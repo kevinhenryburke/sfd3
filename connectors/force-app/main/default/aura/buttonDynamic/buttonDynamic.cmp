@@ -1,15 +1,17 @@
 <aura:component >
     <ltng:require styles="/resource/SLDS090/assets/styles/salesforce-lightning-design-system-ltng.css"
-         scripts="/resource/jq331"    
     />
 
     <aura:attribute name="id" type="String"/>
     <aura:attribute name="label" type="String"/>
-    <aura:attribute name="style" type="String"/>
     <aura:attribute name="onclick" type="String"/>
     <aura:attribute name="class" type="String"/>
     <aura:attribute name="disabled" type="Boolean" default="false"/>
+    <aura:attribute name="show" type="Boolean" default="true"/>
     
     <!-- not sure why using aura:id as v.id does not work here -->
-    <button aura:id="{!v.id}" style="{!v.style}" class="{!v.class}" onclick="{!v.onclick}" disabled="{!v.disabled}">{!v.label}</button>
+
+    <aura:if isTrue="{!v.show}">
+        <lightning:button aura:id="{!v.id}" class="{!v.class}" onclick="{!v.onclick}" disabled="{!v.disabled}">{!v.label}</lightning:button>
+    </aura:if>
 </aura:component>

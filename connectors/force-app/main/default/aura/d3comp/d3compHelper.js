@@ -17,7 +17,7 @@
         {
             index++;
             var cmpTarget = component.find(idprefix + index);
-            cmpTarget.set("v.style","display:none;");
+            cmpTarget.set("v.show","false");
         }
         filterGraph();
         

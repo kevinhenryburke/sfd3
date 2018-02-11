@@ -75,15 +75,15 @@
     [
         "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/buttonDynamic/buttonDynamic.cmp",
         {
+            "state": "u",
             "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/buttonDynamic/buttonDynamic.cmp",
             "isDirectory": false,
-            "size": 706,
-            "modifiedTime": 1518340934962,
-            "changeTime": 1518340934962,
-            "contentHash": "b23a7202a2a01c9a8b541aec041535af8331e972",
             "isMetadataFile": false,
-            "state": "u",
-            "isWorkspace": false
+            "size": 736,
+            "modifiedTime": 1518342926000,
+            "changeTime": 1518342926041,
+            "isWorkspace": false,
+            "contentHash": "143815c05764ee97e7c29abfd5eda6e1c4c77d5d"
         }
     ],
     [
@@ -162,15 +162,15 @@
     [
         "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp/d3comp.cmp",
         {
-            "state": "u",
             "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp/d3comp.cmp",
             "isDirectory": false,
-            "isMetadataFile": false,
             "size": 4840,
             "modifiedTime": 1518341013911,
             "changeTime": 1518341013911,
-            "isWorkspace": false,
-            "contentHash": "79d3587b9627972be0046318c68550e87a836b44"
+            "contentHash": "79d3587b9627972be0046318c68550e87a836b44",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false
         }
     ],
     [
@@ -222,14 +222,13 @@
         {
             "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp/d3compHelper.js",
             "isDirectory": false,
-            "size": 5154,
-            "modifiedTime": 1518300501086,
-            "changeTime": 1518300501086,
-            "contentHash": "8b99c3e52c47b0343a5f7be42bcb5a1dc4c4f889",
+            "size": 5145,
+            "modifiedTime": 1518342851697,
+            "changeTime": 1518342851697,
+            "contentHash": "b53ceb7843fb3e358eb1c76a9c17c7ddfe6001de",
             "isMetadataFile": false,
             "state": "u",
-            "isWorkspace": false,
-            "isArtifactRoot": false
+            "isWorkspace": false
         }
     ],
     [
