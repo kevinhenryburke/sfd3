@@ -1,0 +1,30 @@
+.THIS section {
+    width: 80%;
+    height: 200px;
+    margin: auto;
+    padding: 10px;
+}
+.THIS div#container {
+    width: 15%;
+    float: left;
+}
+.THIS div#numbernodecontainer {
+    margin-left: 15%;
+    float: right;
+}
+.THIS div#levelnodecontainer {
+    margin-left: 15%;
+    float: center;
+}
+
+.THIS.changeMe {
+    background-color:yellow;
+    color:red;
+    width:200px;
+    display:none;
+}
+
+.THIS.hideMe {
+    color:red;
+    display:none;
+}

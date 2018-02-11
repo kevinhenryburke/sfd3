@@ -1,0 +1,84 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" controller="DThree" >
+
+CHANGED 12
+
+
+
+<ltng:require 
+  styles="/resource/pictorcss,/resource/SLDS090/assets/styles/salesforce-lightning-design-system-ltng.css"
+  scripts="{!join(',',$Resource.jq331,$Resource.d3minjs,$Resource.pictorjs)}"
+  afterScriptsLoaded="{!c.afterScriptsLoaded}"
+/>
+
+<!--
+<ltng:require styles="/resource/pictorcss,/resource/SLDS090/assets/styles/salesforce-lightning-design-system-ltng.css"
+scripts="/resource/d3minjs,/resource/jq331,/resource/pictorjs"    
+afterScriptsLoaded="{!c.afterScriptsLoaded}"
+/>
+-->
+
+	<aura:attribute name="typebuttongroup" type="String"/>    
+
+<!--    
+	<aura:handler name="buttonDynamicEvent" event="c:buttonDynamicEvent" action="{!c.handleComponentEventFired}"/>    
+-->
+
+    <div class="slds">
+      <div class="slds-page-header" role="banner">
+        <div class="slds-media">
+          <div class="slds-media__figure" style="display:none;">
+            <c:svg class="slds-icon--large slds-icon-standard-user" xlinkHref="/resource/SLDS090/assets/icons/standard-sprite/svg/symbols.svg#user" />
+          </div>
+          <div class="slds-media__body">
+            <div class="slds-grid">
+              <h1 class="slds-text-heading--medium slds-m-right--small slds-truncate slds-align-middle" title="Record Title">Connections</h1>
+            </div>
+          </div>
+        </div>
+
+        <div class="slds-grid slds-wrap">
+          <!-- Hidden for topic connections -->
+          <div class="slds-col slds-size--1-of-2 slds-small-size--1-of-2 slds-medium-size--1-of-3" style="display:none;">
+            <h1 class="slds-text-heading--label">Types</h1>
+            <div class="slds slds-button-group" role="group">
+                <c:buttonDynamic aura:id="b1" label="" class="slds-button slds-button--brand" onclick="{!c.handleRelationshipTypeB1}"/>
+                <c:buttonDynamic aura:id="b2" label="" class="slds-button slds-button--brand" onclick="{!c.handleRelationshipTypeB2}"/>
+                <c:buttonDynamic aura:id="b3" label="" class="slds-button slds-button--brand" onclick="{!c.handleRelationshipTypeB3}"/>
+                <c:buttonDynamic aura:id="b4" label="" class="slds-button slds-button--brand" onclick="{!c.handleRelationshipTypeB4}"/>
+                <c:buttonDynamic aura:id="b5" label="" class="slds-button slds-button--brand" onclick="{!c.handleRelationshipTypeB5}"/>
+            </div>
+          </div>
+          <div class="slds-col slds-size--1-of-2 slds-small-size--1-of-2 slds-medium-size--1-of-2" style="display:none;">
+            <h1 class="slds-text-heading--label">Levels</h1>
+            <div class="slds slds-button-group" role="group">
+              <button aura:id="l1" class="slds-button slds-button--brand" onclick="{!c.handleClickLevel1}">1 Level</button>
+              <button aura:id="l2" class="slds-button slds-button--neutral" onclick="{!c.handleClickLevel2}">2 Levels</button>
+              <button aura:id="l3" class="slds-button slds-button--neutral" onclick="{!c.handleClickLevel3}">3 Levels</button>
+              <button aura:id="l4" class="slds-button slds-button--neutral" onclick="{!c.handleClickLevel4}">4 Levels</button>
+            </div>
+          </div>
+          <div class="slds-col slds-size--1-of-2 slds-small-size--1-of-2 slds-medium-size--1-of-2">
+            <h1 class="slds-text-heading--label">Show</h1>
+            <div class="slds slds-button-group" role="group">
+              <c:buttonDynamic aura:id="less" label="Fewer" class="slds-button slds-button--neutral" onclick="{!c.handleClickLevelLess}" disabled="true">Less</c:buttonDynamic>
+              <c:buttonDynamic aura:id="more" label="More" class="slds-button slds-button--neutral" onclick="{!c.handleClickLevelMore}" disabled="false">More</c:buttonDynamic>
+            </div>
+          </div>
+          <div class="slds-col slds-size--1-of-2 slds-small-size--1-of-2 slds-medium-size--1-of-2">
+            <h1 class="slds-text-heading--label">Size By</h1>
+            <div class="slds slds-button-group" role="group">
+                <c:buttonDynamic aura:id="v1" label="" class="slds-button slds-button--brand" onclick="{!c.handleMeasureV1}"/>
+                <c:buttonDynamic aura:id="v2" label="" class="slds-button slds-button--neutral" onclick="{!c.handleMeasureV2}"/>
+                <c:buttonDynamic aura:id="v3" label="" class="slds-button slds-button--neutral" onclick="{!c.handleMeasureV3}"/>
+                <c:buttonDynamic aura:id="v4" label="" class="slds-button slds-button--neutral" onclick="{!c.handleMeasureV4}"/>
+                <c:buttonDynamic aura:id="v5" label="" class="slds-button slds-button--neutral" onclick="{!c.handleMeasureV5}"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <body>
+    </body>
+    
+</aura:component>
