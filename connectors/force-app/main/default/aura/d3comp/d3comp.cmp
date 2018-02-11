@@ -1,11 +1,11 @@
 <aura:component implements="forceCommunity:availableForAllPageTypes" controller="DThree" >
 
-CHANGED 12
+CHANGED 13
 
 
 
 <ltng:require 
-  styles="/resource/pictorcss,/resource/SLDS090/assets/styles/salesforce-lightning-design-system-ltng.css"
+  styles="/resource/pictorcss"
   scripts="{!join(',',$Resource.jq331,$Resource.d3minjs,$Resource.pictorjs)}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
 />
@@ -27,7 +27,7 @@ afterScriptsLoaded="{!c.afterScriptsLoaded}"
       <div class="slds-page-header" role="banner">
         <div class="slds-media">
           <div class="slds-media__figure" style="display:none;">
-            <c:svg class="slds-icon--large slds-icon-standard-user" xlinkHref="/resource/SLDS090/assets/icons/standard-sprite/svg/symbols.svg#user" />
+            <c:svg class="slds-icon--large slds-icon-standard-user" xlinkHref="/assets/icons/standard-sprite/svg/symbols.svg#user" />
           </div>
           <div class="slds-media__body">
             <div class="slds-grid">

@@ -1,6 +1,4 @@
 <aura:component >
-    <ltng:require styles="/resource/SLDS090/assets/styles/salesforce-lightning-design-system-ltng.css"
-    />
 
     <aura:attribute name="id" type="String"/>
     <aura:attribute name="label" type="String"/>
