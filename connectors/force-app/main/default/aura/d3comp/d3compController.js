@@ -10,10 +10,10 @@
             if (state === "SUCCESS") {
 				console.log('data returned from apex');
 
-
-// old version from script                init(response.getReturnValue());
                 helper.init(component, response.getReturnValue());
 
+                var datajson = component.get("v.datajson");
+                
                 var arrayNames = datajson.filtertypes;
                 var idprefix = "b";
                 var maxbuttons = 5;

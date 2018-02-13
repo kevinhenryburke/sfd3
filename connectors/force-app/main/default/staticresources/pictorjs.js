@@ -1,7 +1,7 @@
 console.log("loading: pictor.js v23");
 
 // data
-var datajson;
+// var datajson;
 
 // ui
 var clickedfilters = [];
@@ -9,8 +9,8 @@ var width = Math.min(screen.width, screen.height);
 var height = Math.min(screen.width, screen.height);
 var midx = width / 2;
 var midy = height / 2;
-var circlestrokewidth = "0.5px";
-var levels = 1;
+//var circlestrokewidth = "0.5px";
+//var levels = 1;
 
 var isiOS = false;
 var agent = navigator.userAgent.toLowerCase();
@@ -27,11 +27,11 @@ var primaryid;
 
 //var initialized = false;
 
-var force;
+// var force;
 
-var text;
-var circle;
-var path;
+// var text;
+// var circle;
+// var path;
 
 
 
@@ -362,6 +362,67 @@ svg.call(tip);
 svg.call(pathtip);
 
 
+
+function linkArc(d) {
+  var
+    sx = limitborderx(d.source.x),
+    sy = limitbordery(d.source.y),
+    tx = limitborderx(d.target.x),
+    ty = limitbordery(d.target.y),
+    dx = tx - sx,
+    dy = ty - sy,
+    dr = Math.sqrt(dx * dx + dy * dy);
+  return "M" + sx + "," + sy + "A" + dr + "," + dr + " 0 0,1 " + tx + "," + ty;
+}
+
+function transform(d) {
+  /* KB: attempt to make the primary node fixed */
+//  if (d.id == primaryid && datajson.centreonclick === true) {
+//    d.x = midx;
+//    d.y = midy;
+//    return "translate(" + midx + "," + midy + ")";
+//  }
+
+  var dx = limitborderx(d.x);
+  var dy = limitbordery(d.y);
+
+  return "translate(" + dx + "," + dy + ")";
+}
+
+function limitborderx(x) {
+  return Math.min(x, width);
+//  return x;
+}
+
+function limitbordery(y) {
+  return Math.max(Math.min(y, height - 50), 50);
+//  return y;
+}
+
+function showDetails(d) {
+  var content = '<div style="text-align:center;">';
+  content += '<p><span>' + d.name + '</span></p>';
+  //    content += '<hr class="tooltip-hr">';
+  content += '<div><img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Anna_Netrebko_-_Romy_2013_a.jpg" height="60" width="60" alt="No image available" align="centre"></div>';
+  content += '<p>' + d.position + ' (' + d.account + ')</p>';
+  content += '</div>';
+  return content;
+}
+
+function showPathDetails(p) {
+  var content = '<div style="text-align:center;font-size:"6px";>';
+  content += '<p>Type: ' + p.type + '</p>';
+  content += '<p>Linked By ' + p.createdby + '</p>';
+  content += '<p>Notes: ' + p.notes + '</p>';
+  content += '</div>';
+  return content;
+}
+
+
+console.log("loaded: pictor.js");
+
+// OLD FUNCTIONS
+
 /*
 
 function init(inputjson) {
@@ -512,51 +573,16 @@ function init(inputjson) {
 
 
 // Use elliptical arc path segments to doubly-encode directionality.
+/*
 function tick() {
   path.attr("d", linkArc);
   circle.attr("transform", transform);
   text.attr("transform", transform);
 }
-
-function linkArc(d) {
-  var
-    sx = limitborderx(d.source.x),
-    sy = limitbordery(d.source.y),
-    tx = limitborderx(d.target.x),
-    ty = limitbordery(d.target.y),
-    dx = tx - sx,
-    dy = ty - sy,
-    dr = Math.sqrt(dx * dx + dy * dy);
-  return "M" + sx + "," + sy + "A" + dr + "," + dr + " 0 0,1 " + tx + "," + ty;
-}
-
-function transform(d) {
-  /* KB: attempt to make the primary node fixed */
-//  if (d.id == primaryid && datajson.centreonclick === true) {
-//    d.x = midx;
-//    d.y = midy;
-//    return "translate(" + midx + "," + midy + ")";
-//  }
-
-  var dx = limitborderx(d.x);
-  var dy = limitbordery(d.y);
-
-  return "translate(" + dx + "," + dy + ")";
-}
-
-function limitborderx(x) {
-  return Math.min(x, width);
-//  return x;
-}
-
-function limitbordery(y) {
-  return Math.max(Math.min(y, height - 50), 50);
-//  return y;
-}
+*/
 
 
-
-
+/*
 function getRelatedNodes(level) {
 
   var looplevel = 0;
@@ -592,7 +618,7 @@ function getRelatedNodes(level) {
   }
   return linkednodes;
 }
-
+*/
 
 
 /*
@@ -696,25 +722,3 @@ function filterGraph() {
   resizeNodes(measure);
 }
 */
-
-function showDetails(d) {
-  var content = '<div style="text-align:center;">';
-  content += '<p><span>' + d.name + '</span></p>';
-  //    content += '<hr class="tooltip-hr">';
-  content += '<div><img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Anna_Netrebko_-_Romy_2013_a.jpg" height="60" width="60" alt="No image available" align="centre"></div>';
-  content += '<p>' + d.position + ' (' + d.account + ')</p>';
-  content += '</div>';
-  return content;
-}
-
-function showPathDetails(p) {
-  var content = '<div style="text-align:center;font-size:"6px";>';
-  content += '<p>Type: ' + p.type + '</p>';
-  content += '<p>Linked By ' + p.createdby + '</p>';
-  content += '<p>Notes: ' + p.notes + '</p>';
-  content += '</div>';
-  return content;
-}
-
-
-console.log("loaded: pictor.js");
