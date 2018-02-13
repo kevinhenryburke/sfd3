@@ -25,7 +25,7 @@ var measure;
 
 var primaryid;
 
-var initialized = false;
+//var initialized = false;
 
 var force;
 
@@ -361,6 +361,9 @@ var svg = d3.select("body").append("svg")
 svg.call(tip);
 svg.call(pathtip);
 
+
+/*
+
 function init(inputjson) {
   console.log("in init");
 
@@ -374,7 +377,7 @@ function init(inputjson) {
     // set the first measure as default
     measure = datajson.measures[0];
 
-    /* primary node */
+    // primary node 
     primaryid = datajson.people[0].id;
 
     // Compute the distinct nodes from the links.
@@ -473,15 +476,6 @@ function init(inputjson) {
       })
       .call(force.drag);
 
-    /* old
-    var text = svg.append("g").selectAll("text")
-        .data(force.nodes())
-      .enter().append("text")
-        .attr("x", 8)
-        .attr("y", ".31em")
-        .text(function(d) { return d.name; });
-    */
-
     text = svg.append("svg:g")
       .selectAll("g")
       .data(force.nodes())
@@ -514,7 +508,7 @@ function init(inputjson) {
   console.log("exit init");
 };
 
-
+*/
 
 
 // Use elliptical arc path segments to doubly-encode directionality.
@@ -601,7 +595,7 @@ function getRelatedNodes(level) {
 
 
 
-
+/*
 // Method to resize nodes
 function resizeNodes(aType) {
   // change the visibility of the connection path
@@ -634,8 +628,9 @@ function resizeNodes(aType) {
   });
 
 }
+*/
 
-
+/*
 // Method to filter graph
 function filterGraph() {
   // change the visibility of the connection path
@@ -700,7 +695,7 @@ function filterGraph() {
 
   resizeNodes(measure);
 }
-
+*/
 
 function showDetails(d) {
   var content = '<div style="text-align:center;">';

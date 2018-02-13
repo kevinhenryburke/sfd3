@@ -10,7 +10,9 @@
             if (state === "SUCCESS") {
 				console.log('data returned from apex');
 
-                init(response.getReturnValue());
+
+// old version from script                init(response.getReturnValue());
+                helper.init(component, response.getReturnValue());
 
                 var arrayNames = datajson.filtertypes;
                 var idprefix = "b";

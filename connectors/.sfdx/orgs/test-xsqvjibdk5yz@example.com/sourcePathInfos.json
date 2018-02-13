@@ -75,15 +75,15 @@
     [
         "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/buttonDynamic/buttonDynamic.cmp",
         {
-            "state": "u",
             "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/buttonDynamic/buttonDynamic.cmp",
             "isDirectory": false,
+            "size": 626,
+            "modifiedTime": 1518343504880,
+            "changeTime": 1518343504880,
+            "contentHash": "440caa203a5aca2845a997ec87e79d74f859ce9c",
             "isMetadataFile": false,
-            "size": 736,
-            "modifiedTime": 1518342926000,
-            "changeTime": 1518342926041,
-            "isWorkspace": false,
-            "contentHash": "143815c05764ee97e7c29abfd5eda6e1c4c77d5d"
+            "state": "u",
+            "isWorkspace": false
         }
     ],
     [
@@ -120,14 +120,13 @@
         {
             "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3/d3.app",
             "isDirectory": false,
-            "size": 137,
-            "modifiedTime": 1518300501088,
-            "changeTime": 1518300501088,
-            "contentHash": "d4410fe5aeb27f90b678c1d4e293c41f775c18b0",
+            "size": 157,
+            "modifiedTime": 1518343631253,
+            "changeTime": 1518343631253,
+            "contentHash": "e2a764d2ecd20db4fe2c12c48bec61b7808a43b5",
             "isMetadataFile": false,
             "state": "u",
-            "isWorkspace": false,
-            "isArtifactRoot": false
+            "isWorkspace": false
         }
     ],
     [
@@ -164,10 +163,10 @@
         {
             "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp/d3comp.cmp",
             "isDirectory": false,
-            "size": 4840,
-            "modifiedTime": 1518341013911,
-            "changeTime": 1518341013911,
-            "contentHash": "79d3587b9627972be0046318c68550e87a836b44",
+            "size": 4764,
+            "modifiedTime": 1518343487545,
+            "changeTime": 1518343487545,
+            "contentHash": "c35fe01eb688cac2f898add31dde57d654ad00f0",
             "isMetadataFile": false,
             "state": "u",
             "isWorkspace": false
@@ -496,19 +495,6 @@
             "changeTime": 1518302573459,
             "contentHash": "3b8bfef1c8abe215438527bd3a216d07dd40f47b",
             "isMetadataFile": false,
-            "state": "u"
-        }
-    ],
-    [
-        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/SLDS090.resource-meta.xml",
-        {
-            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/SLDS090.resource-meta.xml",
-            "isDirectory": false,
-            "size": 210,
-            "modifiedTime": 1518302573460,
-            "changeTime": 1518302573460,
-            "contentHash": "daa89debd48598fd3138118af8ead370dbb2c259",
-            "isMetadataFile": true,
             "state": "u"
         }
     ],
