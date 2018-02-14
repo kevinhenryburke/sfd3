@@ -4,26 +4,26 @@ console.log("loading: pictor.js v23");
 // var datajson;
 
 // ui
-var clickedfilters = [];
+//var clickedfilters = [];
 var width = Math.min(screen.width, screen.height);
 var height = Math.min(screen.width, screen.height);
-var midx = width / 2;
-var midy = height / 2;
+//var midx = width / 2;
+//var midy = height / 2;
 //var circlestrokewidth = "0.5px";
 //var levels = 1;
 
-var isiOS = false;
-var agent = navigator.userAgent.toLowerCase();
-if(agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0){
-       isiOS = true;
-}
+//var isiOS = false;
+//var agent = navigator.userAgent.toLowerCase();
+//if(agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0){
+//       isiOS = true;
+//}
 
 // set the first measure as default
-var measure;
+//var measure;
 
 /* primary node */
 
-var primaryid;
+// var primaryid;
 
 //var initialized = false;
 

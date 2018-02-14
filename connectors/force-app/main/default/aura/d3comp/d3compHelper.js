@@ -19,10 +19,13 @@
           var sfd3force = component.get("v.sfd3force");          
 
           // set the first measure as default
-          measure = datajson.measures[0];
+          
+          var measure = datajson.measures[0];
+          component.set("v.currentmeasure", measure);
       
           /* primary node */
-          primaryid = datajson.people[0].id;
+          var primaryid = datajson.people[0].id;
+          component.set("v.primaryid", primaryid);
       
           // Compute the distinct nodes from the links.
           datajson.relations.forEach(function(link) {
@@ -30,9 +33,11 @@
             link.target = datajson.people[link.target];
           });
       
+          var clickedfilters = component.get("v.clickedfilters");   
           datajson.filtertypes.forEach(function(filtertype) {
             clickedfilters.push(filtertype);
           });
+          component.set("v.clickedfilters", clickedfilters);
       
           sfd3force = d3.layout.force()
             .nodes(d3.values(datajson.people))
@@ -103,6 +108,9 @@
             .on('mouseover', tip.show)
             .on('mouseout', tip.hide)
             .on('click', function(d) {
+
+              var isiOS = component.get("v.isiOS");
+  
               if(isiOS){
                 var now = new Date().getTime();
                 var delta = now - lastTouch;
@@ -117,7 +125,8 @@
               } else{
                console.log("not iOS");
               }
-              primaryid = d.id;
+//              primaryid = d.id;
+              component.set("v.primaryid", d.id);
               _this.filterGraph(component);
             })
             .on('dblclick', function(d) {
@@ -127,15 +136,6 @@
             })
             .call(sfd3force.drag);
       
-          /* old
-          var text = svg.append("g").selectAll("text")
-              .data(force.nodes())
-            .enter().append("text")
-              .attr("x", 8)
-              .attr("y", ".31em")
-              .text(function(d) { return d.name; });
-          */
-
          var text = component.get("v.text");
       
           text = svg.append("svg:g")
@@ -178,11 +178,13 @@
       
 // Method to filter graph
 filterGraph : function (component) {
+
+    console.log("Enter filterGraph");
+
     var _this = this;
     // change the visibility of the connection path
-  
-    console.log("Static Resource.filterGraph");
 
+    var measure = component.get("v.currentmeasure");
     var sfd3node = component.get("v.sfd3node");          
     var sfd3path = component.get("v.sfd3path");          
     
@@ -205,6 +207,7 @@ filterGraph : function (component) {
   
       if ((sourcevis === 1) && (targetvis === 1) && primaryrelated) {
   
+        var clickedfilters = component.get("v.clickedfilters");   
         var index = $.inArray(o.type, clickedfilters);
   
         if (index > -1) {
@@ -252,6 +255,8 @@ filterGraph : function (component) {
 
     var looplevel = 0;
   
+    var primaryid = component.get("v.primaryid");
+
     var linkednodes = [primaryid];
   
     while (looplevel < level) {
@@ -308,6 +313,7 @@ resizeNodes : function (component, aType) {
   
   
     sfd3node.style("stroke", function(o, i) {
+      var primaryid = component.get("v.primaryid");
       if (o.id == primaryid) {
         return "gold";
       }
@@ -315,7 +321,8 @@ resizeNodes : function (component, aType) {
     });
   
     sfd3node.style("stroke-width", function(o, i) {
-      if (o.id == primaryid) {
+        var primaryid = component.get("v.primaryid");
+        if (o.id == primaryid) {
         return "10px";
       }
       var sfd3nodestrokewidth = component.get("v.sfd3nodestrokewidth");
@@ -358,7 +365,6 @@ resizeNodes : function (component, aType) {
         var _this = this; 
 
         var levels = component.set("v.levels", d);
-//        levels = d;
         _this.filterGraph(component) ;
         var elementid = 'l' + d;
         var cmpTarget = component.find(elementid);
@@ -417,9 +423,10 @@ resizeNodes : function (component, aType) {
         }
     },
     
-    setNodeSize : function(component, d) {
+    setMeasureAndRefresh : function(component, d) {
         var _this = this; 
-        measure = d;
+        console.log("setMeasureAndRefresh: Measure=" + d);
+        component.set("v.currentmeasure", d);
         _this.filterGraph(component) ;
 	},
 
@@ -439,7 +446,7 @@ resizeNodes : function (component, aType) {
         var datajson = component.get("v.datajson");
         var thisMeasure = datajson.measures[indexer - 1];
 
-		this.setNodeSize(component, thisMeasure);
+		this.setMeasureAndRefresh(component, thisMeasure);
         var cmpTarget = component.find(idprefix);
         $A.util.toggleClass(cmpTarget, 'slds-button--neutral');
         $A.util.toggleClass(cmpTarget, 'slds-button--brand');
@@ -448,6 +455,7 @@ resizeNodes : function (component, aType) {
     
     setRelationshipType : function(component, thisType, isClicked) {
         var _this = this; 
+        var clickedfilters = component.get("v.clickedfilters");   
         if (isClicked)
         {
             clickedfilters.push(thisType);
@@ -459,6 +467,7 @@ resizeNodes : function (component, aType) {
                 clickedfilters.splice(index, 1);
             }
         }
+        component.set("v.clickedfilters", clickedfilters);   
         _this.filterGraph(component);
 	},
     

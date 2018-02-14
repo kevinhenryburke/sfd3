@@ -1,7 +1,17 @@
 ({
 	
     afterScriptsLoaded: function(component, event, helper) {
-		console.log('afterScriptsLoaded started v23');
+		console.log('afterScriptsLoaded started v24');
+
+        var agent = navigator.userAgent.toLowerCase();
+        if(agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0){
+               isiOS = true;
+               component.set("v.isiOS", true);
+               console.log("IOS environment");
+        }
+        else {
+            console.log("non-IOS environment");
+        }
 
         var action = component.get("c.returnData");
 

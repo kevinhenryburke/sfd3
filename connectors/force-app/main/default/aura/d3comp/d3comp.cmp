@@ -1,6 +1,6 @@
 <aura:component implements="forceCommunity:availableForAllPageTypes" controller="DThree">
 
-CHANGED 22
+CHANGED 24
 
 
 <ltng:require 
@@ -23,18 +23,23 @@ CHANGED 22
 -->
 
 	<aura:attribute name="typebuttongroup" type="String"/>    
+	<aura:attribute name="currentmeasure" type="String"/>    
+	<aura:attribute name="primaryid" type="String"/>    
 
 	<aura:attribute name="initialized" type="Boolean" default="false"/>    
+	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
 	<aura:attribute name="circlestrokewidth" type="String" default="0.5px"/>    
 	<aura:attribute name="levels" type="Integer" default="1"/>    
   <aura:attribute name="datajson" type="Object" />
 
-
+  
   <aura:attribute name="sfd3force" type="Object" />
   <aura:attribute name="text" type="Object" />
   <aura:attribute name="sfd3node" type="Object" />
   <aura:attribute name="sfd3path" type="Object" />
 
+  <aura:attribute name="clickedfilters" type="Object[]" default="[]" />
+  
 
 <!--    
 	<aura:handler name="buttonDynamicEvent" event="c:buttonDynamicEvent" action="{!c.handleComponentEventFired}"/>    
