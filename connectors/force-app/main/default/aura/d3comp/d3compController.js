@@ -3,6 +3,23 @@
     afterScriptsLoaded: function(component, event, helper) {
 		console.log('afterScriptsLoaded started v24');
 
+        //TODO check this is right
+        var width = Math.min(screen.width, screen.height);
+        component.set("v.width", width);
+
+        //TODO check this is right
+        var height = Math.min(screen.width, screen.height);
+        component.set("v.height", height);
+
+        var svg1 = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+        component.set("v.svg", svg1);
+
+        var lastTouch1 = new Date().getTime();
+        component.set("v.lastTouch", lastTouch1);
+
+
         var agent = navigator.userAgent.toLowerCase();
         if(agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0){
                isiOS = true;
@@ -104,5 +121,15 @@
     handleRelationshipTypeB5 : function(component, event, helper) {
 		helper.setThisRelationshipType(component, 5);
     },
+
+    navigateToRecord : function(component){
+        var evtNav = $A.get("e.force:navigateToSObject");
+        evtNav.setParams({
+        "recordId": component.get("v.card4"),
+        "slideDevName": "detail"
+        });
+        sObectEvent.fire(); 
+     },
+
     
 })

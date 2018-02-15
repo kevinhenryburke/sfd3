@@ -1,14 +1,85 @@
 ({
 
+    transform : function(component, d) {
+        // KB: attempt to make the primary node fixed 
+        //  if (d.id == primaryid && datajson.centreonclick === true) {
+        //    d.x = midx;
+        //    d.y = midy;
+        //    return "translate(" + midx + "," + midy + ")";
+        //  }
+        
+          var _this = this;
+          var dx = _this.limitborderx(component,d.x);
+          var dy = _this.limitbordery(component,d.y);
+          var retVal = "translate(" + dx + "," + dy + ")";
+        
+          console.log("lightning transfrom returns: " + retVal);
+          return retVal;
+        
+        },
+        
+        limitborderx : function(component, x) {
+          var width = component.get("v.width");
+          console.log("limitborderx: x=" + x + " width=" + width);  
+          return Math.min(x, width);
+        },
+        
+        limitbordery : function(component, y) {
+            var height = component.get("v.height");
+            console.log("limitbordery: y=" + y + " height=" + height);  
+            return Math.max(Math.min(y, height - 50), 50);
+        },
+
+        // delete this
+        testmeth : function () {return 0;},
+    
+
      init: function (component, inputjson) {
         var _this = this; 
         console.log("in init helper function");
+
+        var t = _this.testmeth();
+        console.log("DELETE ME: " + t);
       
         var initialized = component.get("v.initialized");
         console.log("init:initialized: " + initialized);
       
         if (initialized != true) {
-          // underlying data parsed to JSON object
+
+            console.log("init:initializing .... ");
+            
+            // TODO: put the styles in a class
+            var divNode = d3.select("#chartarea").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0)
+            .style("position", "relative")
+            .style("text-align", "center")
+            .style("width", "60px")
+            .style("height", "28px")
+            .style("padding", "2px")
+            .style("font", "12px sans-serif")
+            .style("background", "lightsteelblue")
+            .style("border", "0px")
+            .style("border-radius", "8px")
+            .style("pointer-events", "none");
+
+            // TODO: put the styles in a class
+            var divPath = d3.select("#chartarea").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0)
+            .style("position", "relative")
+            .style("text-align", "center")
+            .style("width", "60px")
+            .style("height", "28px")
+            .style("padding", "2px")
+            .style("font", "12px sans-serif")
+            .style("background", "lightsteelblue")
+            .style("border", "0px")
+            .style("border-radius", "8px")
+            .style("pointer-events", "none");
+            
+
+            // underlying data parsed to JSON object
           var datajson = JSON.parse(inputjson);
           component.set("v.datajson", datajson);
       
@@ -38,6 +109,11 @@
             clickedfilters.push(filtertype);
           });
           component.set("v.clickedfilters", clickedfilters);
+
+          console.log("init:getting width and height variables .... ");
+          
+          var width = component.get("v.width");
+          var height = component.get("v.height");
       
           sfd3force = d3.layout.force()
             .nodes(d3.values(datajson.people))
@@ -46,11 +122,25 @@
             .linkDistance(200)
             .charge(-800)
             .on("tick", function() {
-                sfd3path.attr("d", linkArc);
-                sfd3node.attr("transform", transform);
+                sfd3path.attr("d", function(d) {
+                    _this.testmeth();
+                    var sx = _this.limitborderx(component,d.source.x);
+                    var sy = _this.limitbordery(component,d.source.y);
+                    var tx = _this.limitborderx(component,d.target.x);
+                    var ty = _this.limitbordery(component,d.target.y);
+                    var dx = tx - sx;
+                    var dy = ty - sy;
+                    var dr = Math.sqrt(dx * dx + dy * dy);
+                    return "M" + sx + "," + sy + "A" + dr + "," + dr + " 0 0,1 " + tx + "," + ty;
+                  });
+                sfd3node.attr("transform", function(d) {
+                      return _this.transform(component,d);
+                    });
 
                 var text = component.get("v.text");
-                text.attr("transform", transform);
+                text.attr("transform", function(d) {
+                    return _this.transform(component,d);
+                });
                 component.set("v.text", text);
               })
             .start();
@@ -59,9 +149,13 @@
         if (initialized != true) {
                 component.set("v.initialized", true);    
         }
-      
+
+
           // Per-type markers, as they don't inherit styles.
           // KB not sure what benefit this is giving
+          
+          var svg = component.get("v.svg");
+
           svg.append("defs").selectAll("marker")
             .data(datajson.filtertypes)
             .enter().append("marker")
@@ -90,8 +184,34 @@
             .attr("marker-end", function(d) {
               return "url(#" + d.type + ")";
             })
-            .on('mouseover', pathtip.show)
-            .on('mouseout', pathtip.hide);
+// This is the previous implementation of tooltip
+//            .on('mouseover', pathtip.show)
+//            .on('mouseout', pathtip.hide);
+            .on('mouseout', function(d) { // hide the div
+                divPath.transition()
+                    .duration(200)
+                    .style("opacity", 0);
+            })
+            .on('mouseover', function(d) { // card populate
+
+                var midx = (d.source.x + d.target.x ) / 2
+                var midy = (d.source.y + d.target.y ) / 2
+
+                var content = '<div style="text-align:center;font-size:"6px";>';
+                content += '<p>Type: ' + d.type + '</p>';
+                content += '<p>Linked By ' + d.createdby + '</p>';
+                content += '<p>Notes: ' + d.notes + '</p>';
+                content += '</div>';
+
+                divPath.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                divPath.html(content)
+                    .style("left", midx + "px")
+                    .style("top", midy + "px");
+            })
+
+
       
           sfd3node = svg.append("g").selectAll("circle")
             .data(sfd3force.nodes())
@@ -105,14 +225,44 @@
             .attr("id", function(d) {
               return d.id;
             })
-            .on('mouseover', tip.show)
-            .on('mouseout', tip.hide)
+// This is the previous implementation of tooltip - see pictor.js
+//            .on('mouseover', tip.show)
+//            .on('mouseout', tip.hide)
+            .on('mouseout', function(d) { // hide the div
+                divNode.transition()
+                    .duration(200)
+                    .style("opacity", 0);
+            })
+            .on('mouseover', function(d) { // card populate
+                component.set("v.card1", d.name);
+                component.set("v.card2", d.position);
+                component.set("v.card3", d.account);
+                component.set("v.card4", d.id);
+                component.set("v.cardSelected", true);
+
+                var content = '<div style="text-align:center;">';
+                content += '<p><span>' + d.name + '</span></p>';
+                //    content += '<hr class="tooltip-hr">';
+                content += '<div><img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Anna_Netrebko_-_Romy_2013_a.jpg" height="60" width="60" alt="No image available" align="centre"></div>';
+                content += '<p>' + d.position + ' (' + d.account + ')</p>';
+                content += '</div>';
+              
+
+                divNode.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                divNode.html(content)
+                    .style("left", d.x + "px")
+                    .style("top", d.y + "px");
+           })
             .on('click', function(d) {
 
               var isiOS = component.get("v.isiOS");
   
               if(isiOS){
                 var now = new Date().getTime();
+                var lastTouch = component.get("v.lastTouch");
+        
                 var delta = now - lastTouch;
       
                 if(delta<350 && delta>0){
@@ -120,8 +270,7 @@
                   var win = window.open("http://news.bbc.co.uk");
                   win.focus();        
                 }
-                lastTouch = new Date().getTime();
-      
+                component.set("v.lastTouch", lastTouch);      
               } else{
                console.log("not iOS");
               }
@@ -250,7 +399,23 @@ filterGraph : function (component) {
     _this.resizeNodes(component, measure);
   },
 
+linkArc : function(d) {
+    console.log("enter linkArc");
 
+    var _this = this;
+    _this.testmeth();
+    var sx = limitborderx(component,d.source.x);
+    var sy = limitbordery(component,d.source.y);
+    var tx = limitborderx(component,d.target.x);
+    var ty = limitbordery(component,d.target.y);
+    var dx = tx - sx;
+    var dy = ty - sy;
+    var dr = Math.sqrt(dx * dx + dy * dy);
+    return "M" + sx + "," + sy + "A" + dr + "," + dr + " 0 0,1 " + tx + "," + ty;
+  },
+
+
+      
  getRelatedNodes : function (component, level) {
 
     var looplevel = 0;
@@ -292,6 +457,7 @@ filterGraph : function (component) {
     return linkednodes;
   },
   
+
   
       
 // Method to resize nodes

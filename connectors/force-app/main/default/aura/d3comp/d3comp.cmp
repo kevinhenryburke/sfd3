@@ -1,11 +1,11 @@
 <aura:component implements="forceCommunity:availableForAllPageTypes" controller="DThree">
 
-CHANGED 24
+CHANGED 25
 
 
 <ltng:require 
   styles="/resource/pictorcss"
-  scripts="{!join(',',$Resource.jq331,$Resource.d3minjs,$Resource.pictorjs)}"
+  scripts="{!join(',',$Resource.jq331,$Resource.d3minjs)}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
 />
 
@@ -26,6 +26,13 @@ CHANGED 24
 	<aura:attribute name="currentmeasure" type="String"/>    
 	<aura:attribute name="primaryid" type="String"/>    
 
+  <aura:attribute name="card1" type="String" default="No node selected"/>    
+  <aura:attribute name="card2" type="String" default=""/>    
+  <aura:attribute name="card3" type="String" default=""/>    
+  <aura:attribute name="card4" type="String" default=""/>    
+  <aura:attribute name="cardSelected" type="Boolean" default="false"/>    
+
+
 	<aura:attribute name="initialized" type="Boolean" default="false"/>    
 	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
 	<aura:attribute name="circlestrokewidth" type="String" default="0.5px"/>    
@@ -40,10 +47,17 @@ CHANGED 24
 
   <aura:attribute name="clickedfilters" type="Object[]" default="[]" />
   
+  
+  <aura:attribute name="svg" type="Object" />
+  <aura:attribute name="width" type="Double" />
+  <aura:attribute name="height" type="Double" />
+  <aura:attribute name="lastTouch" type="DateTime" />
+  
 
 <!--    
 	<aura:handler name="buttonDynamicEvent" event="c:buttonDynamicEvent" action="{!c.handleComponentEventFired}"/>    
 -->
+
 
     <div class="slds">
       <div class="slds-page-header" role="banner">
@@ -100,7 +114,32 @@ CHANGED 24
       </div>
     </div>
     
-    <body>
-    </body>
-    
+
+  <lightning:card aura:id="detailcard" title="Selected Node" iconName="standard:account">
+      <div class="c-container">
+          <lightning:layout horizontalAlign="space">
+              <lightning:layoutItem flexibility="auto" padding="around-small">
+                  <a href = "" onclick = "{!c.navigateToRecord}">{!v.card1}</a>
+              </lightning:layoutItem>
+              <lightning:layoutItem flexibility="auto" padding="around-small">
+                  {!v.card2}
+              </lightning:layoutItem>
+              <lightning:layoutItem flexibility="auto" padding="around-small">
+                  {!v.card3}
+              </lightning:layoutItem>
+              <lightning:layoutItem flexibility="auto" padding="around-small">
+                <aura:if isTrue="{!v.cardSelected}">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Anna_Netrebko_-_Romy_2013_a.jpg" height="60" width="60" alt="No image available" align="centre"></img>
+                </aura:if>
+              </lightning:layoutItem>
+
+          </lightning:layout>
+      </div>
+      </lightning:card>  
+
+  <body>
+    <div id="chartarea" class="chartarea">
+      <!-- the d3 svg lives here -->
+    </div>
+  </body>
 </aura:component>
