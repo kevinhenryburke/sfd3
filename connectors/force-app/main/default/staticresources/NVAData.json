@@ -1,5 +1,5 @@
 {
-  "people":[
+  "nodes":[
     {
       "name":"Grow Africa",
       "account":"Royal Opera",
@@ -381,7 +381,7 @@
       }
     }
   ],
-  "relations":[
+  "links":[
     {
       "source":"0",
       "target":"1",

@@ -1,13 +1,20 @@
 <aura:component implements="forceCommunity:availableForAllPageTypes" controller="DThree">
 
-CHANGED 25
+CHANGED 26
 
+<ltng:require 
+  styles="/resource/pictorcss"
+  scripts="/resource/d3minjs"
+  afterScriptsLoaded="{!c.afterScriptsLoaded}"
+/>
 
+<!--
 <ltng:require 
   styles="/resource/pictorcss"
   scripts="{!join(',',$Resource.jq331,$Resource.d3minjs)}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
 />
+-->
 
 <!--
 <ltng:require 
