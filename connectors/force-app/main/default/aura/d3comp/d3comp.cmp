@@ -2,18 +2,24 @@
 
 CHANGED 26
 
+
+<!--
+<ltng:require 
+  styles="/resource/pictorcss"
+  scripts="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"
+  afterScriptsLoaded="{!c.afterScriptsLoaded}"
+/>
+-->
+
+
 <ltng:require 
   styles="/resource/pictorcss"
   scripts="/resource/d3minjs"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
 />
 
-<!--
-<ltng:require 
-  styles="/resource/pictorcss"
+<!-- if ever need to add a second script then use join syntax
   scripts="{!join(',',$Resource.jq331,$Resource.d3minjs)}"
-  afterScriptsLoaded="{!c.afterScriptsLoaded}"
-/>
 -->
 
 <!--
@@ -29,37 +35,43 @@ CHANGED 26
 
 -->
 
-	<aura:attribute name="typebuttongroup" type="String"/>    
-	<aura:attribute name="currentmeasure" type="String"/>    
-	<aura:attribute name="primaryid" type="String"/>    
 
+  <!-- Design Paramters -->
   <aura:attribute name="card1" type="String" default="No node selected"/>    
   <aura:attribute name="card2" type="String" default=""/>    
   <aura:attribute name="card3" type="String" default=""/>    
   <aura:attribute name="card4" type="String" default=""/>    
   <aura:attribute name="cardSelected" type="Boolean" default="false"/>    
+  <aura:attribute name="retainNodeDetalsMouseOut" type="Boolean" default="true"/>    
+	<aura:attribute name="levels" type="Integer" default="1"/>    
+  
 
+  <!-- Technical - Chart -->
+  <aura:attribute name="currentmeasure" type="String"/>    
+	<aura:attribute name="primaryid" type="String"/>    
 
 	<aura:attribute name="initialized" type="Boolean" default="false"/>    
 	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
 	<aura:attribute name="circlestrokewidth" type="String" default="0.5px"/>    
-	<aura:attribute name="levels" type="Integer" default="1"/>    
   <aura:attribute name="datajson" type="Object" />
 
   
   <aura:attribute name="sfd3force" type="Object" />
   <aura:attribute name="text" type="Object" />
-  <aura:attribute name="sfd3node" type="Object" />
-  <aura:attribute name="sfd3path" type="Object" />
+  <aura:attribute name="sfd3nodes" type="Object" />
+  <aura:attribute name="sfd3paths" type="Object" />
 
   <aura:attribute name="clickedfilters" type="Object[]" default="[]" />
-  
   
   <aura:attribute name="svg" type="Object" />
   <aura:attribute name="width" type="Double" />
   <aura:attribute name="height" type="Double" />
   <aura:attribute name="lastTouch" type="DateTime" />
   
+  <!-- TODO - add
+    Tooltip Transistion Duration
+
+  -->
 
 <!--    
 	<aura:handler name="buttonDynamicEvent" event="c:buttonDynamicEvent" action="{!c.handleComponentEventFired}"/>    
@@ -74,47 +86,47 @@ CHANGED 26
           </div>
           <div class="slds-media__body">
             <div class="slds-grid">
-              <h1 class="slds-text-heading--medium slds-m-right--small slds-truncate slds-align-middle" title="Record Title">Connections</h1>
+              <h1 class="slds-text-heading_medium slds-m-right_small slds-truncate slds-align-middle" title="Record Title">Connections</h1>
             </div>
           </div>
         </div>
 
         <div class="slds-grid slds-wrap">
           <!-- Hidden for topic connections -->
-          <div class="slds-col slds-size--1-of-2 slds-small-size--1-of-2 slds-medium-size--1-of-3" style="display:none;">
-            <h1 class="slds-text-heading--label">Types</h1>
+          <div class="slds-col slds-size_1-of-2 slds-small-size_1-of-2 slds-medium-size_1-of-3" style="display:none;">
+            <h1 class="slds-text-heading_label">Types</h1>
             <div class="slds slds-button-group" role="group">
-                <c:buttonDynamic aura:id="b1" label="" class="slds-button slds-button--brand" onclick="{!c.handleRelationshipTypeB1}"/>
-                <c:buttonDynamic aura:id="b2" label="" class="slds-button slds-button--brand" onclick="{!c.handleRelationshipTypeB2}"/>
-                <c:buttonDynamic aura:id="b3" label="" class="slds-button slds-button--brand" onclick="{!c.handleRelationshipTypeB3}"/>
-                <c:buttonDynamic aura:id="b4" label="" class="slds-button slds-button--brand" onclick="{!c.handleRelationshipTypeB4}"/>
-                <c:buttonDynamic aura:id="b5" label="" class="slds-button slds-button--brand" onclick="{!c.handleRelationshipTypeB5}"/>
+                <c:buttonDynamic aura:id="b1" label="" class="slds-button slds-button_brand" onclick="{!c.handleRelationshipTypeB1}"/>
+                <c:buttonDynamic aura:id="b2" label="" class="slds-button slds-button_brand" onclick="{!c.handleRelationshipTypeB2}"/>
+                <c:buttonDynamic aura:id="b3" label="" class="slds-button slds-button_brand" onclick="{!c.handleRelationshipTypeB3}"/>
+                <c:buttonDynamic aura:id="b4" label="" class="slds-button slds-button_brand" onclick="{!c.handleRelationshipTypeB4}"/>
+                <c:buttonDynamic aura:id="b5" label="" class="slds-button slds-button_brand" onclick="{!c.handleRelationshipTypeB5}"/>
             </div>
           </div>
-          <div class="slds-col slds-size--1-of-2 slds-small-size--1-of-2 slds-medium-size--1-of-2" style="display:none;">
-            <h1 class="slds-text-heading--label">Levels</h1>
+          <div class="slds-col slds-size_1-of-2 slds-small-size_1-of-2 slds-medium-size_1-of-2" style="display:none;">
+            <h1 class="slds-text-heading_label">Levels</h1>
             <div class="slds slds-button-group" role="group">
-              <button aura:id="l1" class="slds-button slds-button--brand" onclick="{!c.handleClickLevel1}">1 Level</button>
-              <button aura:id="l2" class="slds-button slds-button--neutral" onclick="{!c.handleClickLevel2}">2 Levels</button>
-              <button aura:id="l3" class="slds-button slds-button--neutral" onclick="{!c.handleClickLevel3}">3 Levels</button>
-              <button aura:id="l4" class="slds-button slds-button--neutral" onclick="{!c.handleClickLevel4}">4 Levels</button>
+              <button aura:id="l1" class="slds-button slds-button_brand" onclick="{!c.handleClickLevel1}">1 Level</button>
+              <button aura:id="l2" class="slds-button slds-button_neutral" onclick="{!c.handleClickLevel2}">2 Levels</button>
+              <button aura:id="l3" class="slds-button slds-button_neutral" onclick="{!c.handleClickLevel3}">3 Levels</button>
+              <button aura:id="l4" class="slds-button slds-button_neutral" onclick="{!c.handleClickLevel4}">4 Levels</button>
             </div>
           </div>
-          <div class="slds-col slds-size--1-of-2 slds-small-size--1-of-2 slds-medium-size--1-of-2">
-            <h1 class="slds-text-heading--label">Show</h1>
+          <div class="slds-col slds-size_1-of-2 slds-small-size_1-of-2 slds-medium-size_1-of-2">
+            <h1 class="slds-text-heading_label">Show</h1>
             <div class="slds slds-button-group" role="group">
-              <c:buttonDynamic aura:id="less" label="Fewer" class="slds-button slds-button--neutral" onclick="{!c.handleClickLevelLess}" disabled="true">Less</c:buttonDynamic>
-              <c:buttonDynamic aura:id="more" label="More" class="slds-button slds-button--neutral" onclick="{!c.handleClickLevelMore}" disabled="false">More</c:buttonDynamic>
+              <c:buttonDynamic aura:id="less" label="Fewer" class="slds-button slds-button_neutral" onclick="{!c.handleClickLevelLess}" disabled="true">Less</c:buttonDynamic>
+              <c:buttonDynamic aura:id="more" label="More" class="slds-button slds-button_neutral" onclick="{!c.handleClickLevelMore}" disabled="false">More</c:buttonDynamic>
             </div>
           </div>
-          <div class="slds-col slds-size--1-of-2 slds-small-size--1-of-2 slds-medium-size--1-of-2">
-            <h1 class="slds-text-heading--label">Size By</h1>
+          <div class="slds-col slds-size_1-of-2 slds-small-size_1-of-2 slds-medium-size_1-of-2">
+            <h1 class="slds-text-heading_label">Size By</h1>
             <div class="slds slds-button-group" role="group">
-                <c:buttonDynamic aura:id="v1" label="" class="slds-button slds-button--brand" onclick="{!c.handleMeasureV1}"/>
-                <c:buttonDynamic aura:id="v2" label="" class="slds-button slds-button--neutral" onclick="{!c.handleMeasureV2}"/>
-                <c:buttonDynamic aura:id="v3" label="" class="slds-button slds-button--neutral" onclick="{!c.handleMeasureV3}"/>
-                <c:buttonDynamic aura:id="v4" label="" class="slds-button slds-button--neutral" onclick="{!c.handleMeasureV4}"/>
-                <c:buttonDynamic aura:id="v5" label="" class="slds-button slds-button--neutral" onclick="{!c.handleMeasureV5}"/>
+                <c:buttonDynamic aura:id="v1" label="" class="slds-button slds-button_brand" onclick="{!c.handleMeasureV1}"/>
+                <c:buttonDynamic aura:id="v2" label="" class="slds-button slds-button_neutral" onclick="{!c.handleMeasureV2}"/>
+                <c:buttonDynamic aura:id="v3" label="" class="slds-button slds-button_neutral" onclick="{!c.handleMeasureV3}"/>
+                <c:buttonDynamic aura:id="v4" label="" class="slds-button slds-button_neutral" onclick="{!c.handleMeasureV4}"/>
+                <c:buttonDynamic aura:id="v5" label="" class="slds-button slds-button_neutral" onclick="{!c.handleMeasureV5}"/>
             </div>
           </div>
         </div>
@@ -146,7 +158,8 @@ CHANGED 26
 
   <body>
     <div id="chartarea" class="chartarea">
-      <!-- the d3 svg lives here -->
+      <div id="nodeToolTip" class="nodeToolTip"></div>
+      <div id="pathToolTip" class="pathToolTip"></div>
     </div>
   </body>
 </aura:component>

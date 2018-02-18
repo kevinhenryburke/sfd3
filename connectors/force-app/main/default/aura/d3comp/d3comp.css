@@ -1,13 +1,19 @@
+.THIS div#container {
+    width: 15%;
+    float: left;
+}
+
+
+
+/* Styles not used */
+
 .THIS section {
     width: 80%;
     height: 200px;
     margin: auto;
     padding: 10px;
 }
-.THIS div#container {
-    width: 15%;
-    float: left;
-}
+
 .THIS div#numbernodecontainer {
     margin-left: 15%;
     float: right;
@@ -17,14 +23,40 @@
     float: center;
 }
 
-.THIS.changeMe {
-    background-color:yellow;
-    color:red;
-    width:200px;
-    display:none;
+.THIS div.nodeToolTip {
+    opacity: 0;
+    position: relative;
+    text-align: center;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: rgb(204, 235, 243);
+    border: 10px;
+    border-radius: 8px;
+    pointer-events: none;
+    float: left;
 }
 
-.THIS.hideMe {
-    color:red;
-    display:none;
+.THIS div.pathToolTip {
+    opacity: 0;
+    position: relative;
+    text-align: center;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: rgb(134, 196, 119);
+    border: 10px;
+    border-radius: 8px;
+    pointer-events: none;
+    float: left;
+}
+
+.THIS div.chartarea {
+    height: 1px;
+}
+
+.THIS sfd3Hidden {
+    visibility: hidden;
+}
+
+.THIS sfd3Visible {
+    visibility: visible;
 }

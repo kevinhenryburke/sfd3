@@ -18,27 +18,17 @@
         return Math.max(Math.min(y, height - 50), 50);
     },
 
-    // delete this
-    testmeth: function() {
-        return 0;
-    },
-
-
     init: function(component, inputjson) {
         var _this = this;
-        console.log("in init helper function");
-
-
         var initialized = component.get("v.initialized");
         console.log("init:initialized: " + initialized);
 
         if (initialized != true) {
 
             console.log("init:initializing .... ");
-
             var svg = component.get("v.svg");
-            var sfd3node = component.get("v.sfd3node");
-            var sfd3path = component.get("v.sfd3path");
+            var sfd3nodes = component.get("v.sfd3nodes");
+            var sfd3paths = component.get("v.sfd3paths");
             var sfd3force = component.get("v.sfd3force");
 
             var chartArea = d3.select("#chartarea");
@@ -47,36 +37,45 @@
 
             // TODO: put the styles in a class
             
-            var nodeToolTipDiv = chartArea
-                .append("div")
-                .attr("class", "tooltip")
-                .style("opacity", 0)
-                .style("position", "relative")
-                .style("text-align", "center")
-                .style("width", "60px")
-                .style("height", "28px")
-                .style("padding", "2px")
-                .style("font", "12px sans-serif")
-                .style("background", "lightsteelblue")
-                .style("border", "0px")
-                .style("border-radius", "8px")
-                .style("pointer-events", "none");
+            // var nodeToolTipDiv = chartArea
+            //     .append("div")
+                // .classed("nodeToolTip", true)
+                // .attr("id","nodeToolTip")
+                // .append("div")
+            
+            var nodeToolTipDiv = d3.select("#nodeToolTip");
+            // nodeToolTipDiv
+            //     .style("opacity", 0)
+            //     .style("position", "relative")
+            //     .style("text-align", "center")
+            //     .style("width", "60px")
+            //     .style("height", "28px")
+            //     .style("padding", "2px")
+            //     .style("font", "12px sans-serif")
+            //     .style("background", "lightsteelblue")
+            //     .style("border", "0px")
+            //     .style("border-radius", "8px")
+            //     .style("pointer-events", "none")
+            //     .style("visibility", "hidden")
+            //     ;
 
             // TODO: put the styles in a class
-            var pathToolTipDiv = chartArea
-                .append("div")
-                .attr("class", "tooltip")
-                .style("opacity", 0)
-                .style("position", "relative")
-                .style("text-align", "center")
-                .style("width", "60px")
-                .style("height", "28px")
-                .style("padding", "2px")
-                .style("font", "12px sans-serif")
-                .style("background", "lightsteelblue")
-                .style("border", "0px")
-                .style("border-radius", "8px")
-                .style("pointer-events", "none");
+            var pathToolTipDiv = d3.select("#pathToolTip");
+            
+            // var pathToolTipDiv = chartArea
+            //     .append("div")
+            //     .attr("class", "tooltip")
+            //     .style("opacity", 0)
+            //     .style("position", "relative")
+            //     .style("text-align", "center")
+            //     .style("width", "60px")
+            //     .style("height", "28px")
+            //     .style("padding", "2px")
+            //     .style("font", "12px sans-serif")
+            //     .style("background", "lightsteelblue")
+            //     .style("border", "0px")
+            //     .style("border-radius", "8px")
+            //     .style("pointer-events", "none");
 
 
             // underlying data parsed to JSON object
@@ -113,7 +112,7 @@
                 .linkDistance(200)
                 .charge(-800)
                 .on("tick", function() {
-                    sfd3path.attr("d", function(d) {
+                    sfd3paths.attr("d", function(d) {
                         var sx = _this.limitborderx(component, d.source.x);
                         var sy = _this.limitbordery(component, d.source.y);
                         var tx = _this.limitborderx(component, d.target.x);
@@ -123,7 +122,7 @@
                         var dr = Math.sqrt(dx * dx + dy * dy);
                         return "M" + sx + "," + sy + "A" + dr + "," + dr + " 0 0,1 " + tx + "," + ty;
                     });
-                    sfd3node.attr("transform", function(d) {
+                    sfd3nodes.attr("transform", function(d) {
                         return _this.transform(component, d);
                     });
 
@@ -159,7 +158,7 @@
                 .append("path")
                 .attr("d", "M0,-5L10,0L0,5");
 
-            sfd3path = svg.append("g").selectAll("path")
+            sfd3paths = svg.append("g").selectAll("path")
                 .data(sfd3force.links())
                 .enter().append("path")
                 .attr("class", function(d) {
@@ -167,6 +166,9 @@
                 })
                 .attr("stroke", function(d) {
                     return d.stroke;
+                })
+                .attr("id", function(d) {
+                    return d.id;
                 })
                 .attr("marker-end", function(d) {
                     return "url(#" + d.type + ")";
@@ -176,13 +178,23 @@
                 //            .on('mouseout', pathtip.hide);
                 .on('mouseout', function(d) { // hide the div
                     pathToolTipDiv.transition()
-                        .duration(200)
+                        .duration(2000)
                         .style("opacity", 0);
                 })
-                .on('mouseover', function(d) { // card populate
+                .on('mouseover', function(d) { 
+                    // "this" here is a path DOM element so use its id to match up with a d3 path
+                    var mouseoverpathid = this.id;
 
-                    console.log(d.stroke);
-
+                    sfd3paths.style("stroke", function(o, i) {
+                        if (o.id === mouseoverpathid) {
+                            return "red";
+                        }
+                        else
+                        {
+                            return "gray";
+                        }
+                    });
+            
                     var midx = (d.source.x + d.target.x) / 2
                     var midy = (d.source.y + d.target.y) / 2
 
@@ -193,14 +205,14 @@
                     content += '</div>';
 
                     pathToolTipDiv.transition()
-                        .duration(200)
+                        .duration(1000)
                         .style("opacity", .9);
                     pathToolTipDiv.html(content)
                         .style("left", midx + "px")
                         .style("top", midy + "px");
                 })
 
-            sfd3node = svg.append("g").selectAll("circle")
+            sfd3nodes = svg.append("g").selectAll("circle")
                 .data(sfd3force.nodes())
                 .enter().append("circle")
                 .attr("r", function(d) {
@@ -216,31 +228,62 @@
                 //            .on('mouseover', tip.show)
                 //            .on('mouseout', tip.hide)
                 .on('mouseout', function(d) { // hide the div
-                    nodeToolTipDiv.transition()
-                        .duration(200)
-                        .style("opacity", 0);
+                //    nodeToolTipDiv.transition()
+                //        .duration(2000)
+                //        .style("opacity", 0);
+
+                    // TODO - add an attribute if want to remove details.
+                    // Need to be abstracted - so card vars are provided to this visualization
+
+                    if (!component.get("v.retainNodeDetalsMouseOut"))
+                    {
+                        component.set("v.card1", d.name);
+                        // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
+                        var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + component.get("v.card1") ;
+                        textcontent += '</tspan>'; 
+
+                        var t = d3.select("#t" + d.id);
+                        t.html(textcontent);
+                        var s = d3.select("#s" + d.id);
+                        s.html(textcontent);
+                    }
                 })
                 .on('mouseover', function(d) { // card populate
+                    // Need to be abstracted - so card vars are provided to this visualization
                     component.set("v.card1", d.name);
                     component.set("v.card2", d.position);
                     component.set("v.card3", d.account);
                     component.set("v.card4", d.id);
                     component.set("v.cardSelected", true);
 
-                    var content = '<div style="text-align:center;">';
-                    content += '<p><span>' + d.name + '</span></p>';
-                    //    content += '<hr class="tooltip-hr">';
-                    content += '<div><img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Anna_Netrebko_-_Romy_2013_a.jpg" height="60" width="60" alt="No image available" align="centre"></div>';
-                    content += '<p>' + d.position + ' (' + d.account + ')</p>';
-                    content += '</div>';
+                    // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
+                    var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + component.get("v.card1") ;
+                    textcontent += '</tspan>'; 
+                    textcontent += '<tspan x="10" dy="15">' + component.get("v.card2");
+                    textcontent += ' (' + component.get("v.card3") + ')</tspan>';
 
+                    var t = d3.select("#t" + d.id);
+                    t.html(textcontent);
+                    var s = d3.select("#s" + d.id);
+                    s.html(textcontent);
 
-                    nodeToolTipDiv.transition()
-                        .duration(200)
-                        .style("opacity", .9);
-                    nodeToolTipDiv.html(content)
-                        .style("left", d.x + "px")
-                        .style("top", d.y + "px");
+                    // Tooltips via a fixed div that moves has some issues with box edges etc. Could cause problems in future but this was attempt
+
+                    // var content = '<div style="text-align:center;">';
+                    // content += '<p><span>' + d.name + '</span></p>';
+                    // //    content += '<hr class="tooltip-hr">';
+                    // content += '<div><img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Anna_Netrebko_-_Romy_2013_a.jpg" height="60" width="60" alt="No image available" align="centre"></div>';
+                    // content += '<p>' + d.position + ' (' + d.account + ')</p>';
+                    // content += '</div>';
+
+                    // nodeToolTipDiv.transition()
+                    //     .duration(200)
+                    //     .style("opacity", .9)
+                    //     .style("left", d.x + "px")
+                    //     .style("top", d.y + "px");
+                    // nodeToolTipDiv.html(content)
+                    //     .style("left", d.x + "px")
+                    //     .style("top", d.y + "px");
                 })
                 .on('click', function(d) {
 
@@ -261,7 +304,7 @@
                     } else {
                         console.log("not iOS");
                     }
-                    //              primaryid = d.id;
+                    // reset the clicked node to be the primary
                     component.set("v.primaryid", d.id);
                     _this.filterGraph(component);
                 })
@@ -304,8 +347,8 @@
 
             component.set("v.text", text);
 
-            component.set("v.sfd3node", sfd3node);
-            component.set("v.sfd3path", sfd3path);
+            component.set("v.sfd3nodes", sfd3nodes);
+            component.set("v.sfd3paths", sfd3paths);
             component.set("v.sfd3force", sfd3force);
 
         }
@@ -321,15 +364,15 @@
         // change the visibility of the connection path
 
         var measure = component.get("v.currentmeasure");
-        var sfd3node = component.get("v.sfd3node");
-        var sfd3path = component.get("v.sfd3path");
+        var sfd3nodes = component.get("v.sfd3nodes");
+        var sfd3paths = component.get("v.sfd3paths");
 
         var shownodeids = [];
 
         var levels = component.get("v.levels");
         var relatedNodes = _this.getRelatedNodes(component, levels);
 
-        sfd3path.style("visibility", function(o) {
+        sfd3paths.style("visibility", function(o) {
 
             var retval = "hidden";
             var sourcevis = o.source.measures[measure].visible;
@@ -366,7 +409,7 @@
         // change the visibility of the node
         // if all the links with that node are invisibile, the node should also be invisible
         // otherwise if any link related to that node is visibile, the node should be visible
-        sfd3node.style("visibility", function(o, i) {
+        sfd3nodes.style("visibility", function(o, i) {
 
             var index = shownodeids.indexOf(o.id);
             if (index > -1) {
@@ -380,10 +423,10 @@
             }
         });
 
-        component.set("v.sfd3node", sfd3node);
-        component.set("v.sfd3path", sfd3path);
+        component.set("v.sfd3nodes", sfd3nodes);
+        component.set("v.sfd3paths", sfd3paths);
 
-        _this.resizeNodes(component, measure);
+        _this.styleNodes(component, measure);
     },
 
     linkArc: function(d) {
@@ -414,21 +457,19 @@
             var newnodes = [];
             looplevel++;
 
-            var sfd3path = component.get("v.sfd3path");
+            var sfd3paths = component.get("v.sfd3paths");
 
-            sfd3path.each(function(p) {
-
-                // if the source node is 
-            var sourceindex = linkednodes.indexOf(p.source.id);
-            var targetindex = linkednodes.indexOf(p.target.id);
-                if (sourceindex === -1 && targetindex > -1) {
-                    newnodes.push(p.source.id);
-                }
-                if (targetindex === -1 && sourceindex > -1) {
-                    newnodes.push(p.target.id);
-                }
+            sfd3paths.each(function(p) {
+                    // if the source node is 
+                var sourceindex = linkednodes.indexOf(p.source.id);
+                var targetindex = linkednodes.indexOf(p.target.id);
+                    if (sourceindex === -1 && targetindex > -1) {
+                        newnodes.push(p.source.id);
+                    }
+                    if (targetindex === -1 && sourceindex > -1) {
+                        newnodes.push(p.target.id);
+                    }
             });
-
 
             var arrayLength = newnodes.length;
 
@@ -447,24 +488,24 @@
 
 
     // Method to resize nodes
-    resizeNodes: function(component, aType) {
+    styleNodes: function(component, aType) {
         // change the visibility of the connection path
-        console.log("resizeNodes : " + aType);
+        console.log("styleNodes : " + aType);
 
-        var sfd3node = component.get("v.sfd3node");
+        var sfd3nodes = component.get("v.sfd3nodes");
 
         // change the size of the node 
 
-        sfd3node.attr("r", function(o, i) {
+        sfd3nodes.attr("r", function(o, i) {
             return o.measures[aType].radius;
         });
 
-        sfd3node.style("fill", function(o, i) {
+        sfd3nodes.style("fill", function(o, i) {
             return o.measures[aType].color;
         });
 
 
-        sfd3node.style("stroke", function(o, i) {
+        sfd3nodes.style("stroke", function(o, i) {
             var primaryid = component.get("v.primaryid");
             if (o.id == primaryid) {
                 return "gold";
@@ -472,16 +513,16 @@
             return o.stroke;
         });
 
-        sfd3node.style("stroke-width", function(o, i) {
+        sfd3nodes.style("stroke-width", function(o, i) {
             var primaryid = component.get("v.primaryid");
             if (o.id == primaryid) {
                 return "10px";
             }
-            var sfd3nodestrokewidth = component.get("v.sfd3nodestrokewidth");
-            return sfd3nodestrokewidth;
+            var sfd3nodesstrokewidth = component.get("v.sfd3nodesstrokewidth");
+            return sfd3nodesstrokewidth;
         });
 
-        component.set("v.sfd3node", sfd3node);
+        component.set("v.sfd3nodes", sfd3nodes);
 
     },
 
