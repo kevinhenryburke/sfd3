@@ -43,6 +43,7 @@ CHANGED 26
   <aura:attribute name="card4" type="String" default=""/>    
   <aura:attribute name="cardSelected" type="Boolean" default="false"/>    
   <aura:attribute name="retainNodeDetalsMouseOut" type="Boolean" default="true"/>    
+  <aura:attribute name="showPathToolTip" type="Boolean" default="true"/>    
 	<aura:attribute name="levels" type="Integer" default="1"/>    
   
 
@@ -146,11 +147,13 @@ CHANGED 26
               <lightning:layoutItem flexibility="auto" padding="around-small">
                   {!v.card3}
               </lightning:layoutItem>
+              <!--
               <lightning:layoutItem flexibility="auto" padding="around-small">
                 <aura:if isTrue="{!v.cardSelected}">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Anna_Netrebko_-_Romy_2013_a.jpg" height="60" width="60" alt="No image available" align="centre"></img>
                 </aura:if>
               </lightning:layoutItem>
+            -->
 
           </lightning:layout>
       </div>

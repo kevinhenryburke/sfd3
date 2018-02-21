@@ -10,12 +10,12 @@
 
     limitborderx: function(component, x) {
         var width = component.get("v.width");
-        return Math.min(x, width);
+        return Math.max(Math.min(x, width), 20);
     },
 
     limitbordery: function(component, y) {
         var height = component.get("v.height");
-        return Math.max(Math.min(y, height - 50), 50);
+        return Math.max(Math.min(y, height - 50), 20 );
     },
 
     init: function(component, inputjson) {
@@ -32,8 +32,8 @@
             var sfd3force = component.get("v.sfd3force");
 
             var chartArea = d3.select("#chartarea");
-            var width = component.get("v.width");
-            var height = component.get("v.height");
+            var width = component.get("v.width") / 2;
+            var height = component.get("v.height") / 2;
 
             // TODO: put the styles in a class
             
@@ -177,39 +177,51 @@
                 //            .on('mouseover', pathtip.show)
                 //            .on('mouseout', pathtip.hide);
                 .on('mouseout', function(d) { // hide the div
-                    pathToolTipDiv.transition()
-                        .duration(2000)
-                        .style("opacity", 0);
+                    var showPathToolTip = component.get("v.showPathToolTip");
+                    console.log("showPathToolTip: " + showPathToolTip);
+                    if (showPathToolTip) {
+                        pathToolTipDiv.transition()
+                            .delay(6000)
+                            .duration(2000)
+                            .style("opacity", 0);
+                    }
                 })
                 .on('mouseover', function(d) { 
-                    // "this" here is a path DOM element so use its id to match up with a d3 path
-                    var mouseoverpathid = this.id;
-
-                    sfd3paths.style("stroke", function(o, i) {
-                        if (o.id === mouseoverpathid) {
-                            return "red";
-                        }
-                        else
+                    var showPathToolTip = component.get("v.showPathToolTip");
+                    console.log("showPathToolTip: " + showPathToolTip);
+                    if (showPathToolTip) {
+                        // "this" here is a path DOM element so use its id to match up with a d3 path
+                        if (component.get("v.showPathToolTip"))
                         {
-                            return "gray";
+                            var mouseoverpathid = this.id;
+
+                            sfd3paths.style("stroke", function(o, i) {
+                                if (o.id === mouseoverpathid) {
+                                    return "red";
+                                }
+                                else
+                                {
+                                    return "gray";
+                                }
+                            });
+                    
+                            var midx = (d.source.x + d.target.x) / 2
+                            var midy = (d.source.y + d.target.y) / 2
+
+                            var content = '<div style="text-align:center;font-size:"6px";>';
+                            content += '<p>Type: ' + d.type + '</p>';
+                            content += '<p>Linked By ' + d.createdby + '</p>';
+                            content += '<p>Notes: ' + d.notes + '</p>';
+                            content += '</div>';
+
+                            pathToolTipDiv.transition()
+                                .duration(100)
+                                .style("opacity", .9);
+                            pathToolTipDiv.html(content)
+                                .style("left", midx + "px")
+                                .style("top", midy + "px");
                         }
-                    });
-            
-                    var midx = (d.source.x + d.target.x) / 2
-                    var midy = (d.source.y + d.target.y) / 2
-
-                    var content = '<div style="text-align:center;font-size:"6px";>';
-                    content += '<p>Type: ' + d.type + '</p>';
-                    content += '<p>Linked By ' + d.createdby + '</p>';
-                    content += '<p>Notes: ' + d.notes + '</p>';
-                    content += '</div>';
-
-                    pathToolTipDiv.transition()
-                        .duration(1000)
-                        .style("opacity", .9);
-                    pathToolTipDiv.html(content)
-                        .style("left", midx + "px")
-                        .style("top", midy + "px");
+                    }
                 })
 
             sfd3nodes = svg.append("g").selectAll("circle")
@@ -429,6 +441,7 @@
         _this.styleNodes(component, measure);
     },
 
+/*    
     linkArc: function(d) {
         console.log("enter linkArc");
 
@@ -442,7 +455,7 @@
         var dr = Math.sqrt(dx * dx + dy * dy);
         return "M" + sx + "," + sy + "A" + dr + "," + dr + " 0 0,1 " + tx + "," + ty;
     },
-
+*/
 
 
     getRelatedNodes: function(component, level) {
@@ -558,8 +571,8 @@
         _this.filterGraph(component);
         var elementid = 'l' + d;
         var cmpTarget = component.find(elementid);
-        $A.util.toggleClass(cmpTarget, 'slds-button--neutral');
-        $A.util.toggleClass(cmpTarget, 'slds-button--brand');
+        $A.util.toggleClass(cmpTarget, 'slds-button_neutral');
+        $A.util.toggleClass(cmpTarget, 'slds-button_brand');
         this.clearOtherLevels(component, elementid);
     },
 
@@ -618,9 +631,9 @@
 
     setThislinkshipType: function(component, indexer) {
         var cmpTarget = component.find('b' + indexer);
-        $A.util.toggleClass(cmpTarget, 'slds-button--neutral');
-        $A.util.toggleClass(cmpTarget, 'slds-button--brand');
-        var isClicked = $A.util.hasClass(cmpTarget, 'slds-button--brand');
+        $A.util.toggleClass(cmpTarget, 'slds-button_neutral');
+        $A.util.toggleClass(cmpTarget, 'slds-button_brand');
+        var isClicked = $A.util.hasClass(cmpTarget, 'slds-button_brand');
         var datajson = component.get("v.datajson");
         var thisType = datajson.filtertypes[indexer - 1];
         this.setlinkshipType(component, thisType, isClicked);
@@ -634,8 +647,8 @@
 
         this.setMeasureAndRefresh(component, thisMeasure);
         var cmpTarget = component.find(idprefix);
-        $A.util.toggleClass(cmpTarget, 'slds-button--neutral');
-        $A.util.toggleClass(cmpTarget, 'slds-button--brand');
+        $A.util.toggleClass(cmpTarget, 'slds-button_neutral');
+        $A.util.toggleClass(cmpTarget, 'slds-button_brand');
         this.clearOtherSizes(component, idprefix);
     },
 
@@ -657,51 +670,51 @@
     clearOtherLevels: function(cmp, b) {
         if (b != 'l1') {
             var cmpTarget = cmp.find('l1');
-            $A.util.addClass(cmpTarget, 'slds-button--neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button--brand');
+            $A.util.addClass(cmpTarget, 'slds-button_neutral');
+            $A.util.removeClass(cmpTarget, 'slds-button_brand');
         }
         if (b != 'l2') {
             var cmpTarget = cmp.find('l2');
-            $A.util.addClass(cmpTarget, 'slds-button--neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button--brand');
+            $A.util.addClass(cmpTarget, 'slds-button_neutral');
+            $A.util.removeClass(cmpTarget, 'slds-button_brand');
         }
         if (b != 'l3') {
             var cmpTarget = cmp.find('l3');
-            $A.util.addClass(cmpTarget, 'slds-button--neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button--brand');
+            $A.util.addClass(cmpTarget, 'slds-button_neutral');
+            $A.util.removeClass(cmpTarget, 'slds-button_brand');
         }
         if (b != 'l4') {
             var cmpTarget = cmp.find('l4');
-            $A.util.addClass(cmpTarget, 'slds-button--neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button--brand');
+            $A.util.addClass(cmpTarget, 'slds-button_neutral');
+            $A.util.removeClass(cmpTarget, 'slds-button_brand');
         }
     },
 
     clearOtherSizes: function(cmp, b) {
         if (b != 'v1') {
             var cmpTarget = cmp.find('v1');
-            $A.util.addClass(cmpTarget, 'slds-button--neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button--brand');
+            $A.util.addClass(cmpTarget, 'slds-button_neutral');
+            $A.util.removeClass(cmpTarget, 'slds-button_brand');
         }
         if (b != 'v2') {
             var cmpTarget = cmp.find('v2');
-            $A.util.addClass(cmpTarget, 'slds-button--neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button--brand');
+            $A.util.addClass(cmpTarget, 'slds-button_neutral');
+            $A.util.removeClass(cmpTarget, 'slds-button_brand');
         }
         if (b != 'v3') {
             var cmpTarget = cmp.find('v3');
-            $A.util.addClass(cmpTarget, 'slds-button--neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button--brand');
+            $A.util.addClass(cmpTarget, 'slds-button_neutral');
+            $A.util.removeClass(cmpTarget, 'slds-button_brand');
         }
         if (b != 'v4') {
             var cmpTarget = cmp.find('v4');
-            $A.util.addClass(cmpTarget, 'slds-button--neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button--brand');
+            $A.util.addClass(cmpTarget, 'slds-button_neutral');
+            $A.util.removeClass(cmpTarget, 'slds-button_brand');
         }
         if (b != 'v5') {
             var cmpTarget = cmp.find('v5');
-            $A.util.addClass(cmpTarget, 'slds-button--neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button--brand');
+            $A.util.addClass(cmpTarget, 'slds-button_neutral');
+            $A.util.removeClass(cmpTarget, 'slds-button_brand');
         }
     }
 
