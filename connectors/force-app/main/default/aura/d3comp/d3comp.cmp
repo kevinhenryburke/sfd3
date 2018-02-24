@@ -55,7 +55,7 @@ CHANGED 26
 	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
 	<aura:attribute name="circlestrokewidth" type="String" default="0.5px"/>    
   <aura:attribute name="datajson" type="Object" />
-
+  <aura:attribute name="configjson" type="Object" />
   
   <aura:attribute name="sfd3force" type="Object" />
   <aura:attribute name="text" type="Object" />

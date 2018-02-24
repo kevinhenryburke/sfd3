@@ -40,14 +40,15 @@
                 helper.init(component, response.getReturnValue());
 
                 var datajson = component.get("v.datajson");
+                var configjson = component.get("v.configjson");
                 
-                var arrayNames = datajson.filtertypes;
+                var arrayNames = configjson.filtertypes;
                 var idprefix = "b";
                 var maxbuttons = 5;
                 
                 helper.formatButtons (component, arrayNames, idprefix, maxbuttons);
 
-                arrayNames = datajson.measures;
+                arrayNames = configjson.measures;
                 idprefix = "v";
                 maxbuttons = 5;
 

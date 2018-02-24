@@ -589,16 +589,5 @@
       "notes":"worked together at BLW",
       "stroke":"gray"
     }
-  ],
-  "filtertypes":[
-    "coworker",
-    "social",
-    "client"
-  ],
-  "measures":[
-    "Posts",
-    "Hot"
-  ],
-  "levels":4,
-  "centreonclick":true
+  ]
 }

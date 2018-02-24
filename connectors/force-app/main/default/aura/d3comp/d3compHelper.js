@@ -82,11 +82,20 @@
             var datajson = JSON.parse(inputjson);
             component.set("v.datajson", datajson);
 
+            // underlying config parsed to JSON object
+            // TODO - read from Design Parameter
+            var configString = '{"filtertypes":["coworker","social","client"],"measures":["Posts","Hot"],"levels":4,"centreonclick":true}';
+            var configjson = JSON.parse(configString);
+            component.set("v.configjson", configjson);
+            
+            console.log('datajson');
             console.log(datajson);
+            console.log('configjson');
+            console.log(configjson);
 
             // set the first measure as default
 
-            var measure = datajson.measures[0];
+            var measure = configjson.measures[0];
             component.set("v.currentmeasure", measure);
 
             /* primary node */
@@ -100,7 +109,7 @@
             });
 
             var clickedfilters = component.get("v.clickedfilters");
-            datajson.filtertypes.forEach(function(filtertype) {
+            configjson.filtertypes.forEach(function(filtertype) {
                 clickedfilters.push(filtertype);
             });
             component.set("v.clickedfilters", clickedfilters);
@@ -144,7 +153,7 @@
             // KB not sure what benefit this is giving
 
             svg.append("defs").selectAll("marker")
-                .data(datajson.filtertypes)
+                .data(configjson.filtertypes)
                 .enter().append("marker")
                 .attr("id", function(d) {
                     return d;
@@ -604,8 +613,6 @@
         //TODO need to set a maximum levels?? Might be hard .. - currently got a default of 4
 
         var levels = component.get("v.levels");
-        console.log("levels");
-        console.log(levels);
 
         if (levels < 4) {
             console.log("increasing levels to");
@@ -634,16 +641,16 @@
         $A.util.toggleClass(cmpTarget, 'slds-button_neutral');
         $A.util.toggleClass(cmpTarget, 'slds-button_brand');
         var isClicked = $A.util.hasClass(cmpTarget, 'slds-button_brand');
-        var datajson = component.get("v.datajson");
-        var thisType = datajson.filtertypes[indexer - 1];
+        var configjson = component.get("v.configjson");
+        var thisType = configjson.filtertypes[indexer - 1];
         this.setlinkshipType(component, thisType, isClicked);
     },
 
     setMeasure: function(component, indexer) {
         var idprefix = 'v' + indexer;
         var cmpTarget = component.find(idprefix);
-        var datajson = component.get("v.datajson");
-        var thisMeasure = datajson.measures[indexer - 1];
+        var configjson = component.get("v.configjson");
+        var thisMeasure = configjson.measures[indexer - 1];
 
         this.setMeasureAndRefresh(component, thisMeasure);
         var cmpTarget = component.find(idprefix);
