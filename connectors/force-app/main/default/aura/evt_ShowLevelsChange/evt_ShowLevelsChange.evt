@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION">
+    <aura:attribute name="direction" type="String" description="Either up or down"/>
+    <aura:attribute name="showLevels" type="Integer" description="the new number of levels to show"/>
+</aura:event>

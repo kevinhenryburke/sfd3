@@ -19,7 +19,6 @@
         var lastTouch1 = new Date().getTime();
         component.set("v.lastTouch", lastTouch1);
 
-
         var agent = navigator.userAgent.toLowerCase();
         if(agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0){
                isiOS = true;
@@ -37,7 +36,7 @@
             if (state === "SUCCESS") {
 				console.log('data returned from apex');
 
-                helper.init(component, response.getReturnValue());
+                helper.initializeData(component, response.getReturnValue());
 
                 var datajson = component.get("v.datajson");
                 var configjson = component.get("v.configjson");
@@ -70,25 +69,33 @@
         $A.enqueueAction(action);        
         console.log('afterScriptsLoaded finished');
     },
+
     
-    handleClickLevel1 : function(component, event, helper) {
-		helper.setConnectionLevel(component, 1);
-	},
-    handleClickLevel2 : function(component, event, helper) {
-		helper.setConnectionLevel(component, 2);
-    },
-    handleClickLevel3 : function(component, event, helper) {
-		helper.setConnectionLevel(component, 3);
-    },
-    handleClickLevel4 : function(component, event, helper) {
-		helper.setConnectionLevel(component, 4);
+    handle_evt_ShowLevelsChange  : function(component, event, helper) {
+        var direction = event.getParam("direction");
+        console.log("direction: " + direction);
+        if (direction == "Up")
+        {
+            helper.setConnectionLevelMore(component);
+        }
+        if (direction == "Down")
+        {
+            helper.setConnectionLevelLess(component);
+        }
     },
 
-    handleClickLevelLess : function(component, event, helper) {
-		helper.setConnectionLevelLess(component);
-    },
     handleClickLevelMore : function(component, event, helper) {
-		helper.setConnectionLevelMore(component);
+        var appEvent = $A.get("e.c:evt_ShowLevelsChange");
+        appEvent.setParams({
+            "direction" : "Up"});
+        appEvent.fire();
+    },
+ 
+    handleClickLevelLess : function(component, event, helper) {
+        var appEvent = $A.get("e.c:evt_ShowLevelsChange");
+        appEvent.setParams({
+            "direction" : "Down"});
+        appEvent.fire();
     },
 
     handleMeasureV1 : function(component, event, helper) {

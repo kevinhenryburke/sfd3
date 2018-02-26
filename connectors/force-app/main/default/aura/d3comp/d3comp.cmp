@@ -1,6 +1,6 @@
 <aura:component implements="forceCommunity:availableForAllPageTypes" controller="DThree">
 
-CHANGED 26
+CHANGED 27
 
 
 <!--
@@ -35,6 +35,8 @@ CHANGED 26
 
 -->
 
+  <aura:registerEvent name="evt_ShowLevelsChange" type="c:evt_ShowLevelsChange"/>
+  <aura:handler event="c:evt_ShowLevelsChange" action="{!c.handle_evt_ShowLevelsChange}"/>
 
   <!-- Design Paramters -->
   <aura:attribute name="card1" type="String" default="No node selected"/>    
@@ -44,12 +46,13 @@ CHANGED 26
   <aura:attribute name="cardSelected" type="Boolean" default="false"/>    
   <aura:attribute name="retainNodeDetalsMouseOut" type="Boolean" default="true"/>    
   <aura:attribute name="showPathToolTip" type="Boolean" default="true"/>    
-	<aura:attribute name="levels" type="Integer" default="1"/>    
+	<aura:attribute name="maxlevels" type="Integer" default="4"/>    
   
 
   <!-- Technical - Chart -->
   <aura:attribute name="currentmeasure" type="String"/>    
 	<aura:attribute name="primaryid" type="String"/>    
+	<aura:attribute name="showlevels" type="Integer" default="1"/>    
 
 	<aura:attribute name="initialized" type="Boolean" default="false"/>    
 	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
@@ -102,15 +105,6 @@ CHANGED 26
                 <c:buttonDynamic aura:id="b3" label="" class="slds-button slds-button_brand" onclick="{!c.handleRelationshipTypeB3}"/>
                 <c:buttonDynamic aura:id="b4" label="" class="slds-button slds-button_brand" onclick="{!c.handleRelationshipTypeB4}"/>
                 <c:buttonDynamic aura:id="b5" label="" class="slds-button slds-button_brand" onclick="{!c.handleRelationshipTypeB5}"/>
-            </div>
-          </div>
-          <div class="slds-col slds-size_1-of-2 slds-small-size_1-of-2 slds-medium-size_1-of-2" style="display:none;">
-            <h1 class="slds-text-heading_label">Levels</h1>
-            <div class="slds slds-button-group" role="group">
-              <button aura:id="l1" class="slds-button slds-button_brand" onclick="{!c.handleClickLevel1}">1 Level</button>
-              <button aura:id="l2" class="slds-button slds-button_neutral" onclick="{!c.handleClickLevel2}">2 Levels</button>
-              <button aura:id="l3" class="slds-button slds-button_neutral" onclick="{!c.handleClickLevel3}">3 Levels</button>
-              <button aura:id="l4" class="slds-button slds-button_neutral" onclick="{!c.handleClickLevel4}">4 Levels</button>
             </div>
           </div>
           <div class="slds-col slds-size_1-of-2 slds-small-size_1-of-2 slds-medium-size_1-of-2">

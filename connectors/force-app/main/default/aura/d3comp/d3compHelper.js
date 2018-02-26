@@ -1,5 +1,7 @@
 ({
 
+    /* Chart auxilliary methods */
+
     transform: function(component, d) {
         var _this = this;
         var dx = _this.limitborderx(component, d.x);
@@ -16,9 +18,9 @@
     limitbordery: function(component, y) {
         var height = component.get("v.height");
         return Math.max(Math.min(y, height - 50), 20 );
-    },
+    },    
 
-    init: function(component, inputjson) {
+    initializeData: function(component, datastring) {
         var _this = this;
         var initialized = component.get("v.initialized");
         console.log("init:initialized: " + initialized);
@@ -35,57 +37,23 @@
             var width = component.get("v.width") / 2;
             var height = component.get("v.height") / 2;
 
-            // TODO: put the styles in a class
-            
-            // var nodeToolTipDiv = chartArea
-            //     .append("div")
-                // .classed("nodeToolTip", true)
-                // .attr("id","nodeToolTip")
-                // .append("div")
-            
-            var nodeToolTipDiv = d3.select("#nodeToolTip");
-            // nodeToolTipDiv
-            //     .style("opacity", 0)
-            //     .style("position", "relative")
-            //     .style("text-align", "center")
-            //     .style("width", "60px")
-            //     .style("height", "28px")
-            //     .style("padding", "2px")
-            //     .style("font", "12px sans-serif")
-            //     .style("background", "lightsteelblue")
-            //     .style("border", "0px")
-            //     .style("border-radius", "8px")
-            //     .style("pointer-events", "none")
-            //     .style("visibility", "hidden")
-            //     ;
 
-            // TODO: put the styles in a class
+            // Styling of tooltips - see GitHub prior to Feb 24, 2018
+            var nodeToolTipDiv = d3.select("#nodeToolTip");
             var pathToolTipDiv = d3.select("#pathToolTip");
             
-            // var pathToolTipDiv = chartArea
-            //     .append("div")
-            //     .attr("class", "tooltip")
-            //     .style("opacity", 0)
-            //     .style("position", "relative")
-            //     .style("text-align", "center")
-            //     .style("width", "60px")
-            //     .style("height", "28px")
-            //     .style("padding", "2px")
-            //     .style("font", "12px sans-serif")
-            //     .style("background", "lightsteelblue")
-            //     .style("border", "0px")
-            //     .style("border-radius", "8px")
-            //     .style("pointer-events", "none");
-
-
             // underlying data parsed to JSON object
-            var datajson = JSON.parse(inputjson);
+            var datajson = JSON.parse(datastring);
             component.set("v.datajson", datajson);
 
             // underlying config parsed to JSON object
             // TODO - read from Design Parameter
-            var configString = '{"filtertypes":["coworker","social","client"],"measures":["Posts","Hot"],"levels":4,"centreonclick":true}';
-            var configjson = JSON.parse(configString);
+            var configjson = 
+                {"filtertypes":["coworker","social","client"]
+                ,"measures":["Posts","Hot"]
+                ,"levels":4
+                ,"centreonclick":true};
+            
             component.set("v.configjson", configjson);
             
             console.log('datajson');
@@ -94,9 +62,21 @@
             console.log(configjson);
 
             // set the first measure as default
+            var currentmeasure = configjson.measures[0];
+            component.set("v.currentmeasure", currentmeasure);
 
-            var measure = configjson.measures[0];
-            component.set("v.currentmeasure", measure);
+            // set the maximum number of levels
+            var maxlevels = configjson.levels;
+            console.log("maxlevels:" + maxlevels);
+            if ((typeof maxlevels === 'number'))
+            {
+                console.log("setting maxlevels from configuration: " + maxlevels);
+                component.set("v.maxlevels", maxlevels);          
+            }  
+            else
+            {
+                console.log("using default maxlevels ");
+            }
 
             /* primary node */
             var primaryid = datajson.nodes[0].id;
@@ -236,12 +216,7 @@
             sfd3nodes = svg.append("g").selectAll("circle")
                 .data(sfd3force.nodes())
                 .enter().append("circle")
-                .attr("r", function(d) {
-                    return d.measures[measure].radius;
-                })
-                .attr("fill", function(d) {
-                    return d.measures[measure].color;
-                })
+                // set data related attributes - visual styling is applied later
                 .attr("id", function(d) {
                     return d.id;
                 })
@@ -327,7 +302,7 @@
                     }
                     // reset the clicked node to be the primary
                     component.set("v.primaryid", d.id);
-                    _this.filterGraph(component);
+                    _this.refreshVisibility(component);
                 })
                 .on('dblclick', function(d) {
                     var win = window.open("/" + d.id, '_blank');
@@ -366,38 +341,45 @@
                     return d.name;
                 });
 
+
             component.set("v.text", text);
 
             component.set("v.sfd3nodes", sfd3nodes);
             component.set("v.sfd3paths", sfd3paths);
             component.set("v.sfd3force", sfd3force);
 
+            console.log("apply node styling");
+            _this.styleNodes(component, currentmeasure);
+
+            console.log("apply node visibility");
+            _this.refreshVisibility(component);
+            
         }
         console.log("exit init");
     },
 
-    // Method to filter graph
-    filterGraph: function(component) {
+    // TODO why is this not called on first page load?
+    refreshVisibility: function(component) {
 
-        console.log("Enter filterGraph");
+        console.log("Enter refreshVisibility");
 
         var _this = this;
         // change the visibility of the connection path
 
-        var measure = component.get("v.currentmeasure");
+        var currentmeasure = component.get("v.currentmeasure");
         var sfd3nodes = component.get("v.sfd3nodes");
         var sfd3paths = component.get("v.sfd3paths");
 
         var shownodeids = [];
 
-        var levels = component.get("v.levels");
+        var levels = component.get("v.showlevels");
         var relatedNodes = _this.getRelatedNodes(component, levels);
 
         sfd3paths.style("visibility", function(o) {
 
             var retval = "hidden";
-            var sourcevis = o.source.measures[measure].visible;
-            var targetvis = o.target.measures[measure].visible;
+            var sourcevis = o.source.measures[currentmeasure].visible;
+            var targetvis = o.target.measures[currentmeasure].visible;
 
             var sourceindex = relatedNodes.indexOf(o.source.id);
             var targetindex = relatedNodes.indexOf(o.target.id);
@@ -431,7 +413,6 @@
         // if all the links with that node are invisibile, the node should also be invisible
         // otherwise if any link related to that node is visibile, the node should be visible
         sfd3nodes.style("visibility", function(o, i) {
-
             var index = shownodeids.indexOf(o.id);
             if (index > -1) {
                 d3.select("#t" + o.id).style("visibility", "visible");
@@ -444,27 +425,12 @@
             }
         });
 
+        // TODO - needed? Unlikely
         component.set("v.sfd3nodes", sfd3nodes);
         component.set("v.sfd3paths", sfd3paths);
 
-        _this.styleNodes(component, measure);
+        _this.styleNodes(component, currentmeasure);
     },
-
-/*    
-    linkArc: function(d) {
-        console.log("enter linkArc");
-
-        var _this = this;
-        var sx = limitborderx(component, d.source.x);
-        var sy = limitbordery(component, d.source.y);
-        var tx = limitborderx(component, d.target.x);
-        var ty = limitbordery(component, d.target.y);
-        var dx = tx - sx;
-        var dy = ty - sy;
-        var dr = Math.sqrt(dx * dx + dy * dy);
-        return "M" + sx + "," + sy + "A" + dr + "," + dr + " 0 0,1 " + tx + "," + ty;
-    },
-*/
 
 
     getRelatedNodes: function(component, level) {
@@ -506,17 +472,12 @@
         return linkednodes;
     },
 
-
-
-
     // Method to resize nodes
     styleNodes: function(component, aType) {
         // change the visibility of the connection path
         console.log("styleNodes : " + aType);
 
         var sfd3nodes = component.get("v.sfd3nodes");
-
-        // change the size of the node 
 
         sfd3nodes.attr("r", function(o, i) {
             return o.measures[aType].radius;
@@ -525,7 +486,6 @@
         sfd3nodes.style("fill", function(o, i) {
             return o.measures[aType].color;
         });
-
 
         sfd3nodes.style("stroke", function(o, i) {
             var primaryid = component.get("v.primaryid");
@@ -543,13 +503,102 @@
             var sfd3nodesstrokewidth = component.get("v.sfd3nodesstrokewidth");
             return sfd3nodesstrokewidth;
         });
-
-        component.set("v.sfd3nodes", sfd3nodes);
-
     },
 
+    setConnectionLevelLess: function(component) {
+        var _this = this;
+        var showlevels = component.get("v.showlevels");
 
+        // refresh chart
+        if (showlevels > 1) {
+            showlevels--;
+            console.log("decreasing levels to: " + showlevels);
+            component.set("v.showlevels", showlevels);
+            _this.refreshVisibility(component);
+        }
+        // refresh buttons
+        // "more" button should be enabled, "less" button should be disabled if we've reached lowest level
+        var cmpTargetMore = component.find("more");
+        cmpTargetMore.set("v.disabled", "false");
+        if (showlevels == 1) {
+            var cmpTargetLess = component.find("less");
+            cmpTargetLess.set("v.disabled", "true");
+        }
+    },
 
+    setConnectionLevelMore: function(component) {
+
+        console.log("enter setConnectionLevelMore");
+
+        var _this = this;
+
+        var showlevels = component.get("v.showlevels");
+        var maxlevels = component.get("v.maxlevels");
+
+        // refresh chart
+        if (showlevels < maxlevels) {
+            showlevels++;
+            console.log("increasing levels to: " + showlevels);
+            component.set("v.showlevels", showlevels);
+            _this.refreshVisibility(component);
+        }
+        // refresh buttons
+        // "less" button should be enabled, "more" button should be disabled if we've reached max level
+        var cmpTargetLess = component.find("less");
+        cmpTargetLess.set("v.disabled", "false");
+        if (showlevels >= maxlevels) {
+            var cmpTargetMore = component.find("more");
+            cmpTargetMore.set("v.disabled", "true");
+        }
+    },
+
+    setMeasureAndRefresh: function(component, currentmeasure) {
+        var _this = this;
+        console.log("setMeasureAndRefresh: Measure=" + currentmeasure);
+        component.set("v.currentmeasure", currentmeasure);
+
+        console.log("refreshing styles");
+        _this.styleNodes(component, currentmeasure);
+    
+    },
+
+    setThisLinkType: function(component, indexer) {
+        var cmpTarget = component.find('b' + indexer);
+        $A.util.toggleClass(cmpTarget, 'slds-button_neutral');
+        $A.util.toggleClass(cmpTarget, 'slds-button_brand');
+        var isClicked = $A.util.hasClass(cmpTarget, 'slds-button_brand');
+        var configjson = component.get("v.configjson");
+        var thisType = configjson.filtertypes[indexer - 1];
+        this.setLinkType(component, thisType, isClicked);
+    },
+
+    setMeasure: function(component, indexer) {
+        var idprefix = 'v' + indexer;
+        var cmpTarget = component.find(idprefix);
+        var configjson = component.get("v.configjson");
+        var thisMeasure = configjson.measures[indexer - 1];
+
+        // refresh Chart
+        this.setMeasureAndRefresh(component, thisMeasure);
+
+        // refresh Buttons
+        this.updateButtonStyles(component, 'v', indexer, 5);
+    },
+
+    setLinkType: function(component, thisType, isClicked) {
+        var _this = this;
+        var clickedfilters = component.get("v.clickedfilters");
+        if (isClicked) {
+            clickedfilters.push(thisType);
+        } else {
+            var index = clickedfilters.indexOf(thisType);
+            if (index > -1) {
+                clickedfilters.splice(index, 1);
+            }
+        }
+        component.set("v.clickedfilters", clickedfilters);
+        _this.refreshVisibility(component);
+    },
 
     formatButtons: function(component, arrayNames, idprefix, maxbuttons) {
         var _this = this;
@@ -569,160 +618,44 @@
             var cmpTarget = component.find(idprefix + index);
             cmpTarget.set("v.show", "false");
         }
-        _this.filterGraph(component);
-
     },
 
-    setConnectionLevel: function(component, d) {
-        var _this = this;
+    updateButtonStyles: function(cmp, prefix, selectedIndex, numberOfButtons) {
+        var selectedButtonLabel = prefix + selectedIndex;
 
-        var levels = component.set("v.levels", d);
-        _this.filterGraph(component);
-        var elementid = 'l' + d;
-        var cmpTarget = component.find(elementid);
-        $A.util.toggleClass(cmpTarget, 'slds-button_neutral');
-        $A.util.toggleClass(cmpTarget, 'slds-button_brand');
-        this.clearOtherLevels(component, elementid);
-    },
-
-    setConnectionLevelLess: function(component) {
-        var _this = this;
-
-        var levels = component.get("v.levels");
-
-        if (levels > 1) {
-            var newlevels = levels - 1;
-            var levels = component.set("v.levels", newlevels);
-            _this.filterGraph(component);
-        }
-        var cmpTargetMore = component.find("more");
-        cmpTargetMore.set("v.disabled", "false");
-        if (levels == 1) {
-            var cmpTargetLess = component.find("less");
-            cmpTargetLess.set("v.disabled", "true");
-        }
-
-    },
-
-    setConnectionLevelMore: function(component) {
-
-        console.log("enter setConnectionLevelMore");
-
-        var _this = this;
-
-        //TODO need to set a maximum levels?? Might be hard .. - currently got a default of 4
-
-        var levels = component.get("v.levels");
-
-        if (levels < 4) {
-            console.log("increasing levels to");
-            var newlevels = levels + 1;
-            console.log(newlevels);
-            var levels = component.set("v.levels", newlevels);
-            _this.filterGraph(component);
-        }
-        var cmpTargetLess = component.find("less");
-        cmpTargetLess.set("v.disabled", "false");
-        if (levels == 4) {
-            var cmpTargetMore = component.find("more");
-            cmpTargetMore.set("v.disabled", "true");
-        }
-    },
-
-    setMeasureAndRefresh: function(component, d) {
-        var _this = this;
-        console.log("setMeasureAndRefresh: Measure=" + d);
-        component.set("v.currentmeasure", d);
-        _this.filterGraph(component);
-    },
-
-    setThislinkshipType: function(component, indexer) {
-        var cmpTarget = component.find('b' + indexer);
-        $A.util.toggleClass(cmpTarget, 'slds-button_neutral');
-        $A.util.toggleClass(cmpTarget, 'slds-button_brand');
-        var isClicked = $A.util.hasClass(cmpTarget, 'slds-button_brand');
-        var configjson = component.get("v.configjson");
-        var thisType = configjson.filtertypes[indexer - 1];
-        this.setlinkshipType(component, thisType, isClicked);
-    },
-
-    setMeasure: function(component, indexer) {
-        var idprefix = 'v' + indexer;
-        var cmpTarget = component.find(idprefix);
-        var configjson = component.get("v.configjson");
-        var thisMeasure = configjson.measures[indexer - 1];
-
-        this.setMeasureAndRefresh(component, thisMeasure);
-        var cmpTarget = component.find(idprefix);
-        $A.util.toggleClass(cmpTarget, 'slds-button_neutral');
-        $A.util.toggleClass(cmpTarget, 'slds-button_brand');
-        this.clearOtherSizes(component, idprefix);
-    },
-
-    setlinkshipType: function(component, thisType, isClicked) {
-        var _this = this;
-        var clickedfilters = component.get("v.clickedfilters");
-        if (isClicked) {
-            clickedfilters.push(thisType);
-        } else {
-            var index = clickedfilters.indexOf(thisType);
-            if (index > -1) {
-                clickedfilters.splice(index, 1);
+        console.log("updateButtonStyles: other than " + selectedButtonLabel);
+        for (i = 1; i <= numberOfButtons; i++) { 
+            var iteratedButtonLabel = prefix + i;
+            var cmpTarget = cmp.find(iteratedButtonLabel);
+            if (selectedButtonLabel != iteratedButtonLabel) {
+                $A.util.addClass(cmpTarget, 'slds-button_neutral');
+                $A.util.removeClass(cmpTarget, 'slds-button_brand');
+            }
+            else {
+                $A.util.addClass(cmpTarget, 'slds-button_brand');
+                $A.util.removeClass(cmpTarget, 'slds-button_neutral');
             }
         }
-        component.set("v.clickedfilters", clickedfilters);
-        _this.filterGraph(component);
-    },
-
-    clearOtherLevels: function(cmp, b) {
-        if (b != 'l1') {
-            var cmpTarget = cmp.find('l1');
-            $A.util.addClass(cmpTarget, 'slds-button_neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button_brand');
-        }
-        if (b != 'l2') {
-            var cmpTarget = cmp.find('l2');
-            $A.util.addClass(cmpTarget, 'slds-button_neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button_brand');
-        }
-        if (b != 'l3') {
-            var cmpTarget = cmp.find('l3');
-            $A.util.addClass(cmpTarget, 'slds-button_neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button_brand');
-        }
-        if (b != 'l4') {
-            var cmpTarget = cmp.find('l4');
-            $A.util.addClass(cmpTarget, 'slds-button_neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button_brand');
-        }
-    },
-
-    clearOtherSizes: function(cmp, b) {
-        if (b != 'v1') {
-            var cmpTarget = cmp.find('v1');
-            $A.util.addClass(cmpTarget, 'slds-button_neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button_brand');
-        }
-        if (b != 'v2') {
-            var cmpTarget = cmp.find('v2');
-            $A.util.addClass(cmpTarget, 'slds-button_neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button_brand');
-        }
-        if (b != 'v3') {
-            var cmpTarget = cmp.find('v3');
-            $A.util.addClass(cmpTarget, 'slds-button_neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button_brand');
-        }
-        if (b != 'v4') {
-            var cmpTarget = cmp.find('v4');
-            $A.util.addClass(cmpTarget, 'slds-button_neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button_brand');
-        }
-        if (b != 'v5') {
-            var cmpTarget = cmp.find('v5');
-            $A.util.addClass(cmpTarget, 'slds-button_neutral');
-            $A.util.removeClass(cmpTarget, 'slds-button_brand');
-        }
     }
+
+    
+
+/*    
+    linkArc: function(d) {
+        console.log("enter linkArc");
+
+        var _this = this;
+        var sx = limitborderx(component, d.source.x);
+        var sy = limitbordery(component, d.source.y);
+        var tx = limitborderx(component, d.target.x);
+        var ty = limitbordery(component, d.target.y);
+        var dx = tx - sx;
+        var dy = ty - sy;
+        var dr = Math.sqrt(dx * dx + dy * dy);
+        return "M" + sx + "," + sy + "A" + dr + "," + dr + " 0 0,1 " + tx + "," + ty;
+    },
+*/
+
+
 
 })
