@@ -35,9 +35,9 @@ CHANGED 27
 
 -->
 
-  <aura:registerEvent name="evt_ShowLevelsChange" type="c:evt_ShowLevelsChange"/>
-  <aura:handler event="c:evt_ShowLevelsChange" action="{!c.handle_evt_ShowLevelsChange}"/>
-
+  <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
+  <aura:handler event="c:evt_sfd3" action="{!c.handle_evt_sfd3}"/>
+  
   <!-- Design Paramters -->
   <aura:attribute name="card1" type="String" default="No node selected"/>    
   <aura:attribute name="card2" type="String" default=""/>    
@@ -110,18 +110,18 @@ CHANGED 27
           <div class="slds-col slds-size_1-of-2 slds-small-size_1-of-2 slds-medium-size_1-of-2">
             <h1 class="slds-text-heading_label">Show</h1>
             <div class="slds slds-button-group" role="group">
-              <c:buttonDynamic aura:id="less" label="Fewer" class="slds-button slds-button_neutral" onclick="{!c.handleClickLevelLess}" disabled="true">Less</c:buttonDynamic>
-              <c:buttonDynamic aura:id="more" label="More" class="slds-button slds-button_neutral" onclick="{!c.handleClickLevelMore}" disabled="false">More</c:buttonDynamic>
+              <c:buttonDynamic aura:id="less" label="Fewer" class="slds-button slds-button_neutral" onclick="{!c.onClickLevelFewer}" disabled="true">Less</c:buttonDynamic>
+              <c:buttonDynamic aura:id="more" label="More" class="slds-button slds-button_neutral" onclick="{!c.onClickLevelMore}" disabled="false">More</c:buttonDynamic>
             </div>
           </div>
           <div class="slds-col slds-size_1-of-2 slds-small-size_1-of-2 slds-medium-size_1-of-2">
             <h1 class="slds-text-heading_label">Size By</h1>
             <div class="slds slds-button-group" role="group">
-                <c:buttonDynamic aura:id="v1" label="" class="slds-button slds-button_brand" onclick="{!c.handleMeasureV1}"/>
-                <c:buttonDynamic aura:id="v2" label="" class="slds-button slds-button_neutral" onclick="{!c.handleMeasureV2}"/>
-                <c:buttonDynamic aura:id="v3" label="" class="slds-button slds-button_neutral" onclick="{!c.handleMeasureV3}"/>
-                <c:buttonDynamic aura:id="v4" label="" class="slds-button slds-button_neutral" onclick="{!c.handleMeasureV4}"/>
-                <c:buttonDynamic aura:id="v5" label="" class="slds-button slds-button_neutral" onclick="{!c.handleMeasureV5}"/>
+                <c:buttonDynamic aura:id="v1" label="" class="slds-button slds-button_brand" onclick="{!c.onClickMeasureV1}"/>
+                <c:buttonDynamic aura:id="v2" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV2}"/>
+                <c:buttonDynamic aura:id="v3" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV3}"/>
+                <c:buttonDynamic aura:id="v4" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV4}"/>
+                <c:buttonDynamic aura:id="v5" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV5}"/>
             </div>
           </div>
         </div>

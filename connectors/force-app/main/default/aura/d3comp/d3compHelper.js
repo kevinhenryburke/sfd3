@@ -1,7 +1,8 @@
 ({
 
-    /* Chart auxilliary methods */
+    /* CHART methods - Initialize */
 
+    // called by initializeData
     transform: function(component, d) {
         var _this = this;
         var dx = _this.limitborderx(component, d.x);
@@ -10,16 +11,19 @@
         return retVal;
     },
 
+    // called by initializeData -> transform
     limitborderx: function(component, x) {
         var width = component.get("v.width");
         return Math.max(Math.min(x, width), 20);
     },
 
+    // called by initializeData -> transform
     limitbordery: function(component, y) {
         var height = component.get("v.height");
         return Math.max(Math.min(y, height - 50), 20 );
     },    
 
+    // called by initializeData -> transform
     initializeData: function(component, datastring) {
         var _this = this;
         var initialized = component.get("v.initialized");
@@ -358,21 +362,39 @@
         console.log("exit init");
     },
 
-    // TODO why is this not called on first page load?
+    /* CHART methods - Refresh */
+
+
+    refreshVisibility_LevelsFewer: function(component) {
+        console.log("enter refreshVisibility_LevelsMore");
+        var _this = this;
+        _this.refreshVisibility(component);
+    },
+
+    refreshVisibility_LevelsMore: function(component) {
+        console.log("enter refreshVisibility_LevelsMore");
+        var _this = this;
+        _this.refreshVisibility(component);
+    },
+    
     refreshVisibility: function(component) {
 
         console.log("Enter refreshVisibility");
 
         var _this = this;
+
         // change the visibility of the connection path
 
-        var currentmeasure = component.get("v.currentmeasure");
+        // "v.currentmeasure", "v.showlevels", "v.clickedfilters" - belong to control panel - should be fed in
         var sfd3nodes = component.get("v.sfd3nodes");
         var sfd3paths = component.get("v.sfd3paths");
 
-        var shownodeids = [];
-
+        // "v.sfd3nodes" / "v.sfd3paths" - belong to the chart
         var levels = component.get("v.showlevels");
+        var clickedfilters = component.get("v.clickedfilters");
+        var currentmeasure = component.get("v.currentmeasure");
+
+        var shownodeids = [];
         var relatedNodes = _this.getRelatedNodes(component, levels);
 
         sfd3paths.style("visibility", function(o) {
@@ -388,7 +410,6 @@
 
             if ((sourcevis === 1) && (targetvis === 1) && primaryrelated) {
 
-                var clickedfilters = component.get("v.clickedfilters");
                 var index = clickedfilters.indexOf(o.type);
 
                 if (index > -1) {
@@ -505,18 +526,11 @@
         });
     },
 
-    setConnectionLevelLess: function(component) {
-        var _this = this;
+    /* BUTTON methods */
+    
+    setConnectionLevelFewerButtons: function(component) {
+        console.log("enter setConnectionLevelFewer");
         var showlevels = component.get("v.showlevels");
-
-        // refresh chart
-        if (showlevels > 1) {
-            showlevels--;
-            console.log("decreasing levels to: " + showlevels);
-            component.set("v.showlevels", showlevels);
-            _this.refreshVisibility(component);
-        }
-        // refresh buttons
         // "more" button should be enabled, "less" button should be disabled if we've reached lowest level
         var cmpTargetMore = component.find("more");
         cmpTargetMore.set("v.disabled", "false");
@@ -526,23 +540,12 @@
         }
     },
 
-    setConnectionLevelMore: function(component) {
-
-        console.log("enter setConnectionLevelMore");
-
-        var _this = this;
-
+    setConnectionLevelMoreButtons: function(component) {
+        console.log("enter setConnectionLevelMoreButtons");
         var showlevels = component.get("v.showlevels");
         var maxlevels = component.get("v.maxlevels");
-
-        // refresh chart
-        if (showlevels < maxlevels) {
-            showlevels++;
-            console.log("increasing levels to: " + showlevels);
-            component.set("v.showlevels", showlevels);
-            _this.refreshVisibility(component);
-        }
-        // refresh buttons
+        
+            // refresh buttons
         // "less" button should be enabled, "more" button should be disabled if we've reached max level
         var cmpTargetLess = component.find("less");
         cmpTargetLess.set("v.disabled", "false");
@@ -552,14 +555,11 @@
         }
     },
 
-    setMeasureAndRefresh: function(component, currentmeasure) {
-        var _this = this;
-        console.log("setMeasureAndRefresh: Measure=" + currentmeasure);
-        component.set("v.currentmeasure", currentmeasure);
-
-        console.log("refreshing styles");
-        _this.styleNodes(component, currentmeasure);
-    
+    setMeasure: function(component, measureIndex) {
+        var configjson = component.get("v.configjson");
+        var thisMeasure = configjson.measures[measureIndex - 1];
+        console.log("setMeasure: Measure=" + thisMeasure);
+        component.set("v.currentmeasure", thisMeasure);
     },
 
     setThisLinkType: function(component, indexer) {
@@ -570,19 +570,6 @@
         var configjson = component.get("v.configjson");
         var thisType = configjson.filtertypes[indexer - 1];
         this.setLinkType(component, thisType, isClicked);
-    },
-
-    setMeasure: function(component, indexer) {
-        var idprefix = 'v' + indexer;
-        var cmpTarget = component.find(idprefix);
-        var configjson = component.get("v.configjson");
-        var thisMeasure = configjson.measures[indexer - 1];
-
-        // refresh Chart
-        this.setMeasureAndRefresh(component, thisMeasure);
-
-        // refresh Buttons
-        this.updateButtonStyles(component, 'v', indexer, 5);
     },
 
     setLinkType: function(component, thisType, isClicked) {
@@ -636,9 +623,19 @@
                 $A.util.removeClass(cmpTarget, 'slds-button_neutral');
             }
         }
+    },
+
+    /* BUTTON / Publish Events */
+
+    publishEvent : function(topic, parameters) {
+        var appEvent = $A.get("e.c:evt_sfd3");
+        appEvent.setParams({
+            "topic" : topic,
+            "parameters" : parameters
+        });
+        appEvent.fire();
     }
 
-    
 
 /*    
     linkArc: function(d) {

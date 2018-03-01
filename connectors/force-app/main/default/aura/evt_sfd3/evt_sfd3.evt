@@ -1,0 +1,4 @@
+<aura:event type="APPLICATION">
+    <aura:attribute name="topic" type="String" description="Topic"/>
+    <aura:attribute name="parameters" type="String" description="a JSON formatted parameter, name/value pairs"/>
+</aura:event>

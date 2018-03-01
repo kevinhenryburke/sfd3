@@ -70,48 +70,110 @@
         console.log('afterScriptsLoaded finished');
     },
 
+    /* handlers */
+
+    handle_evt_sfd3  : function(component, event, helper) {
+        var topic = event.getParam("topic");
+        console.log("topic: " + topic);
+
+        // Panel Display handlers
+        if (topic == "ShowLevelsMore")
+        {
+            helper.setConnectionLevelMoreButtons(component);
+        }
+        if (topic == "ShowLevelsFewer")
+        {
+            helper.setConnectionLevelFewerButtons(component);
+        }
+        if (topic == "SetMeasure")
+        {
+            var parameters = event.getParam("parameters");
+            var measureIndex = parameters["index"];
+            // refresh Buttons
+            helper.updateButtonStyles(component, 'v', measureIndex, 5);
+        }
+
+
+
+        // Chart Display handers
+        if (topic == "ShowLevelsMore")
+        {
+            helper.refreshVisibility_LevelsMore(component);
+        }
+        if (topic == "ShowLevelsFewer")
+        {
+            helper.refreshVisibility_LevelsFewer(component);
+        }
+        if (topic == "SetMeasure")
+        {
+            var parameters = event.getParam("parameters");
+            var measureIndex = parameters["index"];
+
+            var configjson = component.get("v.configjson");
+            var thisMeasure = configjson.measures[measureIndex - 1];
+        
+            // refresh Chart
+            helper.styleNodes(component, thisMeasure);
+        }
+
+        
+
+    },
+
+    /* onClick methods */
+
+    onClickLevelMore : function(component, event, helper) {
+        console.log("enter setConnectionLevelMore");
+
+        var _this = this;
+
+        var showlevels = component.get("v.showlevels");
+        var maxlevels = component.get("v.maxlevels");
+
+        // publish event if it is valid to do so
+        if (showlevels < maxlevels) {
+            showlevels++;
+            console.log("increasing levels to: " + showlevels);
+            component.set("v.showlevels", showlevels);
+            helper.publishEvent("ShowLevelsMore");
+        }
+        
+    },
+
+    onClickLevelFewer : function(component, event, helper) {
+
+        var _this = this;
+        var showlevels = component.get("v.showlevels");
+
+        // publish event if it is valid to do so
+        if (showlevels > 1) {
+            showlevels--;
+            console.log("decreasing levels to: " + showlevels);
+            component.set("v.showlevels", showlevels);
+            helper.publishEvent("ShowLevelsFewer");
+        }
+    },
+
     
-    handle_evt_ShowLevelsChange  : function(component, event, helper) {
-        var direction = event.getParam("direction");
-        console.log("direction: " + direction);
-        if (direction == "Up")
-        {
-            helper.setConnectionLevelMore(component);
-        }
-        if (direction == "Down")
-        {
-            helper.setConnectionLevelLess(component);
-        }
+    onClickMeasureV1 : function(component, event, helper) {
+        helper.setMeasure(component, 1);
+        helper.publishEvent("SetMeasure", {"index" : 1});
     },
-
-    handleClickLevelMore : function(component, event, helper) {
-        var appEvent = $A.get("e.c:evt_ShowLevelsChange");
-        appEvent.setParams({
-            "direction" : "Up"});
-        appEvent.fire();
+    onClickMeasureV2 : function(component, event, helper) {
+        helper.setMeasure(component, 2);
+        helper.publishEvent("SetMeasure", {"index" : 2});
     },
- 
-    handleClickLevelLess : function(component, event, helper) {
-        var appEvent = $A.get("e.c:evt_ShowLevelsChange");
-        appEvent.setParams({
-            "direction" : "Down"});
-        appEvent.fire();
+    onClickMeasureV3 : function(component, event, helper) {
+        helper.setMeasure(component, 3);
+        helper.publishEvent("SetMeasure", {"index" : 3});
     },
-
-    handleMeasureV1 : function(component, event, helper) {
-        helper.setMeasure(component,1);
+    onClickMeasureV4 : function(component, event, helper) {
+        helper.setMeasure(component, 4);
+        helper.publishEvent("SetMeasure", {"index" : 4});
     },
-    handleMeasureV2 : function(component, event, helper) {
-        helper.setMeasure(component,2);
-    },
-    handleMeasureV3 : function(component, event, helper) {
-        helper.setMeasure(component,3);
-    },
-    handleMeasureV4 : function(component, event, helper) {
-        helper.setMeasure(component,4);
-    },
-    handleMeasureV5 : function(component, event, helper) {
-        helper.setMeasure(component,5);
+    onClickMeasureV5 : function(component, event, helper) {
+        helper.setMeasure(component, 5);
+        helper.publishEvent("SetMeasure", {"index" : 5});
     },
     
     handleRelationshipTypeB1 : function(component, event, helper) {
