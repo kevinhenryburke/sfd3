@@ -30,27 +30,9 @@
         console.log("init:initialized: " + initialized);
 
         if (initialized != true) {
+            console.log("init:initializing config ");
 
-            console.log("init:initializing .... ");
-            var svg = component.get("v.svg");
-            var sfd3nodes = component.get("v.sfd3nodes");
-            var sfd3paths = component.get("v.sfd3paths");
-            var sfd3force = component.get("v.sfd3force");
-
-            var chartArea = d3.select("#chartarea");
-            var width = component.get("v.width") / 2;
-            var height = component.get("v.height") / 2;
-
-
-            // Styling of tooltips - see GitHub prior to Feb 24, 2018
-            var nodeToolTipDiv = d3.select("#nodeToolTip");
-            var pathToolTipDiv = d3.select("#pathToolTip");
-            
-            // underlying data parsed to JSON object
-            var datajson = JSON.parse(datastring);
-            component.set("v.datajson", datajson);
-
-            // underlying config parsed to JSON object
+            /* Configuration initialization */
             // TODO - read from Design Parameter
             var configjson = 
                 {"filtertypes":["coworker","social","client"]
@@ -58,16 +40,9 @@
                 ,"levels":4
                 ,"centreonclick":true};
             
-            component.set("v.configjson", configjson);
-            
-            console.log('datajson');
-            console.log(datajson);
             console.log('configjson');
             console.log(configjson);
-
-            // set the first measure as default
-            var currentmeasure = configjson.measures[0];
-            component.set("v.currentmeasure", currentmeasure);
+            component.set("v.configjson", configjson);
 
             // set the maximum number of levels
             var maxlevels = configjson.levels;
@@ -82,10 +57,43 @@
                 console.log("using default maxlevels ");
             }
 
-            /* primary node */
-            var primaryid = datajson.nodes[0].id;
-            component.set("v.primaryid", primaryid);
+            // set the first measure as default
+            var currentmeasure = configjson.measures[0];
+            component.set("v.currentmeasure", currentmeasure);
 
+
+            // underlying data parsed to JSON object
+            console.log("init:initializing data ");
+            var datajson = JSON.parse(datastring);
+            component.set("v.datajson", datajson);
+            console.log('datajson');
+            console.log(datajson);
+
+            // primary node - this is interesting as could be provided by datajson or config (e.g. on a record detail page)
+            var primaryNodeInitialization = component.get("v.primaryNodeInitialization");
+            //TODO - need to add in when primary node is derived from recordId. In which case derive in config section
+            if (primaryNodeInitialization == 'FirstInData')
+            {
+                var initialPrimaryId = datajson.nodes[0].id;
+                component.set("v.initialPrimaryId", initialPrimaryId);            
+            }
+
+            
+            
+            console.log("init:initializing chart ");
+            var svg = component.get("v.svg");
+            var sfd3nodes = component.get("v.sfd3nodes");
+            var sfd3paths = component.get("v.sfd3paths");
+            var sfd3force = component.get("v.sfd3force");
+
+            var chartArea = d3.select("#chartarea");
+            var width = component.get("v.width") / 2;
+            var height = component.get("v.height") / 2;
+
+            // Styling of tooltips - see GitHub prior to Feb 24, 2018
+            var nodeToolTipDiv = d3.select("#nodeToolTip");
+            var pathToolTipDiv = d3.select("#pathToolTip");
+            
             // Compute the distinct nodes from the links.
             datajson.links.forEach(function(link) {
                 link.source = datajson.nodes[link.source];
@@ -126,11 +134,6 @@
                     component.set("v.text", text);
                 })
                 .start();
-
-            var initialized = component.get("v.initialized");
-            if (initialized != true) {
-                component.set("v.initialized", true);
-            }
 
 
             // Per-type markers, as they don't inherit styles.
@@ -305,8 +308,10 @@
                         console.log("not iOS");
                     }
                     // reset the clicked node to be the primary
-                    component.set("v.primaryid", d.id);
+                    // TODO This will need to be passed in the refreshVisibility call.
+                    component.set("v.chartPrimaryId", d.id);
                     _this.refreshVisibility(component);
+                    _this.styleNodes(component, null, d.id);
                 })
                 .on('dblclick', function(d) {
                     var win = window.open("/" + d.id, '_blank');
@@ -352,11 +357,13 @@
             component.set("v.sfd3paths", sfd3paths);
             component.set("v.sfd3force", sfd3force);
 
-            console.log("apply node styling");
-            _this.styleNodes(component, currentmeasure);
+            console.log("apply node styling passing through initialPrimaryId");
+            _this.styleNodes(component, currentmeasure, initialPrimaryId);
 
             console.log("apply node visibility");
             _this.refreshVisibility(component);
+
+            component.set("v.initialized", true);
             
         }
         console.log("exit init");
@@ -393,6 +400,8 @@
         var levels = component.get("v.showlevels");
         var clickedfilters = component.get("v.clickedfilters");
         var currentmeasure = component.get("v.currentmeasure");
+        var chartPrimaryId = component.get("v.chartPrimaryId");
+        console.log("primary node id: " + chartPrimaryId);
 
         var shownodeids = [];
         var relatedNodes = _this.getRelatedNodes(component, levels);
@@ -445,12 +454,6 @@
                 return "hidden";
             }
         });
-
-        // TODO - needed? Unlikely
-        component.set("v.sfd3nodes", sfd3nodes);
-        component.set("v.sfd3paths", sfd3paths);
-
-        _this.styleNodes(component, currentmeasure);
     },
 
 
@@ -458,9 +461,9 @@
 
         var looplevel = 0;
 
-        var primaryid = component.get("v.primaryid");
+        var chartPrimaryId = component.get("v.chartPrimaryId");
 
-        var linkednodes = [primaryid];
+        var linkednodes = [chartPrimaryId];
 
         while (looplevel < level) {
             var newnodes = [];
@@ -494,34 +497,52 @@
     },
 
     // Method to resize nodes
-    styleNodes: function(component, aType) {
+    styleNodes: function(component, currentmeasure, primaryid) {
         // change the visibility of the connection path
-        console.log("styleNodes : " + aType);
+        console.log("styleNodes : " + currentmeasure);
+        console.log("primaryid : " + primaryid);
 
+        if (primaryid != null)
+        {
+            component.set("v.chartPrimaryId", primaryid);        
+        }
+        else {
+            primaryid = component.get("v.chartPrimaryId"); 
+        }
+
+        if (currentmeasure == null)
+        {
+            currentmeasure = component.get("v.currentmeasure"); 
+        }
+        
         var sfd3nodes = component.get("v.sfd3nodes");
 
         sfd3nodes.attr("r", function(o, i) {
-            return o.measures[aType].radius;
+            // needs to be computed using a configuration provided algorithm?
+            return o.measures[currentmeasure].radius;
         });
 
         sfd3nodes.style("fill", function(o, i) {
-            return o.measures[aType].color;
+            // needs to be computed using a configuration provided algorithm?
+            return o.measures[currentmeasure].color;
         });
 
         sfd3nodes.style("stroke", function(o, i) {
-            var primaryid = component.get("v.primaryid");
+            var stroke = o.stroke;
             if (o.id == primaryid) {
-                return "gold";
+                var primaryNodeHighlightingOn = component.get("v.primaryNodeHighlightingOn");
+                if (primaryNodeHighlightingOn == true) {
+                    stroke = component.get("v.primaryNodeHighlightingColour");
+                }                
             }
-            return o.stroke;
+            return stroke;
         });
 
         sfd3nodes.style("stroke-width", function(o, i) {
-            var primaryid = component.get("v.primaryid");
-            if (o.id == primaryid) {
-                return "10px";
-            }
             var sfd3nodesstrokewidth = component.get("v.sfd3nodesstrokewidth");
+            if (o.id == primaryid) {
+                sfd3nodesstrokewidth = component.get("v.primaryNodeHighlightingRadius");
+            }
             return sfd3nodesstrokewidth;
         });
     },

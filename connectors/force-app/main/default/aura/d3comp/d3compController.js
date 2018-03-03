@@ -112,8 +112,8 @@
             var configjson = component.get("v.configjson");
             var thisMeasure = configjson.measures[measureIndex - 1];
         
-            // refresh Chart
-            helper.styleNodes(component, thisMeasure);
+            // refresh Chart - measure changes but primaryid does not
+            helper.styleNodes(component, thisMeasure, null);
         }
 
         
