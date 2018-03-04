@@ -11,7 +11,10 @@ CHANGED 27
 />
 -->
 
-
+<!-- externally hosted resources - may be required in the D3 component but should not be used anywhere else. 
+  Other parts should be pure lightning
+ -->
+ 
 <ltng:require 
   styles="/resource/pictorcss"
   scripts="/resource/d3minjs"
@@ -47,8 +50,9 @@ CHANGED 27
 	<aura:attribute name="maxlevels" type="Integer" default="4"/>    
 
   <!-- Technical - Panel -->
-	<aura:attribute name="initialPrimaryId" type="String"/> 
-  
+  <aura:attribute name="panelCurrentMeasure" type="String"/>    
+	<aura:attribute name="panelPrimaryId" type="String"/> 
+	<aura:attribute name="panelShowLevels" type="Integer" default="1"/>    
 
   <!-- Design Paramters -->  
   <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
@@ -59,9 +63,9 @@ CHANGED 27
   <aura:attribute name="showPathToolTip" type="Boolean" default="true"/>    
 
   <!-- Technical - Chart -->
-  <aura:attribute name="currentmeasure" type="String"/>    
+  <aura:attribute name="chartCurrentMeasure" type="String"/>    
 	<aura:attribute name="chartPrimaryId" type="String"/> 
-	<aura:attribute name="showlevels" type="Integer" default="1"/>    
+	<aura:attribute name="chartShowLevels" type="Integer" default="1"/>    
 
 	<aura:attribute name="initialized" type="Boolean" default="false"/>    
 	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
@@ -106,24 +110,14 @@ CHANGED 27
 
         <div class="slds-grid slds-wrap">
           <!-- Hidden for topic connections -->
-          <div class="slds-col slds-size_1-of-2 slds-small-size_1-of-2 slds-medium-size_1-of-3" style="display:none;">
-            <h1 class="slds-text-heading_label">Types</h1>
-            <div class="slds slds-button-group" role="group">
-                <c:buttonDynamic aura:id="b1" label="" class="slds-button slds-button_brand" onclick="{!c.handleRelationshipTypeB1}"/>
-                <c:buttonDynamic aura:id="b2" label="" class="slds-button slds-button_brand" onclick="{!c.handleRelationshipTypeB2}"/>
-                <c:buttonDynamic aura:id="b3" label="" class="slds-button slds-button_brand" onclick="{!c.handleRelationshipTypeB3}"/>
-                <c:buttonDynamic aura:id="b4" label="" class="slds-button slds-button_brand" onclick="{!c.handleRelationshipTypeB4}"/>
-                <c:buttonDynamic aura:id="b5" label="" class="slds-button slds-button_brand" onclick="{!c.handleRelationshipTypeB5}"/>
-            </div>
-          </div>
-          <div class="slds-col slds-size_1-of-2 slds-small-size_1-of-2 slds-medium-size_1-of-2">
+          <div class="slds-col slds-size_1-of-3 slds-small-size_1-of-2 slds-medium-size_1-of-3">
             <h1 class="slds-text-heading_label">Show</h1>
             <div class="slds slds-button-group" role="group">
               <c:buttonDynamic aura:id="less" label="Fewer" class="slds-button slds-button_neutral" onclick="{!c.onClickLevelFewer}" disabled="true">Less</c:buttonDynamic>
               <c:buttonDynamic aura:id="more" label="More" class="slds-button slds-button_neutral" onclick="{!c.onClickLevelMore}" disabled="false">More</c:buttonDynamic>
             </div>
           </div>
-          <div class="slds-col slds-size_1-of-2 slds-small-size_1-of-2 slds-medium-size_1-of-2">
+          <div class="slds-col slds-size_1-of-3 slds-small-size_1-of-2 slds-medium-size_1-of-3">
             <h1 class="slds-text-heading_label">Size By</h1>
             <div class="slds slds-button-group" role="group">
                 <c:buttonDynamic aura:id="v1" label="" class="slds-button slds-button_brand" onclick="{!c.onClickMeasureV1}"/>
@@ -131,6 +125,16 @@ CHANGED 27
                 <c:buttonDynamic aura:id="v3" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV3}"/>
                 <c:buttonDynamic aura:id="v4" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV4}"/>
                 <c:buttonDynamic aura:id="v5" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV5}"/>
+            </div>
+          </div>
+          <div class="slds-col slds-size_1-of-3 slds-small-size_1-of-2 slds-medium-size_1-of-3" >
+            <h1 class="slds-text-heading_label">Relation</h1>
+            <div class="slds slds-button-group" role="group">
+                <c:buttonDynamic aura:id="b1" label="" class="slds-button slds-button_neutral" onclick="{!c.handleRelationshipTypeB1}"/>
+                <c:buttonDynamic aura:id="b2" label="" class="slds-button slds-button_neutral" onclick="{!c.handleRelationshipTypeB2}"/>
+                <c:buttonDynamic aura:id="b3" label="" class="slds-button slds-button_neutral" onclick="{!c.handleRelationshipTypeB3}"/>
+                <c:buttonDynamic aura:id="b4" label="" class="slds-button slds-button_neutral" onclick="{!c.handleRelationshipTypeB4}"/>
+                <c:buttonDynamic aura:id="b5" label="" class="slds-button slds-button_neutral" onclick="{!c.handleRelationshipTypeB5}"/>
             </div>
           </div>
         </div>

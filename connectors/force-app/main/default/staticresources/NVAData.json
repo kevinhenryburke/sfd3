@@ -386,7 +386,7 @@
       "id":"100000000000000001",
       "source":"0",
       "target":"1",
-      "type":"social",
+      "type":"Social",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -395,7 +395,7 @@
       "id":"100000000000000002",
       "source":"0",
       "target":"2",
-      "type":"client",
+      "type":"Client",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -404,7 +404,7 @@
       "id":"100000000000000003",
       "source":"0",
       "target":"3",
-      "type":"coworker",
+      "type":"Work",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -413,7 +413,7 @@
       "id":"100000000000000004",
       "source":"0",
       "target":"4",
-      "type":"coworker",
+      "type":"Work",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -422,7 +422,7 @@
       "id":"100000000000000005",
       "source":"0",
       "target":"14",
-      "type":"coworker",
+      "type":"Work",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -431,7 +431,7 @@
       "id":"100000000000000006",
       "source":"0",
       "target":"15",
-      "type":"client",
+      "type":"Client",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -440,7 +440,7 @@
       "id":"100000000000000007",
       "source":"0",
       "target":"16",
-      "type":"coworker",
+      "type":"Work",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -449,7 +449,7 @@
       "id":"100000000000000008",
       "source":"0",
       "target":"17",
-      "type":"coworker",
+      "type":"Work",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -458,7 +458,7 @@
       "id":"100000000000000009",
       "source":"0",
       "target":"18",
-      "type":"coworker",
+      "type":"Work",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -467,7 +467,7 @@
       "id":"100000000000000010",
       "source":"0",
       "target":"19",
-      "type":"coworker",
+      "type":"Work",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -476,7 +476,7 @@
       "id":"100000000000000011",
       "source":"1",
       "target":"7",
-      "type":"client",
+      "type":"Client",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -485,7 +485,7 @@
       "id":"100000000000000012",
       "source":"1",
       "target":"8",
-      "type":"coworker",
+      "type":"Work",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -494,7 +494,7 @@
       "id":"100000000000000013",
       "source":"2",
       "target":"4",
-      "type":"coworker",
+      "type":"Work",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -503,7 +503,7 @@
       "id":"100000000000000014",
       "source":"3",
       "target":"4",
-      "type":"social",
+      "type":"Social",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -512,7 +512,7 @@
       "id":"100000000000000015",
       "source":"3",
       "target":"6",
-      "type":"social",
+      "type":"Social",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -521,7 +521,7 @@
       "id":"100000000000000016",
       "source":"4",
       "target":"5",
-      "type":"coworker",
+      "type":"Work",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -530,7 +530,7 @@
       "id":"100000000000000017",
       "source":"4",
       "target":"19",
-      "type":"coworker",
+      "type":"Work",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -539,7 +539,7 @@
       "id":"100000000000000018",
       "source":"5",
       "target":"4",
-      "type":"coworker",
+      "type":"Work",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -548,7 +548,7 @@
       "id":"100000000000000019",
       "source":"5",
       "target":"15",
-      "type":"social",
+      "type":"Social",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -557,7 +557,7 @@
       "id":"100000000000000020",
       "source":"6",
       "target":"12",
-      "type":"social",
+      "type":"Social",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -566,7 +566,7 @@
       "id":"100000000000000021",
       "source":"6",
       "target":"13",
-      "type":"coworker",
+      "type":"Work",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -575,7 +575,7 @@
       "id":"100000000000000022",
       "source":"9",
       "target":"10",
-      "type":"coworker",
+      "type":"Work",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
@@ -584,7 +584,7 @@
       "id":"100000000000000023",
       "source":"16",
       "target":"17",
-      "type":"coworker",
+      "type":"Work",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"

@@ -35,7 +35,7 @@
             /* Configuration initialization */
             // TODO - read from Design Parameter
             var configjson = 
-                {"filtertypes":["coworker","social","client"]
+                {"filtertypes":["Work","Social","Client"]
                 ,"measures":["Posts","Hot"]
                 ,"levels":4
                 ,"centreonclick":true};
@@ -58,8 +58,8 @@
             }
 
             // set the first measure as default
-            var currentmeasure = configjson.measures[0];
-            component.set("v.currentmeasure", currentmeasure);
+            var panelCurrentMeasure = configjson.measures[0];
+            component.set("v.panelCurrentMeasure", panelCurrentMeasure);
 
 
             // underlying data parsed to JSON object
@@ -74,12 +74,16 @@
             //TODO - need to add in when primary node is derived from recordId. In which case derive in config section
             if (primaryNodeInitialization == 'FirstInData')
             {
-                var initialPrimaryId = datajson.nodes[0].id;
-                component.set("v.initialPrimaryId", initialPrimaryId);            
+                var panelPrimaryId = datajson.nodes[0].id;
+                component.set("v.panelPrimaryId", panelPrimaryId);            
             }
 
+            // TODO ---- the initialization of the chart needs to be called in a method at this point
+            // TODO ---- various parameters need to be passed in. One is the measure which we'll put in a new variable for now
             
-            
+            var chartCurrentMeasure = panelCurrentMeasure;
+            component.set("v.chartCurrentMeasure", chartCurrentMeasure);
+
             console.log("init:initializing chart ");
             var svg = component.get("v.svg");
             var sfd3nodes = component.get("v.sfd3nodes");
@@ -357,8 +361,8 @@
             component.set("v.sfd3paths", sfd3paths);
             component.set("v.sfd3force", sfd3force);
 
-            console.log("apply node styling passing through initialPrimaryId");
-            _this.styleNodes(component, currentmeasure, initialPrimaryId);
+            console.log("apply node styling passing through panelPrimaryId");
+            _this.styleNodes(component, chartCurrentMeasure, panelPrimaryId);
 
             console.log("apply node visibility");
             _this.refreshVisibility(component);
@@ -371,19 +375,6 @@
 
     /* CHART methods - Refresh */
 
-
-    refreshVisibility_LevelsFewer: function(component) {
-        console.log("enter refreshVisibility_LevelsMore");
-        var _this = this;
-        _this.refreshVisibility(component);
-    },
-
-    refreshVisibility_LevelsMore: function(component) {
-        console.log("enter refreshVisibility_LevelsMore");
-        var _this = this;
-        _this.refreshVisibility(component);
-    },
-    
     refreshVisibility: function(component) {
 
         console.log("Enter refreshVisibility");
@@ -392,14 +383,14 @@
 
         // change the visibility of the connection path
 
-        // "v.currentmeasure", "v.showlevels", "v.clickedfilters" - belong to control panel - should be fed in
+        // "v.chartCurrentMeasure", "v.chartShowLevels", "v.clickedfilters" - belong to control panel - should be fed in
         var sfd3nodes = component.get("v.sfd3nodes");
         var sfd3paths = component.get("v.sfd3paths");
 
         // "v.sfd3nodes" / "v.sfd3paths" - belong to the chart
-        var levels = component.get("v.showlevels");
+        var levels = component.get("v.chartShowLevels");
         var clickedfilters = component.get("v.clickedfilters");
-        var currentmeasure = component.get("v.currentmeasure");
+        var chartCurrentMeasure = component.get("v.chartCurrentMeasure");
         var chartPrimaryId = component.get("v.chartPrimaryId");
         console.log("primary node id: " + chartPrimaryId);
 
@@ -409,8 +400,8 @@
         sfd3paths.style("visibility", function(o) {
 
             var retval = "hidden";
-            var sourcevis = o.source.measures[currentmeasure].visible;
-            var targetvis = o.target.measures[currentmeasure].visible;
+            var sourcevis = o.source.measures[chartCurrentMeasure].visible;
+            var targetvis = o.target.measures[chartCurrentMeasure].visible;
 
             var sourceindex = relatedNodes.indexOf(o.source.id);
             var targetindex = relatedNodes.indexOf(o.target.id);
@@ -497,9 +488,9 @@
     },
 
     // Method to resize nodes
-    styleNodes: function(component, currentmeasure, primaryid) {
+    styleNodes: function(component, chartCurrentMeasure, primaryid) {
         // change the visibility of the connection path
-        console.log("styleNodes : " + currentmeasure);
+        console.log("styleNodes : " + chartCurrentMeasure);
         console.log("primaryid : " + primaryid);
 
         if (primaryid != null)
@@ -510,21 +501,21 @@
             primaryid = component.get("v.chartPrimaryId"); 
         }
 
-        if (currentmeasure == null)
+        if (chartCurrentMeasure == null)
         {
-            currentmeasure = component.get("v.currentmeasure"); 
+            chartCurrentMeasure = component.get("v.chartCurrentMeasure"); 
         }
         
         var sfd3nodes = component.get("v.sfd3nodes");
 
         sfd3nodes.attr("r", function(o, i) {
             // needs to be computed using a configuration provided algorithm?
-            return o.measures[currentmeasure].radius;
+            return o.measures[chartCurrentMeasure].radius;
         });
 
         sfd3nodes.style("fill", function(o, i) {
             // needs to be computed using a configuration provided algorithm?
-            return o.measures[currentmeasure].color;
+            return o.measures[chartCurrentMeasure].color;
         });
 
         sfd3nodes.style("stroke", function(o, i) {
@@ -551,11 +542,11 @@
     
     setConnectionLevelFewerButtons: function(component) {
         console.log("enter setConnectionLevelFewer");
-        var showlevels = component.get("v.showlevels");
+        var panelShowLevels = component.get("v.panelShowLevels");
         // "more" button should be enabled, "less" button should be disabled if we've reached lowest level
         var cmpTargetMore = component.find("more");
         cmpTargetMore.set("v.disabled", "false");
-        if (showlevels == 1) {
+        if (panelShowLevels == 1) {
             var cmpTargetLess = component.find("less");
             cmpTargetLess.set("v.disabled", "true");
         }
@@ -563,14 +554,14 @@
 
     setConnectionLevelMoreButtons: function(component) {
         console.log("enter setConnectionLevelMoreButtons");
-        var showlevels = component.get("v.showlevels");
+        var panelShowLevels = component.get("v.panelShowLevels");
         var maxlevels = component.get("v.maxlevels");
         
             // refresh buttons
         // "less" button should be enabled, "more" button should be disabled if we've reached max level
         var cmpTargetLess = component.find("less");
         cmpTargetLess.set("v.disabled", "false");
-        if (showlevels >= maxlevels) {
+        if (panelShowLevels >= maxlevels) {
             var cmpTargetMore = component.find("more");
             cmpTargetMore.set("v.disabled", "true");
         }
@@ -580,7 +571,8 @@
         var configjson = component.get("v.configjson");
         var thisMeasure = configjson.measures[measureIndex - 1];
         console.log("setMeasure: Measure=" + thisMeasure);
-        component.set("v.currentmeasure", thisMeasure);
+        component.set("v.panelCurrentMeasure", thisMeasure);
+        return thisMeasure;
     },
 
     setThisLinkType: function(component, indexer) {
