@@ -1,42 +1,18 @@
 ({
 	
     afterScriptsLoaded: function(component, event, helper) {
-		console.log('afterScriptsLoaded started v24');
+		console.log('afterScriptsLoaded panel started');
 
-        //TODO check this is right
-        var width = Math.min(screen.width, screen.height);
-        component.set("v.width", width);
-
-        //TODO check this is right
-        var height = Math.min(screen.width, screen.height);
-        component.set("v.height", height);
-
-        var svg1 = d3.select("body").append("svg")
-            .attr("width", width)
-            .attr("height", height);
-        component.set("v.svg", svg1);
-
-        var lastTouch1 = new Date().getTime();
-        component.set("v.lastTouch", lastTouch1);
-
-        var agent = navigator.userAgent.toLowerCase();
-        if(agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0){
-               isiOS = true;
-               component.set("v.isiOS", true);
-               console.log("IOS environment");
-        }
-        else {
-            console.log("non-IOS environment");
-        }
-
+        console.log("afterScriptsLoaded: panel");
+                
         var action = component.get("c.returnData");
 
         action.setCallback(this, function(response) {
             var state = response.getState();
             if (state === "SUCCESS") {
-				console.log('data returned from apex');
-
-                helper.initializeData(component, response.getReturnValue());
+                console.log('data returned from apex');
+                
+                helper.initializeConfig(component, response.getReturnValue());
 
                 var datajson = component.get("v.datajson");
                 var configjson = component.get("v.configjson");
@@ -52,22 +28,39 @@
                 maxbuttons = 5;
 
                 helper.formatButtons (component, arrayNames, idprefix, maxbuttons);
+
+                var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
+                var panelPrimaryId = component.get("v.panelPrimaryId");            
+                var panelClickedFilters = component.get("v.panelClickedFilters");     
                 
+                // publish event - configuration loaded
+
+                var configEventParameters = { 
+                    "datajson" : datajson, 
+                    "configjson" : configjson, 
+                    "panelCurrentMeasure" : panelCurrentMeasure, 
+                    "panelPrimaryId" : panelPrimaryId, 
+                    "panelClickedFilters" : panelClickedFilters
+                }
+
+                helper.publishEvent("ConfigInitialized", configEventParameters);                                 
+//                helper.initializeData(component, datajson, configjson, panelCurrentMeasure, panelPrimaryId, panelClickedFilters);                 
+
             }
             else if (state === "ERROR") {
                 var errors = response.getError();
                 if (errors) {
                     if (errors[0] && errors[0].message) {
-                        console.log("Error message: " + errors[0].message);
+                        console.error("Error message: " + errors[0].message);
                     }
                 } else {
-                    console.log("Unknown error");
+                    console.error("Unknown error retrieving data");
                 }
             }
         });
 
         $A.enqueueAction(action);        
-        console.log('afterScriptsLoaded finished');
+        console.log('afterScriptsLoaded panel finished');
     },
 
     /* handlers */
@@ -76,7 +69,7 @@
         var topic = event.getParam("topic");
         console.log("topic: " + topic);
 
-        // Panel Display handlers
+        
         if (topic == "ShowLevelsMore")
         {
             helper.setConnectionLevelMoreButtons(component);
@@ -92,35 +85,6 @@
             // refresh Buttons
             helper.updateButtonStyles(component, 'v', measureIndex, 5);
         }
-
-        // Chart Display handers
-        if (topic == "ShowLevelsMore")
-        {
-            var parameters = event.getParam("parameters");
-            var levels = parameters["levels"];
-            component.set("v.chartShowLevels", levels);
-            helper.refreshVisibility(component);
-        }
-        if (topic == "ShowLevelsFewer")
-        {
-            var parameters = event.getParam("parameters");
-            var levels = parameters["levels"];
-            component.set("v.chartShowLevels", levels);
-            helper.refreshVisibility(component);
-        }
-        if (topic == "SetMeasure")
-        {
-            var parameters = event.getParam("parameters");
-            var measureIndex = parameters["index"];
-            var currentMeasure = parameters["measure"];
-
-            component.set("v.chartCurrentMeasure", currentMeasure);
-            
-            // refresh Chart - measure changes but primaryid does not
-            helper.styleNodes(component, currentMeasure, null);
-        }
-
-        
 
     },
 

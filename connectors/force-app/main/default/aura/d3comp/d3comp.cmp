@@ -1,7 +1,5 @@
 <aura:component implements="forceCommunity:availableForAllPageTypes" controller="DThree">
 
-CHANGED 27
-
 
 <!--
 <ltng:require 
@@ -14,7 +12,7 @@ CHANGED 27
 <!-- externally hosted resources - may be required in the D3 component but should not be used anywhere else. 
   Other parts should be pure lightning
  -->
- 
+
 <ltng:require 
   styles="/resource/pictorcss"
   scripts="/resource/d3minjs"
@@ -40,7 +38,7 @@ CHANGED 27
 
   <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
   <aura:handler event="c:evt_sfd3" action="{!c.handle_evt_sfd3}"/>
-  
+
   <!-- Design Paramters Panel -->
   <aura:attribute name="card1" type="String" default="No node selected"/>    
   <aura:attribute name="card2" type="String" default=""/>    
@@ -53,6 +51,7 @@ CHANGED 27
   <aura:attribute name="panelCurrentMeasure" type="String"/>    
 	<aura:attribute name="panelPrimaryId" type="String"/> 
 	<aura:attribute name="panelShowLevels" type="Integer" default="1"/>    
+  <aura:attribute name="panelClickedFilters" type="Object[]" default="[]" />
 
   <!-- Design Paramters -->  
   <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
@@ -66,6 +65,7 @@ CHANGED 27
   <aura:attribute name="chartCurrentMeasure" type="String"/>    
 	<aura:attribute name="chartPrimaryId" type="String"/> 
 	<aura:attribute name="chartShowLevels" type="Integer" default="1"/>    
+  <aura:attribute name="chartClickedFilters" type="Object[]" default="[]" />
 
 	<aura:attribute name="initialized" type="Boolean" default="false"/>    
 	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
@@ -77,8 +77,6 @@ CHANGED 27
   <aura:attribute name="text" type="Object" />
   <aura:attribute name="sfd3nodes" type="Object" />
   <aura:attribute name="sfd3paths" type="Object" />
-
-  <aura:attribute name="clickedfilters" type="Object[]" default="[]" />
   
   <aura:attribute name="svg" type="Object" />
   <aura:attribute name="width" type="Double" />
@@ -166,10 +164,5 @@ CHANGED 27
       </div>
       </lightning:card>  
 
-  <body>
-    <div id="chartarea" class="chartarea">
-      <div id="nodeToolTip" class="nodeToolTip"></div>
-      <div id="pathToolTip" class="pathToolTip"></div>
-    </div>
-  </body>
+
 </aura:component>
