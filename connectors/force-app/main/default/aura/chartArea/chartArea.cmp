@@ -46,12 +46,6 @@
   <aura:attribute name="cardSelected" type="Boolean" default="false"/>    
 	<aura:attribute name="maxlevels" type="Integer" default="4"/>    
 
-  <!-- Technical - Panel -->
-  <aura:attribute name="panelCurrentMeasure" type="String"/>    
-	<aura:attribute name="panelPrimaryId" type="String"/> 
-	<aura:attribute name="panelShowLevels" type="Integer" default="1"/>    
-  <aura:attribute name="panelClickedFilters" type="Object[]" default="[]" />
-
   <!-- Design Paramters -->  
   <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
 	<aura:attribute name="primaryNodeHighlightingOn" type="Boolean" default="true" description="Determines if selected node should be highlighted"/>    

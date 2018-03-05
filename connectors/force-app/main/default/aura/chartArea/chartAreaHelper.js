@@ -193,8 +193,9 @@
                     s.html(textcontent);
                 }
             })
-            .on('mouseover', function(d) { // card populate
-                // Need to be abstracted - so card vars are provided to this visualization
+            .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
+                // card populate
+                // TODO Need to be abstracted - so card vars are provided to this visualization
                 component.set("v.card1", d.name);
                 component.set("v.card2", d.position);
                 component.set("v.card3", d.account);
@@ -211,7 +212,9 @@
                 t.html(textcontent);
                 var s = d3.select("#s" + d.id);
                 s.html(textcontent);
-            })
+
+                _this.publishEvent("UpdateCard", {"card1" : d.name, "card2" : d.position, "card3" : d.account});
+            }))
             .on('click', function(d) {
 
                 var isiOS = component.get("v.isiOS");
@@ -281,7 +284,7 @@
         component.set("v.sfd3paths", sfd3paths);
         component.set("v.sfd3force", sfd3force);
 
-        console.log("apply node styling passing through panelPrimaryId");
+        console.log("apply node styling");
         _this.styleNodes(component, chartCurrentMeasure, chartPrimaryId);
 
         console.log("apply node visibility");
@@ -485,7 +488,7 @@
 
 
     publishEvent : function(topic, parameters) {
-        // console.log("publishEvent: " + topic + " " + JSON.stringify(parameters));
+        console.log("publishEvent: " + topic + " " + JSON.stringify(parameters));
         var appEvent = $A.get("e.c:evt_sfd3");
         appEvent.setParams({
             "topic" : topic,

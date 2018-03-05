@@ -1,6 +1,6 @@
 ({
 	
-    afterScriptsLoaded: function(component, event, helper) {
+    onInit: function(component, event, helper) {
 		console.log('afterScriptsLoaded panel started');
 
         console.log("afterScriptsLoaded: panel");
@@ -38,13 +38,12 @@
                 var configEventParameters = { 
                     "datajson" : datajson, 
                     "configjson" : configjson, 
-                    "panelCurrentMeasure" : panelCurrentMeasure, 
-                    "panelPrimaryId" : panelPrimaryId, 
-                    "panelClickedFilters" : panelClickedFilters
+                    "currentMeasure" : panelCurrentMeasure, 
+                    "primaryId" : panelPrimaryId, 
+                    "clickedFilters" : panelClickedFilters
                 }
 
                 helper.publishEvent("ConfigInitialized", configEventParameters);                                 
-//                helper.initializeData(component, datajson, configjson, panelCurrentMeasure, panelPrimaryId, panelClickedFilters);                 
 
             }
             else if (state === "ERROR") {
@@ -68,7 +67,6 @@
     handle_evt_sfd3  : function(component, event, helper) {
         var topic = event.getParam("topic");
         console.log("topic: " + topic);
-
         
         if (topic == "ShowLevelsMore")
         {
@@ -85,7 +83,14 @@
             // refresh Buttons
             helper.updateButtonStyles(component, 'v', measureIndex, 5);
         }
-
+        if (topic == "UpdateCard")
+        {
+            var parameters = event.getParam("parameters");
+            component.set("v.card1", parameters["card1"]);
+            component.set("v.card2", parameters["card2"]);
+            component.set("v.card3", parameters["card3"]);
+        }
+        
     },
 
     /* onClick methods */
@@ -109,7 +114,6 @@
     },
 
     onClickLevelFewer : function(component, event, helper) {
-
         var _this = this;
         var panelShowLevels = component.get("v.panelShowLevels");
 

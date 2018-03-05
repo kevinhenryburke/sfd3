@@ -1,40 +1,6 @@
 <aura:component implements="forceCommunity:availableForAllPageTypes" controller="DThree">
 
-
-<!--
-<ltng:require 
-  styles="/resource/pictorcss"
-  scripts="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"
-  afterScriptsLoaded="{!c.afterScriptsLoaded}"
-/>
--->
-
-<!-- externally hosted resources - may be required in the D3 component but should not be used anywhere else. 
-  Other parts should be pure lightning
- -->
-
-<ltng:require 
-  styles="/resource/pictorcss"
-  scripts="/resource/d3minjs"
-  afterScriptsLoaded="{!c.afterScriptsLoaded}"
-/>
-
-<!-- if ever need to add a second script then use join syntax
-  scripts="{!join(',',$Resource.jq331,$Resource.d3minjs)}"
--->
-
-<!--
-<ltng:require 
-  styles="/resource/pictorcss"
-  scripts="{!join(',',$Resource.d3minjs,$Resource.pictorjs)}"
-  afterScriptsLoaded="{!c.afterScriptsLoaded}"
-/>
--->
-
-<!-- attribute types: 
-  https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/ref_aura_attribute.htm
-
--->
+  <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
 
   <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
   <aura:handler event="c:evt_sfd3" action="{!c.handle_evt_sfd3}"/>
@@ -62,37 +28,12 @@
   <aura:attribute name="showPathToolTip" type="Boolean" default="true"/>    
 
   <!-- Technical - Chart -->
-  <aura:attribute name="chartCurrentMeasure" type="String"/>    
-	<aura:attribute name="chartPrimaryId" type="String"/> 
-	<aura:attribute name="chartShowLevels" type="Integer" default="1"/>    
-  <aura:attribute name="chartClickedFilters" type="Object[]" default="[]" />
 
 	<aura:attribute name="initialized" type="Boolean" default="false"/>    
-	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
-	<aura:attribute name="circlestrokewidth" type="String" default="0.5px"/>    
   <aura:attribute name="datajson" type="Object" />
   <aura:attribute name="configjson" type="Object" />
   
-  <aura:attribute name="sfd3force" type="Object" />
-  <aura:attribute name="text" type="Object" />
-  <aura:attribute name="sfd3nodes" type="Object" />
-  <aura:attribute name="sfd3paths" type="Object" />
   
-  <aura:attribute name="svg" type="Object" />
-  <aura:attribute name="width" type="Double" />
-  <aura:attribute name="height" type="Double" />
-  <aura:attribute name="lastTouch" type="DateTime" />
-  
-  <!-- TODO - add
-    Tooltip Transistion Duration
-
-  -->
-
-<!--    
-	<aura:handler name="buttonDynamicEvent" event="c:buttonDynamicEvent" action="{!c.handleComponentEventFired}"/>    
--->
-
-
     <div class="slds">
       <div class="slds-page-header" role="banner">
         <div class="slds-media">

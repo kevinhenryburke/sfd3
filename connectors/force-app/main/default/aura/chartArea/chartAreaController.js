@@ -71,7 +71,7 @@
             var measureIndex = parameters["index"];
             var currentMeasure = parameters["measure"];
 
-            helper.initializeData(component, parameters["datajson"], parameters["configjson"], parameters["panelCurrentMeasure"], parameters["panelPrimaryId"], parameters["panelClickedFilters"]);                 
+            helper.initializeData(component, parameters["datajson"], parameters["configjson"], parameters["currentMeasure"], parameters["primaryId"], parameters["clickedFilters"]);                 
         }
 
     },
