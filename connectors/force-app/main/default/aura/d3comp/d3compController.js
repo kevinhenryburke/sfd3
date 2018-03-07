@@ -62,7 +62,7 @@
         console.log('afterScriptsLoaded panel finished');
     },
 
-    /* handlers */
+    /* handlers */  
 
     handle_evt_sfd3  : function(component, event, helper) {
         var topic = event.getParam("topic");

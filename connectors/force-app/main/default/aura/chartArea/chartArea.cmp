@@ -1,4 +1,4 @@
-<aura:component implements="forceCommunity:availableForAllPageTypes" controller="DThree">
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes">
 
 <!--
 <ltng:require 
@@ -7,17 +7,16 @@
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
 />
 -->
-
+ 
 <!-- externally hosted resources - may be required in the D3 component but should not be used anywhere else. 
   Other parts should be pure lightning
  -->
-
 <ltng:require 
   styles="/resource/pictorcss"
-  scripts="/resource/d3minjs"
+  scripts="/resource/d3v5minjs"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
 />
-
+    
 <!-- if ever need to add a second script then use join syntax
   scripts="{!join(',',$Resource.jq331,$Resource.d3minjs)}"
 -->
@@ -53,7 +52,7 @@
 	<aura:attribute name="primaryNodeHighlightingRadius" type="String" default="10px" description="Determines width of highlighting on a selected node"/>      
   <aura:attribute name="retainNodeDetalsMouseOut" type="Boolean" default="true"/>    
   <aura:attribute name="showPathToolTip" type="Boolean" default="true"/>    
-
+ 
   <!-- Technical - Chart -->
   <aura:attribute name="chartCurrentMeasure" type="String"/>    
 	<aura:attribute name="chartPrimaryId" type="String"/> 
@@ -62,14 +61,15 @@
 
 	<aura:attribute name="initialized" type="Boolean" default="false"/>    
 	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
-	<aura:attribute name="circlestrokewidth" type="String" default="0.5px"/>    
+	<aura:attribute name="nodestrokewidth" type="String" default="0.5px"/>    
   <aura:attribute name="datajson" type="Object" />
   <aura:attribute name="configjson" type="Object" />
   
-  <aura:attribute name="sfd3force" type="Object" />
+  <aura:attribute name="simulation" type="Object" />
   <aura:attribute name="text" type="Object" />
-  <aura:attribute name="sfd3nodes" type="Object" />
-  <aura:attribute name="sfd3paths" type="Object" />
+  <aura:attribute name="pathtext" type="Object" />
+  <aura:attribute name="node" type="Object" />
+  <aura:attribute name="path" type="Object" />
   
   <aura:attribute name="svg" type="Object" />
   <aura:attribute name="width" type="Double" />
@@ -81,10 +81,15 @@
 
   -->
 
+ <!-- 
+  <aura:attribute name="widthCategory" type="String"/>
+  <lightning:flexipageRegionInfo width="{!v.widthCategory}"/>
+  <h1> Width: {!v.widthCategory}</h1>
+ -->
+
 <!--    
 	<aura:handler name="buttonDynamicEvent" event="c:buttonDynamicEvent" action="{!c.handleComponentEventFired}"/>    
 -->
-
 
   <body>
     <div id="chartarea" class="chartarea">

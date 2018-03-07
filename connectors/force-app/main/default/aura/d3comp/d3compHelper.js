@@ -62,9 +62,6 @@
                 component.set("v.panelPrimaryId", panelPrimaryId);            
             }
 
-            var chartCurrentMeasure = panelCurrentMeasure;
-            component.set("v.chartCurrentMeasure", chartCurrentMeasure);
-
             console.log("exit initializeConfig");
         }
     },
@@ -157,7 +154,7 @@
         var selectedButtonLabel = prefix + selectedIndex;
 
         console.log("updateButtonStyles: other than " + selectedButtonLabel);
-        for (i = 1; i <= numberOfButtons; i++) { 
+        for (var i = 1; i <= numberOfButtons; i++) { 
             var iteratedButtonLabel = prefix + i;
             var cmpTarget = cmp.find(iteratedButtonLabel);
             if (selectedButtonLabel != iteratedButtonLabel) {

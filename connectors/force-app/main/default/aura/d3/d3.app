@@ -5,7 +5,8 @@
                 <c:d3comp />
             </div>
             <div class="slds-col slds-size_1-of-2">
-            </div>
+                <c:chartArea />
+            </div> 
         </div>
     </div>
 </aura:application>
