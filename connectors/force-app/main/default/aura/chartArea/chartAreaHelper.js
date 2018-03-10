@@ -14,7 +14,7 @@
     // called by initializeData -> transform
     limitborderx: function(component, x) {
         var width = component.get("v.width");
-        return Math.max(Math.min(x, width), 20);
+        return Math.max(Math.min(x, width) -30, 20);
     },
 
     // called by initializeData -> transform
@@ -109,7 +109,7 @@
                 var showPathToolTip = component.get("v.showPathToolTip");
                 if (showPathToolTip) {
                     pathToolTipDiv.transition()
-                        .delay(6000)
+                        .delay(3000)
                         .duration(2000)
                         .style("opacity", 0);
                 }
@@ -397,6 +397,7 @@
                         pathToolTipDiv.html(content)
                             .style("left", midx + "px")
                             .style("top", midy + "px");
+                
                     }
                 }
             });

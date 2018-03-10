@@ -76,26 +76,21 @@
   <aura:attribute name="height" type="Double" />
   <aura:attribute name="lastTouch" type="DateTime" />
   
-  <!-- TODO - add
-    Tooltip Transistion Duration
 
-  -->
-
- <!-- 
-  <aura:attribute name="widthCategory" type="String"/>
-  <lightning:flexipageRegionInfo width="{!v.widthCategory}"/>
-  <h1> Width: {!v.widthCategory}</h1>
- -->
-
-<!--    
-	<aura:handler name="buttonDynamicEvent" event="c:buttonDynamicEvent" action="{!c.handleComponentEventFired}"/>    
--->
+  <aura:attribute name="flexiWidth" type="String"/>
+  <lightning:flexipageRegionInfo width="{!v.flexiWidth}"/>
 
   <body>
-    <div id="chartarea" class="chartarea">
-      <div id="nodeToolTip" class="nodeToolTip"></div>
-      <div id="pathToolTip" class="pathToolTip"></div>
-    </div>
-  </body>
+8792 {!v.flexiWidth}
+      <div class="c-container">
+          <lightning:layout horizontalAlign="space" verticalAlign="end">
+              <lightning:layoutItem flexibility="grow" padding="around-small" size="12">
+                  <div id="pathToolTip" class="pathToolTip"></div>
+                  <div id="chartarea" class="chartarea"></div>
+                <!-- <div id="nodeToolTip" class="nodeToolTip"></div> -->
+              </lightning:layoutItem>
+            </lightning:layout>
+      </div>
+</body>
 
 </aura:component>
