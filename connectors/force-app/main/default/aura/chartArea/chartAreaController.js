@@ -3,6 +3,7 @@
     doInit: function(component, event, helper) {
 		console.log('chartArea: doInit started');    
         var componentReference = "compref" + Math.floor((Math.random() * 10000000000) + 1);
+		console.log('chartArea: componentReference: ' + componentReference);    
         component.set("v.componentReference", componentReference);
     },
 

@@ -23,14 +23,45 @@
         return Math.max(Math.min(y, height - 50), 20 );
     },    
 
+    // replace ids with component specific versions - this will allow multiple charts on a page without conflict
+    initializeAddComponentRef: function(component, datajson) {
+        var _this = this;
+        datajson.nodes.forEach(function(node) {
+            node["id"] = _this.addComponentRef(component, node["id"]);
+        });
+            
+        datajson.links.forEach(function(link) {
+            link["id"] = _this.addComponentRef(component, link["id"]);
+        });
+    },    
+
+    addComponentRef: function(component, dataItem) {
+        return component.get("v.componentReference") + dataItem;
+    },    
+
+    // remove component specific prefix from id - this will allow original references to be retrieved
+    removeComponentRef: function(component, dataItem) {
+        var indexer = component.get("v.componentReference").length;
+        return dataItem.substring(indexer);
+    },    
+        
     initializeDataV4: function (component, datajson, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters) {
 
         var _this = this;
+
+        console.log("init:initializing initializeDataV4 ");
+        _this.initializeAddComponentRef(component, datajson);
+        console.log(datajson);
+
+        chartPrimaryId = _this.addComponentRef(component, chartPrimaryId);
+
+        var testing = _this.removeComponentRef(component, chartPrimaryId);
+        console.log("testing: " + testing);
+
         component.set("v.chartCurrentMeasure", chartCurrentMeasure);
         component.set("v.chartPrimaryId", chartPrimaryId);            
         component.set("v.chartClickedFilters", chartClickedFilters);            
                 
-        console.log("init:initializing chart ");
         var svg = component.get("v.svg");
         console.log(svg);
         // use the name convention from d3 tutorials (e.g. http://www.puzzlr.org/force-directed-graph-minimal-working-example/)
@@ -125,7 +156,9 @@
                         var mouseoverpathid = this.id;
 
                         path.style("stroke", function(o, i) {
-                            if (o.id === mouseoverpathid) {
+                            var oid =o.id;
+
+                            if (oid === mouseoverpathid) {
                                 return "red";
                             }
                             else
@@ -188,9 +221,13 @@
                     var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + component.get("v.card1") ;
                     textcontent += '</tspan>'; 
 
-                    var t = d3.select("#t" + d.id);
+                    var tselect =  "t" + d.id;
+                    var sselect =  "s" + d.id;
+                        
+                    var t = d3.select("#" + tselect);                    
                     t.html(textcontent);
-                    var s = d3.select("#s" + d.id);
+
+                    var s = d3.select("#" + sselect);
                     s.html(textcontent);
                 }
             })
@@ -210,12 +247,15 @@
                 textcontent += '<tspan x="10" dy="15">' + component.get("v.card2");
                 textcontent += ' (' + component.get("v.card3") + ')</tspan>';
 
-                var t = d3.select("#t" + d.id);
+                var tselect =  "t" + d.id;
+                var sselect =  "s" + d.id;
+
+                var t = d3.select("#" + tselect);
                 console.log("mouseover: " + t);
                 console.log("mouseover: " + textcontent);
                 console.log(t);
                 t.html(textcontent);
-                var s = d3.select("#s" + d.id);
+                var s = d3.select("#" + sselect);
                 s.html(textcontent);
 
                 _this.publishEvent("UpdateCard", {"card1" : d.name, "card2" : d.position, "card3" : d.account});
@@ -241,13 +281,16 @@
                 }
                 // reset the clicked node to be the primary
                 // TODO This will need to be passed in the refreshVisibility call.
-                component.set("v.chartPrimaryId", d.id);
+                var chartPrimaryId = d.id;
+                component.set("v.chartPrimaryId", chartPrimaryId);
+
                 _this.refreshVisibility(component);
-                _this.styleNodes(component, null, d.id);
+                _this.styleNodes(component, null, chartPrimaryId);
             })
             .on('dblclick', function(d) {
-                var win = window.open("/" + d.id, '_blank');
-                win.focus();
+                //TODO implement
+//                var win = window.open("/" + d.id, '_blank');
+//                win.focus();
 
             });
 
@@ -421,8 +464,11 @@ svg.selectAll('.symbol')
             var sourcevis = o.source.measures[chartCurrentMeasure].visible;
             var targetvis = o.target.measures[chartCurrentMeasure].visible;
 
-            var sourceindex = relatedNodes.indexOf(o.source.id);
-            var targetindex = relatedNodes.indexOf(o.target.id);
+            var osourceid = o.source.id;
+            var otargetid = o.target.id;
+
+            var sourceindex = relatedNodes.indexOf(osourceid);
+            var targetindex = relatedNodes.indexOf(otargetid);
 
             var primaryrelated = (sourceindex > -1 && targetindex > -1);
 
@@ -433,14 +479,14 @@ svg.selectAll('.symbol')
                 if (index > -1) {
                     console.log('for: ' + o.source.name + '/' + o.target.name + " return TRUE");
 
-                    var indexsource = shownodeids.indexOf(o.source.id);
+                    var indexsource = shownodeids.indexOf(osourceid);
                     if (indexsource == -1) {
-                        shownodeids.push(o.source.id);
+                        shownodeids.push(osourceid);
                     }
 
-                    var indextarget = shownodeids.indexOf(o.target.id);
+                    var indextarget = shownodeids.indexOf(otargetid);
                     if (indextarget == -1) {
-                        shownodeids.push(o.target.id);
+                        shownodeids.push(otargetid);
                     }
                 }
             }
@@ -452,18 +498,19 @@ svg.selectAll('.symbol')
         // if all the links with that node are invisibile, the node should also be invisible
         // otherwise if any link related to that node is visibile, the node should be visible
         node.style("visibility", function(o, i) {
-            var index = shownodeids.indexOf(o.id);
+            var oid = o.id;
+            var index = shownodeids.indexOf(oid);
             if (index > -1) {
                 // TODO remove this line of debug
-                if (o.id == "000000000000000011") {console.log("seed distribution visible")};
-                d3.select("#t" + o.id).style("visibility", "visible");
-                d3.select("#s" + o.id).style("visibility", "visible");
+                if (oid == "000000000000000011") {console.log("seed distribution visible")};
+                d3.select("#t" + oid).style("visibility", "visible");
+                d3.select("#s" + oid).style("visibility", "visible");
                 return "visible";
             } else {
                 // TODO remove this line of debug
-                if (o.id == "000000000000000011") {console.log("seed distribution hidden")};
-                d3.select("#t" + o.id).style("visibility", "hidden");
-                d3.select("#s" + o.id).style("visibility", "hidden");
+                if (oid == "000000000000000011") {console.log("seed distribution hidden")};
+                d3.select("#t" + oid).style("visibility", "hidden");
+                d3.select("#s" + oid).style("visibility", "hidden");
                 return "hidden";
             }
         });
@@ -471,6 +518,7 @@ svg.selectAll('.symbol')
 
 
     getRelatedNodes: function(component, level) {
+        var _this = this;
 
         var looplevel = 0;
 
@@ -485,14 +533,17 @@ svg.selectAll('.symbol')
             var path = component.get("v.path");
 
             path.each(function(p) {
-                    // if the source node is 
-                var sourceindex = linkednodes.indexOf(p.source.id);
-                var targetindex = linkednodes.indexOf(p.target.id);
-                    if (sourceindex === -1 && targetindex > -1) {
-                        newnodes.push(p.source.id);
+
+                var psourceid = p.source.id;
+                var ptargetid = p.target.id;
+                    
+                var sourceindex = linkednodes.indexOf(psourceid);
+                var targetindex = linkednodes.indexOf(ptargetid);
+                if (sourceindex === -1 && targetindex > -1) {
+                        newnodes.push(psourceid);
                     }
                     if (targetindex === -1 && sourceindex > -1) {
-                        newnodes.push(p.target.id);
+                        newnodes.push(ptargetid);
                     }
             });
 
@@ -511,6 +562,7 @@ svg.selectAll('.symbol')
 
     // Method to resize nodes
     styleNodes: function(component, chartCurrentMeasure, primaryid) {
+        var _this = this;
         // change the visibility of the connection path
         console.log("styleNodes : " + chartCurrentMeasure);
         console.log("primaryid : " + primaryid);
@@ -542,7 +594,8 @@ svg.selectAll('.symbol')
 
         node.style("stroke", function(o, i) {
             var stroke = o.stroke;
-            if (o.id == primaryid) {
+            var oid = o.id;
+            if (oid == primaryid) {
                 var primaryNodeHighlightingOn = component.get("v.primaryNodeHighlightingOn");
                 if (primaryNodeHighlightingOn == true) {
                     stroke = component.get("v.primaryNodeHighlightingColour");
@@ -553,7 +606,8 @@ svg.selectAll('.symbol')
 
         node.style("stroke-width", function(o, i) {
             var nodestrokewidth = component.get("v.nodestrokewidth");
-            if (o.id == primaryid) {
+            var oid = o.id;
+            if (oid == primaryid) {
                 nodestrokewidth = component.get("v.primaryNodeHighlightingRadius");
             }
             return nodestrokewidth;

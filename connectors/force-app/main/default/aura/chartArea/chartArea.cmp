@@ -100,7 +100,7 @@
                   <div id="pathToolTip" class="pathToolTip"></div>
                 </div>
                 <div id="{!v.chartAreaDivId}" class="chartarea"></div>
-                <!-- <div id="nodeToolTip" class="nodeToolTip"></div> -->
+                  <!-- <div id="nodeToolTip" class="nodeToolTip"></div> -->
               </lightning:layoutItem>
             </lightning:layout>
       </div>
