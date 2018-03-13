@@ -16,34 +16,44 @@
 
                 var datajson = component.get("v.datajson");
                 var configjson = component.get("v.configjson");
+                var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
+                var panelPrimaryId = component.get("v.panelPrimaryId");            
+                var panelClickedFilters = component.get("v.panelClickedFilters");     
                 
                 var arrayNames = configjson.filtertypes;
                 var idprefix = "b";
-                var maxbuttons = 5;
-                
+                var maxbuttons = 5;                
                 helper.formatButtons (component, arrayNames, idprefix, maxbuttons);
 
                 arrayNames = configjson.measures;
                 idprefix = "v";
                 maxbuttons = 5;
-
                 helper.formatButtons (component, arrayNames, idprefix, maxbuttons);
 
-                var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
-                var panelPrimaryId = component.get("v.panelPrimaryId");            
-                var panelClickedFilters = component.get("v.panelClickedFilters");     
+                component.set("v.initialized", true);
                 
-                // publish event - configuration loaded
+                // now we have initialized the configuration we can publish all of the events that are enqueued
 
-                var configEventParameters = { 
-                    "datajson" : datajson, 
-                    "configjson" : configjson, 
-                    "currentMeasure" : panelCurrentMeasure, 
-                    "primaryId" : panelPrimaryId, 
-                    "clickedFilters" : panelClickedFilters
+                var eventQueue = component.get("v.initEventsQueue");
+
+                for (var i = 0; i < eventQueue.length; i++) {
+                    var componentReference = eventQueue[i]["componentReference"];
+
+                    console.log("enrich queued event and publish from onInit, componentReference: " + componentReference);
+                    
+                    var configEventParameters = { 
+                        "datajson" : datajson, 
+                        "configjson" : configjson, 
+                        "currentMeasure" : panelCurrentMeasure, 
+                        "primaryId" : panelPrimaryId, 
+                        "clickedFilters" : panelClickedFilters,
+                        "componentReference" : componentReference
+                    }
+                        
+                    helper.publishEvent("ConfigInitialized", configEventParameters);    
                 }
+                component.set("v.initEventsQueue",[]);
 
-                helper.publishEvent("ConfigInitialized", configEventParameters);                                 
 
             }
             else if (state === "ERROR") {
@@ -68,6 +78,51 @@
         var topic = event.getParam("topic");
         console.log("topic: " + topic);
         
+        if (topic == "ChartRendered")
+        {
+            var parameters = event.getParam("parameters");
+            var componentReference = parameters["componentReference"];
+            console.log("Publish Initializing Instruction for Charts: " + componentReference);
+
+            var initialized = component.get("v.initialized");     
+
+            if (initialized == true) {
+
+                // as the component is initialized we have values for parameters and can publish immediately
+
+                var datajson = component.get("v.datajson");
+                var configjson = component.get("v.configjson");
+                var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
+                var panelPrimaryId = component.get("v.panelPrimaryId");            
+                var panelClickedFilters = component.get("v.panelClickedFilters");     
+                
+                // publish event - configuration loaded
+    
+                var configEventParameters = { 
+                    "datajson" : datajson, 
+                    "configjson" : configjson, 
+                    "currentMeasure" : panelCurrentMeasure, 
+                    "primaryId" : panelPrimaryId, 
+                    "clickedFilters" : panelClickedFilters,
+                    "componentReference" : componentReference                
+                }
+    
+                //publish to this component
+                helper.publishEvent("ConfigInitialized", configEventParameters);    
+
+                // clear the queue
+                component.set("v.initEventsQueue",[]);
+
+            }
+            else {
+                // as the component is not initialized we have need to queue up received events
+
+                console.log("queue up the event from handler as this component is not initialized");
+                var eventQueue = component.get("v.initEventsQueue");
+                eventQueue.push({"componentReference" : componentReference});
+            }
+        
+        }
         if (topic == "ShowLevelsMore")
         {
             helper.setConnectionLevelMoreButtons(component);

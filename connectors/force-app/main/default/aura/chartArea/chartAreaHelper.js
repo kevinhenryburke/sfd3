@@ -23,264 +23,6 @@
         return Math.max(Math.min(y, height - 50), 20 );
     },    
 
-
-    initializeDataV3: function (component, datajson, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters) {
-
-        var _this = this;
-        component.set("v.chartCurrentMeasure", chartCurrentMeasure);
-        component.set("v.chartPrimaryId", chartPrimaryId);            
-        component.set("v.chartClickedFilters", chartClickedFilters);            
-                
-        console.log("init:initializing chart ");
-        var svg = component.get("v.svg");
-        console.log(svg);
-        var node = component.get("v.node");
-        var path = component.get("v.path");
-        var simulation = component.get("v.simulation");
-
-        var chartArea = d3.select("#chartarea");
-        var width = component.get("v.width") / 2;
-        var height = component.get("v.height") / 2;
-
-        // Styling of tooltips - see GitHub prior to Feb 24, 2018
-        var nodeToolTipDiv = d3.select("#nodeToolTip");
-        var pathToolTipDiv = d3.select("#pathToolTip");
-        
-        // Compute the distinct nodes from the links.
-        datajson.links.forEach(function(link) {
-            link.source = datajson.nodes[link.source];
-            link.target = datajson.nodes[link.target];
-        });
-
-        var chartClickedFilters = component.get("v.chartClickedFilters");
-
-        console.log("calling force");
-
-        simulation = d3.layout.force()
-            .nodes(d3.values(datajson.nodes))
-            .links(datajson.links)
-            .size([width, height])
-            .linkDistance(200)
-            .charge(-800)
-            .on("tick", function() {
-                path.attr("d", function(d) {
-                    var sx = _this.limitborderx(component, d.source.x);
-                    var sy = _this.limitbordery(component, d.source.y);
-                    var tx = _this.limitborderx(component, d.target.x);
-                    var ty = _this.limitbordery(component, d.target.y);
-                    var dx = tx - sx;
-                    var dy = ty - sy;
-                    var dr = Math.sqrt(dx * dx + dy * dy);
-                    return "M" + sx + "," + sy + "A" + dr + "," + dr + " 0 0,1 " + tx + "," + ty;
-                });
-                node.attr("transform", function(d) {
-                    return _this.transform(component, d);
-                });
-
-                var text = component.get("v.text");
-                text.attr("transform", function(d) {
-                    return _this.transform(component, d);
-                });
-                component.set("v.text", text);
-            })
-            .start();
-
-        console.log("called force");
-            
-        path = svg.append("g").selectAll("path")
-            .data(simulation.links())
-            .enter().append("path")
-            .attr("class", function(d) {
-                return "link " + d.type;
-            })
-            .attr("stroke", function(d) {
-                return d.stroke;
-            })
-            .attr("id", function(d) {
-                return d.id;
-            })
-            .attr("marker-end", function(d) {
-                return "url(#" + d.type + ")";
-            })
-            // This is the previous implementation of tooltip
-            //            .on('mouseover', pathtip.show)
-            //            .on('mouseout', pathtip.hide);
-            .on('mouseout', function(d) { // hide the div
-                var showPathToolTip = component.get("v.showPathToolTip");
-                if (showPathToolTip) {
-                    pathToolTipDiv.transition()
-                        .delay(3000)
-                        .duration(2000)
-                        .style("opacity", 0);
-                }
-            })
-            .on('mouseover', function(d) { 
-                var showPathToolTip = component.get("v.showPathToolTip");
-                console.log("showPathToolTip: " + showPathToolTip);
-                if (showPathToolTip) {
-                    // "this" here is a path DOM element so use its id to match up with a d3 path
-                    if (component.get("v.showPathToolTip"))
-                    {
-                        var mouseoverpathid = this.id;
-
-                        path.style("stroke", function(o, i) {
-                            if (o.id === mouseoverpathid) {
-                                return "red";
-                            }
-                            else
-                            {
-                                return "gray";
-                            }
-                        });
-                
-                        var midx = (d.source.x + d.target.x) / 2
-                        var midy = (d.source.y + d.target.y) / 2
-
-                        console.log("tooltip: midx / midy: " + midx + " / " + midy);
-
-                        var content = '<div style="text-align:center;font-size:"6px";>';
-                        content += '<p>Type: ' + d.type + '</p>';
-                        content += '<p>Linked By ' + d.createdby + '</p>';
-                        content += '<p>Notes: ' + d.notes + '</p>';
-                        content += '</div>';
-
-                        pathToolTipDiv.transition()
-                            .duration(100)
-                            .style("opacity", .9);
-                        pathToolTipDiv.html(content)
-                            .style("left", midx + "px")
-                            .style("top", midy + "px");
-                    }
-                }
-            })
-
-        node = svg.append("g").selectAll("circle")
-            .data(simulation.nodes())
-            .enter().append("circle")
-            // set data related attributes - visual styling is applied later
-            .attr("id", function(d) {
-                return d.id;
-            })
-            .on('mouseout', function(d) { // hide the div
-                // TODO - add an attribute if want to remove details.
-                // Need to be abstracted - so card vars are provided to this visualization
-
-                if (!component.get("v.retainNodeDetalsMouseOut"))
-                {
-                    component.set("v.card1", d.name);
-                    // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
-                    var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + component.get("v.card1") ;
-                    textcontent += '</tspan>'; 
-
-                    var t = d3.select("#t" + d.id);
-                    t.html(textcontent);
-                    var s = d3.select("#s" + d.id);
-                    s.html(textcontent);
-                }
-            })
-            .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-                // card populate
-                // TODO Need to be abstracted - so card vars are provided to this visualization
-                component.set("v.card1", d.name);
-                component.set("v.card2", d.position);
-                component.set("v.card3", d.account);
-                component.set("v.card4", d.id);
-                component.set("v.cardSelected", true);
-
-                // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
-                var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + component.get("v.card1") ;
-                textcontent += '</tspan>'; 
-                textcontent += '<tspan x="10" dy="15">' + component.get("v.card2");
-                textcontent += ' (' + component.get("v.card3") + ')</tspan>';
-
-                var t = d3.select("#t" + d.id);
-                t.html(textcontent);
-                var s = d3.select("#s" + d.id);
-                s.html(textcontent);
-
-                _this.publishEvent("UpdateCard", {"card1" : d.name, "card2" : d.position, "card3" : d.account});
-            }))
-            .on('click', function(d) {
-
-                var isiOS = component.get("v.isiOS");
-
-                if (isiOS) {
-                    var now = new Date().getTime();
-                    var lastTouch = component.get("v.lastTouch");
-
-                    var delta = now - lastTouch;
-
-                    if (delta < 350 && delta > 0) {
-                        // the second touchend event happened within half a second. Here is where we invoke the double tap code
-                        var win = window.open("http://news.bbc.co.uk");
-                        win.focus();
-                    }
-                    component.set("v.lastTouch", lastTouch);
-                } else {
-                    console.log("not iOS");
-                }
-                // reset the clicked node to be the primary
-                // TODO This will need to be passed in the refreshVisibility call.
-                component.set("v.chartPrimaryId", d.id);
-                _this.refreshVisibility(component);
-                _this.styleNodes(component, null, d.id);
-            })
-            .on('dblclick', function(d) {
-                var win = window.open("/" + d.id, '_blank');
-                win.focus();
-
-            })
-            .call(simulation.drag);
-
-            
-        var text = component.get("v.text");
-
-        text = svg.append("svg:g")
-            .selectAll("g")
-            .data(simulation.nodes())
-            .enter().append("svg:g")
-            .attr("class", "nodeText");
-
-        // A copy of the text with a thick white stroke for legibility.
-        text.append("svg:text")
-            .attr("x", 8)
-            .attr("y", ".31em")
-            .attr("class", "shadow")
-            .attr("id", function(d) {
-                return "s" + d.id;
-            })
-            .text(function(d) {
-                return d.name;
-            });
-
-        text.append("svg:text")
-            .attr("x", 8)
-            .attr("y", ".31em")
-            .attr("id", function(d) {
-                return "t" + d.id;
-            })
-            .text(function(d) {
-                return d.name;
-            });
-
-
-        component.set("v.text", text);
-
-        component.set("v.node", node);
-        component.set("v.path", path);
-        component.set("v.simulation", simulation);
-
-        console.log("apply node styling");
-        _this.styleNodes(component, chartCurrentMeasure, chartPrimaryId);
-
-        console.log("apply node visibility");
-        _this.refreshVisibility(component);
-
-        component.set("v.initialized", true);
-        
-    },
-
-
     initializeDataV4: function (component, datajson, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters) {
 
         var _this = this;
@@ -297,9 +39,8 @@
         var node = component.get("v.node");
         var path = component.get("v.path");
 
-        var chartArea = d3.select("#chartarea");
-        var width = component.get("v.width") / 2;
-        var height = component.get("v.height") / 2;
+        var width = component.get("v.width");  
+        var height = component.get("v.height");  
 
         // Styling of tooltips - see GitHub prior to Feb 24, 2018
         var nodeToolTipDiv = d3.select("#nodeToolTip");
@@ -332,9 +73,13 @@
 
         var link_force =  d3.forceLink(datajson.links)
             .id(function(d) { return d.name; });     
+
+        console.log("setting force links");
             
         simulation.force("links",link_force)    ;
 
+        console.log("append class vectors");
+        
         //draw lines for the links 
         var path = svg.append("g")
             .selectAll("path")
@@ -356,12 +101,21 @@
                 var showPathToolTip = component.get("v.showPathToolTip");
                 if (showPathToolTip) {
                     pathToolTipDiv.transition()
-                        .delay(6000)
+                        .delay(1000)
                         .duration(2000)
                         .style("opacity", 0);
-                }
+/*
+                        console.log("pathtext clear");
+                        var textcontent = ''; 
+                        var pt = d3.select("#pt" + d.id);
+                        console.log(pt);
+                        pt.html(textcontent);
+*/
+                    }
+
+
             })
-            .on('mouseover', function(d) { 
+            .on('mouseover', $A.getCallback(function(d) { 
                 var showPathToolTip = component.get("v.showPathToolTip");
                 console.log("showPathToolTip: " + showPathToolTip);
                 if (showPathToolTip) {
@@ -397,10 +151,19 @@
                         pathToolTipDiv.html(content)
                             .style("left", midx + "px")
                             .style("top", midy + "px");
+
+/*
+                        console.log("pathtext set the html");
+                        var textcontent = '<tspan x="-20" y="0" style="text-align:left; font-weight: bold; opacity: 0.5;">' + d.name;
+                        textcontent += '</tspan>'; 
+                        var pt = d3.select("#pt" + d.id);
+                        console.log(pt);
+                        pt.html(textcontent);
+*/                
                 
                     }
                 }
-            });
+            }));
 
         console.log("calling nodes");
         
@@ -411,11 +174,14 @@
             .attr("id", function(d) {
                 return d.id;
             })
+
+//            .attr("d", d3.symbol().type( function(d) { return d3.symbols[4];}))
+
             .on('mouseout', function(d) { // hide the div
                 // TODO - add an attribute if want to remove details.
                 // Need to be abstracted - so card vars are provided to this visualization
 
-                if (!component.get("v.retainNodeDetalsMouseOut"))
+                if (!component.get("v.retainNodeDetailsMouseOut"))
                 {
                     component.set("v.card1", d.name);
                     // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
@@ -429,6 +195,7 @@
                 }
             })
             .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
+                console.log("mouseover: " + d.name);
                 // card populate
                 // TODO Need to be abstracted - so card vars are provided to this visualization
                 component.set("v.card1", d.name);
@@ -444,6 +211,9 @@
                 textcontent += ' (' + component.get("v.card3") + ')</tspan>';
 
                 var t = d3.select("#t" + d.id);
+                console.log("mouseover: " + t);
+                console.log("mouseover: " + textcontent);
+                console.log(t);
                 t.html(textcontent);
                 var s = d3.select("#s" + d.id);
                 s.html(textcontent);
@@ -523,15 +293,25 @@
                 return _this.transform(component, d);
             });
             component.set("v.text", text);
-    
+
+/*            
+            var pathtext = component.get("v.pathtext");
+            pathtext.attr("transform", function(d) {
+                console.log("pathtext translate");
+
+                var midx = (d.source.x + d.target.x) / 2
+                var midy = (d.source.y + d.target.y) / 2
         
+                var ret = "translate(" + midx + "," + midy + ")";
+                console.log(ret);
+                return ret;
+            });
+            component.set("v.pathtext", pathtext);
+*/        
         
         });                
 
-    
-
         console.log("calling text");    
-
         
         var text = component.get("v.text");
 
@@ -563,6 +343,40 @@
                 return d.name;
             });
 
+/*            
+        var pathtext = component.get("v.pathtext");
+        pathtext = svg.append("svg:g")
+            .selectAll("g")
+            .data(datajson.links)
+            .enter().append("svg:g")
+            .attr("class", "nodeText");
+
+        pathtext.append("svg:text")
+            .attr("x", 8)
+            .attr("y", ".31em")
+            .attr("id", function(d) {
+                return "pt" + d.id;
+            })
+            .text(function(d) {
+                return d.name;
+            });
+
+        component.set("v.pathtext", pathtext);
+            
+*/
+
+
+// TODO here's the d3 nodes .... all in a line ... not proper code!
+/*
+var mdata = [0,1,2,3,4,5,6];
+
+svg.selectAll('.symbol')
+   .data(mdata)
+   .enter()
+   .append('path')
+   .attr('transform',function(d,i) { return 'translate('+(i*20+20)+','+30+')';})
+   .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[i];}) );
+*/
         component.set("v.text", text);
 
         component.set("v.node", node);
@@ -575,7 +389,6 @@
         console.log("apply node visibility");
         _this.refreshVisibility(component);
 
-        component.set("v.initialized", true);
     },
 
     /* CHART methods - Refresh */
@@ -641,10 +454,14 @@
         node.style("visibility", function(o, i) {
             var index = shownodeids.indexOf(o.id);
             if (index > -1) {
+                // TODO remove this line of debug
+                if (o.id == "000000000000000011") {console.log("seed distribution visible")};
                 d3.select("#t" + o.id).style("visibility", "visible");
                 d3.select("#s" + o.id).style("visibility", "visible");
                 return "visible";
             } else {
+                // TODO remove this line of debug
+                if (o.id == "000000000000000011") {console.log("seed distribution hidden")};
                 d3.select("#t" + o.id).style("visibility", "hidden");
                 d3.select("#s" + o.id).style("visibility", "hidden");
                 return "hidden";

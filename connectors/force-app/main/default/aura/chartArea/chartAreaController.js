@@ -1,9 +1,29 @@
 ({
-	
+
+    doInit: function(component, event, helper) {
+		console.log('chartArea: doInit started');    
+        var componentReference = "compref" + Math.floor((Math.random() * 10000000000) + 1);
+        component.set("v.componentReference", componentReference);
+    },
+
+    doneRendering: function(component, event, helper) {
+        var initialized = component.get("v.initialized");
+        if (initialized == false) {
+            var componentReference = component.get("v.componentReference");
+            console.log('chartArea: doneRendering first call: componentReference: ' + componentReference);
+            
+            var eventParameters = { 
+                "componentReference" : componentReference
+            }
+    
+            helper.publishEvent("ChartRendered", eventParameters);   
+            component.set("v.initialized", true);
+        }
+    },
+
+
     afterScriptsLoaded: function(component, event, helper) {
 		console.log('chartArea: afterScriptsLoaded started');
-        
-        console.log("afterScriptsLoaded: chart");
         var width = Math.min(screen.width, screen.height);
         var height = Math.min(screen.width, screen.height);
 
@@ -13,7 +33,7 @@
 
         if (flexiWidth == null) {
             // this is the case when not embedded in a Lightning Page - e.g. in aura preview
-            flexiWidth = "LARGE";
+            flexiWidth = "MEDIUM";
             console.log("defaulting flexiWidth: " + flexiWidth);
         }
 
@@ -41,8 +61,10 @@
 
         component.set("v.width", width);
         component.set("v.height", height);
-        
-        var svg1 = d3.select("#chartarea").append("svg")
+
+        var chartAreaDivId = "#" + component.get("v.chartAreaDivId");
+
+        var svg1 = d3.select(chartAreaDivId).append("svg")
             .attr("width", width)
             .attr("height", height);
         component.set("v.svg", svg1);
@@ -59,7 +81,6 @@
         else {
             console.log("non-IOS environment");
         }
-
         console.log('chartArea: afterScriptsLoaded finished');
     },
 
@@ -99,12 +120,22 @@
         if (topic == "ConfigInitialized")
         {
             var parameters = event.getParam("parameters");
-            var measureIndex = parameters["index"];
-            var currentMeasure = parameters["measure"];
+            var componentReference = component.get("v.componentReference");
 
-            helper.initializeDataV4(component, parameters["datajson"], parameters["configjson"], parameters["currentMeasure"], parameters["primaryId"], parameters["clickedFilters"]);                 
+            if (componentReference == parameters["componentReference"]) {
+                console.log("Initialize Chart with reference: " + componentReference);
+                console.log(parameters["datajson"]);
+                console.log(parameters["configjson"]);
+                console.log(parameters["currentMeasure"]);
+                console.log(parameters["primaryId"]);
+                console.log(parameters["clickedFilters"]);
+                helper.initializeDataV4(component, parameters["datajson"], parameters["configjson"], parameters["currentMeasure"], parameters["primaryId"], parameters["clickedFilters"]);                 
+            }
+            else {
+                console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
+            }
+
         }
-
     },
 
 

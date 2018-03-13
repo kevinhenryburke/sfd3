@@ -24,7 +24,6 @@
 	<aura:attribute name="primaryNodeHighlightingOn" type="Boolean" default="true" description="Determines if selected node should be highlighted"/>    
 	<aura:attribute name="primaryNodeHighlightingColour" type="String" default="gold" description="Name of the colour of highlighed node"/>    
 	<aura:attribute name="primaryNodeHighlightingRadius" type="String" default="10px" description="Determines width of highlighting on a selected node"/>      
-  <aura:attribute name="retainNodeDetalsMouseOut" type="Boolean" default="true"/>    
   <aura:attribute name="showPathToolTip" type="Boolean" default="true"/>    
 
   <!-- Technical - Chart -->
@@ -32,6 +31,8 @@
 	<aura:attribute name="initialized" type="Boolean" default="false"/>    
   <aura:attribute name="datajson" type="Object" />
   <aura:attribute name="configjson" type="Object" />
+  <aura:attribute name="initEventsQueue" type="Object[]" default="[]" />
+
   
   
     <div class="slds">

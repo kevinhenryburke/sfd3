@@ -13,15 +13,15 @@
  -->
 <ltng:require 
   styles="/resource/pictorcss"
-  scripts="/resource/d3v5minjs"
+  scripts="/resource/d3js413"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
 />
     
 <!-- if ever need to add a second script then use join syntax
   scripts="{!join(',',$Resource.jq331,$Resource.d3minjs)}"
--->
 
-<!--
+  e.g 
+
 <ltng:require 
   styles="/resource/pictorcss"
   scripts="{!join(',',$Resource.d3minjs,$Resource.pictorjs)}"
@@ -37,6 +37,9 @@
   <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
   <aura:handler event="c:evt_sfd3" action="{!c.handle_evt_sfd3}"/>
 
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+  <aura:handler event="aura:doneRendering" action="{!c.doneRendering}"/>
+
   <!-- Design Paramters Panel -->
   <aura:attribute name="card1" type="String" default="No node selected"/>    
   <aura:attribute name="card2" type="String" default=""/>    
@@ -50,14 +53,19 @@
 	<aura:attribute name="primaryNodeHighlightingOn" type="Boolean" default="true" description="Determines if selected node should be highlighted"/>    
 	<aura:attribute name="primaryNodeHighlightingColour" type="String" default="gold" description="Name of the colour of highlighed node"/>    
 	<aura:attribute name="primaryNodeHighlightingRadius" type="String" default="10px" description="Determines width of highlighting on a selected node"/>      
-  <aura:attribute name="retainNodeDetalsMouseOut" type="Boolean" default="true"/>    
+  <aura:attribute name="retainNodeDetailsMouseOut" type="Boolean" default="true"/>    
   <aura:attribute name="showPathToolTip" type="Boolean" default="true"/>    
+
+  <aura:attribute name="chartAreaDivId" type="String" default="chartarea" description="If putting more than one chart on a page need to provide unique ids for the chart components"/>    
+  <!-- <aura:attribute name="chartAreaDivId" type="String" default="" description="If putting more than one chart on a page need to provide unique ids for the chart components"/>     -->
  
   <!-- Technical - Chart -->
   <aura:attribute name="chartCurrentMeasure" type="String"/>    
 	<aura:attribute name="chartPrimaryId" type="String"/> 
 	<aura:attribute name="chartShowLevels" type="Integer" default="1"/>    
   <aura:attribute name="chartClickedFilters" type="Object[]" default="[]" />
+
+  <aura:attribute name="componentReference" type="String"/> 
 
 	<aura:attribute name="initialized" type="Boolean" default="false"/>    
 	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
@@ -67,7 +75,7 @@
   
   <aura:attribute name="simulation" type="Object" />
   <aura:attribute name="text" type="Object" />
-  <aura:attribute name="pathtext" type="Object" />
+  <!-- <aura:attribute name="pathtext" type="Object" /> -->
   <aura:attribute name="node" type="Object" />
   <aura:attribute name="path" type="Object" />
   
@@ -76,17 +84,22 @@
   <aura:attribute name="height" type="Double" />
   <aura:attribute name="lastTouch" type="DateTime" />
   
-
   <aura:attribute name="flexiWidth" type="String"/>
   <lightning:flexipageRegionInfo width="{!v.flexiWidth}"/>
 
   <body>
-8792 {!v.flexiWidth}
+8792 {!v.flexiWidth} {!v.chartAreaDivId} {!v.componentReference}
       <div class="c-container">
           <lightning:layout horizontalAlign="space" verticalAlign="end">
               <lightning:layoutItem flexibility="grow" padding="around-small" size="12">
+<!--                 Mechanism for tooltips is based on https://bl.ocks.org/d3noob/257c360b3650b9f0a52dd8257d7a2d73
+                The tooltip exists as a position : absolute div that is moved around when a path is moused over
+                Note that we need to use the Lightning method of defining absolute position or the box can appear relative to the page itself
+ -->                
+                <div class="slds-is-absolute">
                   <div id="pathToolTip" class="pathToolTip"></div>
-                  <div id="chartarea" class="chartarea"></div>
+                </div>
+                <div id="{!v.chartAreaDivId}" class="chartarea"></div>
                 <!-- <div id="nodeToolTip" class="nodeToolTip"></div> -->
               </lightning:layoutItem>
             </lightning:layout>
