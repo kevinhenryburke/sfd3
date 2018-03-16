@@ -35,6 +35,7 @@
                 // now we have initialized the configuration we can publish all of the events that are enqueued
 
                 var eventQueue = component.get("v.initEventsQueue");
+                var publisher = component.get("v.UserComponentId");
 
                 for (var i = 0; i < eventQueue.length; i++) {
                     var componentReference = eventQueue[i]["componentReference"];
@@ -50,7 +51,7 @@
                         "componentReference" : componentReference
                     }
                         
-                    helper.publishEvent("ConfigInitialized", configEventParameters);    
+                    helper.publishEvent("ConfigInitialized", publisher, configEventParameters);    
                 }
                 component.set("v.initEventsQueue",[]);
 
@@ -108,7 +109,8 @@
                 }
     
                 //publish to this component
-                helper.publishEvent("ConfigInitialized", configEventParameters);    
+                var publisher = component.get("v.UserComponentId");
+                helper.publishEvent("ConfigInitialized", publisher, configEventParameters);    
 
                 // clear the queue
                 component.set("v.initEventsQueue",[]);
@@ -163,7 +165,8 @@
             panelShowLevels++;
             console.log("increasing levels to: " + panelShowLevels);
             component.set("v.panelShowLevels", panelShowLevels);
-            helper.publishEvent("ShowLevelsMore", {"levels" : panelShowLevels});
+            var publisher = component.get("v.UserComponentId");
+            helper.publishEvent("ShowLevelsMore", publisher, {"levels" : panelShowLevels});
         }
         
     },
@@ -177,30 +180,36 @@
             panelShowLevels--;
             console.log("decreasing levels to: " + panelShowLevels);
             component.set("v.panelShowLevels", panelShowLevels);
-            helper.publishEvent("ShowLevelsFewer", {"levels" : panelShowLevels});
+            var publisher = component.get("v.UserComponentId");
+            helper.publishEvent("ShowLevelsFewer", publisher, {"levels" : panelShowLevels});
         }
     },
 
     
     onClickMeasureV1 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 1);
-        helper.publishEvent("SetMeasure", {"index" : 1, "measure" : currentMeasure });
+        var publisher = component.get("v.UserComponentId");
+        helper.publishEvent("SetMeasure", publisher, {"index" : 1, "measure" : currentMeasure });
     },
     onClickMeasureV2 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 2);
-        helper.publishEvent("SetMeasure", {"index" : 2, "measure" : currentMeasure });
+        var publisher = component.get("v.UserComponentId");
+        helper.publishEvent("SetMeasure", publisher, {"index" : 2, "measure" : currentMeasure });
     },
     onClickMeasureV3 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 3);
-        helper.publishEvent("SetMeasure", {"index" : 3, "measure" : currentMeasure });
+        var publisher = component.get("v.UserComponentId");
+        helper.publishEvent("SetMeasure", publisher, {"index" : 3, "measure" : currentMeasure });
     },
     onClickMeasureV4 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 4);
-        helper.publishEvent("SetMeasure", {"index" : 4, "measure" : currentMeasure });
+        var publisher = component.get("v.UserComponentId");
+        helper.publishEvent("SetMeasure", publisher, {"index" : 4, "measure" : currentMeasure });
     },
     onClickMeasureV5 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 5);
-        helper.publishEvent("SetMeasure", {"index" : 5, "measure" : currentMeasure });
+        var publisher = component.get("v.UserComponentId");
+        helper.publishEvent("SetMeasure", publisher, {"index" : 5, "measure" : currentMeasure });
     },
     
     handleRelationshipTypeB1 : function(component, event, helper) {

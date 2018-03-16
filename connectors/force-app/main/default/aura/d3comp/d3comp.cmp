@@ -6,6 +6,7 @@
   <aura:handler event="c:evt_sfd3" action="{!c.handle_evt_sfd3}"/> 
 
   <!-- Design Paramters Panel -->
+  <aura:attribute name="UserComponentId" type="String" default="" description="If you want charts to only respond to particular controllers on a page then give this controller a name here (unique to the page) and associate it using the Controller Component Id option on the chart"/>    
   <aura:attribute name="card1" type="String" default="No node selected"/>    
   <aura:attribute name="card2" type="String" default=""/>    
   <aura:attribute name="card3" type="String" default=""/>    
@@ -20,6 +21,7 @@
   <aura:attribute name="panelClickedFilters" type="Object[]" default="[]" />
 
   <!-- Design Paramters -->  
+  <!-- TODO DELETE these are all chart side? -->
   <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
 	<aura:attribute name="primaryNodeHighlightingOn" type="Boolean" default="true" description="Determines if selected node should be highlighted"/>    
 	<aura:attribute name="primaryNodeHighlightingColour" type="String" default="gold" description="Name of the colour of highlighed node"/>    

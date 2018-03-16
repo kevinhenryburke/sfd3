@@ -2,9 +2,25 @@
 
     doInit: function(component, event, helper) {
 		console.log('chartArea: doInit started');    
-        var componentReference = "compref" + Math.floor((Math.random() * 10000000000) + 1);
+        console.log('chartArea: reading user input Component Id');   
+        
+        var comprefNumber = 0;
+
+        var UserComponentId = component.get("v.UserComponentId");
+
+        if (UserComponentId != null && UserComponentId != '') {
+            console.log('chartArea: calculate compref from configuration');   
+            console.log('chartArea: calculate using seed:' + UserComponentId);   
+            comprefNumber = helper.simpleHash(UserComponentId);    
+        }
+        else {
+            console.log('chartArea: calculate compref from random generator');   
+            comprefNumber = Math.floor((Math.random() * 10000000000) + 1); 
+        }
+        var componentReference = "compref" + comprefNumber;
 		console.log('chartArea: componentReference: ' + componentReference);    
         component.set("v.componentReference", componentReference);
+        component.set("v.chartAreaDivId", componentReference + 'div');
     },
 
     doneRendering: function(component, event, helper) {
@@ -17,7 +33,8 @@
                 "componentReference" : componentReference
             }
     
-            helper.publishEvent("ChartRendered", eventParameters);   
+            var publisher = component.get("v.componentReference");
+            helper.publishEvent("ChartRendered", publisher, eventParameters);   
             component.set("v.initialized", true);
         }
     },
@@ -89,8 +106,21 @@
 
     handle_evt_sfd3  : function(component, event, helper) {
         var topic = event.getParam("topic");
-        console.log("topic: " + topic);
+        var publisher = event.getParam("publisher");
 
+        console.log("topic/publisher: " + topic + "/" + publisher);
+
+        var UserControllerComponentId = component.get("v.UserControllerComponentId");
+
+        // if the component is configured to be controlled by a specified controller then exit if it's a different one.
+        if (UserControllerComponentId != null && UserControllerComponentId != "") {
+            if (UserControllerComponentId != publisher) {
+                var UserComponentId = component.get("v.UserComponentId");
+                console.log("ignoring message from " + publisher + " in component " + UserComponentId);
+                return;
+            }
+        }
+        
         // Chart Display handers
         
         if (topic == "ShowLevelsMore")

@@ -1,3 +1,9 @@
 <design:component >
-    <design:attribute name="chartAreaDivId" label="chartAreaDivId" default="chartArea" description="Name of this chart's div" />
+    <design:attribute name="UserComponentId" label="Component Id" default="" description="Id for this component" />
+    <design:attribute name="UserControllerComponentId" label="Controller Component Id" default="" description="If we want to restrict to a particular controller on the page then put the name here that you used as the Component Id of the Controller. Otherwise all controllers will act on this chart"/>    
+	<design:attribute name="primaryNodeHighlightingOn" default="true" label="Primary Node Highlighting On" description="Determines if selected node should be highlighted"/>    
+	<design:attribute name="primaryNodeHighlightingColour" default="gold" label="Primary Node Highlighting Colour" description="Name of the colour of highlighed node"/>    
+	<design:attribute name="primaryNodeHighlightingRadius" default="10px" label="Primary Node Highlighting Radius" description="Determines width of highlighting on a selected node - eg 10px, 20px"/>      
+    <design:attribute name="retainNodeDetailsMouseOut" default="true" label="Retain Node Details MouseOut" description="Mouseover a node changes the text, this parameter set to true retains the text change, otherwise the text will revert on Mouseout"/>   
+    <design:attribute name="showPathToolTip" default="true" label="Show Path ToolTip" description="set to true if tooltips should show when a user mouses over a path"/>    
 </design:component>

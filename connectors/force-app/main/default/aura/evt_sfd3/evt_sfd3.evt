@@ -1,4 +1,5 @@
 <aura:event type="APPLICATION">
     <aura:attribute name="topic" type="String" description="Topic"/>
+    <aura:attribute name="publisher" type="String" description="Component Id of the component creating this event"/>
     <aura:attribute name="parameters" type="String" description="a JSON formatted parameter, name/value pairs"/>
 </aura:event>

@@ -74,8 +74,11 @@
         var height = component.get("v.height");  
 
         // Styling of tooltips - see GitHub prior to Feb 24, 2018
+
         var nodeToolTipDiv = d3.select("#nodeToolTip");
-        var pathToolTipDiv = d3.select("#pathToolTip");
+
+        var nodeToolTipDivId = _this.addComponentRef(component, "pathToolTip");
+        var pathToolTipDiv = d3.select("#" + nodeToolTipDivId);
         
         // Compute the distinct nodes from the links.
         datajson.links.forEach(function(link) {
@@ -135,13 +138,6 @@
                         .delay(1000)
                         .duration(2000)
                         .style("opacity", 0);
-/*
-                        console.log("pathtext clear");
-                        var textcontent = ''; 
-                        var pt = d3.select("#pt" + d.id);
-                        console.log(pt);
-                        pt.html(textcontent);
-*/
                     }
 
 
@@ -184,16 +180,6 @@
                         pathToolTipDiv.html(content)
                             .style("left", midx + "px")
                             .style("top", midy + "px");
-
-/*
-                        console.log("pathtext set the html");
-                        var textcontent = '<tspan x="-20" y="0" style="text-align:left; font-weight: bold; opacity: 0.5;">' + d.name;
-                        textcontent += '</tspan>'; 
-                        var pt = d3.select("#pt" + d.id);
-                        console.log(pt);
-                        pt.html(textcontent);
-*/                
-                
                     }
                 }
             }));
@@ -258,7 +244,8 @@
                 var s = d3.select("#" + sselect);
                 s.html(textcontent);
 
-                _this.publishEvent("UpdateCard", {"card1" : d.name, "card2" : d.position, "card3" : d.account});
+                var publisher = component.get("v.componentReference");
+                _this.publishEvent("UpdateCard", publisher, {"card1" : d.name, "card2" : d.position, "card3" : d.account});
             }))
             .on('click', function(d) {
 
@@ -337,21 +324,6 @@
             });
             component.set("v.text", text);
 
-/*            
-            var pathtext = component.get("v.pathtext");
-            pathtext.attr("transform", function(d) {
-                console.log("pathtext translate");
-
-                var midx = (d.source.x + d.target.x) / 2
-                var midy = (d.source.y + d.target.y) / 2
-        
-                var ret = "translate(" + midx + "," + midy + ")";
-                console.log(ret);
-                return ret;
-            });
-            component.set("v.pathtext", pathtext);
-*/        
-        
         });                
 
         console.log("calling text");    
@@ -385,28 +357,6 @@
             .text(function(d) {
                 return d.name;
             });
-
-/*            
-        var pathtext = component.get("v.pathtext");
-        pathtext = svg.append("svg:g")
-            .selectAll("g")
-            .data(datajson.links)
-            .enter().append("svg:g")
-            .attr("class", "nodeText");
-
-        pathtext.append("svg:text")
-            .attr("x", 8)
-            .attr("y", ".31em")
-            .attr("id", function(d) {
-                return "pt" + d.id;
-            })
-            .text(function(d) {
-                return d.name;
-            });
-
-        component.set("v.pathtext", pathtext);
-            
-*/
 
 
 // TODO here's the d3 nodes .... all in a line ... not proper code!
@@ -501,14 +451,10 @@ svg.selectAll('.symbol')
             var oid = o.id;
             var index = shownodeids.indexOf(oid);
             if (index > -1) {
-                // TODO remove this line of debug
-                if (oid == "000000000000000011") {console.log("seed distribution visible")};
                 d3.select("#t" + oid).style("visibility", "visible");
                 d3.select("#s" + oid).style("visibility", "visible");
                 return "visible";
             } else {
-                // TODO remove this line of debug
-                if (oid == "000000000000000011") {console.log("seed distribution hidden")};
                 d3.select("#t" + oid).style("visibility", "hidden");
                 d3.select("#s" + oid).style("visibility", "hidden");
                 return "hidden";
@@ -642,15 +588,29 @@ svg.selectAll('.symbol')
     },
 
 
-    publishEvent : function(topic, parameters) {
+    publishEvent : function(topic, publisher, parameters) {
         console.log("publishEvent: " + topic + " " + JSON.stringify(parameters));
         var appEvent = $A.get("e.c:evt_sfd3");
         appEvent.setParams({
             "topic" : topic,
+            "publisher" : publisher,
             "parameters" : parameters
         });
         appEvent.fire();
-    }
+    },
+
+    simpleHash : function(s) {
+        var hash = 0;
+        if (s.length == 0) {
+            return hash;
+        }
+        for (var i = 0; i < s.length; i++) {
+            var char = s.charCodeAt(i);
+            hash = ((hash<<5)-hash)+char;
+            hash = hash & hash; // Convert to 32bit integer
+        }
+        return hash;
+    }    
 
 
 })

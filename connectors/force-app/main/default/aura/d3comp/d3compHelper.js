@@ -170,11 +170,11 @@
 
     /* BUTTON / Publish Events */
 
-    publishEvent : function(topic, parameters) {
-        // console.log("publishEvent: " + topic + " " + JSON.stringify(parameters));
+    publishEvent : function(topic, publisher, parameters) {
         var appEvent = $A.get("e.c:evt_sfd3");
         appEvent.setParams({
             "topic" : topic,
+            "publisher" : publisher,
             "parameters" : parameters
         });
         appEvent.fire();

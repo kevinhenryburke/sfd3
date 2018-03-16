@@ -49,15 +49,14 @@
 	<aura:attribute name="maxlevels" type="Integer" default="4"/>    
 
   <!-- Design Paramters -->  
-  <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
+  <aura:attribute name="UserComponentId" type="String" default="" description="If putting more than one chart on a page then this provides users with a mechanism to set their own for mapping purposes"/>    
+  <aura:attribute name="UserControllerComponentId" type="String" default="" description="If we want to restrict to a particular controller on the page then put the name here that you used as the Component Id of the Controller. Otherwise all controllers will act on this chart"/>    
 	<aura:attribute name="primaryNodeHighlightingOn" type="Boolean" default="true" description="Determines if selected node should be highlighted"/>    
 	<aura:attribute name="primaryNodeHighlightingColour" type="String" default="gold" description="Name of the colour of highlighed node"/>    
 	<aura:attribute name="primaryNodeHighlightingRadius" type="String" default="10px" description="Determines width of highlighting on a selected node"/>      
   <aura:attribute name="retainNodeDetailsMouseOut" type="Boolean" default="true"/>    
   <aura:attribute name="showPathToolTip" type="Boolean" default="true"/>    
 
-  <aura:attribute name="chartAreaDivId" type="String" default="chartarea" description="If putting more than one chart on a page need to provide unique ids for the chart components"/>    
-  <!-- <aura:attribute name="chartAreaDivId" type="String" default="" description="If putting more than one chart on a page need to provide unique ids for the chart components"/>     -->
  
   <!-- Technical - Chart -->
   <aura:attribute name="chartCurrentMeasure" type="String"/>    
@@ -66,6 +65,7 @@
   <aura:attribute name="chartClickedFilters" type="Object[]" default="[]" />
 
   <aura:attribute name="componentReference" type="String"/> 
+  <aura:attribute name="chartAreaDivId" type="String" default="" description="If putting more than one chart on a page need to provide unique ids for the chart components"/>    
 
 	<aura:attribute name="initialized" type="Boolean" default="false"/>    
 	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
@@ -88,7 +88,7 @@
   <lightning:flexipageRegionInfo width="{!v.flexiWidth}"/>
 
   <body>
-8792 {!v.flexiWidth} {!v.chartAreaDivId} {!v.componentReference}
+8792 {!v.flexiWidth} {!v.chartAreaDivId} {!v.componentReference} {!v.UserComponentId}
       <div class="c-container">
           <lightning:layout horizontalAlign="space" verticalAlign="end">
               <lightning:layoutItem flexibility="grow" padding="around-small" size="12">
@@ -97,7 +97,7 @@
                 Note that we need to use the Lightning method of defining absolute position or the box can appear relative to the page itself
  -->                
                 <div class="slds-is-absolute">
-                  <div id="pathToolTip" class="pathToolTip"></div>
+                  <div id="{!v.componentReference + 'pathToolTip'}" class="pathToolTip"></div>
                 </div>
                 <div id="{!v.chartAreaDivId}" class="chartarea"></div>
                   <!-- <div id="nodeToolTip" class="nodeToolTip"></div> -->
