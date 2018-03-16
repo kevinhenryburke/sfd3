@@ -36,6 +36,7 @@
 
                 var eventQueue = component.get("v.initEventsQueue");
                 var publisher = component.get("v.UserComponentId");
+                var componentType = component.get("v.componentType");
 
                 for (var i = 0; i < eventQueue.length; i++) {
                     var componentReference = eventQueue[i]["componentReference"];
@@ -51,7 +52,7 @@
                         "componentReference" : componentReference
                     }
                         
-                    helper.publishEvent("ConfigInitialized", publisher, configEventParameters);    
+                    helper.publishEvent("ConfigInitialized", publisher, componentType, configEventParameters);    
                 }
                 component.set("v.initEventsQueue",[]);
 
@@ -78,7 +79,31 @@
     handle_evt_sfd3  : function(component, event, helper) {
         var topic = event.getParam("topic");
         console.log("topic: " + topic);
+
+        var publisher = event.getParam("publisher");
+        var publisherType = event.getParam("publisherType");
+        var UserComponentId = component.get("v.UserComponentId");
+        var controller = event.getParam("controller");
+
+        console.log("handling publisherType: " + publisherType + " from publisher " + publisher + " in " + UserComponentId);
+                
+        // if the component is named and the event propagated from another controller then we ignore it.
+        if (publisherType == "Controller" && UserComponentId != null && UserComponentId != "") {
+            if (UserComponentId != publisher) {
+                console.log("controller: ignoring message from " + publisher + " in component " + UserComponentId);
+                return;
+            }
+        }
+
+        // if the component is named and the event propagated from a chart controlled by a controller with another name then we ignore it.
+        if (publisherType == "Chart" && UserComponentId != null && UserComponentId != ""  && controller != null && controller != "") {
+            if (UserComponentId != controller) {
+                console.log("controller: ignoring message in " + UserComponentId + " intended for component " + controller);
+                return;
+            }
+        }
         
+
         if (topic == "ChartRendered")
         {
             var parameters = event.getParam("parameters");
@@ -110,7 +135,9 @@
     
                 //publish to this component
                 var publisher = component.get("v.UserComponentId");
-                helper.publishEvent("ConfigInitialized", publisher, configEventParameters);    
+                var componentType = component.get("v.componentType");
+                console.log("calling publishEvent");
+                helper.publishEvent("ConfigInitialized", publisher, componentType, configEventParameters);    
 
                 // clear the queue
                 component.set("v.initEventsQueue",[]);
@@ -166,7 +193,8 @@
             console.log("increasing levels to: " + panelShowLevels);
             component.set("v.panelShowLevels", panelShowLevels);
             var publisher = component.get("v.UserComponentId");
-            helper.publishEvent("ShowLevelsMore", publisher, {"levels" : panelShowLevels});
+            var componentType = component.get("v.componentType");
+            helper.publishEvent("ShowLevelsMore", publisher, componentType, {"levels" : panelShowLevels});
         }
         
     },
@@ -181,7 +209,8 @@
             console.log("decreasing levels to: " + panelShowLevels);
             component.set("v.panelShowLevels", panelShowLevels);
             var publisher = component.get("v.UserComponentId");
-            helper.publishEvent("ShowLevelsFewer", publisher, {"levels" : panelShowLevels});
+            var componentType = component.get("v.componentType");
+            helper.publishEvent("ShowLevelsFewer", publisher, componentType, {"levels" : panelShowLevels});
         }
     },
 
@@ -189,27 +218,32 @@
     onClickMeasureV1 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 1);
         var publisher = component.get("v.UserComponentId");
-        helper.publishEvent("SetMeasure", publisher, {"index" : 1, "measure" : currentMeasure });
+        var componentType = component.get("v.componentType");
+        helper.publishEvent("SetMeasure", publisher, componentType, {"index" : 1, "measure" : currentMeasure });
     },
     onClickMeasureV2 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 2);
         var publisher = component.get("v.UserComponentId");
-        helper.publishEvent("SetMeasure", publisher, {"index" : 2, "measure" : currentMeasure });
+        var componentType = component.get("v.componentType");
+        helper.publishEvent("SetMeasure", publisher, componentType, {"index" : 2, "measure" : currentMeasure });
     },
     onClickMeasureV3 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 3);
         var publisher = component.get("v.UserComponentId");
-        helper.publishEvent("SetMeasure", publisher, {"index" : 3, "measure" : currentMeasure });
+        var componentType = component.get("v.componentType");
+        helper.publishEvent("SetMeasure", publisher, componentType, {"index" : 3, "measure" : currentMeasure });
     },
     onClickMeasureV4 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 4);
         var publisher = component.get("v.UserComponentId");
-        helper.publishEvent("SetMeasure", publisher, {"index" : 4, "measure" : currentMeasure });
+        var componentType = component.get("v.componentType");
+        helper.publishEvent("SetMeasure", publisher, componentType, {"index" : 4, "measure" : currentMeasure });
     },
     onClickMeasureV5 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 5);
         var publisher = component.get("v.UserComponentId");
-        helper.publishEvent("SetMeasure", publisher, {"index" : 5, "measure" : currentMeasure });
+        var componentType = component.get("v.componentType");
+        helper.publishEvent("SetMeasure", publisher, componentType, {"index" : 5, "measure" : currentMeasure });
     },
     
     handleRelationshipTypeB1 : function(component, event, helper) {

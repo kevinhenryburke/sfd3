@@ -245,7 +245,10 @@
                 s.html(textcontent);
 
                 var publisher = component.get("v.componentReference");
-                _this.publishEvent("UpdateCard", publisher, {"card1" : d.name, "card2" : d.position, "card3" : d.account});
+                var componentType = component.get("v.componentType");
+                var controller = component.get("v.UserControllerComponentId");    
+
+                _this.publishEvent("UpdateCard", publisher, componentType, controller, {"card1" : d.name, "card2" : d.position, "card3" : d.account});
             }))
             .on('click', function(d) {
 
@@ -587,13 +590,16 @@ svg.selectAll('.symbol')
         _this.refreshVisibility(component);
     },
 
-
-    publishEvent : function(topic, publisher, parameters) {
+    publishEvent : function(topic, publisher, publisherType, controller, parameters) {
         console.log("publishEvent: " + topic + " " + JSON.stringify(parameters));
+        console.log("publisherType: " + publisherType );
+        console.log("controller: " + controller );
         var appEvent = $A.get("e.c:evt_sfd3");
         appEvent.setParams({
             "topic" : topic,
             "publisher" : publisher,
+            "publisherType" : publisherType,
+            "controller" : controller,
             "parameters" : parameters
         });
         appEvent.fire();

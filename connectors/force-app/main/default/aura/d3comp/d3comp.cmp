@@ -30,6 +30,7 @@
 
   <!-- Technical - Chart -->
 
+	<aura:attribute name="componentType" type="String" default="Controller"/>    
 	<aura:attribute name="initialized" type="Boolean" default="false"/>    
   <aura:attribute name="datajson" type="Object" />
   <aura:attribute name="configjson" type="Object" />

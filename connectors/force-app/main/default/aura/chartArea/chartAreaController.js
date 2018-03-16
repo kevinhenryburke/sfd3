@@ -34,7 +34,10 @@
             }
     
             var publisher = component.get("v.componentReference");
-            helper.publishEvent("ChartRendered", publisher, eventParameters);   
+            var componentType = component.get("v.componentType");
+            var controller = component.get("v.UserControllerComponentId");    
+
+            helper.publishEvent("ChartRendered", publisher, componentType, controller, eventParameters);   
             component.set("v.initialized", true);
         }
     },

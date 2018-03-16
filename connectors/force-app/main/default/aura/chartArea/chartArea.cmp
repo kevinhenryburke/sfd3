@@ -59,6 +59,7 @@
 
  
   <!-- Technical - Chart -->
+	<aura:attribute name="componentType" type="String" default="Chart"/>    
   <aura:attribute name="chartCurrentMeasure" type="String"/>    
 	<aura:attribute name="chartPrimaryId" type="String"/> 
 	<aura:attribute name="chartShowLevels" type="Integer" default="1"/>    
