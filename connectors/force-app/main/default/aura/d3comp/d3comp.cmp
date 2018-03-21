@@ -1,5 +1,10 @@
 <aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="DThree">
 
+  <ltng:require 
+    scripts="/resource/Berliozjs"
+  />
+
+
   <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
 
   <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>

@@ -45,28 +45,23 @@
         return dataItem.substring(indexer);
     },    
         
-    initializeDataV4: function (component, datajson, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters) {
+    initializeData: function (component, datajson, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters) {
 
         var _this = this;
 
-        console.log("init:initializing initializeDataV4 ");
+        console.log("init:initializing initializeData ");
         _this.initializeAddComponentRef(component, datajson);
         console.log(datajson);
 
         chartPrimaryId = _this.addComponentRef(component, chartPrimaryId);
-
-        var testing = _this.removeComponentRef(component, chartPrimaryId);
-        console.log("testing: " + testing);
 
         component.set("v.chartCurrentMeasure", chartCurrentMeasure);
         component.set("v.chartPrimaryId", chartPrimaryId);            
         component.set("v.chartClickedFilters", chartClickedFilters);            
                 
         var svg = component.get("v.svg");
-        console.log(svg);
         // use the name convention from d3 tutorials (e.g. http://www.puzzlr.org/force-directed-graph-minimal-working-example/)
         // variables called simulation, node, path
-        var simulation = component.get("v.simulation");
         var node = component.get("v.node");
         var path = component.get("v.path");
 
@@ -77,8 +72,8 @@
 
         var nodeToolTipDiv = d3.select("#nodeToolTip");
 
-        var nodeToolTipDivId = _this.addComponentRef(component, "pathToolTip");
-        var pathToolTipDiv = d3.select("#" + nodeToolTipDivId);
+        var pathToolTipDivId = _this.addComponentRef(component, "pathToolTip");
+        var pathToolTipDiv = d3.select("#" + pathToolTipDivId);
         
         // Compute the distinct nodes from the links.
         datajson.links.forEach(function(link) {
@@ -90,10 +85,11 @@
 
         console.log("calling layout / simulation");
         // force example - https://bl.ocks.org/rsk2327/23622500eb512b5de90f6a916c836a40
+//        var simulation = component.get("v.simulation");
         var attractForce = d3.forceManyBody().strength(5).distanceMax(400).distanceMin(60);
         var repelForce = d3.forceManyBody().strength(-800).distanceMax(200).distanceMin(30);
 
-        simulation = d3.forceSimulation()
+        var simulation = d3.forceSimulation()
         //add nodes
         .nodes(datajson.nodes) 
 //        .size([width, height])
@@ -103,8 +99,6 @@
         console.log("simulation");
         console.log(simulation);
 
-        console.log("calling paths");
-
         var link_force =  d3.forceLink(datajson.links)
             .id(function(d) { return d.name; });     
 
@@ -112,9 +106,9 @@
             
         simulation.force("links",link_force)    ;
 
-        console.log("append class vectors");
-        
         //draw lines for the links 
+        console.log("calling paths");
+
         var path = svg.append("g")
             .selectAll("path")
             .data(datajson.links)
@@ -134,60 +128,25 @@
             .on('mouseout', function(d) { // hide the div
                 var showPathToolTip = component.get("v.showPathToolTip");
                 if (showPathToolTip) {
-                    pathToolTipDiv.transition()
-                        .delay(1000)
-                        .duration(2000)
-                        .style("opacity", 0);
-                    }
-
+                    berlioz.chart.pathMouseout(pathToolTipDiv);
+                }
 
             })
             .on('mouseover', $A.getCallback(function(d) { 
                 var showPathToolTip = component.get("v.showPathToolTip");
                 console.log("showPathToolTip: " + showPathToolTip);
                 if (showPathToolTip) {
-                    // "this" here is a path DOM element so use its id to match up with a d3 path
                     if (component.get("v.showPathToolTip"))
                     {
-                        var mouseoverpathid = this.id;
-
-                        path.style("stroke", function(o, i) {
-                            var oid =o.id;
-
-                            if (oid === mouseoverpathid) {
-                                return "red";
-                            }
-                            else
-                            {
-                                return "gray";
-                            }
-                        });
-                
-                        var midx = (d.source.x + d.target.x) / 2
-                        var midy = (d.source.y + d.target.y) / 2
-
-                        console.log("tooltip: midx / midy: " + midx + " / " + midy);
-
-                        var content = '<div style="text-align:center;font-size:"6px";>';
-                        content += '<p>Type: ' + d.type + '</p>';
-                        content += '<p>Linked By ' + d.createdby + '</p>';
-                        content += '<p>Notes: ' + d.notes + '</p>';
-                        content += '</div>';
-
-                        pathToolTipDiv.transition()
-                            .duration(100)
-                            .style("opacity", .9);
-                        pathToolTipDiv.html(content)
-                            .style("left", midx + "px")
-                            .style("top", midy + "px");
-                    }
+                        berlioz.chart.pathMouseover(d,path,pathToolTipDiv);
+                   }
                 }
             }));
 
         console.log("calling nodes");
         
         node = svg.append("g").selectAll("circle")
-            .data(simulation.nodes())
+            .data(datajson.nodes)
             .enter().append("circle")
             // set data related attributes - visual styling is applied later
             .attr("id", function(d) {
@@ -252,7 +211,9 @@
             }))
             .on('click', function(d) {
 
-                var isiOS = component.get("v.isiOS");
+//                var isiOS = component.get("v.isiOS");
+                console.log("retrieve info on whether isiOS");
+                var isiOS = berlioz.chart.isiOS;
 
                 if (isiOS) {
                     var now = new Date().getTime();
@@ -262,8 +223,9 @@
 
                     if (delta < 350 && delta > 0) {
                         // the second touchend event happened within half a second. Here is where we invoke the double tap code
-                        var win = window.open("http://news.bbc.co.uk");
-                        win.focus();
+                        //TODO implement
+                        //var win = window.open("http://news.bbc.co.uk");
+                        //win.focus();
                     }
                     component.set("v.lastTouch", lastTouch);
                 } else {
@@ -279,9 +241,8 @@
             })
             .on('dblclick', function(d) {
                 //TODO implement
-//                var win = window.open("/" + d.id, '_blank');
-//                win.focus();
-
+                //var win = window.open("/" + d.id, '_blank');
+                //win.focus();
             });
 
             var drag_handler = d3.drag()
@@ -385,13 +346,14 @@ svg.selectAll('.symbol')
         console.log("apply node visibility");
         _this.refreshVisibility(component);
 
+
     },
 
     /* CHART methods - Refresh */
 
     refreshVisibility: function(component) {
 
-        console.log("Enter refreshVisibility");
+        console.log("Enter refreshVisibility"); 
 
         var _this = this;
 

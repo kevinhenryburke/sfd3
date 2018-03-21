@@ -11,11 +11,13 @@
 <!-- externally hosted resources - may be required in the D3 component but should not be used anywhere else. 
   Other parts should be pure lightning
  -->
-<ltng:require 
-  styles="/resource/pictorcss"
-  scripts="/resource/d3js413"
+
+  <ltng:require 
+  styles="/resource/pictorcss"   
+  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs)}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
-/>
+  />
+
     
 <!-- if ever need to add a second script then use join syntax
   scripts="{!join(',',$Resource.jq331,$Resource.d3minjs)}"

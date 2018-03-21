@@ -1,7 +1,7 @@
 ({
 
     doInit: function(component, event, helper) {
-		console.log('chartArea: doInit started');    
+        console.log('chartArea: doInit started');   
         console.log('chartArea: reading user input Component Id');   
         
         var comprefNumber = 0;
@@ -44,7 +44,13 @@
 
 
     afterScriptsLoaded: function(component, event, helper) {
-		console.log('chartArea: afterScriptsLoaded started');
+        console.log('chartArea: afterScriptsLoaded started');
+        
+        // TODO delete this line 
+        berlioz.called();
+        // TODO delete this line 
+        berlioz.chart.called();
+        
         var width = Math.min(screen.width, screen.height);
         var height = Math.min(screen.width, screen.height);
 
@@ -95,12 +101,13 @@
 
         var agent = navigator.userAgent.toLowerCase();
         if(agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0){
-               isiOS = true;
-               component.set("v.isiOS", true);
-               console.log("IOS environment");
+            console.log("IOS environment");
+            berlioz.chart.isiOS = true;
+            component.set("v.isiOS", true);
         }
         else {
             console.log("non-IOS environment");
+            berlioz.chart.isiOS = false;
         }
         console.log('chartArea: afterScriptsLoaded finished');
     },
@@ -163,7 +170,7 @@
                 console.log(parameters["currentMeasure"]);
                 console.log(parameters["primaryId"]);
                 console.log(parameters["clickedFilters"]);
-                helper.initializeDataV4(component, parameters["datajson"], parameters["configjson"], parameters["currentMeasure"], parameters["primaryId"], parameters["clickedFilters"]);                 
+                helper.initializeData(component, parameters["datajson"], parameters["configjson"], parameters["currentMeasure"], parameters["primaryId"], parameters["clickedFilters"]);                 
             }
             else {
                 console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
