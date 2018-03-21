@@ -107,8 +107,8 @@ function pathMouseout (pathToolTipDiv) {
 
   
 exports.called = called;
-exports.mouseover = mouseover;
-exports.mouseout = mouseout;
+exports.pathMouseover = pathMouseover;
+exports.pathMouseout = pathMouseout;
 exports.isiOS = isiOS;
 
 Object.defineProperty(exports, '__esModule', { value: true });
