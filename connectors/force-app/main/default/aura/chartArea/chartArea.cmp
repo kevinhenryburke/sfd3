@@ -43,11 +43,7 @@
   <aura:handler event="aura:doneRendering" action="{!c.doneRendering}"/>
 
   <!-- Design Paramters Panel -->
-  <aura:attribute name="card1" type="String" default="No node selected"/>    
-  <aura:attribute name="card2" type="String" default=""/>    
-  <aura:attribute name="card3" type="String" default=""/>    
-  <aura:attribute name="card4" type="String" default=""/>    
-  <aura:attribute name="cardSelected" type="Boolean" default="false"/>    
+  <aura:attribute name="mouseoverRecordId" type="String" default=""/>    
 	<aura:attribute name="maxlevels" type="Integer" default="4"/>    
 
   <!-- Design Paramters -->  
@@ -56,7 +52,7 @@
 	<aura:attribute name="primaryNodeHighlightingOn" type="Boolean" default="true" description="Determines if selected node should be highlighted"/>    
 	<aura:attribute name="primaryNodeHighlightingColour" type="String" default="gold" description="Name of the colour of highlighed node"/>    
 	<aura:attribute name="primaryNodeHighlightingRadius" type="String" default="10px" description="Determines width of highlighting on a selected node"/>      
-  <aura:attribute name="retainNodeDetailsMouseOut" type="Boolean" default="true"/>    
+  <aura:attribute name="retainNodeDetailsMouseOut" type="Boolean" default="true"  description="Set to true if we wish extended details following a node mouseover to be retain after mouseout"/>    
   <aura:attribute name="showPathToolTip" type="Boolean" default="true"/>    
 
  

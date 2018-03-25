@@ -101,14 +101,57 @@ function pathMouseout (pathToolTipDiv) {
         .style("opacity", 0);
 
     console.log("Berlioz.chart.pathMouseout exit");
-    
 }
+
+function nodeMouseover (d) {
+    console.log("Berlioz.chart.nodeMouseover enter");
+    // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
+    var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
+    textcontent += '</tspan>'; 
+    textcontent += '<tspan x="10" dy="15">' + d.position;
+    textcontent += ' (' + d.account + ')</tspan>';
+
+    var tselect =  "t" + d.id;
+    var sselect =  "s" + d.id;
+
+    var t = d3.select("#" + tselect);
+    console.log("mouseover: " + t);
+    console.log("mouseover: " + textcontent);
+    console.log(t);
+    t.html(textcontent);
+    var s = d3.select("#" + sselect);
+    s.html(textcontent);
+
+    console.log("Berlioz.chart.nodeMouseover exit");
+}
+
+
+function nodeMouseout (d) {
+    console.log("Berlioz.chart.nodeMouseout enter");
+    // revert back to just the name
+    // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
+    var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
+    textcontent += '</tspan>'; 
+
+    var tselect =  "t" + d.id;
+    var sselect =  "s" + d.id;
+        
+    var t = d3.select("#" + tselect);                    
+    t.html(textcontent);
+
+    var s = d3.select("#" + sselect);
+    s.html(textcontent);
+    console.log("Berlioz.chart.nodeMouseout exit");
+}
+
 
 
   
 exports.called = called;
 exports.pathMouseover = pathMouseover;
 exports.pathMouseout = pathMouseout;
+exports.nodeMouseover = nodeMouseover;
+exports.nodeMouseout = nodeMouseout;
 exports.isiOS = isiOS;
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -116,3 +159,106 @@ Object.defineProperty(exports, '__esModule', { value: true });
 console.log("loaded: Berlioz.chart  IIFE");
 
 })));
+
+
+/* Split this into new file */
+
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.berlioz.simulation = global.berlioz.simulation || {})));
+}(this, (function (exports) { 'use strict';
+
+console.log("loading: Berlioz.simulation IIFE");
+
+var version = "0.0.1";
+
+function initializeSimulation (nodes, width, height) {
+    console.log("Berlioz.simulation.initializeSimulation enter");
+
+    // force example - https://bl.ocks.org/rsk2327/23622500eb512b5de90f6a916c836a40
+    var attractForce = d3.forceManyBody().strength(5).distanceMax(400).distanceMin(60);
+    var repelForce = d3.forceManyBody().strength(-800).distanceMax(200).distanceMin(30);
+
+    var simulation = d3.forceSimulation()
+        //add nodes
+        .nodes(nodes) 
+        .force("center_force", d3.forceCenter(width / 2, height / 2))
+        .alphaDecay(0.03).force("attractForce",attractForce).force("repelForce",repelForce);
+    
+    console.log("Berlioz.simulation.initializeSimulation exit");
+    return simulation;
+}
+
+function dragHandler (node, simulation) {
+    console.log("Berlioz.simulation.dragHandler enter");
+    var drag_handler = d3.drag()
+    .on("start", function (d) {
+        simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+        })
+    .on("drag", function (d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+        })
+    .on("end", function (d) {
+        simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+        });
+
+    drag_handler(node);
+    console.log("Berlioz.simulation.dragHandler exit");
+}
+    
+function transform (d, width, height) {
+    var dx = limitborderx(d.x, width);
+    var dy = limitbordery(d.y, height);
+    return "translate(" + dx + "," + dy + ")";
+}
+
+function limitborderx(x, width) {
+    return Math.max(Math.min(x, width) -30, 20);
+}
+
+function limitbordery(y, height) {
+    return Math.max(Math.min(y, height - 50), 20 );
+}    
+
+function onTick (width, height, path, node, text) {
+    path.attr("d", function(d) {
+        var sx = limitborderx(d.source.x, width);
+        var sy = limitbordery(d.source.y, height);
+        var tx = limitborderx(d.target.x, width);
+        var ty = limitbordery(d.target.y, height);
+        var dx = tx - sx;
+        var dy = ty - sy;
+        var dr = Math.sqrt(dx * dx + dy * dy);
+        return "M" + sx + "," + sy + "A" + dr + "," + dr + " 0 0,1 " + tx + "," + ty;
+    });
+    node.attr("transform", function(d) {
+        return transform (d, width, height);
+    });
+    text.attr("transform", function(d) {
+        return transform (d, width, height);
+    });
+}
+
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+exports.initializeSimulation = initializeSimulation;
+exports.dragHandler = dragHandler;
+exports.onTick = onTick;
+
+// temporary
+exports.transform = transform;
+exports.limitborderx = limitborderx;
+exports.limitbordery = limitbordery;
+
+
+console.log("loaded: Berlioz.simulation  IIFE");
+
+})));
+

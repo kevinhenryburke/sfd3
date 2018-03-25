@@ -16,8 +16,12 @@
   <aura:attribute name="card2" type="String" default=""/>    
   <aura:attribute name="card3" type="String" default=""/>    
   <aura:attribute name="card4" type="String" default=""/>    
-  <aura:attribute name="cardSelected" type="Boolean" default="false"/>    
 	<aura:attribute name="maxlevels" type="Integer" default="4"/>    
+
+  <aura:attribute name="card1Field" type="String" default="name"/>    
+  <aura:attribute name="card2Field" type="String" default="position"/>    
+  <aura:attribute name="card3Field" type="String" default="account"/>    
+
 
   <!-- Technical - Panel -->
   <aura:attribute name="panelCurrentMeasure" type="String"/>    

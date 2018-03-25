@@ -1,28 +1,5 @@
 ({
 
-    /* CHART methods - Initialize */
-
-    // called by initializeData
-    transform: function(component, d) {
-        var _this = this;
-        var dx = _this.limitborderx(component, d.x);
-        var dy = _this.limitbordery(component, d.y);
-        var retVal = "translate(" + dx + "," + dy + ")";
-        return retVal;
-    },
-
-    // called by initializeData -> transform
-    limitborderx: function(component, x) {
-        var width = component.get("v.width");
-        return Math.max(Math.min(x, width) -30, 20);
-    },
-
-    // called by initializeData -> transform
-    limitbordery: function(component, y) {
-        var height = component.get("v.height");
-        return Math.max(Math.min(y, height - 50), 20 );
-    },    
-
     // replace ids with component specific versions - this will allow multiple charts on a page without conflict
     initializeAddComponentRef: function(component, datajson) {
         var _this = this;
@@ -36,6 +13,10 @@
     },    
 
     addComponentRef: function(component, dataItem) {
+        if (dataItem.indexOf("compref") > -1) { // don't double index  
+            console.log("avoiding a double compref for item " + dataItem);
+            return dataItem;
+        }
         return component.get("v.componentReference") + dataItem;
     },    
 
@@ -44,7 +25,26 @@
         var indexer = component.get("v.componentReference").length;
         return dataItem.substring(indexer);
     },    
+
+    // TODO - this is experimental - cut down the signature
+    // removes all nodes, paths and text and resets
+    refreshData: function (component, datajson, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters) {
+        var _this = this;
+        console.log("chartArea: enter refreshData");
+
+        // unsophisticated version is to remove everything and re-initialize
+        var svg = component.get("v.svg");
+        var path = svg.selectAll("path").remove();
+        var node = svg.selectAll("circle").remove();
+        var text = svg.selectAll(".nodeText").remove();
+
+        _this.initializeData(component, datajson, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters);                 
         
+        console.log("chartArea: exit refreshData");
+
+    },
+    
+    
     initializeData: function (component, datajson, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters) {
 
         var _this = this;
@@ -83,28 +83,6 @@
 
         var chartClickedFilters = component.get("v.chartClickedFilters");
 
-        console.log("calling layout / simulation");
-        // force example - https://bl.ocks.org/rsk2327/23622500eb512b5de90f6a916c836a40
-//        var simulation = component.get("v.simulation");
-        var attractForce = d3.forceManyBody().strength(5).distanceMax(400).distanceMin(60);
-        var repelForce = d3.forceManyBody().strength(-800).distanceMax(200).distanceMin(30);
-
-        var simulation = d3.forceSimulation()
-        //add nodes
-        .nodes(datajson.nodes) 
-//        .size([width, height])
-        .force("center_force", d3.forceCenter(width / 2, height / 2))
-        .alphaDecay(0.03).force("attractForce",attractForce).force("repelForce",repelForce);
-
-        console.log("simulation");
-        console.log(simulation);
-
-        var link_force =  d3.forceLink(datajson.links)
-            .id(function(d) { return d.name; });     
-
-        console.log("setting force links");
-            
-        simulation.force("links",link_force)    ;
 
         //draw lines for the links 
         console.log("calling paths");
@@ -143,6 +121,8 @@
                 }
             }));
 
+        component.set("v.path", path);
+            
         console.log("calling nodes");
         
         node = svg.append("g").selectAll("circle")
@@ -153,61 +133,21 @@
                 return d.id;
             })
 
-//            .attr("d", d3.symbol().type( function(d) { return d3.symbols[4];}))
+// symbols...           .attr("d", d3.symbol().type( function(d) { return d3.symbols[4];}))
 
             .on('mouseout', function(d) { // hide the div
-                // TODO - add an attribute if want to remove details.
-                // Need to be abstracted - so card vars are provided to this visualization
-
                 if (!component.get("v.retainNodeDetailsMouseOut"))
                 {
-                    component.set("v.card1", d.name);
-                    // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
-                    var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + component.get("v.card1") ;
-                    textcontent += '</tspan>'; 
-
-                    var tselect =  "t" + d.id;
-                    var sselect =  "s" + d.id;
-                        
-                    var t = d3.select("#" + tselect);                    
-                    t.html(textcontent);
-
-                    var s = d3.select("#" + sselect);
-                    s.html(textcontent);
+                    berlioz.chart.nodeMouseout(d);
                 }
             })
             .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
                 console.log("mouseover: " + d.name);
-                // card populate
-                // TODO Need to be abstracted - so card vars are provided to this visualization
-                component.set("v.card1", d.name);
-                component.set("v.card2", d.position);
-                component.set("v.card3", d.account);
-                component.set("v.card4", d.id);
-                component.set("v.cardSelected", true);
+                component.set("v.mouseoverRecordId", d.id);
 
-                // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
-                var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + component.get("v.card1") ;
-                textcontent += '</tspan>'; 
-                textcontent += '<tspan x="10" dy="15">' + component.get("v.card2");
-                textcontent += ' (' + component.get("v.card3") + ')</tspan>';
-
-                var tselect =  "t" + d.id;
-                var sselect =  "s" + d.id;
-
-                var t = d3.select("#" + tselect);
-                console.log("mouseover: " + t);
-                console.log("mouseover: " + textcontent);
-                console.log(t);
-                t.html(textcontent);
-                var s = d3.select("#" + sselect);
-                s.html(textcontent);
-
-                var publisher = component.get("v.componentReference");
-                var componentType = component.get("v.componentType");
-                var controller = component.get("v.UserControllerComponentId");    
-
-                _this.publishEvent("UpdateCard", publisher, componentType, controller, {"card1" : d.name, "card2" : d.position, "card3" : d.account});
+                berlioz.chart.nodeMouseover(d);
+                // send out a notification that we've moused over this node
+                _this.publishEvent(component, "UpdateCard", d);
             }))
             .on('click', function(d) {
 
@@ -239,72 +179,34 @@
                 _this.refreshVisibility(component);
                 _this.styleNodes(component, null, chartPrimaryId);
             })
-            .on('dblclick', function(d) {
-                //TODO implement
-                //var win = window.open("/" + d.id, '_blank');
-                //win.focus();
-            });
+            .on('dblclick', $A.getCallback(function(d) {
+                // TODO re-initialize
+                // Two options - complete refresh OR keep and get data from this point?
+                // send a message identifying the node in question
+                // TODO this will need substantial enriching - e.g. pass current measure and whether to add nodes or to refresh etc.
+                var chartPrimaryId = d.id;
+                component.set("v.chartPrimaryId", chartPrimaryId);
+                var originalId = _this.removeComponentRef(component, d.id);
+                _this.publishEvent(component, "InitiateRefreshChart", {"chartPrimaryId" : originalId, "componentReference" : component.get("v.componentReference")});
+            }));
 
-            var drag_handler = d3.drag()
-            .on("start", function (d) {
-                var simulation = component.get("v.simulation");
-                simulation.alphaTarget(0.3).restart();
-                d.fx = d.x;
-                d.fy = d.y;
-              })
-            .on("drag", function (d) {
-                d.fx = d3.event.x;
-                d.fy = d3.event.y;
-              })
-            .on("end", function (d) {
-                var simulation = component.get("v.simulation");
-                simulation.alphaTarget(0);
-                d.fx = null;
-                d.fy = null;
-              });
-
-            drag_handler(node);
-
-        console.log("calling tick");    
-
-        simulation.on("tick", function() {
-            path.attr("d", function(d) {
-                var sx = _this.limitborderx(component, d.source.x);
-                var sy = _this.limitbordery(component, d.source.y);
-                var tx = _this.limitborderx(component, d.target.x);
-                var ty = _this.limitbordery(component, d.target.y);
-                var dx = tx - sx;
-                var dy = ty - sy;
-                var dr = Math.sqrt(dx * dx + dy * dy);
-                return "M" + sx + "," + sy + "A" + dr + "," + dr + " 0 0,1 " + tx + "," + ty;
-            });
-            node.attr("transform", function(d) {
-                return _this.transform(component, d);
-            })
-
-            var text = component.get("v.text");
-            text.attr("transform", function(d) {
-                return _this.transform(component, d);
-            });
-            component.set("v.text", text);
-
-        });                
-
+        component.set("v.node", node);
+            
         console.log("calling text");    
-        
+    
         var text = component.get("v.text");
 
         text = svg.append("svg:g")
             .selectAll("g")
-            .data(simulation.nodes())
+            .data(datajson.nodes)
             .enter().append("svg:g")
             .attr("class", "nodeText");
 
-        // A copy of the text with a thick white stroke for legibility.
+        // A copy of the text with a thick white stroke for legibility ("s" for shadow, "t" for text).
         text.append("svg:text")
             .attr("x", 8)
             .attr("y", ".31em")
-            .attr("class", "shadow")
+            .attr("class", "shadow") // shadow class
             .attr("id", function(d) {
                 return "s" + d.id;
             })
@@ -322,6 +224,35 @@
                 return d.name;
             });
 
+        component.set("v.text", text);
+    
+        console.log("apply node styling");
+        _this.styleNodes(component, chartCurrentMeasure, chartPrimaryId);
+
+        console.log("apply node visibility");
+        _this.refreshVisibility(component);
+    
+                
+        /* Above should be common to some degree - Below is forceSimulation specific */
+
+        console.log("calling layout / simulation");
+
+        var simulation = berlioz.simulation.initializeSimulation(datajson.nodes, width, height);
+        component.set("v.simulation", simulation);
+        
+        var link_force =  d3.forceLink(datajson.links)
+            .id(function(d) { return d.id; });
+           
+        simulation.force("links",link_force);
+
+        berlioz.simulation.dragHandler(node, simulation);
+
+        console.log("calling tick");    
+
+        simulation.on("tick", function() {
+            berlioz.simulation.onTick (width, height, path, node, text);
+        });                
+
 
 // TODO here's the d3 nodes .... all in a line ... not proper code!
 /*
@@ -334,18 +265,6 @@ svg.selectAll('.symbol')
    .attr('transform',function(d,i) { return 'translate('+(i*20+20)+','+30+')';})
    .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[i];}) );
 */
-        component.set("v.text", text);
-
-        component.set("v.node", node);
-        component.set("v.path", path);
-        component.set("v.simulation", simulation);
-
-        console.log("apply node styling");
-        _this.styleNodes(component, chartCurrentMeasure, chartPrimaryId);
-
-        console.log("apply node visibility");
-        _this.refreshVisibility(component);
-
 
     },
 
@@ -552,8 +471,13 @@ svg.selectAll('.symbol')
         _this.refreshVisibility(component);
     },
 
-    publishEvent : function(topic, publisher, publisherType, controller, parameters) {
+    publishEvent : function(component, topic, parameters) {
         console.log("publishEvent: " + topic + " " + JSON.stringify(parameters));
+
+        var publisher = component.get("v.componentReference");
+        var publisherType = component.get("v.componentType");
+        var controller = component.get("v.UserControllerComponentId");    
+
         console.log("publisherType: " + publisherType );
         console.log("controller: " + controller );
         var appEvent = $A.get("e.c:evt_sfd3");

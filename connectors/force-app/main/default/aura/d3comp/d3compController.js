@@ -52,7 +52,7 @@
                         "componentReference" : componentReference
                     }
                         
-                    helper.publishEvent("ConfigInitialized", publisher, componentType, configEventParameters);    
+                    helper.publishEvent("InitializeData", publisher, componentType, configEventParameters);    
                 }
                 component.set("v.initEventsQueue",[]);
 
@@ -137,7 +137,7 @@
                 var publisher = component.get("v.UserComponentId");
                 var componentType = component.get("v.componentType");
                 console.log("calling publishEvent");
-                helper.publishEvent("ConfigInitialized", publisher, componentType, configEventParameters);    
+                helper.publishEvent("InitializeData", publisher, componentType, configEventParameters);    
 
                 // clear the queue
                 component.set("v.initEventsQueue",[]);
@@ -170,9 +170,47 @@
         if (topic == "UpdateCard")
         {
             var parameters = event.getParam("parameters");
-            component.set("v.card1", parameters["card1"]);
-            component.set("v.card2", parameters["card2"]);
-            component.set("v.card3", parameters["card3"]);
+            console.log("Reading UpdateCard fields from configuration");
+            component.set("v.card1", parameters[component.get("v.card1Field")]);  
+            component.set("v.card2", parameters[component.get("v.card2Field")]);  
+            component.set("v.card3", parameters[component.get("v.card3Field")]);  
+        }
+        if (topic == "InitiateRefreshChart")
+        {
+            // for a RefreshChart event we assume everything is initialized
+
+            var parameters = event.getParam("parameters");
+            var componentReference = parameters["componentReference"];
+            console.log("Publish data upon refresh request for charts: " + componentReference);
+
+            var panelPrimaryId = parameters["chartPrimaryId"];            
+            component.set("v.panelPrimaryId", panelPrimaryId);   
+
+// TODO - this sends data that is picked up by the target component, however work needs to be done on updating / removing nodes
+
+            
+            var datajson = component.get("v.datajson");
+            var configjson = component.get("v.configjson");
+            var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
+            var panelPrimaryId = parameters["chartPrimaryId"];           
+            var panelClickedFilters = component.get("v.panelClickedFilters");     
+            
+            // publish event - configuration loaded
+
+            var configEventParameters = { 
+                "datajson" : datajson, 
+                "configjson" : configjson, 
+                "currentMeasure" : "Hot", 
+                "primaryId" : panelPrimaryId, 
+                "clickedFilters" : panelClickedFilters,
+                "componentReference" : componentReference                
+            }
+
+            //publish to this component
+            var publisher = component.get("v.UserComponentId");
+            var componentType = component.get("v.componentType");
+            helper.publishEvent("RefreshData", publisher, componentType, configEventParameters);            
+
         }
         
     },

@@ -33,11 +33,7 @@
                 "componentReference" : componentReference
             }
     
-            var publisher = component.get("v.componentReference");
-            var componentType = component.get("v.componentType");
-            var controller = component.get("v.UserControllerComponentId");    
-
-            helper.publishEvent("ChartRendered", publisher, componentType, controller, eventParameters);   
+            helper.publishEvent(component, "ChartRendered", eventParameters);   
             component.set("v.initialized", true);
         }
     },
@@ -118,7 +114,6 @@
         var topic = event.getParam("topic");
         var publisher = event.getParam("publisher");
 
-        console.log("topic/publisher: " + topic + "/" + publisher);
 
         var UserControllerComponentId = component.get("v.UserControllerComponentId");
 
@@ -158,18 +153,17 @@
             // refresh Chart - measure changes but primaryid does not
             helper.styleNodes(component, currentMeasure, null);
         }
-        if (topic == "ConfigInitialized")
+
+        if (topic == "InitializeData")
         {
             var parameters = event.getParam("parameters");
             var componentReference = component.get("v.componentReference");
 
+            console.log("InitializeData received by Chart: " + componentReference + "/" + parameters["componentReference"]);
+
+
             if (componentReference == parameters["componentReference"]) {
-                console.log("Initialize Chart with reference: " + componentReference);
-                console.log(parameters["datajson"]);
-                console.log(parameters["configjson"]);
-                console.log(parameters["currentMeasure"]);
-                console.log(parameters["primaryId"]);
-                console.log(parameters["clickedFilters"]);
+                console.log("InitializeData with reference: " + componentReference);
                 helper.initializeData(component, parameters["datajson"], parameters["configjson"], parameters["currentMeasure"], parameters["primaryId"], parameters["clickedFilters"]);                 
             }
             else {
@@ -177,13 +171,32 @@
             }
 
         }
+
+        if (topic == "RefreshData")
+        {
+            var parameters = event.getParam("parameters");
+            var componentReference = component.get("v.componentReference");
+
+            console.log("RefreshData topic received by Chart: " + componentReference + "/" + parameters["componentReference"]);
+
+            if (componentReference == parameters["componentReference"]) {
+                console.log("RefreshData: Refresh Chart with reference: " + componentReference);
+                helper.refreshData(component, parameters["datajson"], parameters["configjson"], parameters["currentMeasure"], parameters["primaryId"], parameters["clickedFilters"]);                 
+            }
+            else {
+                console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
+            }
+
+        }
+        
+                
     },
 
 
     navigateToRecord : function(component){
         var evtNav = $A.get("e.force:navigateToSObject");
         evtNav.setParams({
-        "recordId": component.get("v.card4"),
+        "recordId": component.get("v.mouseoverRecordId"),
         "slideDevName": "detail"
         });
         sObectEvent.fire(); 
