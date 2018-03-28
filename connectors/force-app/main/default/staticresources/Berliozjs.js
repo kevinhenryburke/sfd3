@@ -228,6 +228,9 @@ function limitbordery(y, height) {
 
 function onTick (width, height, path, node, text) {
     path.attr("d", function(d) {
+//        console.log("d.source.x: " + d.source.x);
+//        console.log(JSON.stringify(d));
+//        console.log(d);
         var sx = limitborderx(d.source.x, width);
         var sy = limitbordery(d.source.y, height);
         var tx = limitborderx(d.target.x, width);

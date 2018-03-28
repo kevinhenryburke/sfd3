@@ -9,6 +9,8 @@
             
         datajson.links.forEach(function(link) {
             link["id"] = _this.addComponentRef(component, link["id"]);
+            link["sourceid"] = _this.addComponentRef(component, link["sourceid"]);
+            link["targetid"] = _this.addComponentRef(component, link["targetid"]);
         });
     },    
 
@@ -33,33 +35,37 @@
         console.log("chartArea: enter refreshData");
 
         // unsophisticated version is to remove everything and re-initialize
-        var svg = component.get("v.svg");
-        var path = svg.selectAll("path").remove();
-        var node = svg.selectAll("circle").remove();
-        var text = svg.selectAll(".nodeText").remove();
+
+        // var chartSVGId = component.get("v.chartSVGId");
+        // var svg = d3.select("#" + chartSVGId);
+
+        //    var path = svg.selectAll("path").remove();
+        //    var node = svg.selectAll("circle").remove();
+        //    var text = svg.selectAll(".nodeText").remove();
+
 
         _this.initializeData(component, datajson, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters);                 
         
         console.log("chartArea: exit refreshData");
-
-    },
-    
+    },    
     
     initializeData: function (component, datajson, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters) {
 
         var _this = this;
 
-        console.log("init:initializing initializeData ");
+        console.log("init:initializing initializeData with chartPrimaryId: " + chartPrimaryId);
         _this.initializeAddComponentRef(component, datajson);
-        console.log(datajson);
 
         chartPrimaryId = _this.addComponentRef(component, chartPrimaryId);
 
         component.set("v.chartCurrentMeasure", chartCurrentMeasure);
         component.set("v.chartPrimaryId", chartPrimaryId);            
         component.set("v.chartClickedFilters", chartClickedFilters);            
+        var chartClickedFilters = component.get("v.chartClickedFilters");
                 
-        var svg = component.get("v.svg");
+        var chartSVGId = component.get("v.chartSVGId");
+        var svg = d3.select("#" + chartSVGId);
+
         // use the name convention from d3 tutorials (e.g. http://www.puzzlr.org/force-directed-graph-minimal-working-example/)
         // variables called simulation, node, path
         var node = component.get("v.node");
@@ -69,72 +75,45 @@
         var height = component.get("v.height");  
 
         // Styling of tooltips - see GitHub prior to Feb 24, 2018
-
         var nodeToolTipDiv = d3.select("#nodeToolTip");
-
         var pathToolTipDivId = _this.addComponentRef(component, "pathToolTip");
         var pathToolTipDiv = d3.select("#" + pathToolTipDivId);
         
-        // Compute the distinct nodes from the links.
-        datajson.links.forEach(function(link) {
-            link.source = datajson.nodes[link.source];
-            link.target = datajson.nodes[link.target];
-        });
+        console.log("create some groups inside the svg element to store the raw data");
+        var pathGroupId = chartSVGId + "pathGroup";
+        var pathGroup = d3.select("#" + pathGroupId);
+        if (pathGroup.empty()) {
+            console.log("create pathGroup");
+            pathGroup = svg.append("g").attr("id",pathGroupId);
+        }
 
-        var chartClickedFilters = component.get("v.chartClickedFilters");
+        var nodeGroupId = chartSVGId + "nodeGroup";
+        var nodeGroup = d3.select("#" + nodeGroupId);
+        if (nodeGroup.empty()) {
+            console.log("create nodeGroup");
+            nodeGroup = svg.append("g").attr("id",nodeGroupId);
+        }
 
+        var textGroupId = chartSVGId + "textGroup";
+        var textGroup = d3.select("#" + textGroupId);
+        if (textGroup.empty()) {
+            console.log("create textGroup");
+            textGroup = svg.append("svg:g").attr("id",textGroupId);
+        }
 
-        //draw lines for the links 
-        console.log("calling paths");
-
-        var path = svg.append("g")
-            .selectAll("path")
-            .data(datajson.links)
-            .enter().append("path")
-            .attr("class", function(d) {
-                return "link " + d.type;
-            })
-            .attr("stroke", function(d) {
-                return d.stroke;
-            })
-            .attr("id", function(d) {
-                return d.id;
-            })
-            .attr("marker-end", function(d) {
-                return "url(#" + d.type + ")";
-            })
-            .on('mouseout', function(d) { // hide the div
-                var showPathToolTip = component.get("v.showPathToolTip");
-                if (showPathToolTip) {
-                    berlioz.chart.pathMouseout(pathToolTipDiv);
-                }
-
-            })
-            .on('mouseover', $A.getCallback(function(d) { 
-                var showPathToolTip = component.get("v.showPathToolTip");
-                console.log("showPathToolTip: " + showPathToolTip);
-                if (showPathToolTip) {
-                    if (component.get("v.showPathToolTip"))
-                    {
-                        berlioz.chart.pathMouseover(d,path,pathToolTipDiv);
-                   }
-                }
-            }));
-
-        component.set("v.path", path);
-            
         console.log("calling nodes");
         
-        node = svg.append("g").selectAll("circle")
-            .data(datajson.nodes)
+        var nodeSelection = nodeGroup
+            .selectAll("circle")
+            .data(datajson.nodes,  function(d, i) { return d.id;} );
+
+        node = nodeSelection     
             .enter().append("circle")
             // set data related attributes - visual styling is applied later
             .attr("id", function(d) {
                 return d.id;
             })
-
-// symbols...           .attr("d", d3.symbol().type( function(d) { return d3.symbols[4];}))
-
+            // symbols...           .attr("d", d3.symbol().type( function(d) { return d3.symbols[4];}))
             .on('mouseout', function(d) { // hide the div
                 if (!component.get("v.retainNodeDetailsMouseOut"))
                 {
@@ -150,7 +129,6 @@
                 _this.publishEvent(component, "UpdateCard", d);
             }))
             .on('click', function(d) {
-
 //                var isiOS = component.get("v.isiOS");
                 console.log("retrieve info on whether isiOS");
                 var isiOS = berlioz.chart.isiOS;
@@ -158,9 +136,7 @@
                 if (isiOS) {
                     var now = new Date().getTime();
                     var lastTouch = component.get("v.lastTouch");
-
                     var delta = now - lastTouch;
-
                     if (delta < 350 && delta > 0) {
                         // the second touchend event happened within half a second. Here is where we invoke the double tap code
                         //TODO implement
@@ -190,15 +166,19 @@
                 _this.publishEvent(component, "InitiateRefreshChart", {"chartPrimaryId" : originalId, "componentReference" : component.get("v.componentReference")});
             }));
 
+        var nodey2 = d3.select("#" + nodeGroupId).selectAll("circle");    
+        console.log("nodey1: " + JSON.stringify(node.data()));    
+        console.log("nodey2: " + JSON.stringify(nodey2.data()));  
+        
+//        node = nodey2;
+
         component.set("v.node", node);
-            
+
         console.log("calling text");    
     
-        var text = component.get("v.text");
-
-        text = svg.append("svg:g")
+        var text = textGroup
             .selectAll("g")
-            .data(datajson.nodes)
+            .data(datajson.nodes,  function(d, i) { return d.id;} )
             .enter().append("svg:g")
             .attr("class", "nodeText");
 
@@ -224,23 +204,84 @@
                 return d.name;
             });
 
-        component.set("v.text", text);
-    
+        //draw lines for the links 
+        console.log("calling paths");
+
+        datajson.links.forEach(function(link) {
+            var sourceElement = d3.select("#" + link.sourceid);
+            var targetElement = d3.select("#" + link.targetid);
+            link.source = sourceElement.datum();
+            link.target = targetElement.datum();
+        });
+
+        console.log("datajson.links length: " + datajson.links.length);
+        
+        var pathSelection = pathGroup
+            .selectAll("path")
+            .data(datajson.links,  function(d, i) { return d.id;} );
+        
+        path = pathSelection    
+            .enter().append("path")
+            .attr("class", function(d) {
+                return "link " + d.type;
+            })
+            .attr("stroke", function(d) {
+                return d.stroke;
+            })
+            .attr("id", function(d) {
+                return d.id;
+            })
+            .attr("sourceid", function(d) {
+                return d.sourceid;
+            })
+            .attr("targetid", function(d) {
+                return d.targetid;
+            })
+            .attr("marker-end", function(d) {
+                return "url(#" + d.type + ")";
+            })
+            .on('mouseout', function(d) { // hide the div
+                var showPathToolTip = component.get("v.showPathToolTip");
+                if (showPathToolTip) {
+                    berlioz.chart.pathMouseout(pathToolTipDiv);
+                }
+            })
+            .on('mouseover', $A.getCallback(function(d) { 
+                var showPathToolTip = component.get("v.showPathToolTip");
+                console.log("showPathToolTip: " + showPathToolTip);
+                if (showPathToolTip) {
+                    if (component.get("v.showPathToolTip"))
+                    {
+                        berlioz.chart.pathMouseover(d,path,pathToolTipDiv);
+                   }
+                }
+            }));
+
+        var pathy2 = d3.select("#" + pathGroupId).selectAll("path").data();  
+        console.log("pathy1: " + JSON.stringify(path));  
+        console.log("pathy2: " + JSON.stringify(pathy2));  
+        var pathy3 = d3.select("#" + pathGroupId).selectAll("path");  
+        console.log("pathy3: " + JSON.stringify(pathy3));  
+
+        var djn = datajson.nodes;
+            
+        component.set("v.path", path);
+
+        var forceLinks = _this.buildForceLinks(path);
+        
         console.log("apply node styling");
         _this.styleNodes(component, chartCurrentMeasure, chartPrimaryId);
 
         console.log("apply node visibility");
         _this.refreshVisibility(component);
     
-                
         /* Above should be common to some degree - Below is forceSimulation specific */
 
         console.log("calling layout / simulation");
 
-        var simulation = berlioz.simulation.initializeSimulation(datajson.nodes, width, height);
-        component.set("v.simulation", simulation);
-        
-        var link_force =  d3.forceLink(datajson.links)
+        var simulation = berlioz.simulation.initializeSimulation(djn, width, height);
+
+        var link_force =  d3.forceLink(forceLinks.links)
             .id(function(d) { return d.id; });
            
         simulation.force("links",link_force);
@@ -253,22 +294,36 @@
             berlioz.simulation.onTick (width, height, path, node, text);
         });                
 
-
-// TODO here's the d3 nodes .... all in a line ... not proper code!
-/*
-var mdata = [0,1,2,3,4,5,6];
-
-svg.selectAll('.symbol')
-   .data(mdata)
-   .enter()
-   .append('path')
-   .attr('transform',function(d,i) { return 'translate('+(i*20+20)+','+30+')';})
-   .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[i];}) );
-*/
-
     },
 
     /* CHART methods - Refresh */
+
+    buildForceLinks: function(path) {
+
+        console.log("Enter buildForceLinks"); 
+        var forceLinks = {"links": [] };
+
+        path.data().forEach(function(p) {
+            var sourceDatum = d3.select("#" + p.sourceid).datum();
+            var targetDatum = d3.select("#" + p.targetid).datum();
+
+            forceLinks["links"].push(
+                {
+                    "id" : p.id,
+                    "sourceid" : p.sourceid, 
+                    "targetid" : p.targetid,
+                    "type": p.type,
+                    "createdby": p.createdby,
+                    "notes": p.notes,
+                    "stroke": p.stroke,
+                    "source" : sourceDatum,
+                    "target" : targetDatum
+                }
+            );
+        });
+        return forceLinks;
+    },
+
 
     refreshVisibility: function(component) {
 
@@ -292,41 +347,48 @@ svg.selectAll('.symbol')
         var shownodeids = [];
         var relatedNodes = _this.getRelatedNodes(component, levels);
 
-        path.style("visibility", function(o) {
+        console.log("path is: ");
+        console.log(path);
+
+//        var forceLinks = {"links": [] };
+        
+        path.style("visibility", function(p) {
 
             var retval = "hidden";
-            var sourcevis = o.source.measures[chartCurrentMeasure].visible;
-            var targetvis = o.target.measures[chartCurrentMeasure].visible;
 
-            var osourceid = o.source.id;
-            var otargetid = o.target.id;
+            //TODO temporarily removing the measure level visibility functionaliy, reinstate later if useful
+            // var sourcevis = p.source.measures[chartCurrentMeasure].visible;
+            // var targetvis = p.target.measures[chartCurrentMeasure].visible;
+            var sourcevis = 1;
+            var targetvis = 1;
 
-            var sourceindex = relatedNodes.indexOf(osourceid);
-            var targetindex = relatedNodes.indexOf(otargetid);
+            var sourceindex = relatedNodes.indexOf(p.sourceid);
+            var targetindex = relatedNodes.indexOf(p.targetid);
 
             var primaryrelated = (sourceindex > -1 && targetindex > -1);
 
             if ((sourcevis === 1) && (targetvis === 1) && primaryrelated) {
 
-                var index = clickedfilters.indexOf(o.type);
+                var index = clickedfilters.indexOf(p.type);
 
                 if (index > -1) {
-                    console.log('for: ' + o.source.name + '/' + o.target.name + " return TRUE");
+                    console.log(p.sourceid + '/' + p.targetid + " will be visible");
 
-                    var indexsource = shownodeids.indexOf(osourceid);
+                    var indexsource = shownodeids.indexOf(p.sourceid);
                     if (indexsource == -1) {
-                        shownodeids.push(osourceid);
+                        shownodeids.push(p.sourceid);
                     }
 
-                    var indextarget = shownodeids.indexOf(otargetid);
+                    var indextarget = shownodeids.indexOf(p.targetid);
                     if (indextarget == -1) {
-                        shownodeids.push(otargetid);
+                        shownodeids.push(p.targetid);
                     }
                 }
             }
 
             return (index > -1) ? "visible" : "hidden";
         });
+
 
         // change the visibility of the node
         // if all the links with that node are invisibile, the node should also be invisible
@@ -364,16 +426,13 @@ svg.selectAll('.symbol')
 
             path.each(function(p) {
 
-                var psourceid = p.source.id;
-                var ptargetid = p.target.id;
-                    
-                var sourceindex = linkednodes.indexOf(psourceid);
-                var targetindex = linkednodes.indexOf(ptargetid);
+                var sourceindex = linkednodes.indexOf(p.sourceid);
+                var targetindex = linkednodes.indexOf(p.targetid);
                 if (sourceindex === -1 && targetindex > -1) {
-                        newnodes.push(psourceid);
+                        newnodes.push(p.sourceid);
                     }
                     if (targetindex === -1 && sourceindex > -1) {
-                        newnodes.push(ptargetid);
+                        newnodes.push(p.targetid);
                     }
             });
 
@@ -411,6 +470,8 @@ svg.selectAll('.symbol')
         }
         
         var node = component.get("v.node");
+
+        console.log("styleNodes:" + JSON.stringify(node));
 
         node.attr("r", function(o, i) {
             // needs to be computed using a configuration provided algorithm?
@@ -504,5 +565,19 @@ svg.selectAll('.symbol')
         return hash;
     }    
 
-
 })
+
+
+
+
+// TODO here's the d3 nodes .... all in a line ... not proper code!
+/*
+var mdata = [0,1,2,3,4,5,6];
+
+svg.selectAll('.symbol')
+   .data(mdata)
+   .enter()
+   .append('path')
+   .attr('transform',function(d,i) { return 'translate('+(i*20+20)+','+30+')';})
+   .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[i];}) );
+*/

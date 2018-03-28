@@ -1,0 +1,34 @@
+{
+  "nodes":[
+    {
+      "name":"Transportation",
+      "account":"Royal Opera",
+      "position":"Services Director",
+      "id":"000000000000000020",
+      "type":"Contact",
+      "measures":{
+        "Posts":{
+          "color":"blue",
+          "visible":1,
+          "radius":12
+        },
+        "Hot":{
+          "color":"green",
+          "visible":1,
+          "radius":9
+        }
+      }
+    }
+  ],
+  "links":[
+    {
+      "id":"100000000000000023",
+      "sourceid":"000000000000000000",
+      "targetid":"000000000000000020",
+      "type":"Social",
+      "createdby":"Kevin Burke",
+      "notes":"worked together at Blork",
+      "stroke":"gray"
+    }
+  ]
+}

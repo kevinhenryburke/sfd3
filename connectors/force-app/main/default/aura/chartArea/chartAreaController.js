@@ -21,6 +21,7 @@
 		console.log('chartArea: componentReference: ' + componentReference);    
         component.set("v.componentReference", componentReference);
         component.set("v.chartAreaDivId", componentReference + 'div');
+        component.set("v.chartSVGId", componentReference + 'svg');
     },
 
     doneRendering: function(component, event, helper) {
@@ -85,12 +86,13 @@
         component.set("v.width", width);
         component.set("v.height", height);
 
-        var chartAreaDivId = "#" + component.get("v.chartAreaDivId");
+        var chartAreaDivSearch = "#" + component.get("v.chartAreaDivId");
+        var chartSVGId = component.get("v.chartSVGId");
 
-        var svg1 = d3.select(chartAreaDivId).append("svg")
+        var svg1 = d3.select(chartAreaDivSearch).append("svg")
+            .attr("id", chartSVGId)
             .attr("width", width)
             .attr("height", height);
-        component.set("v.svg", svg1);
 
         var lastTouch1 = new Date().getTime();
         component.set("v.lastTouch", lastTouch1);
@@ -164,7 +166,10 @@
 
             if (componentReference == parameters["componentReference"]) {
                 console.log("InitializeData with reference: " + componentReference);
-                helper.initializeData(component, parameters["datajson"], parameters["configjson"], parameters["currentMeasure"], parameters["primaryId"], parameters["clickedFilters"]);                 
+
+                var datajson = parameters["datajson"];
+
+                helper.initializeData(component, datajson, parameters["configjson"], parameters["currentMeasure"], parameters["primaryId"], parameters["clickedFilters"]);                 
             }
             else {
                 console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);

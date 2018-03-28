@@ -65,20 +65,21 @@
 
   <aura:attribute name="componentReference" type="String"/> 
   <aura:attribute name="chartAreaDivId" type="String" default="" description="If putting more than one chart on a page need to provide unique ids for the chart components"/>    
+  <aura:attribute name="chartSVGId" type="String" default="" description="If putting more than one chart on a page need to provide unique ids for the svg elements"/>    
 
+  <!-- Potentially change this to "rendered" -->
 	<aura:attribute name="initialized" type="Boolean" default="false"/>    
 	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
 	<aura:attribute name="nodestrokewidth" type="String" default="0.5px"/>    
   <aura:attribute name="datajson" type="Object" />
   <aura:attribute name="configjson" type="Object" />
   
-  <aura:attribute name="simulation" type="Object" />
-  <aura:attribute name="text" type="Object" />
   <!-- <aura:attribute name="pathtext" type="Object" /> -->
   <aura:attribute name="node" type="Object" />
   <aura:attribute name="path" type="Object" />
-  
-  <aura:attribute name="svg" type="Object" />
+
+  <aura:attribute name="forceLinks" type="Object" />
+
   <aura:attribute name="width" type="Double" />
   <aura:attribute name="height" type="Double" />
   <aura:attribute name="lastTouch" type="DateTime" />
