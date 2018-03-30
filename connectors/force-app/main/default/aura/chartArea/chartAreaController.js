@@ -1,16 +1,13 @@
 ({
 
     doInit: function(component, event, helper) {
-        console.log('chartArea: doInit started');   
-        console.log('chartArea: reading user input Component Id');   
-        
+        console.log('chartArea: doInit enter');   
         var comprefNumber = 0;
 
         var UserComponentId = component.get("v.UserComponentId");
 
         if (UserComponentId != null && UserComponentId != '') {
-            console.log('chartArea: calculate compref from configuration');   
-            console.log('chartArea: calculate using seed:' + UserComponentId);   
+            console.log('chartArea: calculate comprefNumber using seed:' + UserComponentId);   
             comprefNumber = helper.simpleHash(UserComponentId);    
         }
         else {
@@ -22,31 +19,37 @@
         component.set("v.componentReference", componentReference);
         component.set("v.chartAreaDivId", componentReference + 'div');
         component.set("v.chartSVGId", componentReference + 'svg');
+        console.log('chartArea: doInit exit');   
     },
 
     doneRendering: function(component, event, helper) {
+        console.log('chartArea: doneRendering enter');   
         var initialized = component.get("v.initialized");
         if (initialized == false) {
             var componentReference = component.get("v.componentReference");
-            console.log('chartArea: doneRendering first call: componentReference: ' + componentReference);
-            
-            var eventParameters = { 
-                "componentReference" : componentReference
+            console.log('chartArea: doneRendering first call: componentReference: ' + componentReference);            
+
+            var scriptsLoaded = component.get("v.scriptsLoaded");
+            if (scriptsLoaded == true) {
+                console.log('chartArea: signalling ready from doneRendering');   
+                var eventParameters = { 
+                    "componentReference" : componentReference
+                }    
+                helper.publishEvent(component, "ChartRendered", eventParameters);   
             }
-    
-            helper.publishEvent(component, "ChartRendered", eventParameters);   
-            component.set("v.initialized", true);
+            else {
+                console.log('chartArea: doneRendering: scripts not loaded so publish RefreshEvent from afterScriptsLoaded');   
+            }
         }
+
+        component.set("v.initialized", true);
+        
+        console.log('chartArea: doneRendering exit');   
     },
 
 
     afterScriptsLoaded: function(component, event, helper) {
-        console.log('chartArea: afterScriptsLoaded started');
-        
-        // TODO delete this line 
-        berlioz.called();
-        // TODO delete this line 
-        berlioz.chart.called();
+        console.log('chartArea: afterScriptsLoaded enter');
         
         var width = Math.min(screen.width, screen.height);
         var height = Math.min(screen.width, screen.height);
@@ -107,7 +110,19 @@
             console.log("non-IOS environment");
             berlioz.chart.isiOS = false;
         }
-        console.log('chartArea: afterScriptsLoaded finished');
+        component.set("v.scriptsLoaded", true);
+
+        var initialized = component.get("v.initialized");
+        if (initialized == true) {
+            console.log('chartArea: signalling ready from afterScriptsLoaded');   
+            var componentReference = component.get("v.componentReference");
+            var eventParameters = { 
+                "componentReference" : componentReference
+            }    
+            helper.publishEvent(component, "ChartRendered", eventParameters);   
+        }
+        
+        console.log('chartArea: afterScriptsLoaded exit');
     },
 
     /* handlers */
@@ -169,7 +184,8 @@
 
                 var datajson = parameters["datajson"];
 
-                helper.initializeData(component, datajson, parameters["configjson"], parameters["currentMeasure"], parameters["primaryId"], parameters["clickedFilters"]);                 
+                var isInit = true;
+                helper.initializeData(component, datajson, parameters["configjson"], parameters["currentMeasure"], parameters["primaryId"], parameters["clickedFilters"], isInit);                 
             }
             else {
                 console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);

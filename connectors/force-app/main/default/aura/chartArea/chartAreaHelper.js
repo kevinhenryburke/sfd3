@@ -1,62 +1,63 @@
 ({
 
-    // replace ids with component specific versions - this will allow multiple charts on a page without conflict
-    initializeAddComponentRef: function(component, datajson) {
+
+    // unsophisticated version is to remove everything and re-initialize
+    refreshData: function (component, datajsonRefresh, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters) {
         var _this = this;
+        console.log("chartArea: enter refreshData with chartPrimaryId: " + chartPrimaryId);
+
+        // MOVE THIS INTO A clearChart function?
+        var chartSVGId = component.get("v.chartSVGId");
+        var svg = d3.select("#" + chartSVGId);
+
+        var path = svg.selectAll("path").remove();
+        var node = svg.selectAll("circle").remove();
+        var text = svg.selectAll(".nodeText").remove();
+
+        var datajson = component.get("v.datajson");
+
+        var componentReference = component.get("v.componentReference");
+        berlioz.utils.initializeAddComponentRef(componentReference, datajsonRefresh);
+
+        var nodeIds = [];
         datajson.nodes.forEach(function(node) {
-            node["id"] = _this.addComponentRef(component, node["id"]);
+            nodeIds.push(node["id"]);
+        });        
+
+        datajsonRefresh.nodes.forEach(function(node) {
+            var indexer = nodeIds.indexOf(node["id"]);       
+            if (indexer == -1) {     
+                datajson["nodes"].push(node);
+            }
         });
-            
+
+        var linkIds = [];
         datajson.links.forEach(function(link) {
-            link["id"] = _this.addComponentRef(component, link["id"]);
-            link["sourceid"] = _this.addComponentRef(component, link["sourceid"]);
-            link["targetid"] = _this.addComponentRef(component, link["targetid"]);
+            linkIds.push(link["id"]);
+        });        
+        
+        datajsonRefresh.links.forEach(function(link) {
+            datajson["links"].push(link);
         });
-    },    
 
-    addComponentRef: function(component, dataItem) {
-        if (dataItem.indexOf("compref") > -1) { // don't double index  
-            console.log("avoiding a double compref for item " + dataItem);
-            return dataItem;
-        }
-        return component.get("v.componentReference") + dataItem;
-    },    
-
-    // remove component specific prefix from id - this will allow original references to be retrieved
-    removeComponentRef: function(component, dataItem) {
-        var indexer = component.get("v.componentReference").length;
-        return dataItem.substring(indexer);
-    },    
-
-    // TODO - this is experimental - cut down the signature
-    // removes all nodes, paths and text and resets
-    refreshData: function (component, datajson, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters) {
-        var _this = this;
-        console.log("chartArea: enter refreshData");
-
-        // unsophisticated version is to remove everything and re-initialize
-
-        // var chartSVGId = component.get("v.chartSVGId");
-        // var svg = d3.select("#" + chartSVGId);
-
-        //    var path = svg.selectAll("path").remove();
-        //    var node = svg.selectAll("circle").remove();
-        //    var text = svg.selectAll(".nodeText").remove();
-
-
-        _this.initializeData(component, datajson, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters);                 
+        var isInit = false;
+        _this.initializeData(component, datajson, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters, isInit);                 
         
         console.log("chartArea: exit refreshData");
     },    
     
-    initializeData: function (component, datajson, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters) {
+    initializeData: function (component, datajson, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters, isInit) {
 
         var _this = this;
+        var componentReference = component.get("v.componentReference");
 
         console.log("init:initializing initializeData with chartPrimaryId: " + chartPrimaryId);
-        _this.initializeAddComponentRef(component, datajson);
+        if (isInit) {
+            berlioz.utils.initializeAddComponentRef(componentReference, datajson);
+        }
+        component.set("v.datajson", datajson);
 
-        chartPrimaryId = _this.addComponentRef(component, chartPrimaryId);
+        chartPrimaryId = berlioz.utils.addComponentRef(componentReference, chartPrimaryId);
 
         component.set("v.chartCurrentMeasure", chartCurrentMeasure);
         component.set("v.chartPrimaryId", chartPrimaryId);            
@@ -66,18 +67,15 @@
         var chartSVGId = component.get("v.chartSVGId");
         var svg = d3.select("#" + chartSVGId);
 
-        // use the name convention from d3 tutorials (e.g. http://www.puzzlr.org/force-directed-graph-minimal-working-example/)
-        // variables called simulation, node, path
-        var node = component.get("v.node");
-        var path = component.get("v.path");
-
         var width = component.get("v.width");  
         var height = component.get("v.height");  
 
         // Styling of tooltips - see GitHub prior to Feb 24, 2018
         var nodeToolTipDiv = d3.select("#nodeToolTip");
-        var pathToolTipDivId = _this.addComponentRef(component, "pathToolTip");
+        var pathToolTipDivId = berlioz.utils.addComponentRef(componentReference, "pathToolTip");
         var pathToolTipDiv = d3.select("#" + pathToolTipDivId);
+
+        var isRefresh = false;
         
         console.log("create some groups inside the svg element to store the raw data");
         var pathGroupId = chartSVGId + "pathGroup";
@@ -101,11 +99,18 @@
             textGroup = svg.append("svg:g").attr("id",textGroupId);
         }
 
+        // use the name convention from d3 tutorials (e.g. http://www.puzzlr.org/force-directed-graph-minimal-working-example/)
+        // variables called simulation, node, path
+        var node = d3.select("#" + nodeGroupId).selectAll("circle")  ;
+        var path = d3.select("#" + pathGroupId).selectAll("path")  ;
+        
         console.log("calling nodes");
         
         var nodeSelection = nodeGroup
             .selectAll("circle")
             .data(datajson.nodes,  function(d, i) { return d.id;} );
+
+//        nodeSelection.exit().remove();    
 
         node = nodeSelection     
             .enter().append("circle")
@@ -156,23 +161,17 @@
                 _this.styleNodes(component, null, chartPrimaryId);
             })
             .on('dblclick', $A.getCallback(function(d) {
+                console.log("dblclick");
                 // TODO re-initialize
                 // Two options - complete refresh OR keep and get data from this point?
                 // send a message identifying the node in question
                 // TODO this will need substantial enriching - e.g. pass current measure and whether to add nodes or to refresh etc.
                 var chartPrimaryId = d.id;
                 component.set("v.chartPrimaryId", chartPrimaryId);
-                var originalId = _this.removeComponentRef(component, d.id);
-                _this.publishEvent(component, "InitiateRefreshChart", {"chartPrimaryId" : originalId, "componentReference" : component.get("v.componentReference")});
+                var componentReference = component.get("v.componentReference");
+                var originalId = berlioz.utils.removeComponentRef(componentReference, d.id);
+                _this.publishEvent(component, "InitiateRefreshChart", {"chartPrimaryId" : originalId, "componentReference" : componentReference});
             }));
-
-        var nodey2 = d3.select("#" + nodeGroupId).selectAll("circle");    
-        console.log("nodey1: " + JSON.stringify(node.data()));    
-        console.log("nodey2: " + JSON.stringify(nodey2.data()));  
-        
-//        node = nodey2;
-
-        component.set("v.node", node);
 
         console.log("calling text");    
     
@@ -204,7 +203,6 @@
                 return d.name;
             });
 
-        //draw lines for the links 
         console.log("calling paths");
 
         datajson.links.forEach(function(link) {
@@ -213,13 +211,13 @@
             link.source = sourceElement.datum();
             link.target = targetElement.datum();
         });
-
-        console.log("datajson.links length: " + datajson.links.length);
         
         var pathSelection = pathGroup
             .selectAll("path")
             .data(datajson.links,  function(d, i) { return d.id;} );
-        
+
+//        pathSelection.exit().remove();    
+            
         path = pathSelection    
             .enter().append("path")
             .attr("class", function(d) {
@@ -257,16 +255,9 @@
                 }
             }));
 
-        var pathy2 = d3.select("#" + pathGroupId).selectAll("path").data();  
-        console.log("pathy1: " + JSON.stringify(path));  
-        console.log("pathy2: " + JSON.stringify(pathy2));  
-        var pathy3 = d3.select("#" + pathGroupId).selectAll("path");  
-        console.log("pathy3: " + JSON.stringify(pathy3));  
-
-        var djn = datajson.nodes;
-            
-        component.set("v.path", path);
-
+        // overwrite path with the updated version.
+        path = d3.select("#" + pathGroupId).selectAll("path");
+        
         var forceLinks = _this.buildForceLinks(path);
         
         console.log("apply node styling");
@@ -279,11 +270,19 @@
 
         console.log("calling layout / simulation");
 
-        var simulation = berlioz.simulation.initializeSimulation(djn, width, height);
+        // var forceNodes = {"nodes": [] };
+        // var nodey4 = d3.select("#" + nodeGroupId).selectAll("circle")  
+        // .each(function(d) {
+        // // your update code here as it was in your example
+        //     var d3this = d3.select(this) // Transform to d3 Object - THIS COULD BE MY ANSWER TO EVERYTHING
+        //     forceNodes["nodes"].push(d3this);
+        // });
+
+        var simulation = berlioz.simulation.initializeSimulation(datajson.nodes, width, height);
 
         var link_force =  d3.forceLink(forceLinks.links)
             .id(function(d) { return d.id; });
-           
+        
         simulation.force("links",link_force);
 
         berlioz.simulation.dragHandler(node, simulation);
@@ -292,21 +291,43 @@
 
         simulation.on("tick", function() {
             berlioz.simulation.onTick (width, height, path, node, text);
-        });                
+        });             
+        component.set("v.simulation", simulation);   
 
+// GARBAGE AFTER HERE - experiments
+
+/*
+        //var nodeGroupId = chartSVGId + "nodeGroup";
+        var nodey4 = d3.select("#" + nodeGroupId).selectAll("circle")  
+        .each(function(d) {
+        // your update code here as it was in your example
+            var d3this = d3.select(this) // Transform to d3 Object - THIS COULD BE MY ANSWER TO EVERYTHING
+            console.log("ThisNode");
+            console.log(d);
+            d3this.attr("testAttribute" , "yay");
+        });
+
+        var pathy4 = d3.select("#" + pathGroupId).selectAll("path")  
+        .each(function(d) {
+        // your update code here as it was in your example
+            var d3this = d3.select(this) // Transform to d3 Object - THIS COULD BE MY ANSWER TO EVERYTHING
+            console.log("ThisPath");
+            console.log(d);
+            d3this.attr("testAttribute" , "yay");
+        });
+*/
+        
     },
 
     /* CHART methods - Refresh */
 
     buildForceLinks: function(path) {
-
         console.log("Enter buildForceLinks"); 
         var forceLinks = {"links": [] };
 
         path.data().forEach(function(p) {
             var sourceDatum = d3.select("#" + p.sourceid).datum();
             var targetDatum = d3.select("#" + p.targetid).datum();
-
             forceLinks["links"].push(
                 {
                     "id" : p.id,
@@ -331,13 +352,7 @@
 
         var _this = this;
 
-        // change the visibility of the connection path
-
         // "v.chartCurrentMeasure", "v.chartShowLevels", "v.clickedfilters" - belong to control panel - should be fed in
-        var node = component.get("v.node");
-        var path = component.get("v.path");
-
-        // "v.node" / "v.path" - belong to the chart
         var levels = component.get("v.chartShowLevels");
         var clickedfilters = component.get("v.chartClickedFilters");
         var chartCurrentMeasure = component.get("v.chartCurrentMeasure");
@@ -345,12 +360,14 @@
         console.log("primary node id: " + chartPrimaryId);
 
         var shownodeids = [];
-        var relatedNodes = _this.getRelatedNodes(component, levels);
+        var chartSVGId = component.get("v.chartSVGId");
+        var relatedNodes = berlioz.chart.getRelatedNodes(chartPrimaryId, chartSVGId, levels);
 
-        console.log("path is: ");
-        console.log(path);
+        var pathGroupId = chartSVGId + "pathGroup";
+        var path = d3.select("#" + pathGroupId).selectAll("path")  ;
 
-//        var forceLinks = {"links": [] };
+        var nodeGroupId = chartSVGId + "nodeGroup";
+        var node = d3.select("#" + nodeGroupId).selectAll("circle")  
         
         path.style("visibility", function(p) {
 
@@ -372,7 +389,7 @@
                 var index = clickedfilters.indexOf(p.type);
 
                 if (index > -1) {
-                    console.log(p.sourceid + '/' + p.targetid + " will be visible");
+                    berlioz.utils.log(p.sourceid + '/' + p.targetid + " will be visible");
 
                     var indexsource = shownodeids.indexOf(p.sourceid);
                     if (indexsource == -1) {
@@ -409,52 +426,11 @@
     },
 
 
-    getRelatedNodes: function(component, level) {
-        var _this = this;
-
-        var looplevel = 0;
-
-        var chartPrimaryId = component.get("v.chartPrimaryId");
-
-        var linkednodes = [chartPrimaryId];
-
-        while (looplevel < level) {
-            var newnodes = [];
-            looplevel++;
-
-            var path = component.get("v.path");
-
-            path.each(function(p) {
-
-                var sourceindex = linkednodes.indexOf(p.sourceid);
-                var targetindex = linkednodes.indexOf(p.targetid);
-                if (sourceindex === -1 && targetindex > -1) {
-                        newnodes.push(p.sourceid);
-                    }
-                    if (targetindex === -1 && sourceindex > -1) {
-                        newnodes.push(p.targetid);
-                    }
-            });
-
-            var arrayLength = newnodes.length;
-
-            for (var i = 0; i < newnodes.length; i++) {
-            var index = linkednodes.indexOf(newnodes[i]);
-                if (index === -1) {
-                    linkednodes.push(newnodes[i]);
-                }
-            }
-
-        }
-        return linkednodes;
-    },
-
-    // Method to resize nodes
+    // Method to re-style nodes
     styleNodes: function(component, chartCurrentMeasure, primaryid) {
         var _this = this;
         // change the visibility of the connection path
-        console.log("styleNodes : " + chartCurrentMeasure);
-        console.log("primaryid : " + primaryid);
+        console.log("styleNodes : " + chartCurrentMeasure + " primaryid: " + primaryid);
 
         if (primaryid != null)
         {
@@ -469,9 +445,11 @@
             chartCurrentMeasure = component.get("v.chartCurrentMeasure"); 
         }
         
-        var node = component.get("v.node");
+        var chartSVGId = component.get("v.chartSVGId");
+        var nodeGroupId = chartSVGId + "nodeGroup";
+        var node = d3.select("#" + nodeGroupId).selectAll("circle")  ;
 
-        console.log("styleNodes:" + JSON.stringify(node));
+        berlioz.utils.log("styleNodes:" + JSON.stringify(node));
 
         node.attr("r", function(o, i) {
             // needs to be computed using a configuration provided algorithm?
@@ -479,7 +457,7 @@
         });
 
         node.style("fill", function(o, i) {
-            // needs to be computed using a configuration provided algorithm?
+            berlioz.utils.log("styleNodes: fill: " + o.measures[chartCurrentMeasure].color);
             return o.measures[chartCurrentMeasure].color;
         });
 
@@ -552,6 +530,7 @@
         appEvent.fire();
     },
 
+    // ideally would prefer to put in Berlioz library but that can't be called in doInit
     simpleHash : function(s) {
         var hash = 0;
         if (s.length == 0) {

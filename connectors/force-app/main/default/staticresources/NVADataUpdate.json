@@ -1,6 +1,25 @@
 {
   "nodes":[
     {
+      "name":"Supply Chain Corruption",
+      "account":"Royal Opera",
+      "position":"Sales Director",
+      "id":"000000000000000000",
+      "type":"Contact",
+      "measures":{
+        "Posts":{
+          "color":"blue",
+          "visible":1,
+          "radius":12
+        },
+        "Hot":{
+          "color":"green",
+          "visible":1,
+          "radius":9
+        }
+      }
+    }, 
+    {
       "name":"Transportation",
       "account":"Royal Opera",
       "position":"Services Director",

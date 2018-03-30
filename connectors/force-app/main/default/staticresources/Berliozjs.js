@@ -2,22 +2,56 @@
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.berlioz = global.berlioz || {})));
+	(factory((global.berlioz.utils = global.berlioz.utils || {})));
 }(this, (function (exports) { 'use strict';
 
-console.log("loading: Berlioz.js IIFE");
+console.log("loading: Berlioz.utils IIFE");
 
 var version = "0.0.1";
+var debugMode = true;
 
-function called() {
-    console.log("Berlioz called");
+function log (logItem) {
+    if (debugMode == true) {
+        console.log(logItem);
+    } 
 }
-  
-exports.called = called;
+
+// replace ids with component specific versions - this will allow multiple charts on a page without conflict
+function initializeAddComponentRef(componentReference, datajson) {
+    var _this = this;
+    datajson.nodes.forEach(function(node) {
+        node["id"] = berlioz.utils.addComponentRef(componentReference, node["id"]);
+    });
+        
+    datajson.links.forEach(function(link) {
+        link["id"] = berlioz.utils.addComponentRef(componentReference, link["id"]);
+        link["sourceid"] = berlioz.utils.addComponentRef(componentReference, link["sourceid"]);
+        link["targetid"] = berlioz.utils.addComponentRef(componentReference, link["targetid"]);
+    });
+}    
+
+function addComponentRef(componentReference, dataItem) {
+    if (dataItem.indexOf("compref") > -1) { // don't double index  
+        console.log("avoiding a double compref for item " + dataItem);
+        return dataItem;
+    }
+    return componentReference + dataItem;
+}
+
+// remove component specific prefix from id - this will allow original references to be retrieved
+function removeComponentRef(componentReference, dataItem) {
+    var indexer = componentReference.length;
+    return dataItem.substring(indexer);
+}    
+
+exports.log = log;
+exports.initializeAddComponentRef = initializeAddComponentRef;
+exports.addComponentRef = addComponentRef;
+exports.removeComponentRef = removeComponentRef;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-console.log("loaded: Berlioz.js  IIFE");
+console.log("loaded: Berlioz.utils  IIFE");
 
 })));
 
@@ -47,10 +81,6 @@ console.log("loading: Berlioz.chart IIFE");
 var version = "0.0.1";
 
 var isiOS = false;
-
-function called() {
-    console.log("Berlioz.chart called");
-}
 
 function pathMouseover (d,path,pathToolTipDiv) {
     console.log("Berlioz.chart.pathMouseover enter");
@@ -91,7 +121,6 @@ function pathMouseover (d,path,pathToolTipDiv) {
     
 }
 
-
 function pathMouseout (pathToolTipDiv) {
     console.log("Berlioz.chart.pathMouseout enter");
 
@@ -125,7 +154,6 @@ function nodeMouseover (d) {
     console.log("Berlioz.chart.nodeMouseover exit");
 }
 
-
 function nodeMouseout (d) {
     console.log("Berlioz.chart.nodeMouseout enter");
     // revert back to just the name
@@ -144,14 +172,53 @@ function nodeMouseout (d) {
     console.log("Berlioz.chart.nodeMouseout exit");
 }
 
+function getRelatedNodes (chartPrimaryId, chartSVGId, level) {
+    var _this = this;
+
+    var looplevel = 0;
+
+    var linkednodes = [chartPrimaryId];
+
+    while (looplevel < level) {
+        var newnodes = [];
+        looplevel++;
+
+        var pathGroupId = chartSVGId + "pathGroup";
+        var path = d3.select("#" + pathGroupId).selectAll("path")  ;
+
+        path.each(function(p) {
+
+            var sourceindex = linkednodes.indexOf(p.sourceid);
+            var targetindex = linkednodes.indexOf(p.targetid);
+            if (sourceindex === -1 && targetindex > -1) {
+                    newnodes.push(p.sourceid);
+                }
+                if (targetindex === -1 && sourceindex > -1) {
+                    newnodes.push(p.targetid);
+                }
+        });
+
+        var arrayLength = newnodes.length;
+
+        for (var i = 0; i < newnodes.length; i++) {
+        var index = linkednodes.indexOf(newnodes[i]);
+            if (index === -1) {
+                linkednodes.push(newnodes[i]);
+            }
+        }
+
+    }
+    return linkednodes;
+}
 
 
-  
-exports.called = called;
+
 exports.pathMouseover = pathMouseover;
 exports.pathMouseout = pathMouseout;
 exports.nodeMouseover = nodeMouseover;
 exports.nodeMouseout = nodeMouseout;
+exports.getRelatedNodes = getRelatedNodes;
+
 exports.isiOS = isiOS;
 
 Object.defineProperty(exports, '__esModule', { value: true });
