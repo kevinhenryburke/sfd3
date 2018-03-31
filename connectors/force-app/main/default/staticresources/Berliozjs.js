@@ -10,6 +10,35 @@ console.log("loading: Berlioz.utils IIFE");
 var version = "0.0.1";
 var debugMode = true;
 
+// Data Cache
+// It it handy to have some data stored outside lightning as lightning loses context.
+// These are Data Caches and can exist in both general and context specific forms. They can hold data derived from configuration, from data or data supporting processing.
+// Each store is indexed by a component reference, hence the name componentCache.
+
+// Data Store to hold data derived from configuration
+var componentCache = {};
+
+function initializeCache (componentReference) {
+    componentCache[componentReference] = {};
+}
+
+function setCache (componentReference, key, value) {
+    componentCache[componentReference][key] = value;
+}
+
+function getCache (componentReference, key) {
+    var referenceParameters = componentCache[componentReference];
+    return referenceParameters[key];
+}
+
+function showCache (componentReference) {
+    berlioz.utils.log(componentCache[componentReference]);
+}
+
+function showCacheAll () {
+    berlioz.utils.log(componentCache);
+}
+
 function log (logItem) {
     if (debugMode == true) {
         console.log(logItem);
@@ -18,7 +47,6 @@ function log (logItem) {
 
 // replace ids with component specific versions - this will allow multiple charts on a page without conflict
 function initializeAddComponentRef(componentReference, datajson) {
-    var _this = this;
     datajson.nodes.forEach(function(node) {
         node["id"] = berlioz.utils.addComponentRef(componentReference, node["id"]);
     });
@@ -44,10 +72,53 @@ function removeComponentRef(componentReference, dataItem) {
     return dataItem.substring(indexer);
 }    
 
+/*
+// not used at present
+function simpleHash(s) {
+    berlioz.utils.log("berlioz.utils.simpleHash enter for: " + s);
+    var hash = 0;
+    if (s.length == 0) {
+        return hash;
+    }
+    for (var i = 0; i < s.length; i++) {
+        var char = s.charCodeAt(i);
+        hash = ((hash<<5)-hash)+char;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
+}    
+*/
+
+
+function publishEvent(topic, publisher, publisherType, parameters, controller) {
+    console.log("berlioz.utils.publishEvent: " + topic + " " + JSON.stringify(parameters));
+
+    console.log("publisherType: " + publisherType );
+    console.log("controller: " + controller );
+    var appEvent = $A.get("e.c:evt_sfd3");
+    appEvent.setParams({
+        "topic" : topic,
+        "publisher" : publisher,
+        "publisherType" : publisherType,
+        "controller" : controller,
+        "parameters" : parameters
+    });
+    appEvent.fire();
+}
+
+
 exports.log = log;
 exports.initializeAddComponentRef = initializeAddComponentRef;
 exports.addComponentRef = addComponentRef;
 exports.removeComponentRef = removeComponentRef;
+exports.publishEvent = publishEvent;
+exports.initializeCache = initializeCache;
+exports.setCache = setCache;
+exports.getCache = getCache;
+exports.showCache = showCache;
+exports.showCacheAll = showCacheAll;
+
+
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
@@ -144,9 +215,8 @@ function nodeMouseover (d) {
     var sselect =  "s" + d.id;
 
     var t = d3.select("#" + tselect);
-    console.log("mouseover: " + t);
-    console.log("mouseover: " + textcontent);
-    console.log(t);
+    berlioz.utils.log("mouseover: " + textcontent);
+    berlioz.utils.log(t);
     t.html(textcontent);
     var s = d3.select("#" + sselect);
     s.html(textcontent);
@@ -211,13 +281,18 @@ function getRelatedNodes (chartPrimaryId, chartSVGId, level) {
     return linkednodes;
 }
 
-
+function publishEvent(componentReference, topic, parameters) {
+    var publisherType = berlioz.utils.getCache (componentReference, "componentType") ;
+    var controller = berlioz.utils.getCache (componentReference, "UserControllerComponentId") ;
+    berlioz.utils.publishEvent(topic, componentReference, publisherType, parameters, controller);
+}
 
 exports.pathMouseover = pathMouseover;
 exports.pathMouseout = pathMouseout;
 exports.nodeMouseover = nodeMouseover;
 exports.nodeMouseout = nodeMouseout;
 exports.getRelatedNodes = getRelatedNodes;
+exports.publishEvent = publishEvent;
 
 exports.isiOS = isiOS;
 
@@ -295,9 +370,6 @@ function limitbordery(y, height) {
 
 function onTick (width, height, path, node, text) {
     path.attr("d", function(d) {
-//        console.log("d.source.x: " + d.source.x);
-//        console.log(JSON.stringify(d));
-//        console.log(d);
         var sx = limitborderx(d.source.x, width);
         var sy = limitbordery(d.source.y, height);
         var tx = limitborderx(d.target.x, width);

@@ -1,5 +1,32 @@
 ({
 
+    // first method called after all resources are ready
+    doneRenderLoad: function (component) {
+        var _this = this;
+        console.log("chartArea: doneRenderLoad enter");
+        var componentReference = component.get("v.componentReference");
+
+        berlioz.utils.initializeCache (componentReference) ;
+
+        berlioz.utils.setCache (componentReference, "componentReference", component.get("v.componentReference") ) ;
+        berlioz.utils.setCache (componentReference, "componentType", component.get("v.componentType") ) ;
+        berlioz.utils.setCache (componentReference, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
+
+        berlioz.utils.setCache (componentReference, "primaryNodeHighlightingOn", component.get("v.primaryNodeHighlightingOn") ) ;
+        berlioz.utils.setCache (componentReference, "primaryNodeHighlightingColour", component.get("v.primaryNodeHighlightingColour") ) ;
+        berlioz.utils.setCache (componentReference, "primaryNodeHighlightingRadius", component.get("v.primaryNodeHighlightingRadius") ) ;
+        berlioz.utils.setCache (componentReference, "retainNodeDetailsMouseOut", component.get("v.retainNodeDetailsMouseOut") ) ;
+        berlioz.utils.setCache (componentReference, "showPathToolTip", component.get("v.showPathToolTip") ) ;
+        berlioz.utils.setCache (componentReference, "nodestrokewidth", component.get("v.nodestrokewidth") ) ;
+
+        var eventParameters = { 
+            "componentReference" : componentReference
+        }    
+        berlioz.chart.publishEvent(componentReference, "ChartRendered", eventParameters);
+
+        console.log("chartArea: doneRenderLoad exit");
+
+    },
 
     // unsophisticated version is to remove everything and re-initialize
     refreshData: function (component, datajsonRefresh, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters) {
@@ -60,7 +87,10 @@
         chartPrimaryId = berlioz.utils.addComponentRef(componentReference, chartPrimaryId);
 
         component.set("v.chartCurrentMeasure", chartCurrentMeasure);
-        component.set("v.chartPrimaryId", chartPrimaryId);            
+
+        berlioz.utils.setCache (componentReference, "chartPrimaryId", chartPrimaryId ) ;
+
+
         component.set("v.chartClickedFilters", chartClickedFilters);            
         var chartClickedFilters = component.get("v.chartClickedFilters");
                 
@@ -120,22 +150,29 @@
             })
             // symbols...           .attr("d", d3.symbol().type( function(d) { return d3.symbols[4];}))
             .on('mouseout', function(d) { // hide the div
-                if (!component.get("v.retainNodeDetailsMouseOut"))
+                var retainNodeDetailsMouseOut = berlioz.utils.getCache (componentReference, "retainNodeDetailsMouseOut" ) ;
+                if (!retainNodeDetailsMouseOut)
                 {
                     berlioz.chart.nodeMouseout(d);
                 }
             })
             .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
                 console.log("mouseover: " + d.name);
+
+                var componentReference = component.get("v.componentReference");
+                
                 component.set("v.mouseoverRecordId", d.id);
 
                 berlioz.chart.nodeMouseover(d);
                 // send out a notification that we've moused over this node
-                _this.publishEvent(component, "UpdateCard", d);
+                        
+                berlioz.chart.publishEvent(componentReference, "ChartMouseOver", d);
             }))
             .on('click', function(d) {
 //                var isiOS = component.get("v.isiOS");
                 console.log("retrieve info on whether isiOS");
+                var componentReference = component.get("v.componentReference");
+
                 var isiOS = berlioz.chart.isiOS;
 
                 if (isiOS) {
@@ -155,10 +192,10 @@
                 // reset the clicked node to be the primary
                 // TODO This will need to be passed in the refreshVisibility call.
                 var chartPrimaryId = d.id;
-                component.set("v.chartPrimaryId", chartPrimaryId);
+                berlioz.utils.setCache (componentReference, "chartPrimaryId", chartPrimaryId ) ;
 
                 _this.refreshVisibility(component);
-                _this.styleNodes(component, null, chartPrimaryId);
+                _this.styleNodes(component);
             })
             .on('dblclick', $A.getCallback(function(d) {
                 console.log("dblclick");
@@ -166,11 +203,14 @@
                 // Two options - complete refresh OR keep and get data from this point?
                 // send a message identifying the node in question
                 // TODO this will need substantial enriching - e.g. pass current measure and whether to add nodes or to refresh etc.
-                var chartPrimaryId = d.id;
-                component.set("v.chartPrimaryId", chartPrimaryId);
                 var componentReference = component.get("v.componentReference");
-                var originalId = berlioz.utils.removeComponentRef(componentReference, d.id);
-                _this.publishEvent(component, "InitiateRefreshChart", {"chartPrimaryId" : originalId, "componentReference" : componentReference});
+                var chartPrimaryId = d.id;
+                berlioz.utils.setCache (componentReference, "chartPrimaryId", chartPrimaryId ) ;
+                var cleanId = berlioz.utils.removeComponentRef(componentReference, chartPrimaryId);
+
+                var eventParameters = {"chartPrimaryId" : cleanId, "componentReference" : componentReference};
+                berlioz.chart.publishEvent(componentReference, "InitiateRefreshChart", eventParameters);
+
             }));
 
         console.log("calling text");    
@@ -239,19 +279,16 @@
                 return "url(#" + d.type + ")";
             })
             .on('mouseout', function(d) { // hide the div
-                var showPathToolTip = component.get("v.showPathToolTip");
+                var showPathToolTip = berlioz.utils.getCache (componentReference, "showPathToolTip"); 
                 if (showPathToolTip) {
                     berlioz.chart.pathMouseout(pathToolTipDiv);
                 }
             })
             .on('mouseover', $A.getCallback(function(d) { 
-                var showPathToolTip = component.get("v.showPathToolTip");
+                var showPathToolTip = berlioz.utils.getCache (componentReference, "showPathToolTip") ;
                 console.log("showPathToolTip: " + showPathToolTip);
                 if (showPathToolTip) {
-                    if (component.get("v.showPathToolTip"))
-                    {
-                        berlioz.chart.pathMouseover(d,path,pathToolTipDiv);
-                   }
+                    berlioz.chart.pathMouseover(d,path,pathToolTipDiv);
                 }
             }));
 
@@ -261,7 +298,7 @@
         var forceLinks = _this.buildForceLinks(path);
         
         console.log("apply node styling");
-        _this.styleNodes(component, chartCurrentMeasure, chartPrimaryId);
+        _this.styleNodes(component);
 
         console.log("apply node visibility");
         _this.refreshVisibility(component);
@@ -294,6 +331,8 @@
         });             
         component.set("v.simulation", simulation);   
 
+        berlioz.utils.showCache (componentReference) ;
+        
 // GARBAGE AFTER HERE - experiments
 
 /*
@@ -351,12 +390,16 @@
         console.log("Enter refreshVisibility"); 
 
         var _this = this;
+        var componentReference = component.get("v.componentReference");
 
         // "v.chartCurrentMeasure", "v.chartShowLevels", "v.clickedfilters" - belong to control panel - should be fed in
         var levels = component.get("v.chartShowLevels");
         var clickedfilters = component.get("v.chartClickedFilters");
         var chartCurrentMeasure = component.get("v.chartCurrentMeasure");
-        var chartPrimaryId = component.get("v.chartPrimaryId");
+
+        var chartPrimaryId = berlioz.utils.getCache (componentReference, "chartPrimaryId") ;
+
+
         console.log("primary node id: " + chartPrimaryId);
 
         var shownodeids = [];
@@ -425,26 +468,15 @@
         });
     },
 
-
     // Method to re-style nodes
-    styleNodes: function(component, chartCurrentMeasure, primaryid) {
+    styleNodes: function(component) {
         var _this = this;
-        // change the visibility of the connection path
+        var componentReference = component.get("v.componentReference");
+
+        var primaryid = berlioz.utils.getCache (componentReference, "chartPrimaryId") ;
+        var chartCurrentMeasure = component.get("v.chartCurrentMeasure"); 
         console.log("styleNodes : " + chartCurrentMeasure + " primaryid: " + primaryid);
 
-        if (primaryid != null)
-        {
-            component.set("v.chartPrimaryId", primaryid);        
-        }
-        else {
-            primaryid = component.get("v.chartPrimaryId"); 
-        }
-
-        if (chartCurrentMeasure == null)
-        {
-            chartCurrentMeasure = component.get("v.chartCurrentMeasure"); 
-        }
-        
         var chartSVGId = component.get("v.chartSVGId");
         var nodeGroupId = chartSVGId + "nodeGroup";
         var node = d3.select("#" + nodeGroupId).selectAll("circle")  ;
@@ -465,19 +497,19 @@
             var stroke = o.stroke;
             var oid = o.id;
             if (oid == primaryid) {
-                var primaryNodeHighlightingOn = component.get("v.primaryNodeHighlightingOn");
+                var primaryNodeHighlightingOn = berlioz.utils.getCache (componentReference, "primaryNodeHighlightingOn") ;
                 if (primaryNodeHighlightingOn == true) {
-                    stroke = component.get("v.primaryNodeHighlightingColour");
+                    stroke = berlioz.utils.getCache (componentReference, "primaryNodeHighlightingColour") ;
                 }                
             }
             return stroke;
         });
 
         node.style("stroke-width", function(o, i) {
-            var nodestrokewidth = component.get("v.nodestrokewidth");
+            var nodestrokewidth = berlioz.utils.getCache (componentReference, "nodestrokewidth") ;
             var oid = o.id;
             if (oid == primaryid) {
-                nodestrokewidth = component.get("v.primaryNodeHighlightingRadius");
+                nodestrokewidth = berlioz.utils.getCache (componentReference, "primaryNodeHighlightingRadius") ;
             }
             return nodestrokewidth;
         });
@@ -510,27 +542,7 @@
         _this.refreshVisibility(component);
     },
 
-    publishEvent : function(component, topic, parameters) {
-        console.log("publishEvent: " + topic + " " + JSON.stringify(parameters));
-
-        var publisher = component.get("v.componentReference");
-        var publisherType = component.get("v.componentType");
-        var controller = component.get("v.UserControllerComponentId");    
-
-        console.log("publisherType: " + publisherType );
-        console.log("controller: " + controller );
-        var appEvent = $A.get("e.c:evt_sfd3");
-        appEvent.setParams({
-            "topic" : topic,
-            "publisher" : publisher,
-            "publisherType" : publisherType,
-            "controller" : controller,
-            "parameters" : parameters
-        });
-        appEvent.fire();
-    },
-
-    // ideally would prefer to put in Berlioz library but that can't be called in doInit
+    // ideally would prefer to put in Berlioz library but externals can't be called in doInit
     simpleHash : function(s) {
         var hash = 0;
         if (s.length == 0) {

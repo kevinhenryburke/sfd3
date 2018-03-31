@@ -1,10 +1,8 @@
 ({
 	
     onInit: function(component, event, helper) {
-		console.log('afterScriptsLoaded panel started');
+		console.log('afterScriptsLoaded panel enter');
 
-        console.log("afterScriptsLoaded: panel");
-                
         var action = component.get("c.returnData");
 
         action.setCallback(this, function(response) {
@@ -52,7 +50,7 @@
                         "componentReference" : componentReference
                     }
                         
-                    helper.publishEvent("InitializeData", publisher, componentType, configEventParameters);    
+                    berlioz.utils.publishEvent("InitializeData", publisher, componentType, configEventParameters, null);    
                 }
                 component.set("v.initEventsQueue",[]);
 
@@ -71,7 +69,7 @@
         });
 
         $A.enqueueAction(action);        
-        console.log('afterScriptsLoaded panel finished');
+        console.log('afterScriptsLoaded panel exit');
     },
 
     /* handlers */  
@@ -137,8 +135,7 @@
                 //publish to this component
                 var publisher = component.get("v.UserComponentId");
                 var componentType = component.get("v.componentType");
-                console.log("calling publishEvent");
-                helper.publishEvent("InitializeData", publisher, componentType, configEventParameters);    
+                berlioz.utils.publishEvent("InitializeData", publisher, componentType, configEventParameters, null);    
 
                 // clear the queue
                 component.set("v.initEventsQueue",[]);
@@ -168,7 +165,7 @@
             // refresh Buttons
             helper.updateButtonStyles(component, 'v', measureIndex, 5);
         }
-        if (topic == "UpdateCard")
+        if (topic == "ChartMouseOver")
         {
             var parameters = event.getParam("parameters");
             console.log("Reading UpdateCard fields from configuration");
@@ -225,7 +222,7 @@
                     //publish to this component
                     var publisher = component.get("v.UserComponentId");
                     var componentType = component.get("v.componentType");
-                    helper.publishEvent("RefreshData", publisher, componentType, configEventParameters);            
+                    berlioz.utils.publishEvent("RefreshData", publisher, componentType, configEventParameters, null);            
                 }
             }))
             $A.enqueueAction(action);        
@@ -250,7 +247,7 @@
             component.set("v.panelShowLevels", panelShowLevels);
             var publisher = component.get("v.UserComponentId");
             var componentType = component.get("v.componentType");
-            helper.publishEvent("ShowLevelsMore", publisher, componentType, {"levels" : panelShowLevels});
+            berlioz.utils.publishEvent("ShowLevelsMore", publisher, componentType, {"levels" : panelShowLevels}, null);
         }
         
     },
@@ -266,7 +263,7 @@
             component.set("v.panelShowLevels", panelShowLevels);
             var publisher = component.get("v.UserComponentId");
             var componentType = component.get("v.componentType");
-            helper.publishEvent("ShowLevelsFewer", publisher, componentType, {"levels" : panelShowLevels});
+            berlioz.utils.publishEvent("ShowLevelsFewer", publisher, componentType, {"levels" : panelShowLevels}, null);
         }
     },
 
@@ -275,31 +272,31 @@
         var currentMeasure = helper.setMeasure(component, 1);
         var publisher = component.get("v.UserComponentId");
         var componentType = component.get("v.componentType");
-        helper.publishEvent("SetMeasure", publisher, componentType, {"index" : 1, "measure" : currentMeasure });
+        berlioz.utils.publishEvent("SetMeasure", publisher, componentType, {"index" : 1, "measure" : currentMeasure }, null);
     },
     onClickMeasureV2 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 2);
         var publisher = component.get("v.UserComponentId");
         var componentType = component.get("v.componentType");
-        helper.publishEvent("SetMeasure", publisher, componentType, {"index" : 2, "measure" : currentMeasure });
+        berlioz.utils.publishEvent("SetMeasure", publisher, componentType, {"index" : 2, "measure" : currentMeasure }, null);
     },
     onClickMeasureV3 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 3);
         var publisher = component.get("v.UserComponentId");
         var componentType = component.get("v.componentType");
-        helper.publishEvent("SetMeasure", publisher, componentType, {"index" : 3, "measure" : currentMeasure });
+        berlioz.utils.publishEvent("SetMeasure", publisher, componentType, {"index" : 3, "measure" : currentMeasure }, null);
     },
     onClickMeasureV4 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 4);
         var publisher = component.get("v.UserComponentId");
         var componentType = component.get("v.componentType");
-        helper.publishEvent("SetMeasure", publisher, componentType, {"index" : 4, "measure" : currentMeasure });
+        berlioz.utils.publishEvent("SetMeasure", publisher, componentType, {"index" : 4, "measure" : currentMeasure }, null);
     },
     onClickMeasureV5 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 5);
         var publisher = component.get("v.UserComponentId");
         var componentType = component.get("v.componentType");
-        helper.publishEvent("SetMeasure", publisher, componentType, {"index" : 5, "measure" : currentMeasure });
+        berlioz.utils.publishEvent("SetMeasure", publisher, componentType, {"index" : 5, "measure" : currentMeasure }, null);
     },
     
     handleRelationshipTypeB1 : function(component, event, helper) {

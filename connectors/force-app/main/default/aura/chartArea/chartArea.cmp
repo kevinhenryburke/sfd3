@@ -54,12 +54,12 @@
 	<aura:attribute name="primaryNodeHighlightingRadius" type="String" default="10px" description="Determines width of highlighting on a selected node"/>      
   <aura:attribute name="retainNodeDetailsMouseOut" type="Boolean" default="true"  description="Set to true if we wish extended details following a node mouseover to be retain after mouseout"/>    
   <aura:attribute name="showPathToolTip" type="Boolean" default="true"/>    
+	<aura:attribute name="nodestrokewidth" type="String" default="0.5px"/>    
 
  
   <!-- Technical - Chart -->
 	<aura:attribute name="componentType" type="String" default="Chart"/>    
   <aura:attribute name="chartCurrentMeasure" type="String"/>    
-	<aura:attribute name="chartPrimaryId" type="String"/> 
 	<aura:attribute name="chartShowLevels" type="Integer" default="1"/>    
   <aura:attribute name="chartClickedFilters" type="Object[]" default="[]" />
 
@@ -72,7 +72,6 @@
 	<aura:attribute name="initialized" type="Boolean" default="false"/>    
 	<aura:attribute name="scriptsLoaded" type="Boolean" default="false"/>    
 	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
-	<aura:attribute name="nodestrokewidth" type="String" default="0.5px"/>    
   <aura:attribute name="datajson" type="Object" />
   <aura:attribute name="configjson" type="Object" />
   

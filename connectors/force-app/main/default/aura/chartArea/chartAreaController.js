@@ -1,5 +1,6 @@
 ({
 
+    // bear in mind that doInit can't refresh anything in an external library as it may lose a race condition.
     doInit: function(component, event, helper) {
         console.log('chartArea: doInit enter');   
         var comprefNumber = 0;
@@ -26,16 +27,10 @@
         console.log('chartArea: doneRendering enter');   
         var initialized = component.get("v.initialized");
         if (initialized == false) {
-            var componentReference = component.get("v.componentReference");
-            console.log('chartArea: doneRendering first call: componentReference: ' + componentReference);            
-
             var scriptsLoaded = component.get("v.scriptsLoaded");
             if (scriptsLoaded == true) {
                 console.log('chartArea: signalling ready from doneRendering');   
-                var eventParameters = { 
-                    "componentReference" : componentReference
-                }    
-                helper.publishEvent(component, "ChartRendered", eventParameters);   
+                helper.doneRenderLoad(component);
             }
             else {
                 console.log('chartArea: doneRendering: scripts not loaded so publish RefreshEvent from afterScriptsLoaded');   
@@ -115,11 +110,7 @@
         var initialized = component.get("v.initialized");
         if (initialized == true) {
             console.log('chartArea: signalling ready from afterScriptsLoaded');   
-            var componentReference = component.get("v.componentReference");
-            var eventParameters = { 
-                "componentReference" : componentReference
-            }    
-            helper.publishEvent(component, "ChartRendered", eventParameters);   
+            helper.doneRenderLoad(component);
         }
         
         console.log('chartArea: afterScriptsLoaded exit');
@@ -128,12 +119,16 @@
     /* handlers */
 
     handle_evt_sfd3  : function(component, event, helper) {
+        console.log('chartArea: handle_evt_sfd3 enter');
         var topic = event.getParam("topic");
         var publisher = event.getParam("publisher");
+        var parameters = event.getParam("parameters");
 
+        var componentReference = component.get("v.componentReference");        
 
         var UserControllerComponentId = component.get("v.UserControllerComponentId");
 
+        
         // if the component is configured to be controlled by a specified controller then exit if it's a different one.
         if (UserControllerComponentId != null && UserControllerComponentId != "") {
             if (UserControllerComponentId != publisher) {
@@ -147,35 +142,29 @@
         
         if (topic == "ShowLevelsMore")
         {
-            var parameters = event.getParam("parameters");
             var levels = parameters["levels"];
             component.set("v.chartShowLevels", levels);
             helper.refreshVisibility(component);
         }
         if (topic == "ShowLevelsFewer")
         {
-            var parameters = event.getParam("parameters");
             var levels = parameters["levels"];
             component.set("v.chartShowLevels", levels);
             helper.refreshVisibility(component);
         }
         if (topic == "SetMeasure")
         {
-            var parameters = event.getParam("parameters");
             var measureIndex = parameters["index"];
             var currentMeasure = parameters["measure"];
 
             component.set("v.chartCurrentMeasure", currentMeasure);
             
             // refresh Chart - measure changes but primaryid does not
-            helper.styleNodes(component, currentMeasure, null);
+            helper.styleNodes(component);
         }
 
         if (topic == "InitializeData")
         {
-            var parameters = event.getParam("parameters");
-            var componentReference = component.get("v.componentReference");
-
             console.log("InitializeData received by Chart: " + componentReference + "/" + parameters["componentReference"]);
 
 
@@ -195,9 +184,6 @@
 
         if (topic == "RefreshData")
         {
-            var parameters = event.getParam("parameters");
-            var componentReference = component.get("v.componentReference");
-
             console.log("RefreshData topic received by Chart: " + componentReference + "/" + parameters["componentReference"]);
 
             if (componentReference == parameters["componentReference"]) {
@@ -207,10 +193,8 @@
             else {
                 console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
             }
-
         }
-        
-                
+        console.log('chartArea: handle_evt_sfd3 exit');
     },
 
 

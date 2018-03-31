@@ -30,12 +30,7 @@
   <aura:attribute name="panelClickedFilters" type="Object[]" default="[]" />
 
   <!-- Design Paramters -->  
-  <!-- TODO DELETE these are all chart side? -->
   <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
-	<aura:attribute name="primaryNodeHighlightingOn" type="Boolean" default="true" description="Determines if selected node should be highlighted"/>    
-	<aura:attribute name="primaryNodeHighlightingColour" type="String" default="gold" description="Name of the colour of highlighed node"/>    
-	<aura:attribute name="primaryNodeHighlightingRadius" type="String" default="10px" description="Determines width of highlighting on a selected node"/>      
-  <aura:attribute name="showPathToolTip" type="Boolean" default="true"/>    
 
   <!-- Technical - Chart -->
 
