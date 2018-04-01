@@ -16,17 +16,16 @@
             comprefNumber = Math.floor((Math.random() * 10000000000) + 1); 
         }
         var componentReference = "compref" + comprefNumber;
-		console.log('chartArea: componentReference: ' + componentReference);    
+		console.log('chartArea: doInit: set componentReference: ' + componentReference);    
         component.set("v.componentReference", componentReference);
-        component.set("v.chartAreaDivId", componentReference + 'div');
-        component.set("v.chartSVGId", componentReference + 'svg');
+        component.set("v.chartAreaDivId", componentReference + 'chartArea');
         console.log('chartArea: doInit exit');   
     },
 
     doneRendering: function(component, event, helper) {
         console.log('chartArea: doneRendering enter');   
-        var initialized = component.get("v.initialized");
-        if (initialized == false) {
+        var rendered = component.get("v.rendered");
+        if (rendered == false) {
             var scriptsLoaded = component.get("v.scriptsLoaded");
             if (scriptsLoaded == true) {
                 console.log('chartArea: signalling ready from doneRendering');   
@@ -36,79 +35,17 @@
                 console.log('chartArea: doneRendering: scripts not loaded so publish RefreshEvent from afterScriptsLoaded');   
             }
         }
-
-        component.set("v.initialized", true);
-        
+        component.set("v.rendered", true);
         console.log('chartArea: doneRendering exit');   
     },
 
 
     afterScriptsLoaded: function(component, event, helper) {
         console.log('chartArea: afterScriptsLoaded enter');
-        
-        var width = Math.min(screen.width, screen.height);
-        var height = Math.min(screen.width, screen.height);
-
-
-        var flexiWidth = component.get("v.flexiWidth");
-        console.log("flexiWidth: " + flexiWidth);
-
-        if (flexiWidth == null) {
-            // this is the case when not embedded in a Lightning Page - e.g. in aura preview
-            flexiWidth = "MEDIUM";
-            console.log("defaulting flexiWidth: " + flexiWidth);
-        }
-
-        if (flexiWidth == "SMALL")
-        {
-            // TEMP
-            width = 420;
-            height = 800;
-        }
-
-        if (flexiWidth == "MEDIUM")
-        {
-            // TEMP
-            width = 600;
-            height = 800;
-        }
-
-
-        if (flexiWidth == "LARGE")
-        {
-            // TEMP
-            width = 1000;
-            height = 800;
-        }
-
-        component.set("v.width", width);
-        component.set("v.height", height);
-
-        var chartAreaDivSearch = "#" + component.get("v.chartAreaDivId");
-        var chartSVGId = component.get("v.chartSVGId");
-
-        var svg1 = d3.select(chartAreaDivSearch).append("svg")
-            .attr("id", chartSVGId)
-            .attr("width", width)
-            .attr("height", height);
-
-        var lastTouch1 = new Date().getTime();
-        component.set("v.lastTouch", lastTouch1);
-
-        var agent = navigator.userAgent.toLowerCase();
-        if(agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0){
-            console.log("IOS environment");
-            berlioz.chart.isiOS = true;
-            component.set("v.isiOS", true);
-        }
-        else {
-            console.log("non-IOS environment");
-            berlioz.chart.isiOS = false;
-        }
         component.set("v.scriptsLoaded", true);
 
-        var initialized = component.get("v.initialized");
-        if (initialized == true) {
+        var rendered = component.get("v.rendered");
+        if (rendered == true) {
             console.log('chartArea: signalling ready from afterScriptsLoaded');   
             helper.doneRenderLoad(component);
         }
@@ -127,7 +64,6 @@
         var componentReference = component.get("v.componentReference");        
 
         var UserControllerComponentId = component.get("v.UserControllerComponentId");
-
         
         // if the component is configured to be controlled by a specified controller then exit if it's a different one.
         if (UserControllerComponentId != null && UserControllerComponentId != "") {
@@ -157,24 +93,26 @@
             var measureIndex = parameters["index"];
             var currentMeasure = parameters["measure"];
 
-            component.set("v.chartCurrentMeasure", currentMeasure);
+            berlioz.utils.setCache (componentReference, "currentMeasure", currentMeasure ) ;
             
             // refresh Chart - measure changes but primaryid does not
             helper.styleNodes(component);
+        }
+        if (topic == "SetFilter")
+        {
+            console.log("SetFilter instruction received by Chart: " + componentReference);
+            var parameters = event.getParam("parameters");
+            var indexer = parameters["index"];
         }
 
         if (topic == "InitializeData")
         {
             console.log("InitializeData received by Chart: " + componentReference + "/" + parameters["componentReference"]);
 
-
             if (componentReference == parameters["componentReference"]) {
                 console.log("InitializeData with reference: " + componentReference);
-
-                var datajson = parameters["datajson"];
-
                 var isInit = true;
-                helper.initializeData(component, datajson, parameters["configjson"], parameters["currentMeasure"], parameters["primaryId"], parameters["clickedFilters"], isInit);                 
+                helper.initializeData(component, parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["clickedFilters"], isInit);                 
             }
             else {
                 console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
@@ -188,7 +126,7 @@
 
             if (componentReference == parameters["componentReference"]) {
                 console.log("RefreshData: Refresh Chart with reference: " + componentReference);
-                helper.refreshData(component, parameters["datajson"], parameters["configjson"], parameters["currentMeasure"], parameters["primaryId"], parameters["clickedFilters"]);                 
+                helper.refreshData(component, parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["clickedFilters"]);                 
             }
             else {
                 console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
@@ -201,7 +139,7 @@
     navigateToRecord : function(component){
         var evtNav = $A.get("e.force:navigateToSObject");
         evtNav.setParams({
-        "recordId": component.get("v.mouseoverRecordId"),
+        "recordId": berlioz.utils.getCache (componentReference, "mouseoverRecordId"),
         "slideDevName": "detail"
         });
         sObectEvent.fire(); 

@@ -103,21 +103,28 @@
         return thisMeasure;
     },
 
-    // TODO sort out relations
-    setThisLinkType: function(component, indexer) {
+    setFilter: function(component, indexer) {
         var cmpTarget = component.find('b' + indexer);
-        $A.util.toggleClass(cmpTarget, 'slds-button_neutral');
-        $A.util.toggleClass(cmpTarget, 'slds-button_brand');
-        var isClicked = $A.util.hasClass(cmpTarget, 'slds-button_brand');
+
+        var publisher = component.get("v.UserComponentId");
+        var componentType = component.get("v.componentType");
+
+        // check existence of filter_on class to determine what state to publish
+        var beforeClickedState = $A.util.hasClass(cmpTarget, 'filter_on');
+        var afterClickedState = !beforeClickedState;
+        var filterState = afterClickedState ? "On" : "Off";
+
         var configjson = component.get("v.configjson");
         var thisType = configjson.filtertypes[indexer - 1];
-        this.setLinkType(component, thisType, isClicked);
+        berlioz.utils.publishEvent("SetFilter", publisher, componentType, {"index" : indexer, "state" : filterState, "filterType" : thisType }, null);
+
+        this.setLinkType(component, thisType, afterClickedState);
     },
 
     // TODO sort out relations
     setLinkType: function(component, thisType, isClicked) {
         var _this = this;
-        var clickedfilters = component.get("v.chartClickedFilters");
+        var clickedfilters = component.get("v.panelClickedFilters");
         if (isClicked) {
             clickedfilters.push(thisType);
         } else {
@@ -126,8 +133,9 @@
                 clickedfilters.splice(index, 1);
             }
         }
-        component.set("v.chartClickedFilters", clickedfilters);
-        _this.refreshVisibility(component);
+        component.set("v.panelClickedFilters", clickedfilters);
+        // need to do publish an event to instruct chart
+//        _this.refreshVisibility(component);
     },
 
     formatButtons: function(component, arrayNames, idprefix, maxbuttons) {

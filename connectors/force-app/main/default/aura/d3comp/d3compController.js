@@ -43,7 +43,7 @@
                     
                     var configEventParameters = { 
                         "datajson" : datajson, 
-                        "configjson" : configjson, 
+//                        "configjson" : configjson, 
                         "currentMeasure" : panelCurrentMeasure, 
                         "primaryId" : panelPrimaryId, 
                         "clickedFilters" : panelClickedFilters,
@@ -125,7 +125,7 @@
     
                 var configEventParameters = { 
                     "datajson" : datajson, 
-                    "configjson" : configjson, 
+//                    "configjson" : configjson, 
                     "currentMeasure" : panelCurrentMeasure, 
                     "primaryId" : panelPrimaryId, 
                     "clickedFilters" : panelClickedFilters,
@@ -165,6 +165,19 @@
             // refresh Buttons
             helper.updateButtonStyles(component, 'v', measureIndex, 5);
         }
+        if (topic == "SetFilter")
+        {
+            // toogle the button styles
+            var parameters = event.getParam("parameters");
+            var indexer = parameters["index"];
+            var cmpTarget = component.find('b' + indexer);
+            // set attributes to indicate filter on/off status
+            $A.util.toggleClass(cmpTarget, 'filter_on');
+            $A.util.toggleClass(cmpTarget, 'filter_off');
+            // restyle
+            $A.util.toggleClass(cmpTarget, 'slds-button_neutral');
+            $A.util.toggleClass(cmpTarget, 'slds-button_brand');
+        }
         if (topic == "ChartMouseOver")
         {
             var parameters = event.getParam("parameters");
@@ -186,18 +199,16 @@
                 console.log('InitiateRefreshChart: state ' + state);    
                 if (state === "SUCCESS") {
 
-// TODO - this is setting datajson to be whatever is new ... NOT the full data set in the CHART ...
                     var datastring = response.getReturnValue();
                     var datajson = JSON.parse(datastring);
                     console.log('InitiateRefreshChart: datastring: ' + datastring);    
+                    // Review - this is setting datajson to be whatever is new ... NOT the full data set in the CHART ...
                     component.set("v.datajson", datajson);
                             
                     var parameters = event.getParam("parameters");
                     var componentReference = parameters["componentReference"];
                     console.log("Publish data upon refresh request for charts: " + componentReference);
 
-                    var panelPrimaryId = parameters["chartPrimaryId"];            
-                    component.set("v.panelPrimaryId", panelPrimaryId);   
 
         // TODO - this sends data that is picked up by the target component, however work needs to be done on updating / removing nodes
 
@@ -205,14 +216,16 @@
                     var datajson = component.get("v.datajson");
                     var configjson = component.get("v.configjson");
                     var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
-                    var panelPrimaryId = parameters["chartPrimaryId"];           
+                    var panelPrimaryId = parameters["primaryNodeId"];            
+                    component.set("v.panelPrimaryId", panelPrimaryId);   
                     var panelClickedFilters = component.get("v.panelClickedFilters");     
+
                     
                     // publish event - configuration loaded
 
                     var configEventParameters = { 
                         "datajson" : datajson, 
-                        "configjson" : configjson, 
+//                        "configjson" : configjson, 
                         "currentMeasure" : panelCurrentMeasure,
                         "primaryId" : panelPrimaryId, 
                         "clickedFilters" : panelClickedFilters,
@@ -266,7 +279,6 @@
             berlioz.utils.publishEvent("ShowLevelsFewer", publisher, componentType, {"levels" : panelShowLevels}, null);
         }
     },
-
     
     onClickMeasureV1 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 1);
@@ -298,21 +310,29 @@
         var componentType = component.get("v.componentType");
         berlioz.utils.publishEvent("SetMeasure", publisher, componentType, {"index" : 5, "measure" : currentMeasure }, null);
     },
+
     
-    handleRelationshipTypeB1 : function(component, event, helper) {
-		helper.setThisRelationshipType(component, 1);
+    onClickMeasureV1 : function(component, event, helper) {
+        var currentMeasure = helper.setMeasure(component, 1);
+        var publisher = component.get("v.UserComponentId");
+        var componentType = component.get("v.componentType");
+        berlioz.utils.publishEvent("SetMeasure", publisher, componentType, {"index" : 1, "measure" : currentMeasure }, null);
     },
-    handleRelationshipTypeB2 : function(component, event, helper) {
-		helper.setThisRelationshipType(component, 2);
+    
+    onClickFilterB1 : function(component, event, helper) {
+        helper.setFilter(component, 1);
     },
-    handleRelationshipTypeB3 : function(component, event, helper) {
-		helper.setThisRelationshipType(component, 3);
+    onClickFilterB2 : function(component, event, helper) {
+		helper.setFilter(component, 2);
     },
-    handleRelationshipTypeB4 : function(component, event, helper) {
-		helper.setThisRelationshipType(component, 4);
+    onClickFilterB3 : function(component, event, helper) {
+		helper.setFilter(component, 3);
     },
-    handleRelationshipTypeB5 : function(component, event, helper) {
-		helper.setThisRelationshipType(component, 5);
+    onClickFilterB4 : function(component, event, helper) {
+		helper.setFilter(component, 4);
+    },
+    onClickFilterB5 : function(component, event, helper) {
+		helper.setFilter(component, 5);
     },
 
     navigateToRecord : function(component){

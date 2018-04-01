@@ -10,8 +10,9 @@
 
         berlioz.utils.setCache (componentReference, "componentReference", component.get("v.componentReference") ) ;
         berlioz.utils.setCache (componentReference, "componentType", component.get("v.componentType") ) ;
-        berlioz.utils.setCache (componentReference, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
 
+        berlioz.utils.setCache (componentReference, "UserComponentId", component.get("v.UserComponentId") ) ;
+        berlioz.utils.setCache (componentReference, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
         berlioz.utils.setCache (componentReference, "primaryNodeHighlightingOn", component.get("v.primaryNodeHighlightingOn") ) ;
         berlioz.utils.setCache (componentReference, "primaryNodeHighlightingColour", component.get("v.primaryNodeHighlightingColour") ) ;
         berlioz.utils.setCache (componentReference, "primaryNodeHighlightingRadius", component.get("v.primaryNodeHighlightingRadius") ) ;
@@ -19,6 +20,63 @@
         berlioz.utils.setCache (componentReference, "showPathToolTip", component.get("v.showPathToolTip") ) ;
         berlioz.utils.setCache (componentReference, "nodestrokewidth", component.get("v.nodestrokewidth") ) ;
 
+        var width = Math.min(screen.width, screen.height);
+        var height = Math.min(screen.width, screen.height);
+
+        var flexiWidth = component.get("v.flexiWidth");
+        console.log("flexiWidth: " + flexiWidth);
+
+        if (flexiWidth == null) {
+            // this is the case when not embedded in a Lightning Page - e.g. in aura preview
+            flexiWidth = "MEDIUM";
+            console.log("defaulting flexiWidth: " + flexiWidth);
+        }
+
+        if (flexiWidth == "SMALL")
+        {
+            // TEMP
+            width = 420;
+            height = 800;
+        }
+
+        if (flexiWidth == "MEDIUM")
+        {
+            // TEMP
+            width = 600;
+            height = 800;
+        }
+
+
+        if (flexiWidth == "LARGE")
+        {
+            // TEMP
+            width = 1000;
+            height = 800;
+        }
+
+        component.set("v.width", width);
+        component.set("v.height", height);
+
+        d3.select(berlioz.utils.getDivId("chartArea", componentReference, true))
+            .append("svg")
+            .attr("id", berlioz.utils.getDivId("svg", componentReference, false)) // If putting more than one chart on a page we need to provide unique ids for the svg elements   
+            .attr("width", width)
+            .attr("height", height);
+
+        var lastTouch1 = new Date().getTime();
+        component.set("v.lastTouch", lastTouch1);
+
+        var agent = navigator.userAgent.toLowerCase();
+        if(agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0){
+            console.log("IOS environment");
+            berlioz.chart.isiOS = true;
+            component.set("v.isiOS", true);
+        }
+        else {
+            console.log("non-IOS environment");
+            berlioz.chart.isiOS = false;
+        }
+        
         var eventParameters = { 
             "componentReference" : componentReference
         }    
@@ -29,23 +87,22 @@
     },
 
     // unsophisticated version is to remove everything and re-initialize
-    refreshData: function (component, datajsonRefresh, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters) {
+    refreshData: function (component, datajsonRefresh, currentMeasure, primaryNodeId, chartClickedFilters) {
         var _this = this;
-        console.log("chartArea: enter refreshData with chartPrimaryId: " + chartPrimaryId);
-
-        // MOVE THIS INTO A clearChart function?
-        var chartSVGId = component.get("v.chartSVGId");
-        var svg = d3.select("#" + chartSVGId);
-
-        var path = svg.selectAll("path").remove();
-        var node = svg.selectAll("circle").remove();
-        var text = svg.selectAll(".nodeText").remove();
-
-        var datajson = component.get("v.datajson");
-
         var componentReference = component.get("v.componentReference");
+        console.log("chartArea: enter refreshData with primaryNodeId: " + primaryNodeId);
+
+        // delete the paths and the groups
+        // this is not the preferred option - would have preferred to use d3 joins.
+        berlioz.chart.clearChart(componentReference);
+        
+        // retrieve the existing underlying data
+        var datajson = berlioz.utils.getCache (componentReference, "datajson") ;
+
+        // initialize the new raw data, setting component references
         berlioz.utils.initializeAddComponentRef(componentReference, datajsonRefresh);
 
+        // merge the old and the new data
         var nodeIds = [];
         datajson.nodes.forEach(function(node) {
             nodeIds.push(node["id"]);
@@ -67,35 +124,36 @@
             datajson["links"].push(link);
         });
 
+        // re-initialize the chart
         var isInit = false;
-        _this.initializeData(component, datajson, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters, isInit);                 
+        _this.initializeData(component, datajson, currentMeasure, primaryNodeId, chartClickedFilters, isInit);                 
         
         console.log("chartArea: exit refreshData");
     },    
     
-    initializeData: function (component, datajson, configjson, chartCurrentMeasure, chartPrimaryId, chartClickedFilters, isInit) {
+    initializeData: function (component, datajson, currentMeasure, primaryNodeId, chartClickedFilters, isInit) {
 
         var _this = this;
         var componentReference = component.get("v.componentReference");
 
-        console.log("init:initializing initializeData with chartPrimaryId: " + chartPrimaryId);
+        console.log("init:initializing initializeData with primaryNodeId: " + primaryNodeId);
         if (isInit) {
             berlioz.utils.initializeAddComponentRef(componentReference, datajson);
         }
-        component.set("v.datajson", datajson);
 
-        chartPrimaryId = berlioz.utils.addComponentRef(componentReference, chartPrimaryId);
+        berlioz.utils.setCache (componentReference, "datajson", datajson ) ;
 
-        component.set("v.chartCurrentMeasure", chartCurrentMeasure);
+        primaryNodeId = berlioz.utils.addComponentRef(componentReference, primaryNodeId);
 
-        berlioz.utils.setCache (componentReference, "chartPrimaryId", chartPrimaryId ) ;
+        berlioz.utils.setCache (componentReference, "currentMeasure", currentMeasure ) ;
+
+        berlioz.utils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
 
 
         component.set("v.chartClickedFilters", chartClickedFilters);            
         var chartClickedFilters = component.get("v.chartClickedFilters");
                 
-        var chartSVGId = component.get("v.chartSVGId");
-        var svg = d3.select("#" + chartSVGId);
+        var svg = d3.select(berlioz.utils.getDivId("svg", componentReference, true));
 
         var width = component.get("v.width");  
         var height = component.get("v.height");  
@@ -108,21 +166,24 @@
         var isRefresh = false;
         
         console.log("create some groups inside the svg element to store the raw data");
-        var pathGroupId = chartSVGId + "pathGroup";
+
+
+        var pathGroupId = berlioz.utils.getDivId("pathGroup", componentReference, false);
+        var nodeGroupId = berlioz.utils.getDivId("nodeGroup", componentReference, false);
+        var textGroupId = berlioz.utils.getDivId("textGroup", componentReference, false);
+        
         var pathGroup = d3.select("#" + pathGroupId);
         if (pathGroup.empty()) {
             console.log("create pathGroup");
             pathGroup = svg.append("g").attr("id",pathGroupId);
         }
 
-        var nodeGroupId = chartSVGId + "nodeGroup";
         var nodeGroup = d3.select("#" + nodeGroupId);
         if (nodeGroup.empty()) {
             console.log("create nodeGroup");
             nodeGroup = svg.append("g").attr("id",nodeGroupId);
         }
 
-        var textGroupId = chartSVGId + "textGroup";
         var textGroup = d3.select("#" + textGroupId);
         if (textGroup.empty()) {
             console.log("create textGroup");
@@ -161,8 +222,7 @@
 
                 var componentReference = component.get("v.componentReference");
                 
-                component.set("v.mouseoverRecordId", d.id);
-
+                berlioz.utils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
                 berlioz.chart.nodeMouseover(d);
                 // send out a notification that we've moused over this node
                         
@@ -191,8 +251,8 @@
                 }
                 // reset the clicked node to be the primary
                 // TODO This will need to be passed in the refreshVisibility call.
-                var chartPrimaryId = d.id;
-                berlioz.utils.setCache (componentReference, "chartPrimaryId", chartPrimaryId ) ;
+                var primaryNodeId = d.id;
+                berlioz.utils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
 
                 _this.refreshVisibility(component);
                 _this.styleNodes(component);
@@ -204,11 +264,11 @@
                 // send a message identifying the node in question
                 // TODO this will need substantial enriching - e.g. pass current measure and whether to add nodes or to refresh etc.
                 var componentReference = component.get("v.componentReference");
-                var chartPrimaryId = d.id;
-                berlioz.utils.setCache (componentReference, "chartPrimaryId", chartPrimaryId ) ;
-                var cleanId = berlioz.utils.removeComponentRef(componentReference, chartPrimaryId);
+                var primaryNodeId = d.id;
+                berlioz.utils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
+                var cleanId = berlioz.utils.removeComponentRef(componentReference, primaryNodeId);
 
-                var eventParameters = {"chartPrimaryId" : cleanId, "componentReference" : componentReference};
+                var eventParameters = {"primaryNodeId" : cleanId, "componentReference" : componentReference};
                 berlioz.chart.publishEvent(componentReference, "InitiateRefreshChart", eventParameters);
 
             }));
@@ -256,8 +316,6 @@
             .selectAll("path")
             .data(datajson.links,  function(d, i) { return d.id;} );
 
-//        pathSelection.exit().remove();    
-            
         path = pathSelection    
             .enter().append("path")
             .attr("class", function(d) {
@@ -329,7 +387,6 @@
         simulation.on("tick", function() {
             berlioz.simulation.onTick (width, height, path, node, text);
         });             
-        component.set("v.simulation", simulation);   
 
         berlioz.utils.showCache (componentReference) ;
         
@@ -392,33 +449,31 @@
         var _this = this;
         var componentReference = component.get("v.componentReference");
 
-        // "v.chartCurrentMeasure", "v.chartShowLevels", "v.clickedfilters" - belong to control panel - should be fed in
         var levels = component.get("v.chartShowLevels");
         var clickedfilters = component.get("v.chartClickedFilters");
-        var chartCurrentMeasure = component.get("v.chartCurrentMeasure");
 
-        var chartPrimaryId = berlioz.utils.getCache (componentReference, "chartPrimaryId") ;
+        var primaryNodeId = berlioz.utils.getCache (componentReference, "primaryNodeId") ;        
+        // not needed until reinstate measure level visibility
+        var currentMeasure = berlioz.utils.getCache (componentReference, "currentMeasure") ;
 
 
-        console.log("primary node id: " + chartPrimaryId);
+        var relatedNodes = berlioz.chart.getRelatedNodes(primaryNodeId, componentReference, levels);
 
-        var shownodeids = [];
-        var chartSVGId = component.get("v.chartSVGId");
-        var relatedNodes = berlioz.chart.getRelatedNodes(chartPrimaryId, chartSVGId, levels);
+        var path = d3.select(berlioz.utils.getDivId("pathGroup", componentReference, true))
+            .selectAll("path")  ;
 
-        var pathGroupId = chartSVGId + "pathGroup";
-        var path = d3.select("#" + pathGroupId).selectAll("path")  ;
-
-        var nodeGroupId = chartSVGId + "nodeGroup";
-        var node = d3.select("#" + nodeGroupId).selectAll("circle")  
+        var node = d3.select(berlioz.utils.getDivId("nodeGroup", componentReference, true))
+            .selectAll("circle")  
         
+        var shownodeids = [];
+
         path.style("visibility", function(p) {
 
             var retval = "hidden";
 
             //TODO temporarily removing the measure level visibility functionaliy, reinstate later if useful
-            // var sourcevis = p.source.measures[chartCurrentMeasure].visible;
-            // var targetvis = p.target.measures[chartCurrentMeasure].visible;
+            // var sourcevis = p.source.measures[currentMeasure].visible;
+            // var targetvis = p.target.measures[currentMeasure].visible;
             var sourcevis = 1;
             var targetvis = 1;
 
@@ -473,24 +528,24 @@
         var _this = this;
         var componentReference = component.get("v.componentReference");
 
-        var primaryid = berlioz.utils.getCache (componentReference, "chartPrimaryId") ;
-        var chartCurrentMeasure = component.get("v.chartCurrentMeasure"); 
-        console.log("styleNodes : " + chartCurrentMeasure + " primaryid: " + primaryid);
+        var primaryid = berlioz.utils.getCache (componentReference, "primaryNodeId") ;
+        var currentMeasure = berlioz.utils.getCache (componentReference, "currentMeasure") ;
 
-        var chartSVGId = component.get("v.chartSVGId");
-        var nodeGroupId = chartSVGId + "nodeGroup";
-        var node = d3.select("#" + nodeGroupId).selectAll("circle")  ;
+        console.log("styleNodes : " + currentMeasure + " primaryid: " + primaryid);
+
+        var node = d3.select(berlioz.utils.getDivId("nodeGroup", componentReference, true))
+            .selectAll("circle")  ;
 
         berlioz.utils.log("styleNodes:" + JSON.stringify(node));
 
         node.attr("r", function(o, i) {
             // needs to be computed using a configuration provided algorithm?
-            return o.measures[chartCurrentMeasure].radius;
+            return o.measures[currentMeasure].radius;
         });
 
         node.style("fill", function(o, i) {
-            berlioz.utils.log("styleNodes: fill: " + o.measures[chartCurrentMeasure].color);
-            return o.measures[chartCurrentMeasure].color;
+            berlioz.utils.log("styleNodes: fill: " + o.measures[currentMeasure].color);
+            return o.measures[currentMeasure].color;
         });
 
         node.style("stroke", function(o, i) {
@@ -515,19 +570,10 @@
         });
     },
 
-    // TODO sort out relations
-    setThisLinkType: function(component, indexer) {
-        var cmpTarget = component.find('b' + indexer);
-        $A.util.toggleClass(cmpTarget, 'slds-button_neutral');
-        $A.util.toggleClass(cmpTarget, 'slds-button_brand');
-        var isClicked = $A.util.hasClass(cmpTarget, 'slds-button_brand');
-        var configjson = component.get("v.configjson");
-        var thisType = configjson.filtertypes[indexer - 1];
-        this.setLinkType(component, thisType, isClicked);
-    },
 
     // TODO sort out relations
     setLinkType: function(component, thisType, isClicked) {
+        /*
         var _this = this;
         var clickedfilters = component.get("v.chartClickedFilters");
         if (isClicked) {
@@ -540,6 +586,7 @@
         }
         component.set("v.chartClickedFilters", clickedfilters);
         _this.refreshVisibility(component);
+        */
     },
 
     // ideally would prefer to put in Berlioz library but externals can't be called in doInit

@@ -72,6 +72,10 @@ function removeComponentRef(componentReference, dataItem) {
     return dataItem.substring(indexer);
 }    
 
+function getDivId (idType, componentReference, forSelect) {
+    return (forSelect ? "#" : "") + componentReference + idType;
+}
+
 /*
 // not used at present
 function simpleHash(s) {
@@ -117,7 +121,7 @@ exports.setCache = setCache;
 exports.getCache = getCache;
 exports.showCache = showCache;
 exports.showCacheAll = showCacheAll;
-
+exports.getDivId = getDivId;
 
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -242,7 +246,7 @@ function nodeMouseout (d) {
     console.log("Berlioz.chart.nodeMouseout exit");
 }
 
-function getRelatedNodes (chartPrimaryId, chartSVGId, level) {
+function getRelatedNodes (chartPrimaryId, componentReference, level) {
     var _this = this;
 
     var looplevel = 0;
@@ -253,20 +257,19 @@ function getRelatedNodes (chartPrimaryId, chartSVGId, level) {
         var newnodes = [];
         looplevel++;
 
-        var pathGroupId = chartSVGId + "pathGroup";
-        var path = d3.select("#" + pathGroupId).selectAll("path")  ;
-
-        path.each(function(p) {
-
-            var sourceindex = linkednodes.indexOf(p.sourceid);
-            var targetindex = linkednodes.indexOf(p.targetid);
-            if (sourceindex === -1 && targetindex > -1) {
-                    newnodes.push(p.sourceid);
+        var path = d3.select(berlioz.utils.getDivId("pathGroup", componentReference, true))
+            .selectAll("path")
+            .each(function(p) {
+                var sourceindex = linkednodes.indexOf(p.sourceid);
+                var targetindex = linkednodes.indexOf(p.targetid);
+                if (sourceindex === -1 && targetindex > -1) {
+                        newnodes.push(p.sourceid);
+                    }
+                    if (targetindex === -1 && sourceindex > -1) {
+                        newnodes.push(p.targetid);
+                    }
                 }
-                if (targetindex === -1 && sourceindex > -1) {
-                    newnodes.push(p.targetid);
-                }
-        });
+            );
 
         var arrayLength = newnodes.length;
 
@@ -281,6 +284,18 @@ function getRelatedNodes (chartPrimaryId, chartSVGId, level) {
     return linkednodes;
 }
 
+
+// clear out the paths and the groups
+function clearChart(componentReference) {
+    var svg = d3.select(berlioz.utils.getDivId("svg", componentReference, true));
+    var path = svg.selectAll("path").remove();
+    var node = svg.selectAll("circle").remove();
+    var text = svg.selectAll(".nodeText").remove();
+    d3.select(berlioz.utils.getDivId("pathGroup", componentReference, true)).remove();
+    d3.select(berlioz.utils.getDivId("nodeGroup", componentReference, true)).remove();
+}
+
+
 function publishEvent(componentReference, topic, parameters) {
     var publisherType = berlioz.utils.getCache (componentReference, "componentType") ;
     var controller = berlioz.utils.getCache (componentReference, "UserControllerComponentId") ;
@@ -292,6 +307,7 @@ exports.pathMouseout = pathMouseout;
 exports.nodeMouseover = nodeMouseover;
 exports.nodeMouseout = nodeMouseout;
 exports.getRelatedNodes = getRelatedNodes;
+exports.clearChart = clearChart;
 exports.publishEvent = publishEvent;
 
 exports.isiOS = isiOS;

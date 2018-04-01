@@ -36,15 +36,12 @@
 
 -->
 
+  <!-- Events and Handlers -->  
   <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
   <aura:handler event="c:evt_sfd3" action="{!c.handle_evt_sfd3}"/>
 
   <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
   <aura:handler event="aura:doneRendering" action="{!c.doneRendering}"/>
-
-  <!-- Design Paramters Panel -->
-  <aura:attribute name="mouseoverRecordId" type="String" default=""/>    
-	<aura:attribute name="maxlevels" type="Integer" default="4"/>    
 
   <!-- Design Paramters -->  
   <aura:attribute name="UserComponentId" type="String" default="" description="If putting more than one chart on a page then this provides users with a mechanism to set their own for mapping purposes"/>    
@@ -58,29 +55,26 @@
 
  
   <!-- Technical - Chart -->
-	<aura:attribute name="componentType" type="String" default="Chart"/>    
-  <aura:attribute name="chartCurrentMeasure" type="String"/>    
+  <!-- need to accessed or set before all libraries may be available -->
+  <aura:attribute name="componentReference" type="String"/> 
+  <aura:attribute name="chartAreaDivId" type="String" default="" description="If putting more than one chart on a page need to provide unique ids for the chart components"/>    
+	<aura:attribute name="rendered" type="Boolean" default="false"/>    
+	<aura:attribute name="scriptsLoaded" type="Boolean" default="false"/>    
+
+  <aura:attribute name="componentType" type="String" default="Chart"/>    
 	<aura:attribute name="chartShowLevels" type="Integer" default="1"/>    
   <aura:attribute name="chartClickedFilters" type="Object[]" default="[]" />
 
-  <aura:attribute name="componentReference" type="String"/> 
-  <aura:attribute name="chartAreaDivId" type="String" default="" description="If putting more than one chart on a page need to provide unique ids for the chart components"/>    
-  <aura:attribute name="chartSVGId" type="String" default="" description="If putting more than one chart on a page need to provide unique ids for the svg elements"/>    
-  <aura:attribute name="simulation" type="Object" />
 
   <!-- Potentially change this to "rendered" -->
-	<aura:attribute name="initialized" type="Boolean" default="false"/>    
-	<aura:attribute name="scriptsLoaded" type="Boolean" default="false"/>    
 	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
-  <aura:attribute name="datajson" type="Object" />
-  <aura:attribute name="configjson" type="Object" />
   
-  <aura:attribute name="forceLinks" type="Object" />
 
   <aura:attribute name="width" type="Double" />
   <aura:attribute name="height" type="Double" />
   <aura:attribute name="lastTouch" type="DateTime" />
   
+  <!-- Required for flexible layouts -->
   <aura:attribute name="flexiWidth" type="String"/>
   <lightning:flexipageRegionInfo width="{!v.flexiWidth}"/>
 
