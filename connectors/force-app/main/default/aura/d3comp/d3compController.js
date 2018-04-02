@@ -16,7 +16,7 @@
                 var configjson = component.get("v.configjson");
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
                 var panelPrimaryId = component.get("v.panelPrimaryId");            
-                var panelClickedFilters = component.get("v.panelClickedFilters");     
+                var panelShowFilters = component.get("v.panelShowFilters");     
                 
                 var arrayNames = configjson.filtertypes;
                 var idprefix = "b";
@@ -46,7 +46,7 @@
 //                        "configjson" : configjson, 
                         "currentMeasure" : panelCurrentMeasure, 
                         "primaryId" : panelPrimaryId, 
-                        "clickedFilters" : panelClickedFilters,
+                        "showFilters" : panelShowFilters,
                         "componentReference" : componentReference
                     }
                         
@@ -119,7 +119,7 @@
                 var configjson = component.get("v.configjson");
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
                 var panelPrimaryId = component.get("v.panelPrimaryId");            
-                var panelClickedFilters = component.get("v.panelClickedFilters");     
+                var panelShowFilters = component.get("v.panelShowFilters");     
                 
                 // publish event - configuration loaded
     
@@ -128,7 +128,7 @@
 //                    "configjson" : configjson, 
                     "currentMeasure" : panelCurrentMeasure, 
                     "primaryId" : panelPrimaryId, 
-                    "clickedFilters" : panelClickedFilters,
+                    "showFilters" : panelShowFilters,
                     "componentReference" : componentReference                
                 }
     
@@ -172,8 +172,8 @@
             var indexer = parameters["index"];
             var cmpTarget = component.find('b' + indexer);
             // set attributes to indicate filter on/off status
-            $A.util.toggleClass(cmpTarget, 'filter_on');
-            $A.util.toggleClass(cmpTarget, 'filter_off');
+            $A.util.toggleClass(cmpTarget, 'filter_show');
+            $A.util.toggleClass(cmpTarget, 'filter_hide');
             // restyle
             $A.util.toggleClass(cmpTarget, 'slds-button_neutral');
             $A.util.toggleClass(cmpTarget, 'slds-button_brand');
@@ -218,7 +218,7 @@
                     var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
                     var panelPrimaryId = parameters["primaryNodeId"];            
                     component.set("v.panelPrimaryId", panelPrimaryId);   
-                    var panelClickedFilters = component.get("v.panelClickedFilters");     
+                    var panelShowFilters = component.get("v.panelShowFilters");     
 
                     
                     // publish event - configuration loaded
@@ -228,7 +228,7 @@
 //                        "configjson" : configjson, 
                         "currentMeasure" : panelCurrentMeasure,
                         "primaryId" : panelPrimaryId, 
-                        "clickedFilters" : panelClickedFilters,
+                        "showFilters" : panelShowFilters,
                         "componentReference" : componentReference                
                     }
 

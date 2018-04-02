@@ -48,8 +48,7 @@
         if (rendered == true) {
             console.log('chartArea: signalling ready from afterScriptsLoaded');   
             helper.doneRenderLoad(component);
-        }
-        
+        }        
         console.log('chartArea: afterScriptsLoaded exit');
     },
 
@@ -78,15 +77,13 @@
         
         if (topic == "ShowLevelsMore")
         {
-            var levels = parameters["levels"];
-            component.set("v.chartShowLevels", levels);
-            helper.refreshVisibility(component);
+            berlioz.utils.setCache (componentReference, "showLevels", parameters["levels"] ) ;
+            berlioz.chart.refreshVisibility(componentReference);
         }
         if (topic == "ShowLevelsFewer")
         {
-            var levels = parameters["levels"];
-            component.set("v.chartShowLevels", levels);
-            helper.refreshVisibility(component);
+            berlioz.utils.setCache (componentReference, "showLevels", parameters["levels"] ) ;
+            berlioz.chart.refreshVisibility(componentReference);
         }
         if (topic == "SetMeasure")
         {
@@ -96,13 +93,19 @@
             berlioz.utils.setCache (componentReference, "currentMeasure", currentMeasure ) ;
             
             // refresh Chart - measure changes but primaryid does not
-            helper.styleNodes(component);
+            berlioz.chart.styleNodes(componentReference);
         }
         if (topic == "SetFilter")
         {
             console.log("SetFilter instruction received by Chart: " + componentReference);
             var parameters = event.getParam("parameters");
             var indexer = parameters["index"];
+            var state = parameters["state"];
+            var filterType = parameters["filterType"];
+
+            var isShown = (state == "Show");
+            berlioz.chart.setFilterVisibility(component, filterType, isShown);
+            berlioz.chart.refreshVisibility(componentReference);
         }
 
         if (topic == "InitializeData")
@@ -112,12 +115,11 @@
             if (componentReference == parameters["componentReference"]) {
                 console.log("InitializeData with reference: " + componentReference);
                 var isInit = true;
-                helper.initializeData(component, parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["clickedFilters"], isInit);                 
+                helper.initializeData(component, parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"], isInit);                 
             }
             else {
                 console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
             }
-
         }
 
         if (topic == "RefreshData")
@@ -126,7 +128,7 @@
 
             if (componentReference == parameters["componentReference"]) {
                 console.log("RefreshData: Refresh Chart with reference: " + componentReference);
-                helper.refreshData(component, parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["clickedFilters"]);                 
+                helper.refreshData(component, parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"]);                 
             }
             else {
                 console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);

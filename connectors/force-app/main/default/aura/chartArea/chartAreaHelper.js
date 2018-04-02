@@ -19,6 +19,7 @@
         berlioz.utils.setCache (componentReference, "retainNodeDetailsMouseOut", component.get("v.retainNodeDetailsMouseOut") ) ;
         berlioz.utils.setCache (componentReference, "showPathToolTip", component.get("v.showPathToolTip") ) ;
         berlioz.utils.setCache (componentReference, "nodestrokewidth", component.get("v.nodestrokewidth") ) ;
+        berlioz.utils.setCache (componentReference, "showLevels", component.get("v.showLevelsInitial")) ;
 
         var width = Math.min(screen.width, screen.height);
         var height = Math.min(screen.width, screen.height);
@@ -87,7 +88,7 @@
     },
 
     // unsophisticated version is to remove everything and re-initialize
-    refreshData: function (component, datajsonRefresh, currentMeasure, primaryNodeId, chartClickedFilters) {
+    refreshData: function (component, datajsonRefresh, currentMeasure, primaryNodeId, showFilters) {
         var _this = this;
         var componentReference = component.get("v.componentReference");
         console.log("chartArea: enter refreshData with primaryNodeId: " + primaryNodeId);
@@ -126,12 +127,12 @@
 
         // re-initialize the chart
         var isInit = false;
-        _this.initializeData(component, datajson, currentMeasure, primaryNodeId, chartClickedFilters, isInit);                 
+        _this.initializeData(component, datajson, currentMeasure, primaryNodeId, showFilters, isInit);                 
         
         console.log("chartArea: exit refreshData");
     },    
     
-    initializeData: function (component, datajson, currentMeasure, primaryNodeId, chartClickedFilters, isInit) {
+    initializeData: function (component, datajson, currentMeasure, primaryNodeId, showFilters, isInit) {
 
         var _this = this;
         var componentReference = component.get("v.componentReference");
@@ -146,13 +147,9 @@
         primaryNodeId = berlioz.utils.addComponentRef(componentReference, primaryNodeId);
 
         berlioz.utils.setCache (componentReference, "currentMeasure", currentMeasure ) ;
-
         berlioz.utils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
+        berlioz.utils.setCache (componentReference, "showFilters", showFilters ) ;
 
-
-        component.set("v.chartClickedFilters", chartClickedFilters);            
-        var chartClickedFilters = component.get("v.chartClickedFilters");
-                
         var svg = d3.select(berlioz.utils.getDivId("svg", componentReference, true));
 
         var width = component.get("v.width");  
@@ -254,8 +251,8 @@
                 var primaryNodeId = d.id;
                 berlioz.utils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
 
-                _this.refreshVisibility(component);
-                _this.styleNodes(component);
+                berlioz.chart.refreshVisibility(componentReference);
+                berlioz.chart.styleNodes(componentReference);
             })
             .on('dblclick', $A.getCallback(function(d) {
                 console.log("dblclick");
@@ -353,13 +350,13 @@
         // overwrite path with the updated version.
         path = d3.select("#" + pathGroupId).selectAll("path");
         
-        var forceLinks = _this.buildForceLinks(path);
+        var forceLinks = berlioz.simulation.buildForceLinks(path);
         
         console.log("apply node styling");
-        _this.styleNodes(component);
+        berlioz.chart.styleNodes(componentReference);
 
         console.log("apply node visibility");
-        _this.refreshVisibility(component);
+        berlioz.chart.refreshVisibility(componentReference);
     
         /* Above should be common to some degree - Below is forceSimulation specific */
 
@@ -442,154 +439,7 @@
     },
 
 
-    refreshVisibility: function(component) {
-
-        console.log("Enter refreshVisibility"); 
-
-        var _this = this;
-        var componentReference = component.get("v.componentReference");
-
-        var levels = component.get("v.chartShowLevels");
-        var clickedfilters = component.get("v.chartClickedFilters");
-
-        var primaryNodeId = berlioz.utils.getCache (componentReference, "primaryNodeId") ;        
-        // not needed until reinstate measure level visibility
-        var currentMeasure = berlioz.utils.getCache (componentReference, "currentMeasure") ;
-
-
-        var relatedNodes = berlioz.chart.getRelatedNodes(primaryNodeId, componentReference, levels);
-
-        var path = d3.select(berlioz.utils.getDivId("pathGroup", componentReference, true))
-            .selectAll("path")  ;
-
-        var node = d3.select(berlioz.utils.getDivId("nodeGroup", componentReference, true))
-            .selectAll("circle")  
-        
-        var shownodeids = [];
-
-        path.style("visibility", function(p) {
-
-            var retval = "hidden";
-
-            //TODO temporarily removing the measure level visibility functionaliy, reinstate later if useful
-            // var sourcevis = p.source.measures[currentMeasure].visible;
-            // var targetvis = p.target.measures[currentMeasure].visible;
-            var sourcevis = 1;
-            var targetvis = 1;
-
-            var sourceindex = relatedNodes.indexOf(p.sourceid);
-            var targetindex = relatedNodes.indexOf(p.targetid);
-
-            var primaryrelated = (sourceindex > -1 && targetindex > -1);
-
-            if ((sourcevis === 1) && (targetvis === 1) && primaryrelated) {
-
-                var index = clickedfilters.indexOf(p.type);
-
-                if (index > -1) {
-                    berlioz.utils.log(p.sourceid + '/' + p.targetid + " will be visible");
-
-                    var indexsource = shownodeids.indexOf(p.sourceid);
-                    if (indexsource == -1) {
-                        shownodeids.push(p.sourceid);
-                    }
-
-                    var indextarget = shownodeids.indexOf(p.targetid);
-                    if (indextarget == -1) {
-                        shownodeids.push(p.targetid);
-                    }
-                }
-            }
-
-            return (index > -1) ? "visible" : "hidden";
-        });
-
-
-        // change the visibility of the node
-        // if all the links with that node are invisibile, the node should also be invisible
-        // otherwise if any link related to that node is visibile, the node should be visible
-        node.style("visibility", function(o, i) {
-            var oid = o.id;
-            var index = shownodeids.indexOf(oid);
-            if (index > -1) {
-                d3.select("#t" + oid).style("visibility", "visible");
-                d3.select("#s" + oid).style("visibility", "visible");
-                return "visible";
-            } else {
-                d3.select("#t" + oid).style("visibility", "hidden");
-                d3.select("#s" + oid).style("visibility", "hidden");
-                return "hidden";
-            }
-        });
-    },
-
-    // Method to re-style nodes
-    styleNodes: function(component) {
-        var _this = this;
-        var componentReference = component.get("v.componentReference");
-
-        var primaryid = berlioz.utils.getCache (componentReference, "primaryNodeId") ;
-        var currentMeasure = berlioz.utils.getCache (componentReference, "currentMeasure") ;
-
-        console.log("styleNodes : " + currentMeasure + " primaryid: " + primaryid);
-
-        var node = d3.select(berlioz.utils.getDivId("nodeGroup", componentReference, true))
-            .selectAll("circle")  ;
-
-        berlioz.utils.log("styleNodes:" + JSON.stringify(node));
-
-        node.attr("r", function(o, i) {
-            // needs to be computed using a configuration provided algorithm?
-            return o.measures[currentMeasure].radius;
-        });
-
-        node.style("fill", function(o, i) {
-            berlioz.utils.log("styleNodes: fill: " + o.measures[currentMeasure].color);
-            return o.measures[currentMeasure].color;
-        });
-
-        node.style("stroke", function(o, i) {
-            var stroke = o.stroke;
-            var oid = o.id;
-            if (oid == primaryid) {
-                var primaryNodeHighlightingOn = berlioz.utils.getCache (componentReference, "primaryNodeHighlightingOn") ;
-                if (primaryNodeHighlightingOn == true) {
-                    stroke = berlioz.utils.getCache (componentReference, "primaryNodeHighlightingColour") ;
-                }                
-            }
-            return stroke;
-        });
-
-        node.style("stroke-width", function(o, i) {
-            var nodestrokewidth = berlioz.utils.getCache (componentReference, "nodestrokewidth") ;
-            var oid = o.id;
-            if (oid == primaryid) {
-                nodestrokewidth = berlioz.utils.getCache (componentReference, "primaryNodeHighlightingRadius") ;
-            }
-            return nodestrokewidth;
-        });
-    },
-
-
-    // TODO sort out relations
-    setLinkType: function(component, thisType, isClicked) {
-        /*
-        var _this = this;
-        var clickedfilters = component.get("v.chartClickedFilters");
-        if (isClicked) {
-            clickedfilters.push(thisType);
-        } else {
-            var index = clickedfilters.indexOf(thisType);
-            if (index > -1) {
-                clickedfilters.splice(index, 1);
-            }
-        }
-        component.set("v.chartClickedFilters", clickedfilters);
-        _this.refreshVisibility(component);
-        */
-    },
-
-    // ideally would prefer to put in Berlioz library but externals can't be called in doInit
+    // ideally would prefer to put in Berlioz library but externals can't safely be called in doInit
     simpleHash : function(s) {
         var hash = 0;
         if (s.length == 0) {

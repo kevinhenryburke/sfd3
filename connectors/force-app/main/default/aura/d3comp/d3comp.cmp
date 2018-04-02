@@ -27,7 +27,7 @@
   <aura:attribute name="panelCurrentMeasure" type="String"/>    
 	<aura:attribute name="panelPrimaryId" type="String"/> 
 	<aura:attribute name="panelShowLevels" type="Integer" default="1"/>    
-  <aura:attribute name="panelClickedFilters" type="Object[]" default="[]" />
+  <aura:attribute name="panelShowFilters" type="Object[]" default="[]" />
 
   <!-- Design Paramters -->  
   <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
@@ -77,11 +77,11 @@
           <div class="slds-col slds-size_1-of-3 slds-small-size_1-of-2 slds-medium-size_1-of-3" >
             <h1 class="slds-text-heading_label">Relation</h1>
             <div class="slds slds-button-group" role="group">
-                <c:buttonDynamic aura:id="b1" label="" class="slds-button slds-button_brand filter_on" onclick="{!c.onClickFilterB1}"/>
-                <c:buttonDynamic aura:id="b2" label="" class="slds-button slds-button_brand filter_on" onclick="{!c.onClickFilterB2}"/>
-                <c:buttonDynamic aura:id="b3" label="" class="slds-button slds-button_brand filter_on" onclick="{!c.onClickFilterB3}"/>
-                <c:buttonDynamic aura:id="b4" label="" class="slds-button slds-button_brand filter_on" onclick="{!c.onClickFilterB4}"/>
-                <c:buttonDynamic aura:id="b5" label="" class="slds-button slds-button_brand filter_on" onclick="{!c.onClickFilterB5}"/>
+                <c:buttonDynamic aura:id="b1" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB1}"/>
+                <c:buttonDynamic aura:id="b2" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB2}"/>
+                <c:buttonDynamic aura:id="b3" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB3}"/>
+                <c:buttonDynamic aura:id="b4" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB4}"/>
+                <c:buttonDynamic aura:id="b5" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB5}"/>
             </div>
           </div>
         </div>

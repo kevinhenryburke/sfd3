@@ -247,7 +247,6 @@ function nodeMouseout (d) {
 }
 
 function getRelatedNodes (chartPrimaryId, componentReference, level) {
-    var _this = this;
 
     var looplevel = 0;
 
@@ -284,6 +283,146 @@ function getRelatedNodes (chartPrimaryId, componentReference, level) {
     return linkednodes;
 }
 
+// Method to re-style nodes
+function styleNodes (componentReference) {
+
+    var primaryid = berlioz.utils.getCache (componentReference, "primaryNodeId") ;
+    var currentMeasure = berlioz.utils.getCache (componentReference, "currentMeasure") ;
+
+    console.log("styleNodes : " + currentMeasure + " primaryid: " + primaryid);
+
+    var node = d3.select(berlioz.utils.getDivId("nodeGroup", componentReference, true))
+        .selectAll("circle")  ;
+
+    berlioz.utils.log("styleNodes:" + JSON.stringify(node));
+
+    node.attr("r", function(o, i) {
+        // needs to be computed using a configuration provided algorithm?
+        return o.measures[currentMeasure].radius;
+    });
+
+    node.style("fill", function(o, i) {
+        berlioz.utils.log("styleNodes: fill: " + o.measures[currentMeasure].color);
+        return o.measures[currentMeasure].color;
+    });
+
+    node.style("stroke", function(o, i) {
+        var stroke = o.stroke;
+        var oid = o.id;
+        if (oid == primaryid) {
+            var primaryNodeHighlightingOn = berlioz.utils.getCache (componentReference, "primaryNodeHighlightingOn") ;
+            if (primaryNodeHighlightingOn == true) {
+                stroke = berlioz.utils.getCache (componentReference, "primaryNodeHighlightingColour") ;
+            }                
+        }
+        return stroke;
+    });
+
+    node.style("stroke-width", function(o, i) {
+        var nodestrokewidth = berlioz.utils.getCache (componentReference, "nodestrokewidth") ;
+        var oid = o.id;
+        if (oid == primaryid) {
+            nodestrokewidth = berlioz.utils.getCache (componentReference, "primaryNodeHighlightingRadius") ;
+        }
+        return nodestrokewidth;
+    });
+}
+
+function setFilterVisibility (component, filterType, isShown) {
+    var componentReference = component.get("v.componentReference");
+    var showFilters = berlioz.utils.getCache (componentReference, "showFilters") ;
+    if (isShown) {
+        console.log("setFilterVisibility: adding " + filterType);
+        showFilters.push(filterType);
+    } else {
+        console.log("setFilterVisibility: removing " + filterType);
+        var index = showFilters.indexOf(filterType);
+        if (index > -1) {
+            showFilters.splice(index, 1);
+        }
+    }
+    berlioz.utils.setCache (componentReference, "showFilters", showFilters ) ;
+    console.log("showFilters:" + JSON.stringify(showFilters));
+}
+
+
+function refreshVisibility(componentReference) {
+
+    console.log("Enter refreshVisibility"); 
+
+    var levels = berlioz.utils.getCache(componentReference, "showLevels") ;
+    
+    var showFilters = berlioz.utils.getCache (componentReference, "showFilters") ;
+    var primaryNodeId = berlioz.utils.getCache (componentReference, "primaryNodeId") ;        
+    // not needed until reinstate measure level visibility
+    var currentMeasure = berlioz.utils.getCache (componentReference, "currentMeasure") ;
+
+    var relatedNodes = berlioz.chart.getRelatedNodes(primaryNodeId, componentReference, levels);
+
+    var path = d3.select(berlioz.utils.getDivId("pathGroup", componentReference, true))
+        .selectAll("path")  ;
+
+    var node = d3.select(berlioz.utils.getDivId("nodeGroup", componentReference, true))
+        .selectAll("circle")  
+    
+    var shownodeids = [];
+
+    path.style("visibility", function(p) {
+
+        var retval = "hidden";
+
+        //TODO temporarily removing the measure level visibility functionaliy, reinstate later if useful
+        // var sourcevis = p.source.measures[currentMeasure].visible;
+        // var targetvis = p.target.measures[currentMeasure].visible;
+        var sourcevis = 1;
+        var targetvis = 1;
+
+        var sourceindex = relatedNodes.indexOf(p.sourceid);
+        var targetindex = relatedNodes.indexOf(p.targetid);
+
+        var primaryrelated = (sourceindex > -1 && targetindex > -1);
+
+        if ((sourcevis === 1) && (targetvis === 1) && primaryrelated) {
+
+            var index = showFilters.indexOf(p.type);
+
+            if (index > -1) {
+                berlioz.utils.log(p.sourceid + '/' + p.targetid + " will be visible");
+
+                var indexsource = shownodeids.indexOf(p.sourceid);
+                if (indexsource == -1) {
+                    shownodeids.push(p.sourceid);
+                }
+
+                var indextarget = shownodeids.indexOf(p.targetid);
+                if (indextarget == -1) {
+                    shownodeids.push(p.targetid);
+                }
+            }
+        }
+
+        return (index > -1) ? "visible" : "hidden";
+    });
+
+
+    // change the visibility of the node
+    // if all the links with that node are invisibile, the node should also be invisible
+    // otherwise if any link related to that node is visibile, the node should be visible
+    node.style("visibility", function(o, i) {
+        var oid = o.id;
+        var index = shownodeids.indexOf(oid);
+        if (index > -1) {
+            d3.select("#t" + oid).style("visibility", "visible");
+            d3.select("#s" + oid).style("visibility", "visible");
+            return "visible";
+        } else {
+            d3.select("#t" + oid).style("visibility", "hidden");
+            d3.select("#s" + oid).style("visibility", "hidden");
+            return "hidden";
+        }
+    });
+}
+
 
 // clear out the paths and the groups
 function clearChart(componentReference) {
@@ -293,6 +432,7 @@ function clearChart(componentReference) {
     var text = svg.selectAll(".nodeText").remove();
     d3.select(berlioz.utils.getDivId("pathGroup", componentReference, true)).remove();
     d3.select(berlioz.utils.getDivId("nodeGroup", componentReference, true)).remove();
+    d3.select(berlioz.utils.getDivId("textGroup", componentReference, true)).remove();
 }
 
 
@@ -307,8 +447,13 @@ exports.pathMouseout = pathMouseout;
 exports.nodeMouseover = nodeMouseover;
 exports.nodeMouseout = nodeMouseout;
 exports.getRelatedNodes = getRelatedNodes;
+exports.refreshVisibility = refreshVisibility;
+exports.setFilterVisibility = setFilterVisibility;
 exports.clearChart = clearChart;
 exports.publishEvent = publishEvent;
+exports.styleNodes = styleNodes;
+
+
 
 exports.isiOS = isiOS;
 
@@ -403,13 +548,37 @@ function onTick (width, height, path, node, text) {
     });
 }
 
+function buildForceLinks(path) {
+    console.log("Enter buildForceLinks"); 
+    var forceLinks = {"links": [] };
+
+    path.data().forEach(function(p) {
+        var sourceDatum = d3.select("#" + p.sourceid).datum();
+        var targetDatum = d3.select("#" + p.targetid).datum();
+        forceLinks["links"].push(
+            {
+                "id" : p.id,
+                "sourceid" : p.sourceid, 
+                "targetid" : p.targetid,
+                "type": p.type,
+                "createdby": p.createdby,
+                "notes": p.notes,
+                "stroke": p.stroke,
+                "source" : sourceDatum,
+                "target" : targetDatum
+            }
+        );
+    });
+    return forceLinks;
+}
+
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
 exports.initializeSimulation = initializeSimulation;
 exports.dragHandler = dragHandler;
 exports.onTick = onTick;
-
+exports.buildForceLinks = buildForceLinks;
 // temporary
 exports.transform = transform;
 exports.limitborderx = limitborderx;

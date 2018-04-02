@@ -39,11 +39,11 @@
             component.set("v.panelCurrentMeasure", panelCurrentMeasure);
 
             // set all filters as clicked by default
-            var panelClickedFilters = component.get("v.panelClickedFilters");
+            var panelShowFilters = component.get("v.panelShowFilters");
             configjson.filtertypes.forEach(function(filtertype) {
-                panelClickedFilters.push(filtertype);
+                panelShowFilters.push(filtertype);
             });
-            component.set("v.panelClickedFilters", panelClickedFilters);
+            component.set("v.panelShowFilters", panelShowFilters);
                 
 
             // underlying data parsed to JSON object
@@ -109,33 +109,29 @@
         var publisher = component.get("v.UserComponentId");
         var componentType = component.get("v.componentType");
 
-        // check existence of filter_on class to determine what state to publish
-        var beforeClickedState = $A.util.hasClass(cmpTarget, 'filter_on');
-        var afterClickedState = !beforeClickedState;
-        var filterState = afterClickedState ? "On" : "Off";
+        // check existence of filter_show class to determine what state to publish
+        var beforeClickedState = $A.util.hasClass(cmpTarget, 'filter_show');
+        var filterState = beforeClickedState ? "Hide" : "Show"; // if before it was show then now it is hide
 
         var configjson = component.get("v.configjson");
         var thisType = configjson.filtertypes[indexer - 1];
         berlioz.utils.publishEvent("SetFilter", publisher, componentType, {"index" : indexer, "state" : filterState, "filterType" : thisType }, null);
 
-        this.setLinkType(component, thisType, afterClickedState);
+        this.saveFilterVisibility(component, thisType, (filterState == "Show"));
     },
 
-    // TODO sort out relations
-    setLinkType: function(component, thisType, isClicked) {
+    saveFilterVisibility: function(component, thisType, isClicked) {
         var _this = this;
-        var clickedfilters = component.get("v.panelClickedFilters");
+        var showFilters = component.get("v.panelShowFilters");
         if (isClicked) {
-            clickedfilters.push(thisType);
+            showFilters.push(thisType);
         } else {
-            var index = clickedfilters.indexOf(thisType);
+            var index = showFilters.indexOf(thisType);
             if (index > -1) {
-                clickedfilters.splice(index, 1);
+                showFilters.splice(index, 1);
             }
         }
-        component.set("v.panelClickedFilters", clickedfilters);
-        // need to do publish an event to instruct chart
-//        _this.refreshVisibility(component);
+        component.set("v.panelShowFilters", showFilters);
     },
 
     formatButtons: function(component, arrayNames, idprefix, maxbuttons) {
