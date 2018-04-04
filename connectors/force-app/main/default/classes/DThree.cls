@@ -19,6 +19,16 @@ public class DThree {
     }
 
     @AuraEnabled
+    public static String returnDataNodesOnly() {
+        List<StaticResource> docs;
+//		docs = [select id, name, body from StaticResource where name = 'testdata']; 
+		docs = [select id, name, body from StaticResource where name = 'NVANodesOnly']; 
+        return docs[0].body.toString();
+//		return D3Data.render();
+    }
+
+
+    @AuraEnabled
     public static String returnConfig() {
         List<StaticResource> docs;
 //		docs = [select id, name, body from StaticResource where name = 'testdata']; 

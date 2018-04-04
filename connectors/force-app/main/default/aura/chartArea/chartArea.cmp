@@ -53,9 +53,7 @@
   <aura:attribute name="showPathToolTip" type="Boolean" default="true"/>    
 	<aura:attribute name="nodestrokewidth" type="String" default="0.5px"/>    
   <aura:attribute name="showLevelsInitial" type="Integer" default="1"/>   
-  <aura:attribute name="Title" type="String" default=""/>    
-   
-
+  <aura:attribute name="Title" type="String" default=""/>       
  
   <!-- Technical - Chart -->
   <!-- need to accessed or set before all libraries may be available -->
@@ -66,13 +64,7 @@
 
   <aura:attribute name="componentType" type="String" default="Chart"/>    
 
-  <!-- Potentially change this to "rendered" -->
 	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
-  
-
-  <aura:attribute name="width" type="Double" />
-  <aura:attribute name="height" type="Double" />
-  <aura:attribute name="lastTouch" type="DateTime" />
   
   <!-- Required for flexible layouts -->
   <aura:attribute name="flexiWidth" type="String"/>

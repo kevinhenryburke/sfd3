@@ -78,12 +78,12 @@
         if (topic == "ShowLevelsMore")
         {
             berlioz.utils.setCache (componentReference, "showLevels", parameters["levels"] ) ;
-            berlioz.chart.refreshVisibility(componentReference);
+            berlioz.utils.r1("refreshVisibility", componentReference); 
         }
         if (topic == "ShowLevelsFewer")
         {
             berlioz.utils.setCache (componentReference, "showLevels", parameters["levels"] ) ;
-            berlioz.chart.refreshVisibility(componentReference);
+            berlioz.utils.r1("refreshVisibility", componentReference); 
         }
         if (topic == "SetMeasure")
         {
@@ -105,9 +105,8 @@
 
             var isShown = (state == "Show");
             berlioz.chart.setFilterVisibility(component, filterType, isShown);
-            berlioz.chart.refreshVisibility(componentReference);
+            berlioz.utils.r1("refreshVisibility", componentReference); 
         }
-
         if (topic == "InitializeData")
         {
             console.log("InitializeData received by Chart: " + componentReference + "/" + parameters["componentReference"]);

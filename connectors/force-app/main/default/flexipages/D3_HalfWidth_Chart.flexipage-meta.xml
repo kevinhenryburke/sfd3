@@ -6,9 +6,17 @@
                 <name>UserComponentId</name>
                 <value>Controller Top Left</value>
             </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>dataSourceMethod</name>
+                <value>c.returnData</value>
+            </componentInstanceProperties>
             <componentName>d3comp</componentName>
         </componentInstances>
         <componentInstances>
+            <componentInstanceProperties>
+                <name>Title</name>
+                <value>Gold One Level</value>
+            </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
                 <value>Chart Bottom Left</value>
@@ -16,6 +24,10 @@
             <componentInstanceProperties>
                 <name>UserControllerComponentId</name>
                 <value>Controller Top Left</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>componentType</name>
+                <value>chart.connections</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>primaryNodeHighlightingColour</name>
@@ -48,9 +60,17 @@
                 <name>UserComponentId</name>
                 <value>Controller Top Right</value>
             </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>dataSourceMethod</name>
+                <value>c.returnDataNodesOnly</value>
+            </componentInstanceProperties>
             <componentName>d3comp</componentName>
         </componentInstances>
         <componentInstances>
+            <componentInstanceProperties>
+                <name>Title</name>
+                <value>Silver Two Levels</value>
+            </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
                 <value>Chart Bottom Right</value>
@@ -60,12 +80,24 @@
                 <value>Controller Top Right</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
+                <name>componentType</name>
+                <value>chart.influence</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>primaryNodeHighlightingColour</name>
+                <value>silver</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
                 <name>primaryNodeHighlightingOn</name>
                 <value>true</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>retainNodeDetailsMouseOut</name>
                 <value>true</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>showLevelsInitial</name>
+                <value>2</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>showPathToolTip</name>

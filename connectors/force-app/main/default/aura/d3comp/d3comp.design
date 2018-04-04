@@ -1,3 +1,4 @@
 <design:component >
     <design:attribute name="UserComponentId" label="Component Id" default="" description="Unique Id for this component" />	
+    <design:attribute name="dataSourceMethod" label="Data Source Method" default="c.returnDataNodesOnly" description="Apex Method returning base data" />      
 </design:component>

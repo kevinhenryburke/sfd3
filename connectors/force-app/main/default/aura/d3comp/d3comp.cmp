@@ -31,6 +31,7 @@
 
   <!-- Design Paramters -->  
   <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
+  <aura:attribute name="dataSourceMethod" type="String" default="c.returnDataNodesOnly"/>      
 
   <!-- Technical - Chart -->
 

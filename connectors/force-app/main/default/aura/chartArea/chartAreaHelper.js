@@ -21,8 +21,9 @@
         berlioz.utils.setCache (componentReference, "nodestrokewidth", component.get("v.nodestrokewidth") ) ;
         berlioz.utils.setCache (componentReference, "showLevels", component.get("v.showLevelsInitial")) ;
 
-        var width = Math.min(screen.width, screen.height);
-        var height = Math.min(screen.width, screen.height);
+        berlioz.utils.setCache (componentReference, "lastTouch", new Date().getTime()) ;
+        berlioz.utils.setCache (componentReference, "width", Math.min(screen.width, screen.height)) ; // review this
+        berlioz.utils.setCache (componentReference, "height", Math.min(screen.width, screen.height)) ; // review this
 
         var flexiWidth = component.get("v.flexiWidth");
         console.log("flexiWidth: " + flexiWidth);
@@ -35,37 +36,30 @@
 
         if (flexiWidth == "SMALL")
         {
-            // TEMP
-            width = 420;
-            height = 800;
+            // need to check all the numbers here
+            berlioz.utils.setCache (componentReference, "width", 420) ; 
+            berlioz.utils.setCache (componentReference, "height", 800) ;                 
         }
 
         if (flexiWidth == "MEDIUM")
         {
-            // TEMP
-            width = 600;
-            height = 800;
+            // need to check all the numbers here
+            berlioz.utils.setCache (componentReference, "width", 600) ; 
+            berlioz.utils.setCache (componentReference, "height", 800) ;                 
         }
-
 
         if (flexiWidth == "LARGE")
         {
-            // TEMP
-            width = 1000;
-            height = 800;
+            // need to check all the numbers here
+            berlioz.utils.setCache (componentReference, "width", 1000) ; 
+            berlioz.utils.setCache (componentReference, "height", 800) ;                 
         }
-
-        component.set("v.width", width);
-        component.set("v.height", height);
-
+        
         d3.select(berlioz.utils.getDivId("chartArea", componentReference, true))
             .append("svg")
             .attr("id", berlioz.utils.getDivId("svg", componentReference, false)) // If putting more than one chart on a page we need to provide unique ids for the svg elements   
-            .attr("width", width)
-            .attr("height", height);
-
-        var lastTouch1 = new Date().getTime();
-        component.set("v.lastTouch", lastTouch1);
+            .attr("width", berlioz.utils.getCache (componentReference, "width") )
+            .attr("height", berlioz.utils.getCache (componentReference, "height") );
 
         var agent = navigator.userAgent.toLowerCase();
         if(agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0){
@@ -138,6 +132,7 @@
         var componentReference = component.get("v.componentReference");
 
         console.log("init:initializing initializeData with primaryNodeId: " + primaryNodeId);
+        
         if (isInit) {
             berlioz.utils.initializeAddComponentRef(componentReference, datajson);
         }
@@ -151,10 +146,7 @@
         berlioz.utils.setCache (componentReference, "showFilters", showFilters ) ;
 
         var svg = d3.select(berlioz.utils.getDivId("svg", componentReference, true));
-
-        var width = component.get("v.width");  
-        var height = component.get("v.height");  
-
+        
         // Styling of tooltips - see GitHub prior to Feb 24, 2018
         var nodeToolTipDiv = d3.select("#nodeToolTip");
         var pathToolTipDivId = berlioz.utils.addComponentRef(componentReference, "pathToolTip");
@@ -187,6 +179,16 @@
             textGroup = svg.append("svg:g").attr("id",textGroupId);
         }
 
+        // if (datajson.nodes == null) {
+        //     datajson["nodes"] = []; // if nodes is not populated we create with an empty array to standardize processing
+        // }
+
+        // if (datajson.links == null) {
+        //     datajson["links"] = []; // if links is not populated we create with an empty array to standardize processing
+        // }
+        
+        // Generic up to this point - variation starts to come in here ....
+
         // use the name convention from d3 tutorials (e.g. http://www.puzzlr.org/force-directed-graph-minimal-working-example/)
         // variables called simulation, node, path
         var node = d3.select("#" + nodeGroupId).selectAll("circle")  ;
@@ -215,26 +217,17 @@
                 }
             })
             .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-                console.log("mouseover: " + d.name);
-
-                var componentReference = component.get("v.componentReference");
-                
                 berlioz.utils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
                 berlioz.chart.nodeMouseover(d);
                 // send out a notification that we've moused over this node
-                        
                 berlioz.chart.publishEvent(componentReference, "ChartMouseOver", d);
             }))
             .on('click', function(d) {
-//                var isiOS = component.get("v.isiOS");
                 console.log("retrieve info on whether isiOS");
-                var componentReference = component.get("v.componentReference");
-
                 var isiOS = berlioz.chart.isiOS;
-
                 if (isiOS) {
                     var now = new Date().getTime();
-                    var lastTouch = component.get("v.lastTouch");
+                    var lastTouch = berlioz.utils.getCache (componentReference, "lastTouch");
                     var delta = now - lastTouch;
                     if (delta < 350 && delta > 0) {
                         // the second touchend event happened within half a second. Here is where we invoke the double tap code
@@ -242,7 +235,7 @@
                         //var win = window.open("http://news.bbc.co.uk");
                         //win.focus();
                     }
-                    component.set("v.lastTouch", lastTouch);
+                    berlioz.utils.setCache (componentReference, "lastTouch", lastTouch) ;
                 } else {
                     console.log("not iOS");
                 }
@@ -251,12 +244,11 @@
                 var primaryNodeId = d.id;
                 berlioz.utils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
 
-                berlioz.chart.refreshVisibility(componentReference);
+                berlioz.utils.r1("refreshVisibility", componentReference); 
                 berlioz.chart.styleNodes(componentReference);
             })
             .on('dblclick', $A.getCallback(function(d) {
                 console.log("dblclick");
-                // TODO re-initialize
                 // Two options - complete refresh OR keep and get data from this point?
                 // send a message identifying the node in question
                 // TODO this will need substantial enriching - e.g. pass current measure and whether to add nodes or to refresh etc.
@@ -349,14 +341,12 @@
 
         // overwrite path with the updated version.
         path = d3.select("#" + pathGroupId).selectAll("path");
-        
-        var forceLinks = berlioz.simulation.buildForceLinks(path);
-        
+                
         console.log("apply node styling");
         berlioz.chart.styleNodes(componentReference);
 
         console.log("apply node visibility");
-        berlioz.chart.refreshVisibility(componentReference);
+        berlioz.utils.r1("refreshVisibility", componentReference); 
     
         /* Above should be common to some degree - Below is forceSimulation specific */
 
@@ -370,21 +360,8 @@
         //     forceNodes["nodes"].push(d3this);
         // });
 
-        var simulation = berlioz.simulation.initializeSimulation(datajson.nodes, width, height);
-
-        var link_force =  d3.forceLink(forceLinks.links)
-            .id(function(d) { return d.id; });
+        berlioz.utils.r4("runSimulation", componentReference, path, node, text ); 
         
-        simulation.force("links",link_force);
-
-        berlioz.simulation.dragHandler(node, simulation);
-
-        console.log("calling tick");    
-
-        simulation.on("tick", function() {
-            berlioz.simulation.onTick (width, height, path, node, text);
-        });             
-
         berlioz.utils.showCache (componentReference) ;
         
 // GARBAGE AFTER HERE - experiments
@@ -408,34 +385,7 @@
             console.log(d);
             d3this.attr("testAttribute" , "yay");
         });
-*/
-        
-    },
-
-    /* CHART methods - Refresh */
-
-    buildForceLinks: function(path) {
-        console.log("Enter buildForceLinks"); 
-        var forceLinks = {"links": [] };
-
-        path.data().forEach(function(p) {
-            var sourceDatum = d3.select("#" + p.sourceid).datum();
-            var targetDatum = d3.select("#" + p.targetid).datum();
-            forceLinks["links"].push(
-                {
-                    "id" : p.id,
-                    "sourceid" : p.sourceid, 
-                    "targetid" : p.targetid,
-                    "type": p.type,
-                    "createdby": p.createdby,
-                    "notes": p.notes,
-                    "stroke": p.stroke,
-                    "source" : sourceDatum,
-                    "target" : targetDatum
-                }
-            );
-        });
-        return forceLinks;
+*/        
     },
 
 

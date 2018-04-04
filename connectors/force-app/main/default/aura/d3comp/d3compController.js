@@ -1,9 +1,12 @@
 ({
 	
     onInit: function(component, event, helper) {
-		console.log('afterScriptsLoaded panel enter');
+        console.log('afterScriptsLoaded panel enter');
+        
+        var dataSourceMethod = component.get("v.dataSourceMethod");
 
-        var action = component.get("c.returnData");
+        var action = component.get(dataSourceMethod);
+//        var action = component.get("c.returnData");
 
         action.setCallback(this, function(response) {
             var state = response.getState();

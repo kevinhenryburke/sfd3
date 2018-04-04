@@ -47,15 +47,17 @@ function log (logItem) {
 
 // replace ids with component specific versions - this will allow multiple charts on a page without conflict
 function initializeAddComponentRef(componentReference, datajson) {
+    if (datajson.nodes != null) {
     datajson.nodes.forEach(function(node) {
         node["id"] = berlioz.utils.addComponentRef(componentReference, node["id"]);
-    });
+    })};
         
+    if (datajson.links != null) {
     datajson.links.forEach(function(link) {
         link["id"] = berlioz.utils.addComponentRef(componentReference, link["id"]);
         link["sourceid"] = berlioz.utils.addComponentRef(componentReference, link["sourceid"]);
         link["targetid"] = berlioz.utils.addComponentRef(componentReference, link["targetid"]);
-    });
+    })};
 }    
 
 function addComponentRef(componentReference, dataItem) {
@@ -74,6 +76,53 @@ function removeComponentRef(componentReference, dataItem) {
 
 function getDivId (idType, componentReference, forSelect) {
     return (forSelect ? "#" : "") + componentReference + idType;
+}
+
+
+
+/* This is how to list all the properties and all functions in a module
+
+console.log(Object.getOwnPropertyNames(berlioz.utils));
+
+console.log(Object.getOwnPropertyNames(berlioz.utils).filter(function (p) {
+    return typeof berlioz.utils[p] === 'function';
+}));        
+*/
+
+
+function r0 (fname) {
+}
+
+function r1 (fname, arg0) {
+    if (fname == "refreshVisibility") {
+        var componentReference = arg0;
+        var componentType = berlioz.utils.getCache (componentReference, "componentType") ;
+        if (componentType == "chart.connections") {
+            return berlioz.chart.refreshVisibility(arg0); 
+        }
+        else {
+            return berlioz.chart.influence.refreshVisibility(arg0); 
+        }
+    }
+}
+
+function r2 (fname, arg0, arg1) {
+}
+
+function r3 (fname, arg0, arg1, arg2) {
+}
+
+function r4 (fname, arg0, arg1, arg2, arg3) {
+    if (fname == "runSimulation") {
+        var componentReference = arg0;
+        var componentType = berlioz.utils.getCache (componentReference, "componentType") ;
+        if (componentType == "chart.influence") {
+            return berlioz.simulation.runSimulation1(arg0, arg1, arg2, arg3); 
+        }
+        else {
+            return berlioz.simulation.runSimulation2(arg0, arg1, arg2, arg3); 
+        }
+    }
 }
 
 /*
@@ -110,7 +159,6 @@ function publishEvent(topic, publisher, publisherType, parameters, controller) {
     appEvent.fire();
 }
 
-
 exports.log = log;
 exports.initializeAddComponentRef = initializeAddComponentRef;
 exports.addComponentRef = addComponentRef;
@@ -122,6 +170,10 @@ exports.getCache = getCache;
 exports.showCache = showCache;
 exports.showCacheAll = showCacheAll;
 exports.getDivId = getDivId;
+exports.r1 = r1;
+exports.r2 = r2;
+exports.r3 = r3;
+exports.r4 = r4;
 
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -345,7 +397,6 @@ function setFilterVisibility (component, filterType, isShown) {
     console.log("showFilters:" + JSON.stringify(showFilters));
 }
 
-
 function refreshVisibility(componentReference) {
 
     console.log("Enter refreshVisibility"); 
@@ -404,7 +455,6 @@ function refreshVisibility(componentReference) {
         return (index > -1) ? "visible" : "hidden";
     });
 
-
     // change the visibility of the node
     // if all the links with that node are invisibile, the node should also be invisible
     // otherwise if any link related to that node is visibile, the node should be visible
@@ -423,7 +473,6 @@ function refreshVisibility(componentReference) {
     });
 }
 
-
 // clear out the paths and the groups
 function clearChart(componentReference) {
     var svg = d3.select(berlioz.utils.getDivId("svg", componentReference, true));
@@ -434,7 +483,6 @@ function clearChart(componentReference) {
     d3.select(berlioz.utils.getDivId("nodeGroup", componentReference, true)).remove();
     d3.select(berlioz.utils.getDivId("textGroup", componentReference, true)).remove();
 }
-
 
 function publishEvent(componentReference, topic, parameters) {
     var publisherType = berlioz.utils.getCache (componentReference, "componentType") ;
@@ -452,8 +500,6 @@ exports.setFilterVisibility = setFilterVisibility;
 exports.clearChart = clearChart;
 exports.publishEvent = publishEvent;
 exports.styleNodes = styleNodes;
-
-
 
 exports.isiOS = isiOS;
 
@@ -476,8 +522,10 @@ console.log("loading: Berlioz.simulation IIFE");
 
 var version = "0.0.1";
 
-function initializeSimulation (nodes, width, height) {
+function initializeSimulation (componentReference, nodes) {
     console.log("Berlioz.simulation.initializeSimulation enter");
+    var width = berlioz.utils.getCache (componentReference, "width") ;  
+    var height = berlioz.utils.getCache (componentReference, "height") ; 
 
     // force example - https://bl.ocks.org/rsk2327/23622500eb512b5de90f6a916c836a40
     var attractForce = d3.forceManyBody().strength(5).distanceMax(400).distanceMin(60);
@@ -490,6 +538,37 @@ function initializeSimulation (nodes, width, height) {
         .alphaDecay(0.03).force("attractForce",attractForce).force("repelForce",repelForce);
     
     console.log("Berlioz.simulation.initializeSimulation exit");
+    return simulation;
+}
+
+function initializeSimulation2 (componentReference, nodes) {
+    console.log("Berlioz.simulation.initializeSimulation2 enter");
+    var width = berlioz.utils.getCache (componentReference, "width") ;  
+    var height = berlioz.utils.getCache (componentReference, "height") ; 
+    var sizeDivisor = 100;
+    var nodePadding = 2.5;
+    var currentMeasure = berlioz.utils.getCache (componentReference, "currentMeasure") ; 
+
+    var simulation = d3.forceSimulation()
+        .force("forceX", d3.forceX().strength(.1).x(width * .5))
+        .force("forceY", d3.forceY().strength(.1).y(height * .5))
+        .force("center", d3.forceCenter().x(width * .5).y(height * .5))
+        .force("charge", d3.forceManyBody().strength(-150));
+
+    simulation  
+        .nodes(nodes)
+        .force("collide", d3.forceCollide().strength(.5).radius(function(d){
+            console.log("collide");
+            console.log(d); 
+            return d.measures[currentMeasure].radius + nodePadding; }).iterations(1))
+//        .force("collide", d3.forceCollide().strength(.5).radius(function(d){ return d.radius + nodePadding; }).iterations(1))
+        .on("tick", function(d){
+          node
+              .attr("cx", function(d){ return d.x; })
+              .attr("cy", function(d){ return d.y; })
+        });        
+    
+    console.log("Berlioz.simulation.initializeSimulation2 exit");
     return simulation;
 }
 
@@ -529,7 +608,9 @@ function limitbordery(y, height) {
     return Math.max(Math.min(y, height - 50), 20 );
 }    
 
-function onTick (width, height, path, node, text) {
+function onTick (componentReference, path, node, text) {
+    var width = berlioz.utils.getCache (componentReference, "width") ;  
+    var height = berlioz.utils.getCache (componentReference, "height") ; 
     path.attr("d", function(d) {
         var sx = limitborderx(d.source.x, width);
         var sy = limitbordery(d.source.y, height);
@@ -572,13 +653,57 @@ function buildForceLinks(path) {
     return forceLinks;
 }
 
+function runSimulation1(componentReference, path, node, text ) {
+    console.log("Enter runSimulation1"); 
+
+    var datajson = berlioz.utils.getCache (componentReference, "datajson") ;
+    var simulation = berlioz.simulation.initializeSimulation(componentReference, datajson.nodes);            
+    berlioz.utils.setCache (componentReference, "simulation", simulation ) ;
+
+    var forceLinks = berlioz.simulation.buildForceLinks(path);
+    var link_force =  d3.forceLink(forceLinks.links)
+        .id(function(d) { return d.id; });
+
+    simulation.force("links",link_force);
+
+    berlioz.simulation.dragHandler(node, simulation);
+
+    simulation.on("tick", function() {
+        berlioz.simulation.onTick (componentReference, path, node, text);
+    });             
+    console.log("Exit runSimulation1"); 
+}
+
+function runSimulation2(componentReference, path, node, text ) {
+    console.log("Enter runSimulation2"); 
+
+    var datajson = berlioz.utils.getCache (componentReference, "datajson") ;
+    var simulation = berlioz.simulation.initializeSimulation2(componentReference, datajson.nodes);            
+    berlioz.utils.setCache (componentReference, "simulation", simulation ) ;
+
+    var forceLinks = berlioz.simulation.buildForceLinks(path);
+    var link_force =  d3.forceLink(forceLinks.links)
+        .id(function(d) { return d.id; });
+
+    simulation.force("links",link_force);
+
+    berlioz.simulation.dragHandler(node, simulation);
+
+    simulation.on("tick", function() {
+        berlioz.simulation.onTick (componentReference, path, node, text);
+    });             
+    console.log("Exit runSimulation2"); 
+}
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
 exports.initializeSimulation = initializeSimulation;
+exports.initializeSimulation2 = initializeSimulation2;
 exports.dragHandler = dragHandler;
 exports.onTick = onTick;
 exports.buildForceLinks = buildForceLinks;
+exports.runSimulation1 = runSimulation1;
+exports.runSimulation2 = runSimulation2;
 // temporary
 exports.transform = transform;
 exports.limitborderx = limitborderx;
@@ -586,6 +711,43 @@ exports.limitbordery = limitbordery;
 
 
 console.log("loaded: Berlioz.simulation  IIFE");
+
+})));
+
+/* Split this into new file */
+
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.berlioz.chart.influence = global.berlioz.chart.influence || {})));
+}(this, (function (exports) { 'use strict';
+
+console.log("loading: berlioz.chart.influence IIFE");
+
+var version = "0.0.1";
+
+function refreshVisibility(componentReference) {
+}
+
+exports.refreshVisibility = refreshVisibility;
+
+console.log("loaded: berlioz.chart.influence  IIFE");
+
+})));
+
+/* Split this into new file */
+
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.berlioz.chart.connections = global.berlioz.chart.connections || {})));
+}(this, (function (exports) { 'use strict';
+
+console.log("loading: berlioz.chart.connections IIFE");
+
+var version = "0.0.1";
+
+console.log("loaded: berlioz.chart.connections  IIFE");
 
 })));
 
