@@ -63,12 +63,10 @@
 
         var agent = navigator.userAgent.toLowerCase();
         if(agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0){
-            console.log("IOS environment");
             berlioz.chart.isiOS = true;
             component.set("v.isiOS", true);
         }
         else {
-            console.log("non-IOS environment");
             berlioz.chart.isiOS = false;
         }
         
@@ -191,20 +189,26 @@
 
         // use the name convention from d3 tutorials (e.g. http://www.puzzlr.org/force-directed-graph-minimal-working-example/)
         // variables called simulation, node, path
-        var node = d3.select("#" + nodeGroupId).selectAll("circle")  ;
-        var path = d3.select("#" + pathGroupId).selectAll("path")  ;
+
+// Not used but an alternative way to get node / path values
+        // var node = d3.select("#" + nodeGroupId).selectAll("circle")  ;
+        // var path = d3.select("#" + pathGroupId).selectAll("path")  ;
         
-        console.log("calling nodes");
+        console.log("calling nodes: nodeDataSetFunction");
+
+        var nodeSelector = berlioz.utils.r1("nodeSelector", componentReference); // an html selector for a class or element ids
+        var nodeDataSetFunction = berlioz.utils.r1("nodeDataSetFunction", componentReference); // returns an anonymous function
+        var nodeDataKeyFunction = berlioz.utils.r1("nodeDataKeyFunction", componentReference); // returns an anonymous function
         
-        var nodeSelection = nodeGroup
-            .selectAll("circle")
-            .data(datajson.nodes,  function(d, i) { return d.id;} );
+        var nodeEnterSelection = nodeGroup
+            .selectAll(nodeSelector)
+            .data(nodeDataSetFunction(datajson), nodeDataKeyFunction)
+            .enter();
 
 //        nodeSelection.exit().remove();    
 
-        node = nodeSelection     
-            .enter().append("circle")
-            // set data related attributes - visual styling is applied later
+        var node = nodeEnterSelection     
+            .append("circle")
             .attr("id", function(d) {
                 return d.id;
             })
@@ -213,14 +217,12 @@
                 var retainNodeDetailsMouseOut = berlioz.utils.getCache (componentReference, "retainNodeDetailsMouseOut" ) ;
                 if (!retainNodeDetailsMouseOut)
                 {
-                    berlioz.chart.nodeMouseout(d);
+                    berlioz.utils.r1("nodeMouseout", d); 
                 }
             })
             .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
                 berlioz.utils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
-                berlioz.chart.nodeMouseover(d);
-                // send out a notification that we've moused over this node
-                berlioz.chart.publishEvent(componentReference, "ChartMouseOver", d);
+                berlioz.utils.r2("nodeMouseover", componentReference, d); 
             }))
             .on('click', function(d) {
                 console.log("retrieve info on whether isiOS");
@@ -231,9 +233,7 @@
                     var delta = now - lastTouch;
                     if (delta < 350 && delta > 0) {
                         // the second touchend event happened within half a second. Here is where we invoke the double tap code
-                        //TODO implement
-                        //var win = window.open("http://news.bbc.co.uk");
-                        //win.focus();
+                        //TODO implement - e.g. var win = window.open("http://news.bbc.co.uk"); win.focus();
                     }
                     berlioz.utils.setCache (componentReference, "lastTouch", lastTouch) ;
                 } else {
@@ -245,21 +245,16 @@
                 berlioz.utils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
 
                 berlioz.utils.r1("refreshVisibility", componentReference); 
-                berlioz.chart.styleNodes(componentReference);
+                berlioz.utils.r1("styleNodes", componentReference); 
             })
             .on('dblclick', $A.getCallback(function(d) {
                 console.log("dblclick");
                 // Two options - complete refresh OR keep and get data from this point?
                 // send a message identifying the node in question
-                // TODO this will need substantial enriching - e.g. pass current measure and whether to add nodes or to refresh etc.
                 var componentReference = component.get("v.componentReference");
                 var primaryNodeId = d.id;
                 berlioz.utils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
-                var cleanId = berlioz.utils.removeComponentRef(componentReference, primaryNodeId);
-
-                var eventParameters = {"primaryNodeId" : cleanId, "componentReference" : componentReference};
-                berlioz.chart.publishEvent(componentReference, "InitiateRefreshChart", eventParameters);
-
+                berlioz.utils.r2("nodeDoubleClick", componentReference, primaryNodeId); 
             }));
 
         console.log("calling text");    
@@ -305,7 +300,7 @@
             .selectAll("path")
             .data(datajson.links,  function(d, i) { return d.id;} );
 
-        path = pathSelection    
+        var path = pathSelection    
             .enter().append("path")
             .attr("class", function(d) {
                 return "link " + d.type;
@@ -328,14 +323,14 @@
             .on('mouseout', function(d) { // hide the div
                 var showPathToolTip = berlioz.utils.getCache (componentReference, "showPathToolTip"); 
                 if (showPathToolTip) {
-                    berlioz.chart.pathMouseout(pathToolTipDiv);
+                    berlioz.utils.r1("pathMouseout", pathToolTipDiv); 
                 }
             })
             .on('mouseover', $A.getCallback(function(d) { 
                 var showPathToolTip = berlioz.utils.getCache (componentReference, "showPathToolTip") ;
                 console.log("showPathToolTip: " + showPathToolTip);
                 if (showPathToolTip) {
-                    berlioz.chart.pathMouseover(d,path,pathToolTipDiv);
+                    berlioz.utils.r3("pathMouseover", d, path, pathToolTipDiv); 
                 }
             }));
 
@@ -343,7 +338,7 @@
         path = d3.select("#" + pathGroupId).selectAll("path");
                 
         console.log("apply node styling");
-        berlioz.chart.styleNodes(componentReference);
+        berlioz.utils.r1("styleNodes", componentReference); 
 
         console.log("apply node visibility");
         berlioz.utils.r1("refreshVisibility", componentReference); 

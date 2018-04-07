@@ -8,7 +8,7 @@
       "type":"Contact",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#66c2a5",
           "visible":1,
           "radius":123
         },
@@ -27,7 +27,7 @@
       "type":"User",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#66c2a5",
           "visible":1,
           "radius":12
         },
@@ -46,9 +46,9 @@
       "type":"User",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#66c2a5",
           "visible":1,
-          "radius":112
+          "radius":72
         },
         "Hot":{
           "color":"red",
@@ -65,7 +65,7 @@
       "type":"User",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#66c2a5",
           "visible":1,
           "radius":41
         },
@@ -84,7 +84,7 @@
       "type":"User",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#fc8d62",
           "visible":1,
           "radius":52
         },
@@ -103,7 +103,7 @@
       "type":"User",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#fc8d62",
           "visible":0,
           "radius":12
         },
@@ -122,7 +122,7 @@
       "type":"User",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#fc8d62",
           "visible":1,
           "radius":32
         },
@@ -141,9 +141,9 @@
       "type":"User",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#8da0cb",
           "visible":1,
-          "radius":187
+          "radius":87
         },
         "Hot":{
           "color":"green",
@@ -160,9 +160,9 @@
       "type":"User",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#8da0cb",
           "visible":1,
-          "radius":12
+          "radius":41
         },
         "Hot":{
           "color":"green",
@@ -179,7 +179,7 @@
       "type":"User",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#8da0cb",
           "visible":1,
           "radius":12
         },
@@ -198,7 +198,7 @@
       "type":"User",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#e78ac3",
           "visible":1,
           "radius":12
         },
@@ -217,7 +217,7 @@
       "type":"Contact",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#e78ac3",
           "visible":1,
           "radius":12
         },
@@ -236,9 +236,9 @@
       "type":"Contact",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#e78ac3",
           "visible":1,
-          "radius":12
+          "radius":28
         },
         "Hot":{
           "color":"green",
@@ -255,7 +255,7 @@
       "type":"Contact",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#a6d854",
           "visible":1,
           "radius":12
         },
@@ -274,7 +274,7 @@
       "type":"Contact",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#a6d854",
           "visible":1,
           "radius":12
         },
@@ -293,7 +293,7 @@
       "type":"Contact",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#a6d854",
           "visible":1,
           "radius":12
         },
@@ -312,12 +312,12 @@
       "type":"Contact",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#ffd92f",
           "visible":1,
           "radius":12
         },
         "Hot":{
-          "color":"green",
+          "color":"orange",
           "visible":1,
           "radius":9
         }
@@ -331,7 +331,7 @@
       "type":"Contact",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#ffd92f",
           "visible":1,
           "radius":12
         },
@@ -350,7 +350,7 @@
       "type":"Contact",
       "measures":{
         "Posts":{
-          "color":"blue",
+          "color":"#ffd92f",
           "visible":1,
           "radius":12
         },
