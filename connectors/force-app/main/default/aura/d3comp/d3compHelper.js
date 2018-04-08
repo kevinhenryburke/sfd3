@@ -107,6 +107,7 @@
         var cmpTarget = component.find('b' + indexer);
 
         var publisher = component.get("v.UserComponentId");
+        var componentCategory = component.get("v.componentCategory");
         var componentType = component.get("v.componentType");
 
         // check existence of filter_show class to determine what state to publish
@@ -115,7 +116,7 @@
 
         var configjson = component.get("v.configjson");
         var thisType = configjson.filtertypes[indexer - 1];
-        berlioz.utils.publishEvent("SetFilter", publisher, componentType, {"index" : indexer, "state" : filterState, "filterType" : thisType }, null);
+        bzutils.publishEvent("SetFilter", publisher, componentCategory, componentType, {"index" : indexer, "state" : filterState, "filterType" : thisType }, null);
 
         this.saveFilterVisibility(component, thisType, (filterState == "Show"));
     },

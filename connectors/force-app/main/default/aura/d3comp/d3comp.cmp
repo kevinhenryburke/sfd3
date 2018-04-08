@@ -35,7 +35,8 @@
 
   <!-- Technical - Chart -->
 
-	<aura:attribute name="componentType" type="String" default="Controller"/>    
+  <aura:attribute name="componentCategory" type="String" default="Controller"/>    
+	<aura:attribute name="componentType" type="String" default="Controller"/>   <!-- this may move to Design Parameters when we get different types --> 
 	<aura:attribute name="initialized" type="Boolean" default="false"/>    
   <aura:attribute name="datajson" type="Object" />
   <aura:attribute name="configjson" type="Object" />

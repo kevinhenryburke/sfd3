@@ -77,23 +77,23 @@
         
         if (topic == "ShowLevelsMore")
         {
-            berlioz.utils.setCache (componentReference, "showLevels", parameters["levels"] ) ;
-            berlioz.utils.r1("refreshVisibility", componentReference); 
+            bzutils.setCache (componentReference, "showLevels", parameters["levels"] ) ;
+            bzutils.xfcr("refreshVisibility", componentReference); 
         }
         if (topic == "ShowLevelsFewer")
         {
-            berlioz.utils.setCache (componentReference, "showLevels", parameters["levels"] ) ;
-            berlioz.utils.r1("refreshVisibility", componentReference); 
+            bzutils.setCache (componentReference, "showLevels", parameters["levels"] ) ;
+            bzutils.xfcr("refreshVisibility", componentReference); 
         }
         if (topic == "SetMeasure")
         {
             var measureIndex = parameters["index"];
             var currentMeasure = parameters["measure"];
 
-            berlioz.utils.setCache (componentReference, "currentMeasure", currentMeasure ) ;
+            bzutils.setCache (componentReference, "currentMeasure", currentMeasure ) ;
             
             // refresh Chart - measure changes but primaryid does not
-            berlioz.utils.r1("styleNodes", componentReference); 
+            bzutils.xfcr("styleNodes", componentReference); 
         }
         if (topic == "SetFilter")
         {
@@ -104,8 +104,8 @@
             var filterType = parameters["filterType"];
 
             var isShown = (state == "Show");
-            berlioz.chart.setFilterVisibility(component, filterType, isShown);
-            berlioz.utils.r1("refreshVisibility", componentReference); 
+            bzchart.setFilterVisibility(component, filterType, isShown);
+            bzutils.xfcr("refreshVisibility", componentReference); 
         }
         if (topic == "InitializeData")
         {
@@ -140,7 +140,7 @@
     navigateToRecord : function(component){
         var evtNav = $A.get("e.force:navigateToSObject");
         evtNav.setParams({
-        "recordId": berlioz.utils.getCache (componentReference, "mouseoverRecordId"),
+        "recordId": bzutils.getCache (componentReference, "mouseoverRecordId"),
         "slideDevName": "detail"
         });
         sObectEvent.fire(); 

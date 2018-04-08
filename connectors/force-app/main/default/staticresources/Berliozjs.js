@@ -3,10 +3,10 @@ console.log("loading: Berlioz external libraries");
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.berlioz.utils = global.berlioz.utils || {})));
+	(factory((global.bzutils = global.bzutils || {})));
 }(this, (function (exports) { 'use strict';
 
-console.log("loading: Berlioz.utils IIFE");
+console.log("loading: bzutils IIFE");
 
 var version = "0.0.1";
 var debugMode = true;
@@ -33,11 +33,11 @@ function getCache (componentReference, key) {
 }
 
 function showCache (componentReference) {
-    berlioz.utils.log(componentCache[componentReference]);
+    bzutils.log(componentCache[componentReference]);
 }
 
 function showCacheAll () {
-    berlioz.utils.log(componentCache);
+    bzutils.log(componentCache);
 }
 
 function log (logItem) {
@@ -46,18 +46,22 @@ function log (logItem) {
     } 
 }
 
+function doNothing () {
+}
+
+
 // replace ids with component specific versions - this will allow multiple charts on a page without conflict
 function initializeAddComponentRef(componentReference, datajson) {
     if (datajson.nodes != null) {
     datajson.nodes.forEach(function(node) {
-        node["id"] = berlioz.utils.addComponentRef(componentReference, node["id"]);
+        node["id"] = bzutils.addComponentRef(componentReference, node["id"]);
     })};
         
     if (datajson.links != null) {
     datajson.links.forEach(function(link) {
-        link["id"] = berlioz.utils.addComponentRef(componentReference, link["id"]);
-        link["sourceid"] = berlioz.utils.addComponentRef(componentReference, link["sourceid"]);
-        link["targetid"] = berlioz.utils.addComponentRef(componentReference, link["targetid"]);
+        link["id"] = bzutils.addComponentRef(componentReference, link["id"]);
+        link["sourceid"] = bzutils.addComponentRef(componentReference, link["sourceid"]);
+        link["targetid"] = bzutils.addComponentRef(componentReference, link["targetid"]);
     })};
 }    
 
@@ -83,117 +87,58 @@ function getDivId (idType, componentReference, forSelect) {
 
 /* This is how to list all the properties and all functions in a module
 
-console.log(Object.getOwnPropertyNames(berlioz.utils));
+console.log(Object.getOwnPropertyNames(bzutils));
 
-console.log(Object.getOwnPropertyNames(berlioz.utils).filter(function (p) {
-    return typeof berlioz.utils[p] === 'function';
+console.log(Object.getOwnPropertyNames(bzutils).filter(function (p) {
+    return typeof bzutils[p] === 'function';
 }));        
 */
 
-function r0 (fname) {
+/* 
+Delegates to an appropriate function based on componentReference. This includes deriving the componentType and picking up the correct delegate based on that attribute.
+Note: The delegated function is assumed to have componentReference as its first argument 
+*/
+
+function xfcr(functionType, componentReference /*, args */) {
+    console.log("xfcr: functionType: " + functionType);
+    var componentType = bzutils.getCache (componentReference, "componentType");
+    console.log("xfcr: componentType: " + componentType);
+    var functionName = bzconfig.fns[componentType][functionType];
+    console.log("xfcr: functionName: " + functionName);
+
+    var context = context == undefined? window:context;
+    var args = Array.prototype.slice.call(arguments, 1);
+    var namespaces = functionName.split(".");
+    var func = namespaces.pop();
+    for(var i = 0; i < namespaces.length; i++) {
+      context = context[namespaces[i]];
+    }
+    return context[func].apply(context, args);
 }
 
-function r1 (fname, arg0) {
-    if (fname == "refreshVisibility") {
-        var componentReference = arg0;
-        var componentType = berlioz.utils.getCache (componentReference, "componentType") ;
-        if (componentType == "chart.connections") {
-            return berlioz.chart.refreshVisibility(arg0); 
-        }
-        else {
-            return berlioz.chart.influence.refreshVisibility(arg0); 
-        }
-    }
-    if (fname == "styleNodes") {
-        var componentReference = arg0;
-        var componentType = berlioz.utils.getCache (componentReference, "componentType") ;
-        berlioz.chart.styleNodes(componentReference);
-    }
-    if (fname == "pathMouseout") {
-        var pathToolTipDiv = arg0;
-        berlioz.chart.pathMouseout(pathToolTipDiv);
-    }
-    if (fname == "nodeMouseout") {
-        var d = arg0;
-        berlioz.chart.nodeMouseout(d);
-    }
-    if (fname == "nodeSelector") {
-        var componentReference = arg0;
-        var componentType = berlioz.utils.getCache (componentReference, "componentType") ;
-        if (componentType == "Pack") {
-            return berlioz.pack.nodeSelector();
-        }
-        else {
-            return berlioz.chart.nodeSelector();
-        }
-    }
-    if (fname == "nodeDataSetFunction") {
-        var componentReference = arg0;
-        var componentType = berlioz.utils.getCache (componentReference, "componentType") ;
-        if (componentType == "Pack") {
-            return berlioz.pack.nodeDataSetFunctionNodes(componentReference);
-        }
-        else {
-            return berlioz.utils.nodeDataSetFunctionNodes();
-        }
-    }
-    if (fname == "nodeDataKeyFunction") {
-        var componentReference = arg0;
-        var componentType = berlioz.utils.getCache (componentReference, "componentType") ;
-        if (componentType == "Pack") {
-            return berlioz.utils.nodeDataKeyFunctionId ();
-        }
-        else {
-            return berlioz.utils.nodeDataKeyFunctionId ();
-        }
-    }
+/* 
+Delegates to an appropriate function based on componentType.
+Note: The delegated function is NOT assumed to have componentType as its first argument 
+If componentType is needed then supply it twice in the calling parameters
+*/
 
-}
+function xfct(functionType, componentType /*, args */) {
+    var functionName = bzconfig.fns[componentType][functionType];
 
-function r2 (fname, arg0, arg1) {
-    if (fname == "nodeMouseover") {
-        var componentReference = arg0;
-        var d = arg1;
-        berlioz.chart.nodeMouseover(d);
-        // send out a notification that we've moused over this node
-        berlioz.chart.publishEvent(componentReference, "ChartMouseOver", d);
+    var context = context == undefined? window:context;
+    var args = Array.prototype.slice.call(arguments, 2);
+    var namespaces = functionName.split(".");
+    var func = namespaces.pop();
+    for(var i = 0; i < namespaces.length; i++) {
+      context = context[namespaces[i]];
     }
-    if (fname == "nodeDoubleClick") {
-        var componentReference = arg0;
-        var primaryNodeId = arg1;
-        // TODO this will need substantial enriching - e.g. pass current measure and whether to add nodes or to refresh etc.
-        var cleanId = berlioz.utils.removeComponentRef(componentReference, primaryNodeId);
-        var eventParameters = {"primaryNodeId" : cleanId, "componentReference" : componentReference};
-        berlioz.chart.publishEvent(componentReference, "InitiateRefreshChart", eventParameters);
-    }
-}
-
-function r3 (fname, arg0, arg1, arg2) {
-    if (fname == "pathMouseover") {
-        var d = arg0;
-        var path = arg1;
-        var pathToolTipDiv = arg2;
-        berlioz.chart.pathMouseover(d, path, pathToolTipDiv);
-    }
-}
-
-function r4 (fname, arg0, arg1, arg2, arg3) {
-    if (fname == "runSimulation") {
-        var componentReference = arg0;
-        var componentType = berlioz.utils.getCache (componentReference, "componentType") ;
-        if (componentType == "chart.connections") {
-            return berlioz.simulation.runSimulation(arg0, arg1, arg2, arg3); 
-        }
-        else {
-            return berlioz.chart.influence.runSimulation(arg0, arg1, arg2, arg3); 
-        }
-    }
+    return context[func].apply(context, args);
 }
 
 /*
 // not used at present
 function simpleHash(s) {
-    berlioz.utils.log("berlioz.utils.simpleHash enter for: " + s);
+    bzutils.log("bzutils.simpleHash enter for: " + s);
     var hash = 0;
     if (s.length == 0) {
         return hash;
@@ -207,16 +152,17 @@ function simpleHash(s) {
 }    
 */
 
+function publishEvent(topic, publisher, publisherCategory, publisherType, parameters, controller) {
+    console.log("bzutils.publishEvent: " + topic + " " + JSON.stringify(parameters));
 
-function publishEvent(topic, publisher, publisherType, parameters, controller) {
-    console.log("berlioz.utils.publishEvent: " + topic + " " + JSON.stringify(parameters));
-
+    console.log("publisherCategory: " + publisherCategory );
     console.log("publisherType: " + publisherType );
     console.log("controller: " + controller );
     var appEvent = $A.get("e.c:evt_sfd3");
     appEvent.setParams({
         "topic" : topic,
         "publisher" : publisher,
+        "publisherCategory" : publisherCategory,
         "publisherType" : publisherType,
         "controller" : controller,
         "parameters" : parameters
@@ -234,6 +180,10 @@ function nodeDataKeyFunctionId (d, i) {
 }
 
 exports.log = log;
+exports.doNothing = doNothing;
+exports.xfcr = xfcr;
+exports.xfct = xfct;
+
 exports.initializeAddComponentRef = initializeAddComponentRef;
 exports.addComponentRef = addComponentRef;
 exports.removeComponentRef = removeComponentRef;
@@ -244,18 +194,75 @@ exports.getCache = getCache;
 exports.showCache = showCache;
 exports.showCacheAll = showCacheAll;
 exports.getDivId = getDivId;
-exports.r0 = r0;
-exports.r1 = r1;
-exports.r2 = r2;
-exports.r3 = r3;
-exports.r4 = r4;
 exports.nodeDataSetFunctionNodes = nodeDataSetFunctionNodes;
 exports.nodeDataKeyFunctionId = nodeDataKeyFunctionId;
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
+console.log("loaded: bzutils  IIFE");
+
+})));
+
+
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.bzconfig = global.bzconfig || {})));
+}(this, (function (exports) { 'use strict';
+
+console.log("loading: bzconfig IIFE");
+
+// Represents the functions to call for each of the configured display areas
+
+var fns = 
+{
+    "pack" : {
+        "nodeSelector" : "bzpack.nodeSelector",
+        "nodeDataSetFunction" : "bzpack.nodeDataSetFunctionNodes",
+        "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
+        "refreshVisibility" : "bzinfluence.refreshVisibility",
+        "styleNodes" : "bzchart.styleNodes",
+        "pathMouseover" : "bzchart.pathMouseover",
+        "pathMouseout" : "bzchart.pathMouseout",
+        "nodeMouseout" : "bzutils.doNothing",
+        "nodeMouseover" : "bzpack.nodeMouseover",
+        "nodeDoubleClick" : "bzchart.nodeDoubleClick",        
+        "runSimulation" : "bzinfluence.runSimulation",        
+    },
+    "chart.connections" : {
+        "nodeSelector" : "bzchart.nodeSelector",
+        "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
+        "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
+        "refreshVisibility" : "bzchart.refreshVisibility",
+        "styleNodes" : "bzchart.styleNodes",
+        "pathMouseover" : "bzchart.pathMouseover",
+        "pathMouseout" : "bzchart.pathMouseout",
+        "nodeMouseout" : "bzchart.nodeMouseout",
+        "nodeMouseover" : "bzchart.nodeMouseover",
+        "nodeDoubleClick" : "bzchart.nodeDoubleClick",        
+        "runSimulation" : "bzsimulation.runSimulation",        
+    },    
+    "chart.influence" : {
+        "nodeSelector" : "bzchart.nodeSelector",
+        "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
+        "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
+        "refreshVisibility" : "bzinfluence.refreshVisibility",
+        "styleNodes" : "bzchart.styleNodes",
+        "pathMouseover" : "bzchart.pathMouseover",
+        "pathMouseout" : "bzchart.pathMouseout",
+        "nodeMouseout" : "bzchart.nodeMouseout",
+        "nodeMouseover" : "bzchart.nodeMouseover",
+        "nodeDoubleClick" : "bzchart.nodeDoubleClick",        
+        "runSimulation" : "bzinfluence.runSimulation",        
+    },    
+} 
+
+
+exports.fns = fns;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-console.log("loaded: Berlioz.utils  IIFE");
+console.log("loaded: bzconfig  IIFE");
 
 })));
 
@@ -277,17 +284,17 @@ console.log("loaded: Berlioz.utils  IIFE");
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.berlioz.chart = global.berlioz.chart || {})));
+	(factory((global.bzchart = global.bzchart || {})));
 }(this, (function (exports) { 'use strict';
 
-console.log("loading: Berlioz.chart IIFE");
+console.log("loading: bzchart IIFE");
 
 var version = "0.0.1";
 
 var isiOS = false;
 
-function pathMouseover (d,path,pathToolTipDiv) {
-    console.log("Berlioz.chart.pathMouseover enter");
+function pathMouseover (componentReference, d,path,pathToolTipDiv) {
+    console.log("bzchart.pathMouseover enter");
 
     var mouseoverpathid = d.id;
 
@@ -319,23 +326,23 @@ function pathMouseover (d,path,pathToolTipDiv) {
         .style("left", midx + "px")
         .style("top", midy + "px");
 
-    console.log("Berlioz.chart.pathMouseover exit");
+    console.log("bzchart.pathMouseover exit");
     
 }
 
-function pathMouseout (pathToolTipDiv) {
-    console.log("Berlioz.chart.pathMouseout enter");
+function pathMouseout (componentReference, pathToolTipDiv) {
+    console.log("bzchart.pathMouseout enter");
 
     pathToolTipDiv.transition()
         .delay(1000)
         .duration(2000)
         .style("opacity", 0);
 
-    console.log("Berlioz.chart.pathMouseout exit");
+    console.log("bzchart.pathMouseout exit");
 }
 
-function nodeMouseover (d) {
-    console.log("Berlioz.chart.nodeMouseover enter");
+function nodeMouseover (componentReference, d) {
+    console.log("bzchart.nodeMouseover enter");
     // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
     var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
     textcontent += '</tspan>'; 
@@ -346,17 +353,19 @@ function nodeMouseover (d) {
     var sselect =  "s" + d.id;
 
     var t = d3.select("#" + tselect);
-    berlioz.utils.log("mouseover: " + textcontent);
-    berlioz.utils.log(t);
+    bzutils.log("mouseover: " + textcontent);
+    bzutils.log(t);
     t.html(textcontent);
     var s = d3.select("#" + sselect);
     s.html(textcontent);
 
-    console.log("Berlioz.chart.nodeMouseover exit");
+    bzchart.publishEvent(componentReference, "ChartMouseOver", d);
+
+    console.log("bzchart.nodeMouseover exit");
 }
 
-function nodeMouseout (d) {
-    console.log("Berlioz.chart.nodeMouseout enter");
+function nodeMouseout (componentReference, d) {
+    console.log("bzchart.nodeMouseout enter.");
     // revert back to just the name
     // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
     var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
@@ -370,8 +379,18 @@ function nodeMouseout (d) {
 
     var s = d3.select("#" + sselect);
     s.html(textcontent);
-    console.log("Berlioz.chart.nodeMouseout exit");
+    console.log("bzchart.nodeMouseout exit.");
 }
+
+function nodeDoubleClick (componentReference, primaryNodeId) {
+    console.log("bzchart.nodeDoubleClick enter");
+    // TODO this will need substantial enriching - e.g. pass current measure and whether to add nodes or to refresh etc.
+    var cleanId = bzutils.removeComponentRef(componentReference, primaryNodeId);
+    var eventParameters = {"primaryNodeId" : cleanId, "componentReference" : componentReference};
+    bzchart.publishEvent(componentReference, "InitiateRefreshChart", eventParameters);
+    console.log("bzchart.nodeDoubleClick exit.");
+}
+    
 
 function getRelatedNodes (chartPrimaryId, componentReference, level) {
 
@@ -383,7 +402,7 @@ function getRelatedNodes (chartPrimaryId, componentReference, level) {
         var newnodes = [];
         looplevel++;
 
-        var path = d3.select(berlioz.utils.getDivId("pathGroup", componentReference, true))
+        var path = d3.select(bzutils.getDivId("pathGroup", componentReference, true))
             .selectAll("path")
             .each(function(p) {
                 var sourceindex = linkednodes.indexOf(p.sourceid);
@@ -413,15 +432,15 @@ function getRelatedNodes (chartPrimaryId, componentReference, level) {
 // Method to re-style nodes
 function styleNodes (componentReference) {
 
-    var primaryid = berlioz.utils.getCache (componentReference, "primaryNodeId") ;
-    var currentMeasure = berlioz.utils.getCache (componentReference, "currentMeasure") ;
+    var primaryid = bzutils.getCache (componentReference, "primaryNodeId") ;
+    var currentMeasure = bzutils.getCache (componentReference, "currentMeasure") ;
 
     console.log("styleNodes enter: " + currentMeasure + " primaryid: " + primaryid);
 
-    var node = d3.select(berlioz.utils.getDivId("nodeGroup", componentReference, true))
+    var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
         .selectAll("circle")  ;
 
-    berlioz.utils.log("styleNodes:" + JSON.stringify(node));
+    bzutils.log("styleNodes:" + JSON.stringify(node));
 
     node.attr("r", function(o, i) {
         // needs to be computed using a configuration provided algorithm?
@@ -429,7 +448,7 @@ function styleNodes (componentReference) {
     });
 
     node.style("fill", function(o, i) {
-        berlioz.utils.log("styleNodes: fill: " + o.measures[currentMeasure].color);
+        bzutils.log("styleNodes: fill: " + o.measures[currentMeasure].color);
         return o.measures[currentMeasure].color;
     });
 
@@ -437,19 +456,19 @@ function styleNodes (componentReference) {
         var stroke = o.stroke;
         var oid = o.id;
         if (oid == primaryid) {
-            var primaryNodeHighlightingOn = berlioz.utils.getCache (componentReference, "primaryNodeHighlightingOn") ;
+            var primaryNodeHighlightingOn = bzutils.getCache (componentReference, "primaryNodeHighlightingOn") ;
             if (primaryNodeHighlightingOn == true) {
-                stroke = berlioz.utils.getCache (componentReference, "primaryNodeHighlightingColour") ;
+                stroke = bzutils.getCache (componentReference, "primaryNodeHighlightingColour") ;
             }                
         }
         return stroke;
     });
 
     node.style("stroke-width", function(o, i) {
-        var nodestrokewidth = berlioz.utils.getCache (componentReference, "nodestrokewidth") ;
+        var nodestrokewidth = bzutils.getCache (componentReference, "nodestrokewidth") ;
         var oid = o.id;
         if (oid == primaryid) {
-            nodestrokewidth = berlioz.utils.getCache (componentReference, "primaryNodeHighlightingRadius") ;
+            nodestrokewidth = bzutils.getCache (componentReference, "primaryNodeHighlightingRadius") ;
         }
         return nodestrokewidth;
     });
@@ -461,7 +480,7 @@ function styleNodes (componentReference) {
 function setFilterVisibility (component, filterType, isShown) {
     console.log("setFilterVisibility enter");
     var componentReference = component.get("v.componentReference");
-    var showFilters = berlioz.utils.getCache (componentReference, "showFilters") ;
+    var showFilters = bzutils.getCache (componentReference, "showFilters") ;
     if (isShown) {
         console.log("setFilterVisibility: adding " + filterType);
         showFilters.push(filterType);
@@ -472,7 +491,7 @@ function setFilterVisibility (component, filterType, isShown) {
             showFilters.splice(index, 1);
         }
     }
-    berlioz.utils.setCache (componentReference, "showFilters", showFilters ) ;
+    bzutils.setCache (componentReference, "showFilters", showFilters ) ;
     console.log("setFilterVisibility exit");
 }
 
@@ -480,19 +499,19 @@ function refreshVisibility(componentReference) {
 
     console.log("refreshVisibility enter "); 
 
-    var levels = berlioz.utils.getCache(componentReference, "showLevels") ;
+    var levels = bzutils.getCache(componentReference, "showLevels") ;
     
-    var showFilters = berlioz.utils.getCache (componentReference, "showFilters") ;
-    var primaryNodeId = berlioz.utils.getCache (componentReference, "primaryNodeId") ;        
+    var showFilters = bzutils.getCache (componentReference, "showFilters") ;
+    var primaryNodeId = bzutils.getCache (componentReference, "primaryNodeId") ;        
     // not needed until reinstate measure level visibility
-    var currentMeasure = berlioz.utils.getCache (componentReference, "currentMeasure") ;
+    var currentMeasure = bzutils.getCache (componentReference, "currentMeasure") ;
 
-    var relatedNodes = berlioz.chart.getRelatedNodes(primaryNodeId, componentReference, levels);
+    var relatedNodes = bzchart.getRelatedNodes(primaryNodeId, componentReference, levels);
 
-    var path = d3.select(berlioz.utils.getDivId("pathGroup", componentReference, true))
+    var path = d3.select(bzutils.getDivId("pathGroup", componentReference, true))
         .selectAll("path")  ;
 
-    var node = d3.select(berlioz.utils.getDivId("nodeGroup", componentReference, true))
+    var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
         .selectAll("circle")  
     
     var shownodeids = [];
@@ -517,7 +536,7 @@ function refreshVisibility(componentReference) {
             var index = showFilters.indexOf(p.type);
 
             if (index > -1) {
-                berlioz.utils.log(p.sourceid + '/' + p.targetid + " will be visible");
+                bzutils.log(p.sourceid + '/' + p.targetid + " will be visible");
 
                 var indexsource = shownodeids.indexOf(p.sourceid);
                 if (indexsource == -1) {
@@ -557,22 +576,24 @@ function refreshVisibility(componentReference) {
 // clear out the paths and the groups
 function clearChart(componentReference) {
     console.log("clearChart enter "); 
-    var svg = d3.select(berlioz.utils.getDivId("svg", componentReference, true));
+    var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
     var path = svg.selectAll("path").remove();
     var node = svg.selectAll("circle").remove();
     var text = svg.selectAll(".nodeText").remove();
-    d3.select(berlioz.utils.getDivId("pathGroup", componentReference, true)).remove();
-    d3.select(berlioz.utils.getDivId("nodeGroup", componentReference, true)).remove();
-    d3.select(berlioz.utils.getDivId("textGroup", componentReference, true)).remove();
+    d3.select(bzutils.getDivId("pathGroup", componentReference, true)).remove();
+    d3.select(bzutils.getDivId("nodeGroup", componentReference, true)).remove();
+    d3.select(bzutils.getDivId("textGroup", componentReference, true)).remove();
     console.log("clearChart exit "); 
 }
 
 function publishEvent(componentReference, topic, parameters) {
-//    var publisherType = berlioz.utils.getCache (componentReference, "componentType") ;
-    var publisherType = "Chart"; // think about changing this..
+//    var publisherType = bzutils.getCache (componentReference, "componentType") ;
+//    var publisherType = "Chart"; // think about changing this..
+    var publisherCategory = bzutils.getCache (componentReference, "componentCategory") ;
+    var publisherType = bzutils.getCache (componentReference, "componentType") ;
     
-    var controller = berlioz.utils.getCache (componentReference, "UserControllerComponentId") ;
-    berlioz.utils.publishEvent(topic, componentReference, publisherType, parameters, controller);
+    var controller = bzutils.getCache (componentReference, "UserControllerComponentId") ;
+    bzutils.publishEvent(topic, componentReference, publisherCategory, publisherType, parameters, controller);
 }
 
 function nodeSelector () {
@@ -584,6 +605,7 @@ exports.pathMouseover = pathMouseover;
 exports.pathMouseout = pathMouseout;
 exports.nodeMouseover = nodeMouseover;
 exports.nodeMouseout = nodeMouseout;
+exports.nodeDoubleClick = nodeDoubleClick;
 exports.getRelatedNodes = getRelatedNodes;
 exports.refreshVisibility = refreshVisibility;
 exports.setFilterVisibility = setFilterVisibility;
@@ -596,7 +618,7 @@ exports.isiOS = isiOS;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-console.log("loaded: Berlioz.chart  IIFE");
+console.log("loaded: bzchart  IIFE");
 
 })));
 
@@ -606,17 +628,17 @@ console.log("loaded: Berlioz.chart  IIFE");
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.berlioz.simulation = global.berlioz.simulation || {})));
+	(factory((global.bzsimulation = global.bzsimulation || {})));
 }(this, (function (exports) { 'use strict';
 
-console.log("loading: Berlioz.simulation IIFE");
+console.log("loading: bzsimulation IIFE");
 
 var version = "0.0.1";
 
 function initializeSimulation (componentReference, nodes) {
-    console.log("Berlioz.simulation.initializeSimulation enter");
-    var width = berlioz.utils.getCache (componentReference, "width") ;  
-    var height = berlioz.utils.getCache (componentReference, "height") ; 
+    console.log("bzsimulation.initializeSimulation enter");
+    var width = bzutils.getCache (componentReference, "width") ;  
+    var height = bzutils.getCache (componentReference, "height") ; 
 
     // force example - https://bl.ocks.org/rsk2327/23622500eb512b5de90f6a916c836a40
     var attractForce = d3.forceManyBody().strength(5).distanceMax(400).distanceMin(60);
@@ -628,12 +650,12 @@ function initializeSimulation (componentReference, nodes) {
         .force("center_force", d3.forceCenter(width / 2, height / 2))
         .alphaDecay(0.03).force("attractForce",attractForce).force("repelForce",repelForce);
     
-    console.log("Berlioz.simulation.initializeSimulation exit");
+    console.log("bzsimulation.initializeSimulation exit");
     return simulation;
 }
 
 function dragHandler (node, simulation) {
-    console.log("Berlioz.simulation.dragHandler enter");
+    console.log("bzsimulation.dragHandler enter");
     var drag_handler = d3.drag()
     .on("start", function (d) {
         simulation.alphaTarget(0.3).restart();
@@ -651,7 +673,7 @@ function dragHandler (node, simulation) {
         });
 
     drag_handler(node);
-    console.log("Berlioz.simulation.dragHandler exit");
+    console.log("bzsimulation.dragHandler exit");
 }
     
 function transform (d, width, height) {
@@ -669,8 +691,8 @@ function limitbordery(y, height) {
 }    
 
 function onTick (componentReference, path, node, text) {
-    var width = berlioz.utils.getCache (componentReference, "width") ;  
-    var height = berlioz.utils.getCache (componentReference, "height") ; 
+    var width = bzutils.getCache (componentReference, "width") ;  
+    var height = bzutils.getCache (componentReference, "height") ; 
     path.attr("d", function(d) {
         var sx = limitborderx(d.source.x, width);
         var sy = limitbordery(d.source.y, height);
@@ -717,20 +739,20 @@ function buildForceLinks(path) {
 function runSimulation(componentReference, path, node, text ) {
     console.log("runSimulation enter"); 
 
-    var datajson = berlioz.utils.getCache (componentReference, "datajson") ;
-    var simulation = berlioz.simulation.initializeSimulation(componentReference, datajson.nodes);            
-    berlioz.utils.setCache (componentReference, "simulation", simulation ) ;
+    var datajson = bzutils.getCache (componentReference, "datajson") ;
+    var simulation = bzsimulation.initializeSimulation(componentReference, datajson.nodes);            
+    bzutils.setCache (componentReference, "simulation", simulation ) ;
 
-    var forceLinks = berlioz.simulation.buildForceLinks(path);
+    var forceLinks = bzsimulation.buildForceLinks(path);
     var link_force =  d3.forceLink(forceLinks.links)
         .id(function(d) { return d.id; });
 
     simulation.force("links",link_force);
 
-    berlioz.simulation.dragHandler(node, simulation);
+    bzsimulation.dragHandler(node, simulation);
 
     simulation.on("tick", function() {
-        berlioz.simulation.onTick (componentReference, path, node, text);
+        bzsimulation.onTick (componentReference, path, node, text);
     });             
     console.log("runSimulation exit"); 
 }
@@ -749,7 +771,7 @@ exports.limitborderx = limitborderx;
 exports.limitbordery = limitbordery;
 
 
-console.log("loaded: Berlioz.simulation  IIFE");
+console.log("loaded: bzsimulation  IIFE");
 
 })));
 
@@ -758,10 +780,10 @@ console.log("loaded: Berlioz.simulation  IIFE");
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.berlioz.chart.influence = global.berlioz.chart.influence || {})));
+	(factory((global.bzinfluence = global.bzinfluence || {})));
 }(this, (function (exports) { 'use strict';
 
-console.log("loading: berlioz.chart.influence IIFE");
+console.log("loading: bzinfluence IIFE");
 
 var version = "0.0.1";
 
@@ -771,31 +793,31 @@ function refreshVisibility(componentReference) {
 function runSimulation(componentReference, path, node, text ) {
     console.log("runSimulation enter"); 
 
-    var datajson = berlioz.utils.getCache (componentReference, "datajson") ;
-    var simulation = berlioz.chart.influence.initializeSimulation(componentReference, datajson.nodes);            
-    berlioz.utils.setCache (componentReference, "simulation", simulation ) ;
+    var datajson = bzutils.getCache (componentReference, "datajson") ;
+    var simulation = bzinfluence.initializeSimulation(componentReference, datajson.nodes);            
+    bzutils.setCache (componentReference, "simulation", simulation ) ;
 
-    var forceLinks = berlioz.simulation.buildForceLinks(path);
+    var forceLinks = bzsimulation.buildForceLinks(path);
     var link_force =  d3.forceLink(forceLinks.links)
         .id(function(d) { return d.id; });
 
     simulation.force("links",link_force);
 
-    berlioz.simulation.dragHandler(node, simulation);
+    bzsimulation.dragHandler(node, simulation);
 
     simulation.on("tick", function() {
-        berlioz.simulation.onTick (componentReference, path, node, text);
+        bzsimulation.onTick (componentReference, path, node, text);
     });             
     console.log("runSimulation exit"); 
 }
 
 function initializeSimulation (componentReference, nodes) {
-    console.log("berlioz.chart.influence.initializeSimulation enter");
-    var width = berlioz.utils.getCache (componentReference, "width") ;  
-    var height = berlioz.utils.getCache (componentReference, "height") ; 
+    console.log("bzinfluence.initializeSimulation enter");
+    var width = bzutils.getCache (componentReference, "width") ;  
+    var height = bzutils.getCache (componentReference, "height") ; 
     var sizeDivisor = 100;
     var nodePadding = 2.5;
-    var currentMeasure = berlioz.utils.getCache (componentReference, "currentMeasure") ; 
+    var currentMeasure = bzutils.getCache (componentReference, "currentMeasure") ; 
 
     var simulation = d3.forceSimulation()
         .force("forceX", d3.forceX().strength(.1).x(width * .5))
@@ -814,7 +836,7 @@ function initializeSimulation (componentReference, nodes) {
               .attr("cy", function(d){ return d.y; })
         });        
     
-    console.log("berlioz.chart.influence.initializeSimulation exit");
+    console.log("bzinfluence.initializeSimulation exit");
     return simulation;
 }
 
@@ -824,7 +846,7 @@ exports.runSimulation = runSimulation;
 exports.initializeSimulation = initializeSimulation;
 
 
-console.log("loaded: berlioz.chart.influence  IIFE");
+console.log("loaded: bzinfluence  IIFE");
 
 })));
 
@@ -833,14 +855,14 @@ console.log("loaded: berlioz.chart.influence  IIFE");
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.berlioz.chart.connections = global.berlioz.chart.connections || {})));
+	(factory((global.bzchartconnections = global.bzchartconnections || {})));
 }(this, (function (exports) { 'use strict';
 
-console.log("loading: berlioz.chart.connections IIFE");
+console.log("loading: bzchartconnections IIFE");
 
 var version = "0.0.1";
 
-console.log("loaded: berlioz.chart.connections  IIFE");
+console.log("loaded: bzchartconnections  IIFE");
 
 })));
 
@@ -852,24 +874,24 @@ console.log("loaded: berlioz.chart.connections  IIFE");
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.berlioz.pack = global.berlioz.pack || {})));
+	(factory((global.bzpack = global.bzpack || {})));
 }(this, (function (exports) { 'use strict';
 
-console.log("loading: berlioz.pack IIFE");
+console.log("loading: bzpack IIFE");
 
 function nodeSelector () {
     return ".node";
 }
 
 function nodeDataSetFunctionNodes (componentReference) { 
-    console.log("nodeDataSetFunctionNodes enter"); 
+    console.log("nodeDataSetFunctionNodes enter: componentReference " + componentReference); 
     return function(datajson) { 
-        console.log("nodeDataSetFunctionNodes computing callback");
+        console.log("nodeDataSetFunctionNodes computing callback " + componentReference);
         var root = d3.hierarchy(datajson)
         .sum(function(d) { return d.size; })
         .sort(function(a, b) { return b.value - a.value; });
 
-        var diameter = berlioz.utils.getCache (componentReference, "width") ;  
+        var diameter = bzutils.getCache (componentReference, "width") ;  
         console.log("nodeDataSetFunctionNodes diameter: " + diameter);
         
 //        var diameter = svg.attr("width");
@@ -881,10 +903,37 @@ function nodeDataSetFunctionNodes (componentReference) {
 }
 
 
+function nodeMouseover (componentReference, d) {
+    console.log("bzpack.nodeMouseover enter");
+    console.log(d);
+    // // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
+    // var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
+    // textcontent += '</tspan>'; 
+    // textcontent += '<tspan x="10" dy="15">' + d.position;
+    // textcontent += ' (' + d.account + ')</tspan>';
+
+    // var tselect =  "t" + d.id;
+    // var sselect =  "s" + d.id;
+
+    // var t = d3.select("#" + tselect);
+    // bzutils.log("mouseover: " + textcontent);
+    // bzutils.log(t);
+    // t.html(textcontent);
+    // var s = d3.select("#" + sselect);
+    // s.html(textcontent);
+
+    var pubme = {"name" : d.data.name, "account" : d.value, "position" : d.children?  d.children.length : 0};
+
+    bzchart.publishEvent(componentReference, "ChartMouseOver", pubme);
+
+    console.log("bzpack.nodeMouseover exit");
+}
+
+
 // TODO for zoomable pack
 
 function update() {
-    var nodes = berlioz.pack.flatten(root),
+    var nodes = bzpack.flatten(root),
         links = d3.layout.tree().links(nodes);
   
     // Restart the force layout.
@@ -954,7 +1003,7 @@ function update() {
       d.children = d._children;
       d._children = null;
     }
-    berlioz.pack.update();
+    bzpack.update();
   }
   
   // Returns a list of all nodes under the root.
@@ -972,11 +1021,13 @@ function update() {
     return nodes;
   }
 
-  console.log("loaded: berlioz.pack  IIFE");
+  console.log("loaded: bzpack  IIFE");
 
   exports.nodeSelector = nodeSelector;
   exports.nodeDataSetFunctionNodes = nodeDataSetFunctionNodes;  
-  
+  exports.nodeMouseover = nodeMouseover;
+
+  // zoomable
   exports.update = update;
   exports.tick = tick;
   exports.color = color;

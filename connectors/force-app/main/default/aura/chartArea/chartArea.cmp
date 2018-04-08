@@ -54,15 +54,16 @@
 	<aura:attribute name="nodestrokewidth" type="String" default="0.5px"/>    
   <aura:attribute name="showLevelsInitial" type="Integer" default="1"/>   
   <aura:attribute name="Title" type="String" default=""/>       
- 
+  <aura:attribute name="componentType" type="String" default="Chart"/>    
+  
   <!-- Technical - Chart -->
   <!-- need to accessed or set before all libraries may be available -->
+  <aura:attribute name="componentCategory" type="String" default="Display"/>    
   <aura:attribute name="componentReference" type="String"/> 
   <aura:attribute name="chartAreaDivId" type="String" default="" description="If putting more than one chart on a page need to provide unique ids for the chart components"/>    
 	<aura:attribute name="rendered" type="Boolean" default="false"/>    
 	<aura:attribute name="scriptsLoaded" type="Boolean" default="false"/>    
 
-  <aura:attribute name="componentType" type="String" default="Chart"/>    
 
 	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
   

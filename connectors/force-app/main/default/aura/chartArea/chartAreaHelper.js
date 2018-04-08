@@ -6,24 +6,25 @@
         console.log("chartArea: doneRenderLoad enter");
         var componentReference = component.get("v.componentReference");
 
-        berlioz.utils.initializeCache (componentReference) ;
+        bzutils.initializeCache (componentReference) ;
 
-        berlioz.utils.setCache (componentReference, "componentReference", component.get("v.componentReference") ) ;
-        berlioz.utils.setCache (componentReference, "componentType", component.get("v.componentType") ) ;
+        bzutils.setCache (componentReference, "componentReference", component.get("v.componentReference") ) ;
+        bzutils.setCache (componentReference, "componentType", component.get("v.componentType") ) ;
+        bzutils.setCache (componentReference, "componentCategory", component.get("v.componentCategory") ) ;
 
-        berlioz.utils.setCache (componentReference, "UserComponentId", component.get("v.UserComponentId") ) ;
-        berlioz.utils.setCache (componentReference, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
-        berlioz.utils.setCache (componentReference, "primaryNodeHighlightingOn", component.get("v.primaryNodeHighlightingOn") ) ;
-        berlioz.utils.setCache (componentReference, "primaryNodeHighlightingColour", component.get("v.primaryNodeHighlightingColour") ) ;
-        berlioz.utils.setCache (componentReference, "primaryNodeHighlightingRadius", component.get("v.primaryNodeHighlightingRadius") ) ;
-        berlioz.utils.setCache (componentReference, "retainNodeDetailsMouseOut", component.get("v.retainNodeDetailsMouseOut") ) ;
-        berlioz.utils.setCache (componentReference, "showPathToolTip", component.get("v.showPathToolTip") ) ;
-        berlioz.utils.setCache (componentReference, "nodestrokewidth", component.get("v.nodestrokewidth") ) ;
-        berlioz.utils.setCache (componentReference, "showLevels", component.get("v.showLevelsInitial")) ;
+        bzutils.setCache (componentReference, "UserComponentId", component.get("v.UserComponentId") ) ;
+        bzutils.setCache (componentReference, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
+        bzutils.setCache (componentReference, "primaryNodeHighlightingOn", component.get("v.primaryNodeHighlightingOn") ) ;
+        bzutils.setCache (componentReference, "primaryNodeHighlightingColour", component.get("v.primaryNodeHighlightingColour") ) ;
+        bzutils.setCache (componentReference, "primaryNodeHighlightingRadius", component.get("v.primaryNodeHighlightingRadius") ) ;
+        bzutils.setCache (componentReference, "retainNodeDetailsMouseOut", component.get("v.retainNodeDetailsMouseOut") ) ;
+        bzutils.setCache (componentReference, "showPathToolTip", component.get("v.showPathToolTip") ) ;
+        bzutils.setCache (componentReference, "nodestrokewidth", component.get("v.nodestrokewidth") ) ;
+        bzutils.setCache (componentReference, "showLevels", component.get("v.showLevelsInitial")) ;
 
-        berlioz.utils.setCache (componentReference, "lastTouch", new Date().getTime()) ;
-        berlioz.utils.setCache (componentReference, "width", Math.min(screen.width, screen.height)) ; // review this
-        berlioz.utils.setCache (componentReference, "height", Math.min(screen.width, screen.height)) ; // review this
+        bzutils.setCache (componentReference, "lastTouch", new Date().getTime()) ;
+        bzutils.setCache (componentReference, "width", Math.min(screen.width, screen.height)) ; // review this
+        bzutils.setCache (componentReference, "height", Math.min(screen.width, screen.height)) ; // review this
 
         var flexiWidth = component.get("v.flexiWidth");
         console.log("flexiWidth: " + flexiWidth);
@@ -37,43 +38,43 @@
         if (flexiWidth == "SMALL")
         {
             // need to check all the numbers here
-            berlioz.utils.setCache (componentReference, "width", 420) ; 
-            berlioz.utils.setCache (componentReference, "height", 800) ;                 
+            bzutils.setCache (componentReference, "width", 420) ; 
+            bzutils.setCache (componentReference, "height", 800) ;                 
         }
 
         if (flexiWidth == "MEDIUM")
         {
             // need to check all the numbers here
-            berlioz.utils.setCache (componentReference, "width", 600) ; 
-            berlioz.utils.setCache (componentReference, "height", 800) ;                 
+            bzutils.setCache (componentReference, "width", 600) ; 
+            bzutils.setCache (componentReference, "height", 800) ;                 
         }
 
         if (flexiWidth == "LARGE")
         {
             // need to check all the numbers here
-            berlioz.utils.setCache (componentReference, "width", 1000) ; 
-            berlioz.utils.setCache (componentReference, "height", 800) ;                 
+            bzutils.setCache (componentReference, "width", 1000) ; 
+            bzutils.setCache (componentReference, "height", 800) ;                 
         }
         
-        d3.select(berlioz.utils.getDivId("chartArea", componentReference, true))
+        d3.select(bzutils.getDivId("chartArea", componentReference, true))
             .append("svg")
-            .attr("id", berlioz.utils.getDivId("svg", componentReference, false)) // If putting more than one chart on a page we need to provide unique ids for the svg elements   
-            .attr("width", berlioz.utils.getCache (componentReference, "width") )
-            .attr("height", berlioz.utils.getCache (componentReference, "height") );
+            .attr("id", bzutils.getDivId("svg", componentReference, false)) // If putting more than one chart on a page we need to provide unique ids for the svg elements   
+            .attr("width", bzutils.getCache (componentReference, "width") )
+            .attr("height", bzutils.getCache (componentReference, "height") );
 
         var agent = navigator.userAgent.toLowerCase();
         if(agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0){
-            berlioz.chart.isiOS = true;
+            bzchart.isiOS = true;
             component.set("v.isiOS", true);
         }
         else {
-            berlioz.chart.isiOS = false;
+            bzchart.isiOS = false;
         }
         
         var eventParameters = { 
             "componentReference" : componentReference
         }    
-        berlioz.chart.publishEvent(componentReference, "ChartRendered", eventParameters);
+        bzchart.publishEvent(componentReference, "ChartRendered", eventParameters);
 
         console.log("chartArea: doneRenderLoad exit");
 
@@ -87,13 +88,13 @@
 
         // delete the paths and the groups
         // this is not the preferred option - would have preferred to use d3 joins.
-        berlioz.chart.clearChart(componentReference);
+        bzchart.clearChart(componentReference);
         
         // retrieve the existing underlying data
-        var datajson = berlioz.utils.getCache (componentReference, "datajson") ;
+        var datajson = bzutils.getCache (componentReference, "datajson") ;
 
         // initialize the new raw data, setting component references
-        berlioz.utils.initializeAddComponentRef(componentReference, datajsonRefresh);
+        bzutils.initializeAddComponentRef(componentReference, datajsonRefresh);
 
         // merge the old and the new data
         var nodeIds = [];
@@ -132,22 +133,22 @@
         console.log("init:initializing initializeData with primaryNodeId: " + primaryNodeId);
         
         if (isInit) {
-            berlioz.utils.initializeAddComponentRef(componentReference, datajson);
+            bzutils.initializeAddComponentRef(componentReference, datajson);
         }
 
-        berlioz.utils.setCache (componentReference, "datajson", datajson ) ;
+        bzutils.setCache (componentReference, "datajson", datajson ) ;
 
-        primaryNodeId = berlioz.utils.addComponentRef(componentReference, primaryNodeId);
+        primaryNodeId = bzutils.addComponentRef(componentReference, primaryNodeId);
 
-        berlioz.utils.setCache (componentReference, "currentMeasure", currentMeasure ) ;
-        berlioz.utils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
-        berlioz.utils.setCache (componentReference, "showFilters", showFilters ) ;
+        bzutils.setCache (componentReference, "currentMeasure", currentMeasure ) ;
+        bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
+        bzutils.setCache (componentReference, "showFilters", showFilters ) ;
 
-        var svg = d3.select(berlioz.utils.getDivId("svg", componentReference, true));
+        var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
         
         // Styling of tooltips - see GitHub prior to Feb 24, 2018
         var nodeToolTipDiv = d3.select("#nodeToolTip");
-        var pathToolTipDivId = berlioz.utils.addComponentRef(componentReference, "pathToolTip");
+        var pathToolTipDivId = bzutils.addComponentRef(componentReference, "pathToolTip");
         var pathToolTipDiv = d3.select("#" + pathToolTipDivId);
 
         var isRefresh = false;
@@ -155,9 +156,9 @@
         console.log("create some groups inside the svg element to store the raw data");
 
 
-        var pathGroupId = berlioz.utils.getDivId("pathGroup", componentReference, false);
-        var nodeGroupId = berlioz.utils.getDivId("nodeGroup", componentReference, false);
-        var textGroupId = berlioz.utils.getDivId("textGroup", componentReference, false);
+        var pathGroupId = bzutils.getDivId("pathGroup", componentReference, false);
+        var nodeGroupId = bzutils.getDivId("nodeGroup", componentReference, false);
+        var textGroupId = bzutils.getDivId("textGroup", componentReference, false);
         
         var pathGroup = d3.select("#" + pathGroupId);
         if (pathGroup.empty()) {
@@ -196,9 +197,11 @@
         
         console.log("calling nodes: nodeDataSetFunction");
 
-        var nodeSelector = berlioz.utils.r1("nodeSelector", componentReference); // an html selector for a class or element ids
-        var nodeDataSetFunction = berlioz.utils.r1("nodeDataSetFunction", componentReference); // returns an anonymous function
-        var nodeDataKeyFunction = berlioz.utils.r1("nodeDataKeyFunction", componentReference); // returns an anonymous function
+        var componentType = bzutils.getCache (componentReference, "componentType");
+
+        var nodeSelector = bzutils.xfct("nodeSelector", componentType); // an html selector for a class or element ids
+        var nodeDataSetFunction = bzutils.xfcr("nodeDataSetFunction", componentReference); // an html selector for a class or element ids
+        var nodeDataKeyFunction = bzutils.xfcr("nodeDataKeyFunction", componentReference); // an html selector for a class or element ids
         
         var nodeEnterSelection = nodeGroup
             .selectAll(nodeSelector)
@@ -214,38 +217,38 @@
             })
             // symbols...           .attr("d", d3.symbol().type( function(d) { return d3.symbols[4];}))
             .on('mouseout', function(d) { // hide the div
-                var retainNodeDetailsMouseOut = berlioz.utils.getCache (componentReference, "retainNodeDetailsMouseOut" ) ;
+                var retainNodeDetailsMouseOut = bzutils.getCache (componentReference, "retainNodeDetailsMouseOut" ) ;
                 if (!retainNodeDetailsMouseOut)
                 {
-                    berlioz.utils.r1("nodeMouseout", d); 
+                    bzutils.xfcr("nodeMouseout", componentReference, d); // an html selector for a class or element ids
                 }
             })
             .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-                berlioz.utils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
-                berlioz.utils.r2("nodeMouseover", componentReference, d); 
+                bzutils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
+                bzutils.xfcr("nodeMouseover", componentReference, d); 
             }))
             .on('click', function(d) {
                 console.log("retrieve info on whether isiOS");
-                var isiOS = berlioz.chart.isiOS;
+                var isiOS = bzchart.isiOS;
                 if (isiOS) {
                     var now = new Date().getTime();
-                    var lastTouch = berlioz.utils.getCache (componentReference, "lastTouch");
+                    var lastTouch = bzutils.getCache (componentReference, "lastTouch");
                     var delta = now - lastTouch;
                     if (delta < 350 && delta > 0) {
                         // the second touchend event happened within half a second. Here is where we invoke the double tap code
                         //TODO implement - e.g. var win = window.open("http://news.bbc.co.uk"); win.focus();
                     }
-                    berlioz.utils.setCache (componentReference, "lastTouch", lastTouch) ;
+                    bzutils.setCache (componentReference, "lastTouch", lastTouch) ;
                 } else {
                     console.log("not iOS");
                 }
                 // reset the clicked node to be the primary
                 // TODO This will need to be passed in the refreshVisibility call.
                 var primaryNodeId = d.id;
-                berlioz.utils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
+                bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
 
-                berlioz.utils.r1("refreshVisibility", componentReference); 
-                berlioz.utils.r1("styleNodes", componentReference); 
+                bzutils.xfcr("refreshVisibility", componentReference); 
+                bzutils.xfcr("styleNodes", componentReference); 
             })
             .on('dblclick', $A.getCallback(function(d) {
                 console.log("dblclick");
@@ -253,8 +256,8 @@
                 // send a message identifying the node in question
                 var componentReference = component.get("v.componentReference");
                 var primaryNodeId = d.id;
-                berlioz.utils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
-                berlioz.utils.r2("nodeDoubleClick", componentReference, primaryNodeId); 
+                bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
+                bzutils.xfcr("nodeDoubleClick", componentReference, primaryNodeId); 
             }));
 
         console.log("calling text");    
@@ -321,16 +324,16 @@
                 return "url(#" + d.type + ")";
             })
             .on('mouseout', function(d) { // hide the div
-                var showPathToolTip = berlioz.utils.getCache (componentReference, "showPathToolTip"); 
+                var showPathToolTip = bzutils.getCache (componentReference, "showPathToolTip"); 
                 if (showPathToolTip) {
-                    berlioz.utils.r1("pathMouseout", pathToolTipDiv); 
+                    bzutils.xfcr("pathMouseout", componentReference, pathToolTipDiv); 
                 }
             })
             .on('mouseover', $A.getCallback(function(d) { 
-                var showPathToolTip = berlioz.utils.getCache (componentReference, "showPathToolTip") ;
+                var showPathToolTip = bzutils.getCache (componentReference, "showPathToolTip") ;
                 console.log("showPathToolTip: " + showPathToolTip);
                 if (showPathToolTip) {
-                    berlioz.utils.r3("pathMouseover", d, path, pathToolTipDiv); 
+                    bzutils.xfcr("pathMouseover", componentReference, d, path, pathToolTipDiv); 
                 }
             }));
 
@@ -338,10 +341,10 @@
         path = d3.select("#" + pathGroupId).selectAll("path");
                 
         console.log("apply node styling");
-        berlioz.utils.r1("styleNodes", componentReference); 
+        bzutils.xfcr("styleNodes", componentReference); 
 
         console.log("apply node visibility");
-        berlioz.utils.r1("refreshVisibility", componentReference); 
+        bzutils.xfcr("refreshVisibility", componentReference); 
     
         /* Above should be common to some degree - Below is forceSimulation specific */
 
@@ -355,9 +358,9 @@
         //     forceNodes["nodes"].push(d3this);
         // });
 
-        berlioz.utils.r4("runSimulation", componentReference, path, node, text ); 
+        bzutils.xfcr("runSimulation", componentReference, path, node, text ); 
         
-        berlioz.utils.showCache (componentReference) ;
+        bzutils.showCache (componentReference) ;
         
 // GARBAGE AFTER HERE - experiments
 

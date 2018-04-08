@@ -37,6 +37,7 @@
 
                 var eventQueue = component.get("v.initEventsQueue");
                 var publisher = component.get("v.UserComponentId");
+                var componentCategory = component.get("v.componentCategory");
                 var componentType = component.get("v.componentType");
 
                 for (var i = 0; i < eventQueue.length; i++) {
@@ -53,7 +54,7 @@
                         "componentReference" : componentReference
                     }
                         
-                    berlioz.utils.publishEvent("InitializeData", publisher, componentType, configEventParameters, null);    
+                    bzutils.publishEvent("InitializeData", publisher, componentCategory, componentType, configEventParameters, null);    
                 }
                 component.set("v.initEventsQueue",[]);
 
@@ -83,14 +84,15 @@
         console.log("topic: " + topic);
 
         var publisher = event.getParam("publisher");
+        var publisherCategory = event.getParam("publisherCategory");
         var publisherType = event.getParam("publisherType");
         var UserComponentId = component.get("v.UserComponentId");
         var controller = event.getParam("controller");
 
-        console.log("handling publisherType: " + publisherType + " from publisher " + publisher + " in " + UserComponentId);
+        console.log("handling publisherCategory: " + publisherCategory + " from publisher " + publisher + " in " + UserComponentId);
                 
         // if the component is named and the event propagated from another controller then we ignore it.
-        if (publisherType == "Controller" && UserComponentId != null && UserComponentId != "") {
+        if (publisherCategory == "Controller" && UserComponentId != null && UserComponentId != "") {
             if (UserComponentId != publisher) {
                 console.log("controller: ignoring message from " + publisher + " in component " + UserComponentId);
                 return;
@@ -98,7 +100,7 @@
         }
 
         // if the component is named and the event propagated from a chart controlled by a controller with another name then we ignore it.
-        if (publisherType == "Chart" && UserComponentId != null && UserComponentId != ""  && controller != null && controller != "") {
+        if (publisherCategory == "Display" && UserComponentId != null && UserComponentId != ""  && controller != null && controller != "") {
             if (UserComponentId != controller) {
                 console.log("controller: ignoring message in " + UserComponentId + " intended for component " + controller);
                 return;
@@ -137,8 +139,9 @@
     
                 //publish to this component
                 var publisher = component.get("v.UserComponentId");
+                var componentCategory = component.get("v.componentCategory");
                 var componentType = component.get("v.componentType");
-                berlioz.utils.publishEvent("InitializeData", publisher, componentType, configEventParameters, null);    
+                bzutils.publishEvent("InitializeData", publisher, componentCategory, componentType, configEventParameters, null);    
 
                 // clear the queue
                 component.set("v.initEventsQueue",[]);
@@ -237,8 +240,9 @@
 
                     //publish to this component
                     var publisher = component.get("v.UserComponentId");
+                    var componentCategory = component.get("v.componentCategory");
                     var componentType = component.get("v.componentType");
-                    berlioz.utils.publishEvent("RefreshData", publisher, componentType, configEventParameters, null);            
+                    bzutils.publishEvent("RefreshData", publisher, componentCategory, componentType, configEventParameters, null);            
                 }
             }))
             $A.enqueueAction(action);        
@@ -262,8 +266,9 @@
             console.log("increasing levels to: " + panelShowLevels);
             component.set("v.panelShowLevels", panelShowLevels);
             var publisher = component.get("v.UserComponentId");
+            var componentCategory = component.get("v.componentCategory");
             var componentType = component.get("v.componentType");
-            berlioz.utils.publishEvent("ShowLevelsMore", publisher, componentType, {"levels" : panelShowLevels}, null);
+            bzutils.publishEvent("ShowLevelsMore", publisher, componentCategory, componentType, {"levels" : panelShowLevels}, null);
         }
         
     },
@@ -278,48 +283,55 @@
             console.log("decreasing levels to: " + panelShowLevels);
             component.set("v.panelShowLevels", panelShowLevels);
             var publisher = component.get("v.UserComponentId");
+            var componentCategory = component.get("v.componentCategory");
             var componentType = component.get("v.componentType");
-            berlioz.utils.publishEvent("ShowLevelsFewer", publisher, componentType, {"levels" : panelShowLevels}, null);
+            bzutils.publishEvent("ShowLevelsFewer", publisher, componentCategory, componentType, {"levels" : panelShowLevels}, null);
         }
     },
     
     onClickMeasureV1 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 1);
         var publisher = component.get("v.UserComponentId");
+        var componentCategory = component.get("v.componentCategory");
         var componentType = component.get("v.componentType");
-        berlioz.utils.publishEvent("SetMeasure", publisher, componentType, {"index" : 1, "measure" : currentMeasure }, null);
+        bzutils.publishEvent("SetMeasure", publisher, componentCategory, componentType, {"index" : 1, "measure" : currentMeasure }, null);
     },
     onClickMeasureV2 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 2);
         var publisher = component.get("v.UserComponentId");
+        var componentCategory = component.get("v.componentCategory");
         var componentType = component.get("v.componentType");
-        berlioz.utils.publishEvent("SetMeasure", publisher, componentType, {"index" : 2, "measure" : currentMeasure }, null);
+        bzutils.publishEvent("SetMeasure", publisher, componentCategory, componentType, {"index" : 2, "measure" : currentMeasure }, null);
     },
     onClickMeasureV3 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 3);
         var publisher = component.get("v.UserComponentId");
+        var componentCategory = component.get("v.componentCategory");
         var componentType = component.get("v.componentType");
-        berlioz.utils.publishEvent("SetMeasure", publisher, componentType, {"index" : 3, "measure" : currentMeasure }, null);
+        bzutils.publishEvent("SetMeasure", publisher, componentCategory, componentType, {"index" : 3, "measure" : currentMeasure }, null);
     },
     onClickMeasureV4 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 4);
         var publisher = component.get("v.UserComponentId");
+        var componentCategory = component.get("v.componentCategory");        
         var componentType = component.get("v.componentType");
-        berlioz.utils.publishEvent("SetMeasure", publisher, componentType, {"index" : 4, "measure" : currentMeasure }, null);
+        bzutils.publishEvent("SetMeasure", publisher, componentCategory, componentType, {"index" : 4, "measure" : currentMeasure }, null);
     },
     onClickMeasureV5 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 5);
         var publisher = component.get("v.UserComponentId");
+        var componentCategory = component.get("v.componentCategory");
         var componentType = component.get("v.componentType");
-        berlioz.utils.publishEvent("SetMeasure", publisher, componentType, {"index" : 5, "measure" : currentMeasure }, null);
+        bzutils.publishEvent("SetMeasure", publisher, componentCategory, componentType, {"index" : 5, "measure" : currentMeasure }, null);
     },
 
     
     onClickMeasureV1 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 1);
         var publisher = component.get("v.UserComponentId");
+        var componentCategory = component.get("v.componentCategory");
         var componentType = component.get("v.componentType");
-        berlioz.utils.publishEvent("SetMeasure", publisher, componentType, {"index" : 1, "measure" : currentMeasure }, null);
+        bzutils.publishEvent("SetMeasure", publisher, componentCategory, componentType, {"index" : 1, "measure" : currentMeasure }, null);
     },
     
     onClickFilterB1 : function(component, event, helper) {
