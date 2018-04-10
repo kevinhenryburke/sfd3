@@ -135,6 +135,42 @@ function xfct(functionType, componentType /*, args */) {
     return context[func].apply(context, args);
 }
 
+function getParam(componentType /*, args */) {
+    console.log("getParam enter");
+    var args = Array.prototype.slice.call(arguments, 1);
+    var retValue = null;
+    var loopJson = bzconfig.params[componentType];
+    for (var i=0; i<args.length;i++) {
+        if (loopJson.hasOwnProperty([args[i]])) {
+            console.log("loopJson: " + args[i]);
+            retValue = loopJson[args[i]];
+            loopJson = loopJson[args[i]];
+        }
+        else {
+            return;
+        }    
+    }
+    console.log("getParam exit: " + retValue);
+    return retValue;
+}
+
+function hasParam(componentType /*, args */) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    var retValue = true;
+    var loopJson = bzconfig.params[componentType];
+    for (var i=0; i<args.length;i++) {
+        if (loopJson.hasOwnProperty([args[i]])) {
+            console.log("loopJson: " + args[i]);
+            loopJson = loopJson[args[i]];
+        }
+        else {
+            return false;
+        }    
+    }
+    return true;
+}
+
+
 /*
 // not used at present
 function simpleHash(s) {
@@ -183,6 +219,8 @@ exports.log = log;
 exports.doNothing = doNothing;
 exports.xfcr = xfcr;
 exports.xfct = xfct;
+exports.getParam = getParam;
+exports.hasParam = hasParam;
 
 exports.initializeAddComponentRef = initializeAddComponentRef;
 exports.addComponentRef = addComponentRef;
@@ -217,7 +255,6 @@ console.log("loading: bzconfig IIFE");
 var fns = 
 {
     "pack" : {
-        "nodeSelector" : "bzpack.nodeSelector",
         "nodeDataSetFunction" : "bzpack.nodeDataSetFunctionNodes",
         "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
         "refreshVisibility" : "bzinfluence.refreshVisibility",
@@ -226,11 +263,11 @@ var fns =
         "pathMouseout" : "bzchart.pathMouseout",
         "nodeMouseout" : "bzutils.doNothing",
         "nodeMouseover" : "bzpack.nodeMouseover",
-        "nodeDoubleClick" : "bzchart.nodeDoubleClick",        
-        "runSimulation" : "bzinfluence.runSimulation",        
+        "nodeDoubleClick" : "bzutils.doNothing",     
+        "runSimulation" : "bzutils.doNothing",      
+        "nodeAdditionalAttribute" : "bzpack.nodeAdditionalAttribute", 
     },
-    "chart.connections" : {
-        "nodeSelector" : "bzchart.nodeSelector",
+    "chart.connections" : { // real
         "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
         "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
         "refreshVisibility" : "bzchart.refreshVisibility",
@@ -241,9 +278,9 @@ var fns =
         "nodeMouseover" : "bzchart.nodeMouseover",
         "nodeDoubleClick" : "bzchart.nodeDoubleClick",        
         "runSimulation" : "bzsimulation.runSimulation",        
+        "nodeAdditionalAttribute" : "bzutils.doNothing", 
     },    
-    "chart.influence" : {
-        "nodeSelector" : "bzchart.nodeSelector",
+    "chart.connectionsex" : { // experiment
         "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
         "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
         "refreshVisibility" : "bzinfluence.refreshVisibility",
@@ -253,12 +290,61 @@ var fns =
         "nodeMouseout" : "bzchart.nodeMouseout",
         "nodeMouseover" : "bzchart.nodeMouseover",
         "nodeDoubleClick" : "bzchart.nodeDoubleClick",        
+        "runSimulation" : "bzsimulation.runSimulation",        
+        "nodeAdditionalAttribute" : "bzutils.doNothing", 
+    },    
+    "chart.influence" : {
+        "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
+        "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
+        "refreshVisibility" : "bzutils.doNothing",
+        "styleNodes" : "bzchart.styleNodes",
+        "pathMouseover" : "bzchart.pathMouseover",
+        "pathMouseout" : "bzchart.pathMouseout",
+        "nodeMouseout" : "bzchart.nodeMouseout",
+        "nodeMouseover" : "bzchart.nodeMouseover",
+        "nodeDoubleClick" : "bzchart.nodeDoubleClick",        
         "runSimulation" : "bzinfluence.runSimulation",        
+        "nodeAdditionalAttribute" : "bzutils.doNothing", 
+    },    
+} 
+
+var params = 
+{
+    "pack" : {
+        "node" : {
+            "selector" : ".node",            
+            "appendType" : "g",            
+        },
+    },
+    "chart.connections" : { // real
+        "node" : {  
+            "selector" : "circle",            
+            "appendType" : "circle",            
+        },
+        "path" : {},
+        "text" : {},
+    },    
+    "chart.connectionsex" : { // experiment
+        "node" : {  
+            "selector" : "circle",            
+            "appendType" : "circle",            
+        },
+        "path" : {},
+        "text" : {},
+    },    
+    "chart.influence" : {
+        "node" : {
+            "selector" : "circle",            
+            "appendType" : "circle",            
+        },
+        "path" : {},
+        "text" : {},
     },    
 } 
 
 
 exports.fns = fns;
+exports.params = params;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
@@ -596,10 +682,6 @@ function publishEvent(componentReference, topic, parameters) {
     bzutils.publishEvent(topic, componentReference, publisherCategory, publisherType, parameters, controller);
 }
 
-function nodeSelector () {
-    return "circle";
-}
-
 
 exports.pathMouseover = pathMouseover;
 exports.pathMouseout = pathMouseout;
@@ -612,7 +694,6 @@ exports.setFilterVisibility = setFilterVisibility;
 exports.clearChart = clearChart;
 exports.publishEvent = publishEvent;
 exports.styleNodes = styleNodes;
-exports.nodeSelector = nodeSelector;
 
 exports.isiOS = isiOS;
 
@@ -693,26 +774,30 @@ function limitbordery(y, height) {
 function onTick (componentReference, path, node, text) {
     var width = bzutils.getCache (componentReference, "width") ;  
     var height = bzutils.getCache (componentReference, "height") ; 
-    path.attr("d", function(d) {
-        var sx = limitborderx(d.source.x, width);
-        var sy = limitbordery(d.source.y, height);
-        var tx = limitborderx(d.target.x, width);
-        var ty = limitbordery(d.target.y, height);
-        var dx = tx - sx;
-        var dy = ty - sy;
-        var dr = Math.sqrt(dx * dx + dy * dy);
-        return "M" + sx + "," + sy + "A" + dr + "," + dr + " 0 0,1 " + tx + "," + ty;
-    });
+//    if (bzutils.getCache (componentReference, "hasPaths") == true) {
+        path.attr("d", function(d) {
+            var sx = limitborderx(d.source.x, width);
+            var sy = limitbordery(d.source.y, height);
+            var tx = limitborderx(d.target.x, width);
+            var ty = limitbordery(d.target.y, height);
+            var dx = tx - sx;
+            var dy = ty - sy;
+            var dr = Math.sqrt(dx * dx + dy * dy);
+            return "M" + sx + "," + sy + "A" + dr + "," + dr + " 0 0,1 " + tx + "," + ty;
+        });
+//    }
     node.attr("transform", function(d) {
         return transform (d, width, height);
     });
-    text.attr("transform", function(d) {
-        return transform (d, width, height);
-    });
+    if (bzutils.getCache (componentReference, "hasText") == true) {
+        text.attr("transform", function(d) {
+            return transform (d, width, height);
+        });
+    }
 }
 
 function buildForceLinks(path) {
-    console.log("buildForceLinks enter"); 
+    console.log("buildForceLinks enter: " + JSON.stringify(path)); 
     var forceLinks = {"links": [] };
 
     path.data().forEach(function(p) {
@@ -787,9 +872,6 @@ console.log("loading: bzinfluence IIFE");
 
 var version = "0.0.1";
 
-function refreshVisibility(componentReference) {
-}
-
 function runSimulation(componentReference, path, node, text ) {
     console.log("runSimulation enter"); 
 
@@ -841,7 +923,6 @@ function initializeSimulation (componentReference, nodes) {
 }
 
 
-exports.refreshVisibility = refreshVisibility;
 exports.runSimulation = runSimulation;
 exports.initializeSimulation = initializeSimulation;
 
@@ -878,10 +959,6 @@ console.log("loaded: bzchartconnections  IIFE");
 }(this, (function (exports) { 'use strict';
 
 console.log("loading: bzpack IIFE");
-
-function nodeSelector () {
-    return ".node";
-}
 
 function nodeDataSetFunctionNodes (componentReference) { 
     console.log("nodeDataSetFunctionNodes enter: componentReference " + componentReference); 
@@ -922,11 +999,32 @@ function nodeMouseover (componentReference, d) {
     // var s = d3.select("#" + sselect);
     // s.html(textcontent);
 
+    // TODO this is not the best .... needs a new mechanism
     var pubme = {"name" : d.data.name, "account" : d.value, "position" : d.children?  d.children.length : 0};
 
     bzchart.publishEvent(componentReference, "ChartMouseOver", pubme);
 
     console.log("bzpack.nodeMouseover exit");
+}
+
+function nodeAdditionalAttribute (componentReference, node) {
+    console.log("bzpack.nodeAdditionalAttribute enter");    
+
+    node.attr("transform", "translate(2,2)") // new
+        .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
+        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+    node.append("title")
+        .text(function(d) { return d.data.name + "\n" + d3.format(",d")(d.value); }); // this is the d3 value accessor which handles sum in hierarchy layout 
+
+    node.append("circle")
+        .attr("r", function(d) { return d.r; });
+
+    node.filter(function(d) { return !d.children; }).append("text")
+        .attr("dy", "0.3em")
+        .text(function(d) { return d.data.name.substring(0, d.r / 3); });
+
+    console.log("bzpack.nodeAdditionalAttribute exit");
 }
 
 
@@ -1023,10 +1121,10 @@ function update() {
 
   console.log("loaded: bzpack  IIFE");
 
-  exports.nodeSelector = nodeSelector;
   exports.nodeDataSetFunctionNodes = nodeDataSetFunctionNodes;  
   exports.nodeMouseover = nodeMouseover;
-
+  exports.nodeAdditionalAttribute = nodeAdditionalAttribute;
+  
   // zoomable
   exports.update = update;
   exports.tick = tick;

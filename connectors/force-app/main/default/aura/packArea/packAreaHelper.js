@@ -85,7 +85,21 @@
 
         var _this = this;
         var componentReference = component.get("v.componentReference");
+        var componentType = bzutils.getCache (componentReference, "componentType");
 
+        var hasNodes = bzutils.hasParam(componentType, "node");
+        var hasPaths = bzutils.hasParam(componentType, "path");
+        var hasText = bzutils.hasParam(componentType, "text");
+        bzutils.setCache (componentReference, "hasNodes", hasNodes ) ;
+        bzutils.setCache (componentReference, "hasPaths", hasPaths ) ;
+        bzutils.setCache (componentReference, "hasText", hasText ) ;
+        var node = {};     
+        var text = {};     
+        var path = {};     
+
+
+        console.log("hasParam: hasNodes/hasPaths/hasText =  " + hasNodes + "/"  + hasPaths + "/"  + hasText);
+        
         console.log("init:initializing initializeData with primaryNodeId: " + primaryNodeId);
         
         if (isInit) {
@@ -111,6 +125,7 @@
         
         console.log("create some groups inside the svg element to store the raw data");
 
+
         var pathGroupId = bzutils.getDivId("pathGroup", componentReference, false);
         var nodeGroupId = bzutils.getDivId("nodeGroup", componentReference, false);
         var textGroupId = bzutils.getDivId("textGroup", componentReference, false);
@@ -133,14 +148,23 @@
             textGroup = svg.append("svg:g").attr("id",textGroupId);
         }
 
-        // starting by here 
+        // Generic up to this point - variation starts to come in here ....
 
-        // TODO ths should be fed in via datajson in method signature.
-        var datajson = _this.getJson();
-            
-        var componentType = bzutils.getCache (componentReference, "componentType");
+        // TODO - this is temporary! perhaps turn this into a generic test data load (from static resource) mechanism.
+        if (componentType == "pack") {
+            datajson = _this.getJson();
+        }
 
-        var nodeSelector = bzutils.xfct("nodeSelector", componentType); // an html selector for a class or element ids
+        // use the name convention from d3 tutorials (e.g. http://www.puzzlr.org/force-directed-graph-minimal-working-example/)
+        // variables called simulation, node, path
+
+// Not used but an alternative way to get node / path values
+        // var node = d3.select("#" + nodeGroupId).selectAll("circle")  ;
+        // var path = d3.select("#" + pathGroupId).selectAll("path")  ;
+        
+        console.log("calling nodes");        
+
+        var nodeSelector = bzutils.getParam(componentType, "node", "selector"); // an html selector for a class or element ids
         var nodeDataSetFunction = bzutils.xfcr("nodeDataSetFunction", componentReference); // an html selector for a class or element ids
         var nodeDataKeyFunction = bzutils.xfcr("nodeDataKeyFunction", componentReference); // an html selector for a class or element ids
 
@@ -148,13 +172,68 @@
             .selectAll(nodeSelector)
             .data(nodeDataSetFunction(datajson), nodeDataKeyFunction)
             .enter();
+ 
+//        nodeSelection.exit().remove();                
             
-        var node = nodeEnterSelection     
-            .append("g")
-            .attr("transform", "translate(2,2)") // new
+if (hasNodes) {
+    node = nodeEnterSelection
+        .append(bzutils.getParam(componentType, "node", "appendType"))
+        .attr("id", function(d) {
+            return d.id;
+        })
+        // symbols...           .attr("d", d3.symbol().type( function(d) { return d3.symbols[4];}))
+        .on('mouseout', function(d) { // hide the div
+            var retainNodeDetailsMouseOut = bzutils.getCache (componentReference, "retainNodeDetailsMouseOut" ) ;
+            if (!retainNodeDetailsMouseOut)
+            {
+                bzutils.xfcr("nodeMouseout", componentReference, d); // an html selector for a class or element ids
+            }
+        })
+        .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
+            bzutils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
+            bzutils.xfcr("nodeMouseover", componentReference, d); 
+        }))
+        .on('click', function(d) {
+            console.log("retrieve info on whether isiOS");
+            var isiOS = bzchart.isiOS;
+            if (isiOS) {
+                var now = new Date().getTime();
+                var lastTouch = bzutils.getCache (componentReference, "lastTouch");
+                var delta = now - lastTouch;
+                if (delta < 350 && delta > 0) {
+                    // the second touchend event happened within half a second. Here is where we invoke the double tap code
+                    //TODO implement - e.g. var win = window.open("http://news.bbc.co.uk"); win.focus();
+                }
+                bzutils.setCache (componentReference, "lastTouch", lastTouch) ;
+            } else {
+                console.log("not iOS");
+            }
+            // reset the clicked node to be the primary
+            // TODO This will need to be passed in the refreshVisibility call.
+            var primaryNodeId = d.id;
+            bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
+
+            bzutils.xfcr("refreshVisibility", componentReference); 
+            bzutils.xfcr("styleNodes", componentReference); 
+        })
+        .on('dblclick', $A.getCallback(function(d) {
+            console.log("dblclick");
+            // Two options - complete refresh OR keep and get data from this point?
+            // send a message identifying the node in question
+            var componentReference = component.get("v.componentReference");
+            var primaryNodeId = d.id;
+            bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
+            bzutils.xfcr("nodeDoubleClick", componentReference, primaryNodeId); 
+        }))
+        ;
+
+        var nodeAdditionalAttribute = bzutils.xfcr("nodeAdditionalAttribute", componentReference, node); // an html selector for a class or element ids
+/*
+        node.attr("transform", "translate(2,2)") // new
             .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
             .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-    
+
+
         node.append("title")
             .text(function(d) { return d.data.name + "\n" + d3.format(",d")(d.value); }); // this is the d3 value accessor which handles sum in hierarchy layout 
     
@@ -164,126 +243,9 @@
         node.filter(function(d) { return !d.children; }).append("text")
             .attr("dy", "0.3em")
             .text(function(d) { return d.data.name.substring(0, d.r / 3); });
-
-
-
-        node.attr("id", function(d) {
-                return d.id;
-            })
-            // symbols...           .attr("d", d3.symbol().type( function(d) { return d3.symbols[4];}))
-            .on('mouseout', function(d) { // hide the div
-                var retainNodeDetailsMouseOut = bzutils.getCache (componentReference, "retainNodeDetailsMouseOut" ) ;
-                if (!retainNodeDetailsMouseOut)
-                {
-                    bzutils.xfcr("nodeMouseout", componentReference, d); // an html selector for a class or element ids
-                }
-            })
-            .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-                bzutils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
-                bzutils.xfcr("nodeMouseover", componentReference, d); 
-            }))
-            .on('click', function(d) {
-                console.log("retrieve info on whether isiOS");
-                var isiOS = bzchart.isiOS;
-                if (isiOS) {
-                    var now = new Date().getTime();
-                    var lastTouch = bzutils.getCache (componentReference, "lastTouch");
-                    var delta = now - lastTouch;
-                    if (delta < 350 && delta > 0) {
-                        // the second touchend event happened within half a second. Here is where we invoke the double tap code
-                        //TODO implement - e.g. var win = window.open("http://news.bbc.co.uk"); win.focus();
-                    }
-                    bzutils.setCache (componentReference, "lastTouch", lastTouch) ;
-                } else {
-                    console.log("not iOS");
-                }
-                // reset the clicked node to be the primary
-                // TODO This will need to be passed in the refreshVisibility call.
-                var primaryNodeId = d.id;
-                bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
-
-                bzutils.xfcr("refreshVisibility", componentReference); 
-                bzutils.xfcr("styleNodes", componentReference); 
-            })
-            // .on('dblclick', $A.getCallback(function(d) {
-            //     console.log("dblclick");
-            //     // Two options - complete refresh OR keep and get data from this point?
-            //     // send a message identifying the node in question
-            //     var componentReference = component.get("v.componentReference");
-            //     var primaryNodeId = d.id;
-            //     bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
-            //     bzutils.xfcr("nodeDoubleClick", componentReference, primaryNodeId); 
-            // }))
-            ;
-
-
-
-
-/*
-            var nodeSelection = nodeGroup
-            .selectAll("circle")
-            .data(datajson.nodes,  function(d, i) { return d.id;} );
-
-//        nodeSelection.exit().remove();    
-
-        var node = nodeSelection     
-            .enter().append("circle")
-            // set data related attributes - visual styling is applied later
-            .attr("id", function(d) {
-                return d.id;
-            })
-            // symbols...           .attr("d", d3.symbol().type( function(d) { return d3.symbols[4];}))
-            .on('mouseout', function(d) { // hide the div
-                var retainNodeDetailsMouseOut = bzutils.getCache (componentReference, "retainNodeDetailsMouseOut" ) ;
-                if (!retainNodeDetailsMouseOut)
-                {
-                     bzutils.xfcr("nodeMouseout", componentReference, d); // an html selector for a class or element ids
-                }
-            })
-            .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-                bzutils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
-                bzutils.xfcr("nodeMouseover", componentReference, d); 
-            }))
-            .on('click', function(d) {
-                console.log("retrieve info on whether isiOS");
-                var isiOS = bzchart.isiOS;
-                if (isiOS) {
-                    var now = new Date().getTime();
-                    var lastTouch = bzutils.getCache (componentReference, "lastTouch");
-                    var delta = now - lastTouch;
-                    if (delta < 350 && delta > 0) {
-                        // the second touchend event happened within half a second. Here is where we invoke the double tap code
-                        //TODO implement - e.g. var win = window.open("http://news.bbc.co.uk"); win.focus();
-                    }
-                    bzutils.setCache (componentReference, "lastTouch", lastTouch) ;
-                } else {
-                    console.log("not iOS");
-                }
-                // reset the clicked node to be the primary
-                // TODO This will need to be passed in the refreshVisibility call.
-                var primaryNodeId = d.id;
-                bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
-
-                bzutils.xfcr("refreshVisibility", componentReference); 
-                bzutils.xfcr("styleNodes", componentReference); 
-            })
-            .on('dblclick', $A.getCallback(function(d) {
-                console.log("dblclick");
-                // Two options - complete refresh OR keep and get data from this point?
-                // send a message identifying the node in question
-                var componentReference = component.get("v.componentReference");
-                var primaryNodeId = d.id;
-                bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
-                bzutils.primaryNodeId("nodeDoubleClick", componentReference, primaryNodeId); 
-            }));
 */
 
-
-
-
-
-
-
+        }
 
 
 
@@ -305,7 +267,22 @@
         }
         return hash;
     },
+
+
+
+// TODO here's the d3 nodes .... all in a line ... not proper code!
+/*
+var mdata = [0,1,2,3,4,5,6];
+
+svg.selectAll('.symbol')
+   .data(mdata)
+   .enter()
+   .append('path')
+   .attr('transform',function(d,i) { return 'translate('+(i*20+20)+','+30+')';})
+   .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[i];}) );
+*/
     
+
     // TODO ths should be fed in via datajson in method signature.
     getJson : function () {
         return {
@@ -1608,3 +1585,5 @@
 
 })
 
+
+    
