@@ -131,6 +131,8 @@
         var componentReference = component.get("v.componentReference");
         var componentType = bzutils.getCache (componentReference, "componentType");
 
+        console.log("chart: componentType: " + componentType);
+
         var hasNodes = bzutils.hasParam(componentType, "node");
         var hasPaths = bzutils.hasParam(componentType, "path");
         var hasText = bzutils.hasParam(componentType, "text");
@@ -196,6 +198,7 @@
 
         // TODO - this is temporary! perhaps turn this into a generic test data load (from static resource) mechanism.
         if (componentType == "pack") {
+            console.log("GETTING TEST JSON");
             datajson = _this.getJson();
         }
         
@@ -279,33 +282,49 @@
         console.log("calling text");    
     
         if (hasText) {
-            text = textGroup
+
+            // pick up the text styling
+            var hasShadow = bzutils.hasParam(componentType, "node", "styleclassTextShadow");
+            var styleclassText = bzutils.getParam(componentType, "node", "styleclassText");
+            var styleclassTextShadow = bzutils.getParam(componentType, "node", "styleclassTextShadow");
+
+            var textEnterSelection = textGroup
                 .selectAll("g")
                 .data(datajson.nodes,  function(d, i) { return d.id;} )
-                .enter().append("svg:g")
-                .attr("class", "nodeText");
+                .enter();
+            
+            text = textEnterSelection
+                .append("svg:g")
+                .attr("class", "nodeText"); // TODO what is nodeText class
 
-            // A copy of the text with a thick white stroke for legibility ("s" for shadow, "t" for text).
-            text.append("svg:text")
-                .attr("x", 8)
-                .attr("y", ".31em")
-                .attr("class", "shadow") // shadow class
-                .attr("id", function(d) {
-                    return "s" + d.id;
-                })
-                .text(function(d) {
-                    return d.name;
-                });
+            if (hasShadow == true) {                
+                // A copy of the text with a thick white stroke for legibility ("s" for shadow, "t" for text).
+                var svgText = text.append("svg:text");
+                svgText.attr("id", function(d) {
+                        return "s" + d.id;
+                    })
+                    .text(function(d) {
+                        return d.name;
+                    })
+                    .attr("class", styleclassTextShadow) // shadow class
+                    // .attr("x", 8)
+                    // .attr("y", ".31em");
+                bzutils.xfcr("textAdditionalAttribute", componentReference, svgText); // an html selector for a class or element ids
+            }
 
-            text.append("svg:text")
-                .attr("x", 8)
-                .attr("y", ".31em")
-                .attr("id", function(d) {
+            var svgText = text.append("svg:text");
+            svgText.attr("id", function(d) {
                     return "t" + d.id;
                 })
                 .text(function(d) {
                     return d.name;
-                });
+                })
+                .attr("class", styleclassText) 
+                // .attr("x", 8)
+                // .attr("y", ".31em");
+
+            bzutils.xfcr("textAdditionalAttribute", componentReference, svgText); // an html selector for a class or element ids
+    
         }
 
         console.log("calling paths");

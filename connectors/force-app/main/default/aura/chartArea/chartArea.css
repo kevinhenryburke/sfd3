@@ -4,6 +4,25 @@
 }
 
 
+.THIS body.bodycontainer {
+    background-color: purple;
+    margin: 0px;
+}
+
+.THIS .bodycontainer {
+    background-color: purple;
+    margin: 0px;
+}
+
+.THIS body {
+    background-color: white;
+    margin: 0px;
+}
+
+.THIS body .container {
+    background-color: white;
+    margin: 0px;
+}
 
 /* Styles not used */
 
@@ -12,15 +31,6 @@
     height: 200px;
     margin: auto;
     padding: 10px;
-}
-
-.THIS div#numbernodecontainer {
-    margin-left: 15%;
-    float: right;
-}
-.THIS div#levelnodecontainer {
-    margin-left: 15%;
-    float: center;
 }
 
 .THIS div.nodeToolTip {
@@ -60,3 +70,63 @@
     visibility: visible;
 }
 
+.THIS .link {
+  fill: none;
+  stroke-width: 1.5px;
+}
+
+
+.THIS .packleaf circle {
+    fill: #8da0cb;
+    fill-opacity: 1;
+    stroke: rgb(31, 119, 180);
+    stroke-width: 1px;
+  }
+
+  .THIS .packbranch circle {
+    fill: #e78ac3;
+    fill-opacity: .25;
+    stroke: rgb(31, 119, 180);
+    stroke-width: 1px;
+  }
+
+  .THIS .packleaf text {
+    font: 10px sans-serif;
+    text-anchor: middle;
+  }
+  
+/*
+.THIS circle {
+    fill: rgb(31, 119, 180);
+    fill-opacity: .25;
+    stroke: rgb(31, 119, 180);
+    stroke-width: 1px;
+  }
+
+  .THIS .leaf circle {
+    fill: #8da0cb;
+    fill-opacity: 1;
+  }
+
+  
+  .THIS text {
+    font: 10px sans-serif;
+    text-anchor: middle;
+  }
+*/
+
+
+.THIS .chartText {
+    font: 10px sans-serif;
+    pointer-events: none;
+    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+  
+.THIS .chartTextShadow {
+    font: 10px sans-serif;
+    pointer-events: none;
+    stroke: #fff;
+    stroke-width: 3px;
+    stroke-opacity: .8;
+  }
+  

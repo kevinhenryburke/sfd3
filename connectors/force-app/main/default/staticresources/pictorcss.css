@@ -1,8 +1,10 @@
-
+/*
 .link {
   fill: none;
   stroke-width: 1.5px;
 }
+*/
+
 /*
 #Work {
   fill: red;
@@ -23,7 +25,7 @@ marker#Social, marker#Client {
 }
 */
 
-
+/*
 text {
   font: 10px sans-serif;
   pointer-events: none;
@@ -35,7 +37,7 @@ text.shadow {
     stroke-width: 3px;
     stroke-opacity: .8;
 }
-
+*/
 
 .d3-tip {
   line-height: 1;

@@ -252,13 +252,14 @@ console.log("loading: bzconfig IIFE");
 
 // Represents the functions to call for each of the configured display areas
 
+
 var fns = 
 {
     "pack" : {
         "nodeDataSetFunction" : "bzpack.nodeDataSetFunctionNodes",
         "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
-        "refreshVisibility" : "bzinfluence.refreshVisibility",
-        "styleNodes" : "bzchart.styleNodes",
+        "refreshVisibility" : "bzutils.doNothing",
+        "styleNodes" : "bzutils.doNothing",
         "pathMouseover" : "bzchart.pathMouseover",
         "pathMouseout" : "bzchart.pathMouseout",
         "nodeMouseout" : "bzutils.doNothing",
@@ -266,8 +267,9 @@ var fns =
         "nodeDoubleClick" : "bzutils.doNothing",     
         "runSimulation" : "bzutils.doNothing",      
         "nodeAdditionalAttribute" : "bzpack.nodeAdditionalAttribute", 
+        "textAdditionalAttribute" : "bzutils.doNothing", 
     },
-    "chart.connections" : { // real
+    "chart.connections" : { 
         "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
         "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
         "refreshVisibility" : "bzchart.refreshVisibility",
@@ -279,19 +281,7 @@ var fns =
         "nodeDoubleClick" : "bzchart.nodeDoubleClick",        
         "runSimulation" : "bzsimulation.runSimulation",        
         "nodeAdditionalAttribute" : "bzutils.doNothing", 
-    },    
-    "chart.connectionsex" : { // experiment
-        "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
-        "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
-        "refreshVisibility" : "bzinfluence.refreshVisibility",
-        "styleNodes" : "bzchart.styleNodes",
-        "pathMouseover" : "bzchart.pathMouseover",
-        "pathMouseout" : "bzchart.pathMouseout",
-        "nodeMouseout" : "bzchart.nodeMouseout",
-        "nodeMouseover" : "bzchart.nodeMouseover",
-        "nodeDoubleClick" : "bzchart.nodeDoubleClick",        
-        "runSimulation" : "bzsimulation.runSimulation",        
-        "nodeAdditionalAttribute" : "bzutils.doNothing", 
+        "textAdditionalAttribute" : "bzchart.textAdditionalAttribute", 
     },    
     "chart.influence" : {
         "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
@@ -305,6 +295,7 @@ var fns =
         "nodeDoubleClick" : "bzchart.nodeDoubleClick",        
         "runSimulation" : "bzinfluence.runSimulation",        
         "nodeAdditionalAttribute" : "bzutils.doNothing", 
+        "textAdditionalAttribute" : "bzchart.textAdditionalAttribute", 
     },    
 } 
 
@@ -314,20 +305,16 @@ var params =
         "node" : {
             "selector" : ".node",            
             "appendType" : "g",            
+            "styleclassText" : "chartText",
+            "styleclassTextShadow" : "chartTextShadow",
         },
     },
     "chart.connections" : { // real
         "node" : {  
             "selector" : "circle",            
             "appendType" : "circle",            
-        },
-        "path" : {},
-        "text" : {},
-    },    
-    "chart.connectionsex" : { // experiment
-        "node" : {  
-            "selector" : "circle",            
-            "appendType" : "circle",            
+            "styleclassText" : "chartText",
+            "styleclassTextShadow" : "chartTextShadow",
         },
         "path" : {},
         "text" : {},
@@ -336,6 +323,8 @@ var params =
         "node" : {
             "selector" : "circle",            
             "appendType" : "circle",            
+            "styleclassText" : "chartText",
+            "styleclassTextShadow" : "chartTextShadow",
         },
         "path" : {},
         "text" : {},
@@ -477,6 +466,16 @@ function nodeDoubleClick (componentReference, primaryNodeId) {
     console.log("bzchart.nodeDoubleClick exit.");
 }
     
+function textAdditionalAttribute (componentReference, text) {
+    console.log("bzchart.textAdditionalAttribute enter");    
+    // push over to right and up a smidge
+    text
+        .attr("x", 8)
+        .attr("y", ".31em")
+    console.log("bzchart.textAdditionalAttribute exit");    
+}
+
+
 
 function getRelatedNodes (chartPrimaryId, componentReference, level) {
 
@@ -688,6 +687,7 @@ exports.pathMouseout = pathMouseout;
 exports.nodeMouseover = nodeMouseover;
 exports.nodeMouseout = nodeMouseout;
 exports.nodeDoubleClick = nodeDoubleClick;
+exports.textAdditionalAttribute = textAdditionalAttribute;
 exports.getRelatedNodes = getRelatedNodes;
 exports.refreshVisibility = refreshVisibility;
 exports.setFilterVisibility = setFilterVisibility;
@@ -1011,7 +1011,7 @@ function nodeAdditionalAttribute (componentReference, node) {
     console.log("bzpack.nodeAdditionalAttribute enter");    
 
     node.attr("transform", "translate(2,2)") // new
-        .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
+        .attr("class", function(d) { return d.children ? "packbranch node" : "packleaf node"; })
         .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
     node.append("title")
