@@ -6,7 +6,6 @@
         var dataSourceMethod = component.get("v.dataSourceMethod");
 
         var action = component.get(dataSourceMethod);
-//        var action = component.get("c.returnData");
 
         action.setCallback(this, function(response) {
             var state = response.getState();
@@ -16,20 +15,25 @@
                 helper.initializeConfig(component, response.getReturnValue());
 
                 var datajson = component.get("v.datajson");
+                var configjsonString = component.get("v.configjsonString");
                 var configjson = component.get("v.configjson");
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
                 var panelPrimaryId = component.get("v.panelPrimaryId");            
                 var panelShowFilters = component.get("v.panelShowFilters");     
                 
-                var arrayNames = configjson.filtertypes;
-                var idprefix = "b";
-                var maxbuttons = 5;                
-                helper.formatButtons (component, arrayNames, idprefix, maxbuttons);
+                if (component.get("v.configuredFilterTypes") == true) {                   
+                    var arrayNames = configjson.filtertypes;
+                    var idprefix = "b";
+                    var maxbuttons = 5;                
+                    helper.formatButtons (component, arrayNames, idprefix, maxbuttons);
+                }
 
-                arrayNames = configjson.measures;
-                idprefix = "v";
-                maxbuttons = 5;
-                helper.formatButtons (component, arrayNames, idprefix, maxbuttons);
+                if (component.get("v.configuredMeasures") == true) {                   
+                    var arrayNames = configjson.measures;
+                    var idprefix = "v";
+                    var maxbuttons = 5;
+                    helper.formatButtons (component, arrayNames, idprefix, maxbuttons);
+                }
 
                 component.set("v.initialized", true);
                 
@@ -196,7 +200,10 @@
         {
             // for a RefreshChart event we assume everything is initialized
 
-            var action = component.get("c.returnDataUpdate");
+            var dataUpdateMethod = component.get("v.dataUpdateMethod");
+
+            var action = component.get(dataUpdateMethod);
+
             console.log('InitiateRefreshChart: running apex callback');    
 
             action.setCallback(_this, $A.getCallback(function(response) {
@@ -350,6 +357,48 @@
 		helper.setFilter(component, 5);
     },
 
+    onClickRefresh : function(component, event, helper) {
+        var _this = this;
+        console.log("onClickRefresh enter");
+
+// ALL DUPLICATE WITH other refresh metthod = refactor
+
+var datajson = component.get("v.datajson");
+var configjson = component.get("v.configjson");
+var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
+var panelPrimaryId = component.get("v.panelPrimaryId");            
+var panelShowFilters = component.get("v.panelShowFilters");     
+
+
+// publish event - configuration loaded
+
+var configEventParameters = { 
+    "datajson" : datajson, 
+//                        "configjson" : configjson, 
+    "currentMeasure" : panelCurrentMeasure,
+    "primaryId" : panelPrimaryId, 
+    "showFilters" : panelShowFilters,
+//    "componentReference" : componentReference                
+}
+
+//publish to this component
+var publisher = component.get("v.UserComponentId");
+var componentCategory = component.get("v.componentCategory");
+var componentType = component.get("v.componentType");
+
+
+// bzutils.publishEvent("RefreshData", publisher, componentCategory, componentType, configEventParameters, null);            
+
+
+window.setInterval(
+$A.getCallback(function() {
+    bzutils.publishEvent("RefreshData", publisher, componentCategory, componentType, configEventParameters, null);            
+}),
+1000);
+
+console.log("onClickRefresh exit");
+    },
+    
     navigateToRecord : function(component){
         var evtNav = $A.get("e.force:navigateToSObject");
         evtNav.setParams({

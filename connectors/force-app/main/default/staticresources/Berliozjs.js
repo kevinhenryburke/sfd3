@@ -49,6 +49,10 @@ function log (logItem) {
 function doNothing () {
 }
 
+function return2 (arg1, arg2) {
+    return arg2;
+}
+
 
 // replace ids with component specific versions - this will allow multiple charts on a page without conflict
 function initializeAddComponentRef(componentReference, datajson) {
@@ -217,6 +221,7 @@ function nodeDataKeyFunctionId (d, i) {
 
 exports.log = log;
 exports.doNothing = doNothing;
+exports.return2 = return2;
 exports.xfcr = xfcr;
 exports.xfct = xfct;
 exports.getParam = getParam;
@@ -268,6 +273,7 @@ var fns =
         "runSimulation" : "bzutils.doNothing",      
         "nodeAdditionalAttribute" : "bzpack.nodeAdditionalAttribute", 
         "textAdditionalAttribute" : "bzutils.doNothing", 
+        "dataPreProcess" : "bzutils.return2", 
     },
     "chart.connections" : { 
         "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
@@ -282,6 +288,7 @@ var fns =
         "runSimulation" : "bzsimulation.runSimulation",        
         "nodeAdditionalAttribute" : "bzutils.doNothing", 
         "textAdditionalAttribute" : "bzchart.textAdditionalAttribute", 
+        "dataPreProcess" : "bzutils.return2", 
     },    
     "chart.influence" : {
         "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
@@ -296,6 +303,7 @@ var fns =
         "runSimulation" : "bzinfluence.runSimulation",        
         "nodeAdditionalAttribute" : "bzutils.doNothing", 
         "textAdditionalAttribute" : "bzchart.textAdditionalAttribute", 
+        "dataPreProcess" : "bzinfluence.tempPreProcess", 
     },    
 } 
 
@@ -528,7 +536,6 @@ function styleNodes (componentReference) {
     bzutils.log("styleNodes:" + JSON.stringify(node));
 
     node.attr("r", function(o, i) {
-        // needs to be computed using a configuration provided algorithm?
         return o.measures[currentMeasure].radius;
     });
 
@@ -922,6 +929,15 @@ function initializeSimulation (componentReference, nodes) {
     return simulation;
 }
 
+function tempPreProcess(componentReference, datajson ) {
+    for (var i = 0; i < datajson.nodes.length; i++){
+        datajson.nodes[i].measures["Posts"].radius = Math.floor((Math.random() * 60) + 10); 
+    }    
+    return datajson;
+}    
+
+exports.tempPreProcess = tempPreProcess;
+
 
 exports.runSimulation = runSimulation;
 exports.initializeSimulation = initializeSimulation;
@@ -1012,7 +1028,7 @@ function nodeAdditionalAttribute (componentReference, node) {
 
     node.attr("transform", "translate(2,2)") // new
         .attr("class", function(d) { return d.children ? "packbranch node" : "packleaf node"; })
-        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+        .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 
     node.append("title")
         .text(function(d) { return d.data.name + "\n" + d3.format(",d")(d.value); }); // this is the d3 value accessor which handles sum in hierarchy layout 

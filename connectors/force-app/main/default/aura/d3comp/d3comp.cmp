@@ -32,6 +32,9 @@
   <!-- Design Paramters -->  
   <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
   <aura:attribute name="dataSourceMethod" type="String" default="c.returnDataNodesOnly"/>      
+  <aura:attribute name="dataUpdateMethod" type="String" default="c.returnDataUpdate"/>      
+  <aura:attribute name="configjsonString" type="String" />
+  <aura:attribute name="Title" type="String" />      
 
   <!-- Technical - Chart -->
 
@@ -39,9 +42,13 @@
 	<aura:attribute name="componentType" type="String" default="Controller"/>   <!-- this may move to Design Parameters when we get different types --> 
 	<aura:attribute name="initialized" type="Boolean" default="false"/>    
   <aura:attribute name="datajson" type="Object" />
-  <aura:attribute name="configjson" type="Object" />
   <aura:attribute name="initEventsQueue" type="Object[]" default="[]" />
+  <aura:attribute name="configjson" type="Object" />
 
+	<aura:attribute name="configuredLevels" type="Boolean" default="false"/>    
+	<aura:attribute name="configuredFilterTypes" type="Boolean" default="false"/>    
+	<aura:attribute name="configuredMeasures" type="Boolean" default="false"/>    
+	<aura:attribute name="configuredAllowRefresh" type="Boolean" default="false"/>    
   
   
     <div class="slds">
@@ -52,40 +59,55 @@
           </div>
           <div class="slds-media__body">
             <div class="slds-grid">
-              <h1 class="slds-text-heading_medium slds-m-right_small slds-truncate slds-align-middle" title="Record Title">Connections</h1>
+              <h1 class="slds-text-heading_medium slds-m-right_small slds-truncate slds-align-middle" title="Record Title">{!v.Title}</h1>
             </div>
           </div>
         </div>
-
         <div class="slds-grid slds-wrap">
           <!-- Hidden for topic connections -->
-          <div class="slds-col slds-size_1-of-3 slds-small-size_1-of-2 slds-medium-size_1-of-3">
-            <h1 class="slds-text-heading_label">Show</h1>
-            <div class="slds slds-button-group" role="group">
-              <c:buttonDynamic aura:id="less" label="Fewer" class="slds-button slds-button_neutral" onclick="{!c.onClickLevelFewer}" disabled="true">Less</c:buttonDynamic>
-              <c:buttonDynamic aura:id="more" label="More" class="slds-button slds-button_neutral" onclick="{!c.onClickLevelMore}" disabled="false">More</c:buttonDynamic>
+
+          <aura:if isTrue="{!v.configuredLevels}">
+            <div class="slds-col slds-size_1-of-3 slds-small-size_1-of-2 slds-medium-size_1-of-3">
+              <h1 class="slds-text-heading_label">Connect Levels</h1>
+              <div class="slds slds-button-group" role="group">
+                <c:buttonDynamic aura:id="less" label="Fewer" class="slds-button slds-button_neutral" onclick="{!c.onClickLevelFewer}" disabled="true">Less</c:buttonDynamic>
+                <c:buttonDynamic aura:id="more" label="More" class="slds-button slds-button_neutral" onclick="{!c.onClickLevelMore}" disabled="false">More</c:buttonDynamic>
+              </div>
             </div>
-          </div>
-          <div class="slds-col slds-size_1-of-3 slds-small-size_1-of-2 slds-medium-size_1-of-3">
-            <h1 class="slds-text-heading_label">Size By</h1>
-            <div class="slds slds-button-group" role="group">
-                <c:buttonDynamic aura:id="v1" label="" class="slds-button slds-button_brand" onclick="{!c.onClickMeasureV1}"/>
-                <c:buttonDynamic aura:id="v2" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV2}"/>
-                <c:buttonDynamic aura:id="v3" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV3}"/>
-                <c:buttonDynamic aura:id="v4" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV4}"/>
-                <c:buttonDynamic aura:id="v5" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV5}"/>
+          </aura:if>
+          <aura:if isTrue="{!v.configuredMeasures}">
+            <div class="slds-col slds-size_1-of-3 slds-small-size_1-of-2 slds-medium-size_1-of-3">
+              <h1 class="slds-text-heading_label">Size By</h1>
+              <div class="slds slds-button-group" role="group">
+                  <c:buttonDynamic aura:id="v1" label="" class="slds-button slds-button_brand" onclick="{!c.onClickMeasureV1}"/>
+                  <c:buttonDynamic aura:id="v2" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV2}"/>
+                  <c:buttonDynamic aura:id="v3" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV3}"/>
+                  <c:buttonDynamic aura:id="v4" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV4}"/>
+                  <c:buttonDynamic aura:id="v5" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV5}"/>
+              </div>
             </div>
-          </div>
-          <div class="slds-col slds-size_1-of-3 slds-small-size_1-of-2 slds-medium-size_1-of-3" >
-            <h1 class="slds-text-heading_label">Relation</h1>
-            <div class="slds slds-button-group" role="group">
-                <c:buttonDynamic aura:id="b1" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB1}"/>
-                <c:buttonDynamic aura:id="b2" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB2}"/>
-                <c:buttonDynamic aura:id="b3" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB3}"/>
-                <c:buttonDynamic aura:id="b4" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB4}"/>
-                <c:buttonDynamic aura:id="b5" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB5}"/>
+          </aura:if>
+          <aura:if isTrue="{!v.configuredFilterTypes}">
+            <div class="slds-col slds-size_1-of-3 slds-small-size_1-of-2 slds-medium-size_1-of-3" >
+              <h1 class="slds-text-heading_label">Relation</h1>
+              <div class="slds slds-button-group" role="group">
+                  <c:buttonDynamic aura:id="b1" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB1}"/>
+                  <c:buttonDynamic aura:id="b2" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB2}"/>
+                  <c:buttonDynamic aura:id="b3" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB3}"/>
+                  <c:buttonDynamic aura:id="b4" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB4}"/>
+                  <c:buttonDynamic aura:id="b5" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB5}"/>
+              </div>
             </div>
-          </div>
+          </aura:if>
+          <aura:if isTrue="{!v.configuredAllowRefresh}">
+            <div class="slds-col slds-size_1-of-3 slds-small-size_1-of-2 slds-medium-size_1-of-3">
+              <h1 class="slds-text-heading_label">Refresh</h1>
+              <div class="slds slds-button-group" role="group">
+                <c:buttonDynamic aura:id="r1" label="Refresh" class="slds-button slds-button_brand" onclick="{!c.onClickRefresh}" disabled="false"></c:buttonDynamic>
+              </div>
+            </div>
+          </aura:if>
+
         </div>
       </div>
     </div>

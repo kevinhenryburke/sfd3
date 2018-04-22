@@ -10,40 +10,60 @@
             console.log("init:initializing config ");
 
             /* Configuration initialization */
-            // TODO - read from Design Parameter
-            var configjson = 
-                {"filtertypes":["Work","Social","Client"]
-                ,"measures":["Posts","Hot"]
-                ,"levels":4
-                ,"centreonclick":true};
+            // TODO - review, this may be better hard coded but design parameter allows for some flexibility for end users
+
+            var configjson = JSON.parse(component.get("v.configjsonString"));
             
-            console.log('configjson');
+            console.log('configjson read from design parameter: ');
             console.log(configjson);
             component.set("v.configjson", configjson);
 
-            // set the maximum number of levels
-            var maxlevels = configjson.levels;
-            console.log("maxlevels:" + maxlevels);
-            if ((typeof maxlevels === 'number'))
-            {
-                console.log("setting maxlevels from configuration: " + maxlevels);
-                component.set("v.maxlevels", maxlevels);          
-            }  
-            else
-            {
-                console.log("using default maxlevels ");
-            }
+            for (var key in configjson) {  
+                var subObj = configjson[key];
+                console.log("here is a key layer 1: " + key);
 
-            // set the first measure as default
-            var panelCurrentMeasure = configjson.measures[0];
-            component.set("v.panelCurrentMeasure", panelCurrentMeasure);
+                if (key == "levels") {
+                    component.set("v.configuredLevels", true);                    
+                    // set the maximum number of levels
+                    var maxlevels = configjson.levels;
+                    console.log("maxlevels:" + maxlevels);
+                    if ((typeof maxlevels === 'number'))
+                    {
+                        console.log("setting maxlevels from configuration: " + maxlevels);
+                        component.set("v.maxlevels", maxlevels);          
+                    }  
+                    else
+                    {
+                        console.log("using default maxlevels ");
+                    }
+                }
+                if (key == "filtertypes") {
+                    component.set("v.configuredFilterTypes", true);                    
+                    // set all filters as clicked by default
+                    var panelShowFilters = component.get("v.panelShowFilters");
+                    configjson.filtertypes.forEach(function(filtertype) {
+                        panelShowFilters.push(filtertype);
+                    });
+                    component.set("v.panelShowFilters", panelShowFilters);
+                }
+                if (key == "measures") {
+                    component.set("v.configuredMeasures", true);                    
+                    // set the first measure as default
+                    var panelCurrentMeasure = configjson.measures[0];
+                    component.set("v.panelCurrentMeasure", panelCurrentMeasure);
+                }
+                if (key == "allowrefresh") {
+                    component.set("v.configuredAllowRefresh", true);                    
+                }
 
-            // set all filters as clicked by default
-            var panelShowFilters = component.get("v.panelShowFilters");
-            configjson.filtertypes.forEach(function(filtertype) {
-                panelShowFilters.push(filtertype);
-            });
-            component.set("v.panelShowFilters", panelShowFilters);
+                console.log("here is a subObj layer 1: " + JSON.stringify(subObj));
+                for (var subKey in subObj) {
+                    console.log("here is a key layer 2: " + subKey);
+                    console.log("here is a subObj layer 2: " + JSON.stringify(subObj[subKey]));
+                }
+            }            
+
+
                 
 
             // underlying data parsed to JSON object
@@ -171,6 +191,6 @@
                 $A.util.removeClass(cmpTarget, 'slds-button_neutral');
             }
         }
-    }
+    }   
 
 })
