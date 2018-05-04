@@ -127,6 +127,9 @@
             // we process if the event is from it's controller and either specifies this component or does not specify any
             if (componentReference == parameters["componentReference"] || ! ("componentReference" in parameters)) {
                 console.log("RefreshData: Refresh Chart with reference: " + componentReference);
+// THIS ALL TEMPORARY
+                console.log("RefreshData: Data: " + parameters["valueDate"]);
+                component.set("v.Title", parameters["valueDate"] );
                 helper.refreshData(component, parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"]);                 
             }
             else {

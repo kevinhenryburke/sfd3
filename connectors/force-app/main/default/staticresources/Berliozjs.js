@@ -49,11 +49,6 @@ function log (logItem) {
 function doNothing () {
 }
 
-function return2 (arg1, arg2) {
-    return arg2;
-}
-
-
 // replace ids with component specific versions - this will allow multiple charts on a page without conflict
 function initializeAddComponentRef(componentReference, datajson) {
     if (datajson.nodes != null) {
@@ -221,7 +216,6 @@ function nodeDataKeyFunctionId (d, i) {
 
 exports.log = log;
 exports.doNothing = doNothing;
-exports.return2 = return2;
 exports.xfcr = xfcr;
 exports.xfct = xfct;
 exports.getParam = getParam;
@@ -273,7 +267,7 @@ var fns =
         "runSimulation" : "bzutils.doNothing",      
         "nodeAdditionalAttribute" : "bzpack.nodeAdditionalAttribute", 
         "textAdditionalAttribute" : "bzutils.doNothing", 
-        "dataPreProcess" : "bzutils.return2", 
+        "dataPreProcess" : "bzutils.doNothing", 
     },
     "chart.connections" : { 
         "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
@@ -288,7 +282,7 @@ var fns =
         "runSimulation" : "bzsimulation.runSimulation",        
         "nodeAdditionalAttribute" : "bzutils.doNothing", 
         "textAdditionalAttribute" : "bzchart.textAdditionalAttribute", 
-        "dataPreProcess" : "bzutils.return2", 
+        "dataPreProcess" : "bzutils.doNothing", 
     },    
     "chart.influence" : {
         "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
@@ -929,11 +923,15 @@ function initializeSimulation (componentReference, nodes) {
     return simulation;
 }
 
-function tempPreProcess(componentReference, datajson ) {
-    for (var i = 0; i < datajson.nodes.length; i++){
-        datajson.nodes[i].measures["Posts"].radius = Math.floor((Math.random() * 60) + 10); 
+function tempPreProcess(componentReference, datajsonBefore, datajsonRefresh ) {
+    var all1 = 0;
+    for (var i = 0; i < datajsonBefore.nodes.length; i++){
+//        datajson.nodes[i].measures["Posts"].radius = Math.floor((Math.random() * 60) + 10); 
+        all1 += datajsonRefresh.nodes[i].measures["Posts"].radius;
+        datajsonBefore.nodes[i].measures["Posts"].radius = datajsonRefresh.nodes[i].measures["Posts"].radius;
     }    
-    return datajson;
+    console.log("all1: " + all1);
+    bzutils.setCache (componentReference, "datajson", datajsonBefore ) ;
 }    
 
 exports.tempPreProcess = tempPreProcess;

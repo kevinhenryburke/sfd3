@@ -15,11 +15,7 @@
     </classAccesses>
     <custom>true</custom>
     <tabVisibilities>
-        <tab>D3_HalfWidth_Chart</tab>
-        <visibility>DefaultOn</visibility>
-    </tabVisibilities>
-    <tabVisibilities>
-        <tab>D3_Narrow_Chart</tab>
+        <tab>D3_Full_Width</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
     <userLicense>Salesforce</userLicense>

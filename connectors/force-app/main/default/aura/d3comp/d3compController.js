@@ -389,10 +389,19 @@ var componentType = component.get("v.componentType");
 
 // bzutils.publishEvent("RefreshData", publisher, componentCategory, componentType, configEventParameters, null);            
 
-
+// THIS ALL TEMPORARY
+var d = new Date(2014, 1, 1, 0, 0, 0, 0);
 window.setInterval(
 $A.getCallback(function() {
+    configEventParameters["valueDate"] = d;
+    for (var i = 0; i < datajson.nodes.length; i++){
+        // grow most nodes and shrink a few too but make sure don't go too small.
+        datajson.nodes[i].measures["Posts"].radius = Math.max(10,datajson.nodes[i].measures["Posts"].radius + Math.floor(Math.random() * 20) - 5); 
+        datajson.nodes[i].measures["Hot"].radius = Math.max(10,datajson.nodes[i].measures["Hot"].radius + Math.floor(Math.random() * 20) - 5); 
+    }    
+    configEventParameters["datajson"] = datajson;
     bzutils.publishEvent("RefreshData", publisher, componentCategory, componentType, configEventParameters, null);            
+    d.setMonth(d.getMonth() + 1);
 }),
 1000);
 

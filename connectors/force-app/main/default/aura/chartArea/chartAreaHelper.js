@@ -97,7 +97,6 @@
         // initialize the new raw data, setting component references
         bzutils.initializeAddComponentRef(componentReference, datajsonRefresh);
 
-        // merge the old and the new data
         var nodeIds = [];
         datajson.nodes.forEach(function(node) {
             nodeIds.push(node["id"]);
@@ -106,7 +105,7 @@
         datajsonRefresh.nodes.forEach(function(node) {
             var indexer = nodeIds.indexOf(node["id"]);       
             if (indexer == -1) {     
-                datajson["nodes"].push(node);
+                datajson["nodes"].push(node); // this adds new nodes into datajson
             }
         });
 
@@ -118,6 +117,14 @@
         datajsonRefresh.links.forEach(function(link) {
             datajson["links"].push(link);
         });
+
+// cOME BACK
+        // merge the old and the new data
+        console.log("PreProcess data - not right yet - need to update this method to return nothing");
+        bzutils.xfcr("dataPreProcess", componentReference, datajson, datajsonRefresh); // preprocessing of data (if any)
+
+        datajson = bzutils.getCache (componentReference, "datajson") ;
+        
 
         // re-initialize the chart
         var isInit = false;
@@ -198,8 +205,8 @@
             textGroup = svg.append("svg:g").attr("id",textGroupId);
         }
 
-        console.log("PreProcess data");
-        datajson = bzutils.xfcr("dataPreProcess", componentReference, datajson); // preprocessing of data (if any)
+        // console.log("PreProcess data");
+        // datajson = bzutils.xfcr("dataPreProcess", componentReference, datajson); // preprocessing of data (if any)
 
         // use the name convention from d3 tutorials (e.g. http://www.puzzlr.org/force-directed-graph-minimal-working-example/)
         // variables called simulation, node, path
