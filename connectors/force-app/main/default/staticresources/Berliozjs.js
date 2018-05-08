@@ -1201,6 +1201,15 @@ function update() {
 
     var canExpandColor = "lightsteelblue";
     var expandedColor = "white";
+    var duration = 750;
+    var fixedDepth = 180; // this may need to be a function of chart area depth?
+    var nodeIndex = 0;
+
+    var treemap;
+    var root;
+    var nodes;
+    var links;
+    
 
     function getCanExpandColor () {
         return canExpandColor;
@@ -1219,23 +1228,38 @@ function update() {
         }
     }
 
+    function run(datajson, height, width) {
+        treemap = d3.tree().size([height, width]);
+
+        // Assigns parent, children, height, depth
+        
+        root = d3.hierarchy(datajson, function(d) { return d.children; });
+        root.x0 = height / 2;
+        root.y0 = 0;
+        
+        // Collapse after the second level
+        root.children.forEach(bzctree.collapse);
+        update(root);
+
+    }
+    
     function update(source) {
 
         // Assigns the x and y position for the nodes
-        var datajson = treemap(root);
+        var treeMappedData = treemap(root);
       
         // Compute the new tree layout.
-        var nodes = datajson.descendants(),
-            links = datajson.descendants().slice(1);
+        nodes = treeMappedData.descendants();
+        links = treeMappedData.descendants().slice(1);
       
         // Normalize for fixed-depth.
-        nodes.forEach(function(d){ d.y = d.depth * 180});
+        nodes.forEach(function(d){ d.y = d.depth * fixedDepth});
       
         // ****************** Nodes section ***************************
       
         // Update the nodes...
         var node = svg.selectAll('g.treenode')
-            .data(nodes, function(d) {return d.id || (d.id = ++i); });
+            .data(nodes, function(d) {return d.id || (d.id = ++nodeIndex); });
       
         // Enter any new modes at the parent's previous position.
         var nodeEnter = node.enter().append('g')
@@ -1374,6 +1398,7 @@ function update() {
     exports.getExpandedColor = getExpandedColor;  
     exports.collapse = collapse;  
     exports.update = update;  
+    exports.run = run;  
     exports.nodeDataSetFunctionNodes = nodeDataSetFunctionNodes;  
 
     console.log("loaded: bzctree  IIFE");

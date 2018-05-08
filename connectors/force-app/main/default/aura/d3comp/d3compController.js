@@ -182,11 +182,22 @@
             var indexer = parameters["index"];
             var cmpTarget = component.find('b' + indexer);
             // set attributes to indicate filter on/off status
+
             $A.util.toggleClass(cmpTarget, 'filter_show');
             $A.util.toggleClass(cmpTarget, 'filter_hide');
-            // restyle
-            $A.util.toggleClass(cmpTarget, 'slds-button_neutral');
-            $A.util.toggleClass(cmpTarget, 'slds-button_brand');
+            
+            // restyle is straightforward, flip styles depending on whether we are showing or hiding the filter
+
+            var nowShow = $A.util.hasClass(cmpTarget, 'filter_show');
+
+            if (nowShow) {
+                $A.util.addClass(cmpTarget, 'slds-button_brand');                                
+                $A.util.removeClass(cmpTarget, 'slds-button_neutral');                
+            }
+            else {
+                $A.util.addClass(cmpTarget, 'slds-button_neutral');                                
+                $A.util.removeClass(cmpTarget, 'slds-button_brand');                
+            }
         }
         if (topic == "ChartMouseOver")
         {

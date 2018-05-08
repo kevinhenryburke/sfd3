@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#0070D2</headerColor>
+    </brand>
+    <formFactors>Large</formFactors>
+    <label>D3 Charts</label>
+    <navType>Standard</navType>
+    <tab>D3_HalfWidth_Chart</tab>
+    <tab>D3_Full_Width</tab>
+    <tab>D3_CTree</tab>
+    <tab>D3_Narrow_Chart</tab>
+    <tab>D3_Split_Components</tab>
+    <uiType>Lightning</uiType>
+    <utilityBar>D3_Charts_UtilityBar</utilityBar>
+</CustomApplication>

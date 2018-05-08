@@ -1,0 +1,14 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extends="c:chartArea">
+    <aura:method name="deleteme"> 
+        <aura:attribute name="param1" type="String"/> 
+    </aura:method>    
+
+    <aura:method name="initializeData"> 
+        <aura:attribute name="datajson" type="Object"/> 
+        <aura:attribute name="currentMeasure" type="String"/> 
+        <aura:attribute name="primaryId" type="String"/> 
+        <aura:attribute name="showFilters" type="Object"/> 
+        <aura:attribute name="isInit" type="Boolean"/> 
+    </aura:method>    
+
+</aura:component>

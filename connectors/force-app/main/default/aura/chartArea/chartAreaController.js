@@ -54,8 +54,34 @@
 
     /* handlers */
 
+    // DELETE THIS TOY EXAMPLE WHEN UNDERSTOOD
+    deleteme : function(component,event,helper){
+        var args = event.getParam("arguments");
+        var param1 = args.param1;
+        console.log("deleteme base implementation, invoked in: " + param1);
+    },
+
+    initializeData: function(component,event,helper){
+        console.log("calling the aura:method in base");
+        var args = event.getParam("arguments");
+
+        var datajson = args.datajson;
+        var currentMeasure = args.currentMeasure;
+        var primaryId = args.primaryId;
+        var showFilters = args.showFilters;
+        var isInit = args.isInit;
+
+        helper.initializeData(component, datajson, currentMeasure, primaryId, showFilters, isInit);                 
+    },
+
+
     handle_evt_sfd3  : function(component, event, helper) {
         console.log('chartArea: handle_evt_sfd3 enter');
+
+        // DELETE THIS TOY EXAMPLE WHEN UNDERSTOOD
+        var cc = component.getConcreteComponent()
+        cc.deleteme("BASE");
+
         var topic = event.getParam("topic");
         var publisher = event.getParam("publisher");
         var parameters = event.getParam("parameters");
@@ -114,7 +140,13 @@
             if (componentReference == parameters["componentReference"]) {
                 console.log("InitializeData with reference: " + componentReference);
                 var isInit = true;
-                helper.initializeData(component, parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"], isInit);                 
+
+                var cc = component.getConcreteComponent();
+                cc.initializeData(parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"], isInit);                 
+  
+
+// PREVIOUS --- GOOD
+//                helper.initializeData(component, parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"], isInit);                 
             }
             else {
                 console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);

@@ -1,4 +1,4 @@
-<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes">
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extensible="true">
 
 <!--
 <ltng:require 
@@ -38,6 +38,19 @@
   <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
   <aura:handler event="aura:doneRendering" action="{!c.doneRendering}"/>
 
+  <!-- DELELTE ALL REFERENCES TO DELETEME WHEN GOOD -->
+  <aura:method name="deleteme"> 
+    <aura:attribute name="param1" type="String"/> 
+  </aura:method>
+
+  <aura:method name="initializeData"> 
+    <aura:attribute name="datajson" type="Object"/> 
+    <aura:attribute name="currentMeasure" type="String"/> 
+    <aura:attribute name="primaryId" type="String"/> 
+    <aura:attribute name="showFilters" type="Object"/> 
+    <aura:attribute name="isInit" type="Boolean"/> 
+  </aura:method>
+
   <!-- Design Paramters -->  
   <aura:attribute name="UserComponentId" type="String" default="" description="If putting more than one chart on a page then this provides users with a mechanism to set their own for mapping purposes"/>    
   <aura:attribute name="UserControllerComponentId" type="String" default="" description="If we want to restrict to a particular controller on the page then put the name here that you used as the Component Id of the Controller. Otherwise all controllers will act on this chart"/>    
@@ -67,8 +80,13 @@
   <aura:attribute name="flexiWidth" type="String"/>
   <lightning:flexipageRegionInfo width="{!v.flexiWidth}"/>
 
+
+
   <body class="bodycontainer" style="background-color: white;">
 <!-- 8792 {!v.flexiWidth} {!v.chartAreaDivId} {!v.componentReference} {!v.UserComponentId} -->
+
+<!-- to pass in stuff from a sub component use {!v.body}  see https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/oo_cmp_attributes.htm   -->
+
       <aura:if isTrue="{!v.Title != ''}">{!v.Title}</aura:if>       
       <div class="c-container">
           <lightning:layout horizontalAlign="space" verticalAlign="end">
