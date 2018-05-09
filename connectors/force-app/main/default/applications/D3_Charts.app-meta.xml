@@ -7,10 +7,8 @@
     <label>D3 Charts</label>
     <navType>Standard</navType>
     <tab>D3_HalfWidth_Chart</tab>
-    <tab>D3_Full_Width</tab>
     <tab>D3_CTree</tab>
-    <tab>D3_Narrow_Chart</tab>
-    <tab>D3_Split_Components</tab>
+    <tab>D3_Pack</tab>
     <uiType>Lightning</uiType>
     <utilityBar>D3_Charts_UtilityBar</utilityBar>
 </CustomApplication>

@@ -1,4 +1,5 @@
 ({
+
     initializeData: function(component,event,helper){
         console.log("calling the aura:method in subcomponent");
         var args = event.getParam("arguments");

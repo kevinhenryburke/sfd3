@@ -54,13 +54,6 @@
 
     /* handlers */
 
-    // DELETE THIS TOY EXAMPLE WHEN UNDERSTOOD
-    deleteme : function(component,event,helper){
-        var args = event.getParam("arguments");
-        var param1 = args.param1;
-        console.log("deleteme base implementation, invoked in: " + param1);
-    },
-
     initializeData: function(component,event,helper){
         console.log("calling the aura:method in base");
         var args = event.getParam("arguments");
@@ -77,10 +70,6 @@
 
     handle_evt_sfd3  : function(component, event, helper) {
         console.log('chartArea: handle_evt_sfd3 enter');
-
-        // DELETE THIS TOY EXAMPLE WHEN UNDERSTOOD
-        var cc = component.getConcreteComponent()
-        cc.deleteme("BASE");
 
         var topic = event.getParam("topic");
         var publisher = event.getParam("publisher");

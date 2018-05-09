@@ -1,4 +1,4 @@
-<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extensible="true">
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extensible="true" abstract="true">
 
 <!--
 <ltng:require 
@@ -37,11 +37,6 @@
 
   <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
   <aura:handler event="aura:doneRendering" action="{!c.doneRendering}"/>
-
-  <!-- DELELTE ALL REFERENCES TO DELETEME WHEN GOOD -->
-  <aura:method name="deleteme"> 
-    <aura:attribute name="param1" type="String"/> 
-  </aura:method>
 
   <aura:method name="initializeData"> 
     <aura:attribute name="datajson" type="Object"/> 

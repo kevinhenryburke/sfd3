@@ -20,7 +20,7 @@
     </classAccesses>
     <custom>false</custom>
     <tabVisibilities>
-        <tab>D3_CTree</tab>
+        <tab>D3_Pack</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
     <userLicense>Salesforce</userLicense>

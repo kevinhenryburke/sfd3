@@ -132,7 +132,7 @@
         
         console.log("chartArea: exit refreshData");
     },    
-    
+/*    
     initializeData: function (component, datajson, currentMeasure, primaryNodeId, showFilters, isInit) {
 
 console.log("TOPLEVEL");        
@@ -397,7 +397,7 @@ console.log("TOPLEVEL");
         console.log("apply node visibility");
         bzutils.xfcr("refreshVisibility", componentReference); 
     
-        /* Above should be common to some degree - Below is forceSimulation specific */
+        // Above should be common to some degree - Below is forceSimulation specific
 
         console.log("calling layout / simulation");
 
@@ -413,30 +413,8 @@ console.log("TOPLEVEL");
         
         bzutils.showCache (componentReference) ;
         
-// GARBAGE AFTER HERE - experiments
-
-/*
-        //var nodeGroupId = chartSVGId + "nodeGroup";
-        var nodey4 = d3.select("#" + nodeGroupId).selectAll("circle")  
-        .each(function(d) {
-        // your update code here as it was in your example
-            var d3this = d3.select(this) // Transform to d3 Object - THIS COULD BE MY ANSWER TO EVERYTHING
-            console.log("ThisNode");
-            console.log(d);
-            d3this.attr("testAttribute" , "yay");
-        });
-
-        var pathy4 = d3.select("#" + pathGroupId).selectAll("path")  
-        .each(function(d) {
-        // your update code here as it was in your example
-            var d3this = d3.select(this) // Transform to d3 Object - THIS COULD BE MY ANSWER TO EVERYTHING
-            console.log("ThisPath");
-            console.log(d);
-            d3this.attr("testAttribute" , "yay");
-        });
-*/        
     },
-
+*/
 
     // ideally would prefer to put in Berlioz library but externals can't safely be called in doInit
     simpleHash : function(s) {
