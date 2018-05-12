@@ -27,6 +27,9 @@
         bzutils.setCache (componentReference, "width", Math.min(screen.width, screen.height)) ; // review this
         bzutils.setCache (componentReference, "height", Math.min(screen.width, screen.height)) ; // review this
 
+		var margin = {top: 20, right: 90, bottom: 30, left: 90}; // this should probably be flexi-ed too
+		bzutils.setCache (componentReference, "margin", margin) ;  
+
         var flexiWidth = component.get("v.flexiWidth");
         console.log("flexiWidth: " + flexiWidth);
 

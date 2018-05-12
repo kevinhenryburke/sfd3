@@ -14,10 +14,6 @@
         <enabled>false</enabled>
     </classAccesses>
     <custom>true</custom>
-    <tabVisibilities>
-        <tab>D3_Full_Width</tab>
-        <visibility>DefaultOn</visibility>
-    </tabVisibilities>
     <userLicense>Salesforce</userLicense>
     <userPermissions>
         <enabled>true</enabled>

@@ -1199,6 +1199,8 @@ function update() {
 
     console.log("loading: bzctree IIFE");
 
+    // Note that x and y are seemingly the wrong way round - x is vertical, y is horizontal
+
     var canExpandColor = "lightsteelblue";
     var expandedColor = "white";
     var duration = 750;
@@ -1211,12 +1213,46 @@ function update() {
     var links;
     
 
-    function getCanExpandColor () {
-        return canExpandColor;
+    function getCanExpandColor (d) {
+        var color = canExpandColor;
+        console.log(d);
+        if (d.data.size != null && d.data.size < 5000) {
+            color = "red";
+        }
+        if (d.data.size != null && d.data.size < 4000) {
+            color = "orange";
+        }
+        if (d.data.size != null && d.data.size < 3000) {
+            color = "yellow";
+        }
+        if (d.data.size != null && d.data.size < 2000) {
+            color = "green";
+        }
+        if (d.data.size != null && d.data.size < 2000) {
+            color = "blue";
+        }
+        return color;
     }
 
-    function getExpandedColor () {
-        return expandedColor;
+    function getExpandedColor (d) { // TODO demo stuff only
+        var color = expandedColor;
+        console.log(d);
+        if (d.data.size != null && d.data.size < 5000) {
+            color = "red";
+        }
+        if (d.data.size != null && d.data.size < 4000) {
+            color = "orange";
+        }
+        if (d.data.size != null && d.data.size < 3000) {
+            color = "yellow";
+        }
+        if (d.data.size != null && d.data.size < 2000) {
+            color = "green";
+        }
+        if (d.data.size != null && d.data.size < 2000) {
+            color = "blue";
+        }
+        return color;
     }
 
     // Collapse the node and all it's children
@@ -1228,23 +1264,28 @@ function update() {
         }
     }
 
-    function run(datajson, height, width) {
+    function run(nodeGroup, pathGroup, componentReference, datajson) {
+
+		var width = bzutils.getCache (componentReference, "width") ;  
+		var height = bzutils.getCache (componentReference, "height") ; 
+        
         treemap = d3.tree().size([height, width]);
 
         // Assigns parent, children, height, depth
-        
+
         root = d3.hierarchy(datajson, function(d) { return d.children; });
         root.x0 = height / 2;
         root.y0 = 0;
         
         // Collapse after the second level
         root.children.forEach(bzctree.collapse);
-        update(root);
-
+        update(nodeGroup, pathGroup, componentReference, root);
     }
     
-    function update(source) {
+    function update(nodeGroup, pathGroup, componentReference, source) {
 
+        var margin = bzutils.getCache (componentReference, "margin") ;  
+        
         // Assigns the x and y position for the nodes
         var treeMappedData = treemap(root);
       
@@ -1253,19 +1294,21 @@ function update() {
         links = treeMappedData.descendants().slice(1);
       
         // Normalize for fixed-depth.
-        nodes.forEach(function(d){ d.y = d.depth * fixedDepth});
+        nodes.forEach(function(d){ d.y = margin.left + (d.depth * fixedDepth)});
       
         // ****************** Nodes section ***************************
       
         // Update the nodes...
-        var node = svg.selectAll('g.treenode')
+        var node = nodeGroup.selectAll('g.treenode')
             .data(nodes, function(d) {return d.id || (d.id = ++nodeIndex); });
       
         // Enter any new modes at the parent's previous position.
         var nodeEnter = node.enter().append('g')
             .attr('class', 'treenode')
             .attr("transform", function(d) {
-              return "translate(" + source.y0 + "," + source.x0 + ")";
+                var t = "translate(" + source.y0 + "," + source.x0 + ")";
+                console.log("enter new node: " + t);
+              return t;
           })
           .on('click', click);
       
@@ -1274,7 +1317,7 @@ function update() {
             .attr('class', 'treenode')
             .attr('r', 1e-6)
             .style("fill", function(d) {
-                return d._children ? bzctree.getCanExpandColor() : bzctree.getExpandedColor();
+                return d._children ? bzctree.getCanExpandColor(d) : bzctree.getExpandedColor(d);
             });
       
         // Add labels for the nodes
@@ -1295,14 +1338,16 @@ function update() {
         nodeUpdate.transition()
           .duration(duration)
           .attr("transform", function(d) { 
-              return "translate(" + d.y + "," + d.x + ")";
+              var t = "translate(" + d.y  + "," + d.x + ")";
+              console.log(t);
+              return t;
            });
       
         // Update the node attributes and style
         nodeUpdate.select('circle.treenode')
           .attr('r', 10)
           .style("fill", function(d) {
-              return d._children ? bzctree.getCanExpandColor() : bzctree.getExpandedColor();
+              return d._children ? bzctree.getCanExpandColor(d) : bzctree.getExpandedColor(d);
           })
           .attr('cursor', 'pointer');
       
@@ -1326,14 +1371,14 @@ function update() {
         // ****************** links section ***************************
       
         // Update the links...
-        var link = svg.selectAll('path.treelink')
+        var link = pathGroup.selectAll('path.treelink')
             .data(links, function(d) { return d.id; });
       
         // Enter any new links at the parent's previous position.
         var linkEnter = link.enter().insert('path', "g")
             .attr("class", "treelink")
             .attr('d', function(d){
-              var o = {x: source.x0, y: source.y0}
+                var o = {x: source.x0, y: source.y0}
               return diagonal(o, o)
             });
       
@@ -1380,26 +1425,16 @@ function update() {
               d.children = d._children;
               d._children = null;
             }
-          update(d);
+            update(nodeGroup, pathGroup, componentReference, d);
         }
       }
-
-      function nodeDataSetFunctionNodes (componentReference) { 
-        console.log("nodeDataSetFunctionNodes enter: componentReference " + componentReference); 
-        return function(datajson) { 
-            console.log("nodeDataSetFunctionNodes computing callback " + componentReference);
-            return d3.hierarchy(datajson, function(d) { return d.children; });    
-            };
-        }
-          
-
+      
 
     exports.getCanExpandColor = getCanExpandColor;  
     exports.getExpandedColor = getExpandedColor;  
     exports.collapse = collapse;  
     exports.update = update;  
     exports.run = run;  
-    exports.nodeDataSetFunctionNodes = nodeDataSetFunctionNodes;  
 
     console.log("loaded: bzctree  IIFE");
 

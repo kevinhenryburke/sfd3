@@ -1,6 +1,7 @@
 ({
 
-    initializeData: function (component, datajson, currentMeasure, primaryNodeId, showFilters, isInit) {
+/*
+	initializeData: function (component, datajson, currentMeasure, primaryNodeId, showFilters, isInit) {
 
         var _this = this;
         var componentReference = component.get("v.componentReference");
@@ -262,7 +263,7 @@
         console.log("apply node visibility");
         bzutils.xfcr("refreshVisibility", componentReference); 
     
-        /* Above should be common to some degree - Below is forceSimulation specific */
+        // Above should be common to some degree - Below is forceSimulation specific 
 
         console.log("calling layout / simulation");
 
@@ -280,28 +281,117 @@
         
 // GARBAGE AFTER HERE - experiments
 
-/*
         //var nodeGroupId = chartSVGId + "nodeGroup";
-        var nodey4 = d3.select("#" + nodeGroupId).selectAll("circle")  
-        .each(function(d) {
-        // your update code here as it was in your example
-            var d3this = d3.select(this) // Transform to d3 Object - THIS COULD BE MY ANSWER TO EVERYTHING
-            console.log("ThisNode");
-            console.log(d);
-            d3this.attr("testAttribute" , "yay");
-        });
+        // var nodey4 = d3.select("#" + nodeGroupId).selectAll("circle")  
+        // .each(function(d) {
+        // // your update code here as it was in your example
+        //     var d3this = d3.select(this) // Transform to d3 Object - THIS COULD BE MY ANSWER TO EVERYTHING
+        //     console.log("ThisNode");
+        //     console.log(d);
+        //     d3this.attr("testAttribute" , "yay");
+        // });
 
-        var pathy4 = d3.select("#" + pathGroupId).selectAll("path")  
-        .each(function(d) {
-        // your update code here as it was in your example
-            var d3this = d3.select(this) // Transform to d3 Object - THIS COULD BE MY ANSWER TO EVERYTHING
-            console.log("ThisPath");
-            console.log(d);
-            d3this.attr("testAttribute" , "yay");
-        });
-*/        
+        // var pathy4 = d3.select("#" + pathGroupId).selectAll("path")  
+        // .each(function(d) {
+        // // your update code here as it was in your example
+        //     var d3this = d3.select(this) // Transform to d3 Object - THIS COULD BE MY ANSWER TO EVERYTHING
+        //     console.log("ThisPath");
+        //     console.log(d);
+        //     d3this.attr("testAttribute" , "yay");
+        // });
     },
+*/
+
+	initializeData: function (component, datajson, currentMeasure, primaryNodeId, showFilters, isInit) {
+
+        var _this = this;
+        var componentReference = component.get("v.componentReference");
+        var componentType = bzutils.getCache (componentReference, "componentType");
+
+        console.log("chart: componentType: " + componentType);
+
+        var hasNodes = bzutils.hasParam(componentType, "node");
+        var hasPaths = bzutils.hasParam(componentType, "path");
+        var hasText = bzutils.hasParam(componentType, "text");
+        bzutils.setCache (componentReference, "hasNodes", hasNodes ) ;
+        bzutils.setCache (componentReference, "hasPaths", hasPaths ) ;
+        bzutils.setCache (componentReference, "hasText", hasText ) ;
+        var node = {};     
+        var text = {};     
+        var path = {};     
+
+        console.log("hasParam: hasNodes/hasPaths/hasText =  " + hasNodes + "/"  + hasPaths + "/"  + hasText);
 
 
+        console.log("init:initializing initializeData with primaryNodeId: " + primaryNodeId);
+        
+        if (isInit) {
+            bzutils.initializeAddComponentRef(componentReference, datajson);
+        }
+
+        bzutils.setCache (componentReference, "datajson", datajson ) ;
+
+        var hasPrimaryNode = bzutils.getCache (componentReference, "hasPrimaryNode") ;
+        if (hasPrimaryNode == true) {
+            primaryNodeId = bzutils.addComponentRef(componentReference, primaryNodeId);
+            bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
+        }
+
+        bzutils.setCache (componentReference, "currentMeasure", currentMeasure ) ;
+        bzutils.setCache (componentReference, "showFilters", showFilters ) ;
+
+		var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
+		
+		console.log("svg is defined ... "); 
+        
+        // Styling of tooltips - see GitHub prior to Feb 24, 2018
+        var nodeToolTipDiv = d3.select("#nodeToolTip");
+        var pathToolTipDivId = bzutils.addComponentRef(componentReference, "pathToolTip");
+        var pathToolTipDiv = d3.select("#" + pathToolTipDivId);
+
+        var isRefresh = false;
+        
+        console.log("create some groups inside the svg element to store the raw data");
+
+
+        var pathGroupId = bzutils.getDivId("pathGroup", componentReference, false);
+        var nodeGroupId = bzutils.getDivId("nodeGroup", componentReference, false);
+        var textGroupId = bzutils.getDivId("textGroup", componentReference, false);
+        
+        var pathGroup = d3.select("#" + pathGroupId);
+        if (pathGroup.empty()) {
+            console.log("create pathGroup");
+            pathGroup = svg.append("g").attr("id",pathGroupId);
+        }
+
+        var nodeGroup = d3.select("#" + nodeGroupId);
+        if (nodeGroup.empty()) {
+            console.log("create nodeGroup");
+            nodeGroup = svg.append("g").attr("id",nodeGroupId);
+        }
+
+        var textGroup = d3.select("#" + textGroupId);
+        if (textGroup.empty()) {
+            console.log("create textGroup");
+            textGroup = svg.append("svg:g").attr("id",textGroupId);
+        }
+
+        // console.log("PreProcess data");
+        // datajson = bzutils.xfcr("dataPreProcess", componentReference, datajson); // preprocessing of data (if any)
+
+        // use the name convention from d3 tutorials (e.g. http://www.puzzlr.org/force-directed-graph-minimal-working-example/)
+        // variables called simulation, node, path
+
+        // Not used but an alternative way to get node / path values
+        // var node = d3.select("#" + nodeGroupId).selectAll("circle")  ;
+        // var path = d3.select("#" + pathGroupId).selectAll("path")  ;
+        
+        console.log("calling nodes");
+		
+
+		bzctree.run(nodeGroup, pathGroup, componentReference, datajson);
+
+		
+	}
 
 })

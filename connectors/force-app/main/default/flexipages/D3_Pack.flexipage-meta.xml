@@ -34,7 +34,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
-                <value>Bottom</value>
+                <value>Pack Bottom</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserControllerComponentId</name>
@@ -76,7 +76,7 @@
                 <name>showPathToolTip</name>
                 <value>true</value>
             </componentInstanceProperties>
-            <componentName>chartHierarchy</componentName>
+            <componentName>chartNetwork</componentName>
         </componentInstances>
         <name>main</name>
         <type>Region</type>
