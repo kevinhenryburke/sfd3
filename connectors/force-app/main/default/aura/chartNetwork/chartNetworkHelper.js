@@ -102,6 +102,9 @@
                 .attr("id", function(d) {
                     return d.id;
                 })
+                .attr("recordid", function(d) {
+                    return d.recordid;
+                })
                 // symbols...           .attr("d", d3.symbol().type( function(d) { return d3.symbols[4];}))
                 .on('mouseout', function(d) { // hide the div
                     var retainNodeDetailsMouseOut = bzutils.getCache (componentReference, "retainNodeDetailsMouseOut" ) ;

@@ -54,6 +54,7 @@ function initializeAddComponentRef(componentReference, datajson) {
     if (datajson.nodes != null) {
     datajson.nodes.forEach(function(node) {
         node["id"] = bzutils.addComponentRef(componentReference, node["id"]);
+        node["recordid"] = bzutils.removeComponentRef(componentReference, node["id"]);
     })};
         
     if (datajson.links != null) {
@@ -64,18 +65,21 @@ function initializeAddComponentRef(componentReference, datajson) {
     })};
 }    
 
-function addComponentRef(componentReference, dataItem) {
-    if (dataItem.indexOf("compref") > -1) { // don't double index  
-        console.log("avoiding a double compref for item " + dataItem);
-        return dataItem;
+function addComponentRef(componentReference, recordid) {
+    if (recordid.indexOf("compref") > -1) { // don't double index  
+        console.log("avoiding a double compref for recordid " + recordid);
+        return recordid;
     }
-    return componentReference + dataItem;
+    return componentReference + recordid;
 }
 
 // remove component specific prefix from id - this will allow original references to be retrieved
-function removeComponentRef(componentReference, dataItem) {
-    var indexer = componentReference.length;
-    return dataItem.substring(indexer);
+function removeComponentRef(componentReference, recordidEnriched) {
+    if (recordidEnriched.indexOf("compref") > -1) { // compref present
+        var indexer = componentReference.length;
+        return recordidEnriched.substring(indexer);
+    }
+    return recordidEnriched;
 }    
 
 function getDivId (idType, componentReference, forSelect) {
@@ -193,6 +197,7 @@ function publishEvent(topic, publisher, publisherCategory, publisherType, parame
     console.log("publisherCategory: " + publisherCategory );
     console.log("publisherType: " + publisherType );
     console.log("controller: " + controller );
+
     var appEvent = $A.get("e.c:evt_sfd3");
     appEvent.setParams({
         "topic" : topic,
@@ -262,7 +267,7 @@ var fns =
         "pathMouseover" : "bzchart.pathMouseover",
         "pathMouseout" : "bzchart.pathMouseout",
         "nodeMouseout" : "bzutils.doNothing",
-        "nodeMouseover" : "bzpack.nodeMouseover",
+        "nodeMouseover" : "bzctree.nodeMouseover",
         "nodeDoubleClick" : "bzutils.doNothing",     
         "runSimulation" : "bzutils.doNothing",      
         "nodeAdditionalAttribute" : "bzpack.nodeAdditionalAttribute", 
@@ -1203,14 +1208,9 @@ function update() {
 
     var canExpandColor = "lightsteelblue";
     var expandedColor = "white";
-    var duration = 750;
-    var fixedDepth = 180; // this may need to be a function of chart area depth?
-    var nodeIndex = 0;
 
-    var treemap;
-    var root;
-    var nodes;
-    var links;
+//    var treemap;
+//    var root;
     
 
     function getCanExpandColor (d) {
@@ -1258,183 +1258,241 @@ function update() {
     // Collapse the node and all it's children
     function collapse(d) {
         if(d.children) {
-        d._children = d.children
-        d._children.forEach(collapse)
-        d.children = null
+            d._children = d.children
+            d._children.forEach(collapse)
+            d.children = null
         }
     }
 
-    function run(nodeGroup, pathGroup, componentReference, datajson) {
-
-		var width = bzutils.getCache (componentReference, "width") ;  
-		var height = bzutils.getCache (componentReference, "height") ; 
+    // function update(nodeGroup, pathGroup, componentReference, source) {
+    //     var nodes;
+    //     var links;
+    //     var duration = 750;
+    //     var fixedDepth = 180; // this may need to be a function of chart area depth?
         
-        treemap = d3.tree().size([height, width]);
-
-        // Assigns parent, children, height, depth
-
-        root = d3.hierarchy(datajson, function(d) { return d.children; });
-        root.x0 = height / 2;
-        root.y0 = 0;
+    //     var margin = bzutils.getCache (componentReference, "margin") ;  
         
-        // Collapse after the second level
-        root.children.forEach(bzctree.collapse);
-        update(nodeGroup, pathGroup, componentReference, root);
-    }
+    //     // Assigns the x and y position for the nodes
+
+    //     var treemap = bzutils.getCache (componentReference, "treemap" ) ;
+    //     var root = bzutils.getCache (componentReference, "root" ) ;
+
+    //     var treeMappedData = treemap(root);
+      
+    //     // Compute the new tree layout.
+    //     nodes = treeMappedData.descendants();
+    //     links = treeMappedData.descendants().slice(1);
+      
+    //     // Normalize for fixed-depth.
+    //     nodes.forEach(function(d){ d.y = margin.left + (d.depth * fixedDepth)});
+      
+    //     // ****************** Nodes section ***************************
+      
+    //     // Update the nodes...
+    //     var node = nodeGroup.selectAll('g.treenode')
+    //         .data(nodes, function(d) {                
+    //             console.log("xxx: " + d.id);
+    //             return d.id || (d.id = bzutils.addComponentRef(componentReference, d.data.id)); 
+    //         });
+                
+    //     // Enter any new modes at the parent's previous position.
+    //     var nodeEnter = node.enter().append('g')
+    //         .attr('class', 'treenode')
+    //         .attr("transform", function(d) {
+    //             var t = "translate(" + source.y0 + "," + source.x0 + ")";
+    //             console.log("enter new node: " + t);
+    //           return t;
+    //         })
+    //         .attr("id", function(d) {
+    //             return d.id;
+    //         })            
+    //         .attr("recordid", function(d) {
+    //             return d.data.id;
+    //         })            
+    //         .on('click', click);
+      
+    //     // Add Circle for the nodes
+    //     nodeEnter.append('circle')
+    //         .attr('class', 'treenode')
+    //         .attr('r', 1e-6)
+    //         .style("fill", function(d) {
+    //             return d._children ? bzctree.getCanExpandColor(d) : bzctree.getExpandedColor(d);
+    //         })
+            
+    //         .on('mouseover', function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
+    //             bzutils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
+    //             bzutils.xfcr("nodeMouseover", componentReference, d); 
+    //         })
+        
+    //         ;
+      
+    //     // Add labels for the nodes
+    //     nodeEnter.append('text')
+    //         .attr("dy", ".35em")
+    //         .attr("x", function(d) {
+    //             return d.children || d._children ? -13 : 13;
+    //         })
+    //         .attr("text-anchor", function(d) {
+    //             return d.children || d._children ? "end" : "start";
+    //         })
+    //         .text(function(d) { return d.data.name; });
+      
+    //     // UPDATE
+    //     var nodeUpdate = nodeEnter.merge(node);
+      
+    //     // Transition to the proper position for the node
+    //     nodeUpdate.transition()
+    //       .duration(duration)
+    //       .attr("transform", function(d) { 
+    //           var t = "translate(" + d.y  + "," + d.x + ")";
+    //           console.log(t);
+    //           return t;
+    //        });
+      
+    //     // Update the node attributes and style
+    //     nodeUpdate.select('circle.treenode')
+    //       .attr('r', 10)
+    //       .style("fill", function(d) {
+    //           return d._children ? bzctree.getCanExpandColor(d) : bzctree.getExpandedColor(d);
+    //       })
+    //       .attr('cursor', 'pointer');
+      
+      
+    //     // Remove any exiting nodes
+    //     var nodeExit = node.exit().transition()
+    //         .duration(duration)
+    //         .attr("transform", function(d) {
+    //             return "translate(" + source.y + "," + source.x + ")";
+    //         })
+    //         .remove();
+      
+    //     // On exit reduce the node circles size to 0
+    //     nodeExit.select('circle')
+    //       .attr('r', 1e-6);
+      
+    //     // On exit reduce the opacity of text labels
+    //     nodeExit.select('text')
+    //       .style('fill-opacity', 1e-6);
+      
+    //     // ****************** links section ***************************
+      
+    //     // Update the links...
+    //     var link = pathGroup.selectAll('path.treelink')
+    //         .data(links, function(d) { return d.id; });
+      
+    //     // Enter any new links at the parent's previous position.
+    //     var linkEnter = link.enter().insert('path', "g")
+    //         .attr("class", "treelink")
+    //         .attr('d', function(d){
+    //             var o = {x: source.x0, y: source.y0}
+    //           return diagonal(o, o)
+    //         });
+      
+    //     // UPDATE
+    //     var linkUpdate = linkEnter.merge(link);
+      
+    //     // Transition back to the parent element position
+    //     linkUpdate.transition()
+    //         .duration(duration)
+    //         .attr('d', function(d){ return diagonal(d, d.parent) });
+      
+    //     // Remove any exiting links
+    //     var linkExit = link.exit().transition()
+    //         .duration(duration)
+    //         .attr('d', function(d) {
+    //           var o = {x: source.x, y: source.y}
+    //           return diagonal(o, o)
+    //         })
+    //         .remove();
+      
+    //     // Store the old positions for transition.
+    //     nodes.forEach(function(d){
+    //       d.x0 = d.x;
+    //       d.y0 = d.y;
+    //     });
+      
+    //     // Creates a curved (diagonal) path from parent to the child nodes
+    //     function diagonal(s, d) {
+      
+    //       var path = `M ${s.y} ${s.x}
+    //               C ${(s.y + d.y) / 2} ${s.x},
+    //                 ${(s.y + d.y) / 2} ${d.x},
+    //                 ${d.y} ${d.x}`
+      
+    //       return path
+    //     }
+      
+    //     // Toggle children on click.
+    //     function click(d) {
+    //       if (d.children) {
+    //           d._children = d.children;
+    //           d.children = null;
+    //         } else {
+    //           d.children = d._children;
+    //           d._children = null;
+    //         }
+    //         update(nodeGroup, pathGroup, componentReference, d);
+    //     }
+    //   }
+      
+    /* TODO: this is pretty bad - builds up a huge list of events as context gets lost when we create new nodes
+    Need to find a better way!!!!!!
+    */
     
-    function update(nodeGroup, pathGroup, componentReference, source) {
-
-        var margin = bzutils.getCache (componentReference, "margin") ;  
+    function nodeMouseover (componentReference, d) {
+        console.log("bzctree.nodeMouseover enter");
+        console.log(d);
+    
+        // TODO this is not the best .... needs a new mechanism
+        var pubme = {"name" : d.data.name, "account" : d.parent ? d.parent.data.name : "Top Level", "position" : d.depth};
         
-        // Assigns the x and y position for the nodes
-        var treeMappedData = treemap(root);
-      
-        // Compute the new tree layout.
-        nodes = treeMappedData.descendants();
-        links = treeMappedData.descendants().slice(1);
-      
-        // Normalize for fixed-depth.
-        nodes.forEach(function(d){ d.y = margin.left + (d.depth * fixedDepth)});
-      
-        // ****************** Nodes section ***************************
-      
-        // Update the nodes...
-        var node = nodeGroup.selectAll('g.treenode')
-            .data(nodes, function(d) {return d.id || (d.id = ++nodeIndex); });
-      
-        // Enter any new modes at the parent's previous position.
-        var nodeEnter = node.enter().append('g')
-            .attr('class', 'treenode')
-            .attr("transform", function(d) {
-                var t = "translate(" + source.y0 + "," + source.x0 + ")";
-                console.log("enter new node: " + t);
-              return t;
-          })
-          .on('click', click);
-      
-        // Add Circle for the nodes
-        nodeEnter.append('circle')
-            .attr('class', 'treenode')
-            .attr('r', 1e-6)
-            .style("fill", function(d) {
-                return d._children ? bzctree.getCanExpandColor(d) : bzctree.getExpandedColor(d);
-            });
-      
-        // Add labels for the nodes
-        nodeEnter.append('text')
-            .attr("dy", ".35em")
-            .attr("x", function(d) {
-                return d.children || d._children ? -13 : 13;
-            })
-            .attr("text-anchor", function(d) {
-                return d.children || d._children ? "end" : "start";
-            })
-            .text(function(d) { return d.data.name; });
-      
-        // UPDATE
-        var nodeUpdate = nodeEnter.merge(node);
-      
-        // Transition to the proper position for the node
-        nodeUpdate.transition()
-          .duration(duration)
-          .attr("transform", function(d) { 
-              var t = "translate(" + d.y  + "," + d.x + ")";
-              console.log(t);
-              return t;
-           });
-      
-        // Update the node attributes and style
-        nodeUpdate.select('circle.treenode')
-          .attr('r', 10)
-          .style("fill", function(d) {
-              return d._children ? bzctree.getCanExpandColor(d) : bzctree.getExpandedColor(d);
-          })
-          .attr('cursor', 'pointer');
-      
-      
-        // Remove any exiting nodes
-        var nodeExit = node.exit().transition()
-            .duration(duration)
-            .attr("transform", function(d) {
-                return "translate(" + source.y + "," + source.x + ")";
-            })
-            .remove();
-      
-        // On exit reduce the node circles size to 0
-        nodeExit.select('circle')
-          .attr('r', 1e-6);
-      
-        // On exit reduce the opacity of text labels
-        nodeExit.select('text')
-          .style('fill-opacity', 1e-6);
-      
-        // ****************** links section ***************************
-      
-        // Update the links...
-        var link = pathGroup.selectAll('path.treelink')
-            .data(links, function(d) { return d.id; });
-      
-        // Enter any new links at the parent's previous position.
-        var linkEnter = link.enter().insert('path', "g")
-            .attr("class", "treelink")
-            .attr('d', function(d){
-                var o = {x: source.x0, y: source.y0}
-              return diagonal(o, o)
-            });
-      
-        // UPDATE
-        var linkUpdate = linkEnter.merge(link);
-      
-        // Transition back to the parent element position
-        linkUpdate.transition()
-            .duration(duration)
-            .attr('d', function(d){ return diagonal(d, d.parent) });
-      
-        // Remove any exiting links
-        var linkExit = link.exit().transition()
-            .duration(duration)
-            .attr('d', function(d) {
-              var o = {x: source.x, y: source.y}
-              return diagonal(o, o)
-            })
-            .remove();
-      
-        // Store the old positions for transition.
-        nodes.forEach(function(d){
-          d.x0 = d.x;
-          d.y0 = d.y;
-        });
-      
-        // Creates a curved (diagonal) path from parent to the child nodes
-        function diagonal(s, d) {
-      
-          var path = `M ${s.y} ${s.x}
-                  C ${(s.y + d.y) / 2} ${s.x},
-                    ${(s.y + d.y) / 2} ${d.x},
-                    ${d.y} ${d.x}`
-      
-          return path
-        }
-      
-        // Toggle children on click.
-        function click(d) {
-          if (d.children) {
-              d._children = d.children;
-              d.children = null;
-            } else {
-              d.children = d._children;
-              d._children = null;
-            }
-            update(nodeGroup, pathGroup, componentReference, d);
-        }
-      }
-      
+        if (d.depth == 1) {
+            bzchart.publishEvent(componentReference, "ChartMouseOver", pubme);
 
+            var appEvents = [];
+            for (var i = 0; i < 100; i++) {
+                appEvents.push($A.get("e.c:evt_sfd3"));
+            }
+            bzutils.setCache (componentReference, "appEvents",  appEvents) ;
+        } 
+        else {
+            var appEvents = bzutils.getCache (componentReference, "appEvents") ;
+            var appEvent = appEvents.pop();
+            
+            bzctree.publishEvent(componentReference, "ChartMouseOver", pubme, appEvent);    
+        }
+        console.log("bzctree.nodeMouseover exit");
+    }
+
+    
+    function publishEvent(componentReference, topic, parameters, appEvent) {
+        var publisherCategory = bzutils.getCache (componentReference, "componentCategory") ;
+        var publisherType = bzutils.getCache (componentReference, "componentType") ;
+        
+        var controller = bzutils.getCache (componentReference, "UserControllerComponentId") ;
+        console.log("bzutils.publishEvent: " + topic + " " + JSON.stringify(parameters));
+    
+        console.log("publisherCategory: " + publisherCategory );
+        console.log("publisherType: " + publisherType );
+        console.log("controller: " + controller );
+    
+        appEvent.setParams({
+            "topic" : topic,
+            "publisher" : componentReference,
+            "publisherCategory" : publisherCategory,
+            "publisherType" : publisherType,
+            "controller" : controller,
+            "parameters" : parameters
+        });
+        appEvent.fire();
+    }
+            
     exports.getCanExpandColor = getCanExpandColor;  
     exports.getExpandedColor = getExpandedColor;  
     exports.collapse = collapse;  
-    exports.update = update;  
-    exports.run = run;  
+//    exports.update = update;  
+    exports.nodeMouseover = nodeMouseover;
+    exports.publishEvent = publishEvent;
 
     console.log("loaded: bzctree  IIFE");
 
