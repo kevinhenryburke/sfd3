@@ -1,76 +1,9 @@
 ({
 
-    initializeData: function (component, datajson, currentMeasure, primaryNodeId, showFilters, isInit) {
-
-        var _this = this;
+    abc: function (component, datajson, nodeGroup, pathGroup, textGroup, pathToolTipDiv, pathGroupId) {
+        console.log("subhelper: enter abc proper!");
+        var componentType = component.get("v.componentType");
         var componentReference = component.get("v.componentReference");
-        var componentType = bzutils.getCache (componentReference, "componentType");
-
-        console.log("chart: componentType: " + componentType);
-
-        var hasNodes = bzutils.hasParam(componentType, "node");
-        var hasPaths = bzutils.hasParam(componentType, "path");
-        var hasText = bzutils.hasParam(componentType, "text");
-        bzutils.setCache (componentReference, "hasNodes", hasNodes ) ;
-        bzutils.setCache (componentReference, "hasPaths", hasPaths ) ;
-        bzutils.setCache (componentReference, "hasText", hasText ) ;
-        var node = {};     
-        var text = {};     
-        var path = {};     
-
-        console.log("hasParam: hasNodes/hasPaths/hasText =  " + hasNodes + "/"  + hasPaths + "/"  + hasText);
-
-
-        console.log("init:initializing initializeData with primaryNodeId: " + primaryNodeId);
-        
-        if (isInit) {
-            bzutils.initializeAddComponentRef(componentReference, datajson);
-        }
-
-        bzutils.setCache (componentReference, "datajson", datajson ) ;
-
-        var hasPrimaryNode = bzutils.getCache (componentReference, "hasPrimaryNode") ;
-        if (hasPrimaryNode == true) {
-            primaryNodeId = bzutils.addComponentRef(componentReference, primaryNodeId);
-            bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
-        }
-
-        bzutils.setCache (componentReference, "currentMeasure", currentMeasure ) ;
-        bzutils.setCache (componentReference, "showFilters", showFilters ) ;
-
-        var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
-        
-        // Styling of tooltips - see GitHub prior to Feb 24, 2018
-        var nodeToolTipDiv = d3.select("#nodeToolTip");
-        var pathToolTipDivId = bzutils.addComponentRef(componentReference, "pathToolTip");
-        var pathToolTipDiv = d3.select("#" + pathToolTipDivId);
-
-        var isRefresh = false;
-        
-        console.log("create some groups inside the svg element to store the raw data");
-
-
-        var pathGroupId = bzutils.getDivId("pathGroup", componentReference, false);
-        var nodeGroupId = bzutils.getDivId("nodeGroup", componentReference, false);
-        var textGroupId = bzutils.getDivId("textGroup", componentReference, false);
-        
-        var pathGroup = d3.select("#" + pathGroupId);
-        if (pathGroup.empty()) {
-            console.log("create pathGroup");
-            pathGroup = svg.append("g").attr("id",pathGroupId);
-        }
-
-        var nodeGroup = d3.select("#" + nodeGroupId);
-        if (nodeGroup.empty()) {
-            console.log("create nodeGroup");
-            nodeGroup = svg.append("g").attr("id",nodeGroupId);
-        }
-
-        var textGroup = d3.select("#" + textGroupId);
-        if (textGroup.empty()) {
-            console.log("create textGroup");
-            textGroup = svg.append("svg:g").attr("id",textGroupId);
-        }
 
         // console.log("PreProcess data");
         // datajson = bzutils.xfcr("dataPreProcess", componentReference, datajson); // preprocessing of data (if any)
@@ -82,6 +15,10 @@
         // var node = d3.select("#" + nodeGroupId).selectAll("circle")  ;
         // var path = d3.select("#" + pathGroupId).selectAll("path")  ;
         
+        var node = {};     
+        var text = {};     
+        var path = {};     
+
         console.log("calling nodes");
 
         var nodeSelector = bzutils.getParam(componentType, "node", "selector"); // an html selector for a class or element ids
@@ -95,8 +32,7 @@
 
 //        nodeSelection.exit().remove();    
 
-
-        if (hasNodes) {
+        if (bzutils.hasParam(componentType, "node")) {
             node = nodeEnterSelection
                 .append(bzutils.getParam(componentType, "node", "appendType"))
                 .attr("id", function(d) {
@@ -157,7 +93,7 @@
 
         console.log("calling text");    
     
-        if (hasText) {
+        if (bzutils.hasParam(componentType, "text")) {
 
             // pick up the text styling
             var hasShadow = bzutils.hasParam(componentType, "node", "styleclassTextShadow");
@@ -205,12 +141,13 @@
 
         console.log("calling paths");
 
-        if (!hasPaths) {
+        if (!bzutils.hasParam(componentType, "path")) {
             datajson.links = []; 
         }
 
 //        if (hasPaths) {
-            datajson.links.forEach(function(link) {
+//        if (bzutils.hasParam(componentType, "path")) {
+        datajson.links.forEach(function(link) {
                 var sourceElement = d3.select("#" + link.sourceid);
                 var targetElement = d3.select("#" + link.targetid);
                 link.source = sourceElement.datum();
@@ -305,6 +242,8 @@
 */        
     },
 
+    
+    
 
 
 })

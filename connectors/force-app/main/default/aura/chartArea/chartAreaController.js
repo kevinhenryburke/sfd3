@@ -55,7 +55,7 @@
     /* handlers */
 
     initializeData: function(component,event,helper){
-        console.log("calling the aura:method in base");
+        console.log("calling the aura:method initializeData in base");
         var args = event.getParam("arguments");
 
         var datajson = args.datajson;
@@ -67,7 +67,19 @@
         helper.initializeData(component, datajson, currentMeasure, primaryId, showFilters, isInit);                 
     },
 
+    refreshData: function(component,event,helper){
+        console.log("calling the aura:method refreshData in base");
+        var args = event.getParam("arguments");
 
+        var datajson = args.datajson;
+        var currentMeasure = args.currentMeasure;
+        var primaryId = args.primaryId;
+        var showFilters = args.showFilters;
+
+        helper.refreshData(component, datajson, currentMeasure, primaryId, showFilters);                         
+    },
+
+    
     handle_evt_sfd3  : function(component, event, helper) {
         console.log('chartArea: handle_evt_sfd3 enter');
 
@@ -132,10 +144,6 @@
 
                 var cc = component.getConcreteComponent();
                 cc.initializeData(parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"], isInit);                 
-  
-
-// PREVIOUS --- GOOD
-//                helper.initializeData(component, parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"], isInit);                 
             }
             else {
                 console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
@@ -151,7 +159,11 @@
 // THIS ALL TEMPORARY
                 console.log("RefreshData: Data: " + parameters["valueDate"]);
                 component.set("v.Title", parameters["valueDate"] );
-                helper.refreshData(component, parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"]);                 
+
+                var cc = component.getConcreteComponent();
+                cc.refreshData(parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"]);                 
+
+
             }
             else {
                 console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
