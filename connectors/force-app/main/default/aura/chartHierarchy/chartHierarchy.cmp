@@ -1,13 +1,5 @@
 <aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extends="c:chartArea">
 
-    <aura:method name="abc"> 
-        <aura:attribute name="datajson" type="Object"/> 
-        <aura:attribute name="nodeGroup" type="Object"/> 
-        <aura:attribute name="pathGroup" type="Object"/> 
-        <aura:attribute name="textGroup" type="Object"/> 
-        <aura:attribute name="pathToolTipDiv" type="Object"/> 
-        <aura:attribute name="pathGroupId" type="String"/> 
-      </aura:method>
-    
+    <aura:method name="initializeVisuals"/> 
 
 </aura:component>

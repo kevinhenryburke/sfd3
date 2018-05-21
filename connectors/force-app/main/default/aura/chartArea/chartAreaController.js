@@ -54,19 +54,6 @@
 
     /* handlers */
 
-    initializeData: function(component,event,helper){
-        console.log("calling the aura:method initializeData in base");
-        var args = event.getParam("arguments");
-
-        var datajson = args.datajson;
-        var currentMeasure = args.currentMeasure;
-        var primaryId = args.primaryId;
-        var showFilters = args.showFilters;
-        var isInit = args.isInit;
-
-        helper.initializeData(component, datajson, currentMeasure, primaryId, showFilters, isInit);                 
-    },
-
     refreshData: function(component,event,helper){
         console.log("calling the aura:method refreshData in base");
         var args = event.getParam("arguments");
@@ -142,8 +129,10 @@
                 console.log("InitializeData with reference: " + componentReference);
                 var isInit = true;
 
+                helper.initializeGroups(component, parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"], isInit);                 
+
                 var cc = component.getConcreteComponent();
-                cc.initializeData(parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"], isInit);                 
+                cc.initializeVisuals();
             }
             else {
                 console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);

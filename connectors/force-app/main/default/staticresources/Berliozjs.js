@@ -973,24 +973,6 @@ console.log("loaded: bzinfluence  IIFE");
 
 })));
 
-/* Split this into new file */
-
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.bzchartconnections = global.bzchartconnections || {})));
-}(this, (function (exports) { 'use strict';
-
-console.log("loading: bzchartconnections IIFE");
-
-var version = "0.0.1";
-
-console.log("loaded: bzchartconnections  IIFE");
-
-})));
-
-
-
 
 /* Split this into new file */
 
@@ -1012,8 +994,6 @@ function nodeDataSetFunctionNodes (componentReference) {
 
         var diameter = bzutils.getCache (componentReference, "width") ;  
         console.log("nodeDataSetFunctionNodes diameter: " + diameter);
-        
-//        var diameter = svg.attr("width");
         
         var pack = d3.pack()
         .size([diameter - 4, diameter - 4]);
@@ -1215,7 +1195,7 @@ function update() {
 
     function getCanExpandColor (d) {
         var color = canExpandColor;
-        console.log(d);
+//        console.log(d);
         if (d.data.size != null && d.data.size < 5000) {
             color = "red";
         }
@@ -1236,7 +1216,7 @@ function update() {
 
     function getExpandedColor (d) { // TODO demo stuff only
         var color = expandedColor;
-        console.log(d);
+//        console.log(d);
         if (d.data.size != null && d.data.size < 5000) {
             color = "red";
         }
@@ -1263,177 +1243,6 @@ function update() {
             d.children = null
         }
     }
-
-    // function update(nodeGroup, pathGroup, componentReference, source) {
-    //     var nodes;
-    //     var links;
-    //     var duration = 750;
-    //     var fixedDepth = 180; // this may need to be a function of chart area depth?
-        
-    //     var margin = bzutils.getCache (componentReference, "margin") ;  
-        
-    //     // Assigns the x and y position for the nodes
-
-    //     var treemap = bzutils.getCache (componentReference, "treemap" ) ;
-    //     var root = bzutils.getCache (componentReference, "root" ) ;
-
-    //     var treeMappedData = treemap(root);
-      
-    //     // Compute the new tree layout.
-    //     nodes = treeMappedData.descendants();
-    //     links = treeMappedData.descendants().slice(1);
-      
-    //     // Normalize for fixed-depth.
-    //     nodes.forEach(function(d){ d.y = margin.left + (d.depth * fixedDepth)});
-      
-    //     // ****************** Nodes section ***************************
-      
-    //     // Update the nodes...
-    //     var node = nodeGroup.selectAll('g.treenode')
-    //         .data(nodes, function(d) {                
-    //             console.log("xxx: " + d.id);
-    //             return d.id || (d.id = bzutils.addComponentRef(componentReference, d.data.id)); 
-    //         });
-                
-    //     // Enter any new modes at the parent's previous position.
-    //     var nodeEnter = node.enter().append('g')
-    //         .attr('class', 'treenode')
-    //         .attr("transform", function(d) {
-    //             var t = "translate(" + source.y0 + "," + source.x0 + ")";
-    //             console.log("enter new node: " + t);
-    //           return t;
-    //         })
-    //         .attr("id", function(d) {
-    //             return d.id;
-    //         })            
-    //         .attr("recordid", function(d) {
-    //             return d.data.id;
-    //         })            
-    //         .on('click', click);
-      
-    //     // Add Circle for the nodes
-    //     nodeEnter.append('circle')
-    //         .attr('class', 'treenode')
-    //         .attr('r', 1e-6)
-    //         .style("fill", function(d) {
-    //             return d._children ? bzctree.getCanExpandColor(d) : bzctree.getExpandedColor(d);
-    //         })
-            
-    //         .on('mouseover', function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-    //             bzutils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
-    //             bzutils.xfcr("nodeMouseover", componentReference, d); 
-    //         })
-        
-    //         ;
-      
-    //     // Add labels for the nodes
-    //     nodeEnter.append('text')
-    //         .attr("dy", ".35em")
-    //         .attr("x", function(d) {
-    //             return d.children || d._children ? -13 : 13;
-    //         })
-    //         .attr("text-anchor", function(d) {
-    //             return d.children || d._children ? "end" : "start";
-    //         })
-    //         .text(function(d) { return d.data.name; });
-      
-    //     // UPDATE
-    //     var nodeUpdate = nodeEnter.merge(node);
-      
-    //     // Transition to the proper position for the node
-    //     nodeUpdate.transition()
-    //       .duration(duration)
-    //       .attr("transform", function(d) { 
-    //           var t = "translate(" + d.y  + "," + d.x + ")";
-    //           console.log(t);
-    //           return t;
-    //        });
-      
-    //     // Update the node attributes and style
-    //     nodeUpdate.select('circle.treenode')
-    //       .attr('r', 10)
-    //       .style("fill", function(d) {
-    //           return d._children ? bzctree.getCanExpandColor(d) : bzctree.getExpandedColor(d);
-    //       })
-    //       .attr('cursor', 'pointer');
-      
-      
-    //     // Remove any exiting nodes
-    //     var nodeExit = node.exit().transition()
-    //         .duration(duration)
-    //         .attr("transform", function(d) {
-    //             return "translate(" + source.y + "," + source.x + ")";
-    //         })
-    //         .remove();
-      
-    //     // On exit reduce the node circles size to 0
-    //     nodeExit.select('circle')
-    //       .attr('r', 1e-6);
-      
-    //     // On exit reduce the opacity of text labels
-    //     nodeExit.select('text')
-    //       .style('fill-opacity', 1e-6);
-      
-    //     // ****************** links section ***************************
-      
-    //     // Update the links...
-    //     var link = pathGroup.selectAll('path.treelink')
-    //         .data(links, function(d) { return d.id; });
-      
-    //     // Enter any new links at the parent's previous position.
-    //     var linkEnter = link.enter().insert('path', "g")
-    //         .attr("class", "treelink")
-    //         .attr('d', function(d){
-    //             var o = {x: source.x0, y: source.y0}
-    //           return diagonal(o, o)
-    //         });
-      
-    //     // UPDATE
-    //     var linkUpdate = linkEnter.merge(link);
-      
-    //     // Transition back to the parent element position
-    //     linkUpdate.transition()
-    //         .duration(duration)
-    //         .attr('d', function(d){ return diagonal(d, d.parent) });
-      
-    //     // Remove any exiting links
-    //     var linkExit = link.exit().transition()
-    //         .duration(duration)
-    //         .attr('d', function(d) {
-    //           var o = {x: source.x, y: source.y}
-    //           return diagonal(o, o)
-    //         })
-    //         .remove();
-      
-    //     // Store the old positions for transition.
-    //     nodes.forEach(function(d){
-    //       d.x0 = d.x;
-    //       d.y0 = d.y;
-    //     });
-      
-    //     // Creates a curved (diagonal) path from parent to the child nodes
-    //     function diagonal(s, d) {
-      
-    //       var path = `M ${s.y} ${s.x}
-    //               C ${(s.y + d.y) / 2} ${s.x},
-    //                 ${(s.y + d.y) / 2} ${d.x},
-    //                 ${d.y} ${d.x}`
-      
-    //       return path
-    //     }
-      
-    //     // Toggle children on click.
-    //     function click(d) {
-    //       if (d.children) {
-    //           d._children = d.children;
-    //           d.children = null;
-    //         } else {
-    //           d.children = d._children;
-    //           d._children = null;
-    //         }
-    //         update(nodeGroup, pathGroup, componentReference, d);
-    //     }
-    //   }
       
     /* TODO: this is pretty bad - builds up a huge list of events as context gets lost when we create new nodes
     Need to find a better way!!!!!!

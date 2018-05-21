@@ -38,13 +38,8 @@
   <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
   <aura:handler event="aura:doneRendering" action="{!c.doneRendering}"/>
 
-  <aura:method name="initializeData"> 
-    <aura:attribute name="datajson" type="Object"/> 
-    <aura:attribute name="currentMeasure" type="String"/> 
-    <aura:attribute name="primaryId" type="String"/> 
-    <aura:attribute name="showFilters" type="Object"/> 
-    <aura:attribute name="isInit" type="Boolean"/> 
-  </aura:method>
+
+  <!-- Methods with different implementations for different chart types -->  
 
   <aura:method name="refreshData"> 
     <aura:attribute name="datajson" type="Object"/> 
@@ -53,15 +48,7 @@
     <aura:attribute name="showFilters" type="Object"/> 
   </aura:method>
 
-  <aura:method name="abc"> 
-    <aura:attribute name="datajson" type="Object"/> 
-    <aura:attribute name="nodeGroup" type="Object"/> 
-    <aura:attribute name="pathGroup" type="Object"/> 
-    <aura:attribute name="textGroup" type="Object"/> 
-    <aura:attribute name="pathToolTipDiv" type="Object"/> 
-    <aura:attribute name="pathGroupId" type="String"/> 
-  </aura:method>
-
+  <aura:method name="initializeVisuals"/> 
 
   <!-- Design Paramters -->  
   <aura:attribute name="UserComponentId" type="String" default="" description="If putting more than one chart on a page then this provides users with a mechanism to set their own for mapping purposes"/>    

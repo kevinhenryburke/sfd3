@@ -131,12 +131,15 @@
 
         // re-initialize the chart
         var isInit = false;
-        _this.initializeData(component, datajson, currentMeasure, primaryNodeId, showFilters, isInit);                 
-        
+        _this.initializeGroups(component, datajson, currentMeasure, primaryNodeId, showFilters, isInit);                 
+
+        var cc = component.getConcreteComponent();
+        cc.initializeVisuals();
+
         console.log("chartArea: exit refreshData");
     },    
 
-	initializeData: function (component, datajson, currentMeasure, primaryNodeId, showFilters, isInit) {
+	initializeGroups: function (component, datajson, currentMeasure, primaryNodeId, showFilters, isInit) {
 
         var _this = this;
         var componentReference = component.get("v.componentReference");
@@ -148,7 +151,7 @@
         bzutils.setCache (componentReference, "hasPaths", bzutils.hasParam(componentType, "path") ) ;
         bzutils.setCache (componentReference, "hasText", bzutils.hasParam(componentType, "text") ) ;
 
-        console.log("init:initializing initializeData with primaryNodeId: " + primaryNodeId);
+        console.log("init:initializing initializeGroups with primaryNodeId: " + primaryNodeId);
         
         if (isInit) {
             bzutils.initializeAddComponentRef(componentReference, datajson);
@@ -170,36 +173,36 @@
 		console.log("svg is defined ... "); 
         
         // Styling of tooltips - see GitHub prior to Feb 24, 2018
-        var nodeToolTipDiv = d3.select("#nodeToolTip");
         var pathToolTipDivId = bzutils.addComponentRef(componentReference, "pathToolTip");
         var pathToolTipDiv = d3.select("#" + pathToolTipDivId);
+        bzutils.setCache (componentReference, "pathToolTipDiv", pathToolTipDiv ) ;
 
-        var isRefresh = false;
-        
         console.log("create some groups inside the svg element to store the raw data");
 
-
         var pathGroupId = bzutils.getDivId("pathGroup", componentReference, false);
-        var nodeGroupId = bzutils.getDivId("nodeGroup", componentReference, false);
-        var textGroupId = bzutils.getDivId("textGroup", componentReference, false);
-        
+        bzutils.setCache (componentReference, "pathGroupId", pathGroupId ) ;
         var pathGroup = d3.select("#" + pathGroupId);
         if (pathGroup.empty()) {
             console.log("create pathGroup");
             pathGroup = svg.append("g").attr("id",pathGroupId);
         }
+        bzutils.setCache (componentReference, "pathGroup", pathGroup ) ;
 
+        var nodeGroupId = bzutils.getDivId("nodeGroup", componentReference, false);
         var nodeGroup = d3.select("#" + nodeGroupId);
         if (nodeGroup.empty()) {
             console.log("create nodeGroup");
             nodeGroup = svg.append("g").attr("id",nodeGroupId);
         }
+        bzutils.setCache (componentReference, "nodeGroup", nodeGroup ) ;
 
+        var textGroupId = bzutils.getDivId("textGroup", componentReference, false);        
         var textGroup = d3.select("#" + textGroupId);
         if (textGroup.empty()) {
             console.log("create textGroup");
             textGroup = svg.append("svg:g").attr("id",textGroupId);
         }
+        bzutils.setCache (componentReference, "textGroup", textGroup ) ;
 
         // console.log("PreProcess data");
         // datajson = bzutils.xfcr("dataPreProcess", componentReference, datajson); // preprocessing of data (if any)
@@ -211,10 +214,6 @@
         // var node = d3.select("#" + nodeGroupId).selectAll("circle")  ;
         // var path = d3.select("#" + pathGroupId).selectAll("path")  ;
         
-		var cc = component.getConcreteComponent();
-	 	cc.abc(datajson,nodeGroup,pathGroup,textGroup,pathToolTipDiv,pathGroupId);
-
-
 	},
     
     // ideally would prefer to put in Berlioz library but externals can't safely be called in doInit

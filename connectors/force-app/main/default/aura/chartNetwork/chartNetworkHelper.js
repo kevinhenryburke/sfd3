@@ -1,10 +1,17 @@
 ({
 
-    abc: function (component, datajson, nodeGroup, pathGroup, textGroup, pathToolTipDiv, pathGroupId) {
-        console.log("subhelper: enter abc proper!");
+    initializeVisuals: function (component) {
+        console.log("subhelper: enter initializeVisuals proper!");
         var componentType = component.get("v.componentType");
         var componentReference = component.get("v.componentReference");
 
+		var datajson = bzutils.getCache (componentReference, "datajson") ;  
+		var nodeGroup = bzutils.getCache (componentReference, "nodeGroup") ;  
+		var pathGroup = bzutils.getCache (componentReference, "pathGroup") ;  
+		var textGroup = bzutils.getCache (componentReference, "textGroup") ;  
+		var pathToolTipDiv = bzutils.getCache (componentReference, "pathToolTipDiv") ;  
+		var pathGroupId = bzutils.getCache (componentReference, "pathGroupId") ;  
+        
         // console.log("PreProcess data");
         // datajson = bzutils.xfcr("dataPreProcess", componentReference, datajson); // preprocessing of data (if any)
 
