@@ -28,7 +28,6 @@
         // Collapse after the second level
         root.children.forEach(bzctree.collapse);
         bzutils.setCache (componentReference, "root", root ) ;
-//        _this.merge(root);
         _this.update(nodeGroup, pathGroup, componentReference, root);
     },
 
@@ -109,6 +108,9 @@
         nodeEnter.append('circle')
             .attr('class', 'treenode')
             .attr('r', 1e-6)
+            .attr("id", function(d) {
+                return "circle" + d.id;
+            })            
             .style("fill", function(d) {
                 console.log("kb: we add new circles only to new nodes - the nodes are forgotten if collapsed");
                 return d._children ? bzctree.getCanExpandColor(d) : bzctree.getExpandedColor(d);
@@ -144,6 +146,7 @@
         nodeUpdate.select('circle.treenode')
           .attr('r', 10)
           .style("fill", function(d) {
+              // collapsed children are stored as d._children / expanded a d.children
               return d._children ? bzctree.getCanExpandColor(d) : bzctree.getExpandedColor(d);
           })
           .attr('cursor', 'pointer');
@@ -222,23 +225,79 @@
               d.children = d._children;
               d._children = null;
             }
+// START: KB ADDED            
+// added to try to merge nodes ......
+console.log("click");
+console.log(d);
+console.log("Click: " + d.data.name);
+            if (d.data.name != "L1" && d.data.name != "L2" && d.data.name != "L3" && d.data.name == "analytics") {
+                _this.merge(componentReference, d, nodes, nodeGroup);
+            }
+
+            // END: KB ADDED            
             _this.update(nodeGroup, pathGroup, componentReference, d);
 		}
 		
 
       },
 	
-    merge : function(source) {
+    merge : function(componentReference, source, nodes, nodeGroup) {
         console.log("kb: in update:");
-        var newjson =             {
-            "id": "100000000000000003",
-            "name": "KB Extra Node",
-            "size": 3938
+        var newjson =             
+        {
+            "id": "100000000000000001",
+            "name": "L1",
+            "children": [
+                {
+                    "id": "100000000000000002",
+                    "name": "L2",
+                    "children": [
+                    {
+                        "id": "100000000000000003",
+                        "name": "L3",
+                        "size": 3938
+                    }]
+                }]
         };
+        var recordid = "000000000000000015"; // TODO - change - this is the graph node
+        var addToNodeId = bzutils.addComponentRef(componentReference, recordid);
+        var circleId = "circle" + addToNodeId;
+        console.log("KB: search for node: " + addToNodeId); 
+        console.log("KB: search for circle: " + circleId); 
+
+        // var g = d3.select("#" + addToNodeId).style("fill", "black"); // TODO - source should not be passed in to the merge(), recordid should
+        // console.log(g);
+        // Temporary stuff to turn a node black - to prove I've found another node
+        var g1 = d3.select("#" + circleId).style("fill", "black"); // TODO - source should not be passed in to the merge(), recordid should
+        console.log(g1);
+        // var g2 = d3.select(g1);
+        // console.log(g2);
+
+        var nodey1 = d3.select("#" + circleId).data()[0];
+        console.log("kb: selected node");
+        console.log(nodey1);
+
+        console.log("kb: passed in node");
+        console.log(source);
+        
         var newroot = d3.hierarchy(newjson, function(d) { return d.children; });
-        source.children.push(newroot);
-        source.data.children.push(newroot.data);
-        console.log("kb: added node:");
+        newroot.parent = nodey1;
+        newroot.depth = nodey1.depth + 1; 
+        newroot.height = nodey1.height - 1;
+        if(newroot.children) {
+            newroot.children.forEach(function(d) {d.depth = newroot.depth + 1;});
+        }
+        if (nodey1.children) {
+            nodey1.children.push(newroot);
+        }
+        if (nodey1._children) {
+            nodey1._children.push(newroot);
+        }
+
+        nodey1.data.children.push(newroot.data);
+        bzctree.collapse(newroot);
+//        newroot.children.forEach(bzctree.collapse);
+        console.log("kb: merge: added node:");
     
 /*    
             var _this = this;
