@@ -86,6 +86,11 @@ function getDivId (idType, componentReference, forSelect) {
     return (forSelect ? "#" : "") + componentReference + idType;
 }
 
+// handy function to retrieve a D3 Node from a DOM id
+function getNodeFromId (id) {
+    return d3.select("#" + id).data()[0];
+}
+
 
 
 /* This is how to list all the properties and all functions in a module
@@ -236,6 +241,7 @@ exports.getCache = getCache;
 exports.showCache = showCache;
 exports.showCacheAll = showCacheAll;
 exports.getDivId = getDivId;
+exports.getNodeFromId = getNodeFromId;
 exports.nodeDataSetFunctionNodes = nodeDataSetFunctionNodes;
 exports.nodeDataKeyFunctionId = nodeDataKeyFunctionId;
 

@@ -13,3 +13,8 @@
   stroke: #ccc;
   stroke-width: 2px;
 }
+
+/* TODO REMOVE THIS EVENTUALLY Just to ensure the select2 box is "glued" to the top*/
+.THIS .search {
+  width: 100%;
+}
