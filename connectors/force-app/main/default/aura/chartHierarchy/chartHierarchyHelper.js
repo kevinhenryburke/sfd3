@@ -209,11 +209,11 @@
               d.children = d._children;
               d._children = null;
             }
-// START: KB ADDED            
-// added to try to merge nodes ......
-console.log("click");
-console.log(d);
-console.log("Click: " + d.data.name);
+            _this.update(nodeGroup, pathGroup, componentReference, d);
+
+
+            // CLICK SHOULD END HERE
+            // TODO: none of the following is where it should be - need to move to correct places but proves out functionality.
             if (d.data.name == "analytics") {
                 _this.merge(componentReference, d);
             }
