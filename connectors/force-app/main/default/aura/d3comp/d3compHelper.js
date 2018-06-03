@@ -86,6 +86,78 @@
         }
     },
 
+    refreshOneTime : function(component, event) {
+        var _this = this;
+        // for a RefreshChart event we assume everything is initialized
+
+        var dataUpdateMethod = component.get("v.dataUpdateMethod");
+
+        var action = component.get(dataUpdateMethod);
+
+        console.log('InitiateRefreshChart: running apex callback');    
+
+        action.setCallback(_this, $A.getCallback(function(response) {
+            console.log('InitiateRefreshChart: data returned from apex for udpate');    
+            var state = response.getState();
+            console.log('InitiateRefreshChart: state ' + state);    
+            if (state === "SUCCESS") {
+
+                var datastring = response.getReturnValue();
+                var datajson = JSON.parse(datastring);
+                console.log('InitiateRefreshChart: datastring: ' + datastring);    
+                // Review - this is setting datajson to be whatever is new ... NOT the full data set in the CHART ...
+                component.set("v.datajson", datajson);
+                        
+
+
+    // TODO - this sends data that is picked up by the target component, however work needs to be done on updating / removing nodes
+
+                // TODO - will need to retrieve data based on new selections
+                var datajson = component.get("v.datajson");
+                var configjson = component.get("v.configjson");
+                var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
+                var panelShowFilters = component.get("v.panelShowFilters");     
+
+                var configEventParameters;
+
+                if (event != null && event.getParam("parameters") != null) {
+                    // Extract data from the event to update control panel and send out details.
+                    var parameters = event.getParam("parameters");
+                    var componentReference = parameters["componentReference"];
+                    console.log("Publish data upon refresh request for charts: " + componentReference);
+                    var panelPrimaryId = parameters["primaryNodeId"];            
+                    component.set("v.panelPrimaryId", panelPrimaryId);   
+                    
+                    // publish event - configuration loaded
+
+                    configEventParameters = { 
+                        "datajson" : datajson, 
+                        "currentMeasure" : panelCurrentMeasure,
+                        "primaryId" : panelPrimaryId, 
+                        "showFilters" : panelShowFilters,
+                        "componentReference" : componentReference        // be aware this is the receiving component's reference        
+                    }
+                }
+                else {
+                    configEventParameters = { 
+                        "datajson" : datajson, 
+                        "currentMeasure" : panelCurrentMeasure,
+                        "primaryId" : panelPrimaryId, 
+                        "showFilters" : panelShowFilters,
+                    }
+                }
+
+                //publish to this component
+                var publisher = component.get("v.UserComponentId");
+                var componentCategory = component.get("v.componentCategory");
+                var componentType = component.get("v.componentType");
+                bzutils.publishEvent("RefreshData", publisher, componentCategory, componentType, configEventParameters, null);            
+            }
+        }))
+        $A.enqueueAction(action);        
+    },
+
+
     /* BUTTON methods */
     
     setConnectionLevelFewerButtons: function(component) {

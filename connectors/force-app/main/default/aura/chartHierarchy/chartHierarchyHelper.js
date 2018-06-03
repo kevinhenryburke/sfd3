@@ -215,7 +215,7 @@
             // CLICK SHOULD END HERE
             // TODO: none of the following is where it should be - need to move to correct places but proves out functionality.
             if (d.data.name == "analytics") {
-                _this.merge(componentReference, d);
+                _this.merge(componentReference);
             }
 
             // END: KB ADDED            
@@ -328,36 +328,13 @@
         
     },
 
-    merge : function(componentReference, source) {
+    merge : function(componentReference, newjson) {
         console.log("kb: in merge:");
 		var _this = this;
 
         // TEMPORARY GUFF
 
-        // the first node id is assumed to be a pre-existing node and should not result in a new node.
-        // temp - node 15 for the expanded version, 83 for the collapsed
-        var newjson =             
-        {
-            "id": "000000000000000083",
-            "name": "methods",
-            "children": [
-                {
-                    "id": "100000000000000002",
-                    "name": "L2",
-                    "children": [
-                        {
-                            "id": "100000000000000003",
-                            "name": "L3a",
-                            "size": 3938
-                        },
-                        {
-                            "id": "100000000000000004",
-                            "name": "L3b",
-                            "size": 382
-                        }]
-                }]
-        };
-
+        // the first node id of the newjson is assumed to be a pre-existing node and should not result in a new node.
         var parentRecordId = newjson["id"]; // TODO - change - this is the graph node
         var addToNodeId = bzutils.addComponentRef(componentReference, parentRecordId);
         var parentNodeId = "circle" + addToNodeId;

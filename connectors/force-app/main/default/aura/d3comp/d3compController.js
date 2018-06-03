@@ -210,62 +210,9 @@
         if (topic == "InitiateRefreshChart")
         {
             // for a RefreshChart event we assume everything is initialized
-
-            var dataUpdateMethod = component.get("v.dataUpdateMethod");
-
-            var action = component.get(dataUpdateMethod);
-
-            console.log('InitiateRefreshChart: running apex callback');    
-
-            action.setCallback(_this, $A.getCallback(function(response) {
-                console.log('InitiateRefreshChart: data returned from apex for udpate');    
-                var state = response.getState();
-                console.log('InitiateRefreshChart: state ' + state);    
-                if (state === "SUCCESS") {
-
-                    var datastring = response.getReturnValue();
-                    var datajson = JSON.parse(datastring);
-                    console.log('InitiateRefreshChart: datastring: ' + datastring);    
-                    // Review - this is setting datajson to be whatever is new ... NOT the full data set in the CHART ...
-                    component.set("v.datajson", datajson);
-                            
-                    var parameters = event.getParam("parameters");
-                    var componentReference = parameters["componentReference"];
-                    console.log("Publish data upon refresh request for charts: " + componentReference);
-
-
-        // TODO - this sends data that is picked up by the target component, however work needs to be done on updating / removing nodes
-
-                    // TODO - will need to retrieve data based on new selections
-                    var datajson = component.get("v.datajson");
-                    var configjson = component.get("v.configjson");
-                    var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
-                    var panelPrimaryId = parameters["primaryNodeId"];            
-                    component.set("v.panelPrimaryId", panelPrimaryId);   
-                    var panelShowFilters = component.get("v.panelShowFilters");     
-
-                    
-                    // publish event - configuration loaded
-
-                    var configEventParameters = { 
-                        "datajson" : datajson, 
-//                        "configjson" : configjson, 
-                        "currentMeasure" : panelCurrentMeasure,
-                        "primaryId" : panelPrimaryId, 
-                        "showFilters" : panelShowFilters,
-                        "componentReference" : componentReference                
-                    }
-
-                    //publish to this component
-                    var publisher = component.get("v.UserComponentId");
-                    var componentCategory = component.get("v.componentCategory");
-                    var componentType = component.get("v.componentType");
-                    bzutils.publishEvent("RefreshData", publisher, componentCategory, componentType, configEventParameters, null);            
-                }
-            }))
-            $A.enqueueAction(action);        
+            console.log("One time refresh");
+            helper.refreshOneTime(component, event);
         }
-        
     },
 
     /* onClick methods */
@@ -368,9 +315,16 @@
 		helper.setFilter(component, 5);
     },
 
-    onClickRefresh : function(component, event, helper) {
+    onClickRefreshOneTime : function(component, event, helper) {
         var _this = this;
-        console.log("onClickRefresh enter");
+        console.log("onClickRefreshOneTime enter");
+		helper.refreshOneTime(component, event);
+        console.log("onClickRefreshOneTime exit");
+    },
+    
+    onClickTimeSeriesRefresh : function(component, event, helper) {
+        var _this = this;
+        console.log("onClickTimeSeriesRefresh enter");
 
 // ALL DUPLICATE WITH other refresh metthod = refactor
 
@@ -416,7 +370,7 @@ $A.getCallback(function() {
 }),
 1000);
 
-console.log("onClickRefresh exit");
+console.log("onClickTimeSeriesRefresh exit");
     },
     
     navigateToRecord : function(component){

@@ -103,7 +103,18 @@
             <div class="slds-col slds-size_1-of-3 slds-small-size_1-of-2 slds-medium-size_1-of-3">
               <h1 class="slds-text-heading_label">Refresh</h1>
               <div class="slds slds-button-group" role="group">
-                <c:buttonDynamic aura:id="r1" label="Refresh" class="slds-button slds-button_brand" onclick="{!c.onClickRefresh}" disabled="false"></c:buttonDynamic>
+                <c:buttonDynamic aura:id="r1" label="Time Refresh" class="slds-button slds-button_brand" onclick="{!c.onClickTimeSeriesRefresh}" disabled="false"></c:buttonDynamic>
+              </div>
+            </div>
+          </aura:if>
+          <!-- below is temporary to test out adding paths and highlighting paths-->
+          <!-- TODO - ultimately adding paths will be recursive backend function and highlighting paths will be a search box -->
+          <aura:if isTrue="{!v.configuredAllowRefresh}">
+            <div class="slds-col slds-size_1-of-3 slds-small-size_1-of-2 slds-medium-size_1-of-3" >
+              <h1 class="slds-text-heading_label">Temporary</h1>
+              <div class="slds slds-button-group" role="group">
+                <c:buttonDynamic aura:id="t1" label="Update Nodes" class="slds-button slds-button_brand" onclick="{!c.onClickRefreshOneTime}" disabled="false"></c:buttonDynamic>
+                <c:buttonDynamic aura:id="t1" label="Highlight Paths" class="slds-button slds-button_brand" onclick="{!c.onClickTimeSeriesRefresh}" disabled="false"></c:buttonDynamic>
               </div>
             </div>
           </aura:if>

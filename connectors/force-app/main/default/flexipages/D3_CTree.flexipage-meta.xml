@@ -12,7 +12,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>configjsonString</name>
-                <value>{"filtertypes":["Work","Social","Client"],"measures":["Posts","Hot"],"levels":4,"centreonclick":true}</value>
+                <value>{"allowrefresh":true}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>dataSourceMethod</name>
@@ -20,6 +20,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>dataUpdateMethod</name>
+                <value>c.returnDataPackUpdate</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>primaryNodeInitialization</name>

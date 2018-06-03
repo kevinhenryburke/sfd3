@@ -33,6 +33,18 @@ public class DThree {
     }
 
 
+    @AuraEnabled
+    public static String returnDataPackUpdate() {
+        List<StaticResource> docs;
+		docs = [select id, name, body from StaticResource where name = 'NVAPackUpdate']; 
+        return docs[0].body.toString();
+//		return D3Data.render();
+    }
+
+
+
+
+
 /* Not Used */
     @AuraEnabled
     public static String returnConfig() {
