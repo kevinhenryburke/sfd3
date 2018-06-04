@@ -296,22 +296,26 @@
 
         // try to find target node down from the root node
         var paths = _this.searchTree(ultimateRoot,searchTerm,[],searchBy);
+        _this.stylePathsStroke(paths, highlightOn);
+
+        bzutils.setCache (componentReference, "highlightedPaths", paths ) ;
+    },
+
+    stylePathsStroke : function(paths, highlightOn) {
+        var stroke = (highlightOn == true ? "#f00" : "#ccc");
         for(var i =0;i<paths.length;i++){
             if(paths[i].id !== "1"){//i.e. not root - TODO check value not equal to root
                 console.log("kb: highlight path");
                 var thispath = paths[i];
                 var relatedPathId = "path" + paths[i]["id"];
                 console.log(relatedPathId);
-                var stroke = (highlightOn == true ? "#f00" : "#ccc");
                 var g1 = d3.select("#" + relatedPathId).style("stroke", stroke); 
                 console.log("g1");
                 console.log(g1);
             }
         }
-        // TODO build up a list of highlight path here by just adding these paths into an array
-        // and then use these as an input to a clearHighlightPaths function
-        
     },
+
 
     clearHighlightPaths : function () {
         //TODO - IMPLEMENT

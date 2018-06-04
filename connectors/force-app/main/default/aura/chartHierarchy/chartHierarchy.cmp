@@ -14,4 +14,7 @@
         <aura:attribute name="refreshOperation" type="String"/> 
     </aura:method>              
 
+    <aura:attribute name="clearHighlightedPaths" type="Boolean" default="true" description="Determines if the chart has a primary node"/>    
+
+
 </aura:component>

@@ -12,7 +12,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>configjsonString</name>
-                <value>{"allowrefresh":true}</value>
+                <value>{"showtestbuttons":true}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>dataSourceMethod</name>
@@ -40,6 +40,10 @@
             <componentInstanceProperties>
                 <name>UserControllerComponentId</name>
                 <value>Top</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>clearHighlightedPaths</name>
+                <value>true</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>componentType</name>
