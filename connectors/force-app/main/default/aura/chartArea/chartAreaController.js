@@ -66,6 +66,10 @@
         helper.refreshData(component, datajson, currentMeasure, primaryId, showFilters);                         
     },
 
+    searchChart: function(component,event,helper){
+        console.log("calling the aura:method searchChart in base");        
+    },
+    
     
     handle_evt_sfd3  : function(component, event, helper) {
         console.log('chartArea: handle_evt_sfd3 enter');
@@ -157,6 +161,14 @@
             else {
                 console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
             }
+        }
+        if (topic == "SearchChart")
+        {
+            console.log("SearchChart received by Chart: " + componentReference + "/" + parameters["componentReference"]);
+
+            var cc = component.getConcreteComponent();
+            cc.searchChart(parameters["searchTermId"], parameters["refreshOperation"]);                 
+
         }
         console.log('chartArea: handle_evt_sfd3 exit');
     },

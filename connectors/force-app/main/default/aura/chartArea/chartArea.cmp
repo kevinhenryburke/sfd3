@@ -48,6 +48,11 @@
     <aura:attribute name="showFilters" type="Object"/> 
   </aura:method>
 
+  <aura:method name="searchChart"> 
+    <aura:attribute name="searchTermId" type="String"/> 
+    <aura:attribute name="refreshOperation" type="String"/> 
+  </aura:method>
+
   <aura:method name="initializeVisuals"/> 
 
   <!-- Design Paramters -->  

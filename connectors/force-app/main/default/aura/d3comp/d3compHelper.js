@@ -55,7 +55,12 @@
                 if (key == "allowrefresh") {
                     component.set("v.configuredAllowRefresh", true);                    
                 }
+                // this is a developer setting to allow some group of test buttons to display
+                if (key == "showtestbuttons") {
+                    component.set("v.configuredShowTestButtons", true);                    
+                }
 
+                // this may be required if we need to go down another level in the future.
                 console.log("here is a subObj layer 1: " + JSON.stringify(subObj));
                 for (var subKey in subObj) {
                     console.log("here is a key layer 2: " + subKey);
@@ -143,7 +148,7 @@
                         "datajson" : datajson, 
                         "currentMeasure" : panelCurrentMeasure,
                         "primaryId" : panelPrimaryId, 
-                        "showFilters" : panelShowFilters,
+                        "showFilters" : panelShowFilters
                     }
                 }
 
@@ -157,6 +162,23 @@
         $A.enqueueAction(action);        
     },
 
+    searchChart : function(component) {
+        var _this = this;
+        var searchTermId = component.get("v.searchTermId");
+        var refreshOperation = component.get("v.refreshOperation");
+
+        var configEventParameters = { 
+            "searchTermId" : searchTermId,
+            "refreshOperation" : refreshOperation
+        }
+
+        //publish to this component
+        var publisher = component.get("v.UserComponentId");
+        var componentCategory = component.get("v.componentCategory");
+        var componentType = component.get("v.componentType");
+        bzutils.publishEvent("SearchChart", publisher, componentCategory, componentType, configEventParameters, null);            
+    },
+    
 
     /* BUTTON methods */
     

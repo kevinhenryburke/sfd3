@@ -210,20 +210,6 @@
               d._children = null;
             }
             _this.update(nodeGroup, pathGroup, componentReference, d);
-
-
-            // CLICK SHOULD END HERE
-            // TODO: none of the following is where it should be - need to move to correct places but proves out functionality.
-            if (d.data.name == "analytics") {
-                _this.merge(componentReference);
-            }
-
-            // END: KB ADDED            
-            _this.update(nodeGroup, pathGroup, componentReference, d);
-            _this.openPathsBy(componentReference, "000000000000000082","id");
-            _this.update(nodeGroup, pathGroup, componentReference, d);
-            _this.highlightPathsBy(componentReference, "000000000000000083","id");
-            _this.update(nodeGroup, pathGroup, componentReference, d);
 		}
 		
 
@@ -240,15 +226,10 @@
         }        
       },
 
-    //basically a way to get the path to an object - this is independent of the search box
-    // KB root level call is - var paths = searchTree(root,e.object.text,[]);
-
-    // we have search by name or id (searchBy = "Name" or "Id")
+    // A way to get the path to an object - this is independent of the search box
+    // we can search by name or id (searchBy = "Name" or "Id")
     searchTree : function(obj,search,path, searchBy){
         var _this = this;
-//        console.log(obj.data.name); // shows the node names
-//        console.log(obj.data.id); // shows the node ids
-
         var objFieldValue = (searchBy == "Name" ? obj.data.name : obj.data.id );
         
         if(objFieldValue === search){ //if search is found return, add the object to the path and return it
@@ -306,36 +287,42 @@
 
     
     // highlight the input paths in the graph, note that need to call update afterwards
-    highlightPathsBy : function (componentReference, searchTerm, searchBy){
+    // searchBy is "name" or "id" depending on what searchTerm we are using
+    // highlightOn is boolean - if true we switch highlighting on, otherwise we switch it off
+
+    highlightPathsBy : function (componentReference, searchTerm, searchBy, highlightOn){
         var _this = this;
         var ultimateRoot = bzutils.getCache (componentReference, "root");
 
         // try to find target node down from the root node
         var paths = _this.searchTree(ultimateRoot,searchTerm,[],searchBy);
-        console.log("searchby path");
-        console.log(paths);
         for(var i =0;i<paths.length;i++){
             if(paths[i].id !== "1"){//i.e. not root - TODO check value not equal to root
                 console.log("kb: highlight path");
                 var thispath = paths[i];
                 var relatedPathId = "path" + paths[i]["id"];
                 console.log(relatedPathId);
-                var g1 = d3.select("#" + relatedPathId).style("stroke", "red"); 
+                var stroke = (highlightOn == true ? "#f00" : "#ccc");
+                var g1 = d3.select("#" + relatedPathId).style("stroke", stroke); 
                 console.log("g1");
                 console.log(g1);
             }
         }
+        // TODO build up a list of highlight path here by just adding these paths into an array
+        // and then use these as an input to a clearHighlightPaths function
         
+    },
+
+    clearHighlightPaths : function () {
+        //TODO - IMPLEMENT
     },
 
     merge : function(componentReference, newjson) {
         console.log("kb: in merge:");
 		var _this = this;
 
-        // TEMPORARY GUFF
-
         // the first node id of the newjson is assumed to be a pre-existing node and should not result in a new node.
-        var parentRecordId = newjson["id"]; // TODO - change - this is the graph node
+        var parentRecordId = newjson["id"]; 
         var addToNodeId = bzutils.addComponentRef(componentReference, parentRecordId);
         var parentNodeId = "circle" + addToNodeId;
 

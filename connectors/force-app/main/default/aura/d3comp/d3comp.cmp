@@ -28,6 +28,9 @@
 	<aura:attribute name="panelPrimaryId" type="String"/> 
 	<aura:attribute name="panelShowLevels" type="Integer" default="1"/>    
   <aura:attribute name="panelShowFilters" type="Object[]" default="[]" />
+	<aura:attribute name="searchTermId" type="String"/> 
+  <aura:attribute name="searchText" type="String" default=""/>
+	<aura:attribute name="refreshOperation" type="String"/> 
 
   <!-- Design Paramters -->  
   <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
@@ -48,8 +51,8 @@
 	<aura:attribute name="configuredLevels" type="Boolean" default="false"/>    
 	<aura:attribute name="configuredFilterTypes" type="Boolean" default="false"/>    
 	<aura:attribute name="configuredMeasures" type="Boolean" default="false"/>    
-	<aura:attribute name="configuredAllowRefresh" type="Boolean" default="false"/>    
-  
+  <aura:attribute name="configuredAllowRefresh" type="Boolean" default="false"/>    
+  <aura:attribute name="configuredShowTestButtons" type="Boolean" default="false"/>      
   
     <div class="slds">
       <div class="slds-page-header" role="banner">
@@ -109,12 +112,21 @@
           </aura:if>
           <!-- below is temporary to test out adding paths and highlighting paths-->
           <!-- TODO - ultimately adding paths will be recursive backend function and highlighting paths will be a search box -->
-          <aura:if isTrue="{!v.configuredAllowRefresh}">
-            <div class="slds-col slds-size_1-of-3 slds-small-size_1-of-2 slds-medium-size_1-of-3" >
+          <aura:if isTrue="{!v.configuredShowTestButtons}">
+            <div class="slds-col slds-size_1-of-1 slds-small-size_1-of-1 slds-medium-size_1-of-1" >
               <h1 class="slds-text-heading_label">Temporary</h1>
               <div class="slds slds-button-group" role="group">
-                <c:buttonDynamic aura:id="t1" label="Update Nodes" class="slds-button slds-button_brand" onclick="{!c.onClickRefreshOneTime}" disabled="false"></c:buttonDynamic>
-                <c:buttonDynamic aura:id="t1" label="Highlight Paths" class="slds-button slds-button_brand" onclick="{!c.onClickTimeSeriesRefresh}" disabled="false"></c:buttonDynamic>
+                <c:buttonDynamic aura:id="t1" label="Add" class="slds-button slds-button_brand" onclick="{!c.onClickRefreshOneTime}" disabled="false"></c:buttonDynamic>
+                <c:buttonDynamic aura:id="t2" label="Highlight" class="slds-button slds-button_brand" onclick="{!c.onClickHighlightInChart}" disabled="false"></c:buttonDynamic>
+                <!-- Super temporary search - enter either s1 or s2 for different paths -->
+                <div class="slds-form-element slds-lookup" data-select="single">
+                    <div class="slds-form-element__control">
+                        <div class="slds-input-has-icon slds-input-has-icon--right">
+                            <lightning:buttonIcon iconName="utility:search" variant="bare" onclick="{! c.onClickHighlightInChart }" alternativeText="Search" class="slds-input__icon" />
+                            <ui:inputText value="{!v.searchText}" class="slds-lookup__search-input slds-input" placeholder="Search" />
+                        </div>
+                    </div>
+                </div>
               </div>
             </div>
           </aura:if>
