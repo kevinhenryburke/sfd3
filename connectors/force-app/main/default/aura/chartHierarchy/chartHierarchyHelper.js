@@ -188,7 +188,15 @@
           d.x0 = d.x;
           d.y0 = d.y;
         });
-      
+
+        // KB: added to ensure highlighted nodes remain highlighted after collapse and expand
+        // takes the cached paths and highlights them.
+        var highlightedPaths = bzutils.getCache (componentReference, "highlightedPaths") ;
+        if (highlightedPaths != null) {
+            _this.stylePathsStroke(highlightedPaths, true);
+        }
+    
+
         // Creates a curved (diagonal) path from parent to the child nodes
         function diagonal(s, d) {
       
