@@ -5,4 +5,5 @@
     <design:attribute name="dataUpdateMethod" label="Data Update Method" default="c.returnDataUpdate" description="Apex Method returning updated data" />      
     <design:attribute name="primaryNodeInitialization" label="Primary Node to highlight" default="FirstInData" description="FirstInData (which is Default), RecordId, None" />          
     <design:attribute name="configjsonString" label="Config JSON" description="configuration JSON, do not change this unless you really understand what it does!"/>        
+    <design:attribute name="searchAction" label="Search Action" default="HighlightOpenPath" description="Options whether to highlight or just to open search paths on certain chart types. Options are HighlightPath, OpenPath, HighlightOpenPath"/>        
 </design:component>

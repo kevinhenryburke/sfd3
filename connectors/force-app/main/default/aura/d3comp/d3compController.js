@@ -2,7 +2,7 @@
 	
     onInit: function(component, event, helper) {
         console.log('afterScriptsLoaded panel enter');
-        
+
         var dataSourceMethod = component.get("v.dataSourceMethod");
 
         var action = component.get(dataSourceMethod);
@@ -74,9 +74,13 @@
                     console.error("Unknown error retrieving data");
                 }
             }
+
+
         });
 
-        $A.enqueueAction(action);        
+        $A.enqueueAction(action);      
+        
+
         console.log('afterScriptsLoaded panel exit');
     },
 
@@ -215,6 +219,39 @@
         }
     },
 
+   // This function call when the end User Select any record from the result list.   
+   handleEmbeddedComponentEvent : function(component, event, helper) {
+    // get the selected Account record from the COMPONETN event 	 
+       var selectedAccountGetFromEvent = event.getParam("recordByEvent");
+
+       // validate that we want to process this - i.e. it is for us?
+       var parentUserComponentIdFromEvent = event.getParam("parentUserComponentId");
+       var parentUserComponentId = component.get("v.UserComponentId");
+       if (parentUserComponentId != parentUserComponentIdFromEvent) {
+           console.log("d3comp: ignoring event: " + parentUserComponentId + "/" + parentUserComponentIdFromEvent);
+       } 
+       else {
+           console.log("d3comp: event received");
+       }
+
+       component.set("v.selectedRecord" , selectedAccountGetFromEvent); 
+       
+       console.log("selectedAccountGetFromEvent");
+       console.log(JSON.stringify(selectedAccountGetFromEvent));
+
+       console.log("id");
+       console.log(selectedAccountGetFromEvent.id);
+
+       var searchTermId = selectedAccountGetFromEvent.id;
+
+       component.set("v.searchTermId", searchTermId);
+       // Note: v.searchAction is set via Design Parameter
+
+       helper.publishSearchChartEvent(component);
+
+    },
+
+
     /* onClick methods */
 
     onClickLevelMore : function(component, event, helper) {
@@ -322,29 +359,6 @@
         console.log("onClickRefreshOneTime exit");
     },
     
-    onClickHighlightInChart : function(component, event, helper) {
-        var _this = this;
-
-        var searchText = component.get("v.searchText");
-
-
-        // TODO - this will be read in from a search box 
-        // TODO - consider whether to pass name or id
-        var searchTermId = "100000000000000004";
-
-        if (searchText == "s2") {
-            searchTermId = "000000000000000082";
-        }
-
-        component.set("v.searchTermId", searchTermId);
-        // Need to have options whether to highlight or just to open
-        // These are HighlightPath, OpenPath, HighlightOpenPath
-        component.set("v.refreshOperation", "HighlightOpenPath"); 
-
-        console.log("onClickHighlightInChart enter");
-		helper.searchChart(component);
-        console.log("onClickHighlightInChart exit");
-    },
 
     onClickTimeSeriesRefresh : function(component, event, helper) {
         var _this = this;

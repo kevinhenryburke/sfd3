@@ -26,6 +26,10 @@
                 <name>primaryNodeInitialization</name>
                 <value>None</value>
             </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>searchAction</name>
+                <value>HighlightOpenPath</value>
+            </componentInstanceProperties>
             <componentName>d3comp</componentName>
         </componentInstances>
         <componentInstances>

@@ -34,7 +34,7 @@
         var args = event.getParam("arguments");
 
         var searchTermId = args.searchTermId;
-        var refreshOperation = args.refreshOperation;
+        var searchAction = args.searchAction;
 
         var clearHighlightedPaths = component.get("v.clearHighlightedPaths");
         var componentReference = component.get("v.componentReference");
@@ -42,12 +42,12 @@
         var pathGroup = bzutils.getCache (componentReference, "pathGroup") ;  
         var root = bzutils.getCache (componentReference, "root") ;
 
-        if (refreshOperation == "HighlightOpenPath" || refreshOperation == "OpenPath" ) {
+        if (searchAction == "HighlightOpenPath" || searchAction == "OpenPath" ) {
                 helper.openPathsBy(componentReference, searchTermId, "Id");
                 helper.update(nodeGroup, pathGroup, componentReference, root);
         }
-        
-        if (refreshOperation == "HighlightOpenPath" || refreshOperation == "HighlightPath" ) {
+
+        if (searchAction == "HighlightOpenPath" || searchAction == "HighlightPath" ) {
             var highlightedPaths = bzutils.getCache (componentReference, "highlightedPaths") ;
             if (highlightedPaths != null && clearHighlightedPaths == true) {
                 helper.stylePathsStroke(highlightedPaths, false);

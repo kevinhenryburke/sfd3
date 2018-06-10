@@ -167,7 +167,7 @@
             console.log("SearchChart received by Chart: " + componentReference + "/" + parameters["componentReference"]);
 
             var cc = component.getConcreteComponent();
-            cc.searchChart(parameters["searchTermId"], parameters["refreshOperation"]);                 
+            cc.searchChart(parameters["searchTermId"], parameters["searchAction"]);                 
 
         }
         console.log('chartArea: handle_evt_sfd3 exit');

@@ -10,6 +10,11 @@
   <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
   <aura:handler event="c:evt_sfd3" action="{!c.handle_evt_sfd3}"/> 
 
+    <!--declare events hendlers-->  
+  <aura:attribute name="selectedRecord" type="sObject" default="{}" description="Use,for store SELECTED sObject Record"/>
+  <aura:handler name="oSelectedRecordEvent" event="c:selectedsObjectRecordEvent" action="{!c.handleEmbeddedComponentEvent}"/>
+
+
   <!-- Design Paramters Panel -->
   <aura:attribute name="UserComponentId" type="String" default="" description="If you want charts to only respond to particular controllers on a page then give this controller a name here (unique to the page) and associate it using the Controller Component Id option on the chart"/>    
   <aura:attribute name="card1" type="String" default="No node selected"/>    
@@ -30,7 +35,9 @@
   <aura:attribute name="panelShowFilters" type="Object[]" default="[]" />
 	<aura:attribute name="searchTermId" type="String"/> 
   <aura:attribute name="searchText" type="String" default=""/>
-	<aura:attribute name="refreshOperation" type="String"/> 
+	<aura:attribute name="searchAction" type="String"/> 
+
+  <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>     
 
   <!-- Design Paramters -->  
   <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
@@ -68,7 +75,7 @@
         </div>
         <div class="slds-grid slds-wrap">
           <!-- Hidden for topic connections -->
-
+ 
           <aura:if isTrue="{!v.configuredLevels}">
             <div class="slds-col slds-size_1-of-3 slds-small-size_1-of-2 slds-medium-size_1-of-3">
               <h1 class="slds-text-heading_label">Connect Levels</h1>
@@ -117,13 +124,14 @@
               <h1 class="slds-text-heading_label">Temporary</h1>
               <div class="slds slds-button-group" role="group">
                 <c:buttonDynamic aura:id="t1" label="Add" class="slds-button slds-button_brand" onclick="{!c.onClickRefreshOneTime}" disabled="false"></c:buttonDynamic>
-                <c:buttonDynamic aura:id="t2" label="Highlight" class="slds-button slds-button_brand" onclick="{!c.onClickHighlightInChart}" disabled="false"></c:buttonDynamic>
                 <!-- Super temporary search - enter either s1 or s2 for different paths -->
                 <div class="slds-form-element slds-lookup" data-select="single">
                     <div class="slds-form-element__control">
                         <div class="slds-input-has-icon slds-input-has-icon--right">
                             <lightning:buttonIcon iconName="utility:search" variant="bare" onclick="{! c.onClickHighlightInChart }" alternativeText="Search" class="slds-input__icon" />
                             <ui:inputText value="{!v.searchText}" class="slds-lookup__search-input slds-input" placeholder="Search" />
+
+                            <c:customLookup parentUserComponentId="{!v.UserComponentId}" objectAPIName="account" IconName="standard:account" selectedRecord="{!v.selectedLookUpRecord}" />
                         </div>
                     </div>
                 </div>

@@ -162,14 +162,14 @@
         $A.enqueueAction(action);        
     },
 
-    searchChart : function(component) {
+    publishSearchChartEvent : function(component) {
         var _this = this;
         var searchTermId = component.get("v.searchTermId");
-        var refreshOperation = component.get("v.refreshOperation");
+        var searchAction = component.get("v.searchAction");
 
         var configEventParameters = { 
             "searchTermId" : searchTermId,
-            "refreshOperation" : refreshOperation
+            "searchAction" : searchAction
         }
 
         //publish to this component

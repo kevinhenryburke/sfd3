@@ -280,6 +280,11 @@
         var _this = this;
         var ultimateRoot = bzutils.getCache (componentReference, "root");
 
+        console.log("searchTerm");
+        console.log(searchTerm);
+        console.log("searchBy");
+        console.log(searchBy);
+
         // try to find target node down from the root node
         var paths = _this.searchTree(ultimateRoot,searchTerm,[],searchBy);
         for(var i =0;i<paths.length;i++){

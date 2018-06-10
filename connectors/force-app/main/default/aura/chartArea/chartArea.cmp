@@ -50,7 +50,7 @@
 
   <aura:method name="searchChart"> 
     <aura:attribute name="searchTermId" type="String"/> 
-    <aura:attribute name="refreshOperation" type="String"/> 
+    <aura:attribute name="searchAction" type="String"/> 
   </aura:method>
 
   <aura:method name="initializeVisuals"/> 
