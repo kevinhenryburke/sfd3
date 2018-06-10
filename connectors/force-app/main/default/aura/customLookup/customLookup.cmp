@@ -26,7 +26,7 @@
     <aura:handler event="c:evt_sfd3" action="{!c.handle_evt_sfd3}"/>
 
     <!--declare events hendlers-->  
-    <aura:handler name="oSelectedRecordEvent" event="c:selectedsObjectRecordEvent" action="{!c.handleEmbeddedComponentEvent}"/>
+    <aura:handler name="oSelectedRecordEvent" event="c:evt_SubCompToContaining" action="{!c.handleEmbeddedComponentEvent}"/>
    
     
     <!-- https://www.lightningdesignsystem.com/components/lookups/ --> 

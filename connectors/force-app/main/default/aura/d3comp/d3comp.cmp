@@ -12,7 +12,7 @@
 
     <!--declare events hendlers-->  
   <aura:attribute name="selectedRecord" type="sObject" default="{}" description="Use,for store SELECTED sObject Record"/>
-  <aura:handler name="oSelectedRecordEvent" event="c:selectedsObjectRecordEvent" action="{!c.handleEmbeddedComponentEvent}"/>
+  <aura:handler name="oSelectedRecordEvent" event="c:evt_SubCompToContaining" action="{!c.handleEmbeddedComponentEvent}"/>
 
 
   <!-- Design Paramters Panel -->

@@ -1,4 +1,5 @@
 public with sharing class customLookUpController {
+    /* Class is not used, however kept temporarily as an example of how this could be used to provide search component based on Apex Query */
     @AuraEnabled
     public static List < sObject > fetchLookUpValues(String searchKeyWord, String ObjectName) {
         system.debug('ObjectName-->' + ObjectName);

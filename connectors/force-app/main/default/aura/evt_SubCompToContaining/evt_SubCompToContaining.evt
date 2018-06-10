@@ -1,4 +1,4 @@
-<aura:event type="COMPONENT" description="by this event we are pass the selected sObject(lookup list record) in the parent component">
+<aura:event type="COMPONENT" description="used to pass info from an embedded component to parent and grandparent component">
     <aura:attribute name="recordByEvent" type="sObject"/>
     <aura:attribute name="parentUserComponentId" type="string"/>
 </aura:event>
