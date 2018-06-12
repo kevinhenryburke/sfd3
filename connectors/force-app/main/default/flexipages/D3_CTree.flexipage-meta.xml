@@ -15,6 +15,10 @@
                 <value>{"showtestbuttons":true}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
+                <name>configuredAllowSearch</name>
+                <value>true</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
                 <name>dataSourceMethod</name>
                 <value>c.returnDataPack</value>
             </componentInstanceProperties>
@@ -29,6 +33,10 @@
             <componentInstanceProperties>
                 <name>searchAction</name>
                 <value>HighlightOpenPath</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>showBanner</name>
+                <value>false</value>
             </componentInstanceProperties>
             <componentName>d3comp</componentName>
         </componentInstances>

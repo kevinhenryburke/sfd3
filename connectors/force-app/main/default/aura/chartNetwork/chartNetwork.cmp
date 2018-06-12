@@ -1,5 +1,11 @@
 <aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extends="c:chartArea">
 
     <aura:method name="initializeVisuals" /> 
+
+    <aura:method name="searchChart"> 
+        <aura:attribute name="searchTermId" type="String"/> 
+        <aura:attribute name="searchAction" type="String"/> 
+        <aura:attribute name="showLevels" type="Integer"/> 
+    </aura:method>              
         
 </aura:component>

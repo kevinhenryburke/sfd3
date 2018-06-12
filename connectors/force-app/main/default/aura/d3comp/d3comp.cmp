@@ -44,7 +44,9 @@
   <aura:attribute name="dataSourceMethod" type="String" default="c.returnDataNodesOnly"/>      
   <aura:attribute name="dataUpdateMethod" type="String" default="c.returnDataUpdate"/>      
   <aura:attribute name="configjsonString" type="String" />
+  <aura:attribute name="showBanner" type="Boolean" default="true"/>      
   <aura:attribute name="Title" type="String" />      
+  <aura:attribute name="configuredAllowSearch" type="Boolean" default="false"/>    
 
   <!-- Technical - Chart -->
 
@@ -63,16 +65,19 @@
   
     <div class="slds">
       <div class="slds-page-header" role="banner">
-        <div class="slds-media">
-          <div class="slds-media__figure">
-            <lightning:icon iconName="action:approval" size="large" alternativeText="Connections"/>
-          </div>
-          <div class="slds-media__body">
-            <div class="slds-grid">
-              <h1 class="slds-text-heading_medium slds-m-right_small slds-truncate slds-align-middle" title="Record Title">{!v.Title}</h1>
+          <aura:if isTrue="{!v.showBanner}">
+            <div class="slds-media">
+              <div class="slds-media__figure">
+                <lightning:icon iconName="action:approval" size="large" alternativeText="Connections"/>
+              </div>
+              <div class="slds-media__body">
+                <div class="slds-grid">
+                  <h1 class="slds-text-heading_medium slds-m-right_small slds-truncate slds-align-middle" title="Record Title">{!v.Title}</h1>
+                </div>
+              </div>
+
             </div>
-          </div>
-        </div>
+          </aura:if>
         <div class="slds-grid slds-wrap">
           <!-- Hidden for topic connections -->
  
@@ -117,28 +122,21 @@
               </div>
             </div>
           </aura:if>
-          <!-- below is temporary to test out adding paths and highlighting paths-->
+          <aura:if isTrue="{!v.configuredAllowSearch}">
+          <div class="slds-col slds-size_1-of-3 slds-small-size_1-of-2 slds-medium-size_1-of-3">
+              <c:customLookup parentUserComponentId="{!v.UserComponentId}" objectAPIName="account" IconName="standard:account" selectedRecord="{!v.selectedLookUpRecord}" />
+          </div>
+        </aura:if>
+        <!-- below is temporary to test out adding paths and highlighting paths-->
           <!-- TODO - ultimately adding paths will be recursive backend function and highlighting paths will be a search box -->
           <aura:if isTrue="{!v.configuredShowTestButtons}">
             <div class="slds-col slds-size_1-of-1 slds-small-size_1-of-1 slds-medium-size_1-of-1" >
               <h1 class="slds-text-heading_label">Temporary</h1>
               <div class="slds slds-button-group" role="group">
                 <c:buttonDynamic aura:id="t1" label="Add" class="slds-button slds-button_brand" onclick="{!c.onClickRefreshOneTime}" disabled="false"></c:buttonDynamic>
-                <!-- Super temporary search - enter either s1 or s2 for different paths -->
-                <div class="slds-form-element slds-lookup" data-select="single">
-                    <div class="slds-form-element__control">
-                        <div class="slds-input-has-icon slds-input-has-icon--right">
-                            <lightning:buttonIcon iconName="utility:search" variant="bare" onclick="{! c.onClickHighlightInChart }" alternativeText="Search" class="slds-input__icon" />
-                            <ui:inputText value="{!v.searchText}" class="slds-lookup__search-input slds-input" placeholder="Search" />
-
-                            <c:customLookup parentUserComponentId="{!v.UserComponentId}" objectAPIName="account" IconName="standard:account" selectedRecord="{!v.selectedLookUpRecord}" />
-                        </div>
-                    </div>
-                </div>
               </div>
             </div>
           </aura:if>
-
         </div>
       </div>
     </div>

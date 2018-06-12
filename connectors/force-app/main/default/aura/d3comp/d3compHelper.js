@@ -166,10 +166,14 @@
         var _this = this;
         var searchTermId = component.get("v.searchTermId");
         var searchAction = component.get("v.searchAction");
+        var showLevels = component.get("v.maxlevels");
+
+        console.log("publishSearchChartEvent: " + showLevels);
 
         var configEventParameters = { 
             "searchTermId" : searchTermId,
-            "searchAction" : searchAction
+            "searchAction" : searchAction,
+            "showLevels" : showLevels
         }
 
         //publish to this component
@@ -209,6 +213,19 @@
         }
     },
 
+    setConnectionLevelMaxButtons: function(component) {
+        console.log("enter setConnectionLevelMaxButtons");
+        var maxlevels = component.get("v.maxlevels");
+        component.set("v.panelShowLevels", maxlevels);
+        
+            // refresh buttons
+        // "less" button should be enabled, "more" button should be disabled if we've reached max level
+        var cmpTargetLess = component.find("less");
+        cmpTargetLess.set("v.disabled", "false");
+        var cmpTargetMore = component.find("more");
+        cmpTargetMore.set("v.disabled", "true");
+    },
+    
     setMeasure: function(component, measureIndex) {
         var configjson = component.get("v.configjson");
         var thisMeasure = configjson.measures[measureIndex - 1];

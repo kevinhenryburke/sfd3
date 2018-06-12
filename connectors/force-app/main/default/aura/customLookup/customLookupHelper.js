@@ -1,17 +1,19 @@
 ({
-	searchHelper : function(component,event,getInputkeyWord) {
+	searchListFilter : function(component,event,getInputkeyWord) {
        
         $A.util.removeClass(component.find("mySpinner"), "slds-show");
 
         var datajsonFlat = component.get("v.datajsonFlat");
-        console.log("datajsonFlat");
-        console.log(datajsonFlat);
         
         var storeResponse = [];
 
+        var inputKeywordLowerCase = getInputkeyWord.toLowerCase();
+
         for (var i = 0; i < datajsonFlat.length; i++) { 
-            if ( datajsonFlat[i].name.indexOf(getInputkeyWord) !== -1) {
-                storeResponse.push(datajsonFlat[i]);
+            if ( datajsonFlat[i].name != null) {
+                if ( datajsonFlat[i].name && datajsonFlat[i].name.toLowerCase().indexOf(inputKeywordLowerCase) !== -1) {
+                    storeResponse.push(datajsonFlat[i]);
+                }
             }
         } ;       
 
@@ -58,6 +60,10 @@
 */
     },
 
+
+    /* This may need to change but at present it attempts to parse both hierarchy and node formats
+    More control could be had by informing what the format to expect is of course */
+
     flattenJson : function(component, topnode, datajsonFlat, datajsonSet, isTop) {
         var _this = this;
 
@@ -70,12 +76,21 @@
             datajsonSet.add(topnode.id);
         }
 
+        // parse the hierarchy - using children node
         if (topnode.children) {
             for (var i=0; i < topnode.children.length; i++ ) {
                 _this.flattenJson(component, topnode.children[i], datajsonFlat, datajsonSet, false);
             }
         }
 
+        // parse the node structure - using nodes
+        if (topnode.nodes) {
+            for (var i=0; i < topnode.nodes.length; i++ ) {
+                _this.flattenJson(component, topnode.nodes[i], datajsonFlat, datajsonSet, false);
+            }
+        }        
+
+        // we've navigated the whole structure so set the outputs 
         if (isTop == true) {
             component.set("v.datajsonFlat", datajsonFlat);
             component.set("v.datajsonSet", datajsonSet);

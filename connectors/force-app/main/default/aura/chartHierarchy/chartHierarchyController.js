@@ -30,7 +30,7 @@
     },
 
     searchChart: function(component,event,helper){
-        console.log("calling the aura:method refreshData in subcomponent");
+        console.log("calling the aura:method searchChart in subcomponent");
         var args = event.getParam("arguments");
 
         var searchTermId = args.searchTermId;

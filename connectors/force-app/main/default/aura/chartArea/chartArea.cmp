@@ -51,6 +51,7 @@
   <aura:method name="searchChart"> 
     <aura:attribute name="searchTermId" type="String"/> 
     <aura:attribute name="searchAction" type="String"/> 
+    <aura:attribute name="showLevels" type="Integer"/> 
   </aura:method>
 
   <aura:method name="initializeVisuals"/> 

@@ -1,4 +1,6 @@
 <aura:component controller="customLookUpController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+
+    <!-- Based on http://sfdcmonkey.com/2017/07/17/re-usable-custom-lookup/ -->
     <!--declare attributes--> 
     <aura:attribute name="selectedRecord" type="sObject" default="{}" description="Use,for store SELECTED sObject Record"/>
     <aura:attribute name="listOfSearchRecords" type="List" description="Use,for store the list of search records which returns from apex class"/>
@@ -8,18 +10,12 @@
     <aura:attribute name="label" type="string" default=""/>
     <aura:attribute name="Message" type="String" default=""/>
 
-
-
     <aura:attribute name="parentUserComponentId" type="String"/> 
 
     <aura:attribute name="datajsonString" type="String"/> 
     <aura:attribute name="datajsonFlat" type="Object[]"/> 
     <aura:attribute name="datajsonSet" type="Set"/> 
     <aura:attribute name="test" type="String"/> 
-
-    <aura:attribute name="publisher" type="String" />    
-    <aura:attribute name="componentCategory" type="String" default="Controller" />    
-	<aura:attribute name="componentType" type="String" default="Controller" />  
 
     <!-- Events and Handlers -->  
     <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
@@ -37,7 +33,7 @@
         <div class="slds-form-element__control">
             
             <div class="slds-input-has-icon slds-input-has-icon--right">
-              <lightning:icon class="slds-input__icon slds-show" iconName="utility:search" size="x-small" alternativeText="search"/> 
+              <!-- <lightning:icon class="slds-input__icon slds-show" iconName="utility:search" size="x-small" alternativeText="search"/>  -->
                 <!-- This markup is for when an record is selected -->
                 <div aura:id="lookup-pill" class="slds-pill-container slds-hide">
                      <lightning:pill class="pillSize" label="{!v.selectedRecord.name}" name="{!v.selectedRecord.name}" onremove="{! c.clear }">

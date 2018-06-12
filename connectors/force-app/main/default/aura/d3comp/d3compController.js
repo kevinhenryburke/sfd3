@@ -247,7 +247,8 @@
        component.set("v.searchTermId", searchTermId);
        // Note: v.searchAction is set via Design Parameter
 
-       helper.publishSearchChartEvent(component);
+        helper.setConnectionLevelMaxButtons(component);
+        helper.publishSearchChartEvent(component);
 
     },
 

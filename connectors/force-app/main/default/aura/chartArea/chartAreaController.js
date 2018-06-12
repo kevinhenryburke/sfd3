@@ -155,8 +155,6 @@
 
                 var cc = component.getConcreteComponent();
                 cc.refreshData(parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"]);                 
-
-
             }
             else {
                 console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
@@ -165,9 +163,8 @@
         if (topic == "SearchChart")
         {
             console.log("SearchChart received by Chart: " + componentReference + "/" + parameters["componentReference"]);
-
             var cc = component.getConcreteComponent();
-            cc.searchChart(parameters["searchTermId"], parameters["searchAction"]);                 
+            cc.searchChart(parameters["searchTermId"], parameters["searchAction"], parameters["showLevels"]);                 
 
         }
         console.log('chartArea: handle_evt_sfd3 exit');
