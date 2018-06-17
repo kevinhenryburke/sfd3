@@ -1,0 +1,567 @@
+[
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app",
+            "isDirectory": true,
+            "size": 128,
+            "modifiedTime": 1518258988083,
+            "changeTime": 1518258988083,
+            "contentHash": "51d86f3b64a3d9a0048d192f02147b0e9e9594e4",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": true
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main",
+            "isDirectory": true,
+            "size": 128,
+            "modifiedTime": 1518259003225,
+            "changeTime": 1518259003225,
+            "contentHash": "ae41ed56706e4439a34cda97ac997d7988935c2f",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default",
+            "isDirectory": true,
+            "size": 192,
+            "modifiedTime": 1518302555252,
+            "changeTime": 1518302555252,
+            "contentHash": "9f5a3b21b78d208e3f676c7eaae9feac171a645a",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura",
+            "isDirectory": true,
+            "size": 192,
+            "modifiedTime": 1518300501089,
+            "changeTime": 1518300501089,
+            "contentHash": "b098ab764964398d14d1c708323f28a0fa52a664",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/buttonDynamic",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/buttonDynamic",
+            "isDirectory": true,
+            "size": 128,
+            "modifiedTime": 1518300501089,
+            "changeTime": 1518300501089,
+            "contentHash": "6571ea62e88f14a9fe139412a21f0c256c72417a",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/buttonDynamic/buttonDynamic.cmp",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/buttonDynamic/buttonDynamic.cmp",
+            "isDirectory": false,
+            "size": 626,
+            "modifiedTime": 1518343504880,
+            "changeTime": 1518343504880,
+            "contentHash": "440caa203a5aca2845a997ec87e79d74f859ce9c",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/buttonDynamic/buttonDynamic.cmp-meta.xml",
+        {
+            "state": "u",
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/buttonDynamic/buttonDynamic.cmp-meta.xml",
+            "isDirectory": false,
+            "isMetadataFile": true,
+            "size": 228,
+            "modifiedTime": 1518376978204,
+            "changeTime": 1518376978204,
+            "isWorkspace": false,
+            "contentHash": "255c27edbc22648aa360bee47ea3b2c2c9626c24"
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3",
+            "isDirectory": true,
+            "size": 128,
+            "modifiedTime": 1518346496124,
+            "changeTime": 1518346496124,
+            "contentHash": "1eceb4c62c88a89d54cd7f6b8128f31f4556e4c3",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3/d3.app",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3/d3.app",
+            "isDirectory": false,
+            "size": 157,
+            "modifiedTime": 1518346732810,
+            "changeTime": 1518346496124,
+            "contentHash": "e2a764d2ecd20db4fe2c12c48bec61b7808a43b5",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3/d3.app-meta.xml",
+        {
+            "state": "u",
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3/d3.app-meta.xml",
+            "isDirectory": false,
+            "isMetadataFile": true,
+            "size": 228,
+            "modifiedTime": 1518376969565,
+            "changeTime": 1518376969565,
+            "isWorkspace": false,
+            "contentHash": "255c27edbc22648aa360bee47ea3b2c2c9626c24"
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp",
+            "isDirectory": true,
+            "size": 256,
+            "modifiedTime": 1518346508162,
+            "changeTime": 1518346508162,
+            "contentHash": "7f31a1e18de68e1d9d423baa37234b91fe4dace7",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp/d3comp.cmp",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp/d3comp.cmp",
+            "isDirectory": false,
+            "size": 4643,
+            "modifiedTime": 1518376663253,
+            "changeTime": 1518376663253,
+            "contentHash": "2d8da1b651a4ad5d9fa651d264587a08676d5517",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp/d3comp.cmp-meta.xml",
+        {
+            "state": "u",
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp/d3comp.cmp-meta.xml",
+            "isDirectory": false,
+            "isMetadataFile": true,
+            "size": 228,
+            "modifiedTime": 1518376988658,
+            "changeTime": 1518376988658,
+            "isWorkspace": false,
+            "contentHash": "255c27edbc22648aa360bee47ea3b2c2c9626c24"
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp/d3comp.css",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp/d3comp.css",
+            "isDirectory": false,
+            "size": 444,
+            "modifiedTime": 1518300501085,
+            "changeTime": 1518300501085,
+            "contentHash": "5a4625d4fab8938ce31f649aac5e641f0a0d8bff",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp/d3compController.js",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp/d3compController.js",
+            "isDirectory": false,
+            "size": 3193,
+            "modifiedTime": 1518300501085,
+            "changeTime": 1518300501085,
+            "contentHash": "a1d1dec9372a312300822b0250432df41af081ff",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp/d3compHelper.js",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp/d3compHelper.js",
+            "isDirectory": false,
+            "size": 5145,
+            "modifiedTime": 1518342851697,
+            "changeTime": 1518342851697,
+            "contentHash": "b53ceb7843fb3e358eb1c76a9c17c7ddfe6001de",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp/d3compRenderer.js",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/d3comp/d3compRenderer.js",
+            "isDirectory": false,
+            "size": 58,
+            "modifiedTime": 1518300888179,
+            "changeTime": 1518300888179,
+            "contentHash": "0baf3940cebf44416e86e43a23ff0da0eb7ca957",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/svg",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/svg",
+            "isDirectory": true,
+            "size": 160,
+            "modifiedTime": 1518300501087,
+            "changeTime": 1518300501087,
+            "contentHash": "a8b06822c8ee508bf812bd78c8c174f37864b517",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/svg/svg.cmp",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/svg/svg.cmp",
+            "isDirectory": false,
+            "size": 397,
+            "modifiedTime": 1518300501087,
+            "changeTime": 1518300501087,
+            "contentHash": "efdfef8737208bb1b7fa7105f1568dc7dde03061",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/svg/svg.cmp-meta.xml",
+        {
+            "state": "u",
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/svg/svg.cmp-meta.xml",
+            "isDirectory": false,
+            "isMetadataFile": true,
+            "size": 228,
+            "modifiedTime": 1518376994683,
+            "changeTime": 1518376994683,
+            "isWorkspace": false,
+            "contentHash": "255c27edbc22648aa360bee47ea3b2c2c9626c24"
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/svg/svgRenderer.js",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/aura/svg/svgRenderer.js",
+            "isDirectory": false,
+            "size": 538,
+            "modifiedTime": 1518300501087,
+            "changeTime": 1518300501087,
+            "contentHash": "e17cda4da94f7d9066bebd3b28806353e45a4fa7",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/classes",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/classes",
+            "isDirectory": true,
+            "size": 192,
+            "modifiedTime": 1518299589869,
+            "changeTime": 1518299589869,
+            "contentHash": "f0f0b6d0d63d26f483cf542e9eb7a48d3db21ece",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/classes/DThree.cls",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/classes/DThree.cls",
+            "isDirectory": false,
+            "size": 348,
+            "modifiedTime": 1518299575239,
+            "changeTime": 1518299575239,
+            "contentHash": "df76bde093aeb8fddd0ad24b5ca1006d080cc169",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/classes/DThree.cls-meta.xml",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/classes/DThree.cls-meta.xml",
+            "isDirectory": false,
+            "size": 184,
+            "modifiedTime": 1518299569007,
+            "changeTime": 1518299569007,
+            "contentHash": "bc83fa8d65dde62fc2fe459f52953d36ce23e48c",
+            "isMetadataFile": true,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/classes/DThree_Test.cls",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/classes/DThree_Test.cls",
+            "isDirectory": false,
+            "size": 126,
+            "modifiedTime": 1518299756823,
+            "changeTime": 1518299756823,
+            "contentHash": "3d3b42fbbade7b9684f9bd4aee1fb11513666cb3",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/classes/DThree_Test.cls-meta.xml",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/classes/DThree_Test.cls-meta.xml",
+            "isDirectory": false,
+            "size": 189,
+            "modifiedTime": 1518299589869,
+            "changeTime": 1518299589869,
+            "contentHash": "683aadfced85fb54beda11261fd8cb685c0bc3a6",
+            "isMetadataFile": true,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources",
+            "isDirectory": true,
+            "size": 384,
+            "modifiedTime": 1518344266091,
+            "changeTime": 1518344266091,
+            "contentHash": "edf6b1a4de3528774a20cc2aec7b7f6dc0dbbee4",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/NVAData.json",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/NVAData.json",
+            "isDirectory": false,
+            "size": 11910,
+            "modifiedTime": 1518302573457,
+            "changeTime": 1518302573457,
+            "contentHash": "423cb34104a4ff1285f05f2121353191e04a92f5",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/NVAData.resource-meta.xml",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/NVAData.resource-meta.xml",
+            "isDirectory": false,
+            "size": 210,
+            "modifiedTime": 1518302573457,
+            "changeTime": 1518302573457,
+            "contentHash": "06db0221edbd50bcdcb7428adb67aca5943ff570",
+            "isMetadataFile": true,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/d3minjs.js",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/d3minjs.js",
+            "isDirectory": false,
+            "size": 151143,
+            "modifiedTime": 1518302995125,
+            "changeTime": 1518302995125,
+            "contentHash": "81a7c1f50c337a43a71d9f0a17ce72afdfb88de9",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/d3minjs.resource-meta.xml",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/d3minjs.resource-meta.xml",
+            "isDirectory": false,
+            "size": 218,
+            "modifiedTime": 1518304266485,
+            "changeTime": 1518304266485,
+            "contentHash": "8bb2f51972febd28bff4aeb8da2e60109d5daa1d",
+            "isMetadataFile": true,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/jq331.js",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/jq331.js",
+            "isDirectory": false,
+            "size": 86927,
+            "modifiedTime": 1518302573454,
+            "changeTime": 1518302573454,
+            "contentHash": "0dc32db4aa9c5f03f3b38c47d883dbd4fed13aae",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/jq331.resource-meta.xml",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/jq331.resource-meta.xml",
+            "isDirectory": false,
+            "size": 218,
+            "modifiedTime": 1518304257264,
+            "changeTime": 1518304257264,
+            "contentHash": "8bb2f51972febd28bff4aeb8da2e60109d5daa1d",
+            "isMetadataFile": true,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/pictorcss.css",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/pictorcss.css",
+            "isDirectory": false,
+            "size": 2093,
+            "modifiedTime": 1518302577437,
+            "changeTime": 1518302577437,
+            "contentHash": "c58ee79b05264227643f94d45cedaaaeaa0fd680",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/pictorcss.resource-meta.xml",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/pictorcss.resource-meta.xml",
+            "isDirectory": false,
+            "size": 202,
+            "modifiedTime": 1518302577435,
+            "changeTime": 1518302577435,
+            "contentHash": "685dbf4de5497a270ef119672a6f2f9aa4074ff2",
+            "isMetadataFile": true,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/pictorjs.js",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/pictorjs.js",
+            "isDirectory": false,
+            "size": 16957,
+            "modifiedTime": 1518302573459,
+            "changeTime": 1518302573459,
+            "contentHash": "3b8bfef1c8abe215438527bd3a216d07dd40f47b",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/pictorjs.resource-meta.xml",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors/force-app/main/default/staticresources/pictorjs.resource-meta.xml",
+            "isDirectory": false,
+            "size": 218,
+            "modifiedTime": 1518304247332,
+            "changeTime": 1518304247332,
+            "contentHash": "8bb2f51972febd28bff4aeb8da2e60109d5daa1d",
+            "isMetadataFile": true,
+            "state": "u",
+            "isWorkspace": false,
+            "isArtifactRoot": false
+        }
+    ],
+    [
+        "/Users/kevin.burke/gitexperiments/sfd3/connectors",
+        {
+            "sourcePath": "/Users/kevin.burke/gitexperiments/sfd3/connectors",
+            "isDirectory": true,
+            "size": 320,
+            "modifiedTime": 1518258988084,
+            "changeTime": 1518258988084,
+            "contentHash": "345c04f0bb30a9c2f22b188cc96e39de4179450a",
+            "isMetadataFile": false,
+            "state": "u",
+            "isWorkspace": true,
+            "isArtifactRoot": false
+        }
+    ]
+]

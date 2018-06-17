@@ -1,7 +1,7 @@
 <design:component >
     <design:attribute name="componentType" label="Component Type" default="" description="See documentation for a list of these values. For example chart.connections, chart.influence" />
-    <design:attribute name="UserComponentId" label="Component Id" default="" description="Id for this component" />
-    <design:attribute name="UserControllerComponentId" label="Controller Component Id" default="" description="If we want to restrict to a particular controller on the page then put the name here that you used as the Component Id of the Controller. Otherwise all controllers will act on this chart"/>    
+    <design:attribute name="UserComponentId" label="Component Id" default="Chart" description="Id for this component" />
+    <design:attribute name="UserControllerComponentId" label="Controller Component Id" default="Controller" description="If we want to restrict to a particular controller on the page then put the name here that you used as the Component Id of the Controller. Otherwise all controllers will act on this chart"/>    
 	<design:attribute name="hasPrimaryNode" default="true" label="Chart has Primary Node" description="Determines if the chart has a primary node"/>    
 	<design:attribute name="primaryNodeHighlightingOn" default="true" label="Primary Node Highlighting On" description="Determines if selected node should be highlighted"/>    
 	<design:attribute name="primaryNodeHighlightingColour" default="gold" label="Primary Node Highlighting Colour" description="Name of the colour of highlighed node"/>    

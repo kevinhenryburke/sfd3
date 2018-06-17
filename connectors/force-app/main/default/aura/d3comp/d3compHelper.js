@@ -218,8 +218,6 @@
         var maxlevels = component.get("v.maxlevels");
         component.set("v.panelShowLevels", maxlevels);
         
-            // refresh buttons
-        // "less" button should be enabled, "more" button should be disabled if we've reached max level
         var cmpTargetLess = component.find("less");
         cmpTargetLess.set("v.disabled", "false");
         var cmpTargetMore = component.find("more");

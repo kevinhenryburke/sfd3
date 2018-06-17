@@ -35,7 +35,8 @@
 		var _this = this;
         var nodes;
         var links;
-        var duration = 750;
+        var duration = 250;
+        var shortDuration = 250;
         var fixedDepth = 180; // this may need to be a function of chart area depth?
         
         var margin = bzutils.getCache (componentReference, "margin") ;  
@@ -118,7 +119,7 @@
       
         // Transition to the proper position for the node
         nodeUpdate.transition()
-          .duration(duration)
+          .duration(shortDuration)
           .attr("transform", function(d) { 
               var t = "translate(" + d.y  + "," + d.x + ")";
 //              console.log(t);
@@ -171,7 +172,7 @@
       
         // Transition back to the parent element position
         linkUpdate.transition()
-            .duration(duration)
+            .duration(shortDuration)
             .attr('d', function(d){ return diagonal(d, d.parent) });
       
         // Remove any exiting links

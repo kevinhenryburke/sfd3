@@ -15,8 +15,16 @@
                 <value>{"filtertypes":["Work","Social","Client"],"measures":["Posts","Hot"],"levels":4,"centreonclick":true}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
+                <name>configuredAllowSearch</name>
+                <value>true</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
                 <name>dataSourceMethod</name>
                 <value>c.returnData</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>showBanner</name>
+                <value>false</value>
             </componentInstanceProperties>
             <componentName>d3comp</componentName>
         </componentInstances>
@@ -89,8 +97,16 @@
                 <value>{"allowrefresh":true, "measures":["Posts","Hot"]}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
+                <name>configuredAllowSearch</name>
+                <value>false</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
                 <name>dataSourceMethod</name>
                 <value>c.returnDataNodesOnly</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>showBanner</name>
+                <value>true</value>
             </componentInstanceProperties>
             <componentName>d3comp</componentName>
         </componentInstances>
