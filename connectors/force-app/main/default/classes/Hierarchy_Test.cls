@@ -31,6 +31,15 @@ public with sharing class Hierarchy_Test {
 
         return top;
     }
+
+    @IsTest
+    public static void mapHierarchyStructure() {
+        HierarchyStructure top = factory();
+        HierarchyJSON hj = HierarchyJSON.mapHierarchyStructure (top);
+        System.debug(LoggingLevel.ERROR,JSON.serializePretty(hj,true));
+        System.debug(LoggingLevel.ERROR,JSON.serialize(hj,true));
+        System.assertEquals(2, hj.children.size());
+    }
    
     @IsTest
     public static void getHierarchyStructureById() {
@@ -76,5 +85,13 @@ public with sharing class Hierarchy_Test {
         System.assertEquals(top.id, checkNew.top.id);
         System.assertEquals(top.id, checkNewParent.top.id);
     } 
+
+    @IsTest
+    public static void deserializeDataPack() {
+        String JSONString = DThree.returnDataPack();
+        HierarchyJSON deserialized =
+          (HierarchyJSON)JSON.deserialize(JSONString, HierarchyJSON.class);
+    }
+
 
 }

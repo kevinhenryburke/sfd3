@@ -28,6 +28,8 @@ public with sharing class HierarchyStructure {
     /* Store a list of Map of ids to HierarchyStructure objects against the top node of the hierarchy */
     public Map<Id,HierarchyStructure> mapIdHierarchyStructure = new Map<Id,HierarchyStructure>(); // only populated on the top node
 
+
+
     /* Class Constructor */    
     public HierarchyStructure(HierarchyStructure parent) {
         if (parent == null) {
