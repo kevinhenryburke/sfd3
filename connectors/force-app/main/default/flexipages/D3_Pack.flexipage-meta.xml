@@ -15,6 +15,14 @@
                 <value>{"filtertypes":["Work","Social","Client"],"measures":["Posts","Hot"],"levels":4,"centreonclick":true}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
+                <name>configuredAllowSearch</name>
+                <value>false</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>dataFormat</name>
+                <value>HierarchyJSON</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
                 <name>dataSourceMethod</name>
                 <value>c.returnDataPack</value>
             </componentInstanceProperties>
@@ -24,6 +32,10 @@
             <componentInstanceProperties>
                 <name>primaryNodeInitialization</name>
                 <value>None</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>showBanner</name>
+                <value>true</value>
             </componentInstanceProperties>
             <componentName>d3comp</componentName>
         </componentInstances>

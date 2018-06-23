@@ -5,10 +5,10 @@ public with sharing class Hierarchy_Test {
     public static String C1_ID = '000000000000000002';
     public static String C2_ID = '000000000000000003';
 
-    public static HierarchyStructure factory() {
+    public static HierarchyStructure factoryHS() {
         // create a top node with some attributes
-        HierarchyStructure top = new HierarchyStructure(null);
-        top.id = TOP_ID;
+        HierarchyStructure top = new HierarchyStructure(TOP_ID);
+//        top.id = TOP_ID;
         top.name = 'Burke.com';
         top.size = 100;
 
@@ -32,9 +32,36 @@ public with sharing class Hierarchy_Test {
         return top;
     }
 
+    public static Account factoryAccount() {
+        // build an account hierarchy of four levels
+        // number of accounts at each level: 1,2,3,1
+
+        // Level 0 - Child Depth 3
+        Account a1 = new Account(name = 'Burke Enterprises', AnnualRevenue = 10000);
+        insert a1;
+        // Level 1 - Child Depth 2
+        Account a2 = new Account(name = 'Small Company', AnnualRevenue = 1, parentid = a1.id);
+        insert a2;
+        // Level 2 - Child Depth 1
+        Account a3 = new Account(name = 'Medium Company', AnnualRevenue = 10, parentid = a2.id);
+        insert a3;
+        Account a4 = new Account(name = 'Medium-Small Company', AnnualRevenue = 5, parentid = a2.id);
+        insert a4;
+        // Level 3 - Child Depth 0
+        Account a5 = new Account(name = 'Smallish Company 1', AnnualRevenue = 5, parentid = a3.id);
+        insert a5;
+        Account a6 = new Account(name = 'Smallish Company 2', AnnualRevenue = 5, parentid = a4.id);
+        insert a6;
+        Account a7 = new Account(name = 'Smallish Company 3', AnnualRevenue = 5, parentid = a4.id);
+        insert a7;
+
+        return a1;
+    }
+    
+
     @IsTest
     public static void mapHierarchyStructure() {
-        HierarchyStructure top = factory();
+        HierarchyStructure top = factoryHS();
         HierarchyJSON hj = HierarchyJSON.mapHierarchyStructure (top);
         System.debug(LoggingLevel.ERROR,JSON.serializePretty(hj,true));
         System.debug(LoggingLevel.ERROR,JSON.serialize(hj,true));
@@ -43,14 +70,14 @@ public with sharing class Hierarchy_Test {
    
     @IsTest
     public static void getHierarchyStructureById() {
-        HierarchyStructure top = factory();
+        HierarchyStructure top = factoryHS();
         HierarchyStructure hsFound = top.getHierarchyStructureById(C1_ID);
         System.assertEquals(C1_ID, hsFound.id);
     }
 
     @IsTest
     public static void addChildById() {
-        HierarchyStructure top = factory();
+        HierarchyStructure top = factoryHS();
         HierarchyStructure hsFound = top.getHierarchyStructureById(C1_ID);
 
         // create some child nodes
@@ -92,6 +119,20 @@ public with sharing class Hierarchy_Test {
         HierarchyJSON deserialized =
           (HierarchyJSON)JSON.deserialize(JSONString, HierarchyJSON.class);
     }
+
+    @IsTest
+    public static void hqmapSObject() {
+        Account rootAccount = factoryAccount();
+
+        ID rootId = rootAccount.id;
+        Integer intLevelsToRetrieve = 3;
+
+        HierarchyJSON hj = HierarchyJSON.retrieveLevels (rootId, intLevelsToRetrieve );
+
+        System.assertEquals(3, hj.childDepth);            
+        
+    }
+
 
 
 }

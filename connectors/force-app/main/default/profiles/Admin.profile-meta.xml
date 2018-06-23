@@ -35,22 +35,9 @@
         <enabled>true</enabled>
     </classAccesses>
     <custom>false</custom>
-    <tabVisibilities>
-        <tab>D3_Network</tab>
-        <visibility>DefaultOn</visibility>
-    </tabVisibilities>
-    <tabVisibilities>
-        <tab>D3_Pack</tab>
-        <visibility>DefaultOn</visibility>
-    </tabVisibilities>
-    <tabVisibilities>
-        <tab>D3_HalfWidth_Chart</tab>
-        <visibility>DefaultOn</visibility>
-    </tabVisibilities>
-    <tabVisibilities>
-        <tab>D3_CTree</tab>
-        <visibility>DefaultOn</visibility>
-    </tabVisibilities>
+    <layoutAssignments>
+        <layout>Account-Account Layout</layout>
+    </layoutAssignments>
     <userLicense>Salesforce</userLicense>
     <userPermissions>
         <enabled>true</enabled>

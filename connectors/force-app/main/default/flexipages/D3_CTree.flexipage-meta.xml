@@ -19,6 +19,10 @@
                 <value>true</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
+                <name>dataFormat</name>
+                <value>HierarchyJSON</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
                 <name>dataSourceMethod</name>
                 <value>c.returnDataPack</value>
             </componentInstanceProperties>

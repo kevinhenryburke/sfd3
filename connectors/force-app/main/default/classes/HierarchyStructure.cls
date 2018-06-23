@@ -29,20 +29,21 @@ public with sharing class HierarchyStructure {
     public Map<Id,HierarchyStructure> mapIdHierarchyStructure = new Map<Id,HierarchyStructure>(); // only populated on the top node
 
 
-
-    /* Class Constructor */    
-    public HierarchyStructure(HierarchyStructure parent) {
-        if (parent == null) {
-            isTop = true;
-            this.top = this;
-            this.parent = this;
-        } 
-        else {
-            isTop = false;
-            this.top = parent.top;
-            this.parent = parent;
-        }
+    /* Class Constructor for top element */    
+    public HierarchyStructure(Id Id) {
+        isTop = true;
+        this.top = this;
+        this.parent = this;
+        mapIdHierarchyStructure.put(id, this);
     }
+
+    /* Class Constructor for child elements */    
+    public HierarchyStructure(HierarchyStructure parent) {
+        isTop = false;
+        this.top = parent.top;
+        this.parent = parent;
+    }
+
 
     public void addChildren (List<HierarchyStructure> newChildren) {        
         // add the children to the top node map
