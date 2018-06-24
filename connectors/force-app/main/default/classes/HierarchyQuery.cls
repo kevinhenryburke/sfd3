@@ -37,6 +37,8 @@ public with sharing class HierarchyQuery {
             hs.name = s.get(hm.get('name')).toString();
             hs.size = (Decimal) s.get(hm.get('size'));
             hs.parent = hsParent;
+            hs.objectType = s.getSObjectType().getDescribe().getName();
+
             lisths.add(hs);
         }
 
@@ -69,6 +71,7 @@ public with sharing class HierarchyQuery {
         hs.id = s.get(hm.get('id')).toString();
         hs.name = s.get(hm.get('name')).toString();
         hs.size = (Decimal) s.get(hm.get('size'));
+        hs.objectType = s.getSObjectType().getDescribe().getName();
 
         System.debug(hs);
 

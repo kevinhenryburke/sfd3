@@ -41,7 +41,7 @@ public class DThree {
 
         Account a = [select id from Account where name = 'Burke Enterprises' LIMIT 1];
         Id rootId = a.id;
-        Integer intLevelsToRetrieve = 3;
+        Integer intLevelsToRetrieve = 5;
         HierarchyJSON deserialized = HierarchyJSON.retrieveLevels (rootId, intLevelsToRetrieve );
   
 

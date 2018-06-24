@@ -119,6 +119,8 @@
 
                 // TODO - will need to retrieve data based on new selections
                 var datajson = component.get("v.datajson");
+                // TODO dataFormat is as yet unused.
+                var dataFormat = component.get("v.dataFormat");
                 var configjson = component.get("v.configjson");
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
                 var panelShowFilters = component.get("v.panelShowFilters");     

@@ -17,6 +17,7 @@ public with sharing class HierarchyStructure {
     public String id; // a unique id - typically a Salesforce record id
     public String name; // the name of the record
     public Decimal size; // a metric associated with the record (optional)
+    public String objectType; // the type of the sObject referenced.
     // Decimal sumOfChildren = 0; // a metric associated with the record (optional)
     public List<HierarchyStructure> children;   // child records
 

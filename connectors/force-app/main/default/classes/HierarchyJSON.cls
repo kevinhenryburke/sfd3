@@ -3,6 +3,8 @@ public with sharing class HierarchyJSON {
     public String id; // a unique id - typically a Salesforce record id
     public String name; // the name of the record
     public Decimal size; // a metric associated with the record (optional)
+    public String objectType; // the type of the sObject referenced.
+    
     public Integer childDepth; // depth of levels beneath this.
     public List<HierarchyJSON> children;   // child records
 
@@ -16,6 +18,7 @@ public with sharing class HierarchyJSON {
         hj.name = hs.name;
         hj.size = hs.size;
         hj.childDepth = 0;
+        hj.objectType = hs.objectType;
 
         if (hs.children != null) {
             hj.children = new List<HierarchyJSON>();

@@ -115,6 +115,8 @@ public with sharing class Hierarchy_Test {
 
     @IsTest
     public static void deserializeDataPack() {
+        Account rootAccount = factoryAccount();
+
         String JSONString = DThree.returnDataPack();
         HierarchyJSON deserialized =
           (HierarchyJSON)JSON.deserialize(JSONString, HierarchyJSON.class);
@@ -130,6 +132,7 @@ public with sharing class Hierarchy_Test {
         HierarchyJSON hj = HierarchyJSON.retrieveLevels (rootId, intLevelsToRetrieve );
 
         System.assertEquals(3, hj.childDepth);            
+        System.assertEquals('Account', hj.objectType);            
         
     }
 
