@@ -8,7 +8,6 @@ public with sharing class Hierarchy_Test {
     public static HierarchyStructure factoryHS() {
         // create a top node with some attributes
         HierarchyStructure top = new HierarchyStructure(TOP_ID);
-//        top.id = TOP_ID;
         top.name = 'Burke.com';
         top.size = 100;
 
@@ -126,16 +125,49 @@ public with sharing class Hierarchy_Test {
     public static void hqmapSObject() {
         Account rootAccount = factoryAccount();
 
+        HierarchyConfiguration hc = factoryConfig();
         ID rootId = rootAccount.id;
-        Integer intLevelsToRetrieve = 3;
+        Integer intLevelsToRetrieve = 3; 
 
-        HierarchyJSON hj = HierarchyJSON.retrieveLevels (rootId, intLevelsToRetrieve );
+        HierarchyJSON hj = HierarchyJSON.retrieveLevels (hc, rootId, intLevelsToRetrieve );
 
-        System.assertEquals(3, hj.childDepth);            
+        System.assertEquals(2, hj.childDepth);            
         System.assertEquals('Account', hj.objectType);            
         
     }
 
+    public static HierarchyConfiguration factoryConfig() {
+        HierarchyConfiguration hc = new HierarchyConfiguration('Hierarchy');
+        hc.initialObjectType = 'Account';
+
+        // Add an Account configuration
+        HierarchyConfiguration.ObjectConfiguration oc = new HierarchyConfiguration.ObjectConfiguration ();
+        oc.objectType = 'Account';
+        oc.recursive = true;
+        oc.queryFields.put('id', 'id');
+        oc.queryFields.put('name', 'name');
+        oc.queryFields.put('size', 'AnnualRevenue');
+        oc.parentField = 'parentId';
+        hc.loc.add(oc);
+        return hc;        
+    }
+
+    @IsTest
+    public static void getLevelRecursive() {
+        HierarchyConfiguration hc = factoryConfig();
+        System.debug(LoggingLevel.ERROR,JSON.serializePretty(hc,false));
+        System.assertEquals('Account',hc.getLevel(0).objectType); 
+        System.assertEquals('Account',hc.getLevel(1).objectType); 
+    }
+
+    @IsTest
+    public static void getLevelNonRecursive() {
+        HierarchyConfiguration hc = factoryConfig();
+        hc.loc[0].recursive = false;
+        System.debug(LoggingLevel.ERROR,JSON.serializePretty(hc,false));
+        System.assertEquals('Account',hc.getLevel(0).objectType); 
+        System.assertEquals(null,hc.getLevel(1)); 
+    }
 
 
 }

@@ -25,7 +25,7 @@
         var root = bzutils.getCache (componentReference, "root") ;
 
         helper.merge(componentReference, updatejson);
-        helper.update(nodeGroup, pathGroup, componentReference, root);
+        helper.update(nodeGroup, pathGroup, componentReference, root, false);
 
     },
 
@@ -44,7 +44,7 @@
 
         if (searchAction == "HighlightOpenPath" || searchAction == "OpenPath" ) {
                 helper.openPathsBy(componentReference, searchTermId, "Id");
-                helper.update(nodeGroup, pathGroup, componentReference, root);
+                helper.update(nodeGroup, pathGroup, componentReference, root, false);
         }
 
         if (searchAction == "HighlightOpenPath" || searchAction == "HighlightPath" ) {
@@ -54,7 +54,7 @@
             }
             
             helper.highlightPathsBy(componentReference, searchTermId, "Id", true);
-            helper.update(nodeGroup, pathGroup, componentReference, root);
+            helper.update(nodeGroup, pathGroup, componentReference, root, false);
         }
 
     },

@@ -34,18 +34,20 @@ public with sharing class HierarchyJSON {
         return hj;
     }
 
-    public static HierarchyJSON retrieveLevels (ID rootId, Integer intLevelsToRetrieve ) {
+    public static HierarchyJSON retrieveLevels (HierarchyConfiguration hc, ID rootId, Integer intLevelsToRetrieve ) {
 
         Integer thisLevel = 0;
-        HierarchyQuery hqTop = new HierarchyQuery(null);
 
         // get the top level structure and baseline queries to it.
+        HierarchyQuery hqTop = new HierarchyQuery(null, hc.getLevel(thisLevel));
         HierarchyStructure top = hqTop.mapSObjectTop(rootId);        
-        HierarchyQuery hq = new HierarchyQuery(top);
+
         thisLevel = 1;
         Set<Id> parentLevelIds = new Set<Id>{rootId}; // the top node id
 
-        for (thisLevel = 1; thisLevel <= intLevelsToRetrieve; thisLevel++ ) {
+        for (thisLevel = 1; thisLevel < intLevelsToRetrieve; thisLevel++ ) {
+            // we create the query for each level
+            HierarchyQuery hq = new HierarchyQuery(top, hc.getLevel(thisLevel));
             List<HierarchyStructure> listNextLevelHS = hq.mapSObject(parentLevelIds); // this should map new level nodes to their parents
             parentLevelIds = new Set<Id>();
             for (HierarchyStructure hs : listNextLevelHS) {

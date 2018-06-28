@@ -1202,21 +1202,21 @@ function update() {
     function getCanExpandColor (d) {
         var color = canExpandColor;
 //        console.log(d);
-        if (d.data.size != null && d.data.size < 5000) {
-            color = "red";
-        }
-        if (d.data.size != null && d.data.size < 4000) {
-            color = "orange";
-        }
-        if (d.data.size != null && d.data.size < 3000) {
-            color = "yellow";
-        }
-        if (d.data.size != null && d.data.size < 2000) {
-            color = "green";
-        }
-        if (d.data.size != null && d.data.size < 2000) {
-            color = "blue";
-        }
+        // if (d.data.size != null && d.data.size < 5000) {
+        //     color = "red";
+        // }
+        // if (d.data.size != null && d.data.size < 4000) {
+        //     color = "orange";
+        // }
+        // if (d.data.size != null && d.data.size < 3000) {
+        //     color = "yellow";
+        // }
+        // if (d.data.size != null && d.data.size < 2000) {
+        //     color = "green";
+        // }
+        // if (d.data.size != null && d.data.size < 2000) {
+        //     color = "blue";
+        // }
         return color;
     }
 

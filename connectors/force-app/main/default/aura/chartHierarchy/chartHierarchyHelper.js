@@ -28,10 +28,10 @@
         // Collapse after the second level
         root.children.forEach(bzctree.collapse);
         bzutils.setCache (componentReference, "root", root ) ;
-        _this.update(nodeGroup, pathGroup, componentReference, root);
+        _this.update(nodeGroup, pathGroup, componentReference, root, false);
     },
 
-    update : function(nodeGroup, pathGroup, componentReference, source) {
+    update : function(nodeGroup, pathGroup, componentReference, source, makeSourceRoot) {
 		var _this = this;
         var nodes;
         var links;
@@ -44,9 +44,19 @@
         // Assigns the x and y position for the nodes
 
         var treemap = bzutils.getCache (componentReference, "treemap" ) ;
-        var root = bzutils.getCache (componentReference, "root" ) ;
 
-        var treeMappedData = treemap(root);
+        var treeMappedData;
+        if (makeSourceRoot === true) {
+            // INTERESTING -- RE-ROOT OPTION
+            // WOULD NEED TO TRANSFROM TO SHIFT EVERYTHING TO THE LEFT
+            // can do that by a variant of the nodes.forEach function a few lines below this
+            treeMappedData = treemap(source);
+
+        }
+        else {
+            var root = bzutils.getCache (componentReference, "root" ) ;
+            treeMappedData = treemap(root);
+        }        
       
         // Compute the new tree layout.
         nodes = treeMappedData.descendants();
@@ -62,7 +72,7 @@
         // Update the nodes...
         var node = nodeGroup.selectAll('g.treenode')
             .data(nodes, function(d) {                
-//                console.log("xxx: " + d.id);
+                console.log("xxx: ng");
                 return d.id || (d.id = bzutils.addComponentRef(componentReference, d.data.id)); 
             });
                 
@@ -70,6 +80,7 @@
         var nodeEnter = node.enter().append('g')
             .attr('class', 'treenode')
             .attr("transform", function(d) {
+                console.log("xxx: ea");
                 var t = "translate(" + source.y0 + "," + source.x0 + ")";
 //                console.log("enter new node: " + t);
               return t;
@@ -107,10 +118,12 @@
         nodeEnter.append('text')
             .attr("dy", ".35em")
             .attr("x", function(d) {
-                return d.children || d._children ? -13 : 13;
+                var hasNoChildren = (typeof d._children == "undefined") && (typeof d.children == "undefined") ; 
+                return hasNoChildren ? 13 : -13;
             })
             .attr("text-anchor", function(d) {
-                return d.children || d._children ? "end" : "start";
+                var hasNoChildren = (typeof d._children == "undefined") && (typeof d.children == "undefined") ; 
+                return hasNoChildren ? "start" : "end";
             })
             .text(function(d) { return d.data.name; });
       
@@ -121,7 +134,7 @@
         nodeUpdate.transition()
           .duration(shortDuration)
           .attr("transform", function(d) { 
-              var t = "translate(" + d.y  + "," + d.x + ")";
+            var t = "translate(" + d.y  + "," + d.x + ")";
 //              console.log(t);
               return t;
            });
@@ -130,12 +143,26 @@
         nodeUpdate.select('circle.treenode')
           .attr('r', 10)
           .style("fill", function(d) {
-              // collapsed children are stored as d._children / expanded a d.children
-              return d._children ? bzctree.getCanExpandColor(d) : bzctree.getExpandedColor(d);
+              // collapsed children are stored as d._children / expanded as d.children
+              var hasNoChildren = (typeof d._children == "undefined") && (typeof d.children == "undefined") ; 
+              if(hasNoChildren) {
+                  return bzctree.getExpandedColor(d);
+              }
+              return bzctree.getCanExpandColor(d); 
           })
-          .attr('cursor', 'pointer');
-      
-      
+          .attr('cursor', 'pointer');      
+
+          
+          nodeUpdate.select('text')
+          .attr("x", function(d) {
+              var hasNoChildren = (typeof d._children == "undefined") && (typeof d.children == "undefined") ; 
+              return hasNoChildren ? 13 : -13;
+          })
+          .attr("text-anchor", function(d) {
+              var hasNoChildren = (typeof d._children == "undefined") && (typeof d.children == "undefined") ; 
+              return hasNoChildren ? "start" : "end";
+          });
+        
         // Remove any exiting nodes
         var nodeExit = node.exit().transition()
             .duration(duration)
@@ -156,11 +183,14 @@
       
         // Update the links...
         var link = pathGroup.selectAll('path.treelink')
-            .data(links, function(d) { return d.id; });
+            .data(links, function(d) { 
+                console.log("xxx: pg");
+                return d.id; 
+            });
       
         // Enter any new links at the parent's previous position.
         var linkEnter = link.enter().insert('path', "g")
-            .attr("id", function(d) { return "path" + d.id; }) // identify a path using it's lower level node (so must be unique!)
+            .attr("id", function(d) { return "path" + d.id; }) // identify a path using its lower level node (so must be unique!)
             .attr("class", "treelink")
             .attr('d', function(d){
                 var o = {x: source.x0, y: source.y0}
@@ -218,7 +248,7 @@
               d.children = d._children;
               d._children = null;
             }
-            _this.update(nodeGroup, pathGroup, componentReference, d);
+            _this.update(nodeGroup, pathGroup, componentReference, d, false);
 		}
 		
 
@@ -335,51 +365,86 @@
         //TODO - IMPLEMENT
     },
 
-    merge : function(componentReference, newjson) {
+    merge : function(componentReference, updatejson) {
         console.log("kb: in merge:");
-		var _this = this;
+        var _this = this;
 
-        // the first node id of the newjson is assumed to be a pre-existing node and should not result in a new node.
-        var parentRecordId = newjson["id"]; 
-        var addToNodeId = bzutils.addComponentRef(componentReference, parentRecordId);
-        var parentNodeId = "circle" + addToNodeId;
+        var newjsonarray;
 
-        // see if this is searchable as a node
-        var parentNode = bzutils.getNodeFromId(parentNodeId);
-
-        if (parentNode == null) {
-            console.log("parentNode is undefined - so assuming it is collapsed. Search down from the root node of the base hierarchy");
-
-            var ultimateRoot = bzutils.getCache (componentReference, "root");
-
-            // try to find target node down from the root node
-            var paths = _this.searchTree(ultimateRoot,parentRecordId,[],"Id");
-            parentNode = paths.slice(-1).pop(); // this gets the last element of the path array which is the parent node.
-        }
-
-
-        if (parentNode != null) {
-            console.log("parentNode is defined");
-            var newroot = d3.hierarchy(newjson, function(d) { return d.children; });
-
-            newroot.children.forEach(function(newchild) {
-                newchild.parent = parentNode;
-                newchild.depth = parentNode.depth + 1; 
-                newchild.height = parentNode.height - 1;
-                _this.setDepth(newchild, newchild.depth);
-                if (parentNode.children) {
-                    parentNode.children.push(newchild);
-                }
-                if (parentNode._children) {
-                    parentNode._children.push(newchild);
-                }
-        
-                parentNode.data.children.push(newchild.data);
-                bzctree.collapse(newchild);
-            });
+        if (Array.isArray(updatejson)) {
+            console.log("kb: in merge new input is array");
+            newjsonarray = updatejson;
         }
         else {
-            console.log("parentNode is undefined still - TODO error handling");
+            console.log("kb: in merge new input is not an array so making one");
+            newjsonarray = [ updatejson ];
+        }
+
+        for(var i =0;i<newjsonarray.length;i++){
+            var newjson = newjsonarray[i];
+            console.log("newjson");
+            console.log(newjson);
+
+            // the first node id of the newjson is assumed to be a pre-existing node and should not result in a new node.
+            var parentRecordId = newjson["id"]; 
+            var addToNodeId = bzutils.addComponentRef(componentReference, parentRecordId);
+            var parentNodeId = "circle" + addToNodeId;
+
+            // see if this is searchable as a node
+            var parentNode = bzutils.getNodeFromId(parentNodeId);
+
+            if (parentNode == null) {
+                console.log("parentNode is undefined - so assuming it is collapsed. Search down from the root node of the base hierarchy");
+
+                var ultimateRoot = bzutils.getCache (componentReference, "root");
+
+                // try to find target node down from the root node
+                var paths = _this.searchTree(ultimateRoot,parentRecordId,[],"Id");
+                parentNode = paths.slice(-1).pop(); // this gets the last element of the path array which is the parent node.
+            }
+
+            if (parentNode != null) {
+                console.log("parentNode is defined");
+                var fragmentRoot = d3.hierarchy(newjson, function(d) { return d.children; });
+
+                fragmentRoot.children.forEach(function(newchild) {
+                    newchild.parent = parentNode;
+                    newchild.depth = parentNode.depth + 1; 
+                    newchild.height = parentNode.height - 1;
+                    _this.setDepth(newchild, newchild.depth);
+                    if (parentNode.children) {
+                        console.log("parentNode has open children");
+                        parentNode.children.push(newchild);
+                    }
+                    else {
+                        if (parentNode._children) {
+                            console.log("parentNode has closed children");
+                            parentNode._children.push(newchild);
+                        }
+                        else {
+                            // falls through to this case if a node has no children defined but we now want to push children to it
+                            console.log("parentNode has no children defined:" + parentNodeId);
+                            parentNode._children = [];
+                            parentNode.data.children = [];
+                            parentNode._children.push(newchild);
+                            parentNode.data.children.push(newchild);
+                        }
+                    }
+            
+                    parentNode.data.children.push(newchild.data);
+                    bzctree.collapse(newchild);
+
+                });
+
+                var nodeGroup = bzutils.getCache (componentReference, "nodeGroup") ;  
+                var pathGroup = bzutils.getCache (componentReference, "pathGroup") ;  
+                console.log("xxx: update");
+                _this.update(nodeGroup, pathGroup, componentReference, parentNode, false);
+            
+            }
+            else {
+                console.log("parentNode is undefined still - TODO error handling");
+            }
         }
         console.log("kb: merge: added node:");
     }

@@ -71,6 +71,14 @@
             console.log("flattenJson enter - top");
         }
 
+        // this is intended to cope with updated nodes...
+        if (Array.isArray(topnode) == true) {
+            console.log("flattenJson - break down array input");
+            for (var i=0; i < topnode.length; i++ ) {
+                _this.flattenJson(component, topnode[i], datajsonFlat, datajsonSet, false);
+            }
+        }
+
         if (!datajsonSet.has(topnode.id)) {
             datajsonFlat.push({"name":topnode.name,"id":topnode.id});
             datajsonSet.add(topnode.id);
