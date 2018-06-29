@@ -1264,6 +1264,7 @@ function update() {
         if (d.depth == 1) {
             bzchart.publishEvent(componentReference, "ChartMouseOver", pubme);
 
+            // reset cache of events for mouseover events to publish - may be a better way to do this!
             var appEvents = [];
             for (var i = 0; i < 100; i++) {
                 appEvents.push($A.get("e.c:evt_sfd3"));
@@ -1273,6 +1274,8 @@ function update() {
         else {
             var appEvents = bzutils.getCache (componentReference, "appEvents") ;
             var appEvent = appEvents.pop();
+
+            console.log("appEvents: " + appEvents.length);
             
             bzctree.publishEvent(componentReference, "ChartMouseOver", pubme, appEvent);    
         }

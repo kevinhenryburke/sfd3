@@ -99,6 +99,10 @@
 
         var action = component.get(dataUpdateMethod);
 
+        action.setParams({
+            'queryJSON': component.get("v.queryJSON")
+          });
+        
         console.log('InitiateRefreshChart: running apex callback');    
 
         action.setCallback(_this, $A.getCallback(function(response) {

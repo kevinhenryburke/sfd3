@@ -7,6 +7,10 @@
 
         var action = component.get(dataSourceMethod);
 
+        action.setParams({
+            'queryJSON': component.get("v.queryJSON")
+          });
+        
         action.setCallback(this, function(response) {
             var state = response.getState();
             if (state === "SUCCESS") {

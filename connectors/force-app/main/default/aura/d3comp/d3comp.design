@@ -9,4 +9,5 @@
     <design:attribute name="configjsonString" label="Config JSON" description="configuration JSON, do not change this unless you really understand what it does!"/>        
     <design:attribute name="searchAction" label="Search Action" default="HighlightOpenPath" description="Options whether to highlight or just to open search paths on certain chart types. Options are HighlightPath, OpenPath, HighlightOpenPath"/>        
     <design:attribute name="configuredAllowSearch" label="Allow Search" default="false" description="Click if allowed to Search chart - not supported for all components"/>        
+    <design:attribute name="queryJSON" label="Query JSON" default="{}" description="Configuration for the Salesforce Queries - refer to documentation and do not edit unless you fully understand how this works"/>        
 </design:component>

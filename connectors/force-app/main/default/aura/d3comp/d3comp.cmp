@@ -48,6 +48,7 @@
   <aura:attribute name="configjsonString" type="String" />
 	<aura:attribute name="searchAction" type="String"/> 
   <aura:attribute name="configuredAllowSearch" type="Boolean" default="false"/>    
+	<aura:attribute name="queryJSON" type="String"/> 
 
   <!-- Technical - Chart -->
 

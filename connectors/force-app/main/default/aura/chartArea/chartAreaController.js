@@ -16,7 +16,6 @@
             comprefNumber = Math.floor((Math.random() * 10000000000) + 1); 
         }
         var componentReference = "compref" + comprefNumber;
-		console.log('chartArea: doInit: set componentReference: ' + componentReference);    
         component.set("v.componentReference", componentReference);
         component.set("v.chartAreaDivId", componentReference + 'chartArea');
         console.log('chartArea: doInit exit');   
@@ -41,21 +40,21 @@
 
 
     afterScriptsLoaded: function(component, event, helper) {
-        console.log('chartArea: afterScriptsLoaded enter');
+        bzutils.log('chartArea: afterScriptsLoaded enter');
         component.set("v.scriptsLoaded", true);
 
         var rendered = component.get("v.rendered");
         if (rendered == true) {
-            console.log('chartArea: signalling ready from afterScriptsLoaded');   
+            bzutils.log('chartArea: signalling ready from afterScriptsLoaded');   
             helper.doneRenderLoad(component);
         }        
-        console.log('chartArea: afterScriptsLoaded exit');
+        bzutils.log('chartArea: afterScriptsLoaded exit');
     },
 
     /* handlers */
 
     refreshData: function(component,event,helper){
-        console.log("calling the aura:method refreshData in base");
+        bzutils.log("calling the aura:method refreshData in base");
         var args = event.getParam("arguments");
 
         var datajson = args.datajson;
@@ -67,12 +66,12 @@
     },
 
     searchChart: function(component,event,helper){
-        console.log("calling the aura:method searchChart in base");        
+        bzutils.log("calling the aura:method searchChart in base");        
     },
     
     
     handle_evt_sfd3  : function(component, event, helper) {
-        console.log('chartArea: handle_evt_sfd3 enter');
+        bzutils.log('chartArea: handle_evt_sfd3 enter');
 
         var topic = event.getParam("topic");
         var publisher = event.getParam("publisher");
@@ -86,7 +85,7 @@
         if (UserControllerComponentId != null && UserControllerComponentId != "") {
             if (UserControllerComponentId != publisher) {
                 var UserComponentId = component.get("v.UserComponentId");
-                console.log("ignoring message from " + publisher + " in component " + UserComponentId);
+                bzutils.log("ignoring message from " + publisher + " in component " + UserComponentId);
                 return;
             }
         }
@@ -115,7 +114,6 @@
         }
         if (topic == "SetFilter")
         {
-            console.log("SetFilter instruction received by Chart: " + componentReference);
             var parameters = event.getParam("parameters");
             var indexer = parameters["index"];
             var state = parameters["state"];
@@ -127,10 +125,10 @@
         }
         if (topic == "InitializeData")
         {
-            console.log("InitializeData received by Chart: " + componentReference + "/" + parameters["componentReference"]);
+            bzutils.log("InitializeData received by Chart: " + componentReference + "/" + parameters["componentReference"]);
 
             if (componentReference == parameters["componentReference"]) {
-                console.log("InitializeData with reference: " + componentReference);
+                bzutils.log("InitializeData with reference: " + componentReference);
                 var isInit = true;
 
                 helper.initializeGroups(component, parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"], isInit);                 
@@ -139,35 +137,35 @@
                 cc.initializeVisuals();
             }
             else {
-                console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
+                bzutils.log("Chart with reference: " + componentReference + " ignores this event with chart reference: " + parameters["componentReference"]);
             }
         }
 
         if (topic == "RefreshData")
         {
-            console.log("RefreshData topic received by Chart: " + componentReference + "/" + parameters["componentReference"]);
+            bzutils.log("RefreshData topic received by Chart: " + componentReference + "/" + parameters["componentReference"]);
             // we process if the event is from it's controller and either specifies this component or does not specify any
             if (componentReference == parameters["componentReference"] || ! ("componentReference" in parameters)) {
-                console.log("RefreshData: Refresh Chart with reference: " + componentReference);
+                bzutils.log("RefreshData: Refresh Chart with reference: " + componentReference);
 // THIS ALL TEMPORARY
-                console.log("RefreshData: Data: " + parameters["valueDate"]);
+                bzutils.log("RefreshData: Data: " + parameters["valueDate"]);
                 component.set("v.Title", parameters["valueDate"] );
 
                 var cc = component.getConcreteComponent();
                 cc.refreshData(parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"]);                 
             }
             else {
-                console.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
+                bzutils.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
             }
         }
         if (topic == "SearchChart")
         {
-            console.log("SearchChart received by Chart: " + componentReference + "/" + parameters["componentReference"]);
+            bzutils.log("SearchChart received by Chart: " + componentReference + "/" + parameters["componentReference"]);
             var cc = component.getConcreteComponent();
             cc.searchChart(parameters["searchTermId"], parameters["searchAction"], parameters["showLevels"]);                 
 
         }
-        console.log('chartArea: handle_evt_sfd3 exit');
+        bzutils.log('chartArea: handle_evt_sfd3 exit');
     },
 
 

@@ -1,7 +1,7 @@
 public class DThree {
 
     @AuraEnabled
-    public static String returnData() {
+    public static String returnData(String queryJSON) {
         List<StaticResource> docs;
 		docs = [select id, name, body from StaticResource where name = 'NVAData']; 
         return docs[0].body.toString();
@@ -9,7 +9,7 @@ public class DThree {
     }
 
     @AuraEnabled
-    public static String returnDataUpdate() {
+    public static String returnDataUpdate(String queryJSON) {
         List<StaticResource> docs;
 		docs = [select id, name, body from StaticResource where name = 'NVADataUpdate']; 
         return docs[0].body.toString();
@@ -17,7 +17,7 @@ public class DThree {
     }
 
     @AuraEnabled
-    public static String returnDataNodesOnly() {
+    public static String returnDataNodesOnly(String queryJSON) {
         List<StaticResource> docs;
 		docs = [select id, name, body from StaticResource where name = 'NVANodesOnly']; 
         return docs[0].body.toString();
@@ -26,14 +26,14 @@ public class DThree {
 
     @AuraEnabled
     // TODO TODO TODO - this version to be deprecated? as has no context
-    public static String returnDataPack() {
+    public static String returnDataPack(String queryJSON) {
 
 
 
         // TODO - will be replaced by realtime data
 
-        boolean newVersion = false;
-        if (newVersion == false) {
+        String whichVersion = 'Full';
+        if (whichVersion == 'StaticResource') {
             // STATIC RESOURCE VERSION STILL HAS VALUE but eventually delete
             List<StaticResource> docs;
             String JSONString = [select id, name, body from StaticResource where name = 'NVAPack'].body.toString(); 
@@ -42,13 +42,14 @@ public class DThree {
             return JSON.serialize(deserialized, true);
         }
 
-        // TODO SUPER TEMPORARY - needs to be fed in properly
         Account a = [select id from Account where name = 'Burke Enterprises' LIMIT 1];
         Id rootId = a.id;
         Integer intLevelsToRetrieve = 6;
-        HierarchyConfiguration hc = DThree.TEMPORARY();
+
+        HierarchyConfiguration hc = (HierarchyConfiguration)JSON.deserialize(queryJSON, HierarchyConfiguration.class);
 
         return returnDataPack(hc, rootId, intLevelsToRetrieve);
+
     }
 
     public static String returnDataPack(HierarchyConfiguration hc, Id rootId, Integer intLevelsToRetrieve) {
@@ -58,7 +59,7 @@ public class DThree {
 
 
     @AuraEnabled
-    public static String returnDataPackUpdate() {
+    public static String returnDataPackUpdate(String queryJSON) {
         // TODO - use the same techniques as returnDataPack when done
         // TODO - really should be one method not too anyway
         List<StaticResource> docs;
@@ -81,23 +82,6 @@ public class DThree {
 //		return D3Data.render();
     }
 
-
-//TODO - TEMPOARY- TEMPOARY- TEMPOARY- TEMPOARY- TEMPOARY
-    public static HierarchyConfiguration TEMPORARY() {
-        HierarchyConfiguration hc = new HierarchyConfiguration('Hierarchy');
-        hc.initialObjectType = 'Account';
-
-        // Add an Account configuration
-        HierarchyConfiguration.ObjectConfiguration oc = new HierarchyConfiguration.ObjectConfiguration ();
-        oc.objectType = 'Account';
-        oc.recursive = true;
-        oc.queryFields.put('id', 'id');
-        oc.queryFields.put('name', 'name');
-        oc.queryFields.put('size', 'AnnualRevenue');
-        oc.parentField = 'parentId';
-        hc.loc.add(oc);
-        return hc;        
-    }
 
 
 }

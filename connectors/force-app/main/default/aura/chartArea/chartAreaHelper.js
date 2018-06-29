@@ -80,6 +80,14 @@
         }    
         bzchart.publishEvent(componentReference, "ChartRendered", eventParameters);
 
+        // build up a cache for mouseover events - may be a better way to do this!
+        var appEvents = [];
+        for (var i = 0; i < 100; i++) {
+            appEvents.push($A.get("e.c:evt_sfd3"));
+        }
+        bzutils.setCache (componentReference, "appEvents",  appEvents) ;
+
+
         console.log("chartArea: doneRenderLoad exit");
 
     },
