@@ -24,22 +24,24 @@ public class DThree {
 //		return D3Data.render();
     }
 
-    @AuraEnabled
     // TODO TODO TODO - this version to be deprecated? as has no context
+
+    public static String returnDataPack() {
+        // STATIC RESOURCE VERSION STILL HAS VALUE but eventually delete
+        List<StaticResource> docs;
+        String JSONString = [select id, name, body from StaticResource where name = 'NVAPack'].body.toString(); 
+        HierarchyJSON deserialized =
+        (HierarchyJSON)JSON.deserialize(JSONString, HierarchyJSON.class);
+        return JSON.serialize(deserialized, true);
+    }
+
+
+    @AuraEnabled
     public static String returnDataPack(String queryJSON) {
-
-
-
-        // TODO - will be replaced by realtime data
-
-        String whichVersion = 'Full';
-        if (whichVersion == 'StaticResource') {
+        String whichVersion = 'StaticResource';
+        if (whichVersion == 'Database') {
             // STATIC RESOURCE VERSION STILL HAS VALUE but eventually delete
-            List<StaticResource> docs;
-            String JSONString = [select id, name, body from StaticResource where name = 'NVAPack'].body.toString(); 
-            HierarchyJSON deserialized =
-            (HierarchyJSON)JSON.deserialize(JSONString, HierarchyJSON.class);
-            return JSON.serialize(deserialized, true);
+            return returnDataPack();
         }
 
         Account a = [select id from Account where name = 'Burke Enterprises' LIMIT 1];

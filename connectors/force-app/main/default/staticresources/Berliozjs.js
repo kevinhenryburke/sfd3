@@ -1221,6 +1221,7 @@ function update() {
     }
 
     function getExpandedColor (d) { // TODO demo stuff only
+        // the logic for this should be set by configuration
         var color = expandedColor;
 //        console.log(d);
         if (d.data.size != null && d.data.size < 5000) {
@@ -1265,6 +1266,8 @@ function update() {
             bzchart.publishEvent(componentReference, "ChartMouseOver", pubme);
 
             // reset cache of events for mouseover events to publish - may be a better way to do this!
+            // the issue is that only the top orginally created nodes have lightning context, not sure why
+            // alternative would be to pass in a parameter for these nodes and push events only when the attribute is set
             var appEvents = [];
             for (var i = 0; i < 100; i++) {
                 appEvents.push($A.get("e.c:evt_sfd3"));

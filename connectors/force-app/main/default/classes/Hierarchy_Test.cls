@@ -1,6 +1,7 @@
 @IsTest
 public with sharing class Hierarchy_Test {
 
+
     public static String TOP_ID = '000000000000000001';
     public static String C1_ID = '000000000000000002';
     public static String C2_ID = '000000000000000003';
