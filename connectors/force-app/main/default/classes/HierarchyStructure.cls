@@ -10,15 +10,12 @@ public with sharing class HierarchyStructure {
         Once the parent node is available the children are added to its data structure and the sum of child nodes is computed
     */
 
-    //TODO sumOfChildren - needed - not complete at moment as doesn't bubble up
-
     /* Data returned from the output structure */
  
     public String id; // a unique id - typically a Salesforce record id
     public String name; // the name of the record
     public Decimal size; // a metric associated with the record (optional)
     public String objectType; // the type of the sObject referenced.
-    // Decimal sumOfChildren = 0; // a metric associated with the record (optional)
     public List<HierarchyStructure> children;   // child records
 
 
@@ -56,13 +53,6 @@ public with sharing class HierarchyStructure {
         else {
             this.children = newChildren;
         }
-        // update the sum of child nodes
-        // if (sumOfChildren != null) {
-        //     sumOfChildren += computeSumOfChildren(newChildren);
-        // }
-        // else {
-        //     sumOfChildren = computeSumOfChildren(newChildren);            
-        // }
     }
 
     private void addReferences (List<HierarchyStructure> listHierarchyStructure) {        
@@ -73,17 +63,6 @@ public with sharing class HierarchyStructure {
             mapIdHierarchyStructure.put(hs.id, hs);
         }
     }
-
-    // public void computeSumOfChildren (List<HierarchyStructure> listHierarchyStructure) {        
-    //     Decimal sum = 0;
-    //     for(HierarchyStructure hs : HierarchyStructure ) {
-    //         if (size != null) {
-    //             sum += size; 
-    //         }
-    //     }
-    //     return sum;
-    // }
-
 
     public HierarchyStructure getHierarchyStructureById (String id) {        
         // retrieve the map from the top node 

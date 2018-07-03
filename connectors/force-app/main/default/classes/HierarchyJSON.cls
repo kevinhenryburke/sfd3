@@ -34,21 +34,25 @@ public with sharing class HierarchyJSON {
         return hj;
     }
 
-    public static HierarchyJSON retrieveLevels (HierarchyConfiguration hc, ID rootId, Integer intLevelsToRetrieve ) {
+    // this method initializes the first levels of the chart.
+    public static HierarchyJSON retrieveLevels (HierarchyConfiguration hc, ID rootId ) {
 
         Integer thisLevel = 0;
 
         // get the top level structure and baseline queries to it.
         HierarchyQuery hqTop = new HierarchyQuery(null, hc.getLevel(thisLevel));
-        HierarchyStructure top = hqTop.mapSObjectTop(rootId);        
+        HierarchyStructure top = hqTop.createTopStructure(rootId);        
 
         thisLevel = 1;
         Set<Id> parentLevelIds = new Set<Id>{rootId}; // the top node id
 
-        for (thisLevel = 1; thisLevel < intLevelsToRetrieve; thisLevel++ ) {
+        for (thisLevel = 1; thisLevel < hc.initialLevelsToRetrieve; thisLevel++ ) {
             // we create the query for each level
             HierarchyQuery hq = new HierarchyQuery(top, hc.getLevel(thisLevel));
-            List<HierarchyStructure> listNextLevelHS = hq.mapSObject(parentLevelIds); // this should map new level nodes to their parents
+
+            List<sObject> childObjects = hq.runQuery ( parentLevelIds);
+
+            List<HierarchyStructure> listNextLevelHS = hq.addChildStructures(childObjects); // this should map new level nodes to their parents
             parentLevelIds = new Set<Id>();
             for (HierarchyStructure hs : listNextLevelHS) {
                 // make the next level ids the parents for the next iteration to get the level below this
@@ -60,6 +64,24 @@ public with sharing class HierarchyJSON {
         System.debug(LoggingLevel.ERROR,JSON.serializePretty(hj,true));
         return hj;
     }
+
+    // Adds new level to the chart
+    public static List<HierarchyJSON> createAdoptedChildren (HierarchyConfiguration hc, Set<ID> parentLevelIds, Integer thisLevel ) {
+
+        HierarchyQuery hq = new HierarchyQuery(null, hc, thisLevel); 
+
+        List<HierarchyStructure> lisths = hq.adoptChildren (parentLevelIds);
+
+        List<HierarchyJSON> listhj = new List<HierarchyJSON>();
+
+        for (HierarchyStructure hs : lisths) {
+            listhj.add(HierarchyJSON.mapHierarchyStructure (hs));
+        }
+
+        return listhj;
+
+    }
+    
 
 
 }

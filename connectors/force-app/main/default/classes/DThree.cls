@@ -24,9 +24,9 @@ public class DThree {
 //		return D3Data.render();
     }
 
-    // TODO TODO TODO - this version to be deprecated? as has no context
+    // TODO TODO TODO - this version to be deprecated? as has no context but handy for now
 
-    public static String returnDataPack() {
+    private static String returnDataPack() {
         // STATIC RESOURCE VERSION STILL HAS VALUE but eventually delete
         List<StaticResource> docs;
         String JSONString = [select id, name, body from StaticResource where name = 'NVAPack'].body.toString(); 
@@ -46,16 +46,15 @@ public class DThree {
 
         Account a = [select id from Account where name = 'Burke Enterprises' LIMIT 1];
         Id rootId = a.id;
-        Integer intLevelsToRetrieve = 6;
 
         HierarchyConfiguration hc = (HierarchyConfiguration)JSON.deserialize(queryJSON, HierarchyConfiguration.class);
 
-        return returnDataPack(hc, rootId, intLevelsToRetrieve);
+        return returnDataPack(hc, rootId);
 
     }
 
-    public static String returnDataPack(HierarchyConfiguration hc, Id rootId, Integer intLevelsToRetrieve) {
-        HierarchyJSON deserialized = HierarchyJSON.retrieveLevels (hc, rootId, intLevelsToRetrieve );
+    public static String returnDataPack(HierarchyConfiguration hc, Id rootId) {
+        HierarchyJSON deserialized = HierarchyJSON.retrieveLevels (hc, rootId);
         return JSON.serialize(deserialized, true);
     }
 
@@ -69,21 +68,5 @@ public class DThree {
         return docs[0].body.toString();
 //		return D3Data.render();
     }
-
-
-
-
-
-/* Not Used */
-    @AuraEnabled
-    public static String returnConfig() {
-        List<StaticResource> docs;
-//		docs = [select id, name, body from StaticResource where name = 'testdata']; 
-		docs = [select id, name, body from StaticResource where name = 'config']; 
-        return docs[0].body.toString();
-//		return D3Data.render();
-    }
-
-
 
 }

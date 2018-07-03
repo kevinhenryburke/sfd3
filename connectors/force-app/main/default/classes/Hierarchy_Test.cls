@@ -1,6 +1,7 @@
 @IsTest
 public with sharing class Hierarchy_Test {
 
+    /* Factories */
 
     public static String TOP_ID = '000000000000000001';
     public static String C1_ID = '000000000000000002';
@@ -57,6 +58,23 @@ public with sharing class Hierarchy_Test {
 
         return a1;
     }
+
+    public static HierarchyConfiguration factoryConfig() {
+        HierarchyConfiguration hc = new HierarchyConfiguration('Hierarchy');
+        hc.initialLevelsToRetrieve = 3;
+        // Add an Account configuration
+        HierarchyConfiguration.ObjectConfiguration oc = new HierarchyConfiguration.ObjectConfiguration ();
+        oc.objectType = 'Account';
+        oc.recursive = true;
+        oc.queryFields.put('id', 'id');
+        oc.queryFields.put('name', 'name');
+        oc.queryFields.put('size', 'AnnualRevenue');
+        oc.parentField = 'parentId';
+        hc.loc.add(oc);
+        return hc;        
+    }
+
+    /* TESTS */
     
 
     @IsTest
@@ -115,9 +133,12 @@ public with sharing class Hierarchy_Test {
 
     @IsTest
     public static void deserializeDataPack() {
+
+        // need to create some configuration and some accounts
+        HierarchyConfiguration hc = factoryConfig();
         Account rootAccount = factoryAccount();
 
-        String JSONString = DThree.returnDataPack();
+        String JSONString = DThree.returnDataPack(JSON.serialize(hc));
         HierarchyJSON deserialized =
           (HierarchyJSON)JSON.deserialize(JSONString, HierarchyJSON.class);
     }
@@ -128,29 +149,12 @@ public with sharing class Hierarchy_Test {
 
         HierarchyConfiguration hc = factoryConfig();
         ID rootId = rootAccount.id;
-        Integer intLevelsToRetrieve = 3; 
 
-        HierarchyJSON hj = HierarchyJSON.retrieveLevels (hc, rootId, intLevelsToRetrieve );
+        HierarchyJSON hj = HierarchyJSON.retrieveLevels (hc, rootId);
 
         System.assertEquals(2, hj.childDepth);            
         System.assertEquals('Account', hj.objectType);            
         
-    }
-
-    public static HierarchyConfiguration factoryConfig() {
-        HierarchyConfiguration hc = new HierarchyConfiguration('Hierarchy');
-        hc.initialObjectType = 'Account';
-
-        // Add an Account configuration
-        HierarchyConfiguration.ObjectConfiguration oc = new HierarchyConfiguration.ObjectConfiguration ();
-        oc.objectType = 'Account';
-        oc.recursive = true;
-        oc.queryFields.put('id', 'id');
-        oc.queryFields.put('name', 'name');
-        oc.queryFields.put('size', 'AnnualRevenue');
-        oc.parentField = 'parentId';
-        hc.loc.add(oc);
-        return hc;        
     }
 
     @IsTest
@@ -168,6 +172,31 @@ public with sharing class Hierarchy_Test {
         System.debug(LoggingLevel.ERROR,JSON.serializePretty(hc,false));
         System.assertEquals('Account',hc.getLevel(0).objectType); 
         System.assertEquals(null,hc.getLevel(1)); 
+    }
+
+
+    @IsTest
+    public static void createAdoptedChildren() {
+
+        HierarchyConfiguration hc = factoryConfig();
+
+        Account rootAccount = factoryAccount();
+        ID rootId = rootAccount.id;
+
+
+        Account a3 = [select id, name, AnnualRevenue, parentid from Account where name = 'Medium Company' LIMIT 1];
+        Account a4 = [select id, name, AnnualRevenue, parentid from Account where name = 'Medium-Small Company' LIMIT 1];
+
+        // we will try add two children
+
+        Set<ID> parentLevelIds = new Set<Id>{a3.id, a4.id};
+        Integer thisLevel = 2;
+
+        List<HierarchyJSON> listhj = HierarchyJSON.createAdoptedChildren (hc, parentLevelIds, thisLevel );
+
+        System.debug(LoggingLevel.ERROR,JSON.serializePretty(listhj,false));
+        System.assertEquals(2,listhj.size()); 
+        
     }
 
 

@@ -9,45 +9,46 @@ public with sharing class HierarchyQuery {
         this.top = top;
     }
 
-    public List<HierarchyStructure> mapSObject (Set<Id> ids) {
-        String queryString = 'select ' 
-            + String.join(oc.queryFields.values(),',') + ','
-            + oc.parentField 
-            + ' from '
-            + oc.objectType + ' where '
-            + oc.parentField + ' IN : ids' ; // escape single quotes should not be necessary as we are dealing with ids and not expsoing to front end
+    public HierarchyQuery(HierarchyStructure top, HierarchyConfiguration hc, Integer thisLevel) {
+        this.top = top;
+        this.oc = hc.getLevel(thisLevel); 
+    }
 
-        List<sObject> listso = Database.query(queryString);
-        List<HierarchyStructure> lisths = new List<HierarchyStructure>();
 
-        for (sObject s : listso) {
+    public List<HierarchyStructure> addChildStructures (List<sObject> childObjects) {
+
+        List<HierarchyStructure> childStructures = new List<HierarchyStructure>();
+
+        for (sObject s : childObjects) {
             id parentId = s.get(oc.parentField).toString();
+            // Concern for update - I've lost context with the top node - pass back and forth seems unperfomant
+            // also we now have multiple "tops"
             HierarchyStructure hsParent = top.getHierarchyStructureById(parentId);
             HierarchyStructure hs = new HierarchyStructure(hsParent); 
 
             hs.id = s.get(oc.queryFields.get('id')).toString();
             hs.name = s.get(oc.queryFields.get('name')).toString();
             hs.size = (Decimal) s.get(oc.queryFields.get('size'));
-            hs.parent = hsParent;
             hs.objectType = s.getSObjectType().getDescribe().getName();
+            hs.parent = hsParent;
 
-            lisths.add(hs);
+            childStructures.add(hs);
         }
 
-        System.debug('mapSObject loop start:' + lisths.size());
+        System.debug('addChildStructures loop start:' + childStructures.size());
 
         // This is not at all efficient - should group into common parents and add children that way
         // currently is taking 0.06 seconds for 120 iterations - so 1700 per second. Good enough probably
-        for (HierarchyStructure hs : lisths) {
+        for (HierarchyStructure hs : childStructures) {
             List<HierarchyStructure> newChildren = new List<HierarchyStructure>{hs};
             hs.parent.addChildren(newChildren);
         }
 
-        System.debug('mapSObject loop end:' + lisths.size());
-        return lisths;
+        System.debug('addChildStructures loop end:' + childStructures.size());
+        return childStructures;
     }
 
-    public HierarchyStructure mapSObjectTop (Id id) {
+    public HierarchyStructure createTopStructure (Id id) {
         String queryString = 'select ' 
             + String.join(oc.queryFields.values(),',') 
             + ' from '
@@ -64,6 +65,64 @@ public with sharing class HierarchyQuery {
         hs.objectType = s.getSObjectType().getDescribe().getName();
 
         return hs;
+    }
+
+    public List<sObject> runQuery (Set<Id> parentIds) {
+        String queryString = 'select ' 
+            + String.join(oc.queryFields.values(),',') + ','
+            + oc.parentField 
+            + ' from '
+            + oc.objectType + ' where '
+            + oc.parentField + ' IN : parentIds' ; // escape single quotes should not be necessary as we are dealing with ids and not expsoing to front end
+
+        List<sObject> listso = Database.query(queryString);
+        return listso;
+    }
+
+    /* we may children to a lightweight parent before pushing it to the main chart */
+
+    public List<HierarchyStructure> adoptChildren (Set<ID> potentialParentIds) {
+
+        // We have the parentIds as input... potentialParentIds (some may not be parents)
+        // run the query against these ids
+        List<sObject> childObjects = runQuery ( potentialParentIds);
+
+        // group by parentId from the query output (some of the input potentialParentIds may not be parents) 
+
+        Map<Id,List<sObject>> childMap = new Map<Id,List<sObject>>();  
+
+        for (sObject s : childObjects) {
+            id parentId = s.get(oc.parentField).toString();
+            if (childMap.keyset().contains(parentId)) {
+                List<sObject> siblings = childMap.get(parentId);
+                siblings.add(s);
+            } 
+            else {
+                childMap.put(parentId, new List<sObject>{s});
+            }
+        }
+
+        // create a list to hold a structure for each of these parents, it will be 1:1
+        List<HierarchyStructure> topStructures = new List<HierarchyStructure> ();
+
+        for (Id parentId : childMap.keyset()) {
+
+            List<sObject> siblings = childMap.get(parentId);
+
+            HierarchyQuery hqTop = new HierarchyQuery(null, oc);
+
+            HierarchyStructure top = new HierarchyStructure(parentId); // to signify top element
+            top.id = parentId;      
+
+            HierarchyQuery hq = new HierarchyQuery(top, oc);
+            List<HierarchyStructure> listNextLevelHS = hq.addChildStructures(siblings); // this should map new level nodes to their parents
+
+            HierarchyJSON hj = HierarchyJSON.mapHierarchyStructure (top);
+
+            topStructures.add(top);
+        }
+
+        return topStructures;
     }
 
 

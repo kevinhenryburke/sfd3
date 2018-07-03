@@ -1,10 +1,14 @@
-// AAATestData.testScripts(1);
 
 
 public with sharing class AAATestData {
     public AAATestData() {
 
     }
+
+
+// In Execute Anonymous run
+// AAATestData.testScripts(1);
+// for each of 1 to 9
 
 public static void testScripts(Integer sectionNumber) {
 
@@ -202,9 +206,6 @@ p=[select id from Account where Name='Crestview Partners' ];a=new Account(Name='
 }
 
 if (sectionNumber == 7) {
-}
-
-if (sectionNumber == 8) {
 p=[select id from Account where Name='BIP Investment Partners' ];a=new Account(Name='Oak Hill Capital Partners', AnnualRevenue=21726249);a.parentid=p.id;insert a;
 p=[select id from Account where Name='Blackstone Group' ];a=new Account(Name='Oak Investment Partners', AnnualRevenue=21622370);a.parentid=p.id;insert a;
 p=[select id from Account where Name='Blum Capital' ];a=new Account(Name='Oaktree Capital Management', AnnualRevenue=21518491);a.parentid=p.id;insert a;
@@ -241,7 +242,7 @@ p=[select id from Account where Name='Pamlico Capital' ];a=new Account(Name='Sen
 p=[select id from Account where Name='Pantheon Ventures' ];a=new Account(Name='Silver Lake Partners', AnnualRevenue=18298242);a.parentid=p.id;insert a;
 }
 
-if (sectionNumber == 9) { 
+if (sectionNumber == 8) { 
 p=[select id from Account where Name='Partners Group' ];a=new Account(Name='Silverfleet Capital Partners', AnnualRevenue=18194363);a.parentid=p.id;insert a;
 p=[select id from Account where Name='Permira' ];a=new Account(Name='SL Capital Partners', AnnualRevenue=18090484);a.parentid=p.id;insert a;
 p=[select id from Account where Name='Phoenix Equity Partners' ];a=new Account(Name='Stabilis Capital Management[5]', AnnualRevenue=17986605);a.parentid=p.id;insert a;

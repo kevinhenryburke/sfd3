@@ -12,8 +12,8 @@ public with sharing class HierarchyConfiguration  {
 
     // chartType is required to provide the mandatory fields for every object
     public String chartType;
-    // starting objects of a configuration
-    public String initialObjectType;
+    // levels to retrieve in initial query
+    public Integer initialLevelsToRetrieve;
     // maps an object name to its configuration object.
     public List<ObjectConfiguration> loc = new List<ObjectConfiguration>();
 
@@ -57,10 +57,9 @@ public with sharing class HierarchyConfiguration  {
     // Note: Level 0 is the top element
     // returns the configuration in the ith position. If the list is of shorter length then returns the final element if that element is marked as recursive
     // otherwise returns null
-    public ObjectConfiguration getLevel(Integer i) {
-        Integer thisIndex = i;
+    public ObjectConfiguration getLevel(Integer thisLevel) {
         Integer arrayMaxIndex = loc.size() -1;
-        if (thisIndex > arrayMaxIndex) {
+        if (thisLevel > arrayMaxIndex) {
             // this is not an explicitly configured level but we can still return the final configured level if that level is recursive
             ObjectConfiguration lastOC = loc[arrayMaxIndex];
             if (lastOC.recursive == true) {
@@ -71,7 +70,7 @@ public with sharing class HierarchyConfiguration  {
             }
         }
         // this is an explicitly configured level so we return
-        return loc[thisIndex];
+        return loc[thisLevel];
     }
 
 
