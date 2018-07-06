@@ -16,6 +16,8 @@ public with sharing class HierarchyStructure {
     public String name; // the name of the record
     public Decimal size; // a metric associated with the record (optional)
     public String objectType; // the type of the sObject referenced.
+    public Integer level; // level down we have reached in teh structure
+
     public List<HierarchyStructure> children;   // child records
 
 
@@ -28,10 +30,11 @@ public with sharing class HierarchyStructure {
 
 
     /* Class Constructor for top element */    
-    public HierarchyStructure(Id Id) {
+    public HierarchyStructure(Id Id, Integer level) {
         isTop = true;
         this.top = this;
         this.parent = this;
+        this.level = level;
         mapIdHierarchyStructure.put(id, this);
     }
 
@@ -40,6 +43,7 @@ public with sharing class HierarchyStructure {
         isTop = false;
         this.top = parent.top;
         this.parent = parent;
+        this.level = parent.level + 1;
     }
 
 

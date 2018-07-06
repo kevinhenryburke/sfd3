@@ -48,7 +48,7 @@
   <aura:attribute name="configjsonString" type="String" />
 	<aura:attribute name="searchAction" type="String"/> 
   <aura:attribute name="configuredAllowSearch" type="Boolean" default="false"/>    
-	<aura:attribute name="queryJSON" type="String"/> 
+	<aura:attribute name="queryJSON" type="String" default="{}"/> 
 
   <!-- Technical - Chart -->
 
@@ -64,6 +64,13 @@
 	<aura:attribute name="configuredMeasures" type="Boolean" default="false"/>    
   <aura:attribute name="configuredAllowRefresh" type="Boolean" default="false"/>    
   <aura:attribute name="configuredShowTestButtons" type="Boolean" default="false"/>      
+
+
+  <!-- Technical - Query -->
+  <aura:attribute name="queryLevels" type="Object[]" default="[]"/> 
+  <aura:attribute name="queryLevelIds" type="Object[]" default="[]"/> 
+  <aura:attribute name="thisLevel" type="Integer"/> 
+
   
     <div class="slds">
       <div class="slds-page-header" role="banner">

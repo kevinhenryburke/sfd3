@@ -3,15 +3,14 @@ public with sharing class HierarchyQuery {
     // map between the JSON attributes expected in the Chart and the Salesforce field names.
     public HierarchyStructure top; // top node in the hierarchy 
     public HierarchyConfiguration.ObjectConfiguration oc;
+    public HierarchyConfiguration hc;
+    public Integer level;
 
-    public HierarchyQuery(HierarchyStructure top, HierarchyConfiguration.ObjectConfiguration oc) {
-        this.oc = oc; 
+    public HierarchyQuery(HierarchyStructure top, HierarchyConfiguration hc, Integer level) {
         this.top = top;
-    }
-
-    public HierarchyQuery(HierarchyStructure top, HierarchyConfiguration hc, Integer thisLevel) {
-        this.top = top;
-        this.oc = hc.getLevel(thisLevel); 
+        this.level = level;
+        this.hc = hc;
+        this.oc = hc.getLevel(level); 
     }
 
 
@@ -58,7 +57,7 @@ public with sharing class HierarchyQuery {
         List<sObject> listso = Database.query(queryString);
         sObject s = listso[0];
 
-        HierarchyStructure hs = new HierarchyStructure(id); // to signify top element
+        HierarchyStructure hs = new HierarchyStructure(id, level); // to signify top element
         hs.id = s.get(oc.queryFields.get('id')).toString();
         hs.name = s.get(oc.queryFields.get('name')).toString();
         hs.size = (Decimal) s.get(oc.queryFields.get('size'));
@@ -109,12 +108,12 @@ public with sharing class HierarchyQuery {
 
             List<sObject> siblings = childMap.get(parentId);
 
-            HierarchyQuery hqTop = new HierarchyQuery(null, oc);
+            HierarchyQuery hqTop = new HierarchyQuery(null, hc, level);
 
-            HierarchyStructure top = new HierarchyStructure(parentId); // to signify top element
+            HierarchyStructure top = new HierarchyStructure(parentId, level); // to signify top element
             top.id = parentId;      
 
-            HierarchyQuery hq = new HierarchyQuery(top, oc);
+            HierarchyQuery hq = new HierarchyQuery(top, hc, level + 1);
             List<HierarchyStructure> listNextLevelHS = hq.addChildStructures(siblings); // this should map new level nodes to their parents
 
             HierarchyJSON hj = HierarchyJSON.mapHierarchyStructure (top);

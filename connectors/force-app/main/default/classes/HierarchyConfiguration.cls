@@ -59,10 +59,19 @@ public with sharing class HierarchyConfiguration  {
     // otherwise returns null
     public ObjectConfiguration getLevel(Integer thisLevel) {
         Integer arrayMaxIndex = loc.size() -1;
+
+        System.debug('thisLevel: ' + thisLevel);
+        System.debug('arrayMaxIndex: ' + arrayMaxIndex);
+        System.debug('loc: ' + loc);
+
         if (thisLevel > arrayMaxIndex) {
+            System.debug('gone beyond end of array so check if recursive');
+
             // this is not an explicitly configured level but we can still return the final configured level if that level is recursive
             ObjectConfiguration lastOC = loc[arrayMaxIndex];
+            System.debug('lastOC: ' + lastOC);
             if (lastOC.recursive == true) {
+                System.debug('recursive');
                 return lastOC;
             }
             else {

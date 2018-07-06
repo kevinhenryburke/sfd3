@@ -1,5 +1,7 @@
 public class DThree {
 
+    public static String TEMP_WHICH_VERSION = 'StaticResource##!#!';
+
     @AuraEnabled
     public static String returnData(String queryJSON) {
         List<StaticResource> docs;
@@ -9,7 +11,7 @@ public class DThree {
     }
 
     @AuraEnabled
-    public static String returnDataUpdate(String queryJSON) {
+    public static String returnDataUpdate(String queryJSON, List<Id> queryLevelIds, Integer thisLevel) {
         List<StaticResource> docs;
 		docs = [select id, name, body from StaticResource where name = 'NVADataUpdate']; 
         return docs[0].body.toString();
@@ -38,8 +40,7 @@ public class DThree {
 
     @AuraEnabled
     public static String returnDataPack(String queryJSON) {
-        String whichVersion = 'StaticResource';
-        if (whichVersion == 'Database') {
+        if (TEMP_WHICH_VERSION == 'StaticResource') {
             // STATIC RESOURCE VERSION STILL HAS VALUE but eventually delete
             return returnDataPack();
         }
@@ -60,13 +61,23 @@ public class DThree {
 
 
     @AuraEnabled
-    public static String returnDataPackUpdate(String queryJSON) {
+    public static String returnDataPackUpdate(String queryJSON, List<Id> queryLevelIds, Integer queryLevel) {
         // TODO - use the same techniques as returnDataPack when done
         // TODO - really should be one method not too anyway
-        List<StaticResource> docs;
-		docs = [select id, name, body from StaticResource where name = 'NVAPackUpdate']; 
-        return docs[0].body.toString();
-//		return D3Data.render();
+
+        System.debug('returnDataPackUpdate: ' + queryLevel);
+
+        if (TEMP_WHICH_VERSION == 'StaticResource') {
+            List<StaticResource> docs;
+            docs = [select id, name, body from StaticResource where name = 'NVAPackUpdate']; 
+            return docs[0].body.toString();
+        }
+
+        HierarchyConfiguration hc = (HierarchyConfiguration)JSON.deserialize(queryJSON, HierarchyConfiguration.class);
+
+        Integer intQueryLevel = Integer.valueOf(queryLevel);
+        List<HierarchyJSON> listhj = HierarchyJSON.createAdoptedChildren (hc, queryLevelIds, intQueryLevel );
+        return JSON.serialize(listhj, true);
     }
 
 }

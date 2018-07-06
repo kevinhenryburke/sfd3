@@ -7,6 +7,18 @@
 
         var action = component.get(dataSourceMethod);
 
+        var queryJSONObject = JSON.parse(component.get("v.queryJSON"));
+
+        var thisLevel = queryJSONObject.initialLevelsToRetrieve - 1;
+        // shift removes from front....
+        component.set("v.thisLevel", thisLevel );
+
+        // build up an array of ids that are still to be queried and the levels that are indexed by the arrays   
+        var queryLevels = [thisLevel];
+        var queryLevelIds = [[]];
+        component.set("v.queryLevels", queryLevels );
+        component.set("v.queryLevelIds", queryLevelIds );
+        
         action.setParams({
             'queryJSON': component.get("v.queryJSON")
           });
@@ -68,6 +80,12 @@
                     bzutils.publishEvent("InitializeData", publisher, componentCategory, componentType, configEventParameters, null);    
                 }
                 component.set("v.initEventsQueue",[]);
+
+
+                // KB: TODO COME BACK
+                var thisLevel = component.get("v.thisLevel");
+                helper.extractLeafIds(component, datajson, thisLevel);
+
 
 
             }

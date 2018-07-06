@@ -5,6 +5,7 @@ public with sharing class HierarchyJSON {
     public Decimal size; // a metric associated with the record (optional)
     public String objectType; // the type of the sObject referenced.
     
+    public Integer level; // current level in the structure
     public Integer childDepth; // depth of levels beneath this.
     public List<HierarchyJSON> children;   // child records
 
@@ -17,6 +18,7 @@ public with sharing class HierarchyJSON {
         hj.id = hs.id;
         hj.name = hs.name;
         hj.size = hs.size;
+        hj.level = hs.level;
         hj.childDepth = 0;
         hj.objectType = hs.objectType;
 
@@ -40,7 +42,7 @@ public with sharing class HierarchyJSON {
         Integer thisLevel = 0;
 
         // get the top level structure and baseline queries to it.
-        HierarchyQuery hqTop = new HierarchyQuery(null, hc.getLevel(thisLevel));
+        HierarchyQuery hqTop = new HierarchyQuery(null, hc, thisLevel);
         HierarchyStructure top = hqTop.createTopStructure(rootId);        
 
         thisLevel = 1;
@@ -48,7 +50,7 @@ public with sharing class HierarchyJSON {
 
         for (thisLevel = 1; thisLevel < hc.initialLevelsToRetrieve; thisLevel++ ) {
             // we create the query for each level
-            HierarchyQuery hq = new HierarchyQuery(top, hc.getLevel(thisLevel));
+            HierarchyQuery hq = new HierarchyQuery(top, hc, thisLevel);
 
             List<sObject> childObjects = hq.runQuery ( parentLevelIds);
 
@@ -82,6 +84,14 @@ public with sharing class HierarchyJSON {
 
     }
     
+    public static List<HierarchyJSON> createAdoptedChildren (HierarchyConfiguration hc, List<ID> listParentLevelIds, Integer thisLevel ) {
+        Set<Id> parentLevelIds = new Set<Id>();
+        for (ID id : listParentLevelIds) {
+            parentLevelIds.add(id);
+        }
+        return createAdoptedChildren (hc, parentLevelIds, thisLevel);
+    }
+
 
 
 }

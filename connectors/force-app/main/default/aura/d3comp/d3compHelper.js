@@ -99,8 +99,18 @@
 
         var action = component.get(dataUpdateMethod);
 
+        var thisLevel = component.get("v.thisLevel");
+
+        var queryLevelIds = _this.getQueryLevelIds(component,thisLevel);
+        console.log("yyy: update: " + queryLevelIds.length);
+        console.log("yyy: thisLevel: " + thisLevel);
+
+        // TODO COME BACK - ADD in queryLevelIds .....
+
         action.setParams({
-            'queryJSON': component.get("v.queryJSON")
+            'queryJSON': component.get("v.queryJSON"),
+            'queryLevelIds' : queryLevelIds,
+            'queryLevel' : thisLevel
           });
         
         console.log('InitiateRefreshChart: running apex callback');    
@@ -114,6 +124,13 @@
                 var datastring = response.getReturnValue();
                 var datajson = JSON.parse(datastring);
                 console.log('InitiateRefreshChart: datastring: ' + datastring);    
+
+
+                // KB: TODO COME BACK
+                var thisLevel = component.get("v.thisLevel");
+                _this.extractLeafIds(component, datajson, thisLevel);
+
+
                 // Review - this is setting datajson to be whatever is new ... NOT the full data set in the CHART ...
                 component.set("v.datajson", datajson);
                         
@@ -306,6 +323,79 @@
                 $A.util.removeClass(cmpTarget, 'slds-button_neutral');
             }
         }
-    }   
+    }, 
+
+    // TODO TODO TODO - come back, not even half finished.
+    
+    /* This may need to change but at present it attempts to parse both hierarchy and node formats
+    More control could be had by informing what the format to expect is of course */
+
+    extractLeafIds : function(component, topnode, thisLevel) {
+        var _this = this;
+        console.log("yyy: " + thisLevel);
+
+        var queryLevels = component.get("v.queryLevels");
+        var queryLevelIds = component.get("v.queryLevelIds");     
+
+        var levelIndex = queryLevels.indexOf(thisLevel);
+        console.log("yyy: levelIndex: " + levelIndex);
+
+        if (levelIndex == -1) {
+            queryLevels.push(thisLevel);
+            queryLevelIds.push([]);
+            component.set("v.queryLevels", queryLevels);
+            component.set("v.queryLevelIds", queryLevelIds);     
+            levelIndex = queryLevels.length;
+        }
+
+
+        if (Array.isArray(topnode) == true) {
+            console.log("flattenJson - break down array input");
+            for (var i=0; i < topnode.length; i++ ) {
+                _this.extractLeafIds(component, topnode[i], thisLevel);
+            }
+        }
+        else {
+            // parse the hierarchy - using children node
+            if (topnode.children) {
+                for (var i=0; i < topnode.children.length; i++ ) {
+                    _this.extractLeafIds(component, topnode.children[i], thisLevel);
+                }
+            } 
+            else {
+                if (topnode.level == thisLevel) {
+                    var queryLevelIds = component.get("v.queryLevelIds");     
+                    queryLevelIds[levelIndex].push(topnode.id);
+                    console.log("yyy: array length: " + queryLevelIds[levelIndex].length );
+                    component.set("v.queryLevelIds", queryLevelIds); 
+                }
+            }
+        }
+        // parse the node structure - using nodes // TODO - need to be sorted for nodes
+        if (topnode.nodes) {
+            for (var i=0; i < topnode.nodes.length; i++ ) {
+                _this.extractLeafIds(component, topnode.nodes[i], thisLevel);
+            }
+        }        
+
+    },
+
+    getQueryLevelIds : function(component, thisLevel) {
+        var _this = this;
+
+        var queryLevels = component.get("v.queryLevels");
+
+        var levelIndex = queryLevels.indexOf(thisLevel);
+        console.log("yyy: levelIndex: " + levelIndex);
+
+        if (levelIndex == -1) {
+            return [];            
+        }
+        else {
+            var queryLevelIds = component.get("v.queryLevelIds");     
+            return queryLevelIds[levelIndex];
+        }
+    }
+    
 
 })

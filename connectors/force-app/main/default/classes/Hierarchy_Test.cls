@@ -9,7 +9,7 @@ public with sharing class Hierarchy_Test {
 
     public static HierarchyStructure factoryHS() {
         // create a top node with some attributes
-        HierarchyStructure top = new HierarchyStructure(TOP_ID);
+        HierarchyStructure top = new HierarchyStructure(TOP_ID,0);
         top.name = 'Burke.com';
         top.size = 100;
 
@@ -183,11 +183,9 @@ public with sharing class Hierarchy_Test {
         Account rootAccount = factoryAccount();
         ID rootId = rootAccount.id;
 
-
+        // Pick two accounts to act as parents
         Account a3 = [select id, name, AnnualRevenue, parentid from Account where name = 'Medium Company' LIMIT 1];
         Account a4 = [select id, name, AnnualRevenue, parentid from Account where name = 'Medium-Small Company' LIMIT 1];
-
-        // we will try add two children
 
         Set<ID> parentLevelIds = new Set<Id>{a3.id, a4.id};
         Integer thisLevel = 2;
@@ -196,6 +194,9 @@ public with sharing class Hierarchy_Test {
 
         System.debug(LoggingLevel.ERROR,JSON.serializePretty(listhj,false));
         System.assertEquals(2,listhj.size()); 
+        System.assertEquals(2,listhj[0].level); 
+        System.assertEquals(3,listhj[0].children[0].level); 
+
         
     }
 

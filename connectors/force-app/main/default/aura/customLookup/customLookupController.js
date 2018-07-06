@@ -93,13 +93,7 @@
 
         if (topic == "InitializeData" || topic == "RefreshData")
         {
-            console.log("InitializeData received by customLookup");
-
             var datajson = parameters["datajson"];
-            console.log("datajson");
-            console.log(JSON.stringify(datajson));
-
-
             var datajsonFlat = component.get("v.datajsonFlat") || [];
             var datajsonSet = component.get("v.datajsonSet") || new Set();
 
