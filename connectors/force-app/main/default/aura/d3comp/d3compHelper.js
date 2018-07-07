@@ -105,8 +105,6 @@
         console.log("yyy: update: " + queryLevelIds.length);
         console.log("yyy: thisLevel: " + thisLevel);
 
-        // TODO COME BACK - ADD in queryLevelIds .....
-
         action.setParams({
             'queryJSON': component.get("v.queryJSON"),
             'queryLevelIds' : queryLevelIds,
@@ -129,7 +127,12 @@
                 // KB: TODO COME BACK
                 var thisLevel = component.get("v.thisLevel");
                 _this.extractLeafIds(component, datajson, thisLevel);
+                component.set("v.thisLevel", thisLevel+1);
 
+//KB 20180707 TEMP                
+                // var queryLevels = component.get("v.queryLevels");
+                // component.set("v.queryLevels", queryLevels + 1);
+        
 
                 // Review - this is setting datajson to be whatever is new ... NOT the full data set in the CHART ...
                 component.set("v.datajson", datajson);
@@ -337,18 +340,6 @@
         var queryLevels = component.get("v.queryLevels");
         var queryLevelIds = component.get("v.queryLevelIds");     
 
-        var levelIndex = queryLevels.indexOf(thisLevel);
-        console.log("yyy: levelIndex: " + levelIndex);
-
-        if (levelIndex == -1) {
-            queryLevels.push(thisLevel);
-            queryLevelIds.push([]);
-            component.set("v.queryLevels", queryLevels);
-            component.set("v.queryLevelIds", queryLevelIds);     
-            levelIndex = queryLevels.length;
-        }
-
-
         if (Array.isArray(topnode) == true) {
             console.log("flattenJson - break down array input");
             for (var i=0; i < topnode.length; i++ ) {
@@ -363,10 +354,10 @@
                 }
             } 
             else {
-                if (topnode.level == thisLevel) {
+                if (topnode.level >= thisLevel) {
+                    var levelIndex = _this.getLevelIndex(component, topnode.level);
                     var queryLevelIds = component.get("v.queryLevelIds");     
                     queryLevelIds[levelIndex].push(topnode.id);
-                    console.log("yyy: array length: " + queryLevelIds[levelIndex].length );
                     component.set("v.queryLevelIds", queryLevelIds); 
                 }
             }
@@ -395,6 +386,32 @@
             var queryLevelIds = component.get("v.queryLevelIds");     
             return queryLevelIds[levelIndex];
         }
+    },
+
+
+    getLevelIndex : function(component, thisLevel) {
+        var _this = this;
+
+        var queryLevels = component.get("v.queryLevels");
+
+        var levelIndex = queryLevels.indexOf(thisLevel);
+
+        if (levelIndex == -1) {
+            // this is a new level
+            var queryLevelIds = component.get("v.queryLevelIds");     
+
+            // push the new level to the levels array and create a new array at the end of the ids array
+            queryLevels.push(thisLevel);
+            queryLevelIds.push([]);
+            // set these as new values
+            component.set("v.queryLevels", queryLevels);
+            component.set("v.queryLevelIds", queryLevelIds);     
+            // and set the level index to the the last index of the new array
+            levelIndex = queryLevels.length -1;
+            bzutils.log("yyy: create new level: levelIndex: " + levelIndex + " thisLevel: " + thisLevel);
+        }
+        return levelIndex;
+        
     }
     
 

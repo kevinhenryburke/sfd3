@@ -66,6 +66,7 @@ public class DThree {
         // TODO - really should be one method not too anyway
 
         System.debug('returnDataPackUpdate: ' + queryLevel);
+        System.debug('returnDataPackUpdate: ' + queryLevelIds);
 
         if (TEMP_WHICH_VERSION == 'StaticResource') {
             List<StaticResource> docs;
