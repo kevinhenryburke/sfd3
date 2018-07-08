@@ -102,8 +102,6 @@
         var thisLevel = component.get("v.thisLevel");
 
         var queryLevelIds = _this.getQueryLevelIds(component,thisLevel);
-        console.log("yyy: update: " + queryLevelIds.length);
-        console.log("yyy: thisLevel: " + thisLevel);
 
         action.setParams({
             'queryJSON': component.get("v.queryJSON"),
@@ -114,30 +112,22 @@
         console.log('InitiateRefreshChart: running apex callback');    
 
         action.setCallback(_this, $A.getCallback(function(response) {
-            console.log('InitiateRefreshChart: data returned from apex for udpate');    
+            bzutils.log('InitiateRefreshChart: data returned from apex for udpate');    
             var state = response.getState();
-            console.log('InitiateRefreshChart: state ' + state);    
+            bzutils.log('InitiateRefreshChart: state ' + state);    
             if (state === "SUCCESS") {
 
                 var datastring = response.getReturnValue();
                 var datajson = JSON.parse(datastring);
-                console.log('InitiateRefreshChart: datastring: ' + datastring);    
+                bzutils.log('InitiateRefreshChart: datastring: ' + datastring);    
 
-
-                // KB: TODO COME BACK
+                // lay down candidate ids for further queries
                 var thisLevel = component.get("v.thisLevel");
                 _this.extractLeafIds(component, datajson, thisLevel);
                 component.set("v.thisLevel", thisLevel+1);
 
-//KB 20180707 TEMP                
-                // var queryLevels = component.get("v.queryLevels");
-                // component.set("v.queryLevels", queryLevels + 1);
-        
-
                 // Review - this is setting datajson to be whatever is new ... NOT the full data set in the CHART ...
                 component.set("v.datajson", datajson);
-                        
-
 
     // TODO - this sends data that is picked up by the target component, however work needs to be done on updating / removing nodes
 
@@ -155,7 +145,7 @@
                     // Extract data from the event to update control panel and send out details.
                     var parameters = event.getParam("parameters");
                     var componentReference = parameters["componentReference"];
-                    console.log("Publish data upon refresh request for charts: " + componentReference);
+                    bzutils.log("Publish data upon refresh request for charts: " + componentReference);
                     var panelPrimaryId = parameters["primaryNodeId"];            
                     component.set("v.panelPrimaryId", panelPrimaryId);   
                     
@@ -335,13 +325,10 @@
 
     extractLeafIds : function(component, topnode, thisLevel) {
         var _this = this;
-        console.log("yyy: " + thisLevel);
-
         var queryLevels = component.get("v.queryLevels");
         var queryLevelIds = component.get("v.queryLevelIds");     
 
         if (Array.isArray(topnode) == true) {
-            console.log("flattenJson - break down array input");
             for (var i=0; i < topnode.length; i++ ) {
                 _this.extractLeafIds(component, topnode[i], thisLevel);
             }
@@ -355,10 +342,7 @@
             } 
             else {
                 if (topnode.level >= thisLevel) {
-                    var levelIndex = _this.getLevelIndex(component, topnode.level);
-                    var queryLevelIds = component.get("v.queryLevelIds");     
-                    queryLevelIds[levelIndex].push(topnode.id);
-                    component.set("v.queryLevelIds", queryLevelIds); 
+                    _this.addIdToQueryList(component, topnode.level, topnode.id);
                 }
             }
         }
@@ -368,7 +352,6 @@
                 _this.extractLeafIds(component, topnode.nodes[i], thisLevel);
             }
         }        
-
     },
 
     getQueryLevelIds : function(component, thisLevel) {
@@ -377,7 +360,6 @@
         var queryLevels = component.get("v.queryLevels");
 
         var levelIndex = queryLevels.indexOf(thisLevel);
-        console.log("yyy: levelIndex: " + levelIndex);
 
         if (levelIndex == -1) {
             return [];            
@@ -408,11 +390,21 @@
             component.set("v.queryLevelIds", queryLevelIds);     
             // and set the level index to the the last index of the new array
             levelIndex = queryLevels.length -1;
-            bzutils.log("yyy: create new level: levelIndex: " + levelIndex + " thisLevel: " + thisLevel);
+            bzutils.log("create new level: levelIndex: " + levelIndex + " thisLevel: " + thisLevel);
         }
         return levelIndex;
         
-    }
+    },
+
+
+    addIdToQueryList : function(component, thisLevel, thisid) {
+        var _this = this;
+        var levelIndex = _this.getLevelIndex(component, thisLevel);
+        var queryLevelIds = component.get("v.queryLevelIds");     
+        queryLevelIds[levelIndex].push(thisid);
+        component.set("v.queryLevelIds", queryLevelIds); 
+    },
+
     
 
 })

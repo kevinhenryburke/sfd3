@@ -60,8 +60,7 @@
       
         // Compute the new tree layout.
         nodes = treeMappedData.descendants();
-        console.log("kb: descendants: nodes will contain all of the visible nodes");
-        console.log(nodes);
+        // descendants: nodes will contain all of the visible nodes
         links = treeMappedData.descendants().slice(1);
       
         // Normalize for fixed-depth.
@@ -72,7 +71,6 @@
         // Update the nodes...
         var node = nodeGroup.selectAll('g.treenode')
             .data(nodes, function(d) {                
-                console.log("xxx: ng");
                 return d.id || (d.id = bzutils.addComponentRef(componentReference, d.data.id)); 
             });
                 
@@ -80,10 +78,8 @@
         var nodeEnter = node.enter().append('g')
             .attr('class', 'treenode')
             .attr("transform", function(d) {
-                console.log("xxx: ea");
                 var t = "translate(" + source.y0 + "," + source.x0 + ")";
-//                console.log("enter new node: " + t);
-              return t;
+                return t;
             })
             .attr("id", function(d) {
                 return d.id;
@@ -93,7 +89,6 @@
             })            
             .on('click', click)
 			.on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-//				console.log("mouseover: " + d.id);
 				bzutils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
 				bzutils.xfcr("nodeMouseover", componentReference, d); 
 			}))
@@ -107,7 +102,7 @@
                 return "circle" + d.id;
             })            
             .style("fill", function(d) {
-                console.log("kb: we add new circles only to new nodes - the nodes are forgotten if collapsed");
+                // we add new circles only to new nodes - the nodes are forgotten if collapsed
                 return d._children ? bzctree.getCanExpandColor(d) : bzctree.getExpandedColor(d);
             })
             
@@ -135,7 +130,6 @@
           .duration(shortDuration)
           .attr("transform", function(d) { 
             var t = "translate(" + d.y  + "," + d.x + ")";
-//              console.log(t);
               return t;
            });
       
@@ -183,7 +177,6 @@
         // Update the links...
         var link = pathGroup.selectAll('path.treelink')
             .data(links, function(d) { 
-                console.log("xxx: pg");
                 return d.id; 
             });
       
