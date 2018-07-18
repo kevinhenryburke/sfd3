@@ -1,18 +1,15 @@
 declare module "@apex/DThree.returnData" {
-  export function returnData(): Promise<any>;
+  export function returnData(param: {queryJSON: any}): Promise<any>;
 }
 declare module "@apex/DThree.returnDataUpdate" {
-  export function returnDataUpdate(): Promise<any>;
+  export function returnDataUpdate(param: {queryJSON: any, queryLevelIds: any, thisLevel: any}): Promise<any>;
 }
 declare module "@apex/DThree.returnDataNodesOnly" {
-  export function returnDataNodesOnly(): Promise<any>;
+  export function returnDataNodesOnly(param: {queryJSON: any}): Promise<any>;
 }
 declare module "@apex/DThree.returnDataPack" {
-  export function returnDataPack(): Promise<any>;
+  export function returnDataPack(param: {queryJSON: any}): Promise<any>;
 }
 declare module "@apex/DThree.returnDataPackUpdate" {
-  export function returnDataPackUpdate(): Promise<any>;
-}
-declare module "@apex/DThree.returnConfig" {
-  export function returnConfig(): Promise<any>;
+  export function returnDataPackUpdate(param: {queryJSON: any, queryLevelIds: any, queryLevel: any}): Promise<any>;
 }

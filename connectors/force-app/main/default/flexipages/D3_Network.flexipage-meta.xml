@@ -12,7 +12,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>configjsonString</name>
-                <value>{"filtertypes":["Work","Social","Client"],"measures":["Posts","Hot"],"levels":4,"centreonclick":true}</value>
+                <value>{&quot;filtertypes&quot;:[&quot;Work&quot;,&quot;Social&quot;,&quot;Client&quot;],&quot;measures&quot;:[&quot;Posts&quot;,&quot;Hot&quot;],&quot;levels&quot;:4,&quot;centreonclick&quot;:true}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>configuredAllowSearch</name>
@@ -27,6 +27,10 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>primaryNodeInitialization</name>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>queryJSON</name>
+                <value>{&quot;initialLevelsToRetrieve&quot; : 1}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>searchAction</name>

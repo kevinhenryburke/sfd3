@@ -45,10 +45,10 @@ public with sharing class HierarchyJSON {
         HierarchyQuery hqTop = new HierarchyQuery(null, hc, thisLevel);
         HierarchyStructure top = hqTop.createTopStructure(rootId);        
 
-        thisLevel = 1;
+//        thisLevel = 1;
         Set<Id> parentLevelIds = new Set<Id>{rootId}; // the top node id
 
-        for (thisLevel = 1; thisLevel < hc.initialLevelsToRetrieve; thisLevel++ ) {
+        for (thisLevel = 0; thisLevel < hc.initialLevelsToRetrieve; thisLevel++ ) {
             // we create the query for each level
             HierarchyQuery hq = new HierarchyQuery(top, hc, thisLevel);
 

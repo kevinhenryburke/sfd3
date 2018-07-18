@@ -55,6 +55,11 @@
                 if (key == "allowrefresh") {
                     component.set("v.configuredAllowRefresh", true);                    
                 }
+                if (key == "levelsIncreaseOnly") {
+                    console.log("xxx: levelsIncreaseOnly: " + configjson.levelsIncreaseOnly );
+                    component.set("v.levelsIncreaseOnly", configjson.levelsIncreaseOnly);                    
+                    component.set("v.levelsIncreaseDecrease", ! configjson.levelsIncreaseOnly);                    
+                }
                 // this is a developer setting to allow some group of test buttons to display
                 if (key == "showtestbuttons") {
                     component.set("v.configuredShowTestButtons", true);                    
@@ -99,7 +104,7 @@
 
         var action = component.get(dataUpdateMethod);
 
-        var thisLevel = component.get("v.thisLevel");
+        var thisLevel = component.get("v.currentLevels");
 
         var queryLevelIds = _this.getQueryLevelIds(component,thisLevel);
 
@@ -122,9 +127,10 @@
                 bzutils.log('InitiateRefreshChart: datastring: ' + datastring);    
 
                 // lay down candidate ids for further queries
-                var thisLevel = component.get("v.thisLevel");
+                var thisLevel = component.get("v.currentLevels");
                 _this.extractLeafIds(component, datajson, thisLevel);
-                component.set("v.thisLevel", thisLevel+1);
+//                component.set("v.currentLevels", thisLevel+1);
+                _this.increaseLevels (component);
 
                 // Review - this is setting datajson to be whatever is new ... NOT the full data set in the CHART ...
                 component.set("v.datajson", datajson);
@@ -198,45 +204,115 @@
         var componentType = component.get("v.componentType");
         bzutils.publishEvent("SearchChart", publisher, componentCategory, componentType, configEventParameters, null);            
     },
-    
 
+    canIncreaseLevels : function(component) {
+        console.log("enter canIncreaseLevels");
+        var _this = this;
+
+        var currentLevels = component.get("v.currentLevels");
+        var maxlevels = component.get("v.maxlevels");
+
+        return (currentLevels < maxlevels);
+    },
+    
+    increaseLevels : function(component) {
+        console.log("enter increaseLevels");
+        var _this = this;
+        var canIncreaseLevels = _this.canIncreaseLevels(component);
+
+        // publish event if it is valid to do so
+        if (canIncreaseLevels) {
+            var currentLevels = component.get("v.currentLevels");
+            currentLevels++;
+            console.log("increasing levels to: " + currentLevels);
+            component.set("v.currentLevels", currentLevels);
+            var publisher = component.get("v.UserComponentId");
+            var componentCategory = component.get("v.componentCategory");
+            var componentType = component.get("v.componentType");
+            bzutils.publishEvent("ShowLevelsMore", publisher, componentCategory, componentType, {"levels" : currentLevels}, null);
+        }
+    },
+    
+    decreaseLevels : function(component) {
+        console.log("enter decreaseLevels");
+
+        var _this = this;
+        var currentLevels = component.get("v.currentLevels");
+
+        // publish event if it is valid to do so
+        if (currentLevels > 1) {
+            currentLevels--;
+            console.log("decreasing levels to: " + currentLevels);
+            component.set("v.currentLevels", currentLevels);
+            var publisher = component.get("v.UserComponentId");
+            var componentCategory = component.get("v.componentCategory");
+            var componentType = component.get("v.componentType");
+            bzutils.publishEvent("ShowLevelsFewer", publisher, componentCategory, componentType, {"levels" : currentLevels}, null);
+        }
+    },
+    
     /* BUTTON methods */
     
     setConnectionLevelFewerButtons: function(component) {
+        var _this = this;
         console.log("enter setConnectionLevelFewer");
-        var panelShowLevels = component.get("v.panelShowLevels");
-        // "more" button should be enabled, "less" button should be disabled if we've reached lowest level
-        var cmpTargetMore = component.find("more");
-        cmpTargetMore.set("v.disabled", "false");
-        if (panelShowLevels == 1) {
-            var cmpTargetLess = component.find("less");
-            cmpTargetLess.set("v.disabled", "true");
+
+        // we have a different aura:id for the more button for when levels increase only or can decrease also.
+        var moreButtonId = _this.getMoreButtonId(component);
+ 
+        var levelsIncreaseDecrease = component.get("v.levelsIncreaseDecrease");
+        // if levels cannot decrease then nothing to do here as there is no Fewer Button to press
+        if (levelsIncreaseDecrease) {
+            var currentLevels = component.get("v.currentLevels");
+            // "more" button should be enabled, "less" button should be disabled if we've reached lowest level
+            var cmpTargetMore = component.find(moreButtonId);
+            cmpTargetMore.set("v.disabled", "false");
+            if (currentLevels == 1) {
+                var cmpTargetLess = component.find("less");
+                cmpTargetLess.set("v.disabled", "true");
+            }
         }
     },
 
     setConnectionLevelMoreButtons: function(component) {
+        var _this = this;
         console.log("enter setConnectionLevelMoreButtons");
-        var panelShowLevels = component.get("v.panelShowLevels");
+        var currentLevels = component.get("v.currentLevels");
         var maxlevels = component.get("v.maxlevels");
+
+        // we have a different aura:id for the more button for when levels increase only or can decrease also.
+        var moreButtonId = _this.getMoreButtonId(component);
         
-            // refresh buttons
-        // "less" button should be enabled, "more" button should be disabled if we've reached max level
-        var cmpTargetLess = component.find("less");
-        cmpTargetLess.set("v.disabled", "false");
-        if (panelShowLevels >= maxlevels) {
-            var cmpTargetMore = component.find("more");
+        // refresh buttons : "less" button should be enabled, "more" button should be disabled if we've reached max level
+        // if levels cannot decrease then no action for the "less" button as there is no button to press
+
+        var levelsIncreaseDecrease = component.get("v.levelsIncreaseDecrease");
+        if (levelsIncreaseDecrease) {
+            var cmpTargetLess = component.find("less");
+            cmpTargetLess.set("v.disabled", "false");
+        }
+        if (currentLevels >= maxlevels) {
+            var cmpTargetMore = component.find(moreButtonId);
             cmpTargetMore.set("v.disabled", "true");
         }
     },
 
     setConnectionLevelMaxButtons: function(component) {
+        var _this = this;
         console.log("enter setConnectionLevelMaxButtons");
         var maxlevels = component.get("v.maxlevels");
-        component.set("v.panelShowLevels", maxlevels);
+        component.set("v.currentLevels", maxlevels);
+
+        // we have a different aura:id for the more button for when levels increase only or can decrease also.
+        var moreButtonId = _this.getMoreButtonId(component);
         
-        var cmpTargetLess = component.find("less");
-        cmpTargetLess.set("v.disabled", "false");
-        var cmpTargetMore = component.find("more");
+        // if levels cannot decrease then no action for the "less" button as there is no button to press
+        var levelsIncreaseDecrease = component.get("v.levelsIncreaseDecrease");
+        if (levelsIncreaseDecrease) {
+            var cmpTargetLess = component.find("less");
+            cmpTargetLess.set("v.disabled", "false");
+        }
+        var cmpTargetMore = component.find(moreButtonId);
         cmpTargetMore.set("v.disabled", "true");
     },
     
@@ -404,6 +480,18 @@
         queryLevelIds[levelIndex].push(thisid);
         component.set("v.queryLevelIds", queryLevelIds); 
     },
+
+    getMoreButtonId : function(component) {
+        var _this = this;    
+        var moreButtonId = 'more';
+        
+        var levelsIncreaseOnly = component.get("v.levelsIncreaseOnly");
+        if (levelsIncreaseOnly) {
+            moreButtonId = 'moreIncreaseOnly';
+        }
+        return moreButtonId;
+    }
+
 
     
 

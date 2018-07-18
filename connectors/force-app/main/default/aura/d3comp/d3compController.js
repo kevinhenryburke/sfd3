@@ -9,9 +9,9 @@
 
         var queryJSONObject = JSON.parse(component.get("v.queryJSON"));
 
-        var thisLevel = queryJSONObject.initialLevelsToRetrieve - 1;
+        var thisLevel = queryJSONObject.initialLevelsToRetrieve;
         // shift removes from front....
-        component.set("v.thisLevel", thisLevel );
+        component.set("v.currentLevels", thisLevel );
 
         // build up an array of ids that are still to be queried and the levels that are indexed by the arrays   
         var queryLevels = [thisLevel];
@@ -83,7 +83,7 @@
 
 
                 // KB: TODO COME BACK
-                var thisLevel = component.get("v.thisLevel");
+                var thisLevel = component.get("v.currentLevels");
                 helper.extractLeafIds(component, datajson, thisLevel);
 
 
@@ -275,8 +275,14 @@
         
         var configuredLevels = component.get("v.configuredLevels");
         if (configuredLevels == true) {
+            // TODO this is wrong and will need to change 
+            // for networks I'm pushing ot max levels - probably shouldn't
+            // code here is temporary and should probably just go
+            var levelsIncreaseDecrease = component.get("v.levelsIncreaseDecrease");
             // set the configured levels buttons
-            helper.setConnectionLevelMaxButtons(component);
+            if (levelsIncreaseDecrease) {
+                helper.setConnectionLevelMaxButtons(component);
+            }
         }
 
         helper.publishSearchChartEvent(component);
@@ -288,39 +294,11 @@
 
     onClickLevelMore : function(component, event, helper) {
         console.log("enter setConnectionLevelMore");
-
-        var _this = this;
-
-        var panelShowLevels = component.get("v.panelShowLevels");
-        var maxlevels = component.get("v.maxlevels");
-
-        // publish event if it is valid to do so
-        if (panelShowLevels < maxlevels) {
-            panelShowLevels++;
-            console.log("increasing levels to: " + panelShowLevels);
-            component.set("v.panelShowLevels", panelShowLevels);
-            var publisher = component.get("v.UserComponentId");
-            var componentCategory = component.get("v.componentCategory");
-            var componentType = component.get("v.componentType");
-            bzutils.publishEvent("ShowLevelsMore", publisher, componentCategory, componentType, {"levels" : panelShowLevels}, null);
-        }
-        
+        helper.increaseLevels(component);
     },
 
     onClickLevelFewer : function(component, event, helper) {
-        var _this = this;
-        var panelShowLevels = component.get("v.panelShowLevels");
-
-        // publish event if it is valid to do so
-        if (panelShowLevels > 1) {
-            panelShowLevels--;
-            console.log("decreasing levels to: " + panelShowLevels);
-            component.set("v.panelShowLevels", panelShowLevels);
-            var publisher = component.get("v.UserComponentId");
-            var componentCategory = component.get("v.componentCategory");
-            var componentType = component.get("v.componentType");
-            bzutils.publishEvent("ShowLevelsFewer", publisher, componentCategory, componentType, {"levels" : panelShowLevels}, null);
-        }
+        helper.decreaseLevels(component);
     },
     
     onClickMeasureV1 : function(component, event, helper) {
@@ -387,7 +365,10 @@
     onClickRefreshOneTime : function(component, event, helper) {
         var _this = this;
         console.log("onClickRefreshOneTime enter");
-		helper.refreshOneTime(component, event);
+        var canIncreaseLevels = helper.canIncreaseLevels(component);
+        if (canIncreaseLevels) { // if is not strictly necessary as event is disabling the button but keep for now
+            helper.refreshOneTime(component, event);
+        }
         console.log("onClickRefreshOneTime exit");
     },
     

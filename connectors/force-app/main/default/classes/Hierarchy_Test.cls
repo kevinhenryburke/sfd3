@@ -152,7 +152,7 @@ public with sharing class Hierarchy_Test {
 
         HierarchyJSON hj = HierarchyJSON.retrieveLevels (hc, rootId);
 
-        System.assertEquals(2, hj.childDepth);            
+        System.assertEquals(3, hj.childDepth);            
         System.assertEquals('Account', hj.objectType);            
         
     }

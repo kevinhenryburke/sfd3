@@ -1,6 +1,7 @@
 public class DThree {
 
-    public static String TEMP_WHICH_VERSION = 'StaticResource##!#!';
+//    public static String TEMP_WHICH_VERSION = 'StaticResource';
+    public static String TEMP_WHICH_VERSION = 'Database';
 
     @AuraEnabled
     public static String returnData(String queryJSON) {
