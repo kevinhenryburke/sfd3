@@ -111,14 +111,15 @@
       
         // Add labels for the nodes
         nodeEnter.append('text')
+            .attr("childLess", function(d) {
+                return childLess(d);
+            })
             .attr("dy", ".35em")
             .attr("x", function(d) {
-                var hasNoChildren = (typeof d._children == "undefined") && (typeof d.children == "undefined") ; 
-                return hasNoChildren ? 13 : -13;
+                return childLess(d) ? 13 : -13;
             })
             .attr("text-anchor", function(d) {
-                var hasNoChildren = (typeof d._children == "undefined") && (typeof d.children == "undefined") ; 
-                return hasNoChildren ? "start" : "end";
+                return childLess(d) ? "start" : "end";
             })
             .text(function(d) { return d.data.name; });
       
@@ -138,23 +139,24 @@
           .attr('r', 10)
           .style("fill", function(d) {
               // collapsed children are stored as d._children / expanded as d.children
-              var hasNoChildren = (typeof d._children == "undefined") && (typeof d.children == "undefined") ; 
-              if(hasNoChildren) {
+            if(childLess(d)) {
                   return bzctree.getExpandedColor(d);
               }
               return bzctree.getCanExpandColor(d); 
           })
           .attr('cursor', 'pointer');      
           
-          nodeUpdate.select('text')
-          .attr("x", function(d) {
-              var hasNoChildren = (typeof d._children == "undefined") && (typeof d.children == "undefined") ; 
-              return hasNoChildren ? 13 : -13;
-          })
-          .attr("text-anchor", function(d) {
-              var hasNoChildren = (typeof d._children == "undefined") && (typeof d.children == "undefined") ; 
-              return hasNoChildren ? "start" : "end";
-          });
+        // text box starts to the right for childless nodes, to the left for parents (collapsed or expanded)  
+        nodeUpdate.select('text')
+            .attr("childLess", function(d) {
+                return childLess(d);
+            })
+            .attr("x", function(d) {
+                return childLess(d) ? 13 : -13;
+            })
+            .attr("text-anchor", function(d) {
+                return childLess(d) ? "start" : "end";
+            });
         
         // Remove any exiting nodes
         var nodeExit = node.exit().transition()
@@ -242,7 +244,11 @@
             }
             _this.update(nodeGroup, pathGroup, componentReference, d, false);
 		}
-		
+
+        function childLess(d) {
+            return (typeof d._children == "undefined" || d._children == null) && (typeof d.children == "undefined" || d.children == null) ; 
+        }
+        
 
       },
 
