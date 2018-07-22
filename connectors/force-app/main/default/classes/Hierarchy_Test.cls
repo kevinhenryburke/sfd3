@@ -70,6 +70,7 @@ public with sharing class Hierarchy_Test {
         oc.queryFields.put('name', 'name');
         oc.queryFields.put('size', 'AnnualRevenue');
         oc.parentField = 'parentId';
+        oc.orderByField = 'AnnualRevenue';
         hc.loc.add(oc);
         return hc;        
     }

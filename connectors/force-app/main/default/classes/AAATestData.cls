@@ -14,6 +14,7 @@ public static void testScripts(Integer sectionNumber) {
 
 Account a;
 Account p;
+Opportunity o;
 
 if (sectionNumber == 1) { 
 a=new Account(Name='Burke Enterprises', AnnualRevenue=39281800); insert a;
@@ -285,6 +286,71 @@ p=[select id from Account where Name='Trivest' ];a=new Account(Name='Zelnick Med
 p=[select id from Account where Name='TSG Consumer Partners' ];a=new Account(Name='Zhongzhi Capital', AnnualRevenue=14143082);a.parentid=p.id;insert a;
 }
 
+if (sectionNumber == 9) { 
+p=[select id from Account where Name='3G Capital' ];
+o=new Opportunity(Name='2018 Q3 Renewal', StageName='Closed Won', Amount=35827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,6,30);insert o;
+o=new Opportunity(Name='2018 Q4 Renewal', StageName='Closed Won', Amount=25827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,9,30);insert o;
+o=new Opportunity(Name='2019 Q1 Renewal', StageName='Closed Won', Amount=15827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,12,30);insert o;
+o=new Opportunity(Name='2019 Q2 Renewal', StageName='Qualification', Amount=32827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,3,30);insert o;
+o=new Opportunity(Name='2019 Q3 Renewal', StageName='Needs Analysis', Amount=39827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,6,30);insert o;
+o=new Opportunity(Name='2019 Q4 Renewal', StageName='Closed Lost', Amount=5827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,9,30);insert o;
+p=[select id from Account where Name='3i' ];a=new Account(Name='Affinity Equity Partners', AnnualRevenue=38243010);
+o=new Opportunity(Name='2018 Q3 Renewal', StageName='Closed Won', Amount=35827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,6,30);insert o;
+o=new Opportunity(Name='2018 Q4 Renewal', StageName='Closed Won', Amount=25827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,9,30);insert o;
+o=new Opportunity(Name='2019 Q1 Renewal', StageName='Closed Won', Amount=15827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,12,30);insert o;
+o=new Opportunity(Name='2019 Q2 Renewal', StageName='Qualification', Amount=32827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,3,30);insert o;
+o=new Opportunity(Name='2019 Q3 Renewal', StageName='Needs Analysis', Amount=39827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,6,30);insert o;
+o=new Opportunity(Name='2019 Q4 Renewal', StageName='Closed Lost', Amount=5827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,9,30);insert o;
+p=[select id from Account where Name='ABRY Partners' ];a=new Account(Name='American Securities', AnnualRevenue=37931373);
+o=new Opportunity(Name='2018 Q3 Renewal', StageName='Closed Won', Amount=35827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,6,30);insert o;
+o=new Opportunity(Name='2018 Q4 Renewal', StageName='Closed Won', Amount=25827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,9,30);insert o;
+o=new Opportunity(Name='2019 Q1 Renewal', StageName='Closed Won', Amount=15827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,12,30);insert o;
+o=new Opportunity(Name='2019 Q2 Renewal', StageName='Qualification', Amount=32827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,3,30);insert o;
+o=new Opportunity(Name='2019 Q3 Renewal', StageName='Needs Analysis', Amount=39827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,6,30);insert o;
+o=new Opportunity(Name='2019 Q4 Renewal', StageName='Closed Lost', Amount=5827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,9,30);insert o;
+p=[select id from Account where Name='ABS Capital' ];a=new Account(Name='Altor Equity Partners', AnnualRevenue=38035252);
+o=new Opportunity(Name='2018 Q3 Renewal', StageName='Closed Won', Amount=35827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,6,30);insert o;
+o=new Opportunity(Name='2018 Q4 Renewal', StageName='Closed Won', Amount=25827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,9,30);insert o;
+o=new Opportunity(Name='2019 Q1 Renewal', StageName='Closed Won', Amount=15827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,12,30);insert o;
+o=new Opportunity(Name='2019 Q2 Renewal', StageName='Qualification', Amount=32827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,3,30);insert o;
+o=new Opportunity(Name='2019 Q3 Renewal', StageName='Needs Analysis', Amount=39827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,6,30);insert o;
+o=new Opportunity(Name='2019 Q4 Renewal', StageName='Closed Lost', Amount=5827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,9,30);insert o;
+p=[select id from Account where Name='Accel-KKR' ];a=new Account(Name='Angelo, Gordon & Co.', AnnualRevenue=37827494);
+o=new Opportunity(Name='2018 Q3 Renewal', StageName='Closed Won', Amount=35827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,6,30);insert o;
+o=new Opportunity(Name='2018 Q4 Renewal', StageName='Closed Won', Amount=25827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,9,30);insert o;
+o=new Opportunity(Name='2019 Q1 Renewal', StageName='Closed Won', Amount=15827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,12,30);insert o;
+o=new Opportunity(Name='2019 Q2 Renewal', StageName='Qualification', Amount=32827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,3,30);insert o;
+o=new Opportunity(Name='2019 Q3 Renewal', StageName='Needs Analysis', Amount=39827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,6,30);insert o;
+o=new Opportunity(Name='2019 Q4 Renewal', StageName='Closed Lost', Amount=5827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,9,30);insert o;
+p=[select id from Account where Name='Actera Group' ];a=new Account(Name='Apax Partners', AnnualRevenue=37723615);
+o=new Opportunity(Name='2018 Q3 Renewal', StageName='Closed Won', Amount=35827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,6,30);insert o;
+o=new Opportunity(Name='2018 Q4 Renewal', StageName='Closed Won', Amount=25827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,9,30);insert o;
+o=new Opportunity(Name='2019 Q1 Renewal', StageName='Closed Won', Amount=15827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,12,30);insert o;
+o=new Opportunity(Name='2019 Q2 Renewal', StageName='Qualification', Amount=32827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,3,30);insert o;
+o=new Opportunity(Name='2019 Q3 Renewal', StageName='Needs Analysis', Amount=39827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,6,30);insert o;
+o=new Opportunity(Name='2019 Q4 Renewal', StageName='Closed Lost', Amount=5827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,9,30);insert o;
+p=[select id from Account where Name='Actis' ];a=new Account(Name='Apollo Management', AnnualRevenue=37619736);
+o=new Opportunity(Name='2018 Q3 Renewal', StageName='Closed Won', Amount=35827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,6,30);insert o;
+o=new Opportunity(Name='2018 Q4 Renewal', StageName='Closed Won', Amount=25827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,9,30);insert o;
+o=new Opportunity(Name='2019 Q1 Renewal', StageName='Closed Won', Amount=15827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,12,30);insert o;
+o=new Opportunity(Name='2019 Q2 Renewal', StageName='Qualification', Amount=32827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,3,30);insert o;
+o=new Opportunity(Name='2019 Q3 Renewal', StageName='Needs Analysis', Amount=39827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,6,30);insert o;
+o=new Opportunity(Name='2019 Q4 Renewal', StageName='Closed Lost', Amount=5827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,9,30);insert o;
+p=[select id from Account where Name='Advent International' ];a=new Account(Name='Arcapita', AnnualRevenue=37515857);
+o=new Opportunity(Name='2018 Q3 Renewal', StageName='Closed Won', Amount=35827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,6,30);insert o;
+o=new Opportunity(Name='2018 Q4 Renewal', StageName='Closed Won', Amount=25827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,9,30);insert o;
+o=new Opportunity(Name='2019 Q1 Renewal', StageName='Closed Won', Amount=15827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,12,30);insert o;
+o=new Opportunity(Name='2019 Q2 Renewal', StageName='Qualification', Amount=32827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,3,30);insert o;
+o=new Opportunity(Name='2019 Q3 Renewal', StageName='Needs Analysis', Amount=39827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,6,30);insert o;
+o=new Opportunity(Name='2019 Q4 Renewal', StageName='Closed Lost', Amount=5827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,9,30);insert o;
+p=[select id from Account where Name='AEA Investors' ];a=new Account(Name='Ardian (formerly AXA Private Equity)', AnnualRevenue=37411978);
+o=new Opportunity(Name='2018 Q3 Renewal', StageName='Closed Won', Amount=35827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,6,30);insert o;
+o=new Opportunity(Name='2018 Q4 Renewal', StageName='Closed Won', Amount=25827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,9,30);insert o;
+o=new Opportunity(Name='2019 Q1 Renewal', StageName='Closed Won', Amount=15827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,12,30);insert o;
+o=new Opportunity(Name='2019 Q2 Renewal', StageName='Qualification', Amount=32827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,3,30);insert o;
+o=new Opportunity(Name='2019 Q3 Renewal', StageName='Needs Analysis', Amount=39827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,6,30);insert o;
+o=new Opportunity(Name='2019 Q4 Renewal', StageName='Closed Lost', Amount=5827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,9,30);insert o;
+}
 
  }
 

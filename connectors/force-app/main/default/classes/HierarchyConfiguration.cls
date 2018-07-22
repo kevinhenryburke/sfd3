@@ -25,6 +25,7 @@ public with sharing class HierarchyConfiguration  {
         // Some concept of a parent will be needed for hierarchies for example
         public Map<String,String> queryFields = new Map<String,String>();
         public String parentField;
+        public String orderByField = null;
 
         // recursive = true means we need to the same configuration should be used for all levels below
         public boolean recursive = false;

@@ -72,7 +72,11 @@ public with sharing class HierarchyQuery {
             + oc.parentField 
             + ' from '
             + oc.objectType + ' where '
-            + oc.parentField + ' IN : parentIds' ; // escape single quotes should not be necessary as we are dealing with ids and not expsoing to front end
+            + oc.parentField + ' IN : parentIds ' ; // escape single quotes should not be necessary as we are dealing with ids and not expsoing to front end
+
+        if (oc.orderByField != null) {
+            queryString += ' order by ' + oc.orderByField ;
+        }    
 
         List<sObject> listso = Database.query(queryString);
         return listso;
