@@ -10,6 +10,7 @@
     <tab>D3_Network</tab>
     <tab>D3_CTree</tab>
     <tab>D3_Pack</tab>
+    <tab>D3_CTree_Opp</tab>
     <uiType>Lightning</uiType>
     <utilityBar>D3_Charts_UtilityBar</utilityBar>
 </CustomApplication>
