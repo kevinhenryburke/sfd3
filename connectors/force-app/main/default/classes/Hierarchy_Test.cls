@@ -49,9 +49,9 @@ public with sharing class Hierarchy_Test {
         Account a4 = new Account(name = 'Medium-Small Company', AnnualRevenue = 5, parentid = a2.id);
         insert a4;
         // Level 3 - Child Depth 0
-        Account a5 = new Account(name = 'Smallish Company 1', AnnualRevenue = 5, parentid = a3.id);
+        Account a5 = new Account(name = 'Smallish Company 1', AnnualRevenue = 3, parentid = a3.id);
         insert a5;
-        Account a6 = new Account(name = 'Smallish Company 2', AnnualRevenue = 5, parentid = a4.id);
+        Account a6 = new Account(name = 'Smallish Company 2', AnnualRevenue = 4, parentid = a4.id);
         insert a6;
         Account a7 = new Account(name = 'Smallish Company 3', AnnualRevenue = 5, parentid = a4.id);
         insert a7;

@@ -24,7 +24,36 @@
         var root = d3.hierarchy(datajson, function(d) { return d.children; });
         root.x0 = height / 2;
         root.y0 = 0;
-        
+
+        // Establish node coloring paradigm
+
+        // have a default
+
+        var LeafColorsString = component.get("v.LeafColors");
+        var LeafColorsObject;
+        if (LeafColorsString == null || LeafColorsString == "") {
+            LeafColorsObject = {"values" : [0], "colors" : ["white"]};
+        }
+        else {
+            LeafColorsObject = JSON.parse(LeafColorsString);
+        }
+        bzutils.setCache (componentReference, "LeafColorsObject", LeafColorsObject ) ;
+        bzutils.setCache (componentReference, "LeafColorsValues", LeafColorsObject.values ) ;
+        bzutils.setCache (componentReference, "LeafColorsNames", LeafColorsObject.colors ) ;
+
+        var ParentColorsString = component.get("v.ParentColors");
+        var ParentColorsObject;
+        if (ParentColorsString == null || ParentColorsString == "") {
+            ParentColorsObject = {"values" : [0], "colors" : ["white"]};
+        }
+        else {
+            ParentColorsObject = JSON.parse(ParentColorsString);
+        }
+
+        bzutils.setCache (componentReference, "ParentColorsObject", ParentColorsObject ) ;
+        bzutils.setCache (componentReference, "ParentColorsValues", ParentColorsObject.values ) ;
+        bzutils.setCache (componentReference, "ParentColorsNames", ParentColorsObject.colors ) ;
+
         // Collapse after the second level
         root.children.forEach(bzctree.collapse);
         bzutils.setCache (componentReference, "root", root ) ;
@@ -103,7 +132,7 @@
             })            
             .style("fill", function(d) {
                 // we add new circles only to new nodes - the nodes are forgotten if collapsed
-                return d._children ? bzctree.getCanExpandColor(d) : bzctree.getExpandedColor(d);
+                return d._children ? bzctree.getCanExpandColor(componentReference, d) : bzctree.getExpandedColor(componentReference, d);
             })
             
 	
@@ -140,9 +169,9 @@
           .style("fill", function(d) {
               // collapsed children are stored as d._children / expanded as d.children
             if(childLess(d)) {
-                  return bzctree.getExpandedColor(d);
+                  return bzctree.getExpandedColor(componentReference, d);
               }
-              return bzctree.getCanExpandColor(d); 
+              return bzctree.getCanExpandColor(componentReference, d); 
           })
           .attr('cursor', 'pointer');      
           

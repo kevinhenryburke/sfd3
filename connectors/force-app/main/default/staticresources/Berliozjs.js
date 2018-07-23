@@ -1199,45 +1199,35 @@ function update() {
 //    var root;
     
 
-    function getCanExpandColor (d) {
+    function getCanExpandColor (componentReference, d) {
         var color = canExpandColor;
-//        console.log(d);
-        // if (d.data.size != null && d.data.size < 5000) {
-        //     color = "red";
-        // }
-        // if (d.data.size != null && d.data.size < 4000) {
-        //     color = "orange";
-        // }
-        // if (d.data.size != null && d.data.size < 3000) {
-        //     color = "yellow";
-        // }
-        // if (d.data.size != null && d.data.size < 2000) {
-        //     color = "green";
-        // }
-        // if (d.data.size != null && d.data.size < 2000) {
-        //     color = "blue";
-        // }
+
+        var ParentColorsValues = bzutils.getCache (componentReference, "ParentColorsValues") ;
+        var ParentColorsNames = bzutils.getCache (componentReference, "ParentColorsNames") ;
+
+        for (var i = 0; i < ParentColorsValues.length; i++) {
+            if (d.data.size != null && d.data.size >= ParentColorsValues[i]) {
+                color = ParentColorsNames[i];
+            } else {
+                break;
+            }
+        }
         return color;
     }
 
-    function getExpandedColor (d) { // TODO demo stuff only
+    function getExpandedColor (componentReference, d) { // TODO demo stuff only
         // the logic for this should be set by configuration
         var color = expandedColor;
-//        console.log(d);
-        if (d.data.size != null && d.data.size < 5000) {
-            color = "red";
-        }
-        if (d.data.size != null && d.data.size < 4000) {
-            color = "orange";
-        }
-        if (d.data.size != null && d.data.size < 3000) {
-            color = "yellow";
-        }
-        if (d.data.size != null && d.data.size < 2000) {
-            color = "green";
-        }
-        if (d.data.size != null && d.data.size < 2000) {
-            color = "blue";
+
+        var LeafColorsValues = bzutils.getCache (componentReference, "LeafColorsValues") ;
+        var LeafColorsNames = bzutils.getCache (componentReference, "LeafColorsNames") ;
+
+        for (var i = 0; i < LeafColorsValues.length; i++) {
+            if (d.data.size != null && d.data.size >= LeafColorsValues[i]) {
+                color = LeafColorsNames[i];
+            } else {
+                break;
+            }
         }
         return color;
     }
