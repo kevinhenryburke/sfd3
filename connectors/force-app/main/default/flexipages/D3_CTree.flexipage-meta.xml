@@ -11,7 +11,7 @@
                 <value>Top</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
-                <name>configjsonString</name> 
+                <name>configjsonString</name>
                 <value>{&quot;showtestbuttons&quot;:true, &quot;levels&quot;:5, &quot;levelsIncreaseOnly&quot;:true}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
@@ -51,11 +51,11 @@
         <componentInstances>
             <componentInstanceProperties>
                 <name>LeafColors</name>
-                <value>{&quot;values&quot; : [0,22070163,25070163], &quot;colors&quot; : [&quot;white&quot; , &quot;yellow&quot;, &quot;green&quot;]}</value>
+                <value>{&quot;Account&quot; : { &quot;values&quot; : [0,22070163,25070163], &quot;colors&quot; : [&quot;white&quot; , &quot;yellow&quot;, &quot;green&quot;] }}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>ParentColors</name>
-                <value>{&quot;values&quot; : [0,38970163], &quot;colors&quot; : [&quot;lightsteelblue&quot; , &quot;purple&quot;]}</value>
+                <value>{&quot;Account&quot; : { &quot;values&quot; : [0,38970163], &quot;colors&quot; : [&quot;lightsteelblue&quot; , &quot;purple&quot;] }}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>Title</name>

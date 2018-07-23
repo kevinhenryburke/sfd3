@@ -32,6 +32,11 @@ function getCache (componentReference, key) {
     return referenceParameters[key];
 }
 
+function hasCache (componentReference, key) {
+    var referenceParameters = componentCache[componentReference];
+    return Object.keys(referenceParameters).includes(key);
+}
+
 function showCache (componentReference) {
     bzutils.log(componentCache[componentReference]);
 }
@@ -238,6 +243,7 @@ exports.publishEvent = publishEvent;
 exports.initializeCache = initializeCache;
 exports.setCache = setCache;
 exports.getCache = getCache;
+exports.hasCache = hasCache;
 exports.showCache = showCache;
 exports.showCacheAll = showCacheAll;
 exports.getDivId = getDivId;
@@ -1199,15 +1205,23 @@ function update() {
 //    var root;
     
 
-    function getCanExpandColor (componentReference, d) {
-        var color = canExpandColor;
+    // LeafParent is either "Leaf" or "Node"
+    // TODO - really should be "expanded" or "collapsed"
+    function getNodeColor (componentReference, d, LeafParent) {
+        var color;
+        var objectType = d.data.objectType;
 
-        var ParentColorsValues = bzutils.getCache (componentReference, "ParentColorsValues") ;
-        var ParentColorsNames = bzutils.getCache (componentReference, "ParentColorsNames") ;
+        var hasObjectSpecifics = bzutils.hasCache (componentReference, LeafParent + "ColorsValues" + objectType) ;
+        if (!hasObjectSpecifics) {
+            objectType = "Default";
+        }
 
-        for (var i = 0; i < ParentColorsValues.length; i++) {
-            if (d.data.size != null && d.data.size >= ParentColorsValues[i]) {
-                color = ParentColorsNames[i];
+        var ColorsValues = bzutils.getCache (componentReference, LeafParent + "ColorsValues" + objectType) ;
+        var ColorsNames = bzutils.getCache (componentReference, LeafParent + "ColorsNames" + objectType) ;
+
+        for (var i = 0; i < ColorsValues.length; i++) {
+            if (d.data.size != null && d.data.size >= ColorsValues[i]) {
+                color = ColorsNames[i];
             } else {
                 break;
             }
@@ -1215,22 +1229,8 @@ function update() {
         return color;
     }
 
-    function getExpandedColor (componentReference, d) { // TODO demo stuff only
-        // the logic for this should be set by configuration
-        var color = expandedColor;
 
-        var LeafColorsValues = bzutils.getCache (componentReference, "LeafColorsValues") ;
-        var LeafColorsNames = bzutils.getCache (componentReference, "LeafColorsNames") ;
 
-        for (var i = 0; i < LeafColorsValues.length; i++) {
-            if (d.data.size != null && d.data.size >= LeafColorsValues[i]) {
-                color = LeafColorsNames[i];
-            } else {
-                break;
-            }
-        }
-        return color;
-    }
 
     // Collapse the node and all it's children
     function collapse(d) {
@@ -1298,8 +1298,7 @@ function update() {
         appEvent.fire();
     }
             
-    exports.getCanExpandColor = getCanExpandColor;  
-    exports.getExpandedColor = getExpandedColor;  
+    exports.getNodeColor = getNodeColor;  
     exports.collapse = collapse;  
 //    exports.update = update;  
     exports.nodeMouseover = nodeMouseover;
