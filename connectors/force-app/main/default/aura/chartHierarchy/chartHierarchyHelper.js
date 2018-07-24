@@ -31,10 +31,11 @@
 
         // have a default for leaves
 
-        var LeafColorsObjectDefault = {"values" : [0], "colors" : ["white"]};
+        var LeafColorsObjectDefault = {"colorBy" : "size", "values" : [0], "colors" : ["white"]};
         bzutils.setCache (componentReference, "LeafColorsObjectDefault", LeafColorsObjectDefault ) ;
         bzutils.setCache (componentReference, "LeafColorsValuesDefault", LeafColorsObjectDefault.values ) ;
         bzutils.setCache (componentReference, "LeafColorsNamesDefault", LeafColorsObjectDefault.colors ) ;
+        bzutils.setCache (componentReference, "LeafColorsColorByDefault", LeafColorsObjectDefault.colorBy ) ;
 
 
         var LeafColorsString = component.get("v.LeafColors");
@@ -49,12 +50,14 @@
             bzutils.setCache (componentReference, "LeafColorsObject" + objectKey, LeafColorsObject[objectKey] ) ;
             bzutils.setCache (componentReference, "LeafColorsValues" + objectKey, LeafColorsObject[objectKey].values ) ;
             bzutils.setCache (componentReference, "LeafColorsNames" + objectKey, LeafColorsObject[objectKey].colors ) ;
+            bzutils.setCache (componentReference, "LeafColorsColorBy" + objectKey, LeafColorsObject[objectKey].colorBy ) ;
         });
 
-        var ParentColorsObjectDefault = {"values" : [0], "colors" : ["lightsteelblue"]};
+        var ParentColorsObjectDefault = {"colorBy" : "size", "values" : [0], "colors" : ["lightsteelblue"]};
         bzutils.setCache (componentReference, "ParentColorsObjectDefault", ParentColorsObjectDefault ) ;
         bzutils.setCache (componentReference, "ParentColorsValuesDefault", ParentColorsObjectDefault.values ) ;
         bzutils.setCache (componentReference, "ParentColorsNamesDefault", ParentColorsObjectDefault.colors ) ;
+        bzutils.setCache (componentReference, "ParentColorsColorByDefault", ParentColorsObjectDefault.colorBy ) ;
 
         var ParentColorsString = component.get("v.ParentColors");
         var ParentColorsObject;
@@ -68,6 +71,7 @@
             bzutils.setCache (componentReference, "ParentColorsObject" + objectKey, ParentColorsObject[objectKey] ) ;
             bzutils.setCache (componentReference, "ParentColorsValues" + objectKey, ParentColorsObject[objectKey].values ) ;
             bzutils.setCache (componentReference, "ParentColorsNames" + objectKey, ParentColorsObject[objectKey].colors ) ;
+            bzutils.setCache (componentReference, "ParentColorsColorBy" + objectKey, ParentColorsObject[objectKey].colorBy ) ;
         });
 
 

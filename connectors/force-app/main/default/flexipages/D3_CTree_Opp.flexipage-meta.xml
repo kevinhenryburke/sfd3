@@ -50,6 +50,14 @@
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>
+                <name>LeafColors</name>
+                <value>{ &quot;Account&quot; : { &quot;values&quot; : [0,22070163,25070163], &quot;colors&quot; : [&quot;white&quot; , &quot;yellow&quot;, &quot;green&quot;] } , &quot;Opportunity&quot; : { &quot;values&quot; : [0], &quot;colors&quot; : [&quot;red&quot;] }}</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>ParentColors</name>
+                <value>{&quot;Account&quot; : { &quot;values&quot; : [0,38970163], &quot;colors&quot; : [&quot;lightsteelblue&quot; , &quot;purple&quot;] }}</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
                 <name>Title</name>
                 <value>1</value>
             </componentInstanceProperties>

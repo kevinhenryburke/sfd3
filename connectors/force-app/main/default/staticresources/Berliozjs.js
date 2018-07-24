@@ -1209,21 +1209,47 @@ function update() {
     // TODO - really should be "expanded" or "collapsed"
     function getNodeColor (componentReference, d, LeafParent) {
         var color;
-        var objectType = d.data.objectType;
 
+        var objectType = d.data.objectType;
         var hasObjectSpecifics = bzutils.hasCache (componentReference, LeafParent + "ColorsValues" + objectType) ;
         if (!hasObjectSpecifics) {
+            // if there is nothing specifc for an object then use the defaults
             objectType = "Default";
         }
+
+        var colorBy;      
+        var hasObjectSpecificColorBy = bzutils.hasCache (componentReference, LeafParent + "ColorsColorBy" + objectType) ;
+        if (hasObjectSpecificColorBy) {
+            colorBy = bzutils.getCache (componentReference, LeafParent + "ColorsColorBy" + objectType) ;
+        }
+        else {
+            colorBy = bzutils.getCache (componentReference, LeafParent + "ColorsColorByDefault") ;
+        }
+
 
         var ColorsValues = bzutils.getCache (componentReference, LeafParent + "ColorsValues" + objectType) ;
         var ColorsNames = bzutils.getCache (componentReference, LeafParent + "ColorsNames" + objectType) ;
 
         for (var i = 0; i < ColorsValues.length; i++) {
-            if (d.data.size != null && d.data.size >= ColorsValues[i]) {
-                color = ColorsNames[i];
-            } else {
-                break;
+            if (colorBy == "size") {
+                if (d.data.size != null && d.data.size >= ColorsValues[i]) {
+                    color = ColorsNames[i];
+                } else {
+                    break;
+                }
+            }
+            else { 
+                // going by a textual value - default to the first color in the list
+                console.log("colorBy: " + colorBy);
+                console.log("colorBy: d.data:  " + d.data);
+                console.log(d.data);
+
+//                color = ColorsNames[0];
+                if (d.data[colorBy] == ColorsValues[i]) {
+                    console.log("colorBy Match: " + colorBy);
+                    color = ColorsNames[i];
+                }
+
             }
         }
         return color;
