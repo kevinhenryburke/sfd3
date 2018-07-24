@@ -27,54 +27,13 @@
 
         // Establish node coloring paradigm for leaf and parent nodes
 
-        // TODO put in own function
-
         // have a default for leaves
-
         var LeafColorsObjectDefault = {"colorBy" : "size", "values" : [0], "colors" : ["white"]};
-        bzutils.setCache (componentReference, "LeafColorsObjectDefault", LeafColorsObjectDefault ) ;
-        bzutils.setCache (componentReference, "LeafColorsValuesDefault", LeafColorsObjectDefault.values ) ;
-        bzutils.setCache (componentReference, "LeafColorsNamesDefault", LeafColorsObjectDefault.colors ) ;
-        bzutils.setCache (componentReference, "LeafColorsColorByDefault", LeafColorsObjectDefault.colorBy ) ;
-
-
-        var LeafColorsString = component.get("v.LeafColors");
-        var LeafColorsObject;
-        if (LeafColorsString != null && LeafColorsString != "") {
-            LeafColorsObject = JSON.parse(LeafColorsString);
-        }
-
-        var arrayObjectKeys = Object.keys(LeafColorsObject);
-
-        arrayObjectKeys.forEach ( function(objectKey) {
-            bzutils.setCache (componentReference, "LeafColorsObject" + objectKey, LeafColorsObject[objectKey] ) ;
-            bzutils.setCache (componentReference, "LeafColorsValues" + objectKey, LeafColorsObject[objectKey].values ) ;
-            bzutils.setCache (componentReference, "LeafColorsNames" + objectKey, LeafColorsObject[objectKey].colors ) ;
-            bzutils.setCache (componentReference, "LeafColorsColorBy" + objectKey, LeafColorsObject[objectKey].colorBy ) ;
-        });
-
+        bzctree.setColorCache (componentReference, component.get("v.LeafColors"), LeafColorsObjectDefault, "Leaf") ;
+    
+        // have a default for parents
         var ParentColorsObjectDefault = {"colorBy" : "size", "values" : [0], "colors" : ["lightsteelblue"]};
-        bzutils.setCache (componentReference, "ParentColorsObjectDefault", ParentColorsObjectDefault ) ;
-        bzutils.setCache (componentReference, "ParentColorsValuesDefault", ParentColorsObjectDefault.values ) ;
-        bzutils.setCache (componentReference, "ParentColorsNamesDefault", ParentColorsObjectDefault.colors ) ;
-        bzutils.setCache (componentReference, "ParentColorsColorByDefault", ParentColorsObjectDefault.colorBy ) ;
-
-        var ParentColorsString = component.get("v.ParentColors");
-        var ParentColorsObject;
-        if (ParentColorsString != null && ParentColorsString != "") {
-            ParentColorsObject = JSON.parse(ParentColorsString);
-        }
-
-        var arrayObjectKeys = Object.keys(ParentColorsObject);
-
-        arrayObjectKeys.forEach ( function(objectKey) {
-            bzutils.setCache (componentReference, "ParentColorsObject" + objectKey, ParentColorsObject[objectKey] ) ;
-            bzutils.setCache (componentReference, "ParentColorsValues" + objectKey, ParentColorsObject[objectKey].values ) ;
-            bzutils.setCache (componentReference, "ParentColorsNames" + objectKey, ParentColorsObject[objectKey].colors ) ;
-            bzutils.setCache (componentReference, "ParentColorsColorBy" + objectKey, ParentColorsObject[objectKey].colorBy ) ;
-        });
-
-
+        bzctree.setColorCache (componentReference, component.get("v.ParentColors"), ParentColorsObjectDefault, "Parent") ;
 
         // Collapse after the second level
         root.children.forEach(bzctree.collapse);

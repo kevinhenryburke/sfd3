@@ -1239,18 +1239,38 @@ function update() {
             }
             else { 
                 // going by a textual value - default to the first color in the list
+                // TODO could add in a default in the config string?
                 color = ColorsNames[0];
                 if (d.data.otherFields[colorBy] == ColorsValues[i]) {
                     console.log("colorBy Match: " + colorBy);
                     color = ColorsNames[i];
+                    break;
                 }
             }
         }
         return color;
     }
 
+    function setColorCache (componentReference, ColorsString, ColorsObjectDefault, prefix) {
+        bzutils.setCache (componentReference, prefix + "ColorsObjectDefault", ColorsObjectDefault ) ;
+        bzutils.setCache (componentReference, prefix + "ColorsValuesDefault", ColorsObjectDefault.values ) ;
+        bzutils.setCache (componentReference, prefix + "ColorsNamesDefault", ColorsObjectDefault.colors ) ;
+        bzutils.setCache (componentReference, prefix + "ColorsColorByDefault", ColorsObjectDefault.colorBy ) ;
 
+        var ColorsObject;
+        if (ColorsString != null && ColorsString != "") {
+            ColorsObject = JSON.parse(ColorsString);
+        }
 
+        var arrayObjectKeys = Object.keys(ColorsObject);
+
+        arrayObjectKeys.forEach ( function(objectKey) {
+            bzutils.setCache (componentReference, prefix + "ColorsObject" + objectKey, ColorsObject[objectKey] ) ;
+            bzutils.setCache (componentReference, prefix + "ColorsValues" + objectKey, ColorsObject[objectKey].values ) ;
+            bzutils.setCache (componentReference, prefix + "ColorsNames" + objectKey, ColorsObject[objectKey].colors ) ;
+            bzutils.setCache (componentReference, prefix + "ColorsColorBy" + objectKey, ColorsObject[objectKey].colorBy ) ;
+        });
+    }
 
     // Collapse the node and all it's children
     function collapse(d) {
@@ -1319,8 +1339,8 @@ function update() {
     }
             
     exports.getNodeColor = getNodeColor;  
+    exports.setColorCache = setColorCache;  
     exports.collapse = collapse;  
-//    exports.update = update;  
     exports.nodeMouseover = nodeMouseover;
     exports.publishEvent = publishEvent;
 
