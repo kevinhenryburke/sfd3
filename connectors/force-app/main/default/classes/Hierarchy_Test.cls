@@ -66,9 +66,9 @@ public with sharing class Hierarchy_Test {
         HierarchyConfiguration.ObjectConfiguration oc = new HierarchyConfiguration.ObjectConfiguration ();
         oc.objectType = 'Account';
         oc.recursive = true;
-        oc.queryFields.put('id', 'id');
-        oc.queryFields.put('name', 'name');
-        oc.queryFields.put('size', 'AnnualRevenue');
+        oc.requiredFields.put('id', 'id');
+        oc.requiredFields.put('name', 'name');
+        oc.requiredFields.put('size', 'AnnualRevenue');
         oc.parentField = 'parentId';
         oc.orderByField = 'AnnualRevenue';
         hc.loc.add(oc);

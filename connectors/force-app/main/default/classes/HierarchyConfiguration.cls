@@ -23,7 +23,8 @@ public with sharing class HierarchyConfiguration  {
 
         // Salesforce standard fields like id and name must be included plus other depending on chartType.
         // Some concept of a parent will be needed for hierarchies for example
-        public Map<String,String> queryFields = new Map<String,String>();
+        public Map<String,String> requiredFields = new Map<String,String>();
+        public List<String> otherFields = new List<String>();
         public String parentField;
         public String orderByField = null;
 

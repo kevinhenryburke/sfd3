@@ -1226,7 +1226,6 @@ function update() {
             colorBy = bzutils.getCache (componentReference, LeafParent + "ColorsColorByDefault") ;
         }
 
-
         var ColorsValues = bzutils.getCache (componentReference, LeafParent + "ColorsValues" + objectType) ;
         var ColorsNames = bzutils.getCache (componentReference, LeafParent + "ColorsNames" + objectType) ;
 
@@ -1240,16 +1239,11 @@ function update() {
             }
             else { 
                 // going by a textual value - default to the first color in the list
-                console.log("colorBy: " + colorBy);
-                console.log("colorBy: d.data:  " + d.data);
-                console.log(d.data);
-
-//                color = ColorsNames[0];
-                if (d.data[colorBy] == ColorsValues[i]) {
+                color = ColorsNames[0];
+                if (d.data.otherFields[colorBy] == ColorsValues[i]) {
                     console.log("colorBy Match: " + colorBy);
                     color = ColorsNames[i];
                 }
-
             }
         }
         return color;

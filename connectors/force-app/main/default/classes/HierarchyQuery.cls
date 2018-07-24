@@ -25,11 +25,18 @@ public with sharing class HierarchyQuery {
             HierarchyStructure hsParent = top.getHierarchyStructureById(parentId);
             HierarchyStructure hs = new HierarchyStructure(hsParent); 
 
-            hs.id = s.get(oc.queryFields.get('id')).toString();
-            hs.name = s.get(oc.queryFields.get('name')).toString();
-            hs.size = (Decimal) s.get(oc.queryFields.get('size'));
-            hs.objectType = s.getSObjectType().getDescribe().getName();
+            hs.id = s.get(oc.requiredFields.get('id')).toString();
+            hs.name = s.get(oc.requiredFields.get('name')).toString();
+            hs.size = (Decimal) s.get(oc.requiredFields.get('size'));
+            hs.objectType = s.getSObjectType().getDescribe().getName();            
             hs.parent = hsParent;
+
+            if (oc.otherFields != null) {
+                hs.otherFields = new Map<String,String>();
+                for (String sof : oc.otherFields) {
+                    hs.otherFields.put(sof, s.get(sof).toString());
+                }
+            }
 
             childStructures.add(hs);
         }
@@ -48,28 +55,51 @@ public with sharing class HierarchyQuery {
     }
 
     public HierarchyStructure createTopStructure (Id id) {
+
+        String otherFieldsString = '';
+        if (oc.otherFields != null && oc.otherFields.size() > 0) {
+            otherFieldsString += ','; 
+            otherFieldsString += String.join(oc.otherFields,','); 
+        }
+
         String queryString = 'select ' 
-            + String.join(oc.queryFields.values(),',') 
+            + String.join(oc.requiredFields.values(),',') 
+            + otherFieldsString
             + ' from '
             + oc.objectType + ' where '
-            + oc.queryFields.get('id') + ' = \'' + String.escapeSingleQuotes(id) + '\'';
+            + oc.requiredFields.get('id') + ' = \'' + String.escapeSingleQuotes(id) + '\'';
 
         List<sObject> listso = Database.query(queryString);
         sObject s = listso[0];
 
         HierarchyStructure hs = new HierarchyStructure(id, level); // to signify top element
-        hs.id = s.get(oc.queryFields.get('id')).toString();
-        hs.name = s.get(oc.queryFields.get('name')).toString();
-        hs.size = (Decimal) s.get(oc.queryFields.get('size'));
+        hs.id = s.get(oc.requiredFields.get('id')).toString();
+        hs.name = s.get(oc.requiredFields.get('name')).toString();
+        hs.size = (Decimal) s.get(oc.requiredFields.get('size'));
         hs.objectType = s.getSObjectType().getDescribe().getName();
+
+        if (oc.otherFields != null) {
+            hs.otherFields = new Map<String,String>();
+            for (String sof : oc.otherFields) {
+                hs.otherFields.put(sof, s.get(sof).toString());
+            }
+        }
 
         return hs;
     }
 
     public List<sObject> runQuery (Set<Id> parentIds) {
+
+        String otherFieldsString = '';
+        if (oc.otherFields != null && oc.otherFields.size() > 0) {
+            otherFieldsString += ','; 
+            otherFieldsString += String.join(oc.otherFields,','); 
+        }
+
         String queryString = 'select ' 
-            + String.join(oc.queryFields.values(),',') + ','
+            + String.join(oc.requiredFields.values(),',') + ','
             + oc.parentField 
+            + otherFieldsString
             + ' from '
             + oc.objectType + ' where '
             + oc.parentField + ' IN : parentIds ' ; // escape single quotes should not be necessary as we are dealing with ids and not expsoing to front end

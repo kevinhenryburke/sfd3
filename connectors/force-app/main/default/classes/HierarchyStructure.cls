@@ -18,6 +18,8 @@ public with sharing class HierarchyStructure {
     public String objectType; // the type of the sObject referenced.
     public Integer level; // level down we have reached in teh structure
 
+    public Map<String,String> otherFields; // map of additional field names and values passed through to the front end
+
     public List<HierarchyStructure> children;   // child records
 
 

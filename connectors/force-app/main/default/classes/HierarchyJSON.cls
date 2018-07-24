@@ -4,10 +4,12 @@ public with sharing class HierarchyJSON {
     public String name; // the name of the record
     public Decimal size; // a metric associated with the record (optional)
     public String objectType; // the type of the sObject referenced.
+    public Map<String,String> otherFields; // map of additional field names and values passed through to the front end
     
     public Integer level; // current level in the structure
     public Integer childDepth; // depth of levels beneath this.
     public List<HierarchyJSON> children;   // child records
+
 
     public HierarchyJSON() {
 
@@ -21,6 +23,7 @@ public with sharing class HierarchyJSON {
         hj.level = hs.level;
         hj.childDepth = 0;
         hj.objectType = hs.objectType;
+        hj.otherFields = hs.otherFields;
 
         if (hs.children != null) {
             hj.children = new List<HierarchyJSON>();
