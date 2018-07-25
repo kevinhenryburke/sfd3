@@ -201,5 +201,19 @@ public with sharing class Hierarchy_Test {
         
     }
 
+    @IsTest
+    public static void mergeDedupe() {
+        List<List<String>> listlist = new List<List<String>>();
+
+        List<String> list1 = new List<String>{'one', 'two'};
+        List<String> list2 = new List<String>{'one', 'three'};
+        listlist.add(list1);
+        listlist.add(list2);
+
+        List<String> retList = HierarchyQuery.mergeDedupe (listlist);
+        System.assertEquals(3,retList.size());
+
+    }
+
 
 }

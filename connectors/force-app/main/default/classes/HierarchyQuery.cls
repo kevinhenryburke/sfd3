@@ -54,20 +54,53 @@ public with sharing class HierarchyQuery {
         return childStructures;
     }
 
-    public HierarchyStructure createTopStructure (Id id) {
+    public String createQueryString (Set<Id> queryIds, boolean queryParents) {
+
+        // SELECT
+        
+        // temporary construct to bring together various lists of fields to create the select part of our query
+        List<List<String>> listlist = new List<List<String>>{oc.requiredFields.values()};
 
         String otherFieldsString = '';
         if (oc.otherFields != null && oc.otherFields.size() > 0) {
-            otherFieldsString += ','; 
-            otherFieldsString += String.join(oc.otherFields,','); 
+            listlist.add(oc.otherFields);
         }
 
+        if (queryParents)  {
+            listlist.add(new List<String>{oc.parentField});
+        } 
+
+        List<String> selectFields = mergeDedupe (listlist); 
+
         String queryString = 'select ' 
-            + String.join(oc.requiredFields.values(),',') 
-            + otherFieldsString
-            + ' from '
-            + oc.objectType + ' where '
-            + oc.requiredFields.get('id') + ' = \'' + String.escapeSingleQuotes(id) + '\'';
+            + String.join(selectFields,',');
+        
+        
+        // WHERE
+        queryString += ' from ' + oc.objectType + ' where ';
+
+        if (queryParents)  {
+            queryString += oc.parentField + ' IN : queryIds ' ; // escape single quotes should not be necessary as we are dealing with ids and not expsoing to front end; 
+        } 
+        else {
+            queryString += oc.requiredFields.get('id') +  ' IN : queryIds ';
+        }
+
+        // ORDER BY
+        if (oc.orderByField != null) {
+            queryString += ' order by ' + oc.orderByField ;
+        }
+
+        return queryString;    
+
+
+    }
+
+
+    public HierarchyStructure createTopStructure (Id id) {
+
+        Set<ID> queryIds = new Set<Id>{id};
+        String queryString = createQueryString (queryIds, false);
 
         List<sObject> listso = Database.query(queryString);
         sObject s = listso[0];
@@ -88,25 +121,9 @@ public with sharing class HierarchyQuery {
         return hs;
     }
 
-    public List<sObject> runQuery (Set<Id> parentIds) {
+    public List<sObject> runQuery (Set<Id> queryIds) {
 
-        String otherFieldsString = '';
-        if (oc.otherFields != null && oc.otherFields.size() > 0) {
-            otherFieldsString += ','; 
-            otherFieldsString += String.join(oc.otherFields,','); 
-        }
-
-        String queryString = 'select ' 
-            + String.join(oc.requiredFields.values(),',') + ','
-            + oc.parentField 
-            + otherFieldsString
-            + ' from '
-            + oc.objectType + ' where '
-            + oc.parentField + ' IN : parentIds ' ; // escape single quotes should not be necessary as we are dealing with ids and not expsoing to front end
-
-        if (oc.orderByField != null) {
-            queryString += ' order by ' + oc.orderByField ;
-        }    
+        String queryString = createQueryString (queryIds, true);
 
         List<sObject> listso = Database.query(queryString);
         return listso;
@@ -156,6 +173,19 @@ public with sharing class HierarchyQuery {
         }
 
         return topStructures;
+    }
+
+    public static List<String> mergeDedupe (List<List<String>> listlist) {
+        List<String> retList = new List<String>();
+        Set<String> setter = new Set<String>();
+
+        for (List<String> oneList : listlist) {
+            setter.addAll(oneList);
+        }
+        
+        retList.addAll(setter);
+        return retList;
+
     }
 
 
