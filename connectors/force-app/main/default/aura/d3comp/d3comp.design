@@ -10,4 +10,12 @@
     <design:attribute name="searchAction" label="Search Action" default="HighlightOpenPath" description="Options whether to highlight or just to open search paths on certain chart types. Options are HighlightPath, OpenPath, HighlightOpenPath"/>        
     <design:attribute name="configuredAllowSearch" label="Allow Search" default="false" description="Click if allowed to Search chart - not supported for all components"/>        
     <design:attribute name="queryJSON" label="Query JSON" default="{}" description="Configuration for the Salesforce Queries - refer to documentation and do not edit unless you fully understand how this works"/>        
+
+    <design:attribute name="cardDynamic" label="Card Dynamic - TO GO" default="false" description=""/>        
+    <design:attribute name="card1Field" default="" label="Card Field 1" description=""/>        
+    <design:attribute name="card2Field" default="" label="Card Field 2" description=""/>        
+    <design:attribute name="card3Field" default="" label="Card Field 3" description=""/>        
+
+    <design:attribute name="cardFields" default="" label="Card Fields" description=""/>        
+    
 </design:component>

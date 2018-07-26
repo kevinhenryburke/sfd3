@@ -183,6 +183,26 @@ function hasParam(componentType /*, args */) {
     return true;
 }
 
+/* param is of form "data.name" - this looks at the first part and returns the attribute with the name of the second part of the relevant structure */
+function parseCardParam(data, parent, param) {
+    var splitArray = param.split(".");
+    if (splitArray[0] == "data") {
+        if (data != null) {
+            if (splitArray[1] != "otherFields") {
+                return data[splitArray[1]];
+            }
+            else {
+                return data[splitArray[1]][splitArray[2]];
+            }
+        }
+    }
+    if (splitArray[0] == "parent") {
+        if (parent != null) {
+            return parent[splitArray[1]];
+        }
+    }
+    return "";
+}
 
 /*
 // not used at present
@@ -235,6 +255,7 @@ exports.xfcr = xfcr;
 exports.xfct = xfct;
 exports.getParam = getParam;
 exports.hasParam = hasParam;
+exports.parseCardParam = parseCardParam;
 
 exports.initializeAddComponentRef = initializeAddComponentRef;
 exports.addComponentRef = addComponentRef;
@@ -1033,10 +1054,9 @@ function nodeMouseover (componentReference, d) {
     // var s = d3.select("#" + sselect);
     // s.html(textcontent);
 
-    // TODO this is not the best .... needs a new mechanism
-    var pubme = {"name" : d.data.name, "account" : d.value, "position" : d.children?  d.children.length : 0};
+    var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
 
-    bzchart.publishEvent(componentReference, "ChartMouseOver", pubme);
+    bzchart.publishEvent(componentReference, "ChartMouseOver", publishParameters);
 
     console.log("bzpack.nodeMouseover exit");
 }
@@ -1289,11 +1309,10 @@ function update() {
         console.log("bzctree.nodeMouseover enter");
         console.log(d);
     
-        // TODO this is not the best .... needs a new mechanism
-        var pubme = {"name" : d.data.name, "account" : d.parent ? d.parent.data.name : "Top Level", "position" : d.depth};
+        var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
         
         if (d.depth == 1) {
-            bzchart.publishEvent(componentReference, "ChartMouseOver", pubme);
+            bzchart.publishEvent(componentReference, "ChartMouseOver", publishParameters);
 
             // reset cache of events for mouseover events to publish - may be a better way to do this!
             // the issue is that only the top orginally created nodes have lightning context, not sure why
@@ -1310,7 +1329,7 @@ function update() {
 
             console.log("appEvents: " + appEvents.length);
             
-            bzctree.publishEvent(componentReference, "ChartMouseOver", pubme, appEvent);    
+            bzctree.publishEvent(componentReference, "ChartMouseOver", publishParameters, appEvent);    
         }
         console.log("bzctree.nodeMouseover exit");
     }

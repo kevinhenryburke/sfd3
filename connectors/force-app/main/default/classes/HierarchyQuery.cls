@@ -57,7 +57,7 @@ public with sharing class HierarchyQuery {
     public String createQueryString (Set<Id> queryIds, boolean queryParents) {
 
         // SELECT
-        
+
         // temporary construct to bring together various lists of fields to create the select part of our query
         List<List<String>> listlist = new List<List<String>>{oc.requiredFields.values()};
 
@@ -65,9 +65,11 @@ public with sharing class HierarchyQuery {
         if (oc.otherFields != null && oc.otherFields.size() > 0) {
             listlist.add(oc.otherFields);
         }
-
-        if (queryParents)  {
+        if (oc.parentField != null)  {
             listlist.add(new List<String>{oc.parentField});
+        } 
+        if (oc.orderByField != null)  {
+            listlist.add(new List<String>{oc.orderByField});
         } 
 
         List<String> selectFields = mergeDedupe (listlist); 

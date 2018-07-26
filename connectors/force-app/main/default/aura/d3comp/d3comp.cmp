@@ -22,10 +22,13 @@
   <aura:attribute name="card4" type="String" default=""/>    
 	<aura:attribute name="maxlevels" type="Integer" default="4"/>    
 
+  <!-- all cards should be dynamic so ultimately this will go -->
+  <aura:attribute name="cardDynamic" type="Boolean" default="false"/>      
   <aura:attribute name="card1Field" type="String" default="name"/>    
   <aura:attribute name="card2Field" type="String" default="position"/>    
   <aura:attribute name="card3Field" type="String" default="account"/>    
 
+  <aura:attribute name="cardFields" type="String" default="{}"/>    
 
   <!-- Technical - Panel -->
   <aura:attribute name="panelCurrentMeasure" type="String"/>    

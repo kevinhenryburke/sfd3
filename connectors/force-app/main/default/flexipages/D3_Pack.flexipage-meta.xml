@@ -8,7 +8,14 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
-                <value>Top</value>
+                <value>TopPack</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>cardDynamic</name>
+                <value>false</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>cardFields</name>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>configjsonString</name>
@@ -50,11 +57,11 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
-                <value>Pack Bottom</value>
+                <value>BottomPack</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserControllerComponentId</name>
-                <value>Top</value>
+                <value>TopPack</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>componentType</name>
