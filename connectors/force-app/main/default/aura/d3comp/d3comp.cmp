@@ -14,20 +14,16 @@
   <aura:attribute name="selectedRecord" type="sObject" default="{}" description="Use,for store SELECTED sObject Record"/>
   <aura:handler name="oSelectedRecordEvent" event="c:evt_SubCompToContaining" action="{!c.handleEmbeddedComponentEvent}"/>
 
-
-  <!-- Design Paramters Panel -->
+<!-- TODO ALL THERE LINES NEED DELETING -->
   <aura:attribute name="card1" type="String" default="No node selected"/>    
   <aura:attribute name="card2" type="String" default=""/>    
   <aura:attribute name="card3" type="String" default=""/>    
   <aura:attribute name="card4" type="String" default=""/>    
+
+
+  <!-- Design Paramters Panel -->
 	<aura:attribute name="maxlevels" type="Integer" default="4"/>    
 
-  <!-- TODO need to delete 3 lines below but for some reason it won't let me -->
-  <aura:attribute name="card1Field" type="String" default="name"/>    
-  <aura:attribute name="card2Field" type="String" default="position"/>    
-  <aura:attribute name="card3Field" type="String" default="account"/>    
-
-  <aura:attribute name="cardFields" type="String" default="{}"/>    
 
   <!-- Technical - Panel -->
   <aura:attribute name="panelCurrentMeasure" type="String"/>    
@@ -153,31 +149,6 @@
         </div>
       </div>
     </div>
-    
-
-  <lightning:card aura:id="detailcard" title="Selected Node" iconName="standard:account">
-      <div class="c-container">
-          <lightning:layout horizontalAlign="space">
-              <lightning:layoutItem flexibility="auto" padding="around-small">
-                  <a href = "" onclick = "{!c.navigateToRecord}">{!v.card1}</a>
-              </lightning:layoutItem>
-              <lightning:layoutItem flexibility="auto" padding="around-small">
-                  {!v.card2}
-              </lightning:layoutItem>
-              <lightning:layoutItem flexibility="auto" padding="around-small">
-                  {!v.card3}
-              </lightning:layoutItem>
-              <!--
-              <lightning:layoutItem flexibility="auto" padding="around-small">
-                <aura:if isTrue="{!v.cardSelected}">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Anna_Netrebko_-_Romy_2013_a.jpg" height="60" width="60" alt="No image available" align="centre"></img>
-                </aura:if>
-              </lightning:layoutItem>
-            -->
-
-          </lightning:layout>
-      </div>
-      </lightning:card>  
 
 
 </aura:component>

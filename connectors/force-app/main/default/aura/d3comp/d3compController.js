@@ -228,34 +228,6 @@
                 $A.util.removeClass(cmpTarget, 'slds-button_brand');                
             }
         }
-        if (topic == "ChartMouseOver")
-        {
-            var parameters = event.getParam("parameters");
-            console.log("Reading UpdateCard fields from configuration");
-
-            var displayData = parameters["data"];
-            console.log("displayData");
-            console.log(displayData);
-            var displayParent = parameters["parent"];
-
-            var cardFields = JSON.parse(component.get("v.cardFields"));
-            // set a default display fields list
-            var cardFieldsArray = ["data.name", "data.size", "parent.name"];
-
-            // check if there is an objectType specific display fields list
-            if (cardFields[displayData["objectType"]] != null) {
-                cardFieldsArray = cardFields[displayData["objectType"]];
-            }
-            else {
-                if (cardFields["default"] != null) {
-                    cardFieldsArray = cardFields["default"];
-                }
-            }
-
-            component.set("v.card1", bzutils.parseCardParam(displayData, displayParent, cardFieldsArray[0] ));  
-            component.set("v.card2", bzutils.parseCardParam(displayData, displayParent, cardFieldsArray[1] ));  
-            component.set("v.card3", bzutils.parseCardParam(displayData, displayParent, cardFieldsArray[2] ));  
-        }
         if (topic == "InitiateRefreshChart")
         {
             // for a RefreshChart event we assume everything is initialized
@@ -444,14 +416,5 @@ $A.getCallback(function() {
 console.log("onClickTimeSeriesRefresh exit");
     },
     
-    navigateToRecord : function(component){
-        var evtNav = $A.get("e.force:navigateToSObject");
-        evtNav.setParams({
-        "recordId": component.get("v.card4"),
-        "slideDevName": "detail"
-        });
-        sObectEvent.fire(); 
-     },
-
     
 })
