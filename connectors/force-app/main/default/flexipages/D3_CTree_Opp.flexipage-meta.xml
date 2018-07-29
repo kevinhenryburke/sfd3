@@ -54,6 +54,17 @@
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>
+                <name>cardFields</name>
+                <value>{&quot;Account&quot; : [&quot;data.name&quot;, &quot;data.size&quot;, &quot;parent.name&quot;] , &quot;Opportunity&quot; : [&quot;data.name&quot;, &quot;data.otherFields.StageName&quot;, &quot;parent.name&quot;]}</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>objectIcons</name>
+                <value>{&quot;Account&quot; :&quot;standard:account&quot; , &quot;Opportunity&quot; : &quot;standard:opportunity&quot;}</value>
+            </componentInstanceProperties>
+            <componentName>panelDisplay</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentInstanceProperties>
                 <name>LeafColors</name>
                 <value>{ &quot;Account&quot; : { &quot;colorBy&quot; : &quot;size&quot; , &quot;values&quot; : [0,22070163,25070163], &quot;colors&quot; : [&quot;white&quot; , &quot;yellow&quot;, &quot;green&quot;] } , &quot;Opportunity&quot; : {&quot;colorBy&quot; : &quot;StageName&quot;,  &quot;values&quot; : [&quot;Closed Lost&quot;, &quot;Qualification&quot;, &quot;Needs Analysis&quot;, &quot;Closed Won&quot;], &quot;colors&quot; : [&quot;red&quot;, &quot;orange&quot;, &quot;yellow&quot;, &quot;green&quot;] }}</value>
             </componentInstanceProperties>

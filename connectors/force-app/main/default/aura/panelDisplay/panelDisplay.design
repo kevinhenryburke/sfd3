@@ -1,0 +1,4 @@
+<design:component >
+    <design:attribute name="cardFields" default="" label="Card Fields" description=""/>        
+    <design:attribute name="objectIcons" default="" label="Object Icons" description=""/>        
+</design:component>

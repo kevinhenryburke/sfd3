@@ -1,0 +1,65 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="DThree">
+
+  <ltng:require 
+    scripts="/resource/Berliozjs"
+  />
+
+
+  <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+
+  <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
+  <aura:handler event="c:evt_sfd3" action="{!c.handle_evt_sfd3}"/> 
+
+
+  <!-- Design Paramters Panel -->
+  <aura:attribute name="card1" type="String" default="No node selected"/>    
+  <aura:attribute name="card2" type="String" default=""/>    
+  <aura:attribute name="card3" type="String" default=""/>    
+  <aura:attribute name="card4" type="String" default=""/>    
+  <aura:attribute name="cardFields" type="String" default="{}"/>    
+
+  <aura:attribute name="recordId" type="String" default=""/>    
+
+  <aura:attribute name="objectIcons" type="String" default="{}"/>    
+  <aura:attribute name="iconName" type="String" default="standard:account"/>    
+
+  <!-- Design Paramters -->  
+  <aura:attribute name="UserComponentId" type="String" default="" description="If you want charts to only respond to particular controllers on a page then give this controller a name here (unique to the page) and associate it using the Controller Component Id option on the chart"/>    
+
+  <!-- Technical - Chart -->
+
+    <aura:attribute name="componentCategory" type="String" default="Controller"/>    
+    <aura:attribute name="componentType" type="String" default="Card"/>   <!-- this may move to Design Parameters when we get different types --> 
+    <aura:attribute name="initialized" type="Boolean" default="false"/>    
+
+  
+    <div class="slds">
+    
+
+  <lightning:card aura:id="detailcard" title="Selected Node" iconName="{!v.iconName}">
+      <div class="c-container">
+          <lightning:layout horizontalAlign="space">
+              <lightning:layoutItem flexibility="auto" padding="around-small">
+                  <a href = "" onclick = "{!c.navigateToRecord}">{!v.card1}</a>
+              </lightning:layoutItem>
+              <lightning:layoutItem flexibility="auto" padding="around-small">
+                  {!v.card2}
+              </lightning:layoutItem>
+              <lightning:layoutItem flexibility="auto" padding="around-small">
+                  {!v.card3}
+              </lightning:layoutItem>
+              <!--
+              <lightning:layoutItem flexibility="auto" padding="around-small">
+                <aura:if isTrue="{!v.cardSelected}">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Anna_Netrebko_-_Romy_2013_a.jpg" height="60" width="60" alt="No image available" align="centre"></img>
+                </aura:if>
+              </lightning:layoutItem>
+            -->
+
+          </lightning:layout>
+      </div>
+      </lightning:card>  
+    </div>
+
+
+</aura:component>
