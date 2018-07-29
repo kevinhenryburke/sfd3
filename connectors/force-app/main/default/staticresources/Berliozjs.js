@@ -497,7 +497,9 @@ function nodeMouseover (componentReference, d) {
     var s = d3.select("#" + sselect);
     s.html(textcontent);
 
-    bzchart.publishEvent(componentReference, "ChartMouseOver", d);
+    var publishParameters = {"data" : d, "parent" : null};
+
+    bzchart.publishEvent(componentReference, "ChartMouseOver", publishParameters);
 
     console.log("bzchart.nodeMouseover exit");
 }

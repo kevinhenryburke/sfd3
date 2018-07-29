@@ -11,8 +11,12 @@
                 <value>Controller Top Left</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
+                <name>cardFields</name>
+                <value>{&quot;default&quot; : [&quot;data.name&quot;, &quot;data.position&quot;, &quot;data.account&quot;]}</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
                 <name>configjsonString</name>
-                <value>{"filtertypes":["Work","Social","Client"],"measures":["Posts","Hot"],"levels":4,"centreonclick":true}</value>
+                <value>{&quot;filtertypes&quot;:[&quot;Work&quot;,&quot;Social&quot;,&quot;Client&quot;],&quot;measures&quot;:[&quot;Posts&quot;,&quot;Hot&quot;],&quot;levels&quot;:4,&quot;centreonclick&quot;:true}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>configuredAllowSearch</name>
@@ -93,8 +97,12 @@
                 <value>Controller Top Right</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
+                <name>cardFields</name>
+                <value>{&quot;default&quot; : [&quot;data.name&quot;, &quot;data.position&quot;, &quot;data.account&quot;]}</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
                 <name>configjsonString</name>
-                <value>{"allowrefresh":true, "measures":["Posts","Hot"]}</value>
+                <value>{&quot;allowrefresh&quot;:true, &quot;measures&quot;:[&quot;Posts&quot;,&quot;Hot&quot;]}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>configuredAllowSearch</name>

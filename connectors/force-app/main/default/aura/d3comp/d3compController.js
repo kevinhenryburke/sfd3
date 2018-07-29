@@ -234,28 +234,27 @@
             console.log("Reading UpdateCard fields from configuration");
 
             var displayData = parameters["data"];
+            console.log("displayData");
+            console.log(displayData);
             var displayParent = parameters["parent"];
 
-            var cardDynamic = component.get("v.cardDynamic");
-            
-            if (cardDynamic) {
-                var cardFields = JSON.parse(component.get("v.cardFields"));
-                // set a default display fields list
-                var cardFieldsArray = ["data.name", "data.size", "parent.name"];
+            var cardFields = JSON.parse(component.get("v.cardFields"));
+            // set a default display fields list
+            var cardFieldsArray = ["data.name", "data.size", "parent.name"];
 
-                // check if there is an objectType specific display fields list
-                if (cardFields[displayData["objectType"]] != null) {
-                    cardFieldsArray = cardFields[displayData["objectType"]];
-                }
-                component.set("v.card1", bzutils.parseCardParam(displayData, displayParent, cardFieldsArray[0] ));  
-                component.set("v.card2", bzutils.parseCardParam(displayData, displayParent, cardFieldsArray[1] ));  
-                component.set("v.card3", bzutils.parseCardParam(displayData, displayParent, cardFieldsArray[2] ));  
+            // check if there is an objectType specific display fields list
+            if (cardFields[displayData["objectType"]] != null) {
+                cardFieldsArray = cardFields[displayData["objectType"]];
             }
             else {
-                component.set("v.card1", parameters[component.get("v.card1Field")]);  
-                component.set("v.card2", parameters[component.get("v.card2Field")]);  
-                component.set("v.card3", parameters[component.get("v.card3Field")]);      
+                if (cardFields["default"] != null) {
+                    cardFieldsArray = cardFields["default"];
+                }
             }
+
+            component.set("v.card1", bzutils.parseCardParam(displayData, displayParent, cardFieldsArray[0] ));  
+            component.set("v.card2", bzutils.parseCardParam(displayData, displayParent, cardFieldsArray[1] ));  
+            component.set("v.card3", bzutils.parseCardParam(displayData, displayParent, cardFieldsArray[2] ));  
         }
         if (topic == "InitiateRefreshChart")
         {

@@ -11,11 +11,8 @@
                 <value>TopPack</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
-                <name>cardDynamic</name>
-                <value>false</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
                 <name>cardFields</name>
+                <value>{&quot;Account&quot; : [&quot;data.name&quot;, &quot;data.size&quot;, &quot;parent.name&quot;]}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>configjsonString</name>
