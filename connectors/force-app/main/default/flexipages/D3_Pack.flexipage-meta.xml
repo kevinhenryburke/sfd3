@@ -49,6 +49,21 @@
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>
+                <name>Controller</name>
+                <value>TopPack</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>cardFields</name>
+                <value>{&quot;Account&quot; : [&quot;data.name&quot;, &quot;data.size&quot;, &quot;parent.name&quot;]}</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>objectIcons</name>
+                <value>{&quot;Account&quot; :&quot;standard:account&quot; , &quot;Opportunity&quot; : &quot;standard:opportunity&quot;}</value>
+            </componentInstanceProperties>
+            <componentName>panelDisplay</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentInstanceProperties>
                 <name>Title</name>
                 <value>1</value>
             </componentInstanceProperties>

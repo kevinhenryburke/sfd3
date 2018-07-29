@@ -34,6 +34,20 @@
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>
+                <name>Controller</name>
+                <value>Controller Top Left</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>cardFields</name>
+                <value>{&quot;default&quot; : [&quot;data.name&quot;, &quot;data.position&quot;, &quot;data.account&quot;]}</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>objectIcons</name>
+            </componentInstanceProperties>
+            <componentName>panelDisplay</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentInstanceProperties>
                 <name>Title</name>
                 <value>Gold One Level</value>
             </componentInstanceProperties>
@@ -117,6 +131,20 @@
                 <value>true</value>
             </componentInstanceProperties>
             <componentName>d3comp</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>Controller</name>
+                <value>Controller Top Right</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>cardFields</name>
+                <value>{&quot;default&quot; : [&quot;data.name&quot;, &quot;data.position&quot;, &quot;data.account&quot;]}</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>objectIcons</name>
+            </componentInstanceProperties>
+            <componentName>panelDisplay</componentName>
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>

@@ -54,6 +54,10 @@
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>
+                <name>Controller</name>
+                <value>TopOpp</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
                 <name>cardFields</name>
                 <value>{&quot;Account&quot; : [&quot;data.name&quot;, &quot;data.size&quot;, &quot;parent.name&quot;] , &quot;Opportunity&quot; : [&quot;data.name&quot;, &quot;data.otherFields.StageName&quot;, &quot;parent.name&quot;]}</value>
             </componentInstanceProperties>

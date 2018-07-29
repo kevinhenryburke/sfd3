@@ -1,4 +1,5 @@
 <design:component >
+    <design:attribute name="Controller" label="Controller" default="Controller" description="Unique Id for the controller related to this component" />	
     <design:attribute name="cardFields" default="" label="Card Fields" description=""/>        
     <design:attribute name="objectIcons" default="" label="Object Icons" description=""/>        
 </design:component>

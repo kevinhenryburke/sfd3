@@ -24,7 +24,7 @@
   <aura:attribute name="iconName" type="String" default="standard:account"/>    
 
   <!-- Design Paramters -->  
-  <aura:attribute name="UserComponentId" type="String" default="" description="If you want charts to only respond to particular controllers on a page then give this controller a name here (unique to the page) and associate it using the Controller Component Id option on the chart"/>    
+  <aura:attribute name="Controller" type="String" default="" description="If you want this card to respond to a particular controller on a page then put the controller's configured name here (unique to the page)"/>    
 
   <!-- Technical - Chart -->
 

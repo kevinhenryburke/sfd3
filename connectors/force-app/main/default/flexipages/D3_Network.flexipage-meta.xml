@@ -47,6 +47,20 @@
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>
+                <name>Controller</name>
+                <value>Controller</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>cardFields</name>
+                <value>{&quot;default&quot; : [&quot;data.name&quot;, &quot;data.position&quot;, &quot;data.account&quot;]}</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>objectIcons</name>
+            </componentInstanceProperties>
+            <componentName>panelDisplay</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentInstanceProperties>
                 <name>Title</name>
                 <value>Gold One Level</value>
             </componentInstanceProperties>
