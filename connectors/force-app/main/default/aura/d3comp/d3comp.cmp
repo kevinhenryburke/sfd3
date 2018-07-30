@@ -14,13 +14,6 @@
   <aura:attribute name="selectedRecord" type="sObject" default="{}" description="Use,for store SELECTED sObject Record"/>
   <aura:handler name="oSelectedRecordEvent" event="c:evt_SubCompToContaining" action="{!c.handleEmbeddedComponentEvent}"/>
 
-<!-- TODO ALL THERE LINES NEED DELETING -->
-  <aura:attribute name="card1" type="String" default="No node selected"/>    
-  <aura:attribute name="card2" type="String" default=""/>    
-  <aura:attribute name="card3" type="String" default=""/>    
-  <aura:attribute name="card4" type="String" default=""/>    
-
-
   <!-- Design Paramters Panel -->
 	<aura:attribute name="maxlevels" type="Integer" default="4"/>    
 
