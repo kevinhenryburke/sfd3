@@ -10,27 +10,24 @@
     handle_evt_sfd3  : function(component, event, helper) {
         var _this = this;
         var topic = event.getParam("topic");
-        console.log("topic: " + topic);
+        bzutils.log("topic: " + topic);
 
         var publisher = event.getParam("publisher");
-        console.log("publisher: " + publisher);
         var publisherCategory = event.getParam("publisherCategory");
         var publisherType = event.getParam("publisherType");
         var RelatedControllerId = component.get("v.Controller");
         var controller = event.getParam("controller");
-        console.log("controller: " + controller);
-        console.log("RelatedControllerId: " + RelatedControllerId );
 
         // if the event is propagated from a controller then we ignore it as this displays cards for charts
         if (publisherCategory == "Controller") {
-            console.log("controller: ignoring message from " + publisher + " in component for controller " + RelatedControllerId);
+            bzutils.log("controller: ignoring message from " + publisher + " in component for controller " + RelatedControllerId);
             return;
         }
 
         // if the component is named and the event propagated from a chart controlled by a controller with another name then we ignore it.
         if (publisherCategory == "Display" && RelatedControllerId != null && RelatedControllerId != ""  && controller != null && controller != "") {
             if (RelatedControllerId != controller) {
-                console.log("controller: ignoring message for card related to " + RelatedControllerId + " intended for component " + controller);
+                bzutils.log("controller: ignoring message for card related to " + RelatedControllerId + " intended for component " + controller);
                 return;
             }
         }
