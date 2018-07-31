@@ -54,10 +54,6 @@
     <layoutAssignments>
         <layout>Account-Account Layout</layout>
     </layoutAssignments>
-    <tabVisibilities>
-        <tab>D3_CTree_Opp</tab>
-        <visibility>DefaultOn</visibility>
-    </tabVisibilities>
     <userLicense>Salesforce</userLicense>
     <userPermissions>
         <enabled>true</enabled>
