@@ -7,23 +7,27 @@
 
         var UserComponentId = component.get("v.UserComponentId");
 
-        if (UserComponentId != null && UserComponentId != '') {
-            console.log('chartArea: calculate comprefNumber using seed:' + UserComponentId);   
-            comprefNumber = helper.simpleHash(UserComponentId);    
+        var componentReference = component.get("v.componentReference");
+
+        if (componentReference == null) {
+            if (UserComponentId != null && UserComponentId != '') {
+                console.log('chartArea: calculate comprefNumber using seed:' + UserComponentId);   
+                comprefNumber = helper.simpleHash(UserComponentId);    
+            }
+            else {
+                console.log('chartArea: calculate compref from random generator');   
+                comprefNumber = Math.floor((Math.random() * 10000000000) + 1); 
+            }
+            componentReference = "compref" + comprefNumber;
+            component.set("v.componentReference", componentReference);
+            component.set("v.chartAreaDivId", componentReference + 'chartArea');
         }
-        else {
-            console.log('chartArea: calculate compref from random generator');   
-            comprefNumber = Math.floor((Math.random() * 10000000000) + 1); 
-        }
-        var componentReference = "compref" + comprefNumber;
-        component.set("v.componentReference", componentReference);
-        component.set("v.chartAreaDivId", componentReference + 'chartArea');
-        console.log('chartArea: doInit exit');   
+        console.log('chartArea: doInit exit for componentReference: ' + componentReference);   
     },
 
     doneRendering: function(component, event, helper) {
-        console.log('chartArea: doneRendering enter');   
         var rendered = component.get("v.rendered");
+        console.log('chartArea: doneRendering enter. Rendered: ' + rendered);   
         if (rendered == false) {
             var scriptsLoaded = component.get("v.scriptsLoaded");
             if (scriptsLoaded == true) {

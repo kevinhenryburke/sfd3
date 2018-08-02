@@ -5,6 +5,7 @@
         var _this = this;
         console.log("chartArea: doneRenderLoad enter");
         var componentReference = component.get("v.componentReference");
+        console.log("chartArea: componentReference:" + componentReference);
 
         bzutils.initializeCache (componentReference) ;
 

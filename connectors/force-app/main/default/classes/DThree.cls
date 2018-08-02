@@ -4,7 +4,7 @@ public class DThree {
     public static String TEMP_WHICH_VERSION = 'Database';
 
     @AuraEnabled
-    public static String returnData(String queryJSON) {
+    public static String returnData(String queryJSON, String recordId) {
         List<StaticResource> docs;
 		docs = [select id, name, body from StaticResource where name = 'NVAData']; 
         return docs[0].body.toString();
@@ -20,7 +20,7 @@ public class DThree {
     }
 
     @AuraEnabled
-    public static String returnDataNodesOnly(String queryJSON) {
+    public static String returnDataNodesOnly(String queryJSON, String recordId) {
         List<StaticResource> docs;
 		docs = [select id, name, body from StaticResource where name = 'NVANodesOnly']; 
         return docs[0].body.toString();
@@ -38,20 +38,23 @@ public class DThree {
         return JSON.serialize(deserialized, true);
     }
 
-
     @AuraEnabled
-    public static String returnDataPack(String queryJSON) {
+    public static String returnDataPack(String queryJSON, String recordId) {
         if (TEMP_WHICH_VERSION == 'StaticResource') {
             // STATIC RESOURCE VERSION STILL HAS VALUE but eventually delete
             return returnDataPack();
         }
-
-        Account a = [select id from Account where name = 'Burke Enterprises' LIMIT 1];
-        Id rootId = a.id;
+        else {
+            if (recordId == null) {
+                // TEMP - set a default for testing
+                Account a = [select id from Account where name = 'Burke Enterprises' LIMIT 1];
+                recordId = a.id;
+            }
+        }
 
         HierarchyConfiguration hc = (HierarchyConfiguration)JSON.deserialize(queryJSON, HierarchyConfiguration.class);
 
-        return returnDataPack(hc, rootId);
+        return returnDataPack(hc, recordId);
 
     }
 

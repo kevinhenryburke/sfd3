@@ -1,4 +1,5 @@
 <design:component >
+    <!-- <design:attribute name="showBanner" label="Show Top Banner" default="true" description="Click if you want to see the top banner"/>         -->
     <design:attribute name="Controller" label="Controller" default="Controller" description="Unique Id for the controller related to this component" />	
     <design:attribute name="cardFields" default="" label="Card Fields" description=""/>        
     <design:attribute name="objectIcons" default="" label="Object Icons" description=""/>        

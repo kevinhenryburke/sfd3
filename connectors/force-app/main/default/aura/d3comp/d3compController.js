@@ -18,9 +18,12 @@
         var queryLevelIds = [[]];
         component.set("v.queryLevels", queryLevels );
         component.set("v.queryLevelIds", queryLevelIds );
+
+        console.log("recordId:" + component.get("v.recordId"));
         
         action.setParams({
-            'queryJSON': component.get("v.queryJSON")
+            'queryJSON': component.get("v.queryJSON"),
+            "recordId" : component.get("v.recordId")
           });
         
         action.setCallback(this, function(response) {

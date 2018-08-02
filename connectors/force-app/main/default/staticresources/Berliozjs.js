@@ -222,7 +222,6 @@ function simpleHash(s) {
 */
 
 function publishEvent(topic, publisher, publisherCategory, publisherType, parameters, controller) {
-    console.log("bzutils.publishEvent: " + topic + " " + JSON.stringify(parameters));
 
     console.log("publisherCategory: " + publisherCategory );
     console.log("publisherType: " + publisherType );
@@ -1342,7 +1341,6 @@ function update() {
         var publisherType = bzutils.getCache (componentReference, "componentType") ;
         
         var controller = bzutils.getCache (componentReference, "UserControllerComponentId") ;
-        console.log("bzutils.publishEvent: " + topic + " " + JSON.stringify(parameters));
     
         console.log("publisherCategory: " + publisherCategory );
         console.log("publisherType: " + publisherType );

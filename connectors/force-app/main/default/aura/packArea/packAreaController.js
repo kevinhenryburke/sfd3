@@ -2,7 +2,7 @@
 
     // bear in mind that doInit can't refresh anything in an external library as it may lose a race condition.
     doInit: function(component, event, helper) {
-        console.log('chartArea: doInit enter');   
+        console.log('packArea: doInit enter');   
         var comprefNumber = 0;
 
         var UserComponentId = component.get("v.UserComponentId");
@@ -19,7 +19,7 @@
 		console.log('chartArea: doInit: set componentReference: ' + componentReference);    
         component.set("v.componentReference", componentReference);
         component.set("v.chartAreaDivId", componentReference + 'chartArea');
-        console.log('chartArea: doInit exit');   
+        console.log('packArea: doInit exit');   
     },
 
     doneRendering: function(component, event, helper) {
