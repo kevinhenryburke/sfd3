@@ -3,6 +3,12 @@
     // bear in mind that doInit can't refresh anything in an external library as it may lose a race condition.
     doInit: function(component, event, helper) {
         console.log('chartArea: doInit enter');   
+
+        var recordId = component.get("v.recordId");
+        if (recordId == null) {
+            recordId = "";
+        }
+        console.log('chartArea: doInit enter: ' + recordId);   
         var comprefNumber = 0;
 
         var UserComponentId = component.get("v.UserComponentId");
@@ -18,7 +24,7 @@
                 console.log('chartArea: calculate compref from random generator');   
                 comprefNumber = Math.floor((Math.random() * 10000000000) + 1); 
             }
-            componentReference = "compref" + comprefNumber;
+            componentReference = "compref" + comprefNumber + recordId;
             component.set("v.componentReference", componentReference);
             component.set("v.chartAreaDivId", componentReference + 'chartArea');
         }
