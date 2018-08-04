@@ -38,6 +38,7 @@
   <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
   <aura:handler event="aura:doneRendering" action="{!c.doneRendering}"/>
 
+  <lightning:overlayLibrary aura:id="overlayLib"/>
 
   <!-- Methods with different implementations for different chart types -->  
 
@@ -85,6 +86,9 @@
   <aura:attribute name="flexiWidth" type="String"/>
   <lightning:flexipageRegionInfo width="{!v.flexiWidth}"/>
 
+<!-- test stuff -->
+<aura:attribute name="popoverElementClass2" type="String" access="public"/>
+<aura:attribute name="oneortwo" type="Integer" default="1" access="public"/> 
 
 
   <body class="bodycontainer" style="background-color: white;">
@@ -92,7 +96,8 @@
 
 <!-- to pass in stuff from a sub component use {!v.body}  see https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/oo_cmp_attributes.htm   -->
 
-      <aura:if isTrue="{!v.Title != ''}">{!v.Title}</aura:if>       
+
+    <aura:if isTrue="{!v.Title != ''}">{!v.Title}</aura:if>       
       <div class="c-container">
           <lightning:layout horizontalAlign="space" verticalAlign="end">
               <lightning:layoutItem flexibility="grow" padding="around-small" size="12">

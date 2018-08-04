@@ -68,7 +68,7 @@
           <aura:if isTrue="{!v.showBanner}">
             <div class="slds-media">
               <div class="slds-media__figure">
-                <lightning:icon iconName="action:approval" size="large" alternativeText="Connections"/>
+                <lightning:icon iconName="action:approval" size="small" alternativeText="Connections"/>
               </div>
               <div class="slds-media__body">
                 <div class="slds-grid">

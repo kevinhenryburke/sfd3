@@ -9,6 +9,7 @@
 
         bzutils.initializeCache (componentReference) ;
 
+        bzutils.setCache (componentReference, "component", component) ;
         bzutils.setCache (componentReference, "componentReference", component.get("v.componentReference") ) ;
         bzutils.setCache (componentReference, "componentType", component.get("v.componentType") ) ;
         bzutils.setCache (componentReference, "componentCategory", component.get("v.componentCategory") ) ;
@@ -238,8 +239,6 @@
         }
         return hash;
     },    
-
-
 
 // TODO here's the d3 nodes .... all in a line ... not proper code!
 /*

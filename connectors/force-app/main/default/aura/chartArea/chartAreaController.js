@@ -28,6 +28,7 @@
             component.set("v.componentReference", componentReference);
             component.set("v.chartAreaDivId", componentReference + 'chartArea');
         }
+
         console.log('chartArea: doInit exit for componentReference: ' + componentReference);   
     },
 
@@ -187,6 +188,5 @@
         });
         sObectEvent.fire(); 
      },
-
     
 })

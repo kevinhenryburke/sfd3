@@ -87,6 +87,9 @@
         // Enter any new modes at the parent's previous position.
         var nodeEnter = node.enter().append('g')
             .attr('class', 'treenode')
+            .attr("class", function(d) {
+                return 'treenode ' + d.id;
+            })
             .attr("transform", function(d) {
                 var t = "translate(" + source.y0 + "," + source.x0 + ")";
                 return t;
@@ -100,13 +103,17 @@
             .on('click', click)
 			.on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
 				bzutils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
-				bzutils.xfcr("nodeMouseover", componentReference, d); 
+                bzutils.xfcr("nodeMouseover", componentReference, d); 
+                _this.mousePopD (componentReference, d);                
 			}))
 			;
       
         // Add Circle for the nodes
         nodeEnter.append('circle')
             .attr('class', 'treenode')
+            .attr("class", function(d) {
+                return 'treenode ' + d.id;
+            })
             .attr('r', 1e-6)
             .attr("id", function(d) {
                 return "circle" + d.id;
@@ -432,7 +439,29 @@
             });        
         }
         bzutils.log("merge exit");
+    },    
+
+    mousePopD: function (componentReference, d) {
+        console.log("mousePopD: enter");
+		var component = bzutils.getCache (componentReference, "component") ;  
+        var referenceSelector = "." + d.id;
+    
+        component.find('overlayLib').showCustomPopover({
+            body: 'Some popover text for Randomer ' + d.data.name,
+            referenceSelector: referenceSelector,
+//            cssClass: "slds-p-around_x-small,popoverclass,slds-popover,slds-popover_walkthrough,slds-popover_feature,slds-nubbin_left,no-pointer,cChartHierarchy"
+            cssClass: "slds-p-around_x-small,popoverclass,slds-popover_small,slds-popover_walkthrough,slds-popover_feature,slds-nubbin_top-right,no-pointer,cChartHierarchy"
+        }).then(function (overlay) {
+            setTimeout(function(){ 
+                //close the popover after 3 seconds
+                overlay.close(); 
+            }, 3000);
+        });
+        
+        console.log("mousePopD: exit");
+    
     }
+
         
 
 })
