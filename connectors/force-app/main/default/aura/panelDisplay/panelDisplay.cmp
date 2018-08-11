@@ -12,6 +12,7 @@
     <aura:attribute name="Controller" type="String" default="" description="If you want this card to respond to a particular controller on a page then put the controller's configured name here (unique to the page)"/>    
     <aura:attribute name="objectIcons" type="String" default="{}"/>    
     <aura:attribute name="cardFields" type="String" default="{}"/>    
+    <aura:attribute name="layoutStyle" type="String" default="card"/>    
 
     <!-- Design Paramters Panel -->
     <aura:attribute name="card1" type="String" default="No node selected"/>    
@@ -21,10 +22,13 @@
 
     <aura:attribute name="recordId" type="String" default=""/>    
     <aura:attribute name="iconName" type="String" default="standard:account"/>    
-  
+    <aura:attribute name="hostUserControllerComponentId" type="String" default="If this component is embedded in another, this is the name of the host"/>    
+ 
     <div class="slds">
-        <lightning:card aura:id="detailcard" title="Selected Node" iconName="{!v.iconName}">
-            <div class="c-container">
+    
+    <aura:if isTrue="{!v.layoutStyle == 'card'}"> 
+        <lightning:card aura:id="detailcard" title="{!v.card1}" iconName="{!v.iconName}">
+            <div class="c-container"  aura:id="detailcardfields" >
                 <lightning:layout horizontalAlign="space">
                     <lightning:layoutItem flexibility="auto" padding="around-small">
                         <a href = "" onclick = "{!c.navigateToRecord}">{!v.card1}</a>
@@ -35,17 +39,40 @@
                     <lightning:layoutItem flexibility="auto" padding="around-small">
                         {!v.card3}
                     </lightning:layoutItem>
-                    <!--
-                    <lightning:layoutItem flexibility="auto" padding="around-small">
-                    <aura:if isTrue="{!v.cardSelected}">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Anna_Netrebko_-_Romy_2013_a.jpg" height="60" width="60" alt="No image available" align="centre"></img>
-                    </aura:if>
-                    </lightning:layoutItem>
-                -->
-
                 </lightning:layout>
             </div>
         </lightning:card>  
+    </aura:if>
+
+    <aura:if isTrue="{!v.layoutStyle == 'cardTile'}"> 
+        <lightning:card variant="Narrow" aura:id="detailcard" title="{!v.card1}" iconName="{!v.iconName}">
+            <aura:set attribute="actions">
+                <lightning:buttonIcon iconName="utility:close" variant="bare" onclick="{! c.handleClose }" alternativeText="Close" /> 
+            </aura:set>
+            <div class="c-container">
+                <lightning:layout horizontalAlign="space" class="slds-grid_vertical">
+                    <lightning:layoutItem flexibility="auto" padding="around-small">
+                        <a href = "" onclick = "{!c.navigateToRecord}">Go To Record</a>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto" padding="around-small">
+                        {!v.card2}
+                    </lightning:layoutItem>
+                    <lightning:layoutItem flexibility="auto" padding="around-small">
+                            <ul class="slds-has-dividers_around-space">
+                                <li class="slds-item">
+                                    <lightning:tile label="Anypoint Connectors" href="/path/to/somewhere" class="slds-tile_board">
+                                        <p class="slds-text-heading_medium">$50,000</p>
+                                        <p class="slds-truncate" title="Company One"><a href="#">Company One</a></p>
+                                        <p class="slds-truncate">Closing 9/30/2015</p>
+                                    </lightning:tile>
+                                </li>
+                            </ul>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </div>
+        </lightning:card>  
+    </aura:if>
     </div>
+
 
 </aura:component>

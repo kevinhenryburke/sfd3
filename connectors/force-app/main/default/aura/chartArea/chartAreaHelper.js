@@ -214,17 +214,99 @@
         }
         bzutils.setCache (componentReference, "textGroup", textGroup ) ;
 
-        // console.log("PreProcess data");
-        // datajson = bzutils.xfcr("dataPreProcess", componentReference, datajson); // preprocessing of data (if any)
 
-        // use the name convention from d3 tutorials (e.g. http://www.puzzlr.org/force-directed-graph-minimal-working-example/)
-        // variables called simulation, node, path
+        // TEMP
 
-        // Not used but an alternative way to get node / path values
-        // var node = d3.select("#" + nodeGroupId).selectAll("circle")  ;
-        // var path = d3.select("#" + pathGroupId).selectAll("path")  ;
-        
-	},
+        // TODO we need to have a delaying mechanism here to make sure we have a defined location before we attach the component to the overlay
+
+       _this.createInfoLocation(component);
+
+       _this.createPopOverComponent(component);
+
+    },
+
+    createInfoLocation : function (component) {
+        var componentReference = component.get("v.componentReference");
+
+        var mdata = [0];
+
+        var width = bzutils.getCache (componentReference, "width");
+        var popx = width - 10;
+        var popy = 200;
+
+        var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
+        svg.selectAll('.symbol')
+        .data(mdata)
+        .enter()
+        .append('path')
+        .attr('transform',function(d,i) { return 'translate(' + popx + ',' + popy + ')';})
+        .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[i];}) )
+        .attr('id', function(d,i) { return "infolocation" + componentReference;})
+        .attr('visibility', "hidden") // white background to hide
+        .attr('class', function(d,i) { return "infolocation" + componentReference;});
+
+        var referenceSelector = ".infolocation" + componentReference;
+
+        bzutils.setCache (componentReference, "referenceSelector", referenceSelector ) ;
+    },
+
+
+    createPopOverComponent : function (component) {
+        // check if we have an overlay library
+        var overlayLibElement = component.find('overlayLib');
+        if (overlayLibElement != null) {
+
+            var componentReference = component.get("v.componentReference");
+
+            $A.createComponent(
+                "c:panelDisplay",
+                {
+                    "Controller" : "Top",
+                    "cardFields" : JSON.stringify({"Account" : ["data.name", "data.size", "parent.name"]}),
+                    "objectIcons" : JSON.stringify({"Account" :"standard:account" , "Opportunity" : "standard:opportunity"}),
+                    "layoutStyle" : "cardTile",
+                    "hostUserControllerComponentId" : component.get("v.UserControllerComponentId")
+                },
+                function(content, status, errorMessage){
+                    //Add the new button to the body array
+                    var referenceSelector = bzutils.getCache (componentReference, "referenceSelector");
+
+                    console.log("createPopOverComponent: createComponent callback: " + referenceSelector);
+                    console.log("createPopOverComponent: createComponent callback: " + component.find('overlayLib'));
+                    if (status === "SUCCESS") {
+                        console.log("createPopOverComponent: createComponent callback: SUCCESS: " );
+
+                        var modalPromise = component.find('overlayLib').showCustomPopover({
+                            body: content,
+                            referenceSelector: referenceSelector,
+                            // cssClass: "slds-hide,popoverclass,slds-popover,slds-popover_panel,slds-nubbin_left,no-pointer,cPopoverTest"
+                            cssClass: "popoverclass,slds-popover,slds-popover_panel,no-pointer,cChartArea"
+                        });
+                        component.set("v.modalPromise", modalPromise);  
+                        modalPromise.then(function (overlay) {
+                            overlay.show();  
+                            bzutils.setCache (componentReference, "overlay", overlay) ; 
+                        });             
+                    }
+                    else {
+                        console.log("createPopOverComponent: createComponent callback: Error: " + errorMessage);
+                        // Show error message
+                    }
+                }
+            );
+        }
+    },
+
+
+    // console.log("PreProcess data");
+    // datajson = bzutils.xfcr("dataPreProcess", componentReference, datajson); // preprocessing of data (if any)
+
+    // use the name convention from d3 tutorials (e.g. http://www.puzzlr.org/force-directed-graph-minimal-working-example/)
+    // variables called simulation, node, path
+
+    // Not used but an alternative way to get node / path values
+    // var node = d3.select("#" + nodeGroupId).selectAll("circle")  ;
+    // var path = d3.select("#" + pathGroupId).selectAll("path")  ;
     
     // ideally would prefer to put in Berlioz library but externals can't safely be called in doInit
     simpleHash : function(s) {
@@ -239,6 +321,21 @@
         }
         return hash;
     },    
+
+    // TODO NEED TO PASS IN PARAMETERS APLENTY
+    mousePopD: function (component, displayData, displayParent) {  
+        console.log("mousePopD: enter");
+        var componentReference = component.get("v.componentReference");
+
+        var popId = bzutils.parseCardParam(displayData, displayParent, "data.id" );
+        var crPopId = componentReference + popId;
+//        var referenceSelector = "." + crPopId;
+        console.log("crPopId: " + crPopId);
+
+
+
+    },
+
 
 // TODO here's the d3 nodes .... all in a line ... not proper code!
 /*

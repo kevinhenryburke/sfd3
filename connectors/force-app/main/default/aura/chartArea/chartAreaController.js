@@ -80,21 +80,25 @@
         bzutils.log("calling the aura:method searchChart in base");        
     },
     
-    
     handle_evt_sfd3  : function(component, event, helper) {
         bzutils.log('chartArea: handle_evt_sfd3 enter');
 
+
         var topic = event.getParam("topic");
+        var componentReference = component.get("v.componentReference");        
+
         var publisher = event.getParam("publisher");
         var parameters = event.getParam("parameters");
 
-        var componentReference = component.get("v.componentReference");        
+
+        bzutils.log('chartArea: topic:' + topic + " publisher " + publisher + "compref " + componentReference);
 
         var UserControllerComponentId = component.get("v.UserControllerComponentId");
         
         // if the component is configured to be controlled by a specified controller then exit if it's a different one.
         if (UserControllerComponentId != null && UserControllerComponentId != "") {
-            if (UserControllerComponentId != publisher) {
+            // note - component will subscribe to its own events
+            if (UserControllerComponentId != publisher && publisher != componentReference) { 
                 var UserComponentId = component.get("v.UserComponentId");
                 bzutils.log("ignoring message from " + publisher + " in component " + UserComponentId);
                 return;
@@ -176,6 +180,34 @@
             cc.searchChart(parameters["searchTermId"], parameters["searchAction"], parameters["showLevels"]);                 
 
         }
+        if (topic == "ChartMouseOut")
+        {
+            bzutils.log("chartArea: ChartMouseOut received by Chart: " + componentReference + "/" + parameters["componentReference"]);
+        }
+        if (topic == "CloseDisplayPanel")
+        {      
+            console.log("chartArea: CloseDisplayPanel received by Chart : " + componentReference );
+            var modalPromise = component.get("v.modalPromise");
+
+            if (modalPromise != null ) {
+                modalPromise.then(function (overlay) {
+                    overlay.hide();   
+                });
+            }
+        } 
+        if (topic == "ChartMouseOver")
+        {
+            bzutils.log("chartArea: ChartMouseOver received by Chart: " + componentReference + "/" + parameters["componentReference"]);
+
+            var parameters = event.getParam("parameters");
+            var displayData = parameters["data"];
+            var displayParent = parameters["parent"];
+
+            helper.mousePopD(component, displayData, displayParent);
+
+        }
+
+
         bzutils.log('chartArea: handle_evt_sfd3 exit');
     },
 

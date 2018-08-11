@@ -39,6 +39,14 @@
         root.children.forEach(bzctree.collapse);
         bzutils.setCache (componentReference, "root", root ) ;
         _this.update(nodeGroup, pathGroup, componentReference, root, false);
+
+        // Push out an initial message to highlight the root node to display panels
+        // Effecitvely can do this via a mouseover event on root.
+        // TODO can move this to a generic location?
+        bzutils.setCache (componentReference, "mouseoverRecordId", root.id ) ;
+        bzutils.xfcr("nodeMouseover", componentReference, root); 
+
+
     },
 
     update : function(nodeGroup, pathGroup, componentReference, source, makeSourceRoot) {
@@ -97,6 +105,9 @@
             .attr("id", function(d) {
                 return d.id;
             })            
+            .attr("aura:id", function(d) {
+                return d.id;
+            })            
             .attr("recordid", function(d) {
                 return d.data.id;
             })            
@@ -104,18 +115,24 @@
 			.on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
 				bzutils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
                 bzutils.xfcr("nodeMouseover", componentReference, d); 
-                _this.mousePopD (componentReference, d);                
-			}))
+            }))
+			.on('mouseout', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
+				bzutils.setCache (componentReference, "mouseoutRecordId", d.id ) ;
+                bzutils.xfcr("nodeMouseout", componentReference, d); 
+            }))
 			;
       
         // Add Circle for the nodes
         nodeEnter.append('circle')
-            .attr('class', 'treenode')
+            .attr('class', 'treenode') // redundant
             .attr("class", function(d) {
                 return 'treenode ' + d.id;
             })
             .attr('r', 1e-6)
             .attr("id", function(d) {
+                return "circle" + d.id;
+            })            
+            .attr("aura:id", function(d) {
                 return "circle" + d.id;
             })            
             .style("fill", function(d) {
@@ -202,6 +219,7 @@
         // Enter any new links at the parent's previous position.
         var linkEnter = link.enter().insert('path', "g")
             .attr("id", function(d) { return "path" + d.id; }) // identify a path using its lower level node (so must be unique!)
+            .attr("aura:id", function(d) { return "path" + d.id; }) // identify a path using its lower level node (so must be unique!)
             .attr("class", "treelink")
             .attr('d', function(d){
                 var o = {x: source.x0, y: source.y0}
@@ -261,7 +279,7 @@
             }
             _this.update(nodeGroup, pathGroup, componentReference, d, false);
 		}
-
+  
         function childLess(d) {
             return (typeof d._children == "undefined" || d._children == null) && (typeof d.children == "undefined" || d.children == null) ; 
         }
@@ -441,27 +459,5 @@
         bzutils.log("merge exit");
     },    
 
-    mousePopD: function (componentReference, d) {
-        console.log("mousePopD: enter");
-		var component = bzutils.getCache (componentReference, "component") ;  
-        var referenceSelector = "." + d.id;
-    
-        component.find('overlayLib').showCustomPopover({
-            body: 'Some popover text for Randomer ' + d.data.name,
-            referenceSelector: referenceSelector,
-//            cssClass: "slds-p-around_x-small,popoverclass,slds-popover,slds-popover_walkthrough,slds-popover_feature,slds-nubbin_left,no-pointer,cChartHierarchy"
-            cssClass: "slds-p-around_x-small,popoverclass,slds-popover_small,slds-popover_walkthrough,slds-popover_feature,slds-nubbin_top-right,no-pointer,cChartHierarchy"
-        }).then(function (overlay) {
-            setTimeout(function(){ 
-                //close the popover after 3 seconds
-                overlay.close(); 
-            }, 3000);
-        });
-        
-        console.log("mousePopD: exit");
-    
-    }
-
-        
 
 })

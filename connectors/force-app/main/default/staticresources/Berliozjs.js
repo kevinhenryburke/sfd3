@@ -239,6 +239,31 @@ function publishEvent(topic, publisher, publisherCategory, publisherType, parame
     appEvent.fire();
 }
 
+function publishEventFromCache(componentReference, topic, parameters) {
+    var appEvents = bzutils.getCache (componentReference, "appEvents") ;
+    var appEvent = appEvents.pop();
+    var publisherCategory = bzutils.getCache (componentReference, "componentCategory") ;
+    var publisherType = bzutils.getCache (componentReference, "componentType") ;
+    
+    var controller = bzutils.getCache (componentReference, "UserControllerComponentId") ;
+
+    console.log("publisherCategory: " + publisherCategory );
+    console.log("publisherType: " + publisherType );
+    console.log("controller: " + controller );
+
+    appEvent.setParams({
+        "topic" : topic,
+        "publisher" : componentReference,
+        "publisherCategory" : publisherCategory,
+        "publisherType" : publisherType,
+        "controller" : controller,
+        "parameters" : parameters
+    });
+    appEvent.fire();
+}
+
+
+
 function nodeDataSetFunctionNodes () { 
     console.log("nodeDataSetFunctionNodes enter"); 
     return function(datajson) { return datajson.nodes;};
@@ -260,6 +285,7 @@ exports.initializeAddComponentRef = initializeAddComponentRef;
 exports.addComponentRef = addComponentRef;
 exports.removeComponentRef = removeComponentRef;
 exports.publishEvent = publishEvent;
+exports.publishEventFromCache = publishEventFromCache;
 exports.initializeCache = initializeCache;
 exports.setCache = setCache;
 exports.getCache = getCache;
@@ -298,7 +324,7 @@ var fns =
         "styleNodes" : "bzutils.doNothing",
         "pathMouseover" : "bzchart.pathMouseover",
         "pathMouseout" : "bzchart.pathMouseout",
-        "nodeMouseout" : "bzutils.doNothing",
+        "nodeMouseout" : "bzctree.nodeMouseout",
         "nodeMouseover" : "bzctree.nodeMouseover",
         "nodeDoubleClick" : "bzutils.doNothing",     
         "runSimulation" : "bzutils.doNothing",      
@@ -1325,43 +1351,32 @@ function update() {
             bzutils.setCache (componentReference, "appEvents",  appEvents) ;
         } 
         else {
-            var appEvents = bzutils.getCache (componentReference, "appEvents") ;
-            var appEvent = appEvents.pop();
-
-            console.log("appEvents: " + appEvents.length);
-            
-            bzctree.publishEvent(componentReference, "ChartMouseOver", publishParameters, appEvent);    
+            bzutils.publishEventFromCache(componentReference, "ChartMouseOver", publishParameters);    
         }
         console.log("bzctree.nodeMouseover exit");
     }
 
+    function nodeMouseout (componentReference, d) {
+        console.log("bzctree.nodeMouseout enter");
+        console.log(d);
     
-    function publishEvent(componentReference, topic, parameters, appEvent) {
-        var publisherCategory = bzutils.getCache (componentReference, "componentCategory") ;
-        var publisherType = bzutils.getCache (componentReference, "componentType") ;
+        var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
         
-        var controller = bzutils.getCache (componentReference, "UserControllerComponentId") ;
-    
-        console.log("publisherCategory: " + publisherCategory );
-        console.log("publisherType: " + publisherType );
-        console.log("controller: " + controller );
-    
-        appEvent.setParams({
-            "topic" : topic,
-            "publisher" : componentReference,
-            "publisherCategory" : publisherCategory,
-            "publisherType" : publisherType,
-            "controller" : controller,
-            "parameters" : parameters
-        });
-        appEvent.fire();
+        if (d.depth == 1) {
+            bzchart.publishEvent(componentReference, "ChartMouseOut", publishParameters);
+        } 
+        else {
+            bzutils.publishEventFromCache(componentReference, "ChartMouseOver", publishParameters);    
+        }
+        console.log("bzctree.nodeMouseout exit");
     }
-            
+    
+
     exports.getNodeColor = getNodeColor;  
     exports.setColorCache = setColorCache;  
     exports.collapse = collapse;  
     exports.nodeMouseover = nodeMouseover;
-    exports.publishEvent = publishEvent;
+    exports.nodeMouseout = nodeMouseout;
 
     console.log("loaded: bzctree  IIFE");
 

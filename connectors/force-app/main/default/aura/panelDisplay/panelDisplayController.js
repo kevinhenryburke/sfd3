@@ -34,13 +34,22 @@
 
         if (topic == "ChartMouseOver")
         {
+
+            // Hiding and showing fields on mouseover, whilst a nice idea, calls all the nodes to bounce
+            // $A.util.removeClass(component.find("detailcardfields"), "slds-hide");
             var parameters = event.getParam("parameters");
+
 
             var displayData = parameters["data"];
             var displayParent = parameters["parent"];
 
-            var cardFields = JSON.parse(component.get("v.cardFields"));
-            var objectIcons = JSON.parse(component.get("v.objectIcons"));
+            var cardFieldsString = component.get("v.cardFields");
+            var objectIconsString = component.get("v.objectIcons");
+
+            console.log("cardFieldsString:" + cardFieldsString);
+
+            var cardFields = JSON.parse(cardFieldsString);
+            var objectIcons = JSON.parse(objectIconsString);
             // set a default display fields list
             var cardFieldsArray = ["data.name", "data.size", "parent.name"];
 
@@ -70,8 +79,19 @@
             component.set("v.card2", bzutils.parseCardParam(displayData, displayParent, cardFieldsArray[1] ));  
             component.set("v.card3", bzutils.parseCardParam(displayData, displayParent, cardFieldsArray[2] ));  
         }
-    },
 
+        if (topic == "ChartMouseOut")
+        {
+            bzutils.log("panelDisplay: ChartMouseOut");
+            // Hiding fields, whilst a nice idea, calls all the nodes to bounce
+            // setTimeout(function(){ 
+            //     console.log("details: hide " );
+            //     $A.util.addClass(component.find("detailcardfields"), "slds-hide");
+            // }, 3000);
+
+        }
+    },
+   
     navigateToRecord : function(component){
         var evtNav = $A.get("e.force:navigateToSObject");
         evtNav.setParams({
@@ -79,6 +99,21 @@
             "slideDevName": "detail"
         });
         evtNav.fire(); 
+     },
+
+     handleClose : function(component, event, helper) {
+        console.log("handleClose: enter");
+        var appEvent = $A.get("e.c:evt_sfd3");
+        appEvent.setParams({
+            "topic" : "CloseDisplayPanel",
+            "publisher" : component.get("v.hostUserControllerComponentId"), // pass the host component name back for an embedded component 
+        });
+        appEvent.fire();
+    
+        // destroy this component
+        component.destroy();
+
+        console.log("handleClose: exit");
      },
 
 })

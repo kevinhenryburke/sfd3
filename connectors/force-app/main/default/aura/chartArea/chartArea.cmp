@@ -39,7 +39,9 @@
   <aura:handler event="aura:doneRendering" action="{!c.doneRendering}"/>
 
   <lightning:overlayLibrary aura:id="overlayLib"/>
-
+  <aura:attribute name="modalPromise" type="Aura.Action"/>
+	<aura:attribute name="modalShown" type="Boolean" default="false"/>    
+  
   <!-- Methods with different implementations for different chart types -->  
 
   <aura:method name="refreshData"> 
@@ -97,7 +99,9 @@
 <!-- to pass in stuff from a sub component use {!v.body}  see https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/oo_cmp_attributes.htm   -->
 
 
-    <aura:if isTrue="{!v.Title != ''}">{!v.Title}</aura:if>       
+    <aura:if isTrue="{!v.Title != ''}">{!v.Title}</aura:if> 
+    <div aura:id="div1"/>
+      
       <div class="c-container">
           <lightning:layout horizontalAlign="space" verticalAlign="end">
               <lightning:layoutItem flexibility="grow" padding="around-small" size="12">
@@ -108,7 +112,7 @@
                 <div class="slds-is-absolute">
                   <div id="{!v.componentReference + 'pathToolTip'}" class="pathToolTip"></div>
                 </div>
-                <div id="{!v.chartAreaDivId}" class="chartarea"></div>
+                <div id="{!v.chartAreaDivId}" aura:id="{!v.chartAreaDivId}" class="chartarea"></div>
                   <!-- <div id="nodeToolTip" class="nodeToolTip"></div> -->
               </lightning:layoutItem>
             </lightning:layout>
