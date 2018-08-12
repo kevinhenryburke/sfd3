@@ -38,7 +38,7 @@
         // Collapse after the second level
         root.children.forEach(bzctree.collapse);
         bzutils.setCache (componentReference, "root", root ) ;
-        _this.update(nodeGroup, pathGroup, componentReference, root, false);
+        _this.update(component, nodeGroup, pathGroup, componentReference, root, false);
 
         // Push out an initial message to highlight the root node to display panels
         // Effecitvely can do this via a mouseover event on root.
@@ -49,13 +49,25 @@
 
     },
 
-    update : function(nodeGroup, pathGroup, componentReference, source, makeSourceRoot) {
+
+// SUPER TEMP
+// var csf = component.get("v.ChartScaleFactor");
+// if (csf == 1) {
+//     component.set("v.ChartScaleFactor", 0.5);
+// }
+// else {
+//     component.set("v.ChartScaleFactor", 1);
+// }
+       
+
+
+    update : function(component, nodeGroup, pathGroup, componentReference, source, makeSourceRoot) {
 		var _this = this;
         var nodes;
         var links;
         var duration = 250;
         var shortDuration = 250;
-        var fixedDepth = 180; // this may need to be a function of chart area depth?
+        var fixedDepth = _this.getFixedDepth(component); // this may need to be a function of chart area depth?
         
         var margin = bzutils.getCache (componentReference, "margin") ;  
         
@@ -150,10 +162,13 @@
             })
             .attr("dy", ".35em")
             .attr("x", function(d) {
-                return childLess(d) ? 13 : -13;
+                return childLess(d) ? _this.getTextOffset(component) : - _this.getTextOffset(component);
             })
             .attr("text-anchor", function(d) {
                 return childLess(d) ? "start" : "end";
+            })
+            .style("font", function(d) {
+                return _this.getFontSizePX(component) + "px sans-serif";
             })
             .text(function(d) { return d.data.name; });
       
@@ -170,7 +185,7 @@
       
         // Update the node attributes and style
         nodeUpdate.select('circle.treenode')
-          .attr('r', 10)
+          .attr('r', _this.getRadius(component))
           .style("fill", function(d) {
               // collapsed children are stored as d._children / expanded as d.children
             if(childLess(d)) {
@@ -186,7 +201,7 @@
                 return childLess(d);
             })
             .attr("x", function(d) {
-                return childLess(d) ? 13 : -13;
+                return childLess(d) ? _this.getTextOffset(component) : - _this.getTextOffset(component);
             })
             .attr("text-anchor", function(d) {
                 return childLess(d) ? "start" : "end";
@@ -277,26 +292,25 @@
               d.children = d._children;
               d._children = null;
             }
-            _this.update(nodeGroup, pathGroup, componentReference, d, false);
+            _this.update(component, nodeGroup, pathGroup, componentReference, d, false);
 		}
   
         function childLess(d) {
             return (typeof d._children == "undefined" || d._children == null) && (typeof d.children == "undefined" || d.children == null) ; 
         }
-        
 
-      },
+    },
 
-      setDepth : function (baseNode, baseNodeDepth) {
-        console.log("setDepth: " + baseNodeDepth);
-		var _this = this;
-        if(baseNode.children) {
-            baseNode.children.forEach(function(d) {
-                d.depth = baseNodeDepth + 1;
-                _this.setDepth(d,baseNodeDepth +1);            
-            });
-        }        
-      },
+    setDepth : function (baseNode, baseNodeDepth) {
+    console.log("setDepth: " + baseNodeDepth);
+    var _this = this;
+    if(baseNode.children) {
+        baseNode.children.forEach(function(d) {
+            d.depth = baseNodeDepth + 1;
+            _this.setDepth(d,baseNodeDepth +1);            
+        });
+    }        
+    },
 
     // A way to get the path to an object - this is independent of the search box
     // we can search by name or id (searchBy = "Name" or "Id")
@@ -459,5 +473,23 @@
         bzutils.log("merge exit");
     },    
 
+
+    /* Configuration number functions */
+
+    getFixedDepth : function(component) {
+        return Math.ceil(180 * component.get("v.ChartScaleFactor"));
+    },
+
+    getTextOffset : function(component) {
+        return Math.ceil(13 * component.get("v.ChartScaleFactor"));
+    },
+
+    getFontSizePX : function(component) {
+        return Math.ceil(12 * component.get("v.ChartScaleFactor"));
+    },    
+
+    getRadius : function(component) {
+        return Math.ceil(10 * component.get("v.ChartScaleFactor"));
+    },    
 
 })

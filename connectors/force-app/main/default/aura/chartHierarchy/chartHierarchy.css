@@ -4,9 +4,11 @@
   stroke-width: 3px;
 }
 
+/*
 .THIS .treenode text {
   font: 12px sans-serif;
 }
+*/
 
 .THIS .treelink {
   fill: none;
@@ -19,9 +21,6 @@
   width: 100%;
 }
 
-.THIS.popoutOuterDiv{
-	background-color:white;   
-}
 .THIS.popoverclass {
     min-height: 100px;
 }

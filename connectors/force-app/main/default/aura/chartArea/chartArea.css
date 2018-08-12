@@ -130,16 +130,3 @@
     stroke-opacity: .8;
   }
   
-.THIS.popoutOuterDiv{
-	background-color:white;   
-}
-.THIS.popoverclass {
-    min-height: 100px;
-}
- 
-.THIS.no-pointer .pointer{
-    visibility: hidden;
-}
-
-
-  

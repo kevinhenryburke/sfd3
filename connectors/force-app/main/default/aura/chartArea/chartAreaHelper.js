@@ -238,11 +238,6 @@
         var popx = width - 10;
         var popy = 200;
 
-console.log("WIDTH: " + width);
-// innerWidth is the full page, no good
-var lWidth = window.innerWidth ;//Get the window's width
-console.log("INNERWIDTH: " + lWidth);
-
         var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
         svg.selectAll('.symbol')
             .data(mdata)
@@ -251,7 +246,7 @@ console.log("INNERWIDTH: " + lWidth);
             .attr('transform',function(d,i) { return 'translate(' + popx + ',' + popy + ')';})
             .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[i];}) )
             .attr('id', function(d,i) { return "infolocation" + componentReference;})
-//            .attr('visibility', "hidden") // white background to hide
+            .attr('visibility', "hidden") // white background to hide
             .attr('class', function(d,i) { return "infolocation" + componentReference;});
 
         var referenceSelector = ".infolocation" + componentReference;
