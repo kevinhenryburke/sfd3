@@ -88,10 +88,10 @@
   <aura:attribute name="flexiWidth" type="String"/>
   <lightning:flexipageRegionInfo width="{!v.flexiWidth}"/>
 
-<!-- test stuff -->
-<aura:attribute name="popoverElementClass2" type="String" access="public"/>
-<aura:attribute name="oneortwo" type="Integer" default="1" access="public"/> 
-
+  <!-- Popover configuration -->
+	<aura:attribute name="allowPopover" type="Boolean" default="false"/>    
+  <aura:attribute name="objectIcons" type="String" default="{}"/>    
+  <aura:attribute name="cardFields" type="String" default="{}"/>    
 
   <body class="bodycontainer" style="background-color: white;">
 <!-- 8792 {!v.flexiWidth} {!v.chartAreaDivId} {!v.componentReference} {!v.UserComponentId} -->
@@ -100,9 +100,9 @@
 
 
     <aura:if isTrue="{!v.Title != ''}">{!v.Title}</aura:if> 
-    <div aura:id="div1"/>
+    <div id="div1" aura:id="div1"/>
       
-      <div class="c-container">
+      <div class="c-container" id="container1" aura:id="container1" >
           <lightning:layout horizontalAlign="space" verticalAlign="end">
               <lightning:layoutItem flexibility="grow" padding="around-small" size="12">
 <!--                 Mechanism for tooltips is based on https://bl.ocks.org/d3noob/257c360b3650b9f0a52dd8257d7a2d73

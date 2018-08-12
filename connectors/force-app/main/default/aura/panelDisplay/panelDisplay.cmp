@@ -22,8 +22,10 @@
 
     <aura:attribute name="recordId" type="String" default=""/>    
     <aura:attribute name="iconName" type="String" default="standard:account"/>    
-    <aura:attribute name="hostUserControllerComponentId" type="String" default="If this component is embedded in another, this is the name of the host"/>    
- 
+    <aura:attribute name="hostUserControllerComponentId" type="String" default="" description="If this component is embedded in a chart, this is the controller of the host"/>    
+    <aura:attribute name="hostComponentReference" type="String" default="" description="If this component is embedded in a chart, this is the name of the host"/>    
+    <aura:attribute name="isHosted" type="Boolean" default="false" description="If this component is embedded in a chart, then this is set to true"/>    
+        
     <div class="slds">
     
     <aura:if isTrue="{!v.layoutStyle == 'card'}"> 

@@ -1338,17 +1338,19 @@ function update() {
     
         var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
         
-        if (d.depth == 1) {
+        if (d.depth <= 1) { // root or first level
             bzchart.publishEvent(componentReference, "ChartMouseOver", publishParameters);
 
             // reset cache of events for mouseover events to publish - may be a better way to do this!
             // the issue is that only the top orginally created nodes have lightning context, not sure why
             // alternative would be to pass in a parameter for these nodes and push events only when the attribute is set
             var appEvents = [];
-            for (var i = 0; i < 100; i++) {
-                appEvents.push($A.get("e.c:evt_sfd3"));
+            if (appEvents.length < 500) { // keep a cap on number of cached events
+                for (var i = 0; i < 100; i++) {
+                    appEvents.push($A.get("e.c:evt_sfd3"));
+                }
+                bzutils.setCache (componentReference, "appEvents",  appEvents) ;
             }
-            bzutils.setCache (componentReference, "appEvents",  appEvents) ;
         } 
         else {
             bzutils.publishEventFromCache(componentReference, "ChartMouseOver", publishParameters);    

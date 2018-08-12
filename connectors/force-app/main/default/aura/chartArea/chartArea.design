@@ -10,5 +10,10 @@
     <design:attribute name="showPathToolTip" default="true" label="Show Path ToolTip" description="set to true if tooltips should show when a user mouses over a path"/>    
     <design:attribute name="nodestrokewidth" default="0.5px" label="Node Stroke Width" description="Width of border line around a node in pixels - format is Npx where N is decimal - default is 0.5px"/>    
     <design:attribute name="showLevelsInitial" default="1" label="Initial Connection Levels" description="Initial number of connection levels to show - default is 1"/>    
-    <design:attribute name="Title" default="1" label="Title Text" description=""/>        
+    <design:attribute name="Title" default="" label="Title Text" description=""/>        
+
+    <design:attribute name="allowPopover" default="false" label="Embed Info Panel" description="Select if you want an embeddable floating info panel "/>        
+    <design:attribute name="cardFields" default="" label="Card Fields" description=""/>        
+    <design:attribute name="objectIcons" default="" label="Object Icons" description=""/>        
+  
 </design:component>

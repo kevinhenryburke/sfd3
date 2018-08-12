@@ -187,24 +187,22 @@
         if (topic == "CloseDisplayPanel")
         {      
             console.log("chartArea: CloseDisplayPanel received by Chart : " + componentReference );
-            var modalPromise = component.get("v.modalPromise");
 
-            if (modalPromise != null ) {
-                modalPromise.then(function (overlay) {
-                    overlay.hide();   
-                });
+            var allowPopover = component.get("v.allowPopover");
+
+            if (allowPopover == true) {
+                var modalPromise = component.get("v.modalPromise");
+
+                if (modalPromise != null ) {
+                    modalPromise.then(function (overlay) {
+                        overlay.hide();   
+                    });
+                }
             }
         } 
         if (topic == "ChartMouseOver")
         {
             bzutils.log("chartArea: ChartMouseOver received by Chart: " + componentReference + "/" + parameters["componentReference"]);
-
-            var parameters = event.getParam("parameters");
-            var displayData = parameters["data"];
-            var displayParent = parameters["parent"];
-
-            helper.mousePopD(component, displayData, displayParent);
-
         }
 
 

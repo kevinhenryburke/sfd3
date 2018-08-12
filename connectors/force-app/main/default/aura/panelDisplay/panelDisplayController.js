@@ -7,16 +7,28 @@
     },
 
 
+    /* handle_evt_sfd3
+    Logic for accepting messages:
+
+    1. If it was created by a controller then reject, this is for responding to chart events
+    2. If it is a separate component on an App Builder page we ensure that the message was created by a component 
+    (potentially another chart) which has the same controller as this chart
+    3. If the panel is embedded in a chart then check that the message was published by the self-same chart
+
+    */
+
     handle_evt_sfd3  : function(component, event, helper) {
         var _this = this;
         var topic = event.getParam("topic");
-        bzutils.log("topic: " + topic);
 
         var publisher = event.getParam("publisher");
         var publisherCategory = event.getParam("publisherCategory");
         var publisherType = event.getParam("publisherType");
         var RelatedControllerId = component.get("v.Controller");
         var controller = event.getParam("controller");
+
+        var isHosted = component.get("v.isHosted");
+
 
         // if the event is propagated from a controller then we ignore it as this displays cards for charts
         if (publisherCategory == "Controller") {
@@ -25,10 +37,23 @@
         }
 
         // if the component is named and the event propagated from a chart controlled by a controller with another name then we ignore it.
-        if (publisherCategory == "Display" && RelatedControllerId != null && RelatedControllerId != ""  && controller != null && controller != "") {
+        if (isHosted == false && publisherCategory == "Display" && RelatedControllerId != null && RelatedControllerId != ""  && controller != null && controller != "") {
             if (RelatedControllerId != controller) {
                 bzutils.log("controller: ignoring message for card related to " + RelatedControllerId + " intended for component " + controller);
                 return;
+            }
+        }
+
+        // if the component is hosted then we check that the incoming message was published by the same component that created the component
+        if (isHosted == true) {
+            bzutils.log("hosted clause: topic: " + topic + " received from publisher: " + publisher + " layoutStyle: " + component.get("v.layoutStyle") + " hostUserControllerComponentId: " + component.get("v.hostUserControllerComponentId"));
+            var hostComponentReference = component.get("v.hostComponentReference");
+            if (hostComponentReference != publisher) {
+                bzutils.log("hosted: ignoring message for card created by " + hostComponentReference + " published by " + publisher);
+                return;
+            } 
+            else {
+                bzutils.log("hosted: accepted message for card created by " + hostComponentReference + " published by " + publisher);
             }
         }
 
@@ -38,7 +63,6 @@
             // Hiding and showing fields on mouseover, whilst a nice idea, calls all the nodes to bounce
             // $A.util.removeClass(component.find("detailcardfields"), "slds-hide");
             var parameters = event.getParam("parameters");
-
 
             var displayData = parameters["data"];
             var displayParent = parameters["parent"];

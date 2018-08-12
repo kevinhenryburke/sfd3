@@ -30,8 +30,18 @@
         bzutils.setCache (componentReference, "height", Math.min(screen.width, screen.height)) ; // review this
 
 		var margin = {top: 20, right: 90, bottom: 30, left: 90}; // this should probably be flexi-ed too
-		bzutils.setCache (componentReference, "margin", margin) ;  
+        bzutils.setCache (componentReference, "margin", margin) ;  
+        
+        // Differing strategies for computing Width and Height
+        // Width depends on width of the container
 
+        var divComponent = component.find("container1"); // this should be ok as it's an internal search, need to prefix with a unique id is required outside of lightning context
+        var divElement = divComponent.getElement();
+        var clientWidth = divElement.clientWidth;        
+        console.log("chartArea: set width: " + clientWidth);
+        bzutils.setCache (componentReference, "width", clientWidth) ; 
+
+        // Height we hard code depending on the flexible page width 
         var flexiWidth = component.get("v.flexiWidth");
         console.log("flexiWidth: " + flexiWidth);
 
@@ -43,23 +53,17 @@
 
         if (flexiWidth == "SMALL")
         {
-            // need to check all the numbers here
-            bzutils.setCache (componentReference, "width", 420) ; 
             bzutils.setCache (componentReference, "height", 800) ;                 
         }
 
         if (flexiWidth == "MEDIUM")
         {
-            // need to check all the numbers here
-            bzutils.setCache (componentReference, "width", 600) ; 
             bzutils.setCache (componentReference, "height", 800) ;                 
         }
 
         if (flexiWidth == "LARGE")
         {
-            // need to check all the numbers here
-            bzutils.setCache (componentReference, "width", 1000) ; 
-            bzutils.setCache (componentReference, "height", 800) ;                 
+            bzutils.setCache (componentReference, "height", 1000) ;                 
         }
         
         d3.select(bzutils.getDivId("chartArea", componentReference, true))
@@ -67,6 +71,7 @@
             .attr("id", bzutils.getDivId("svg", componentReference, false)) // If putting more than one chart on a page we need to provide unique ids for the svg elements   
             .attr("width", bzutils.getCache (componentReference, "width") )
             .attr("height", bzutils.getCache (componentReference, "height") );
+
 
         var agent = navigator.userAgent.toLowerCase();
         if(agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0){
@@ -214,65 +219,71 @@
         }
         bzutils.setCache (componentReference, "textGroup", textGroup ) ;
 
+        var allowPopover = component.get("v.allowPopover");
 
-        // TEMP
-
-        // TODO we need to have a delaying mechanism here to make sure we have a defined location before we attach the component to the overlay
-
-       _this.createInfoLocation(component);
-
-       _this.createPopOverComponent(component);
+        if (allowPopover == true) {
+            _this.createInfoLocation(component);
+            _this.createPopOverComponent(component);
+        }
 
     },
 
+    // create an invisible svg symbol to attach a popover to
     createInfoLocation : function (component) {
         var componentReference = component.get("v.componentReference");
 
-        var mdata = [0];
+        var mdata = [0]; // random data value, not used
 
         var width = bzutils.getCache (componentReference, "width");
         var popx = width - 10;
         var popy = 200;
 
+console.log("WIDTH: " + width);
+// innerWidth is the full page, no good
+var lWidth = window.innerWidth ;//Get the window's width
+console.log("INNERWIDTH: " + lWidth);
+
         var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
         svg.selectAll('.symbol')
-        .data(mdata)
-        .enter()
-        .append('path')
-        .attr('transform',function(d,i) { return 'translate(' + popx + ',' + popy + ')';})
-        .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[i];}) )
-        .attr('id', function(d,i) { return "infolocation" + componentReference;})
-        .attr('visibility', "hidden") // white background to hide
-        .attr('class', function(d,i) { return "infolocation" + componentReference;});
+            .data(mdata)
+            .enter()
+            .append('path')
+            .attr('transform',function(d,i) { return 'translate(' + popx + ',' + popy + ')';})
+            .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[i];}) )
+            .attr('id', function(d,i) { return "infolocation" + componentReference;})
+//            .attr('visibility', "hidden") // white background to hide
+            .attr('class', function(d,i) { return "infolocation" + componentReference;});
 
         var referenceSelector = ".infolocation" + componentReference;
 
         bzutils.setCache (componentReference, "referenceSelector", referenceSelector ) ;
     },
 
-
+    // creates an informational popover
     createPopOverComponent : function (component) {
         // check if we have an overlay library
         var overlayLibElement = component.find('overlayLib');
         if (overlayLibElement != null) {
 
             var componentReference = component.get("v.componentReference");
+            var cardFields = component.get("v.cardFields");
+            var objectIcons = component.get("v.objectIcons");
 
             $A.createComponent(
                 "c:panelDisplay",
                 {
                     "Controller" : "Top",
-                    "cardFields" : JSON.stringify({"Account" : ["data.name", "data.size", "parent.name"]}),
-                    "objectIcons" : JSON.stringify({"Account" :"standard:account" , "Opportunity" : "standard:opportunity"}),
+                    "cardFields" : cardFields,
+                    "objectIcons" : objectIcons,
                     "layoutStyle" : "cardTile",
+                    "isHosted" : true,
+                    "hostComponentReference" : componentReference,
                     "hostUserControllerComponentId" : component.get("v.UserControllerComponentId")
                 },
                 function(content, status, errorMessage){
                     //Add the new button to the body array
                     var referenceSelector = bzutils.getCache (componentReference, "referenceSelector");
-
                     console.log("createPopOverComponent: createComponent callback: " + referenceSelector);
-                    console.log("createPopOverComponent: createComponent callback: " + component.find('overlayLib'));
                     if (status === "SUCCESS") {
                         console.log("createPopOverComponent: createComponent callback: SUCCESS: " );
 
@@ -290,7 +301,6 @@
                     }
                     else {
                         console.log("createPopOverComponent: createComponent callback: Error: " + errorMessage);
-                        // Show error message
                     }
                 }
             );
@@ -321,33 +331,6 @@
         }
         return hash;
     },    
-
-    // TODO NEED TO PASS IN PARAMETERS APLENTY
-    mousePopD: function (component, displayData, displayParent) {  
-        console.log("mousePopD: enter");
-        var componentReference = component.get("v.componentReference");
-
-        var popId = bzutils.parseCardParam(displayData, displayParent, "data.id" );
-        var crPopId = componentReference + popId;
-//        var referenceSelector = "." + crPopId;
-        console.log("crPopId: " + crPopId);
-
-
-
-    },
-
-
-// TODO here's the d3 nodes .... all in a line ... not proper code!
-/*
-var mdata = [0,1,2,3,4,5,6];
-
-svg.selectAll('.symbol')
-   .data(mdata)
-   .enter()
-   .append('path')
-   .attr('transform',function(d,i) { return 'translate('+(i*20+20)+','+30+')';})
-   .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[i];}) );
-*/
 
 })
 
