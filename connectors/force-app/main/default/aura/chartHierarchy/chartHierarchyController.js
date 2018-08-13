@@ -29,6 +29,22 @@
 
     },
 
+    reScale: function(component,event,helper){
+        console.log("reScale: enter");
+        var args = event.getParam("arguments");
+        console.log("reScale: ChartScaleFactor: " + args.ChartScaleFactor);
+
+        var componentReference = component.get("v.componentReference");
+        var nodeGroup = bzutils.getCache (componentReference, "nodeGroup") ;  
+        var pathGroup = bzutils.getCache (componentReference, "pathGroup") ;  
+        var root = bzutils.getCache (componentReference, "root") ;
+
+        helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
+
+        console.log("reScale: exit");
+    },
+        
+
     searchChart: function(component,event,helper){
         console.log("calling the aura:method searchChart in subcomponent");
         var args = event.getParam("arguments");

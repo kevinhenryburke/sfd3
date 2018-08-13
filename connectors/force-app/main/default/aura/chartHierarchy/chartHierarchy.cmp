@@ -13,12 +13,17 @@
         <aura:attribute name="searchTermId" type="String"/> 
         <aura:attribute name="searchAction" type="String"/> 
         <aura:attribute name="showLevels" type="Integer"/> 
-    </aura:method>              
+    </aura:method>       
+
+    <aura:method name="reScale"> 
+        <aura:attribute name="ChartScaleFactor" type="Decimal"/> 
+    </aura:method>            
 
     <aura:attribute name="clearHighlightedPaths" type="Boolean" default="true" description="Determines if the chart has a primary node"/>    
     <aura:attribute name="LeafColors" type="String" default="{&quot;values&quot; : [0], &quot;colors&quot; : [&quot;white&quot;]}" description="Determines the color of a leaf node"/>    
     <aura:attribute name="ParentColors" type="String" default="{&quot;values&quot; : [0], &quot;colors&quot; : [&quot;lightsteelblue&quot; ]}" description="Determines the color of parent node"/>    
 
     <aura:attribute name="ChartScaleFactor" type="Decimal" default="1" description="Scale Factor for chart display. Defaults to 1"/>    
+
 
 </aura:component>

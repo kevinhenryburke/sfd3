@@ -79,6 +79,24 @@
     searchChart: function(component,event,helper){
         bzutils.log("calling the aura:method searchChart in base");        
     },
+
+    handleScaleChange: function(component,event,helper){
+        bzutils.log("reScaleOnClick 3 enter");        
+
+        var csfp = component.get("v.ChartScaleFactorPercentage");
+        var csf = parseFloat(csfp / 100); // ensure js knows it's a decimal
+        component.set("v.ChartScaleFactor", csf);
+
+        bzutils.log("reScaleOnClick: " + csf);       
+        
+        var cc = component.getConcreteComponent();
+        cc.reScale(csf);                 
+    },
+
+    searchChart: function(component,event,helper){
+        bzutils.log("calling the aura:method reScale in base");        
+    },
+
     
     handle_evt_sfd3  : function(component, event, helper) {
         bzutils.log('chartArea: handle_evt_sfd3 enter');

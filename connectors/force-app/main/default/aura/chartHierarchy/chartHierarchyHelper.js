@@ -49,18 +49,6 @@
 
     },
 
-
-// SUPER TEMP
-// var csf = component.get("v.ChartScaleFactor");
-// if (csf == 1) {
-//     component.set("v.ChartScaleFactor", 0.5);
-// }
-// else {
-//     component.set("v.ChartScaleFactor", 1);
-// }
-       
-
-
     update : function(component, nodeGroup, pathGroup, componentReference, source, makeSourceRoot) {
 		var _this = this;
         var nodes;
@@ -205,6 +193,9 @@
             })
             .attr("text-anchor", function(d) {
                 return childLess(d) ? "start" : "end";
+            })
+            .style("font", function(d) {
+                return _this.getFontSizePX(component) + "px sans-serif";
             });
         
         // Remove any exiting nodes

@@ -7,5 +7,9 @@
         <aura:attribute name="searchAction" type="String"/> 
         <aura:attribute name="showLevels" type="Integer"/> 
     </aura:method>              
-        
+
+    <aura:method name="reScale"> 
+        <aura:attribute name="ChartScaleFactor" type="Decimal"/> 
+    </aura:method>
+            
 </aura:component>

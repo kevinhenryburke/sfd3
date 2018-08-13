@@ -57,6 +57,10 @@
     <aura:attribute name="showLevels" type="Integer"/> 
   </aura:method>
 
+  <aura:method name="reScale"> 
+    <aura:attribute name="ChartScaleFactor" type="Decimal"/> 
+  </aura:method>
+
   <aura:method name="initializeVisuals"/> 
 
   <!-- Design Paramters -->  
@@ -93,6 +97,10 @@
   <aura:attribute name="objectIcons" type="String" default="{}"/>    
   <aura:attribute name="cardFields" type="String" default="{}"/>    
 
+  <!-- Slider configuration -->
+  <aura:attribute name="ChartScaleFactorPercentage" type="Integer" default="100"/> 
+
+
   <body class="bodycontainer" style="background-color: white;">
 <!-- 8792 {!v.flexiWidth} {!v.chartAreaDivId} {!v.componentReference} {!v.UserComponentId} -->
 
@@ -100,7 +108,9 @@
 
 
     <aura:if isTrue="{!v.Title != ''}">{!v.Title}</aura:if> 
-    <div id="div1" aura:id="div1"/>
+    <div id="div1" aura:id="div1">
+        <lightning:slider size="small" step="25" min="50" max="125" value="{!v.ChartScaleFactorPercentage}" variant="label-hidden" onchange="{! c.handleScaleChange }"/>
+    </div>
       
       <div class="c-container" id="container1" aura:id="container1" >
           <lightning:layout horizontalAlign="space" verticalAlign="end">
