@@ -33,6 +33,7 @@
         console.log("reScale: enter");
         var args = event.getParam("arguments");
         console.log("reScale: ChartScaleFactor: " + args.ChartScaleFactor);
+        component.set("v.ChartScaleFactor", args.ChartScaleFactor);
 
         var componentReference = component.get("v.componentReference");
         var nodeGroup = bzutils.getCache (componentReference, "nodeGroup") ;  

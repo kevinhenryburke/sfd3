@@ -109,7 +109,8 @@
 
     <aura:if isTrue="{!v.Title != ''}">{!v.Title}</aura:if> 
     <div id="div1" aura:id="div1">
-        <lightning:slider size="small" step="25" min="50" max="125" value="{!v.ChartScaleFactorPercentage}" variant="label-hidden" onchange="{! c.handleScaleChange }"/>
+        <!-- hide label via variant="label-hidden" -->
+        <lightning:slider size="small" label="Zoom" step="10" min="50" max="120" value="{!v.ChartScaleFactorPercentage}" onchange="{! c.handleScaleChange }"/>
     </div>
       
       <div class="c-container" id="container1" aura:id="container1" >

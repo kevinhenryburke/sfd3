@@ -81,16 +81,21 @@
     },
 
     handleScaleChange: function(component,event,helper){
-        bzutils.log("reScaleOnClick 3 enter");        
+        bzutils.log("handleScaleChange enter.");        
+        var componentReference = component.get("v.componentReference");
 
         var csfp = component.get("v.ChartScaleFactorPercentage");
         var csf = parseFloat(csfp / 100); // ensure js knows it's a decimal
-        component.set("v.ChartScaleFactor", csf);
 
-        bzutils.log("reScaleOnClick: " + csf);       
-        
-        var cc = component.getConcreteComponent();
-        cc.reScale(csf);                 
+        var eventParameters = { 
+            "componentReference" : componentReference,
+            "ChartScaleFactor" : csf
+        }    
+        bzchart.publishEvent(componentReference, "ReScale", eventParameters);
+
+
+//        helper.handleScaleChange(component,csf);
+        bzutils.log("handleScaleChange exit.");        
     },
 
     searchChart: function(component,event,helper){
@@ -222,6 +227,24 @@
         {
             bzutils.log("chartArea: ChartMouseOver received by Chart: " + componentReference + "/" + parameters["componentReference"]);
         }
+        if (topic == "ReScale")
+        {
+            bzutils.log("chartArea: ReScale received by Chart: " + componentReference + "/" + parameters["componentReference"]);
+
+            var csfStored = component.get("v.ChartScaleFactor");
+
+            if (csf != csfStored) {
+                var csf = parameters["ChartScaleFactor"];
+                // make sure the percentage parameter is in sync - required by slider to be an integer
+                var csfp = csf * 100;
+                component.set("v.ChartScaleFactorPercentage", csfp);
+
+                helper.handleScaleChange(component,csf);
+            }
+        }
+
+
+
 
 
         bzutils.log('chartArea: handle_evt_sfd3 exit');

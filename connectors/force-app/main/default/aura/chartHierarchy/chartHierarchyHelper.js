@@ -82,7 +82,19 @@
         links = treeMappedData.descendants().slice(1);
       
         // Normalize for fixed-depth.
-        nodes.forEach(function(d){ d.y = margin.left + (d.depth * fixedDepth)});
+        nodes.forEach(function(d){ 
+            d.y = margin.left + (d.depth * fixedDepth);
+
+            // workout the maximum depth in the chart so we can perform any necessary resizing
+            if (!bzutils.hasCache (componentReference, "maxDepth")) {
+                bzutils.setCache (componentReference, "maxDepth", 0) ;
+            }
+            var maxDepth = bzutils.getCache (componentReference, "maxDepth") ;
+            if (d.depth > maxDepth) {
+                bzutils.setCache (componentReference, "maxDepth", d.depth) ;
+                console.log("maxDepth: " + bzutils.getCache (componentReference, "maxDepth") );
+            }
+        });
       
         // ****************** Nodes section ***************************
       
@@ -276,18 +288,33 @@
       
         // Toggle children on click.
         function click(d) {
-          if (d.children) {
-              d._children = d.children;
-              d.children = null;
+            if (d.children) {
+                d._children = d.children;
+                d.children = null;
             } else {
-              d.children = d._children;
-              d._children = null;
+                d.children = d._children;
+                d._children = null;
             }
             _this.update(component, nodeGroup, pathGroup, componentReference, d, false);
 		}
   
         function childLess(d) {
             return (typeof d._children == "undefined" || d._children == null) && (typeof d.children == "undefined" || d.children == null) ; 
+        }
+
+        // finally auto-resize the chart if the bottom nodes are encroaching on the end
+        var maxDepth = bzutils.getCache (componentReference, "maxDepth") ;
+        var maxHorizontal = margin.left + (maxDepth * fixedDepth);
+		var width = bzutils.getCache (componentReference, "width") ;  
+
+        if (width - maxHorizontal < 100) {
+            var csf = component.get("v.ChartScaleFactor");
+            var newcsf = csf - 0.1;
+            var eventParameters = { 
+                "componentReference" : componentReference,
+                "ChartScaleFactor" : newcsf
+            }    
+            bzutils.publishEventFromCache(componentReference, "ReScale", eventParameters);
         }
 
     },

@@ -62,7 +62,7 @@
                     <lightning:layoutItem flexibility="auto" padding="around-small">
                             <ul class="slds-has-dividers_around-space">
                                 <li class="slds-item">
-                                    <lightning:tile label="Anypoint Connectors" href="/path/to/somewhere" class="slds-tile_board">
+                                    <lightning:tile label="Anypoint Corporation" href="/path/to/somewhere" class="slds-tile_board">
                                         <p class="slds-text-heading_medium">$50,000</p>
                                         <p class="slds-truncate" title="Company One"><a href="#">Company One</a></p>
                                         <p class="slds-truncate">Closing 9/30/2015</p>
@@ -70,6 +70,15 @@
                                 </li>
                             </ul>
                     </lightning:layoutItem>
+                    <force:recordView recordId="0017E00000wL7LaQAK" type="MINI"/>
+
+                    <lightning:recordViewForm recordId="0017E00000wL7LaQAK" objectApiName="Account">
+                            <div class="slds-box">
+                                <lightning:outputField fieldName="Name" />
+                                <lightning:outputField fieldName="Website" />
+                            </div>
+                        </lightning:recordViewForm>                    
+
                 </lightning:layout>
             </div>
         </lightning:card>  

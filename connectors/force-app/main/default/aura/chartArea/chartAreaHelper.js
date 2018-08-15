@@ -302,6 +302,13 @@
         }
     },
 
+    handleScaleChange: function(component,csf){
+        bzutils.log("helper: handleScaleChange enter");
+        component.set("v.ChartScaleFactor", csf);
+        var cc = component.getConcreteComponent();
+        cc.reScale(csf);                 
+    },
+
 
     // console.log("PreProcess data");
     // datajson = bzutils.xfcr("dataPreProcess", componentReference, datajson); // preprocessing of data (if any)
