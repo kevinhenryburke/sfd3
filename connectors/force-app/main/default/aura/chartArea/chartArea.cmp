@@ -76,6 +76,7 @@
   <aura:attribute name="showLevelsInitial" type="Integer" default="1"/>   
   <aura:attribute name="Title" type="String" default=""/>       
   <aura:attribute name="componentType" type="String" default="Chart"/>    
+  <aura:attribute name="showZoomSlider" type="Boolean" default="false"/>    
   
   <!-- Technical - Chart -->
   <!-- need to accessed or set before all libraries may be available -->
@@ -108,10 +109,13 @@
 
 
     <aura:if isTrue="{!v.Title != ''}">{!v.Title}</aura:if> 
-    <div id="div1" aura:id="div1">
-        <!-- hide label via variant="label-hidden" -->
-        <lightning:slider size="small" label="Zoom" step="10" min="50" max="120" value="{!v.ChartScaleFactorPercentage}" onchange="{! c.handleScaleChange }"/>
-    </div>
+
+    <aura:if isTrue="{!v.showZoomSlider == true}">
+      <div class="slds-m-left_large">
+          <!-- hide label via variant="label-hidden" -->
+          <lightning:slider size="small" label="Zoom" variant="label-hidden" step="10" min="50" max="120" value="{!v.ChartScaleFactorPercentage}" onchange="{! c.handleScaleChange }"/>
+      </div>
+    </aura:if>
       
       <div class="c-container" id="container1" aura:id="container1" >
           <lightning:layout horizontalAlign="space" verticalAlign="end">
