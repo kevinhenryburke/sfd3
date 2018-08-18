@@ -60,10 +60,16 @@
                     component.set("v.levelsIncreaseOnly", configjson.levelsIncreaseOnly);                    
                     component.set("v.levelsIncreaseDecrease", ! configjson.levelsIncreaseOnly);                    
                 }
+                if (key == "autoIncreaseLevels") {
+                    component.set("v.autoIncreaseLevels", true);                    
+                }
+
                 // this is a developer setting to allow some group of test buttons to display
                 if (key == "showtestbuttons") {
                     component.set("v.configuredShowTestButtons", true);                    
                 }
+
+                
 
                 // this may be required if we need to go down another level in the future.
                 console.log("here is a subObj layer 1: " + JSON.stringify(subObj));

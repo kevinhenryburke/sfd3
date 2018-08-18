@@ -3,16 +3,58 @@
     <flexiPageRegions>
         <componentInstances>
             <componentInstanceProperties>
+                <name>collapsed</name>
+                <value>false</value>
+            </componentInstanceProperties>
+            <componentName>force:highlightsPanel</componentName>
+        </componentInstances>
+        <mode>Replace</mode>
+        <name>header</name>
+        <type>Region</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <componentInstances>
+            <componentName>cooper:companyInsightTeaserCard</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentName>runtime_sales_merge:mergeCandidatesPreviewCard</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentName>force:relatedListContainer</componentName>
+        </componentInstances>
+        <mode>Replace</mode>
+        <name>relatedTabContent</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <componentInstances>
+            <componentName>force:detailPanel</componentName>
+        </componentInstances>
+        <mode>Replace</mode>
+        <name>detailTabContent</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <componentInstances>
+            <componentName>runtime_sales_social:socialPanel</componentName>
+        </componentInstances>
+        <mode>Replace</mode>
+        <name>newsTabContent</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <componentInstances>
+            <componentInstanceProperties>
                 <name>Title</name>
                 <value>Collapsible Tree</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
-                <value>Top</value>
+                <value>TopAccount</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>configjsonString</name>
-                <value>{&quot;showtestbuttons&quot;:true, &quot;levels&quot;:5, &quot;levelsIncreaseOnly&quot;:true, &quot;autoIncreaseLevels&quot;:true}</value>
+                <value>{&quot;showtestbuttons&quot;:true, &quot;levels&quot;:5, &quot;levelsIncreaseOnly&quot;:true}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>configuredAllowSearch</name>
@@ -51,7 +93,7 @@
         <componentInstances>
             <componentInstanceProperties>
                 <name>Controller</name>
-                <value>Top</value>
+                <value>TopAccount</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>cardFields</name>
@@ -74,14 +116,15 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>Title</name>
+                <value>Hierarchy</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
-                <value>Bottom</value>
+                <value>BottomAccount</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserControllerComponentId</name>
-                <value>Top</value>
+                <value>TopAccount</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>allowPopover</name>
@@ -93,7 +136,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>clearHighlightedPaths</name>
-                <value>true</value>
+                <value>false</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>componentType</name>
@@ -135,18 +178,140 @@
                 <name>showPathToolTip</name>
                 <value>true</value>
             </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>showZoomSlider</name>
-                <value>false</value>
-            </componentInstanceProperties>
             <componentName>chartHierarchy</componentName>
         </componentInstances>
+        <name>Facet-c4b8d061-fb18-4153-86a9-c6e0de44b86a</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>active</name>
+                <value>true</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>body</name>
+                <value>relatedTabContent</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>title</name>
+                <value>Standard.Tab.relatedLists</value>
+            </componentInstanceProperties>
+            <componentName>flexipage:tab</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>body</name>
+                <value>detailTabContent</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>title</name>
+                <value>Standard.Tab.detail</value>
+            </componentInstanceProperties>
+            <componentName>flexipage:tab</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>body</name>
+                <value>newsTabContent</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>title</name>
+                <value>Standard.Tab.news</value>
+            </componentInstanceProperties>
+            <componentName>flexipage:tab</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>body</name>
+                <value>Facet-c4b8d061-fb18-4153-86a9-c6e0de44b86a</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>title</name>
+                <value>Hierarchy</value>
+            </componentInstanceProperties>
+            <componentName>flexipage:tab</componentName>
+        </componentInstances>
+        <mode>Replace</mode>
+        <name>maintabs</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>tabs</name>
+                <value>maintabs</value>
+            </componentInstanceProperties>
+            <componentName>flexipage:tabset</componentName>
+        </componentInstances>
+        <mode>Replace</mode>
         <name>main</name>
         <type>Region</type>
     </flexiPageRegions>
-    <masterLabel>D3 CTree</masterLabel>
+    <flexiPageRegions>
+        <componentInstances>
+            <componentName>runtime_sales_activities:activityPanel</componentName>
+        </componentInstances>
+        <mode>Replace</mode>
+        <name>activityTabContent</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <componentInstances>
+            <componentName>forceChatter:recordFeedContainer</componentName>
+        </componentInstances>
+        <mode>Replace</mode>
+        <name>feedTabContent</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>active</name>
+                <value>true</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>body</name>
+                <value>activityTabContent</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>title</name>
+                <value>Standard.Tab.activity</value>
+            </componentInstanceProperties>
+            <componentName>flexipage:tab</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>body</name>
+                <value>feedTabContent</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>title</name>
+                <value>Standard.Tab.collaborate</value>
+            </componentInstanceProperties>
+            <componentName>flexipage:tab</componentName>
+        </componentInstances>
+        <mode>Replace</mode>
+        <name>sidebartabs</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>tabs</name>
+                <value>sidebartabs</value>
+            </componentInstanceProperties>
+            <componentName>flexipage:tabset</componentName>
+        </componentInstances>
+        <mode>Replace</mode>
+        <name>sidebar</name>
+        <type>Region</type>
+    </flexiPageRegions>
+    <masterLabel>Account Record Page</masterLabel>
+    <parentFlexiPage>sfa__Account_rec_L</parentFlexiPage>
+    <sobjectType>Account</sobjectType>
     <template>
-        <name>flexipage:defaultAppHomeTemplate</name>
+        <name>flexipage:recordHomeTemplateDesktop</name>
     </template>
-    <type>AppPage</type>
+    <type>RecordPage</type>
 </FlexiPage>

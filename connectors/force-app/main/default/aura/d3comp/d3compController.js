@@ -192,6 +192,30 @@
             }
         
         }
+        if (topic == "InitializeData")
+        {
+            console.log("InitializeData received by Controller: " + UserComponentId);
+            var autoIncreaseLevels = component.get("v.autoIncreaseLevels");
+            if (autoIncreaseLevels == true) {
+                console.log("auto increasing levels");
+                var canIncreaseLevels = helper.canIncreaseLevels(component);
+                if (canIncreaseLevels) { // if is not strictly necessary as event is disabling the button but keep for now
+                    helper.refreshOneTime(component, event);
+                }
+            }
+        }
+        if (topic == "RefreshData")
+        {
+            console.log("RefreshData received by Controller: " + UserComponentId);
+            var autoIncreaseLevels = component.get("v.autoIncreaseLevels");
+            if (autoIncreaseLevels == true) {
+                console.log("auto increasing levels");
+                var canIncreaseLevels = helper.canIncreaseLevels(component);
+                if (canIncreaseLevels) { // if is not strictly necessary as event is disabling the button but keep for now
+                    helper.refreshOneTime(component, event);
+                }
+            }            
+        }
         if (topic == "ShowLevelsMore")
         {
             helper.setConnectionLevelMoreButtons(component);

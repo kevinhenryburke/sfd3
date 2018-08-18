@@ -60,6 +60,7 @@
   <!-- Technical - Query -->
   <aura:attribute name="levelsIncreaseOnly" type="Boolean" default="false"/> 
   <aura:attribute name="levelsIncreaseDecrease" type="Boolean" default="true"/> 
+  <aura:attribute name="autoIncreaseLevels" type="Boolean" default="false"/> 
   <aura:attribute name="queryLevels" type="Object[]" default="[]"/> 
   <aura:attribute name="queryLevelIds" type="Object[]" default="[]"/> 
   
