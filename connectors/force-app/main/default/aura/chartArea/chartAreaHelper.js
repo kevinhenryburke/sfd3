@@ -5,7 +5,7 @@
         var _this = this;
         console.log("chartArea: doneRenderLoad enter");
         var componentReference = component.get("v.componentReference");
-        console.log("chartArea: componentReference:" + componentReference);
+        console.log("chartArea: doneRenderLoad: componentReference:" + componentReference);
 
         bzutils.initializeCache (componentReference) ;
 
@@ -72,6 +72,7 @@
             .attr("width", bzutils.getCache (componentReference, "width") )
             .attr("height", bzutils.getCache (componentReference, "height") );
 
+        console.log("chartArea: svg attached ");
 
         var agent = navigator.userAgent.toLowerCase();
         if(agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0){
@@ -87,6 +88,8 @@
         }    
         bzchart.publishEvent(componentReference, "ChartRendered", eventParameters);
 
+        console.log("chartArea: ChartRendered event published ");
+
         // build up a cache for mouseover events - may be a better way to do this!
         var appEvents = [];
         for (var i = 0; i < 100; i++) {
@@ -96,6 +99,7 @@
 
 
         console.log("chartArea: doneRenderLoad exit");
+        bzutils.showCacheAll () ;
 
     },
 

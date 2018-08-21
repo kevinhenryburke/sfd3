@@ -81,6 +81,8 @@
                     }
                         
                     bzutils.publishEvent("InitializeData", publisher, componentCategory, componentType, configEventParameters, null);    
+//                    bzutils.publishEventComponent(component, "InitializeData", publisher, componentCategory, componentType, configEventParameters, null);    
+
                 }
                 component.set("v.initEventsQueue",[]);
 
@@ -88,9 +90,6 @@
                 // KB: TODO COME BACK
                 var thisLevel = component.get("v.currentLevels");
                 helper.extractLeafIds(component, datajson, thisLevel);
-
-
-
             }
             else if (state === "ERROR") {
                 var errors = response.getError();
@@ -113,6 +112,41 @@
     },
 
     /* handlers */  
+
+    /* Component Events */
+
+    handle_evt_bzc  : function(component, event, helper) {
+        var _this = this;
+        var topic = event.getParam("topic");
+
+        var publisher = event.getParam("publisher");
+        var publisherCategory = event.getParam("publisherCategory");
+        var publisherType = event.getParam("publisherType");
+        var UserComponentId = component.get("v.UserComponentId");
+        var controller = event.getParam("controller");
+
+        console.log("bzc: topic: " + topic + " component: " + UserComponentId);
+
+        console.log("handle_evt_bzc: handling publisherCategory: " + publisherCategory + " from publisher " + publisher + " in " + UserComponentId);
+
+        // if the component is named and the event propagated from another controller then we ignore it.
+        if (publisherCategory == "Controller" && UserComponentId != null && UserComponentId != "") {
+            if (UserComponentId != publisher) {
+                console.log("handle_evt_bzc: controller: ignoring message from " + publisher + " in component " + UserComponentId);
+                return;
+            }
+        }
+
+        // if the component is named and the event propagated from a chart controlled by a controller with another name then we ignore it.
+        if (publisherCategory == "Display" && UserComponentId != null && UserComponentId != ""  && controller != null && controller != "") {
+            if (UserComponentId != controller) {
+                console.log("handle_evt_bzc: controller: ignoring message in " + UserComponentId + " intended for component " + controller);
+                return;
+            }
+        }
+
+
+    },        
 
     handle_evt_sfd3  : function(component, event, helper) {
         var _this = this;
@@ -178,7 +212,8 @@
                 var componentCategory = component.get("v.componentCategory");
                 var componentType = component.get("v.componentType");
                 bzutils.publishEvent("InitializeData", publisher, componentCategory, componentType, configEventParameters, null);    
-
+//                bzutils.publishEventComponent(component, "InitializeData", publisher, componentCategory, componentType, configEventParameters, null);    
+                
                 // clear the queue
                 component.set("v.initEventsQueue",[]);
 
@@ -194,25 +229,25 @@
         }
         if (topic == "InitializeData")
         {
-            console.log("InitializeData received by Controller: " + UserComponentId);
+            console.log("handle_evt_bzc: InitializeData received by Controller: " + UserComponentId);
             var autoIncreaseLevels = component.get("v.autoIncreaseLevels");
             if (autoIncreaseLevels == true) {
                 console.log("auto increasing levels");
                 var canIncreaseLevels = helper.canIncreaseLevels(component);
                 if (canIncreaseLevels) { // if is not strictly necessary as event is disabling the button but keep for now
-                    helper.refreshOneTime(component, event);
+                    helper.updateData(component, event);
                 }
             }
         }
         if (topic == "RefreshData")
         {
-            console.log("RefreshData received by Controller: " + UserComponentId);
+            console.log("handle_evt_bzc: RefreshData received by Controller: " + UserComponentId);
             var autoIncreaseLevels = component.get("v.autoIncreaseLevels");
             if (autoIncreaseLevels == true) {
                 console.log("auto increasing levels");
                 var canIncreaseLevels = helper.canIncreaseLevels(component);
                 if (canIncreaseLevels) { // if is not strictly necessary as event is disabling the button but keep for now
-                    helper.refreshOneTime(component, event);
+                    helper.updateData(component, event);
                 }
             }            
         }
@@ -259,7 +294,7 @@
         {
             // for a RefreshChart event we assume everything is initialized
             console.log("One time refresh");
-            helper.refreshOneTime(component, event);
+            helper.updateData(component, event);
         }
     },
 
@@ -386,7 +421,7 @@
         console.log("onClickRefreshOneTime enter");
         var canIncreaseLevels = helper.canIncreaseLevels(component);
         if (canIncreaseLevels) { // if is not strictly necessary as event is disabling the button but keep for now
-            helper.refreshOneTime(component, event);
+            helper.updateData(component, event);
         }
         console.log("onClickRefreshOneTime exit");
     },

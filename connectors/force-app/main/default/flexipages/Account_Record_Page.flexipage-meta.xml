@@ -54,7 +54,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>configjsonString</name>
-                <value>{&quot;showtestbuttons&quot;:true, &quot;levels&quot;:5, &quot;levelsIncreaseOnly&quot;:true}</value>
+                <value>{&quot;showtestbuttons&quot;:true, &quot;levels&quot;:5, &quot;levelsIncreaseOnly&quot;:true, &quot;autoIncreaseLevels&quot;:true}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>configuredAllowSearch</name>

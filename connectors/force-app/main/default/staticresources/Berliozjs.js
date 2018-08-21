@@ -262,6 +262,23 @@ function publishEventFromCache(componentReference, topic, parameters) {
     appEvent.fire();
 }
 
+function publishEventComponent(component, topic, publisher, publisherCategory, publisherType, parameters, controller) {
+
+    console.log("publishEventComponent: publisherCategory: " + publisherCategory );
+    console.log("publishEventComponent: publisherType: " + publisherType );
+    console.log("publishEventComponent: controller: " + controller );
+
+    var cmpEvent = component.getEvent("evt_bzc");
+    cmpEvent.setParams({
+        "topic" : topic,
+        "publisher" : publisher,
+        "publisherCategory" : publisherCategory,
+        "publisherType" : publisherType,
+        "controller" : controller,
+        "parameters" : parameters
+    });
+    cmpEvent.fire();
+}
 
 
 function nodeDataSetFunctionNodes () { 
@@ -286,6 +303,7 @@ exports.addComponentRef = addComponentRef;
 exports.removeComponentRef = removeComponentRef;
 exports.publishEvent = publishEvent;
 exports.publishEventFromCache = publishEventFromCache;
+exports.publishEventComponent = publishEventComponent;
 exports.initializeCache = initializeCache;
 exports.setCache = setCache;
 exports.getCache = getCache;

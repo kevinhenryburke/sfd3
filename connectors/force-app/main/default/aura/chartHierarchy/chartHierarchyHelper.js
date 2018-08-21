@@ -35,8 +35,11 @@
         var ParentColorsObjectDefault = {"colorBy" : "size", "values" : [0], "colors" : ["lightsteelblue"]};
         bzctree.setColorCache (componentReference, component.get("v.ParentColors"), ParentColorsObjectDefault, "Parent") ;
 
-        // Collapse after the second level
-        root.children.forEach(bzctree.collapse);
+        // Collapse after the second level (provided root has children)
+        if (root.children != null) {
+            root.children.forEach(bzctree.collapse);
+        }
+
         bzutils.setCache (componentReference, "root", root ) ;
         _this.update(component, nodeGroup, pathGroup, componentReference, root, false);
 
@@ -100,7 +103,11 @@
       
         // Update the nodes...
         var node = nodeGroup.selectAll('g.treenode')
-            .data(nodes, function(d) {                
+            .data(nodes, function(d) {    
+                console.log("bzc: error investigate: ");            
+                console.log(d.data);
+                console.log(d.data.id);
+                console.log(componentReference);
                 return d.id || (d.id = bzutils.addComponentRef(componentReference, d.data.id)); 
             });
                 

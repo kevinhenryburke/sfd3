@@ -102,7 +102,7 @@
         }
     },
 
-    refreshOneTime : function(component, event) {
+    updateData : function(component, event) {
         var _this = this;
         // for a RefreshChart event we assume everything is initialized
 
@@ -123,9 +123,8 @@
         console.log('InitiateRefreshChart: running apex callback');    
 
         action.setCallback(_this, $A.getCallback(function(response) {
-            bzutils.log('InitiateRefreshChart: data returned from apex for udpate');    
             var state = response.getState();
-            bzutils.log('InitiateRefreshChart: state ' + state);    
+            bzutils.log('InitiateRefreshChart: data returned from apex for udpate with state: ' + state);   
             if (state === "SUCCESS") {
 
                 var datastring = response.getReturnValue();
@@ -185,6 +184,7 @@
                 var componentCategory = component.get("v.componentCategory");
                 var componentType = component.get("v.componentType");
                 bzutils.publishEvent("RefreshData", publisher, componentCategory, componentType, configEventParameters, null);            
+//                bzutils.publishEventComponent(component, "RefreshData", publisher, componentCategory, componentType, configEventParameters, null);            
             }
         }))
         $A.enqueueAction(action);        

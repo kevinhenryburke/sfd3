@@ -8,30 +8,19 @@
         if (recordId == null) {
             recordId = "";
         }
+
         console.log('chartArea: doInit enter: ' + recordId);   
-        var comprefNumber = 0;
 
-        var UserComponentId = component.get("v.UserComponentId");
-
-        var componentReference = component.get("v.componentReference");
-
-        if (componentReference == null) {
-            if (UserComponentId != null && UserComponentId != '') {
-                console.log('chartArea: calculate comprefNumber using seed:' + UserComponentId);   
-                comprefNumber = helper.simpleHash(UserComponentId);    
-            }
-            else {
-                console.log('chartArea: calculate compref from random generator');   
-                comprefNumber = Math.floor((Math.random() * 10000000000) + 1); 
-            }
-            componentReference = "compref" + comprefNumber + recordId;
-            component.set("v.componentReference", componentReference);
-            component.set("v.chartAreaDivId", componentReference + 'chartArea');
-        }
+        // calculate compref from random generator   
+        var comprefNumber = Math.floor((Math.random() * 10000000000) + 1); 
+        var componentReference = "compref" + comprefNumber + recordId;
+        component.set("v.componentReference", componentReference);
+        component.set("v.chartAreaDivId", componentReference + 'chartArea');
 
         console.log('chartArea: doInit exit for componentReference: ' + componentReference);   
     },
 
+    // we need to avoid race condition between chart rendering and scripts loading, hence the checks in this method
     doneRendering: function(component, event, helper) {
         var rendered = component.get("v.rendered");
         console.log('chartArea: doneRendering enter. Rendered: ' + rendered);   
@@ -49,7 +38,7 @@
         console.log('chartArea: doneRendering exit');   
     },
 
-
+    // we need to avoid race condition between chart rendering and scripts loading, hence the checks in this method
     afterScriptsLoaded: function(component, event, helper) {
         bzutils.log('chartArea: afterScriptsLoaded enter');
         component.set("v.scriptsLoaded", true);
@@ -114,7 +103,7 @@
         var parameters = event.getParam("parameters");
 
 
-        bzutils.log('chartArea: topic:' + topic + " publisher " + publisher + "compref " + componentReference);
+        bzutils.log('chartArea: topic:' + topic + " publisher " + publisher + "componentReference " + componentReference);
 
         var UserControllerComponentId = component.get("v.UserControllerComponentId");
         

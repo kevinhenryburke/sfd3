@@ -54,6 +54,14 @@
     <layoutAssignments>
         <layout>Account-Account Layout</layout>
     </layoutAssignments>
+    <tabVisibilities>
+        <tab>Account_Hierarchy_Chart</tab>
+        <visibility>DefaultOn</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
+        <tab>standard-Account</tab>
+        <visibility>DefaultOn</visibility>
+    </tabVisibilities>
     <userLicense>Salesforce</userLicense>
     <userPermissions>
         <enabled>true</enabled>

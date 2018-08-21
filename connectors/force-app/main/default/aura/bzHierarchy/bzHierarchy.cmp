@@ -1,0 +1,92 @@
+<aura:component implements="force:hasRecordId,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="DThree">
+
+  <ltng:require 
+    scripts="/resource/Berliozjs"
+  />
+
+  <!-- Controller parameters -->
+  <aura:attribute name="showBanner" type="Boolean" default="true"/>      
+  <aura:attribute name="Title" type="String" />      
+  <aura:attribute name="UserComponentId" type="String" default="" description="If you want charts to only respond to particular controllers on a page then give this controller a name here (unique to the page) and associate it using the Controller Component Id option on the chart"/>    
+  <aura:attribute name="dataFormat" type="String" default=""/>      
+  <aura:attribute name="dataSourceMethod" type="String" default="c.returnDataNodesOnly"/>      
+  <aura:attribute name="dataUpdateMethod" type="String" default="c.returnDataUpdate"/>      
+  <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
+  <aura:attribute name="configjsonString" type="String" />
+	<aura:attribute name="searchAction" type="String"/> 
+  <aura:attribute name="configuredAllowSearch" type="Boolean" default="false"/>    
+  <aura:attribute name="queryJSON" type="String" default="{}"/> 
+  
+  <c:d3comp 
+    showBanner = "{!v.showBanner}" 
+    Title = "{!v.Title}" 
+    UserComponentId = "{!v.UserComponentId}"  
+    dataFormat = "{!v.dataFormat}"   
+    dataSourceMethod = "{!v.dataSourceMethod}"    
+    dataUpdateMethod = "{!v.dataUpdateMethod}"     
+    primaryNodeInitialization = "{!v.primaryNodeInitialization}"   
+    configjsonString = "{!v.configjsonString}" 
+    searchAction = "{!v.searchAction}"
+    configuredAllowSearch = "{!v.configuredAllowSearch}"
+    queryJSON = "{!v.queryJSON}"
+  />
+
+
+  <!-- Card Display Parameters-->
+  <aura:attribute name="cardFields" type="String" default="{}"/>    
+  <aura:attribute name="objectIcons" type="String" default="{}"/>    
+
+  <c:panelDisplay
+    Controller = "{!v.UserComponentId}"
+    cardFields = "{!v.cardFields}"
+    objectIcons = "{!v.objectIcons}"  
+  />
+
+  <!-- Hierarchy Chart Parameters -->
+  <aura:attribute name="componentType" type="String" default="Chart"/>    
+  <aura:attribute name="ChartUserComponentId" type="String" default="" description="If putting more than one chart on a page then this provides users with a mechanism to set their own for mapping purposes"/>
+  <aura:attribute name="showLevelsInitial" type="Integer" default="1"/>   
+  <aura:attribute name="clearHighlightedPaths" type="Boolean" default="true" description="Determines if the chart has a primary node"/>    
+  <aura:attribute name="LeafColors" type="String" default="{&quot;values&quot; : [0], &quot;colors&quot; : [&quot;white&quot;]}" description="Determines the color of a leaf node"/>    
+  <aura:attribute name="ParentColors" type="String" default="{&quot;values&quot; : [0], &quot;colors&quot; : [&quot;lightsteelblue&quot; ]}" description="Determines the color of parent node"/>    
+  <aura:attribute name="showZoomSlider" type="Boolean" default="false"/>    
+	<aura:attribute name="allowPopover" type="Boolean" default="false"/>    
+
+  <!-- Network Chart Parameters -->
+  <aura:attribute name="hasPrimaryNode" type="Boolean" default="true" description="Determines if the chart has a primary node"/>    
+  <aura:attribute name="primaryNodeHighlightingOn" type="Boolean" default="true" description="Determines if selected node should be highlighted"/>    
+	<aura:attribute name="primaryNodeHighlightingColour" type="String" default="gold" description="Name of the colour of highlighed node"/>    
+	<aura:attribute name="primaryNodeHighlightingRadius" type="String" default="10px" description="Determines width of highlighting on a selected node"/>      
+  <aura:attribute name="retainNodeDetailsMouseOut" type="Boolean" default="true"  description="Set to true if we wish extended details following a node mouseover to be retain after mouseout"/>    
+  <aura:attribute name="showPathToolTip" type="Boolean" default="true"/>    
+  <aura:attribute name="nodestrokewidth" type="String" default="0.5px"/>    
+
+  <c:chartHierarchy
+    componentType = "{!v.componentType}"
+    UserComponentId = "{!v.ChartUserComponentId}"
+    UserControllerComponentId = "{!v.UserComponentId}"
+    showLevelsInitial = "{!v.showLevelsInitial}"
+    Title = "{!v.Title}"
+    clearHighlightedPaths = "{!v.clearHighlightedPaths}"
+    LeafColors = "{!v.LeafColors}"
+    ParentColors = "{!v.ParentColors}"
+    showZoomSlider = "{!v.showZoomSlider}"
+    allowPopover = "{!v.allowPopover}"
+    cardFields = "{!v.cardFields}"
+    objectIcons = "{!v.objectIcons}"
+    hasPrimaryNode = "{!v.hasPrimaryNode}"
+    primaryNodeHighlightingOn = "{!v.primaryNodeHighlightingOn}"
+    primaryNodeHighlightingColour = "{!v.primaryNodeHighlightingColour}"
+    primaryNodeHighlightingRadius = "{!v.primaryNodeHighlightingRadius}"
+    retainNodeDetailsMouseOut = "{!v.retainNodeDetailsMouseOut}"
+    showPathToolTip = "{!v.showPathToolTip}"
+    nodestrokewidth = "{!v.nodestrokewidth}"
+  />
+
+  
+  <!--
+
+
+  -->
+	
+</aura:component>
