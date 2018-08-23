@@ -209,6 +209,7 @@
         var componentCategory = component.get("v.componentCategory");
         var componentType = component.get("v.componentType");
         bzutils.publishEvent("SearchChart", publisher, componentCategory, componentType, configEventParameters, null);            
+
     },
 
     canIncreaseLevels : function(component) {

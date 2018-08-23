@@ -221,14 +221,29 @@ function simpleHash(s) {
 }    
 */
 
+
+// new signatures .... 
+// (topic, publisher, publisherCategory, publisherType, parameters, controller)
+// becomes
+// (componentReference, topic, parameters)
+
+// Simpler model
+// Everything is associated with a controller
+// Everything associated with the same controller receives the same messages
+// These can then be filtered out in the handlers
+
+// so don't need publisher, publisherCategory, publisherType
+
+
+
 function publishEvent(topic, publisher, publisherCategory, publisherType, parameters, controller) {
 
     console.log("publisherCategory: " + publisherCategory );
     console.log("publisherType: " + publisherType );
     console.log("controller: " + controller );
 
-    var appEvent = $A.get("e.c:evt_sfd3");
-    appEvent.setParams({
+    var event = bzutils.getEventByType("Application");
+    event.setParams({
         "topic" : topic,
         "publisher" : publisher,
         "publisherCategory" : publisherCategory,
@@ -236,22 +251,26 @@ function publishEvent(topic, publisher, publisherCategory, publisherType, parame
         "controller" : controller,
         "parameters" : parameters
     });
-    appEvent.fire();
+    event.fire();
 }
 
-function publishEventFromCache(componentReference, topic, parameters) {
-    var appEvents = bzutils.getCache (componentReference, "appEvents") ;
-    var appEvent = appEvents.pop();
+function publishEventApplication(componentReference, topic, parameters) {
+    var event = $A.get("e.c:evt_sfd3");
+    bzutils.publishEventHelper(event, componentReference, topic, parameters); 
+}
+
+// KB TEMP COME BACK ok this is only going to work for chart components because of componentReference
+
+function publishEventHelper(event, componentReference, topic, parameters) {
     var publisherCategory = bzutils.getCache (componentReference, "componentCategory") ;
-    var publisherType = bzutils.getCache (componentReference, "componentType") ;
-    
+    var publisherType = bzutils.getCache (componentReference, "componentType") ;    
     var controller = bzutils.getCache (componentReference, "UserControllerComponentId") ;
 
-    console.log("publisherCategory: " + publisherCategory );
-    console.log("publisherType: " + publisherType );
-    console.log("controller: " + controller );
+    console.log("publishEventHelper: publisherCategory: " + publisherCategory );
+    console.log("publishEventHelper: publisherType: " + publisherType );
+    console.log("publishEventHelper: controller: " + controller );
 
-    appEvent.setParams({
+    event.setParams({
         "topic" : topic,
         "publisher" : componentReference,
         "publisherCategory" : publisherCategory,
@@ -259,8 +278,9 @@ function publishEventFromCache(componentReference, topic, parameters) {
         "controller" : controller,
         "parameters" : parameters
     });
-    appEvent.fire();
+    event.fire();
 }
+
 
 function publishEventComponent(component, topic, publisher, publisherCategory, publisherType, parameters, controller) {
 
@@ -268,8 +288,8 @@ function publishEventComponent(component, topic, publisher, publisherCategory, p
     console.log("publishEventComponent: publisherType: " + publisherType );
     console.log("publishEventComponent: controller: " + controller );
 
-    var cmpEvent = component.getEvent("evt_bzc");
-    cmpEvent.setParams({
+    var event = bzutils.getEventByType("Component");
+    event.setParams({
         "topic" : topic,
         "publisher" : publisher,
         "publisherCategory" : publisherCategory,
@@ -277,7 +297,33 @@ function publishEventComponent(component, topic, publisher, publisherCategory, p
         "controller" : controller,
         "parameters" : parameters
     });
-    cmpEvent.fire();
+    event.fire();
+}
+
+/* eventType is one of "Component" or "Application" 
+- Cache events are particular to chart components and should not be configurable */
+
+
+function getEventByType(eventType) {
+    var event;
+    if (eventType == "Component"){
+        event = component.getEvent("evt_bzc");
+    }
+    if (eventType == "Application"){
+        event = $A.get("e.c:evt_sfd3");
+    }
+    return event;
+}
+
+/* Different topics may use different event types, implement in this method */
+
+function getEventTypeByTopic(topic) {
+    return "Application";
+}
+
+function getEventByTopic(topic) {
+    var eventType = bzutils.getEventTypeByTopic(topic);
+    return bzutils.getEventByType(eventType);
 }
 
 
@@ -302,8 +348,12 @@ exports.initializeAddComponentRef = initializeAddComponentRef;
 exports.addComponentRef = addComponentRef;
 exports.removeComponentRef = removeComponentRef;
 exports.publishEvent = publishEvent;
-exports.publishEventFromCache = publishEventFromCache;
+exports.publishEventApplication = publishEventApplication;
+exports.publishEventHelper = publishEventHelper;
 exports.publishEventComponent = publishEventComponent;
+exports.getEventByType = getEventByType;
+exports.getEventTypeByTopic = getEventTypeByTopic;
+exports.getEventByTopic = getEventByTopic;
 exports.initializeCache = initializeCache;
 exports.setCache = setCache;
 exports.getCache = getCache;
@@ -781,12 +831,23 @@ function clearChart(componentReference) {
 function publishEvent(componentReference, topic, parameters) {
 //    var publisherType = bzutils.getCache (componentReference, "componentType") ;
 //    var publisherType = "Chart"; // think about changing this..
-    var publisherCategory = bzutils.getCache (componentReference, "componentCategory") ;
-    var publisherType = bzutils.getCache (componentReference, "componentType") ;
+    // var publisherCategory = bzutils.getCache (componentReference, "componentCategory") ;
+    // var publisherType = bzutils.getCache (componentReference, "componentType") ;
     
-    var controller = bzutils.getCache (componentReference, "UserControllerComponentId") ;
-    bzutils.publishEvent(topic, componentReference, publisherCategory, publisherType, parameters, controller);
+    // var controller = bzutils.getCache (componentReference, "UserControllerComponentId") ;
+    // bzutils.publishEvent(topic, componentReference, publisherCategory, publisherType, parameters, controller);
+
+    var event = $A.get("e.c:evt_sfd3");
+    bzutils.publishEventHelper(event, componentReference, topic, parameters);     
 }
+
+
+function publishEventFromCache(componentReference, topic, parameters) {
+    var appEvents = bzutils.getCache (componentReference, "appEvents") ;
+    var event = appEvents.pop();
+    bzutils.publishEventHelper(event, componentReference, topic, parameters); 
+}
+
 
 
 exports.pathMouseover = pathMouseover;
@@ -800,6 +861,7 @@ exports.refreshVisibility = refreshVisibility;
 exports.setFilterVisibility = setFilterVisibility;
 exports.clearChart = clearChart;
 exports.publishEvent = publishEvent;
+exports.publishEventFromCache = publishEventFromCache;
 exports.styleNodes = styleNodes;
 
 exports.isiOS = isiOS;
@@ -1371,7 +1433,7 @@ function update() {
             }
         } 
         else {
-            bzutils.publishEventFromCache(componentReference, "ChartMouseOver", publishParameters);    
+            bzchart.publishEventFromCache(componentReference, "ChartMouseOver", publishParameters);    
         }
         console.log("bzctree.nodeMouseover exit");
     }
@@ -1386,7 +1448,7 @@ function update() {
             bzchart.publishEvent(componentReference, "ChartMouseOut", publishParameters);
         } 
         else {
-            bzutils.publishEventFromCache(componentReference, "ChartMouseOver", publishParameters);    
+            bzchart.publishEventFromCache(componentReference, "ChartMouseOver", publishParameters);    
         }
         console.log("bzctree.nodeMouseout exit");
     }

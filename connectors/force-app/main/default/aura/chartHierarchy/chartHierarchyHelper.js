@@ -321,7 +321,7 @@
                 "componentReference" : componentReference,
                 "ChartScaleFactor" : newcsf
             }    
-            bzutils.publishEventFromCache(componentReference, "ReScale", eventParameters);
+            bzchart.publishEventFromCache(componentReference, "ReScale", eventParameters);
         }
 
     },
