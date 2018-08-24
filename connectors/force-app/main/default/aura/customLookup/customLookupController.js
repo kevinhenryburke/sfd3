@@ -88,7 +88,7 @@
         console.log('customLookup: handle_evt_sfd3 enter');
 
         var topic = event.getParam("topic");
-        var publisher = event.getParam("publisher");
+        var controller = event.getParam("controller");
         var parameters = event.getParam("parameters");
 
         if (topic == "InitializeData" || topic == "RefreshData")

@@ -57,7 +57,7 @@
     handle_evt_sfd3  : function(component, event, helper) {
         console.log('chartArea: handle_evt_sfd3 enter');
         var topic = event.getParam("topic");
-        var publisher = event.getParam("publisher");
+        var controller = event.getParam("controller");
         var parameters = event.getParam("parameters");
 
         var componentReference = component.get("v.componentReference");        
@@ -66,9 +66,9 @@
         
         // if the component is configured to be controlled by a specified controller then exit if it's a different one.
         if (UserControllerComponentId != null && UserControllerComponentId != "") {
-            if (UserControllerComponentId != publisher) {
+            if (UserControllerComponentId != controller) {
                 var UserComponentId = component.get("v.UserComponentId");
-                console.log("ignoring message from " + publisher + " in component " + UserComponentId);
+                console.log("ignoring message for controller " + controller + " in component " + UserComponentId);
                 return;
             }
         }

@@ -234,98 +234,34 @@ function simpleHash(s) {
 
 // so don't need publisher, publisherCategory, publisherType
 
-
-
-function publishEvent(topic, publisher, publisherCategory, publisherType, parameters, controller) {
-
-    console.log("publisherCategory: " + publisherCategory );
-    console.log("publisherType: " + publisherType );
-    console.log("controller: " + controller );
-
-    var event = bzutils.getEventByType("Application");
-    event.setParams({
+function prepareEvent(topic, parameters, controllerId) {
+    var eventType = bzutils.getEventTypeByTopic(topic);
+    return {
+        "eventType" : eventType ,
         "topic" : topic,
-        "publisher" : publisher,
-        "publisherCategory" : publisherCategory,
-        "publisherType" : publisherType,
-        "controller" : controller,
-        "parameters" : parameters
-    });
-    event.fire();
+        "parameters" : parameters,
+        "controllerId" : controllerId
+    }
 }
 
-function publishEventApplication(componentReference, topic, parameters) {
-    var event = $A.get("e.c:evt_sfd3");
-    bzutils.publishEventHelper(event, componentReference, topic, parameters); 
-}
-
-// KB TEMP COME BACK ok this is only going to work for chart components because of componentReference
-
-function publishEventHelper(event, componentReference, topic, parameters) {
-    var publisherCategory = bzutils.getCache (componentReference, "componentCategory") ;
-    var publisherType = bzutils.getCache (componentReference, "componentType") ;    
-    var controller = bzutils.getCache (componentReference, "UserControllerComponentId") ;
-
-    console.log("publishEventHelper: publisherCategory: " + publisherCategory );
-    console.log("publishEventHelper: publisherType: " + publisherType );
+function publishEventHelper(event, topic, parameters, controller) {
     console.log("publishEventHelper: controller: " + controller );
 
     event.setParams({
         "topic" : topic,
-        "publisher" : componentReference,
-        "publisherCategory" : publisherCategory,
-        "publisherType" : publisherType,
         "controller" : controller,
         "parameters" : parameters
     });
     event.fire();
 }
 
-
-function publishEventComponent(component, topic, publisher, publisherCategory, publisherType, parameters, controller) {
-
-    console.log("publishEventComponent: publisherCategory: " + publisherCategory );
-    console.log("publishEventComponent: publisherType: " + publisherType );
-    console.log("publishEventComponent: controller: " + controller );
-
-    var event = bzutils.getEventByType("Component");
-    event.setParams({
-        "topic" : topic,
-        "publisher" : publisher,
-        "publisherCategory" : publisherCategory,
-        "publisherType" : publisherType,
-        "controller" : controller,
-        "parameters" : parameters
-    });
-    event.fire();
-}
-
-/* eventType is one of "Component" or "Application" 
-- Cache events are particular to chart components and should not be configurable */
-
-
-function getEventByType(eventType) {
-    var event;
-    if (eventType == "Component"){
-        event = component.getEvent("evt_bzc");
-    }
-    if (eventType == "Application"){
-        event = $A.get("e.c:evt_sfd3");
-    }
-    return event;
-}
 
 /* Different topics may use different event types, implement in this method */
+/* eventType is one of "Component" or "Application" or "Cache" */
 
 function getEventTypeByTopic(topic) {
-    return "Application";
+    return null;
 }
-
-function getEventByTopic(topic) {
-    var eventType = bzutils.getEventTypeByTopic(topic);
-    return bzutils.getEventByType(eventType);
-}
-
 
 function nodeDataSetFunctionNodes () { 
     console.log("nodeDataSetFunctionNodes enter"); 
@@ -343,17 +279,12 @@ exports.xfct = xfct;
 exports.getParam = getParam;
 exports.hasParam = hasParam;
 exports.parseCardParam = parseCardParam;
-
 exports.initializeAddComponentRef = initializeAddComponentRef;
 exports.addComponentRef = addComponentRef;
 exports.removeComponentRef = removeComponentRef;
-exports.publishEvent = publishEvent;
-exports.publishEventApplication = publishEventApplication;
+exports.prepareEvent = prepareEvent;
 exports.publishEventHelper = publishEventHelper;
-exports.publishEventComponent = publishEventComponent;
-exports.getEventByType = getEventByType;
 exports.getEventTypeByTopic = getEventTypeByTopic;
-exports.getEventByTopic = getEventByTopic;
 exports.initializeCache = initializeCache;
 exports.setCache = setCache;
 exports.getCache = getCache;
@@ -592,9 +523,11 @@ function nodeMouseover (componentReference, d) {
 
     var publishParameters = {"data" : d, "parent" : null};
 
-    bzchart.publishEvent(componentReference, "ChartMouseOver", publishParameters);
-
     console.log("bzchart.nodeMouseover exit");
+
+    var preppedEvent = bzchart.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
+    return preppedEvent;
+    
 }
 
 function nodeMouseout (componentReference, d) {
@@ -620,8 +553,11 @@ function nodeDoubleClick (componentReference, primaryNodeId) {
     // TODO this will need substantial enriching - e.g. pass current measure and whether to add nodes or to refresh etc.
     var cleanId = bzutils.removeComponentRef(componentReference, primaryNodeId);
     var eventParameters = {"primaryNodeId" : cleanId, "componentReference" : componentReference};
-    bzchart.publishEvent(componentReference, "InitiateRefreshChart", eventParameters);
     console.log("bzchart.nodeDoubleClick exit.");
+
+    var preppedEvent = bzchart.prepareEvent(componentReference, "InitiateRefreshChart", eventParameters);
+    return preppedEvent;
+
 }
     
 function textAdditionalAttribute (componentReference, text) {
@@ -828,24 +764,20 @@ function clearChart(componentReference) {
     console.log("clearChart exit "); 
 }
 
-function publishEvent(componentReference, topic, parameters) {
-//    var publisherType = bzutils.getCache (componentReference, "componentType") ;
-//    var publisherType = "Chart"; // think about changing this..
-    // var publisherCategory = bzutils.getCache (componentReference, "componentCategory") ;
-    // var publisherType = bzutils.getCache (componentReference, "componentType") ;
-    
-    // var controller = bzutils.getCache (componentReference, "UserControllerComponentId") ;
-    // bzutils.publishEvent(topic, componentReference, publisherCategory, publisherType, parameters, controller);
+/* Potential way out of the conundrum of firing component events
+ have each call to bzchart.publishEvent[FromCache] return an object made up of the parameters for a bzutils.publishEventHelper call
+ - except that the event would be eventType
+ - then call the event from the calling location via bzutils.publishEventHelper */
 
-    var event = $A.get("e.c:evt_sfd3");
-    bzutils.publishEventHelper(event, componentReference, topic, parameters);     
-}
-
-
-function publishEventFromCache(componentReference, topic, parameters) {
-    var appEvents = bzutils.getCache (componentReference, "appEvents") ;
-    var event = appEvents.pop();
-    bzutils.publishEventHelper(event, componentReference, topic, parameters); 
+function prepareEvent(componentReference, topic, parameters) {
+    var controllerId = bzutils.getCache (componentReference, "UserControllerComponentId") ;
+    var eventType = bzutils.getEventTypeByTopic(topic);
+    return {
+        "eventType" : eventType ,
+        "topic" : topic,
+        "parameters" : parameters,
+        "controllerId" : controllerId
+    }
 }
 
 
@@ -860,9 +792,8 @@ exports.getRelatedNodes = getRelatedNodes;
 exports.refreshVisibility = refreshVisibility;
 exports.setFilterVisibility = setFilterVisibility;
 exports.clearChart = clearChart;
-exports.publishEvent = publishEvent;
-exports.publishEventFromCache = publishEventFromCache;
 exports.styleNodes = styleNodes;
+exports.prepareEvent = prepareEvent;
 
 exports.isiOS = isiOS;
 
@@ -1163,9 +1094,11 @@ function nodeMouseover (componentReference, d) {
 
     var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
 
-    bzchart.publishEvent(componentReference, "ChartMouseOver", publishParameters);
-
     console.log("bzpack.nodeMouseover exit");
+
+    var preppedEvent = bzchart.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
+    return preppedEvent;
+
 }
 
 function nodeAdditionalAttribute (componentReference, node) {
@@ -1419,8 +1352,6 @@ function update() {
         var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
         
         if (d.depth <= 1) { // root or first level
-            bzchart.publishEvent(componentReference, "ChartMouseOver", publishParameters);
-
             // reset cache of events for mouseover events to publish - may be a better way to do this!
             // the issue is that only the top orginally created nodes have lightning context, not sure why
             // alternative would be to pass in a parameter for these nodes and push events only when the attribute is set
@@ -1432,10 +1363,12 @@ function update() {
                 bzutils.setCache (componentReference, "appEvents",  appEvents) ;
             }
         } 
-        else {
-            bzchart.publishEventFromCache(componentReference, "ChartMouseOver", publishParameters);    
-        }
-        console.log("bzctree.nodeMouseover exit");
+
+        var preppedEvent = bzchart.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
+        if (d.depth > 1) {
+            preppedEvent.eventType = "Cache";
+        } 
+        return preppedEvent;
     }
 
     function nodeMouseout (componentReference, d) {
@@ -1444,13 +1377,11 @@ function update() {
     
         var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
         
-        if (d.depth == 1) {
-            bzchart.publishEvent(componentReference, "ChartMouseOut", publishParameters);
+        var preppedEvent = bzchart.prepareEvent(componentReference, "ChartMouseOut", publishParameters);
+        if (d.depth > 1) {
+            preppedEvent.eventType = "Cache";
         } 
-        else {
-            bzchart.publishEventFromCache(componentReference, "ChartMouseOver", publishParameters);    
-        }
-        console.log("bzctree.nodeMouseout exit");
+        return preppedEvent;
     }
     
 

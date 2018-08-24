@@ -21,41 +21,30 @@
         var _this = this;
         var topic = event.getParam("topic");
 
-        var publisher = event.getParam("publisher");
-        var publisherCategory = event.getParam("publisherCategory");
-        var publisherType = event.getParam("publisherType");
         var RelatedControllerId = component.get("v.Controller");
         var controller = event.getParam("controller");
 
         var isHosted = component.get("v.isHosted");
 
-
-        // if the event is propagated from a controller then we ignore it as this displays cards for charts
-        if (publisherCategory == "Controller") {
-            bzutils.log("controller: ignoring message from " + publisher + " in component for controller " + RelatedControllerId);
+        // if the component is named and the event propagated from a chart controlled by a controller with another name then we ignore it.
+        if (isHosted == false && RelatedControllerId != controller) {
+            bzutils.log("controller: ignoring message for card related to " + RelatedControllerId + " intended for component " + controller);
             return;
         }
 
-        // if the component is named and the event propagated from a chart controlled by a controller with another name then we ignore it.
-        if (isHosted == false && publisherCategory == "Display" && RelatedControllerId != null && RelatedControllerId != ""  && controller != null && controller != "") {
-            if (RelatedControllerId != controller) {
-                bzutils.log("controller: ignoring message for card related to " + RelatedControllerId + " intended for component " + controller);
-                return;
-            }
-        }
-
         // if the component is hosted then we check that the incoming message was published by the same component that created the component
-        if (isHosted == true) {
-            bzutils.log("hosted clause: topic: " + topic + " received from publisher: " + publisher + " layoutStyle: " + component.get("v.layoutStyle") + " hostUserControllerComponentId: " + component.get("v.hostUserControllerComponentId"));
-            var hostComponentReference = component.get("v.hostComponentReference");
-            if (hostComponentReference != publisher) {
-                bzutils.log("hosted: ignoring message for card created by " + hostComponentReference + " published by " + publisher);
-                return;
-            } 
-            else {
-                bzutils.log("hosted: accepted message for card created by " + hostComponentReference + " published by " + publisher);
-            }
-        }
+        // IF we want to reinstigate this functionality we will need to re-introduce a publisher parameters
+        // if (isHosted == true) {
+        //     bzutils.log("hosted clause: topic: " + topic + " received. layoutStyle: " + component.get("v.layoutStyle") + " hostUserControllerComponentId: " + component.get("v.hostUserControllerComponentId"));
+        //     var hostComponentReference = component.get("v.hostComponentReference");
+        //     if (hostComponentReference != controller) {
+        //         bzutils.log("hosted: ignoring message for card created by " + hostComponentReference + " related to controller " + controller);
+        //         return;
+        //     } 
+        //     else {
+        //         bzutils.log("hosted: accepted message for card created by " + hostComponentReference + " related to controller " + controller);
+        //     }
+        // }
 
         if (topic == "ChartMouseOver")
         {
@@ -130,7 +119,7 @@
         var appEvent = $A.get("e.c:evt_sfd3");
         appEvent.setParams({
             "topic" : "CloseDisplayPanel",
-            "publisher" : component.get("v.hostUserControllerComponentId"), // pass the host component name back for an embedded component 
+            "controller" : component.get("v.hostUserControllerComponentId"), // pass the host component name back for an embedded component 
         });
         appEvent.fire();
     

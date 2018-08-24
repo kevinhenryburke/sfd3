@@ -47,7 +47,8 @@
         // Effecitvely can do this via a mouseover event on root.
         // TODO can move this to a generic location?
         bzutils.setCache (componentReference, "mouseoverRecordId", root.id ) ;
-        bzutils.xfcr("nodeMouseover", componentReference, root); 
+        var preppedEvent = bzutils.xfcr("nodeMouseover", componentReference, root); 
+        _this.publishPreppedEvent(component,preppedEvent);
 
 
     },
@@ -133,11 +134,14 @@
             .on('click', click)
 			.on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
 				bzutils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
-                bzutils.xfcr("nodeMouseover", componentReference, d); 
+                var preppedEvent = bzutils.xfcr("nodeMouseover", componentReference, d); 
+                _this.publishPreppedEvent(component,preppedEvent);
+
             }))
 			.on('mouseout', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
 				bzutils.setCache (componentReference, "mouseoutRecordId", d.id ) ;
-                bzutils.xfcr("nodeMouseout", componentReference, d); 
+                var preppedEvent = bzutils.xfcr("nodeMouseout", componentReference, d); 
+                _this.publishPreppedEvent(component,preppedEvent);
             }))
 			;
       
@@ -321,7 +325,10 @@
                 "componentReference" : componentReference,
                 "ChartScaleFactor" : newcsf
             }    
-            bzchart.publishEventFromCache(componentReference, "ReScale", eventParameters);
+
+            var preppedEvent = bzchart.prepareEvent(componentReference, "ReScale", eventParameters);
+            preppedEvent.eventType = "Cache";
+            _this.publishPreppedEvent (component,preppedEvent);    
         }
 
     },
@@ -516,5 +523,39 @@
     getRadius : function(component) {
         return Math.ceil(10 * component.get("v.ChartScaleFactor"));
     },    
+
+    // TODO function appears in many places, try to consolidate
+    publishPreppedEvent : function(component,preppedEvent){
+        if (preppedEvent != null) {
+            var event;
+            console.log("publishPreppedEvent: enter "+ preppedEvent.topic + " and " + preppedEvent.eventType);
+
+            if (preppedEvent.eventType != null) {
+                // go with preset value
+                console.log("publishPreppedEvent: override eventType: " + preppedEvent.eventType);
+            }
+            else {
+                preppedEvent.eventType = component.get("v.defaultEventType");
+                console.log("publishPreppedEvent: use default eventType: " + preppedEvent.eventType);
+            }
+
+            if (preppedEvent.eventType == "Component"){
+                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
+                event = component.getEvent("evt_bzc");
+            }
+            if (preppedEvent.eventType == "Application"){
+                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
+                event = $A.get("e.c:evt_sfd3");
+            }
+            if (preppedEvent.eventType == "Cache"){
+                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
+                var componentReference = component.get("v.componentReference");
+                var appEvents = bzutils.getCache (componentReference, "appEvents") ;
+                event = appEvents.pop();
+            }    
+            bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
+        }
+    },
+
 
 })

@@ -4,6 +4,9 @@
     scripts="/resource/Berliozjs"
   />
 
+  <aura:registerEvent name="evt_bzc" type="c:evt_bzc"/>
+  <aura:handler name="evt_bzc" event="c:evt_bzc" action="{!c.handle_evt_sfd3}"/>   
+
   <!-- Controller parameters -->
   <aura:attribute name="showBanner" type="Boolean" default="true"/>      
   <aura:attribute name="Title" type="String" />      
@@ -18,6 +21,7 @@
   <aura:attribute name="queryJSON" type="String" default="{}"/> 
   
   <c:d3comp 
+    defaultEventType = "Component"
     showBanner = "{!v.showBanner}" 
     Title = "{!v.Title}" 
     UserComponentId = "{!v.UserComponentId}"  
@@ -37,6 +41,7 @@
   <aura:attribute name="objectIcons" type="String" default="{}"/>    
 
   <c:panelDisplay
+    defaultEventType = "Component"
     Controller = "{!v.UserComponentId}"
     cardFields = "{!v.cardFields}"
     objectIcons = "{!v.objectIcons}"  
@@ -62,6 +67,7 @@
   <aura:attribute name="nodestrokewidth" type="String" default="0.5px"/>    
 
   <c:chartHierarchy
+    defaultEventType = "Component"
     componentType = "{!v.componentType}"
     UserComponentId = "{!v.ChartUserComponentId}"
     UserControllerComponentId = "{!v.UserComponentId}"

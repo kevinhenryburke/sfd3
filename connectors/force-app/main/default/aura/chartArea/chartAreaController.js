@@ -70,7 +70,7 @@
     },
 
     handleScaleChange: function(component,event,helper){
-        bzutils.log("handleScaleChange enter.");        
+        bzutils.log("handleScaleChange enter...");        
         var componentReference = component.get("v.componentReference");
 
         var csfp = component.get("v.ChartScaleFactorPercentage");
@@ -80,8 +80,10 @@
             "componentReference" : componentReference,
             "ChartScaleFactor" : csf
         }    
-        bzchart.publishEvent(componentReference, "ReScale", eventParameters);
+//        bzchart.publishEvent(componentReference, "ReScale", eventParameters);
 
+        var preppedEvent = bzchart.prepareEvent(componentReference, "ReScale", eventParameters);
+        helper.publishPreppedEvent(component,preppedEvent);
 
 //        helper.handleScaleChange(component,csf);
         bzutils.log("handleScaleChange exit.");        
@@ -99,20 +101,20 @@
         var topic = event.getParam("topic");
         var componentReference = component.get("v.componentReference");        
 
-        var publisher = event.getParam("publisher");
+        var controller = event.getParam("controller");
         var parameters = event.getParam("parameters");
 
 
-        bzutils.log('chartArea: topic:' + topic + " publisher " + publisher + "componentReference " + componentReference);
+        bzutils.log('chartArea: topic:' + topic + " controller " + controller + "componentReference " + componentReference);
 
         var UserControllerComponentId = component.get("v.UserControllerComponentId");
         
         // if the component is configured to be controlled by a specified controller then exit if it's a different one.
         if (UserControllerComponentId != null && UserControllerComponentId != "") {
             // note - component will subscribe to its own events
-            if (UserControllerComponentId != publisher && publisher != componentReference) { 
+            if (UserControllerComponentId != controller) { 
                 var UserComponentId = component.get("v.UserComponentId");
-                bzutils.log("ignoring message from " + publisher + " in component " + UserComponentId);
+                bzutils.log("ignoring message from " + controller + " in component " + UserComponentId);
                 return;
             }
         }

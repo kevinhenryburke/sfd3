@@ -7,6 +7,8 @@
     <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
     <aura:handler event="c:evt_sfd3" action="{!c.handle_evt_sfd3}"/> 
 
+    <aura:attribute name="defaultEventType" type="String" default="APPLICATION"/>    
+
     <!-- Design Paramters -->  
     <!-- <aura:attribute name="showBanner" type="Boolean" default="true"/>       -->
     <aura:attribute name="Controller" type="String" default="" description="If you want this card to respond to a particular controller on a page then put the controller's configured name here (unique to the page)"/>    

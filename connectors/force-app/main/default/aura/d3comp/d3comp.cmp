@@ -17,6 +17,8 @@
   <aura:attribute name="selectedRecord" type="sObject" default="{}" description="Use,for store SELECTED sObject Record"/>
   <aura:handler name="oSelectedRecordEvent" event="c:evt_SubCompToContaining" action="{!c.handleEmbeddedComponentEvent}"/>
 
+  <aura:attribute name="defaultEventType" type="String" default="Application"/>    
+
   <!-- Design Paramters Panel -->
 	<aura:attribute name="maxlevels" type="Integer" default="4"/>    
 

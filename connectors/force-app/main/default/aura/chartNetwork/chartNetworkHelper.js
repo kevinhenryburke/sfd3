@@ -2,6 +2,7 @@
 
     initializeVisuals: function (component) {
         console.log("subhelper: enter initializeVisuals proper!");
+        var _this = this;
         var componentType = component.get("v.componentType");
         var componentReference = component.get("v.componentReference");
 
@@ -53,12 +54,14 @@
                     var retainNodeDetailsMouseOut = bzutils.getCache (componentReference, "retainNodeDetailsMouseOut" ) ;
                     if (!retainNodeDetailsMouseOut)
                     {
-                        bzutils.xfcr("nodeMouseout", componentReference, d); // an html selector for a class or element ids
+                        var preppedEvent = bzutils.xfcr("nodeMouseout", componentReference, d); // an html selector for a class or element ids
+                        _this.publishPreppedEvent(component,preppedEvent);
                     }
                 })
                 .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
                     bzutils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
-                    bzutils.xfcr("nodeMouseover", componentReference, d); 
+                    var preppedEvent = bzutils.xfcr("nodeMouseover", componentReference, d); 
+                    _this.publishPreppedEvent(component,preppedEvent);
                 }))
                 .on('click', function(d) {
                     console.log("retrieve info on whether isiOS");
@@ -90,7 +93,9 @@
                     var componentReference = component.get("v.componentReference");
                     var primaryNodeId = d.id;
                     bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
-                    bzutils.xfcr("nodeDoubleClick", componentReference, primaryNodeId); 
+                    // bzutils.xfcr("nodeDoubleClick", componentReference, primaryNodeId); 
+                    var preppedEvent = bzutils.xfcr("nodeDoubleClick", componentReference, primaryNodeId); 
+                    _this.publishPreppedEvent(component,preppedEvent);
                 }))
                 ;
 
@@ -249,6 +254,38 @@
 */        
     },
 
+    // TODO function appears in many places, try to consolidate
+    publishPreppedEvent : function(component,preppedEvent){
+        if (preppedEvent != null) {
+            var event;
+            console.log("publishPreppedEvent: enter "+ preppedEvent.topic + " and " + preppedEvent.eventType);
+
+            if (preppedEvent.eventType != null) {
+                // go with preset value
+                console.log("publishPreppedEvent: override eventType: " + preppedEvent.eventType);
+            }
+            else {
+                preppedEvent.eventType = component.get("v.defaultEventType");
+                console.log("publishPreppedEvent: use default eventType: " + preppedEvent.eventType);
+            }
+
+            if (preppedEvent.eventType == "Component"){
+                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
+                event = component.getEvent("evt_bzc");
+            }
+            if (preppedEvent.eventType == "Application"){
+                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
+                event = $A.get("e.c:evt_sfd3");
+            }
+            if (preppedEvent.eventType == "Cache"){
+                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
+                var componentReference = component.get("v.componentReference");
+                var appEvents = bzutils.getCache (componentReference, "appEvents") ;
+                event = appEvents.pop();
+            }    
+            bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
+        }
+    },
     
     
 

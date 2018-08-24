@@ -3,7 +3,7 @@
     // first method called after all resources are ready
     doneRenderLoad: function (component) {
         var _this = this;
-        console.log("chartArea: doneRenderLoad enter");
+        console.log("packArea: doneRenderLoad enter");
         var componentReference = component.get("v.componentReference");
 
         bzutils.initializeCache (componentReference) ;
@@ -74,9 +74,11 @@
         var eventParameters = { 
             "componentReference" : componentReference
         }    
-        bzchart.publishEvent(componentReference, "ChartRendered", eventParameters);
+        // bzchart.publishEvent(componentReference, "ChartRendered", eventParameters);
+        var preppedEvent = bzchart.prepareEvent(componentReference, "ChartRendered", eventParameters);
+        _this.publishPreppedEvent(component,preppedEvent);
 
-        console.log("chartArea: doneRenderLoad exit");
+        console.log("packArea: doneRenderLoad exit");
 
     },
 

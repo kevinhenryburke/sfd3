@@ -32,6 +32,9 @@
 -->
 
   <!-- Events and Handlers -->  
+  <aura:registerEvent name="evt_bzc" type="c:evt_bzc"/>
+  <aura:handler name="evt_bzc" event="c:evt_bzc" action="{!c.handle_evt_sfd3}"/>   
+
   <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
   <aura:handler event="c:evt_sfd3" action="{!c.handle_evt_sfd3}"/>
 
@@ -85,7 +88,7 @@
   <aura:attribute name="chartAreaDivId" type="String" default="" description="If putting more than one chart on a page need to provide unique ids for the chart components"/>    
 	<aura:attribute name="rendered" type="Boolean" default="false"/>    
 	<aura:attribute name="scriptsLoaded" type="Boolean" default="false"/>    
-
+  <aura:attribute name="defaultEventType" type="String" default="Application"/>    
 
 	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
   

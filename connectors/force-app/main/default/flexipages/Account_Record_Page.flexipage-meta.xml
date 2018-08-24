@@ -178,6 +178,10 @@
                 <name>showPathToolTip</name>
                 <value>true</value>
             </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>showZoomSlider</name>
+                <value>true</value>
+            </componentInstanceProperties>
             <componentName>chartHierarchy</componentName>
         </componentInstances>
         <name>Facet-c4b8d061-fb18-4153-86a9-c6e0de44b86a</name>

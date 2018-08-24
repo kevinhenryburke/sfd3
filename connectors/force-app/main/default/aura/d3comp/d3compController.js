@@ -62,9 +62,7 @@
                 // now we have initialized the configuration we can publish all of the events that are enqueued
 
                 var eventQueue = component.get("v.initEventsQueue");
-                var publisher = component.get("v.UserComponentId");
-                var componentCategory = component.get("v.componentCategory");
-                var componentType = component.get("v.componentType");
+                var controllerId = component.get("v.UserComponentId");
 
                 for (var i = 0; i < eventQueue.length; i++) {
                     var componentReference = eventQueue[i]["componentReference"];
@@ -80,9 +78,8 @@
                         "componentReference" : componentReference
                     }
                         
-                    bzutils.publishEvent("InitializeData", publisher, componentCategory, componentType, configEventParameters, null);    
-//                    bzutils.publishEventComponent(component, "InitializeData", publisher, componentCategory, componentType, configEventParameters, null);    
-
+                    var preppedEvent = bzutils.prepareEvent("InitializeData", configEventParameters, controllerId);
+                    helper.publishPreppedEvent(component,preppedEvent);
                 }
                 component.set("v.initEventsQueue",[]);
 
@@ -113,70 +110,20 @@
 
     /* handlers */  
 
-    /* Component Events */
-
-    handle_evt_bzc  : function(component, event, helper) {
-        var _this = this;
-        var topic = event.getParam("topic");
-
-        var publisher = event.getParam("publisher");
-        var publisherCategory = event.getParam("publisherCategory");
-        var publisherType = event.getParam("publisherType");
-        var UserComponentId = component.get("v.UserComponentId");
-        var controller = event.getParam("controller");
-
-        console.log("bzc: topic: " + topic + " component: " + UserComponentId);
-
-        console.log("handle_evt_bzc: handling publisherCategory: " + publisherCategory + " from publisher " + publisher + " in " + UserComponentId);
-
-        // if the component is named and the event propagated from another controller then we ignore it.
-        if (publisherCategory == "Controller" && UserComponentId != null && UserComponentId != "") {
-            if (UserComponentId != publisher) {
-                console.log("handle_evt_bzc: controller: ignoring message from " + publisher + " in component " + UserComponentId);
-                return;
-            }
-        }
-
-        // if the component is named and the event propagated from a chart controlled by a controller with another name then we ignore it.
-        if (publisherCategory == "Display" && UserComponentId != null && UserComponentId != ""  && controller != null && controller != "") {
-            if (UserComponentId != controller) {
-                console.log("handle_evt_bzc: controller: ignoring message in " + UserComponentId + " intended for component " + controller);
-                return;
-            }
-        }
-
-
-    },        
-
     handle_evt_sfd3  : function(component, event, helper) {
         var _this = this;
         var topic = event.getParam("topic");
-        console.log("topic: " + topic);
 
-        var publisher = event.getParam("publisher");
-        var publisherCategory = event.getParam("publisherCategory");
-        var publisherType = event.getParam("publisherType");
         var UserComponentId = component.get("v.UserComponentId");
         var controller = event.getParam("controller");
 
-        console.log("handling publisherCategory: " + publisherCategory + " from publisher " + publisher + " in " + UserComponentId);
-                
-        // if the component is named and the event propagated from another controller then we ignore it.
-        if (publisherCategory == "Controller" && UserComponentId != null && UserComponentId != "") {
-            if (UserComponentId != publisher) {
-                console.log("controller: ignoring message from " + publisher + " in component " + UserComponentId);
-                return;
-            }
-        }
+        console.log("handle_evt_sfd3: topic: " + topic + " component: " + UserComponentId);
 
-        // if the component is named and the event propagated from a chart controlled by a controller with another name then we ignore it.
-        if (publisherCategory == "Display" && UserComponentId != null && UserComponentId != ""  && controller != null && controller != "") {
-            if (UserComponentId != controller) {
-                console.log("controller: ignoring message in " + UserComponentId + " intended for component " + controller);
-                return;
-            }
-        }
-        
+        // If the event propagated from a component related to another controller then we ignore it.
+        if (UserComponentId != controller) {
+            console.log("handle_evt_sfd3: controller: ignoring message in " + UserComponentId + " intended for component " + controller);
+            return;
+        }        
 
         if (topic == "ChartRendered")
         {
@@ -208,12 +155,11 @@
                 }
     
                 //publish to this component
-                var publisher = component.get("v.UserComponentId");
-                var componentCategory = component.get("v.componentCategory");
-                var componentType = component.get("v.componentType");
-                bzutils.publishEvent("InitializeData", publisher, componentCategory, componentType, configEventParameters, null);    
-//                bzutils.publishEventComponent(component, "InitializeData", publisher, componentCategory, componentType, configEventParameters, null);    
-                
+                var controllerId = component.get("v.UserComponentId");
+
+                var preppedEvent = bzutils.prepareEvent("InitializeData", configEventParameters, controllerId);
+                helper.publishPreppedEvent(component,preppedEvent);
+            
                 // clear the queue
                 component.set("v.initEventsQueue",[]);
 
@@ -229,7 +175,7 @@
         }
         if (topic == "InitializeData")
         {
-            console.log("handle_evt_bzc: InitializeData received by Controller: " + UserComponentId);
+            console.log("handle_evt_sfd3: InitializeData received by Controller: " + UserComponentId);
             var autoIncreaseLevels = component.get("v.autoIncreaseLevels");
             if (autoIncreaseLevels == true) {
                 console.log("auto increasing levels");
@@ -241,7 +187,7 @@
         }
         if (topic == "RefreshData")
         {
-            console.log("handle_evt_bzc: RefreshData received by Controller: " + UserComponentId);
+            console.log("handle_evt_sfd3: RefreshData received by Controller: " + UserComponentId);
             var autoIncreaseLevels = component.get("v.autoIncreaseLevels");
             if (autoIncreaseLevels == true) {
                 console.log("auto increasing levels");
@@ -357,49 +303,35 @@
     
     onClickMeasureV1 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 1);
-        var publisher = component.get("v.UserComponentId");
-        var componentCategory = component.get("v.componentCategory");
-        var componentType = component.get("v.componentType");
-        bzutils.publishEvent("SetMeasure", publisher, componentCategory, componentType, {"index" : 1, "measure" : currentMeasure }, null);
+        var controllerId = component.get("v.UserComponentId");
+        var preppedEvent = bzutils.prepareEvent("SetMeasure", {"index" : 1, "measure" : currentMeasure }, controllerId);
+        helper.publishPreppedEvent(component,preppedEvent);
     },
     onClickMeasureV2 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 2);
-        var publisher = component.get("v.UserComponentId");
-        var componentCategory = component.get("v.componentCategory");
-        var componentType = component.get("v.componentType");
-        bzutils.publishEvent("SetMeasure", publisher, componentCategory, componentType, {"index" : 2, "measure" : currentMeasure }, null);
+        var controllerId = component.get("v.UserComponentId");
+        var preppedEvent = bzutils.prepareEvent("SetMeasure", {"index" : 2, "measure" : currentMeasure }, controllerId);
+        helper.publishPreppedEvent(component,preppedEvent);
     },
     onClickMeasureV3 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 3);
-        var publisher = component.get("v.UserComponentId");
-        var componentCategory = component.get("v.componentCategory");
-        var componentType = component.get("v.componentType");
-        bzutils.publishEvent("SetMeasure", publisher, componentCategory, componentType, {"index" : 3, "measure" : currentMeasure }, null);
+        var controllerId = component.get("v.UserComponentId");
+        var preppedEvent = bzutils.prepareEvent("SetMeasure", {"index" : 3, "measure" : currentMeasure }, controllerId);
+        helper.publishPreppedEvent(component,preppedEvent);
     },
     onClickMeasureV4 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 4);
-        var publisher = component.get("v.UserComponentId");
-        var componentCategory = component.get("v.componentCategory");        
-        var componentType = component.get("v.componentType");
-        bzutils.publishEvent("SetMeasure", publisher, componentCategory, componentType, {"index" : 4, "measure" : currentMeasure }, null);
+        var controllerId = component.get("v.UserComponentId");
+        var preppedEvent = bzutils.prepareEvent("SetMeasure", {"index" : 4, "measure" : currentMeasure }, controllerId);
+        helper.publishPreppedEvent(component,preppedEvent);
     },
     onClickMeasureV5 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 5);
-        var publisher = component.get("v.UserComponentId");
-        var componentCategory = component.get("v.componentCategory");
-        var componentType = component.get("v.componentType");
-        bzutils.publishEvent("SetMeasure", publisher, componentCategory, componentType, {"index" : 5, "measure" : currentMeasure }, null);
+        var controllerId = component.get("v.UserComponentId");
+        var preppedEvent = bzutils.prepareEvent("SetMeasure", {"index" : 5, "measure" : currentMeasure }, controllerId);
+        helper.publishPreppedEvent(component,preppedEvent);
     },
 
-    
-    onClickMeasureV1 : function(component, event, helper) {
-        var currentMeasure = helper.setMeasure(component, 1);
-        var publisher = component.get("v.UserComponentId");
-        var componentCategory = component.get("v.componentCategory");
-        var componentType = component.get("v.componentType");
-        bzutils.publishEvent("SetMeasure", publisher, componentCategory, componentType, {"index" : 1, "measure" : currentMeasure }, null);
-    },
-    
     onClickFilterB1 : function(component, event, helper) {
         helper.setFilter(component, 1);
     },
@@ -452,12 +384,7 @@ var configEventParameters = {
 }
 
 //publish to this component
-var publisher = component.get("v.UserComponentId");
-var componentCategory = component.get("v.componentCategory");
-var componentType = component.get("v.componentType");
-
-
-// bzutils.publishEvent("RefreshData", publisher, componentCategory, componentType, configEventParameters, null);            
+var controllerId = component.get("v.UserComponentId");
 
 // THIS ALL TEMPORARY
 var d = new Date(2014, 1, 1, 0, 0, 0, 0);
@@ -470,7 +397,8 @@ $A.getCallback(function() {
         datajson.nodes[i].measures["Hot"].radius = Math.max(10,datajson.nodes[i].measures["Hot"].radius + Math.floor(Math.random() * 20) - 5); 
     }    
     configEventParameters["datajson"] = datajson;
-    bzutils.publishEvent("RefreshData", publisher, componentCategory, componentType, configEventParameters, null);            
+    var preppedEvent = bzutils.prepareEvent("RefreshData", configEventParameters, controllerId);
+    helper.publishPreppedEvent(component,preppedEvent);
     d.setMonth(d.getMonth() + 1);
 }),
 1000);

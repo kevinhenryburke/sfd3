@@ -180,11 +180,10 @@
                 }
 
                 //publish to this component
-                var publisher = component.get("v.UserComponentId");
-                var componentCategory = component.get("v.componentCategory");
-                var componentType = component.get("v.componentType");
-                bzutils.publishEvent("RefreshData", publisher, componentCategory, componentType, configEventParameters, null);            
-//                bzutils.publishEventComponent(component, "RefreshData", publisher, componentCategory, componentType, configEventParameters, null);            
+                var controllerId = component.get("v.UserComponentId");
+                var preppedEvent = bzutils.prepareEvent("RefreshData", configEventParameters, controllerId);
+                _this.publishPreppedEvent(component,preppedEvent);
+            
             }
         }))
         $A.enqueueAction(action);        
@@ -205,10 +204,9 @@
         }
 
         //publish to this component
-        var publisher = component.get("v.UserComponentId");
-        var componentCategory = component.get("v.componentCategory");
-        var componentType = component.get("v.componentType");
-        bzutils.publishEvent("SearchChart", publisher, componentCategory, componentType, configEventParameters, null);            
+        var controllerId = component.get("v.UserComponentId");
+        var preppedEvent = bzutils.prepareEvent("SearchChart", configEventParameters, controllerId);
+        _this.publishPreppedEvent(component,preppedEvent);
 
     },
 
@@ -233,10 +231,9 @@
             currentLevels++;
             console.log("increasing levels to: " + currentLevels);
             component.set("v.currentLevels", currentLevels);
-            var publisher = component.get("v.UserComponentId");
-            var componentCategory = component.get("v.componentCategory");
-            var componentType = component.get("v.componentType");
-            bzutils.publishEvent("ShowLevelsMore", publisher, componentCategory, componentType, {"levels" : currentLevels}, null);
+            var controllerId = component.get("v.UserComponentId");
+            var preppedEvent = bzutils.prepareEvent("ShowLevelsMore", {"levels" : currentLevels}, controllerId);
+            _this.publishPreppedEvent(component,preppedEvent);
         }
     },
     
@@ -251,10 +248,9 @@
             currentLevels--;
             console.log("decreasing levels to: " + currentLevels);
             component.set("v.currentLevels", currentLevels);
-            var publisher = component.get("v.UserComponentId");
-            var componentCategory = component.get("v.componentCategory");
-            var componentType = component.get("v.componentType");
-            bzutils.publishEvent("ShowLevelsFewer", publisher, componentCategory, componentType, {"levels" : currentLevels}, null);
+            var controllerId = component.get("v.UserComponentId");
+            var preppedEvent = bzutils.prepareEvent("ShowLevelsFewer", {"levels" : currentLevels}, controllerId);
+            _this.publishPreppedEvent(component,preppedEvent);
         }
     },
     
@@ -332,11 +328,9 @@
     },
 
     setFilter: function(component, indexer) {
+        var _this = this;
         var cmpTarget = component.find('b' + indexer);
-
-        var publisher = component.get("v.UserComponentId");
-        var componentCategory = component.get("v.componentCategory");
-        var componentType = component.get("v.componentType");
+        var controllerId = component.get("v.UserComponentId");
 
         // check existence of filter_show class to determine what state to publish
         var beforeClickedState = $A.util.hasClass(cmpTarget, 'filter_show');
@@ -344,7 +338,8 @@
 
         var configjson = component.get("v.configjson");
         var thisType = configjson.filtertypes[indexer - 1];
-        bzutils.publishEvent("SetFilter", publisher, componentCategory, componentType, {"index" : indexer, "state" : filterState, "filterType" : thisType }, null);
+        var preppedEvent = bzutils.prepareEvent("SetFilter", {"index" : indexer, "state" : filterState, "filterType" : thisType }, controllerId);
+        _this.publishPreppedEvent(component,preppedEvent);
 
         this.saveFilterVisibility(component, thisType, (filterState == "Show"));
     },
@@ -497,7 +492,40 @@
             moreButtonId = 'moreIncreaseOnly';
         }
         return moreButtonId;
-    }
+    },
+
+    // TODO function appears in many places, try to consolidate
+    publishPreppedEvent : function(component,preppedEvent){
+        if (preppedEvent != null) {
+            var event;
+            console.log("publishPreppedEvent: enter "+ preppedEvent.topic + " and " + preppedEvent.eventType);
+
+            if (preppedEvent.eventType != null) {
+                // go with preset value
+                console.log("publishPreppedEvent: override eventType: " + preppedEvent.eventType);
+            }
+            else {
+                preppedEvent.eventType = component.get("v.defaultEventType");
+                console.log("publishPreppedEvent: use default eventType: " + preppedEvent.eventType);
+            }
+
+            if (preppedEvent.eventType == "Component"){
+                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
+                event = component.getEvent("evt_bzc");
+            }
+            if (preppedEvent.eventType == "Application"){
+                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
+                event = $A.get("e.c:evt_sfd3");
+            }
+            if (preppedEvent.eventType == "Cache"){
+                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
+                var componentReference = component.get("v.componentReference");
+                var appEvents = bzutils.getCache (componentReference, "appEvents") ;
+                event = appEvents.pop();
+            }    
+            bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
+        }
+    },
 
 
     
