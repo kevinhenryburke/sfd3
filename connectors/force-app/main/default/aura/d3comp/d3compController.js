@@ -111,11 +111,29 @@
     /* handlers */  
 
     handle_evt_sfd3  : function(component, event, helper) {
+
         var _this = this;
-        var topic = event.getParam("topic");
+        var topic, parameters, controller;
+
+        // if there is an arguments parameter this has been triggered by a method call
+        // in which case we need to source our information from a level down in the event
+        var argumentsParameter = event.getParam("arguments");
+
+        if (argumentsParameter != null) {
+            bzutils.log('controller: invoked from method');
+            var tpc = argumentsParameter.tpc;
+            topic = tpc.topic;
+            parameters = tpc.parameters;
+            controller = tpc.controller;
+        }
+        else {
+            bzutils.log('chartArea: invoked from event');
+            topic = event.getParam("topic");
+            parameters = event.getParam("parameters");
+            controller = event.getParam("controller");    
+        }
 
         var UserComponentId = component.get("v.UserComponentId");
-        var controller = event.getParam("controller");
 
         console.log("handle_evt_sfd3: topic: " + topic + " component: " + UserComponentId);
 
@@ -127,7 +145,6 @@
 
         if (topic == "ChartRendered")
         {
-            var parameters = event.getParam("parameters");
             var componentReference = parameters["componentReference"];
             console.log("Publish Initializing Instruction for Charts: " + componentReference);
 
@@ -207,7 +224,6 @@
         }
         if (topic == "SetMeasure")
         {
-            var parameters = event.getParam("parameters");
             var measureIndex = parameters["index"];
             // refresh Buttons
             helper.updateButtonStyles(component, 'v', measureIndex, 5);
@@ -215,7 +231,6 @@
         if (topic == "SetFilter")
         {
             // toogle the button styles
-            var parameters = event.getParam("parameters");
             var indexer = parameters["index"];
             var cmpTarget = component.find('b' + indexer);
             // set attributes to indicate filter on/off status

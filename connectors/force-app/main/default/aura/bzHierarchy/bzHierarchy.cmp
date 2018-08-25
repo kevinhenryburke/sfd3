@@ -20,7 +20,7 @@
   <aura:attribute name="configuredAllowSearch" type="Boolean" default="false"/>    
   <aura:attribute name="queryJSON" type="String" default="{}"/> 
   
-  <c:d3comp 
+  <c:d3comp aura:id = "d3comp"
     defaultEventType = "Component"
     showBanner = "{!v.showBanner}" 
     Title = "{!v.Title}" 
@@ -40,7 +40,7 @@
   <aura:attribute name="cardFields" type="String" default="{}"/>    
   <aura:attribute name="objectIcons" type="String" default="{}"/>    
 
-  <c:panelDisplay
+  <c:panelDisplay aura:id = "panelDisplay" 
     defaultEventType = "Component"
     Controller = "{!v.UserComponentId}"
     cardFields = "{!v.cardFields}"
@@ -66,7 +66,7 @@
   <aura:attribute name="showPathToolTip" type="Boolean" default="true"/>    
   <aura:attribute name="nodestrokewidth" type="String" default="0.5px"/>    
 
-  <c:chartHierarchy
+  <c:chartHierarchy aura:id="chartHierarchy"
     defaultEventType = "Component"
     componentType = "{!v.componentType}"
     UserComponentId = "{!v.ChartUserComponentId}"

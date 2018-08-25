@@ -1,5 +1,14 @@
 ({
 
+    callFromContainer : function (component, event, helper) {
+        console.log('tpc: callFromContainer enter');   
+        var params = event.getParam("arguments");
+        console.log(params);
+        var tpc = params.tpc;
+        var topic = tpc.topic;
+        console.log(topic);
+    },
+
     // bear in mind that doInit can't refresh anything in an external library as it may lose a race condition.
     doInit: function(component, event, helper) {
         console.log('chartArea: doInit enter');   
@@ -93,19 +102,31 @@
         bzutils.log("calling the aura:method reScale in base");        
     },
 
-    
+
     handle_evt_sfd3  : function(component, event, helper) {
         bzutils.log('chartArea: handle_evt_sfd3 enter');
+        var topic, parameters, controller;
 
+        // if there is an arguments parameter this has been triggered by a method call
+        // in which case we need to source our information from a level down in the event
+        var argumentsParameter = event.getParam("arguments");
 
-        var topic = event.getParam("topic");
+        if (argumentsParameter != null) {
+            bzutils.log('chartArea: invoked from method');
+            var tpc = argumentsParameter.tpc;
+            topic = tpc.topic;
+            parameters = tpc.parameters;
+            controller = tpc.controller;
+        }
+        else {
+            bzutils.log('chartArea: invoked from event');
+            topic = event.getParam("topic");
+            parameters = event.getParam("parameters");
+            controller = event.getParam("controller");    
+        }
+
         var componentReference = component.get("v.componentReference");        
-
-        var controller = event.getParam("controller");
-        var parameters = event.getParam("parameters");
-
-
-        bzutils.log('chartArea: topic:' + topic + " controller " + controller + "componentReference " + componentReference);
+        bzutils.log('chartArea: topic:' + topic + " controller " + controller + " componentReference " + componentReference);
 
         var UserControllerComponentId = component.get("v.UserControllerComponentId");
         
@@ -143,7 +164,6 @@
         }
         if (topic == "SetFilter")
         {
-            var parameters = event.getParam("parameters");
             var indexer = parameters["index"];
             var state = parameters["state"];
             var filterType = parameters["filterType"];
