@@ -118,10 +118,11 @@
         // if there is an arguments parameter this has been triggered by a method call
         // in which case we need to source our information from a level down in the event
         var argumentsParameter = event.getParam("arguments");
+        var tpc = null;
 
         if (argumentsParameter != null) {
             bzutils.log('controller: invoked from method');
-            var tpc = argumentsParameter.tpc;
+            tpc = argumentsParameter.tpc;
             topic = tpc.topic;
             parameters = tpc.parameters;
             controller = tpc.controller;
@@ -257,6 +258,15 @@
             console.log("One time refresh");
             helper.updateData(component, event);
         }
+
+        // finally push down to contained components if this is a component event received from a direct method call
+        if (argumentsParameter != null) 
+        {
+            var customLookup = component.find("customLookup");
+            customLookup.callFromContainer(tpc);
+        }
+
+
     },
 
    // This function call when the end User Select any record from the result list.   

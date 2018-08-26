@@ -1,7 +1,7 @@
 ({
 
     /* receive a bubbled component event and distribute this to required children */
-    
+
     handle_evt_sfd3  : function(component, event, helper) {
         bzutils.log('bzHierarchy: handle_evt_sfd3 enter');
 
@@ -20,6 +20,9 @@
 
         var d3comp = component.find("d3comp");
         d3comp.callFromContainer(tpc);
+
+        var panelDisplay = component.find("panelDisplay");
+        panelDisplay.callFromContainer(tpc);
 
     },
 })

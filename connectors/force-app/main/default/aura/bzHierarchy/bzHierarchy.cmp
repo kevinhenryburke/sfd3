@@ -23,6 +23,7 @@
   <c:d3comp aura:id = "d3comp"
     defaultEventType = "Component"
     showBanner = "{!v.showBanner}" 
+    recordId = "{!v.recordId}"
     Title = "{!v.Title}" 
     UserComponentId = "{!v.UserComponentId}"  
     dataFormat = "{!v.dataFormat}"   
@@ -89,10 +90,4 @@
     nodestrokewidth = "{!v.nodestrokewidth}"
   />
 
-  
-  <!--
-
-
-  -->
-	
 </aura:component>

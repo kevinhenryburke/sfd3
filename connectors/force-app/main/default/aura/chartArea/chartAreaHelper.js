@@ -149,7 +149,6 @@
 
         datajson = bzutils.getCache (componentReference, "datajson") ;
         
-
         // re-initialize the chart
         var isInit = false;
         _this.initializeGroups(component, datajson, currentMeasure, primaryNodeId, showFilters, isInit);                 
@@ -228,8 +227,12 @@
         var allowPopover = component.get("v.allowPopover");
 
         if (allowPopover == true) {
+            console.log("allowPopover set so create embedded component ... "); 
             _this.createInfoLocation(component);
             _this.createPopOverComponent(component);
+        }
+        else {
+            console.log("allowPopover not set "); 
         }
 
     },
@@ -252,7 +255,7 @@
             .attr('transform',function(d,i) { return 'translate(' + popx + ',' + popy + ')';})
             .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[i];}) )
             .attr('id', function(d,i) { return "infolocation" + componentReference;})
-            .attr('visibility', "hidden") // white background to hide
+//            .attr('visibility', "hidden") // white background to hide
             .attr('class', function(d,i) { return "infolocation" + componentReference;});
 
         var referenceSelector = ".infolocation" + componentReference;
@@ -262,50 +265,62 @@
 
     // creates an informational popover
     createPopOverComponent : function (component) {
-        // check if we have an overlay library
-        var overlayLibElement = component.find('overlayLib');
-        if (overlayLibElement != null) {
 
-            var componentReference = component.get("v.componentReference");
-            var cardFields = component.get("v.cardFields");
-            var objectIcons = component.get("v.objectIcons");
+        // create an overlayLibrary that we can attach the popover to
+        $A.createComponent(
+        "lightning:overlayLibrary",
+        {
+        },
+        function(overlayLibElement, overlayStatus, overlayErrorMessage){
+            console.log("createPopOverComponent: overlayLibrary creation status: " + overlayStatus );
+            if (overlayStatus == "SUCCESS") {
+                console.log("createPopOverComponent: overlayLib found");
 
-            $A.createComponent(
-                "c:panelDisplay",
-                {
-                    "Controller" : "Top",
-                    "cardFields" : cardFields,
-                    "objectIcons" : objectIcons,
-                    "layoutStyle" : "cardTile",
-                    "isHosted" : true,
-                    "hostComponentReference" : componentReference,
-                    "hostUserControllerComponentId" : component.get("v.UserControllerComponentId")
-                },
-                function(content, status, errorMessage){
-                    //Add the new button to the body array
-                    var referenceSelector = bzutils.getCache (componentReference, "referenceSelector");
-                    console.log("createPopOverComponent: createComponent callback: " + referenceSelector);
-                    if (status === "SUCCESS") {
-                        console.log("createPopOverComponent: createComponent callback: SUCCESS: " );
+                var componentReference = component.get("v.componentReference");
+                var cardFields = component.get("v.cardFields");
+                var objectIcons = component.get("v.objectIcons");
 
-                        var modalPromise = component.find('overlayLib').showCustomPopover({
-                            body: content,
-                            referenceSelector: referenceSelector,
-                            // cssClass: "slds-hide,popoverclass,slds-popover,slds-popover_panel,slds-nubbin_left,no-pointer,cPopoverTest"
-                            cssClass: "popoverclass,slds-popover,slds-popover_panel,no-pointer,cChartArea"
-                        });
-                        component.set("v.modalPromise", modalPromise);  
-                        modalPromise.then(function (overlay) {
-                            overlay.show();  
-                            bzutils.setCache (componentReference, "overlay", overlay) ; 
-                        });             
+                $A.createComponent(
+                    "c:panelDisplay",
+                    {
+                        "Controller" : "Top", // TODO is this really ok to hardcode? Should it be same as hosting component's controller?
+                        "cardFields" : cardFields,
+                        "objectIcons" : objectIcons,
+                        "layoutStyle" : "cardTile",
+                        "isHosted" : true,
+                        "hostComponentReference" : componentReference,
+                        "hostUserControllerComponentId" : component.get("v.UserControllerComponentId")
+                    },
+                    function(content, status, errorMessage){
+                        //Add the new button to the body array
+                        var referenceSelector = bzutils.getCache (componentReference, "referenceSelector");
+                        console.log("createPopOverComponent: createComponent callback: " + referenceSelector);
+                        if (status === "SUCCESS") {
+                            console.log("createPopOverComponent: createComponent callback: SUCCESS: " );
+
+                            var modalPromise = overlayLibElement.showCustomPopover({
+                                body: content,
+                                referenceSelector: referenceSelector,
+                                // cssClass: "slds-hide,popoverclass,slds-popover,slds-popover_panel,slds-nubbin_left,no-pointer,cPopoverTest"
+                                cssClass: "popoverclass,slds-popover,slds-popover_panel,no-pointer,cChartArea"
+                            });
+                            component.set("v.modalPromise", modalPromise);  
+                            modalPromise.then(function (overlay) {
+                                overlay.show();  
+                                bzutils.setCache (componentReference, "overlay", overlay) ; 
+                            });             
+                        }
+                        else {
+                            console.log("createPopOverComponent: createComponent callback: Error: " + errorMessage);
+                        }
                     }
-                    else {
-                        console.log("createPopOverComponent: createComponent callback: Error: " + errorMessage);
-                    }
-                }
-            );
-        }
+                );
+            }
+            else {
+                console.log("createPopOverComponent: Error: overlayLib not created: " + overlayErrorMessage);
+            }
+        });
+
     },
 
     handleScaleChange: function(component,csf){

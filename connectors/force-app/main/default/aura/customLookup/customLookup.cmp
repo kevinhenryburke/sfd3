@@ -21,6 +21,10 @@
     <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
     <aura:handler event="c:evt_sfd3" action="{!c.handle_evt_sfd3}"/>
 
+    <aura:method name="callFromContainer" action="{!c.handle_evt_sfd3}"> 
+        <aura:attribute name="tpc" type="Object"/>    
+    </aura:method>
+      
     <!--declare events hendlers-->  
     <aura:handler name="oSelectedRecordEvent" event="c:evt_SubCompToContaining" action="{!c.handleEmbeddedComponentEvent}"/>
    

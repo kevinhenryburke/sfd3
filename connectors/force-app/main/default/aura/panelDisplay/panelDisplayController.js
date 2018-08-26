@@ -18,11 +18,29 @@
     */
 
     handle_evt_sfd3  : function(component, event, helper) {
+
         var _this = this;
-        var topic = event.getParam("topic");
+        var topic, parameters, controller;
+
+        // if there is an arguments parameter this has been triggered by a method call
+        // in which case we need to source our information from a level down in the event
+        var argumentsParameter = event.getParam("arguments");
+
+        if (argumentsParameter != null) {
+            bzutils.log('controller: invoked from method');
+            var tpc = argumentsParameter.tpc;
+            topic = tpc.topic;
+            parameters = tpc.parameters;
+            controller = tpc.controller;
+        }
+        else {
+            bzutils.log('chartArea: invoked from event');
+            topic = event.getParam("topic");
+            parameters = event.getParam("parameters");
+            controller = event.getParam("controller");    
+        }
 
         var RelatedControllerId = component.get("v.Controller");
-        var controller = event.getParam("controller");
 
         var isHosted = component.get("v.isHosted");
 
@@ -51,7 +69,6 @@
 
             // Hiding and showing fields on mouseover, whilst a nice idea, calls all the nodes to bounce
             // $A.util.removeClass(component.find("detailcardfields"), "slds-hide");
-            var parameters = event.getParam("parameters");
 
             var displayData = parameters["data"];
             var displayParent = parameters["parent"];

@@ -87,9 +87,26 @@
      handle_evt_sfd3  : function(component, event, helper) {
         console.log('customLookup: handle_evt_sfd3 enter');
 
-        var topic = event.getParam("topic");
-        var controller = event.getParam("controller");
-        var parameters = event.getParam("parameters");
+        var _this = this;
+        var topic, parameters, controller; // TODO - for application events this needs to consider controller
+
+        // if there is an arguments parameter this has been triggered by a method call
+        // in which case we need to source our information from a level down in the event
+        var argumentsParameter = event.getParam("arguments");
+
+        if (argumentsParameter != null) {
+            bzutils.log('controller: invoked from method');
+            var tpc = argumentsParameter.tpc;
+            topic = tpc.topic;
+            parameters = tpc.parameters;
+            controller = tpc.controller;
+        }
+        else {
+            bzutils.log('chartArea: invoked from event');
+            topic = event.getParam("topic");
+            parameters = event.getParam("parameters");
+            controller = event.getParam("controller");    
+        }
 
         if (topic == "InitializeData" || topic == "RefreshData")
         {
