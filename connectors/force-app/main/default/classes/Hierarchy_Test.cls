@@ -139,7 +139,9 @@ public with sharing class Hierarchy_Test {
         HierarchyConfiguration hc = factoryConfig();
         Account rootAccount = factoryAccount();
 
-        String JSONString = DThree.returnDataPack(JSON.serialize(hc));
+// TODO FIX to right method signature
+        // String JSONString = DThree.returnDataPack(JSON.serialize(hc));
+        String JSONString = DThree.returnDataPack();
         HierarchyJSON deserialized =
           (HierarchyJSON)JSON.deserialize(JSONString, HierarchyJSON.class);
     }

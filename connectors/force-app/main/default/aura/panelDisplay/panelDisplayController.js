@@ -146,4 +146,81 @@
         console.log("handleClose: exit");
      },
 
+     handleShowActiveSectionName: function (cmp, event, helper) {
+        alert(cmp.find("accordion").get('v.activeSectionName'));
+    },
+    handleToggleSectionD: function (cmp) {
+        cmp.set('v.isDVisible', !cmp.get('v.isDVisible'));
+    },
+    
+    handleExpandA : function(component, event, helper) {
+        console.log("handleExpandA: enter");
+        var expandComponent = component.find("expandA");
+        var isCollapsed = helper.sectionExpandCollapse(expandComponent);
+        if (isCollapsed) {
+            component.set("v.iconA", "utility:chevronright");
+        }
+        else {
+            component.set("v.iconA", "utility:chevrondown");
+        } 
+    },
+
+    handleExpandB : function(component, event, helper) {
+        console.log("handleExpandB: enter");
+        var expandComponent = component.find("expandB");
+        var isCollapsed = helper.sectionExpandCollapse(expandComponent);
+        if (isCollapsed) {
+            component.set("v.iconB", "utility:chevronright");
+        }
+        else {
+            component.set("v.iconB", "utility:chevrondown");
+        } 
+    },
+
+    handleExpandC : function(component, event, helper) {
+        console.log("handleExpandC: enter");
+        var expandComponent = component.find("expandC");
+        var isCollapsed = helper.sectionExpandCollapse(expandComponent);
+        if (isCollapsed) {
+            component.set("v.iconC", "utility:chevronright");
+        }
+        else {
+            component.set("v.iconC", "utility:chevrondown");
+        } 
+    },
+
+    handleShowModalView : function (component, event, helper) {
+
+        // TODO temporary hard coding
+
+        component.set("v.objectApiName", "Account");
+        component.set("v.layoutType", "Compact");
+        var mode = "view";
+        helper.showModal(component, mode);
+
+    },
+
+    handleShowModalReadOnly : function (component, event, helper) {
+
+        // TODO temporary hard coding
+
+        component.set("v.objectApiName", "Account");
+        component.set("v.layoutType", "Compact");
+        var mode = "readonly";
+        helper.showModal(component, mode);
+
+    },
+
+    handleShowModalEdit : function (component, event, helper) {
+
+        // TODO temporary hard coding
+
+        component.set("v.objectApiName", "Account");
+        component.set("v.layoutType", "Compact");
+        var mode = "edit";
+        helper.showModal(component, mode);
+
+    },
+
+
 })

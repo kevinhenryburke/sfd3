@@ -29,7 +29,7 @@ public class DThree {
 
     // TODO TODO TODO - this version to be deprecated? as has no context but handy for now
 
-    private static String returnDataPack() {
+    public static String returnDataPack() {
         // STATIC RESOURCE VERSION STILL HAS VALUE but eventually delete
         List<StaticResource> docs;
         String JSONString = [select id, name, body from StaticResource where name = 'NVAPack'].body.toString(); 

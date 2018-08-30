@@ -1368,6 +1368,40 @@ function update() {
         if (d.depth > 1) {
             preppedEvent.eventType = "Cache";
         } 
+
+// attempt to get the lighting info panel to follow the highlight.        
+var infosvg = bzutils.getCache (componentReference, "infosvg") ;
+var dx = d.x;
+var dy = d.y;
+console.log("popover:" + dy + " / " + dx);
+// infosvg.attr('transform',function(d,i) { return 'translate(' + dy + ',' + dx + ')';})
+
+// transitions fine but the lightning component only moves on scroll???
+// infosvg.transition()
+// .duration(1000)
+// .attr("transform", function(d) { 
+// var t = "translate(" + dy  + "," + dx + ")";
+//     return t;
+// });
+
+// if (dy > 500) {
+// infosvg.transition()
+// .duration(100)
+// .attr("transform", function(d) { 
+// var t = "translate(" + 50  + "," + dx + ")";
+//     return t;
+// });    
+// }
+
+// if (dy < 500) {
+// infosvg.transition()
+// .duration(100)
+// .attr("transform", function(d) { 
+// var t = "translate(" + 600  + "," + dx + ")";
+//     return t;
+// });    
+// }
+    
         return preppedEvent;
     }
 

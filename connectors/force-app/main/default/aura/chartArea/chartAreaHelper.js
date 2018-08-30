@@ -248,6 +248,7 @@
         var popy = 200;
 
         var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
+        var infosvg = 
         svg.selectAll('.symbol')
             .data(mdata)
             .enter()
@@ -261,6 +262,7 @@
         var referenceSelector = ".infolocation" + componentReference;
 
         bzutils.setCache (componentReference, "referenceSelector", referenceSelector ) ;
+        bzutils.setCache (componentReference, "infosvg", infosvg ) ;
     },
 
     // creates an informational popover
@@ -311,7 +313,7 @@
                             });             
                         }
                         else {
-                            console.log("createPopOverComponent: createComponent callback: Error: " + errorMessage);
+                            console.log("createPopOverComponent: create panelDisplay callback: Error: " + errorMessage);
                         }
                     }
                 );
