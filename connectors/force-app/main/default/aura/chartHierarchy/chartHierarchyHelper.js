@@ -85,7 +85,7 @@
         nodes = treeMappedData.descendants();
         // descendants: nodes will contain all of the visible nodes
         links = treeMappedData.descendants().slice(1);
-      
+
         // Normalize for fixed-depth.
         nodes.forEach(function(d){ 
             d.y = margin.left + (d.depth * fixedDepth);
@@ -106,10 +106,6 @@
         // Update the nodes...
         var node = nodeGroup.selectAll('g.treenode')
             .data(nodes, function(d) {    
-                console.log("bzc: error investigate: ");            
-                console.log(d.data);
-                console.log(d.data.id);
-                console.log(componentReference);
                 return d.id || (d.id = bzutils.addComponentRef(componentReference, d.data.id)); 
             });
                 
@@ -170,16 +166,41 @@
             })            ;
       
         // Add labels for the nodes
+
+
+        // dy = -1.35em
+        // x = 2
+        // text-anchor = middle        
+        
+        
+
+
         nodeEnter.append('text')
             .attr("childLess", function(d) {
                 return childLess(d);
             })
-            .attr("dy", ".35em")
+            .attr("dy", function(d) {
+                if (d.depth > 0) {
+                    return ".35em";
+                }
+                return "-1.35em";
+            })
             .attr("x", function(d) {
-                return childLess(d) ? _this.getTextOffset(component) : - _this.getTextOffset(component);
+                if (d.depth > 0) {
+                    return childLess(d) ? _this.getTextOffset(component) : - _this.getTextOffset(component);
+                }
+                return -1;
             })
             .attr("text-anchor", function(d) {
-                return childLess(d) ? "start" : "end";
+                var textAnchor = "middle";
+                console.log("check if root");
+                if (d.depth > 0) {
+                    textAnchor = childLess(d) ? "start" : "end";
+                } 
+                else {
+                    console.log("it must be root");
+                }
+                return textAnchor;
             })
             .style("font", function(d) {
                 return _this.getFontSizePX(component) + "px sans-serif";
@@ -215,10 +236,21 @@
                 return childLess(d);
             })
             .attr("x", function(d) {
-                return childLess(d) ? _this.getTextOffset(component) : - _this.getTextOffset(component);
+                if (d.depth > 0) {
+                    return childLess(d) ? _this.getTextOffset(component) : - _this.getTextOffset(component);
+                }
+                return -1;
             })
             .attr("text-anchor", function(d) {
-                return childLess(d) ? "start" : "end";
+                var textAnchor = "middle";
+                console.log("check if root");
+                if (d.depth > 0) {
+                    textAnchor = childLess(d) ? "start" : "end";
+                } 
+                else {
+                    console.log("it must be root");
+                }
+                return textAnchor;
             })
             .style("font", function(d) {
                 return _this.getFontSizePX(component) + "px sans-serif";

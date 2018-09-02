@@ -32,7 +32,7 @@
         bzutils.setCache (componentReference, "width", Math.min(screen.width, screen.height)) ; // review this
         bzutils.setCache (componentReference, "height", Math.min(screen.width, screen.height)) ; // review this
 
-		var margin = {top: 20, right: 90, bottom: 30, left: 90}; // this should probably be flexi-ed too
+		var margin = {top: 20, right: 90, bottom: 30, left: 50}; // this should probably be flexi-ed too
         bzutils.setCache (componentReference, "margin", margin) ;  
         
         // Differing strategies for computing Width and Height
