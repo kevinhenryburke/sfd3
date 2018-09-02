@@ -1341,33 +1341,18 @@ function update() {
         }
     }
       
-    /* TODO: this is pretty bad - builds up a huge list of events as context gets lost when we create new nodes
-    Need to find a better way!!!!!!
+    /* TODO: builds up a huge list of events as context gets lost when we create new nodes
+    Would be nice to find a better way!!!!!!
     */
     
     function nodeMouseover (componentReference, d) {
-        console.log("bzctree.nodeMouseover enter");
+        console.log("bzctree.nodeMouseover enter:");
         console.log(d);
     
         var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
         
-        if (d.depth <= 1) { // root or first level
-            // reset cache of events for mouseover events to publish - may be a better way to do this!
-            // the issue is that only the top orginally created nodes have lightning context, not sure why
-            // alternative would be to pass in a parameter for these nodes and push events only when the attribute is set
-            var appEvents = [];
-            if (appEvents.length < 500) { // keep a cap on number of cached events
-                for (var i = 0; i < 100; i++) {
-                    appEvents.push($A.get("e.c:evt_sfd3"));
-                }
-                bzutils.setCache (componentReference, "appEvents",  appEvents) ;
-            }
-        } 
-
         var preppedEvent = bzchart.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
-        if (d.depth > 1) {
-            preppedEvent.eventType = "Cache";
-        } 
+        preppedEvent.eventType = "Cache";
 
 // attempt to get the lighting info panel to follow the highlight.        
 var infosvg = bzutils.getCache (componentReference, "infosvg") ;

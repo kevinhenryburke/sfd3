@@ -19,7 +19,7 @@
         return isCollapsed;
     },
 
-    showModal : function (component, mode) {
+    showModal : function (component, mode, layoutType) {
         var modalBody;
         var modalFooter;
         var modalHeader;
@@ -29,8 +29,8 @@
         $A.createComponents([
             ["c:modalPanelDisplayContent",{
                 'recordId' : component.get("v.recordId"),
-                'objectApiName' : component.get("v.objectApiName"),
-                'layoutType' : component.get("v.layoutType"),
+                'objectApiName' : component.get("v.objectType"),
+                'layoutType' : layoutType,
                 'mode' : mode
             }],
             ["c:modalPanelDisplayFooter",{}]
@@ -44,7 +44,7 @@
                 component.find('overlayLib').showCustomModal({
                    header: modalHeader,
                    body: modalBody, 
-                   footer: modalFooter,
+                   // footer: modalFooter,
                    showCloseButton: true,
                    // cssClass: "my-modal,my-custom-class,my-other-class",
                    closeCallback: function() {

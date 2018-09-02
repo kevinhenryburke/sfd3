@@ -42,8 +42,16 @@
   <aura:handler event="aura:doneRendering" action="{!c.doneRendering}"/>
 
   <aura:attribute name="modalPromise" type="Aura.Action"/>
-	<aura:attribute name="modalShown" type="Boolean" default="false"/>    
+  <aura:attribute name="modalShown" type="Boolean" default="false"/>    
   
+<!-- Temporary play with reference to dynamic component -->
+<aura:attribute name="dyno" type="Aura.Component[]">
+<h1>WOWZA!!!</h1>
+</aura:attribute>
+
+<aura:attribute name="popoverPanel" type="Aura.Component[]">
+</aura:attribute>
+
   <!-- Methods with different implementations for different chart types -->  
 
   <aura:method name="refreshData"> 

@@ -47,10 +47,11 @@
         // Effecitvely can do this via a mouseover event on root.
         // TODO can move this to a generic location?
         bzutils.setCache (componentReference, "mouseoverRecordId", root.id ) ;
+        _this.restockCache(component);
+
         var preppedEvent = bzutils.xfcr("nodeMouseover", componentReference, root); 
         _this.publishPreppedEvent(component,preppedEvent);
-
-
+        _this.updatePopoverDirectry(component, preppedEvent);
     },
 
     update : function(component, nodeGroup, pathGroup, componentReference, source, makeSourceRoot) {
@@ -136,6 +137,11 @@
 				bzutils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
                 var preppedEvent = bzutils.xfcr("nodeMouseover", componentReference, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
+                if (d.depth <= 1) { // root or first level
+                    _this.restockCache(component);
+                }
+
+                _this.updatePopoverDirectry(component, preppedEvent);
 
             }))
 			.on('mouseout', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
@@ -161,10 +167,7 @@
             .style("fill", function(d) {
                 // we add new circles only to new nodes - the nodes are forgotten if collapsed
                 return d._children ? bzctree.getNodeColor(componentReference, d, "Parent") : bzctree.getNodeColor(componentReference, d, "Leaf");
-            })
-            
-	
-            ;
+            })            ;
       
         // Add labels for the nodes
         nodeEnter.append('text')

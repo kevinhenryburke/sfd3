@@ -27,14 +27,14 @@
         var argumentsParameter = event.getParam("arguments");
 
         if (argumentsParameter != null) {
-            bzutils.log('controller: invoked from method');
+            bzutils.log('panelDisplay: controller: invoked from method');
             var tpc = argumentsParameter.tpc;
             topic = tpc.topic;
             parameters = tpc.parameters;
             controller = tpc.controller;
         }
         else {
-            bzutils.log('chartArea: invoked from event');
+            bzutils.log('panelDisplay: invoked from event');
             topic = event.getParam("topic");
             parameters = event.getParam("parameters");
             controller = event.getParam("controller");    
@@ -46,7 +46,7 @@
 
         // if the component is named and the event propagated from a chart controlled by a controller with another name then we ignore it.
         if (isHosted == false && RelatedControllerId != controller) {
-            bzutils.log("controller: ignoring message for card related to " + RelatedControllerId + " intended for component " + controller);
+            bzutils.log("panelDisplay: controller: ignoring message for card related to " + RelatedControllerId + " intended for component " + controller);
             return;
         }
 
@@ -86,6 +86,7 @@
             // check if there is an objectType specific display fields list and icons list
             if (cardFields[displayData["objectType"]] != null) {
                 var objectType = displayData["objectType"];
+                component.set("v.objectType", objectType);
                 cardFieldsArray = cardFields[objectType];
 
                 component.set("v.iconName", "standard:account");
@@ -190,37 +191,21 @@
     },
 
     handleShowModalView : function (component, event, helper) {
-
-        // TODO temporary hard coding
-
-        component.set("v.objectApiName", "Account");
-        component.set("v.layoutType", "Compact");
         var mode = "view";
-        helper.showModal(component, mode);
-
+        var layoutType = "Compact";
+        helper.showModal(component, mode, layoutType);
     },
 
-    handleShowModalReadOnly : function (component, event, helper) {
-
-        // TODO temporary hard coding
-
-        component.set("v.objectApiName", "Account");
-        component.set("v.layoutType", "Compact");
-        var mode = "readonly";
-        helper.showModal(component, mode);
-
-    },
+    // handleShowModalReadOnly : function (component, event, helper) {
+    //     var mode = "readonly";
+    //     var layoutType = "Compact";
+    //     helper.showModal(component, mode, layoutType);
+    // },
 
     handleShowModalEdit : function (component, event, helper) {
-
-        // TODO temporary hard coding
-
-        component.set("v.objectApiName", "Account");
-        component.set("v.layoutType", "Compact");
         var mode = "edit";
-        helper.showModal(component, mode);
-
+        var layoutType = "Compact";
+        helper.showModal(component, mode, layoutType);
     },
-
 
 })

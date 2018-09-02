@@ -229,7 +229,8 @@
 
                 if (modalPromise != null ) {
                     modalPromise.then(function (overlay) {
-                        overlay.hide();   
+                        // overlay.hide();   
+                        overlay.close();   
                     });
                 }
             }

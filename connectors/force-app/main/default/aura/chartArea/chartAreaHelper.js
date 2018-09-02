@@ -14,6 +14,8 @@
         bzutils.setCache (componentReference, "componentType", component.get("v.componentType") ) ;
         bzutils.setCache (componentReference, "componentCategory", component.get("v.componentCategory") ) ;
         bzutils.setCache (componentReference, "componentEvent", component.getEvent("evt_bzc")) ;        
+        bzutils.setCache (componentReference, "defaultEventType", component.getEvent("defaultEventType")) ;        
+        bzutils.setCache (componentReference, "appEvents",  []) ;
 
         bzutils.setCache (componentReference, "UserComponentId", component.get("v.UserComponentId") ) ;
         bzutils.setCache (componentReference, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
@@ -274,6 +276,7 @@
         {
         },
         function(overlayLibElement, overlayStatus, overlayErrorMessage){
+
             console.log("createPopOverComponent: overlayLibrary creation status: " + overlayStatus );
             if (overlayStatus == "SUCCESS") {
                 console.log("createPopOverComponent: overlayLib found");
@@ -293,15 +296,17 @@
                         "hostComponentReference" : componentReference,
                         "hostUserControllerComponentId" : component.get("v.UserControllerComponentId")
                     },
-                    function(content, status, errorMessage){
-                        //Add the new button to the body array
+                    function(newComponent, status, errorMessage){
+
+                        component.set("v.popoverPanel", newComponent);
+                        
                         var referenceSelector = bzutils.getCache (componentReference, "referenceSelector");
                         console.log("createPopOverComponent: createComponent callback: " + referenceSelector);
                         if (status === "SUCCESS") {
                             console.log("createPopOverComponent: createComponent callback: SUCCESS: " );
 
                             var modalPromise = overlayLibElement.showCustomPopover({
-                                body: content,
+                                body: newComponent,
                                 referenceSelector: referenceSelector,
                                 // cssClass: "slds-hide,popoverclass,slds-popover,slds-popover_panel,slds-nubbin_left,no-pointer,cPopoverTest"
                                 cssClass: "popoverclass,slds-popover,slds-popover_panel,no-pointer,cChartArea"
@@ -364,6 +369,66 @@
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
         }
     },
+
+    restockCache : function(component) {
+        var _this = this;
+        console.log("chartArea: restockCache enter:");
+        var componentReference = component.get("v.componentReference");
+
+        // reset cache of events for mouseover events to publish - may be a better way to do this!
+        // the issue is that only the top orginally created nodes have lightning context, not sure why
+        // alternative would be to pass in a parameter for these nodes and push events only when the attribute is set
+
+        var appEvents = bzutils.getCache (componentReference, "appEvents") ;
+        console.log("chartArea: push a new cache event length = " + appEvents.length);
+
+        if (appEvents.length < 200) { // keep a cap on number of cached events
+            for (var i = 0; i < 100; i++) {
+
+                var defaultEventType = component.get("v.defaultEventType");
+                var appEvent;
+            
+                if (defaultEventType == "Application") {
+                    console.log("chartArea: push a new cache event Application");
+                    appEvent = $A.get("e.c:evt_sfd3");
+                } 
+                else {
+                    console.log("chartArea: push a new cache event Component");
+                    appEvent = component.getEvent("evt_bzc");
+//                    appEvent = $A.get("e.c:evt_sfd3");
+                }
+            
+                appEvents.push(appEvent);
+            }
+            bzutils.setCache (componentReference, "appEvents",  appEvents) ;
+        }
+    }, 
+
+    /*
+     Note - popover component is not in the component hierarchy so needs to be invoked directly, 
+     not via a component event which is till not recognize
+    */
+
+    updatePopoverDirectry : function(component, preppedEvent) {
+        var _this = this;
+        console.log("chartArea: updatePopoverDirectry enter");
+
+        var defaultEventType = component.get("v.defaultEventType");
+
+        if (defaultEventType == "Component") {
+            console.log("popover: invoking by direct method call");
+            var popoverPanel = component.get("v.popoverPanel");
+            var tpc = {
+                "topic" : preppedEvent.topic,
+                "parameters" : preppedEvent.parameters,
+                "controller" : preppedEvent.controllerId,
+            };
+            popoverPanel[0].callFromContainer(tpc);    
+        }
+    },
+
+
+
 
     // console.log("PreProcess data");
     // datajson = bzutils.xfcr("dataPreProcess", componentReference, datajson); // preprocessing of data (if any)
