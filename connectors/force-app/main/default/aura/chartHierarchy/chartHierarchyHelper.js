@@ -163,17 +163,8 @@
             .style("fill", function(d) {
                 // we add new circles only to new nodes - the nodes are forgotten if collapsed
                 return d._children ? bzctree.getNodeColor(componentReference, d, "Parent") : bzctree.getNodeColor(componentReference, d, "Leaf");
-            })            ;
+            });
       
-        // Add labels for the nodes
-
-
-        // dy = -1.35em
-        // x = 2
-        // text-anchor = middle        
-        
-        
-
 
         nodeEnter.append('text')
             .attr("childLess", function(d) {

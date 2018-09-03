@@ -60,10 +60,6 @@
 
   <!-- Network Chart Parameters -->
   <aura:attribute name="hasPrimaryNode" type="Boolean" default="true" description="Determines if the chart has a primary node"/>    
-  <aura:attribute name="primaryNodeHighlightingOn" type="Boolean" default="true" description="Determines if selected node should be highlighted"/>    
-	<aura:attribute name="primaryNodeHighlightingColour" type="String" default="gold" description="Name of the colour of highlighed node"/>    
-	<aura:attribute name="primaryNodeHighlightingRadius" type="String" default="10px" description="Determines width of highlighting on a selected node"/>      
-  <aura:attribute name="retainNodeDetailsMouseOut" type="Boolean" default="true"  description="Set to true if we wish extended details following a node mouseover to be retain after mouseout"/>    
   <aura:attribute name="showPathToolTip" type="Boolean" default="true"/>    
   <aura:attribute name="nodestrokewidth" type="String" default="0.5px"/>    
 
@@ -82,12 +78,9 @@
     cardFields = "{!v.cardFields}"
     objectIcons = "{!v.objectIcons}"
     hasPrimaryNode = "{!v.hasPrimaryNode}"
-    primaryNodeHighlightingOn = "{!v.primaryNodeHighlightingOn}"
-    primaryNodeHighlightingColour = "{!v.primaryNodeHighlightingColour}"
-    primaryNodeHighlightingRadius = "{!v.primaryNodeHighlightingRadius}"
-    retainNodeDetailsMouseOut = "{!v.retainNodeDetailsMouseOut}"
     showPathToolTip = "{!v.showPathToolTip}"
     nodestrokewidth = "{!v.nodestrokewidth}"
   />
+
 
 </aura:component>

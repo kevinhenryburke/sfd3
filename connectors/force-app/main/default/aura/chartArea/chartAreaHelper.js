@@ -20,10 +20,6 @@
         bzutils.setCache (componentReference, "UserComponentId", component.get("v.UserComponentId") ) ;
         bzutils.setCache (componentReference, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
         bzutils.setCache (componentReference, "hasPrimaryNode", component.get("v.hasPrimaryNode") ) ;
-        bzutils.setCache (componentReference, "primaryNodeHighlightingOn", component.get("v.primaryNodeHighlightingOn") ) ;
-        bzutils.setCache (componentReference, "primaryNodeHighlightingColour", component.get("v.primaryNodeHighlightingColour") ) ;
-        bzutils.setCache (componentReference, "primaryNodeHighlightingRadius", component.get("v.primaryNodeHighlightingRadius") ) ;
-        bzutils.setCache (componentReference, "retainNodeDetailsMouseOut", component.get("v.retainNodeDetailsMouseOut") ) ;
         bzutils.setCache (componentReference, "showPathToolTip", component.get("v.showPathToolTip") ) ;
         bzutils.setCache (componentReference, "nodestrokewidth", component.get("v.nodestrokewidth") ) ;
         bzutils.setCache (componentReference, "showLevels", component.get("v.showLevelsInitial")) ;

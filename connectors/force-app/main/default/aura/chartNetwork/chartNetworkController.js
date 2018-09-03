@@ -7,6 +7,12 @@
         // var args = event.getParam("arguments");
         // var datajson = args.datajson;
 
+        var componentReference = component.get("v.componentReference");        
+        bzutils.setCache (componentReference, "primaryNodeHighlightingOn", component.get("v.primaryNodeHighlightingOn") ) ;
+        bzutils.setCache (componentReference, "primaryNodeHighlightingColour", component.get("v.primaryNodeHighlightingColour") ) ;
+        bzutils.setCache (componentReference, "primaryNodeHighlightingRadius", component.get("v.primaryNodeHighlightingRadius") ) ;
+        bzutils.setCache (componentReference, "retainNodeDetailsMouseOut", component.get("v.retainNodeDetailsMouseOut") ) ;
+
         helper.initializeVisuals(component);                         
     },
 
