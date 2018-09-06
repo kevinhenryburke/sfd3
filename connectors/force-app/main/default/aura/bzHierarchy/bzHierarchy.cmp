@@ -59,8 +59,8 @@
 	<aura:attribute name="allowPopover" type="Boolean" default="false"/>    
 
   <!-- Network Chart Parameters -->
-  <aura:attribute name="hasPrimaryNode" type="Boolean" default="true" description="Determines if the chart has a primary node"/>    
-  <aura:attribute name="showPathToolTip" type="Boolean" default="true"/>    
+  <aura:attribute name="hasPrimaryNode" type="Boolean" default="false" description="Determines if the chart has a primary node"/>    
+  <aura:attribute name="showPathToolTip" type="Boolean" default="false"/>    
   <aura:attribute name="nodestrokewidth" type="String" default="0.5px"/>    
 
   <c:chartHierarchy aura:id="chartHierarchy"
