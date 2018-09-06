@@ -27,8 +27,5 @@
     <design:attribute name="allowPopover" default="false" label="Embed Info Panel" description="Select if you want an embeddable floating info panel "/>        
 
     <!-- Network Chart Parameters -->
-    <!-- <design:attribute name="hasPrimaryNode" default="false" label="Chart has Primary Node" description="Determines if the chart has a primary node"/>    
-    <design:attribute name="showPathToolTip" default="false" label="Show Path ToolTip" description="set to true if tooltips should show when a user mouses over a path"/>    
-    <design:attribute name="nodestrokewidth" default="0.5px" label="Node Stroke Width" description="Width of border line around a node in pixels - format is Npx where N is decimal - default is 0.5px"/>     -->
     
 </design:component>

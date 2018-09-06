@@ -12,9 +12,9 @@
         <aura:attribute name="ChartScaleFactor" type="Decimal"/> 
     </aura:method>
 
-  <aura:attribute name="primaryNodeHighlightingOn" type="Boolean" default="true" description="Determines if selected node should be highlighted"/>    
-	<aura:attribute name="primaryNodeHighlightingColour" type="String" default="gold" description="Name of the colour of highlighed node"/>    
-	<aura:attribute name="primaryNodeHighlightingRadius" type="String" default="10px" description="Determines width of highlighting on a selected node"/>      
-  <aura:attribute name="retainNodeDetailsMouseOut" type="Boolean" default="true"  description="Set to true if we wish extended details following a node mouseover to be retain after mouseout"/>    
+    <aura:attribute name="primaryNodeHighlightingOn" type="Boolean" default="true" description="Determines if selected node should be highlighted"/>    
+    <aura:attribute name="primaryNodeHighlightingColour" type="String" default="gold" description="Name of the colour of highlighed node"/>    
+    <aura:attribute name="primaryNodeHighlightingRadius" type="String" default="10px" description="Determines width of highlighting on a selected node"/>      
+    <aura:attribute name="retainNodeDetailsMouseOut" type="Boolean" default="true"  description="Set to true if we wish extended details following a node mouseover to be retain after mouseout"/>    
     
 </aura:component>

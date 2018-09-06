@@ -78,8 +78,6 @@
     cardFields = "{!v.cardFields}"
     objectIcons = "{!v.objectIcons}"
     hasPrimaryNode = "{!v.hasPrimaryNode}"
-    showPathToolTip = "{!v.showPathToolTip}"
-    nodestrokewidth = "{!v.nodestrokewidth}"
   />
 
 
