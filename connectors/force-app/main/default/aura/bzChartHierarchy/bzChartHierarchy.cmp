@@ -7,29 +7,49 @@
   <aura:registerEvent name="evt_bzc" type="c:evt_bzc"/>
   <aura:handler name="evt_bzc" event="c:evt_bzc" action="{!c.handle_evt_sfd3}"/>   
 
-  <!-- Page Show Parameters -->
-  <aura:attribute name="showTopPanel" type="Boolean" default="true"/>      
-  <aura:attribute name="showFloatPanel" type="Boolean" default="true"/>      
-  <aura:attribute name="showBanner" type="Boolean" default="true"/>      
+  <!-- DATA -->
 
-  <!-- Controller parameters -->
-  <aura:attribute name="Title" type="String" />      
-  <aura:attribute name="UserComponentId" type="String" default="" description="If you want charts to only respond to particular controllers on a page then give this controller a name here (unique to the page) and associate it using the Controller Component Id option on the chart"/>    
   <aura:attribute name="dataFormat" type="String" default=""/>      
   <aura:attribute name="dataSourceMethod" type="String" default="c.returnDataNodesOnly"/>      
   <aura:attribute name="dataUpdateMethod" type="String" default="c.returnDataUpdate"/>      
-  <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
-  <aura:attribute name="configjsonString" type="String" />
-	<aura:attribute name="searchAction" type="String"/> 
-  <aura:attribute name="configuredAllowSearch" type="Boolean" default="false"/>    
   <aura:attribute name="queryJSON" type="String" default="{}"/> 
+  <aura:attribute name="configjsonString" type="String" />  <!-- this one is a bit of data and a bit of display -->
+  <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
+
+  <!-- DISPLAY PANELS -->
+
+  <aura:attribute name="showTopPanel" type="Boolean" default="true"/>      
+  <aura:attribute name="showBanner" type="Boolean" default="true"/>      
+  <aura:attribute name="allowPopover" type="Boolean" default="false"/>    
+
+
+  <!-- DISPLAY FEATURES - GENERAL -->
+
+  <aura:attribute name="searchAction" type="String"/> 
+  <aura:attribute name="configuredAllowSearch" type="Boolean" default="false"/>    
+  <aura:attribute name="Title" type="String" />      
+  <aura:attribute name="showLevelsInitial" type="Integer" default="1"/>   
+
+  <!-- DISPLAY FEATURES - HIERARCHY -->
+
+  <aura:attribute name="cardFields" type="String" default="{}"/>    
+  <aura:attribute name="objectIcons" type="String" default="{}"/>    
+  <aura:attribute name="LeafColors" type="String" default="{&quot;values&quot; : [0], &quot;colors&quot; : [&quot;white&quot;]}" description="Determines the color of a leaf node"/>    
+  <aura:attribute name="ParentColors" type="String" default="{&quot;values&quot; : [0], &quot;colors&quot; : [&quot;lightsteelblue&quot; ]}" description="Determines the color of parent node"/>    
+  <aura:attribute name="showZoomSlider" type="Boolean" default="false"/>    
+  <aura:attribute name="clearHighlightedPaths" type="Boolean" default="true" description="Determines if the chart has a primary node"/>    
+
+  <!-- DISPLAY FEATURES - NETWORK -->
+
+  <aura:attribute name="showPathToolTip" type="Boolean" default="false"/>    
+  <aura:attribute name="nodestrokewidth" type="String" default="0.5px"/>    
   
   <c:d3comp aura:id = "d3comp"
     defaultEventType = "Component"
     showBanner = "{!v.showBanner}" 
     recordId = "{!v.recordId}"
     Title = "{!v.Title}" 
-    UserComponentId = "{!v.UserComponentId}"  
+    UserComponentId = "Controller"  
     dataFormat = "{!v.dataFormat}"   
     dataSourceMethod = "{!v.dataSourceMethod}"    
     dataUpdateMethod = "{!v.dataUpdateMethod}"     
@@ -42,38 +62,21 @@
 
 
   <!-- Card Display Parameters-->
-  <aura:attribute name="cardFields" type="String" default="{}"/>    
-  <aura:attribute name="objectIcons" type="String" default="{}"/>    
 
   <aura:if isTrue="{!v.showTopPanel}">
     <c:panelDisplay aura:id = "panelDisplay" 
       defaultEventType = "Component"
-      Controller = "{!v.UserComponentId}"
+      Controller = "Controller"
       cardFields = "{!v.cardFields}"
       objectIcons = "{!v.objectIcons}"  
     />
   </aura:if>
 
-  <!-- Hierarchy Chart Parameters -->
-  <aura:attribute name="componentType" type="String" default="Chart"/>    
-  <aura:attribute name="ChartUserComponentId" type="String" default="" description="If putting more than one chart on a page then this provides users with a mechanism to set their own for mapping purposes"/>
-  <aura:attribute name="showLevelsInitial" type="Integer" default="1"/>   
-  <aura:attribute name="clearHighlightedPaths" type="Boolean" default="true" description="Determines if the chart has a primary node"/>    
-  <aura:attribute name="LeafColors" type="String" default="{&quot;values&quot; : [0], &quot;colors&quot; : [&quot;white&quot;]}" description="Determines the color of a leaf node"/>    
-  <aura:attribute name="ParentColors" type="String" default="{&quot;values&quot; : [0], &quot;colors&quot; : [&quot;lightsteelblue&quot; ]}" description="Determines the color of parent node"/>    
-  <aura:attribute name="showZoomSlider" type="Boolean" default="false"/>    
-	<aura:attribute name="allowPopover" type="Boolean" default="false"/>    
-
-  <!-- Network Chart Parameters -->
-  <!-- <aura:attribute name="hasPrimaryNode" type="Boolean" default="false" description="Determines if the chart has a primary node"/>    -->
-  <aura:attribute name="showPathToolTip" type="Boolean" default="false"/>    
-  <aura:attribute name="nodestrokewidth" type="String" default="0.5px"/>    
-
   <c:chartHierarchy aura:id="chartHierarchy"
     defaultEventType = "Component"
-    componentType = "{!v.componentType}"
-    UserComponentId = "{!v.ChartUserComponentId}"
-    UserControllerComponentId = "{!v.UserComponentId}"
+    componentType = "ctree"
+    UserComponentId = "Hierarchy"
+    UserControllerComponentId = "Controller"
     showLevelsInitial = "{!v.showLevelsInitial}"
     Title = "{!v.Title}"
     clearHighlightedPaths = "{!v.clearHighlightedPaths}"

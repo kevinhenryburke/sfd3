@@ -178,9 +178,15 @@
         bzutils.setCache (componentReference, "datajson", datajson ) ;
 
         var hasPrimaryNode = bzutils.getCache (componentReference, "hasPrimaryNode") ;
+        // var hasPrimaryNode = component.get("v.hasPrimaryNode") ;
         if (hasPrimaryNode == true) {
+            console.log("hasPrimaryNode true");
+            console.log("hasPrimaryNode id: " + primaryNodeId);
             primaryNodeId = bzutils.addComponentRef(componentReference, primaryNodeId);
             bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
+        }
+        else {
+            console.log("hasPrimaryNode false");
         }
 
         bzutils.setCache (componentReference, "currentMeasure", currentMeasure ) ;
@@ -254,7 +260,7 @@
             .attr('transform',function(d,i) { return 'translate(' + popx + ',' + popy + ')';})
             .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[i];}) )
             .attr('id', function(d,i) { return "infolocation" + componentReference;})
-//            .attr('visibility', "hidden") // white background to hide
+            .attr('visibility', "hidden") // white background to hide
             .attr('class', function(d,i) { return "infolocation" + componentReference;});
 
         var referenceSelector = ".infolocation" + componentReference;
@@ -405,21 +411,25 @@
      not via a component event which is till not recognize
     */
 
-    updatePopoverDirectry : function(component, preppedEvent) {
+    updatePopoverDirectly : function(component, preppedEvent) {
         var _this = this;
-        console.log("chartArea: updatePopoverDirectry enter");
+        console.log("chartArea: updatePopoverDirectly enter");
 
-        var defaultEventType = component.get("v.defaultEventType");
+        var allowPopover = component.get("v.allowPopover");
 
-        if (defaultEventType == "Component") {
-            console.log("popover: invoking by direct method call");
-            var popoverPanel = component.get("v.popoverPanel");
-            var tpc = {
-                "topic" : preppedEvent.topic,
-                "parameters" : preppedEvent.parameters,
-                "controller" : preppedEvent.controllerId,
-            };
-            popoverPanel[0].callFromContainer(tpc);    
+        if (allowPopover == true) {
+            var defaultEventType = component.get("v.defaultEventType");
+
+            if (defaultEventType == "Component") {
+                console.log("popover: invoking by direct method call");
+                var popoverPanel = component.get("v.popoverPanel");
+                var tpc = {
+                    "topic" : preppedEvent.topic,
+                    "parameters" : preppedEvent.parameters,
+                    "controller" : preppedEvent.controllerId,
+                };
+                popoverPanel[0].callFromContainer(tpc);    
+            }
         }
     },
 

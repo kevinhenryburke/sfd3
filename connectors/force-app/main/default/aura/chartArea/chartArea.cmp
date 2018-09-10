@@ -81,7 +81,7 @@
   <!-- Design Paramters -->  
   <aura:attribute name="UserComponentId" type="String" default="" description="If putting more than one chart on a page then this provides users with a mechanism to set their own for mapping purposes"/>    
   <aura:attribute name="UserControllerComponentId" type="String" default="" description="If we want to restrict to a particular controller on the page then put the name here that you used as the Component Id of the Controller. Otherwise all controllers will act on this chart"/>    
-  <aura:attribute name="hasPrimaryNode" type="Boolean" default="true" description="Determines if the chart has a primary node"/>    
+  <aura:attribute name="hasPrimaryNode" type="Boolean" default="false" description="Determines if the chart has a primary node"/>    
   <aura:attribute name="showPathToolTip" type="Boolean" default="true"/>    
 	<aura:attribute name="nodestrokewidth" type="String" default="0.5px"/>    
   <aura:attribute name="showLevelsInitial" type="Integer" default="1"/>   

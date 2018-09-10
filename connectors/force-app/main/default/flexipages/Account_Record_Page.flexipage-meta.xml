@@ -45,10 +45,6 @@
     <flexiPageRegions>
         <componentInstances>
             <componentInstanceProperties>
-                <name>ChartUserComponentId</name>
-                <value>BottomC</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
                 <name>LeafColors</name>
                 <value>{&quot;Account&quot; : { &quot;colorBy&quot; : &quot;size&quot; , &quot;values&quot; : [0,22070163,25070163], &quot;colors&quot; : [&quot;white&quot; , &quot;yellow&quot;, &quot;green&quot;] }}</value>
             </componentInstanceProperties>
@@ -61,10 +57,6 @@
                 <value>Account Hierarchy Component</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
-                <name>UserComponentId</name>
-                <value>TopC</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
                 <name>allowPopover</name>
                 <value>true</value>
             </componentInstanceProperties>
@@ -75,10 +67,6 @@
             <componentInstanceProperties>
                 <name>clearHighlightedPaths</name>
                 <value>true</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>componentType</name>
-                <value>ctree</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>configjsonString</name>
@@ -119,10 +107,6 @@
             <componentInstanceProperties>
                 <name>showBanner</name>
                 <value>false</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>showFloatPanel</name>
-                <value>true</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>showLevelsInitial</name>

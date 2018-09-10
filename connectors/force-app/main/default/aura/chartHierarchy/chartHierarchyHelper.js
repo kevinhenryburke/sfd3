@@ -51,7 +51,7 @@
 
         var preppedEvent = bzutils.xfcr("nodeMouseover", componentReference, root); 
         _this.publishPreppedEvent(component,preppedEvent);
-        _this.updatePopoverDirectry(component, preppedEvent);
+        _this.updatePopoverDirectly(component, preppedEvent);
     },
 
     update : function(component, nodeGroup, pathGroup, componentReference, source, makeSourceRoot) {
@@ -137,7 +137,7 @@
                     _this.restockCache(component);
                 }
 
-                _this.updatePopoverDirectry(component, preppedEvent);
+                _this.updatePopoverDirectly(component, preppedEvent);
 
             }))
 			.on('mouseout', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once

@@ -2,7 +2,7 @@
     <design:attribute name="componentType" label="Component Type" default="" description="See documentation for a list of these values. For example chart.connections, chart.influence" />
     <design:attribute name="UserComponentId" label="Component Id" default="Chart" description="Id for this component" />
     <design:attribute name="UserControllerComponentId" label="Controller Component Id" default="Controller" description="If we want to restrict to a particular controller on the page then put the name here that you used as the Component Id of the Controller. Otherwise all controllers will act on this chart"/>    
-	<design:attribute name="hasPrimaryNode" default="true" label="Chart has Primary Node" description="Determines if the chart has a primary node"/>    
+	<!-- <design:attribute name="hasPrimaryNode" default="true" label="Chart has Primary Node" description="Determines if the chart has a primary node"/>     -->
     <design:attribute name="showPathToolTip" default="true" label="Show Path ToolTip" description="set to true if tooltips should show when a user mouses over a path"/>    
     <design:attribute name="nodestrokewidth" default="0.5px" label="Node Stroke Width" description="Width of border line around a node in pixels - format is Npx where N is decimal - default is 0.5px"/>    
     <design:attribute name="showLevelsInitial" default="1" label="Initial Connection Levels" description="Initial number of connection levels to show - default is 1"/>    
