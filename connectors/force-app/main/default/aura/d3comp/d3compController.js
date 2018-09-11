@@ -37,7 +37,6 @@
                 // TODO dataFormat is as yet unused.
                 var dataFormat = component.get("v.dataFormat");
                 console.log("dataFormat: " + dataFormat);
-                var configjsonString = component.get("v.configjsonString");
                 var configjson = component.get("v.configjson");
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
                 var panelPrimaryId = component.get("v.panelPrimaryId");            

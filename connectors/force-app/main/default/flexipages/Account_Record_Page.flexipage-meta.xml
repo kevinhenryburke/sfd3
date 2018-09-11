@@ -89,6 +89,10 @@
                 <value>c.returnDataPackUpdate</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
+                <name>masterConfig</name>
+                <value>{ 	&quot;data&quot; : { 		&quot;dataFormat&quot; : &quot;HierarchyJSON&quot;	 	} }</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
                 <name>objectIcons</name>
                 <value>{&quot;Account&quot; :&quot;standard:account&quot; , &quot;Opportunity&quot; : &quot;standard:opportunity&quot;}</value>
             </componentInstanceProperties>
