@@ -191,13 +191,13 @@
                     return "url(#" + d.type + ")";
                 })
                 .on('mouseout', function(d) { // hide the div
-                    var showPathToolTip = bzutils.getCache (componentReference, "showPathToolTip"); 
+                    var showPathToolTip = component.get("v.showPathToolTip"); 
                     if (showPathToolTip) {
                         bzutils.xfcr("pathMouseout", componentReference, pathToolTipDiv); 
                     }
                 })
                 .on('mouseover', $A.getCallback(function(d) { 
-                    var showPathToolTip = bzutils.getCache (componentReference, "showPathToolTip") ;
+                    var showPathToolTip = component.get("v.showPathToolTip"); 
                     console.log("showPathToolTip: " + showPathToolTip);
                     if (showPathToolTip) {
                         bzutils.xfcr("pathMouseover", componentReference, d, path, pathToolTipDiv); 

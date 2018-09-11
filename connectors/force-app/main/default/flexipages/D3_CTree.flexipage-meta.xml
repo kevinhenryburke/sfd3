@@ -115,10 +115,6 @@
                 <name>showLevelsInitial</name>
                 <value>1</value>
             </componentInstanceProperties>
-            <!-- <componentInstanceProperties>
-                <name>showPathToolTip</name>
-                <value>true</value>
-            </componentInstanceProperties> -->
             <componentInstanceProperties>
                 <name>showZoomSlider</name>
                 <value>false</value>

@@ -101,10 +101,6 @@
                 <name>showLevelsInitial</name>
                 <value>1</value>
             </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>showPathToolTip</name>
-                <value>true</value>
-            </componentInstanceProperties>
             <componentName>chartHierarchy</componentName>
         </componentInstances>
         <name>main</name>

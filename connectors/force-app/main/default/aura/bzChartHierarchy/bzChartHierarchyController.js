@@ -59,6 +59,9 @@ masterConfigObject =
                 "ParentColors" : {"Account" : {  "colorBy" : "size" ,  "values" : [0,38970163], "colors" : ["lightsteelblue" , "purple"] }},
                 "showZoomSlider" : false,
                 "clearHighlightedPaths" : true
+            },
+            "Network" : {
+                "showPathToolTip" : true
             }
         }
     },
@@ -100,14 +103,9 @@ masterConfigObject =
         component.set("v.showZoomSlider" , masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["showZoomSlider"]);
         component.set("v.clearHighlightedPaths" , masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["clearHighlightedPaths"]);
         
-        // "LeafColors" type="String" default="{&quot;values&quot; : [0], &quot;colors&quot; : [&quot;white&quot;]}" description="Determines the color of a leaf node"/>    
-        // "ParentColors" type="String" default="{&quot;values&quot; : [0], &quot;colors&quot; : [&quot;lightsteelblue&quot; ]}" description="Determines the color of parent node"/>    
-        // "showZoomSlider" type="Boolean" default="false"/>    
-        // "clearHighlightedPaths" type="Boolean" default="true" description="Determines if the chart has a primary node"/>    
       
         // <!-- DISPLAY FEATURES - NETWORK -->
       
-        // "showPathToolTip" type="Boolean" default="false"/>    
         // "nodestrokewidth" type="String" default="0.5px"/>    
       
 
