@@ -52,7 +52,7 @@ masterConfigObject =
             "showBanner": true
         },
         "ChartPanel": {
-            "Title": "It is a new title",
+            "Title": "",
             "showLevelsInitial": 1,
             "Hierarchy" : {
                 "LeafColors" : {"Account" : { "colorBy" : "size" , "values" : [0,22070163,25070163], "colors" : ["white" , "yellow", "green"] }},
@@ -61,7 +61,8 @@ masterConfigObject =
                 "clearHighlightedPaths" : true
             },
             "Network" : {
-                "showPathToolTip" : true
+                "showPathToolTip" : true,
+                "nodestrokewidth" : "0.5px"
             }
         }
     },
@@ -102,13 +103,12 @@ masterConfigObject =
         component.set("v.ParentColors" , JSON.stringify(masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["ParentColors"]));
         component.set("v.showZoomSlider" , masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["showZoomSlider"]);
         component.set("v.clearHighlightedPaths" , masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["clearHighlightedPaths"]);
-        
-      
-        // <!-- DISPLAY FEATURES - NETWORK -->
-      
-        // "nodestrokewidth" type="String" default="0.5px"/>    
-      
 
+        // <!-- DISPLAY FEATURES - NETWORK -->
+        
+        component.set("v.showPathToolTip" , masterConfigObject["panels"]["ChartPanel"]["Network"]["showPathToolTip"]);
+        component.set("v.nodestrokewidth" , masterConfigObject["panels"]["ChartPanel"]["Network"]["nodestrokewidth"]);
+      
     },
 
     /* receive a bubbled component event and distribute this to required children */

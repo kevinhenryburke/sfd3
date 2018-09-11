@@ -89,10 +89,10 @@
                 <name>hasPrimaryNode</name>
                 <value>false</value>
             </componentInstanceProperties>
-            <componentInstanceProperties>
+            <!-- <componentInstanceProperties>
                 <name>nodestrokewidth</name>
                 <value>0.5px</value>
-            </componentInstanceProperties>
+            </componentInstanceProperties> -->
             <componentInstanceProperties>
                 <name>objectIcons</name>
                 <value>{&quot;Account&quot; :&quot;standard:account&quot; , &quot;Opportunity&quot; : &quot;standard:opportunity&quot;}</value>

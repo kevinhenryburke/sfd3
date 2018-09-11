@@ -20,7 +20,6 @@
         bzutils.setCache (componentReference, "UserComponentId", component.get("v.UserComponentId") ) ;
         bzutils.setCache (componentReference, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
         bzutils.setCache (componentReference, "hasPrimaryNode", component.get("v.hasPrimaryNode") ) ;
-        bzutils.setCache (componentReference, "nodestrokewidth", component.get("v.nodestrokewidth") ) ;
         bzutils.setCache (componentReference, "showLevels", component.get("v.showLevelsInitial")) ;
 
         bzutils.setCache (componentReference, "lastTouch", new Date().getTime()) ;

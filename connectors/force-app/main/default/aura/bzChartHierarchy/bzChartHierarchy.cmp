@@ -93,7 +93,6 @@
     allowPopover = "{!v.allowPopover}"
     cardFields = "{!v.cardFields}"
     objectIcons = "{!v.objectIcons}"
-    nodestrokewidth = "{!v.nodestrokewidth}"
   />
 
 
