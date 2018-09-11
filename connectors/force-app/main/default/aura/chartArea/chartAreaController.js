@@ -196,9 +196,13 @@
             // we process if the event is from it's controller and either specifies this component or does not specify any
             if (componentReference == parameters["componentReference"] || ! ("componentReference" in parameters)) {
                 bzutils.log("RefreshData: Refresh Chart with reference: " + componentReference);
-// THIS ALL TEMPORARY
+// THIS ALL TEMPORARY FOR TIME-BASED CHARTS
                 bzutils.log("RefreshData: Data: " + parameters["valueDate"]);
-                component.set("v.Title", parameters["valueDate"] );
+
+                var valueDate = parameters["valueDate"];
+                if (valueDate != null) {
+                    component.set("v.Title", parameters["valueDate"] );
+                }
 
                 var cc = component.getConcreteComponent();
                 cc.refreshData(parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"]);                 
