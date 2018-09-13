@@ -27,12 +27,6 @@ masterConfigObject =
             "initialLevelsToRetrieve": 2,
             "chartType": "Hierarchy"
         },
-        "configjsonString": {
-            "showtestbuttons": true,
-            "levels": 5,
-            "levelsIncreaseOnly": true,
-            "autoIncreaseLevels": false
-        },
         "primaryNodeInitialization": "None"
 
     },
@@ -49,7 +43,13 @@ masterConfigObject =
             }
         },
         "ControlPanel": {
-            "showBanner": true
+            "showBanner": true,
+            "configjsonString": {
+                "showtestbuttons": true,
+                "levels": 5,
+                "levelsIncreaseOnly": true,
+                "autoIncreaseLevels": false
+            }
         },
         "ChartPanel": {
             "Title": "",
@@ -81,7 +81,7 @@ masterConfigObject =
         component.set("v.dataSourceMethod" , masterConfigObject["data"]["dataSourceMethod"]);
         component.set("v.dataUpdateMethod" , masterConfigObject["data"]["dataUpdateMethod"]);
         component.set("v.queryJSON" , JSON.stringify(masterConfigObject["data"]["queryJSON"]));
-        component.set("v.configjsonString" , JSON.stringify(masterConfigObject["data"]["configjsonString"]));
+        component.set("v.configjsonString" , JSON.stringify(masterConfigObject["panels"]["ControlPanel"]["configjsonString"]));
         component.set("v.primaryNodeInitialization" , masterConfigObject["data"]["primaryNodeInitialization"]);
 
         component.set("v.showTopPanel" , masterConfigObject["panels"]["InfoPanel"]["showOnTop"]);
