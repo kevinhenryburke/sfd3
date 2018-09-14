@@ -73,7 +73,11 @@
             helper.highlightPathsBy(componentReference, searchTermId, "Id", true);
             helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
         }
-
     },
+
+    refreshVisibility: function(component,event,helper){
+        console.log("aura:method refreshVisibility in subcomponent enter");
+        console.log("aura:method refreshVisibility in subcomponent exit");
+    }
 
 })

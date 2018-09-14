@@ -90,7 +90,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>masterConfig</name>
-                <value>{ 	&quot;data&quot; : { 		&quot;dataFormat&quot; : &quot;HierarchyJSON&quot;	 	} }</value>
+                <value>{ 	&quot;data&quot;: { 		&quot;dataFormat&quot;: &quot;HierarchyJSON&quot;, 		&quot;dataSourceMethod&quot;: &quot;c.returnDataPack&quot;, 		&quot;dataUpdateMethod&quot;: &quot;c.returnDataPackUpdate&quot;, 		&quot;queryJSON&quot;: { 			&quot;loc&quot;: [{ 				&quot;terminal&quot;: false, 				&quot;recursive&quot;: true, 				&quot;requiredFields&quot;: { 					&quot;size&quot;: &quot;AnnualRevenue&quot;, 					&quot;name&quot;: &quot;name&quot;, 					&quot;id&quot;: &quot;id&quot; 				}, 				&quot;parentField&quot;: &quot;parentId&quot;, 				&quot;objectType&quot;: &quot;Account&quot; 			}], 			&quot;initialLevelsToRetrieve&quot;: 2, 			&quot;chartType&quot;: &quot;Hierarchy&quot; 		}, 		&quot;configjsonString&quot;: { 			&quot;showtestbuttons&quot;: true, 			&quot;levels&quot;: 5, 			&quot;levelsIncreaseOnly&quot;: true, 			&quot;autoIncreaseLevels&quot;: false 		}, 		&quot;primaryNodeInitialization&quot;: &quot;None&quot;  	}, 	&quot;panels&quot;: { 		&quot;InfoPanel&quot;: { 			&quot;showOnTop&quot;: false, 			&quot;showPopover&quot;: true 		}, 		&quot;ControlPanel&quot;: { 			&quot;showBanner&quot;: false 		}		 	}, 	&quot;search&quot;: { 		&quot;searchAction&quot;: &quot;HighlightOpenPath&quot;, 		&quot;configuredAllowSearch&quot;: true 	} }</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>objectIcons</name>

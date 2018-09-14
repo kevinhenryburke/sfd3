@@ -83,7 +83,8 @@
                     var primaryNodeId = d.id;
                     bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
 
-                    bzutils.xfcr("refreshVisibility", componentReference); 
+                    var cc = component.getConcreteComponent();
+                    cc.refreshVisibility();                 
                     bzutils.xfcr("styleNodes", componentReference); 
                 })
                 .on('dblclick', $A.getCallback(function(d) {
@@ -212,8 +213,9 @@
         bzutils.xfcr("styleNodes", componentReference); 
 
         console.log("apply node visibility");
-        bzutils.xfcr("refreshVisibility", componentReference); 
-    
+        var cc = component.getConcreteComponent();
+        cc.refreshVisibility();                 
+
         /* Above should be common to some degree - Below is forceSimulation specific */
 
         console.log("calling layout / simulation");

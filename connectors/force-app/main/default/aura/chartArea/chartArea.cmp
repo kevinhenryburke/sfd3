@@ -71,6 +71,11 @@
     <aura:attribute name="ChartScaleFactor" type="Decimal"/> 
   </aura:method>
 
+  <aura:method name="refreshVisibility"> 
+  </aura:method>
+
+  
+
   <aura:method name="initializeVisuals"/> 
 
   <aura:method name="callFromContainer" action="{!c.handle_evt_sfd3}"> 

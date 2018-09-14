@@ -99,7 +99,7 @@
     },
 
     searchChart: function(component,event,helper){
-        bzutils.log("calling the aura:method reScale in base");        
+        bzutils.log("calling the aura:method searchChart in base");        
     },
 
 
@@ -145,12 +145,15 @@
         if (topic == "ShowLevelsMore")
         {
             bzutils.setCache (componentReference, "showLevels", parameters["levels"] ) ;
-            bzutils.xfcr("refreshVisibility", componentReference);
+            var cc = component.getConcreteComponent();
+            cc.refreshVisibility();                 
+    
         }
         if (topic == "ShowLevelsFewer")
         {
             bzutils.setCache (componentReference, "showLevels", parameters["levels"] ) ;
-            bzutils.xfcr("refreshVisibility", componentReference); 
+            var cc = component.getConcreteComponent();
+            cc.refreshVisibility();                 
         }
         if (topic == "SetMeasure")
         {
@@ -170,7 +173,8 @@
 
             var isShown = (state == "Show");
             bzchart.setFilterVisibility(component, filterType, isShown);
-            bzutils.xfcr("refreshVisibility", componentReference); 
+            var cc = component.getConcreteComponent();
+            cc.refreshVisibility();                 
         }
         if (topic == "InitializeData")
         {
@@ -275,5 +279,10 @@
         });
         sObectEvent.fire(); 
      },
+
+     refreshVisibility: function(component,event,helper){
+        console.log("aura:method refreshVisibility in chartArea enter");
+        console.log("aura:method refreshVisibility in chartArea exit");
+    }
 
 })
