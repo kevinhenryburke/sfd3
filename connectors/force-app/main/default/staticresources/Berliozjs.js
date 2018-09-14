@@ -315,12 +315,10 @@ console.log("loading: bzconfig IIFE");
 
 
 var fns = 
-{
+{ 
     "ctree" : {
         "nodeDataSetFunction" : "bzpack.nodeDataSetFunctionNodes",
         "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
-        "refreshVisibility" : "bzutils.doNothing",
-        "styleNodes" : "bzutils.doNothing",
         "pathMouseover" : "bzchart.pathMouseover",
         "pathMouseout" : "bzchart.pathMouseout",
         "nodeMouseout" : "bzctree.nodeMouseout",
@@ -334,8 +332,6 @@ var fns =
     "pack" : {
         "nodeDataSetFunction" : "bzpack.nodeDataSetFunctionNodes",
         "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
-        "refreshVisibility" : "bzutils.doNothing",
-        "styleNodes" : "bzutils.doNothing",
         "pathMouseover" : "bzchart.pathMouseover",
         "pathMouseout" : "bzchart.pathMouseout",
         "nodeMouseout" : "bzutils.doNothing",
@@ -349,8 +345,6 @@ var fns =
     "chart.connections" : { 
         "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
         "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
-        "refreshVisibility" : "bzchart.refreshVisibility",
-        "styleNodes" : "bzchart.styleNodes",
         "pathMouseover" : "bzchart.pathMouseover",
         "pathMouseout" : "bzchart.pathMouseout",
         "nodeMouseout" : "bzchart.nodeMouseout",
@@ -364,8 +358,6 @@ var fns =
     "chart.influence" : {
         "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
         "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
-        "refreshVisibility" : "bzutils.doNothing",
-        "styleNodes" : "bzchart.styleNodes",
         "pathMouseover" : "bzchart.pathMouseover",
         "pathMouseout" : "bzchart.pathMouseout",
         "nodeMouseout" : "bzchart.nodeMouseout",
@@ -608,53 +600,6 @@ function getRelatedNodes (chartPrimaryId, componentReference, level) {
     return linkednodes;
 }
 
-// Method to re-style nodes
-function styleNodes (componentReference) {
-
-    var primaryid = bzutils.getCache (componentReference, "primaryNodeId") ;
-    var currentMeasure = bzutils.getCache (componentReference, "currentMeasure") ;
-
-    console.log("styleNodes enter: " + currentMeasure + " primaryid: " + primaryid);
-
-    var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
-        .selectAll("circle")  ;
-
-    bzutils.log("styleNodes:" + JSON.stringify(node));
-
-    node.attr("r", function(o, i) {
-        return o.measures[currentMeasure].radius;
-    });
-
-    node.style("fill", function(o, i) {
-        bzutils.log("styleNodes: fill: " + o.measures[currentMeasure].color);
-        return o.measures[currentMeasure].color;
-    });
-
-    node.style("stroke", function(o, i) {
-        var stroke = o.stroke;
-        var oid = o.id;
-        if (oid == primaryid) {
-            var primaryNodeHighlightingOn = bzutils.getCache (componentReference, "primaryNodeHighlightingOn") ;
-            if (primaryNodeHighlightingOn == true) {
-                stroke = bzutils.getCache (componentReference, "primaryNodeHighlightingColour") ;
-            }                
-        }
-        return stroke;
-    });
-
-    node.style("stroke-width", function(o, i) {
-        var nodestrokewidth = bzutils.getCache (componentReference, "nodestrokewidth") ;
-        var oid = o.id;
-        if (oid == primaryid) {
-            nodestrokewidth = bzutils.getCache (componentReference, "primaryNodeHighlightingRadius") ;
-        }
-        return nodestrokewidth;
-    });
-
-    console.log("styleNodes exit");
-    
-}
-
 function setFilterVisibility (component, filterType, isShown) {
     console.log("setFilterVisibility enter");
     var componentReference = component.get("v.componentReference");
@@ -673,85 +618,6 @@ function setFilterVisibility (component, filterType, isShown) {
     console.log("setFilterVisibility exit");
 }
 
-function refreshVisibility(componentReference) {
-
-    console.log("refreshVisibility enter "); 
-
-    var levels = bzutils.getCache(componentReference, "showLevels") ;
-    
-    var showFilters = bzutils.getCache (componentReference, "showFilters") ;
-    var primaryNodeId = bzutils.getCache (componentReference, "primaryNodeId") ;        
-    // not needed until reinstate measure level visibility
-    var currentMeasure = bzutils.getCache (componentReference, "currentMeasure") ;
-
-    var relatedNodes = bzchart.getRelatedNodes(primaryNodeId, componentReference, levels);
-
-    var path = d3.select(bzutils.getDivId("pathGroup", componentReference, true))
-        .selectAll("path")  ;
-
-    var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
-        .selectAll("circle")  
-    
-    var shownodeids = [];
-
-    path.style("visibility", function(p) {
-
-        var retval = "hidden";
-
-        //TODO temporarily removing the measure level visibility functionaliy, reinstate later if useful
-        // var sourcevis = p.source.measures[currentMeasure].visible;
-        // var targetvis = p.target.measures[currentMeasure].visible;
-        var sourcevis = 1;
-        var targetvis = 1;
-
-        var sourceindex = relatedNodes.indexOf(p.sourceid);
-        var targetindex = relatedNodes.indexOf(p.targetid);
-
-        var primaryrelated = (sourceindex > -1 && targetindex > -1);
-
-        if ((sourcevis === 1) && (targetvis === 1) && primaryrelated) {
-
-            var index = showFilters.indexOf(p.type);
-
-            if (index > -1) {
-                bzutils.log(p.sourceid + '/' + p.targetid + " will be visible");
-
-                var indexsource = shownodeids.indexOf(p.sourceid);
-                if (indexsource == -1) {
-                    shownodeids.push(p.sourceid);
-                }
-
-                var indextarget = shownodeids.indexOf(p.targetid);
-                if (indextarget == -1) {
-                    shownodeids.push(p.targetid);
-                }
-            }
-        }
-
-        return (index > -1) ? "visible" : "hidden";
-    });
-
-    // change the visibility of the node
-    // if all the links with that node are invisibile, the node should also be invisible
-    // otherwise if any link related to that node is visibile, the node should be visible
-    node.style("visibility", function(o, i) {
-        var oid = o.id;
-        var index = shownodeids.indexOf(oid);
-        if (index > -1) {
-            d3.select("#t" + oid).style("visibility", "visible");
-            d3.select("#s" + oid).style("visibility", "visible");
-            return "visible";
-        } else {
-            d3.select("#t" + oid).style("visibility", "hidden");
-            d3.select("#s" + oid).style("visibility", "hidden");
-            return "hidden";
-        }
-    });
-
-    console.log("refreshVisibility exit "); 
-}
-
-// clear out the paths and the groups
 function clearChart(componentReference) {
     console.log("clearChart enter "); 
     var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
@@ -789,10 +655,9 @@ exports.nodeMouseout = nodeMouseout;
 exports.nodeDoubleClick = nodeDoubleClick;
 exports.textAdditionalAttribute = textAdditionalAttribute;
 exports.getRelatedNodes = getRelatedNodes;
-exports.refreshVisibility = refreshVisibility;
 exports.setFilterVisibility = setFilterVisibility;
 exports.clearChart = clearChart;
-exports.styleNodes = styleNodes;
+// exports.styleNodes = styleNodes;
 exports.prepareEvent = prepareEvent;
 
 exports.isiOS = isiOS;

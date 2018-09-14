@@ -163,7 +163,8 @@
             bzutils.setCache (componentReference, "currentMeasure", currentMeasure ) ;
             
             // refresh Chart - measure changes but primaryid does not
-            bzutils.xfcr("styleNodes", componentReference); 
+            var cc = component.getConcreteComponent();
+            cc.styleNodes();                 
         }
         if (topic == "SetFilter")
         {
@@ -283,6 +284,11 @@
      refreshVisibility: function(component,event,helper){
         console.log("aura:method refreshVisibility in chartArea enter");
         console.log("aura:method refreshVisibility in chartArea exit");
+    },
+
+    styleNodes: function(component,event,helper){
+        console.log("aura:method styleNodes in chartArea enter");
+        console.log("aura:method styleNodes in chartArea exit");
     }
 
 })

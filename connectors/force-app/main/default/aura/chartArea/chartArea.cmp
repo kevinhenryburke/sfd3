@@ -74,6 +74,8 @@
   <aura:method name="refreshVisibility"> 
   </aura:method>
 
+  <aura:method name="styleNodes"> 
+  </aura:method>
   
 
   <aura:method name="initializeVisuals"/> 

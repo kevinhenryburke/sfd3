@@ -32,8 +32,7 @@
 
         var cc = component.getConcreteComponent();
         cc.refreshVisibility();                 
-
-        bzutils.xfcr("styleNodes", componentReference); 
+        cc.styleNodes();                 
         console.log("aura:method searchChart in subcomponent exit");
     },
 
@@ -124,6 +123,62 @@
             });
         }
         console.log("aura:method refreshVisibility in subcomponent exit");
+    },
+
+    styleNodes: function(component,event,helper){
+        console.log("aura:method styleNodes in chartArea enter");
+
+        var componentType = component.get("v.componentType");
+
+        if ((componentType ==  "chart.connections") || (componentType ==  "chart.influence")) {
+
+            var componentReference = component.get("v.componentReference");        
+
+            var primaryid = bzutils.getCache (componentReference, "primaryNodeId") ;
+            var currentMeasure = bzutils.getCache (componentReference, "currentMeasure") ;
+        
+            console.log("styleNodes enter: " + currentMeasure + " primaryid: " + primaryid);
+        
+            var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
+                .selectAll("circle")  ;
+        
+            bzutils.log("styleNodes:" + JSON.stringify(node));
+        
+            node.attr("r", function(o, i) {
+                return o.measures[currentMeasure].radius;
+            });
+        
+            node.style("fill", function(o, i) {
+                bzutils.log("styleNodes: fill: " + o.measures[currentMeasure].color);
+                return o.measures[currentMeasure].color;
+            });
+        
+            node.style("stroke", function(o, i) {
+                var stroke = o.stroke;
+                var oid = o.id;
+                if (oid == primaryid) {
+                    var primaryNodeHighlightingOn = bzutils.getCache (componentReference, "primaryNodeHighlightingOn") ;
+                    if (primaryNodeHighlightingOn == true) {
+                        stroke = bzutils.getCache (componentReference, "primaryNodeHighlightingColour") ;
+                    }                
+                }
+                return stroke;
+            });
+        
+            node.style("stroke-width", function(o, i) {
+                var nodestrokewidth = bzutils.getCache (componentReference, "nodestrokewidth") ;
+                var oid = o.id;
+                if (oid == primaryid) {
+                    nodestrokewidth = bzutils.getCache (componentReference, "primaryNodeHighlightingRadius") ;
+                }
+                return nodestrokewidth;
+            });
+        
+            console.log("styleNodes exit");
+        
+        }
+
+        console.log("aura:method styleNodes in chartArea exit");
     }
 
 

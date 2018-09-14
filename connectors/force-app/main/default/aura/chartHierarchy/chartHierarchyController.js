@@ -78,6 +78,11 @@
     refreshVisibility: function(component,event,helper){
         console.log("aura:method refreshVisibility in subcomponent enter");
         console.log("aura:method refreshVisibility in subcomponent exit");
+    },
+
+    styleNodes: function(component,event,helper){
+        console.log("aura:method styleNodes in chartArea enter");
+        console.log("aura:method styleNodes in chartArea exit");
     }
 
 })

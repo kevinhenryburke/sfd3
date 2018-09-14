@@ -85,7 +85,7 @@
 
                     var cc = component.getConcreteComponent();
                     cc.refreshVisibility();                 
-                    bzutils.xfcr("styleNodes", componentReference); 
+                    cc.styleNodes();                 
                 })
                 .on('dblclick', $A.getCallback(function(d) {
                     console.log("dblclick");
@@ -210,10 +210,10 @@
 //        }
                 
         console.log("apply node styling");
-        bzutils.xfcr("styleNodes", componentReference); 
+        var cc = component.getConcreteComponent();
+        cc.styleNodes();                 
 
         console.log("apply node visibility");
-        var cc = component.getConcreteComponent();
         cc.refreshVisibility();                 
 
         /* Above should be common to some degree - Below is forceSimulation specific */
