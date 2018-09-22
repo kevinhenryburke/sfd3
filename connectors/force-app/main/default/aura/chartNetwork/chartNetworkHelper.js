@@ -84,8 +84,9 @@
                     var componentReference = component.get("v.componentReference");
                     var primaryNodeId = d.id;
                     bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
-                    // bzutils.xfcr("nodeDoubleClick", componentReference, primaryNodeId); 
-                    var preppedEvent = bzutils.xfcr("nodeDoubleClick", componentReference, primaryNodeId); 
+
+                    var preppedEvent = _this.nodeDoubleClick(component,primaryNodeId);
+
                     _this.publishPreppedEvent(component,preppedEvent);
                 }))
                 ;
@@ -242,10 +243,6 @@
             d3this.attr("testAttribute" , "yay");
         });
 */        
-    },
-
-    initializeVisuals2: function (component) {
-        console.log("subhelper: enter initializeVisuals2 proper!");
     },
 
     // TODO function appears in many places, try to consolidate
@@ -498,8 +495,30 @@
         
         console.log("chartNetworkHelper.initializeSimulationInfluence exit");
         return simulation;
-    }
+    },
         
+    nodeDoubleClick: function(component,primaryNodeId){
+        console.log("calling nodeDoubleClick");
+
+        var componentType = component.get("v.componentType");
+        console.log("nodeDoubleClick componentType = " + componentType);
+
+        if ((componentType ==  "chart.influence") || (componentType ==  "chart.connections")) {
+
+            var componentReference = component.get("v.componentReference");        
+
+            // TODO this will need substantial enriching - e.g. pass current measure and whether to add nodes or to refresh etc.
+            var cleanId = bzutils.removeComponentRef(componentReference, primaryNodeId);
+            var eventParameters = {"primaryNodeId" : cleanId, "componentReference" : componentReference};
+            console.log("bzchart.nodeDoubleClick exit.");
+        
+            var preppedEvent = bzchart.prepareEvent(componentReference, "InitiateRefreshChart", eventParameters);
+            return preppedEvent;        
+
+        }
+
+    },
+
     
 
 

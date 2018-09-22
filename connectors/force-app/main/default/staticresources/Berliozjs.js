@@ -280,7 +280,6 @@ var fns =
         "pathMouseout" : "bzchart.pathMouseout",
         "nodeMouseout" : "bzctree.nodeMouseout",
         "nodeMouseover" : "bzctree.nodeMouseover",
-        "nodeDoubleClick" : "bzutils.doNothing",     
         "nodeAdditionalAttribute" : "bzpack.nodeAdditionalAttribute", 
         "textAdditionalAttribute" : "bzutils.doNothing", 
     },
@@ -291,7 +290,6 @@ var fns =
         "pathMouseout" : "bzchart.pathMouseout",
         "nodeMouseout" : "bzutils.doNothing",
         "nodeMouseover" : "bzpack.nodeMouseover",
-        "nodeDoubleClick" : "bzutils.doNothing",     
         "nodeAdditionalAttribute" : "bzpack.nodeAdditionalAttribute", 
         "textAdditionalAttribute" : "bzutils.doNothing", 
     },
@@ -302,7 +300,6 @@ var fns =
         "pathMouseout" : "bzchart.pathMouseout",
         "nodeMouseout" : "bzchart.nodeMouseout",
         "nodeMouseover" : "bzchart.nodeMouseover",
-        "nodeDoubleClick" : "bzchart.nodeDoubleClick",        
         "nodeAdditionalAttribute" : "bzutils.doNothing", 
         "textAdditionalAttribute" : "bzchart.textAdditionalAttribute", 
     },    
@@ -313,7 +310,6 @@ var fns =
         "pathMouseout" : "bzchart.pathMouseout",
         "nodeMouseout" : "bzchart.nodeMouseout",
         "nodeMouseover" : "bzchart.nodeMouseover",
-        "nodeDoubleClick" : "bzchart.nodeDoubleClick",        
         "nodeAdditionalAttribute" : "bzutils.doNothing", 
         "textAdditionalAttribute" : "bzchart.textAdditionalAttribute", 
     },    
@@ -486,18 +482,6 @@ function nodeMouseout (componentReference, d) {
     s.html(textcontent);
     console.log("bzchart.nodeMouseout exit.");
 }
-
-function nodeDoubleClick (componentReference, primaryNodeId) {
-    console.log("bzchart.nodeDoubleClick enter");
-    // TODO this will need substantial enriching - e.g. pass current measure and whether to add nodes or to refresh etc.
-    var cleanId = bzutils.removeComponentRef(componentReference, primaryNodeId);
-    var eventParameters = {"primaryNodeId" : cleanId, "componentReference" : componentReference};
-    console.log("bzchart.nodeDoubleClick exit.");
-
-    var preppedEvent = bzchart.prepareEvent(componentReference, "InitiateRefreshChart", eventParameters);
-    return preppedEvent;
-
-}
     
 function textAdditionalAttribute (componentReference, text) {
     console.log("bzchart.textAdditionalAttribute enter");    
@@ -591,12 +575,10 @@ exports.pathMouseover = pathMouseover;
 exports.pathMouseout = pathMouseout;
 exports.nodeMouseover = nodeMouseover;
 exports.nodeMouseout = nodeMouseout;
-exports.nodeDoubleClick = nodeDoubleClick;
 exports.textAdditionalAttribute = textAdditionalAttribute;
 exports.getRelatedNodes = getRelatedNodes;
 exports.setFilterVisibility = setFilterVisibility;
 exports.clearChart = clearChart;
-// exports.styleNodes = styleNodes;
 exports.prepareEvent = prepareEvent;
 
 exports.isiOS = isiOS;
