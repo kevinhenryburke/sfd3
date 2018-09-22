@@ -110,22 +110,22 @@ Delegates to an appropriate function based on componentReference. This includes 
 Note: The delegated function is assumed to have componentReference as its first argument 
 */
 
-function xfcr(functionType, componentReference /*, args */) {
-    console.log("xfcr: functionType: " + functionType);
-    var componentType = bzutils.getCache (componentReference, "componentType");
-    console.log("xfcr: componentType: " + componentType);
-    var functionName = bzconfig.fns[componentType][functionType];
-    console.log("xfcr: functionName: " + functionName);
+// function xfcr(functionType, componentReference /*, args */) {
+//     console.log("xfcr: functionType: " + functionType);
+//     var componentType = bzutils.getCache (componentReference, "componentType");
+//     console.log("xfcr: componentType: " + componentType);
+//     var functionName = bzconfig.fns[componentType][functionType];
+//     console.log("xfcr: functionName: " + functionName);
 
-    var context = context == undefined? window:context;
-    var args = Array.prototype.slice.call(arguments, 1);
-    var namespaces = functionName.split(".");
-    var func = namespaces.pop();
-    for(var i = 0; i < namespaces.length; i++) {
-      context = context[namespaces[i]];
-    }
-    return context[func].apply(context, args);
-}
+//     var context = context == undefined? window:context;
+//     var args = Array.prototype.slice.call(arguments, 1);
+//     var namespaces = functionName.split(".");
+//     var func = namespaces.pop();
+//     for(var i = 0; i < namespaces.length; i++) {
+//       context = context[namespaces[i]];
+//     }
+//     return context[func].apply(context, args);
+// }
 
 /* 
 Delegates to an appropriate function based on componentType.
@@ -133,18 +133,18 @@ Note: The delegated function is NOT assumed to have componentType as its first a
 If componentType is needed then supply it twice in the calling parameters
 */
 
-function xfct(functionType, componentType /*, args */) {
-    var functionName = bzconfig.fns[componentType][functionType];
+// function xfct(functionType, componentType /*, args */) {
+//     var functionName = bzconfig.fns[componentType][functionType];
 
-    var context = context == undefined? window:context;
-    var args = Array.prototype.slice.call(arguments, 2);
-    var namespaces = functionName.split(".");
-    var func = namespaces.pop();
-    for(var i = 0; i < namespaces.length; i++) {
-      context = context[namespaces[i]];
-    }
-    return context[func].apply(context, args);
-}
+//     var context = context == undefined? window:context;
+//     var args = Array.prototype.slice.call(arguments, 2);
+//     var namespaces = functionName.split(".");
+//     var func = namespaces.pop();
+//     for(var i = 0; i < namespaces.length; i++) {
+//       context = context[namespaces[i]];
+//     }
+//     return context[func].apply(context, args);
+// }
 
 function getParam(componentType /*, args */) {
     console.log("getParam enter");
@@ -221,19 +221,10 @@ function getEventTypeByTopic(topic) {
     return null;
 }
 
-function nodeDataSetFunctionNodes () { 
-    console.log("nodeDataSetFunctionNodes enter"); 
-    return function(datajson) { return datajson.nodes;};
-}
-
-function nodeDataKeyFunctionId (d, i) { 
-    return function(d, i) { return d.id;};
-}
-
 exports.log = log;
 exports.doNothing = doNothing;
-exports.xfcr = xfcr;
-exports.xfct = xfct;
+// exports.xfcr = xfcr;
+// exports.xfct = xfct;
 exports.getParam = getParam;
 exports.hasParam = hasParam;
 exports.initializeAddComponentRef = initializeAddComponentRef;
@@ -250,8 +241,6 @@ exports.showCache = showCache;
 exports.showCacheAll = showCacheAll;
 exports.getDivId = getDivId;
 exports.getNodeFromId = getNodeFromId;
-exports.nodeDataSetFunctionNodes = nodeDataSetFunctionNodes;
-exports.nodeDataKeyFunctionId = nodeDataKeyFunctionId;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
@@ -271,41 +260,17 @@ console.log("loading: bzconfig IIFE");
 // Represents the functions to call for each of the configured display areas
 
 
-var fns = 
-{ 
-    "ctree" : {
-        "nodeDataSetFunction" : "bzpack.nodeDataSetFunctionNodes",
-        "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
-        "pathMouseover" : "bzchart.pathMouseover",
-        "pathMouseout" : "bzchart.pathMouseout",
-        "nodeMouseout" : "bzctree.nodeMouseout",
-        "nodeMouseover" : "bzctree.nodeMouseover",
-    },
-    "pack" : {
-        "nodeDataSetFunction" : "bzpack.nodeDataSetFunctionNodes",
-        "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
-        "pathMouseover" : "bzchart.pathMouseover",
-        "pathMouseout" : "bzchart.pathMouseout",
-        "nodeMouseout" : "bzutils.doNothing",
-        "nodeMouseover" : "bzpack.nodeMouseover",
-    },
-    "chart.connections" : { 
-        "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
-        "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
-        "pathMouseover" : "bzchart.pathMouseover",
-        "pathMouseout" : "bzchart.pathMouseout",
-        "nodeMouseout" : "bzchart.nodeMouseout",
-        "nodeMouseover" : "bzchart.nodeMouseover",
-    },    
-    "chart.influence" : {
-        "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
-        "nodeDataKeyFunction" : "bzutils.nodeDataKeyFunctionId",
-        "pathMouseover" : "bzchart.pathMouseover",
-        "pathMouseout" : "bzchart.pathMouseout",
-        "nodeMouseout" : "bzchart.nodeMouseout",
-        "nodeMouseover" : "bzchart.nodeMouseover",
-    },    
-} 
+// var fns = 
+// { 
+//     "ctree" : {
+//     },
+//     "pack" : {
+//     },
+//     "chart.connections" : { 
+//     },    
+//     "chart.influence" : {
+//     },    
+// } 
 
 var params = 
 {
@@ -347,8 +312,7 @@ var params =
     },    
 } 
 
-
-exports.fns = fns;
+// exports.fns = fns;
 exports.params = params;
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -381,99 +345,6 @@ console.log("loaded: bzconfig  IIFE");
 console.log("loading: bzchart IIFE");
 
 var isiOS = false;
-
-function pathMouseover (componentReference, d,path,pathToolTipDiv) {
-    console.log("bzchart.pathMouseover enter");
-
-    var mouseoverpathid = d.id;
-
-    path.style("stroke", function(o, i) {
-        var oid =o.id;
-
-        if (oid === mouseoverpathid) {
-            return "red";
-        }
-        else
-        {
-            return "gray";
-        }
-    });
-
-    var midx = (d.source.x + d.target.x) / 2
-    var midy = (d.source.y + d.target.y) / 2
-
-    var content = '<div style="text-align:center;font-size:"6px";>';
-    content += '<p>Type: ' + d.type + '</p>';
-    content += '<p>Linked By ' + d.createdby + '</p>';
-    content += '<p>Notes: ' + d.notes + '</p>';
-    content += '</div>';
-
-    pathToolTipDiv.transition()
-        .duration(100)
-        .style("opacity", .9);
-    pathToolTipDiv.html(content)
-        .style("left", midx + "px")
-        .style("top", midy + "px");
-
-    console.log("bzchart.pathMouseover exit");
-    
-}
-
-function pathMouseout (componentReference, pathToolTipDiv) {
-    console.log("bzchart.pathMouseout enter");
-
-    pathToolTipDiv.transition()
-        .delay(1000)
-        .duration(2000)
-        .style("opacity", 0);
-
-    console.log("bzchart.pathMouseout exit");
-}
-
-function nodeMouseover (componentReference, d) {
-    console.log("bzchart.nodeMouseover enter");
-    // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
-    var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
-    textcontent += '</tspan>'; 
-    textcontent += '<tspan x="10" dy="15">' + d.position;
-    textcontent += ' (' + d.account + ')</tspan>';
-
-    var tselect =  "t" + d.id;
-    var sselect =  "s" + d.id;
-
-    var t = d3.select("#" + tselect);
-    bzutils.log("mouseover: " + textcontent);
-    bzutils.log(t);
-    t.html(textcontent);
-    var s = d3.select("#" + sselect);
-    s.html(textcontent);
-
-    var publishParameters = {"data" : d, "parent" : null};
-
-    console.log("bzchart.nodeMouseover exit");
-
-    var preppedEvent = bzchart.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
-    return preppedEvent;
-    
-}
-
-function nodeMouseout (componentReference, d) {
-    console.log("bzchart.nodeMouseout enter.");
-    // revert back to just the name
-    // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
-    var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
-    textcontent += '</tspan>'; 
-
-    var tselect =  "t" + d.id;
-    var sselect =  "s" + d.id;
-        
-    var t = d3.select("#" + tselect);                    
-    t.html(textcontent);
-
-    var s = d3.select("#" + sselect);
-    s.html(textcontent);
-    console.log("bzchart.nodeMouseout exit.");
-}
     
 function getRelatedNodes (chartPrimaryId, componentReference, level) {
     var looplevel = 0;
@@ -554,10 +425,6 @@ function prepareEvent(componentReference, topic, parameters) {
     }
 }
 
-exports.pathMouseover = pathMouseover;
-exports.pathMouseout = pathMouseout;
-exports.nodeMouseover = nodeMouseover;
-exports.nodeMouseout = nodeMouseout;
 exports.getRelatedNodes = getRelatedNodes;
 exports.setFilterVisibility = setFilterVisibility;
 exports.clearChart = clearChart;
@@ -599,52 +466,6 @@ console.log("loaded: bzchart  IIFE");
 }(this, (function (exports) { 'use strict';
 
 console.log("loading: bzpack IIFE");
-
-function nodeDataSetFunctionNodes (componentReference) { 
-    console.log("nodeDataSetFunctionNodes enter: componentReference " + componentReference); 
-    return function(datajson) { 
-        console.log("nodeDataSetFunctionNodes computing callback " + componentReference);
-        var root = d3.hierarchy(datajson)
-        .sum(function(d) { return d.size; })
-        .sort(function(a, b) { return b.value - a.value; });
-
-        var diameter = bzutils.getCache (componentReference, "width") ;  
-        console.log("nodeDataSetFunctionNodes diameter: " + diameter);
-        
-        var pack = d3.pack()
-        .size([diameter - 4, diameter - 4]);
-        return pack(root).descendants();
-    };
-}
-
-
-function nodeMouseover (componentReference, d) {
-    console.log("bzpack.nodeMouseover enter");
-    console.log(d);
-    // // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
-    // var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
-    // textcontent += '</tspan>'; 
-    // textcontent += '<tspan x="10" dy="15">' + d.position;
-    // textcontent += ' (' + d.account + ')</tspan>';
-
-    // var tselect =  "t" + d.id;
-    // var sselect =  "s" + d.id;
-
-    // var t = d3.select("#" + tselect);
-    // bzutils.log("mouseover: " + textcontent);
-    // bzutils.log(t);
-    // t.html(textcontent);
-    // var s = d3.select("#" + sselect);
-    // s.html(textcontent);
-
-    var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
-
-    console.log("bzpack.nodeMouseover exit");
-
-    var preppedEvent = bzchart.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
-    return preppedEvent;
-
-}
 
 
 // TODO for zoomable pack
@@ -740,9 +561,6 @@ function update() {
   }
 
   console.log("loaded: bzpack  IIFE");
-
-  exports.nodeDataSetFunctionNodes = nodeDataSetFunctionNodes;  
-  exports.nodeMouseover = nodeMouseover;
   
   // zoomable
   exports.update = update;
@@ -780,155 +598,7 @@ function update() {
 
     console.log("loading: bzctree IIFE");
 
-    // Note that x and y are seemingly the wrong way round - x is vertical, y is horizontal
-
-    // LeafParent is either "Leaf" or "Node"
-    // TODO - really should be "expanded" or "collapsed"
-    function getNodeColor (componentReference, d, LeafParent) {
-        var color;
-
-        var objectType = d.data.objectType;
-        var hasObjectSpecifics = bzutils.hasCache (componentReference, LeafParent + "ColorsValues" + objectType) ;
-        if (!hasObjectSpecifics) {
-            // if there is nothing specifc for an object then use the defaults
-            objectType = "Default";
-        }
-
-        var colorBy;      
-        var hasObjectSpecificColorBy = bzutils.hasCache (componentReference, LeafParent + "ColorsColorBy" + objectType) ;
-        if (hasObjectSpecificColorBy) {
-            colorBy = bzutils.getCache (componentReference, LeafParent + "ColorsColorBy" + objectType) ;
-        }
-        else {
-            colorBy = bzutils.getCache (componentReference, LeafParent + "ColorsColorByDefault") ;
-        }
-
-        var ColorsValues = bzutils.getCache (componentReference, LeafParent + "ColorsValues" + objectType) ;
-        var ColorsNames = bzutils.getCache (componentReference, LeafParent + "ColorsNames" + objectType) ;
-
-        for (var i = 0; i < ColorsValues.length; i++) {
-            if (colorBy == "size") {
-                if (d.data.size != null && d.data.size >= ColorsValues[i]) {
-                    color = ColorsNames[i];
-                } else {
-                    break;
-                }
-            }
-            else { 
-                // going by a textual value - default to the first color in the list
-                // TODO could add in a default in the config string?
-                color = ColorsNames[0];
-                if (d.data.otherFields[colorBy] == ColorsValues[i]) {
-                    console.log("colorBy Match: " + colorBy);
-                    color = ColorsNames[i];
-                    break;
-                }
-            }
-        }
-        return color;
-    }
-
-    function setColorCache (componentReference, ColorsString, ColorsObjectDefault, prefix) {
-        bzutils.setCache (componentReference, prefix + "ColorsObjectDefault", ColorsObjectDefault ) ;
-        bzutils.setCache (componentReference, prefix + "ColorsValuesDefault", ColorsObjectDefault.values ) ;
-        bzutils.setCache (componentReference, prefix + "ColorsNamesDefault", ColorsObjectDefault.colors ) ;
-        bzutils.setCache (componentReference, prefix + "ColorsColorByDefault", ColorsObjectDefault.colorBy ) ;
-
-        var ColorsObject;
-        if (ColorsString != null && ColorsString != "") {
-            ColorsObject = JSON.parse(ColorsString);
-        }
-
-        var arrayObjectKeys = Object.keys(ColorsObject);
-
-        arrayObjectKeys.forEach ( function(objectKey) {
-            bzutils.setCache (componentReference, prefix + "ColorsObject" + objectKey, ColorsObject[objectKey] ) ;
-            bzutils.setCache (componentReference, prefix + "ColorsValues" + objectKey, ColorsObject[objectKey].values ) ;
-            bzutils.setCache (componentReference, prefix + "ColorsNames" + objectKey, ColorsObject[objectKey].colors ) ;
-            bzutils.setCache (componentReference, prefix + "ColorsColorBy" + objectKey, ColorsObject[objectKey].colorBy ) ;
-        });
-    }
-
-    // Collapse the node and all it's children
-    function collapse(d) {
-        if(d.children) {
-            d._children = d.children
-            d._children.forEach(collapse)
-            d.children = null
-        }
-    }
-      
-    /* TODO: builds up a huge list of events as context gets lost when we create new nodes
-    Would be nice to find a better way!!!!!!
-    */
-    
-    function nodeMouseover (componentReference, d) {
-        console.log("bzctree.nodeMouseover enter:");
-        console.log(d);
-    
-        var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
-        
-        var preppedEvent = bzchart.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
-        preppedEvent.eventType = "Cache";
-
-// attempt to get the lighting info panel to follow the highlight.        
-var infosvg = bzutils.getCache (componentReference, "infosvg") ;
-var dx = d.x;
-var dy = d.y;
-console.log("popover:" + dy + " / " + dx);
-// infosvg.attr('transform',function(d,i) { return 'translate(' + dy + ',' + dx + ')';})
-
-// transitions fine but the lightning component only moves on scroll???
-// infosvg.transition()
-// .duration(1000)
-// .attr("transform", function(d) { 
-// var t = "translate(" + dy  + "," + dx + ")";
-//     return t;
-// });
-
-// if (dy > 500) {
-// infosvg.transition()
-// .duration(100)
-// .attr("transform", function(d) { 
-// var t = "translate(" + 50  + "," + dx + ")";
-//     return t;
-// });    
-// }
-
-// if (dy < 500) {
-// infosvg.transition()
-// .duration(100)
-// .attr("transform", function(d) { 
-// var t = "translate(" + 600  + "," + dx + ")";
-//     return t;
-// });    
-// }
-    
-        return preppedEvent;
-    }
-
-    function nodeMouseout (componentReference, d) {
-        console.log("bzctree.nodeMouseout enter");
-        console.log(d);
-    
-        var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
-        
-        var preppedEvent = bzchart.prepareEvent(componentReference, "ChartMouseOut", publishParameters);
-        if (d.depth > 1) {
-            preppedEvent.eventType = "Cache";
-        } 
-        return preppedEvent;
-    }
-    
-
-    exports.getNodeColor = getNodeColor;  
-    exports.setColorCache = setColorCache;  
-    exports.collapse = collapse;  
-    exports.nodeMouseover = nodeMouseover;
-    exports.nodeMouseout = nodeMouseout;
-
     console.log("loaded: bzctree  IIFE");
-
-
+    
 })));
 

@@ -29,15 +29,15 @@
 
         // have a default for leaves
         var LeafColorsObjectDefault = {"colorBy" : "size", "values" : [0], "colors" : ["white"]};
-        bzctree.setColorCache (componentReference, component.get("v.LeafColors"), LeafColorsObjectDefault, "Leaf") ;
+        _this.setColorCache (componentReference, component.get("v.LeafColors"), LeafColorsObjectDefault, "Leaf") ;
     
         // have a default for parents
         var ParentColorsObjectDefault = {"colorBy" : "size", "values" : [0], "colors" : ["lightsteelblue"]};
-        bzctree.setColorCache (componentReference, component.get("v.ParentColors"), ParentColorsObjectDefault, "Parent") ;
+        _this.setColorCache (componentReference, component.get("v.ParentColors"), ParentColorsObjectDefault, "Parent") ;
 
         // Collapse after the second level (provided root has children)
         if (root.children != null) {
-            root.children.forEach(bzctree.collapse);
+            root.children.forEach(_this.collapse);
         }
 
         bzutils.setCache (componentReference, "root", root ) ;
@@ -49,7 +49,7 @@
         bzutils.setCache (componentReference, "mouseoverRecordId", root.id ) ;
         _this.restockCache(component);
 
-        var preppedEvent = bzutils.xfcr("nodeMouseover", componentReference, root); 
+        var preppedEvent = _this.nodeMouseover(componentReference, root); 
         _this.publishPreppedEvent(component,preppedEvent);
         _this.updatePopoverDirectly(component, preppedEvent);
     },
@@ -131,7 +131,7 @@
             .on('click', click)
 			.on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
 				bzutils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
-                var preppedEvent = bzutils.xfcr("nodeMouseover", componentReference, d); 
+                var preppedEvent = _this.nodeMouseover(componentReference, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
                 if (d.depth <= 1) { // root or first level
                     _this.restockCache(component);
@@ -142,7 +142,7 @@
             }))
 			.on('mouseout', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
 				bzutils.setCache (componentReference, "mouseoutRecordId", d.id ) ;
-                var preppedEvent = bzutils.xfcr("nodeMouseout", componentReference, d); 
+                var preppedEvent = _this.nodeMouseout(componentReference, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
             }))
 			;
@@ -162,7 +162,7 @@
             })            
             .style("fill", function(d) {
                 // we add new circles only to new nodes - the nodes are forgotten if collapsed
-                return d._children ? bzctree.getNodeColor(componentReference, d, "Parent") : bzctree.getNodeColor(componentReference, d, "Leaf");
+                return d._children ? _this.getNodeColor(componentReference, d, "Parent") : _this.getNodeColor(componentReference, d, "Leaf");
             });
       
 
@@ -215,9 +215,9 @@
           .style("fill", function(d) {
               // collapsed children are stored as d._children / expanded as d.children
             if(childLess(d)) {
-                  return bzctree.getNodeColor(componentReference, d, "Leaf");
+                  return _this.getNodeColor(componentReference, d, "Leaf");
               }
-              return bzctree.getNodeColor(componentReference, d, "Parent"); 
+              return _this.getNodeColor(componentReference, d, "Parent"); 
           })
           .attr('cursor', 'pointer');      
           
@@ -524,7 +524,7 @@
                 }
         
                 parentNode.data.children.push(newchild.data);
-                bzctree.collapse(newchild);
+                _this.collapse(newchild);
 
             });        
         }
@@ -582,6 +582,148 @@
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
         }
     },
+
+    nodeMouseover : function (componentReference, d) {
+        console.log("chartHierarchyHelper.nodeMouseover enter");
+        var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
+        
+        var preppedEvent = bzchart.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
+        preppedEvent.eventType = "Cache";
+
+        // attempt to get the lighting info panel to follow the highlight.        
+        var infosvg = bzutils.getCache (componentReference, "infosvg") ;
+        var dx = d.x;
+        var dy = d.y;
+        console.log("popover:" + dy + " / " + dx);
+        // infosvg.attr('transform',function(d,i) { return 'translate(' + dy + ',' + dx + ')';})
+
+        // transitions fine but the lightning component only moves on scroll???
+        // infosvg.transition()
+        // .duration(1000)
+        // .attr("transform", function(d) { 
+        // var t = "translate(" + dy  + "," + dx + ")";
+        //     return t;
+        // });
+
+        // if (dy > 500) {
+        // infosvg.transition()
+        // .duration(100)
+        // .attr("transform", function(d) { 
+        // var t = "translate(" + 50  + "," + dx + ")";
+        //     return t;
+        // });    
+        // }
+
+        // if (dy < 500) {
+        // infosvg.transition()
+        // .duration(100)
+        // .attr("transform", function(d) { 
+        // var t = "translate(" + 600  + "," + dx + ")";
+        //     return t;
+        // });    
+        // }
+    
+        return preppedEvent;
+        
+    },
+    
+    nodeMouseout : function (componentReference, d) {
+        console.log("chartHierarchyHelper.nodeMouseout enter.");
+        var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
+        
+        var preppedEvent = bzchart.prepareEvent(componentReference, "ChartMouseOut", publishParameters);
+        if (d.depth > 1) {
+            preppedEvent.eventType = "Cache";
+        } 
+        return preppedEvent;
+    },
+
+    // bzctree methods
+    
+    getNodeColor : function (componentReference, d, LeafParent) {
+        var color;
+
+        var objectType = d.data.objectType;
+        var hasObjectSpecifics = bzutils.hasCache (componentReference, LeafParent + "ColorsValues" + objectType) ;
+        if (!hasObjectSpecifics) {
+            // if there is nothing specifc for an object then use the defaults
+            objectType = "Default";
+        }
+
+        var colorBy;      
+        var hasObjectSpecificColorBy = bzutils.hasCache (componentReference, LeafParent + "ColorsColorBy" + objectType) ;
+        if (hasObjectSpecificColorBy) {
+            colorBy = bzutils.getCache (componentReference, LeafParent + "ColorsColorBy" + objectType) ;
+        }
+        else {
+            colorBy = bzutils.getCache (componentReference, LeafParent + "ColorsColorByDefault") ;
+        }
+
+        var ColorsValues = bzutils.getCache (componentReference, LeafParent + "ColorsValues" + objectType) ;
+        var ColorsNames = bzutils.getCache (componentReference, LeafParent + "ColorsNames" + objectType) ;
+
+        for (var i = 0; i < ColorsValues.length; i++) {
+            if (colorBy == "size") {
+                if (d.data.size != null && d.data.size >= ColorsValues[i]) {
+                    color = ColorsNames[i];
+                } else {
+                    break;
+                }
+            }
+            else { 
+                // going by a textual value - default to the first color in the list
+                // TODO could add in a default in the config string?
+                color = ColorsNames[0];
+                if (d.data.otherFields[colorBy] == ColorsValues[i]) {
+                    console.log("colorBy Match: " + colorBy);
+                    color = ColorsNames[i];
+                    break;
+                }
+            }
+        }
+        return color;
+    },
+
+    setColorCache : function(componentReference, ColorsString, ColorsObjectDefault, prefix) {
+        bzutils.setCache (componentReference, prefix + "ColorsObjectDefault", ColorsObjectDefault ) ;
+        bzutils.setCache (componentReference, prefix + "ColorsValuesDefault", ColorsObjectDefault.values ) ;
+        bzutils.setCache (componentReference, prefix + "ColorsNamesDefault", ColorsObjectDefault.colors ) ;
+        bzutils.setCache (componentReference, prefix + "ColorsColorByDefault", ColorsObjectDefault.colorBy ) ;
+
+        var ColorsObject;
+        if (ColorsString != null && ColorsString != "") {
+            ColorsObject = JSON.parse(ColorsString);
+        }
+
+        var arrayObjectKeys = Object.keys(ColorsObject);
+
+        arrayObjectKeys.forEach ( function(objectKey) {
+            bzutils.setCache (componentReference, prefix + "ColorsObject" + objectKey, ColorsObject[objectKey] ) ;
+            bzutils.setCache (componentReference, prefix + "ColorsValues" + objectKey, ColorsObject[objectKey].values ) ;
+            bzutils.setCache (componentReference, prefix + "ColorsNames" + objectKey, ColorsObject[objectKey].colors ) ;
+            bzutils.setCache (componentReference, prefix + "ColorsColorBy" + objectKey, ColorsObject[objectKey].colorBy ) ;
+        });
+    },
+
+    // Collapse the node and all its children
+    collapse : function (d) {
+        var recursor = function (e) {
+            if(e.children) {
+                e._children = e.children
+                e._children.forEach(recursor)
+                e.children = null
+            }
+        };
+
+        if(d.children) {
+            d._children = d.children
+            d._children.forEach(recursor)
+            d.children = null
+        }
+    },
+    
+
+
 
 
 })

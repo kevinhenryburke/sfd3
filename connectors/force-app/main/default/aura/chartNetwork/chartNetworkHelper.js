@@ -17,15 +17,14 @@
         var text = {};     
         var path = {};     
 
-        console.log("calling nodes");
+        console.log("chartNetworkHelper: calling nodes");
 
         var nodeSelector = bzutils.getParam(componentType, "node", "selector"); // an html selector for a class or element ids
-        var nodeDataSetFunction = bzutils.xfcr("nodeDataSetFunction", componentReference); // an html selector for a class or element ids
-        var nodeDataKeyFunction = bzutils.xfcr("nodeDataKeyFunction", componentReference); // an html selector for a class or element ids
-        
+        var nodeDataSetFunction = _this.nodeDataSetFunctionNodes (component); 
+
         var nodeEnterSelection = nodeGroup
             .selectAll(nodeSelector)
-            .data(nodeDataSetFunction(datajson), nodeDataKeyFunction)
+            .data(nodeDataSetFunction(datajson), function(d, i) { return d.id;})
             .enter();
 
 //        nodeSelection.exit().remove();    
@@ -44,13 +43,13 @@
                     var retainNodeDetailsMouseOut = bzutils.getCache (componentReference, "retainNodeDetailsMouseOut" ) ;
                     if (!retainNodeDetailsMouseOut)
                     {
-                        var preppedEvent = bzutils.xfcr("nodeMouseout", componentReference, d); // an html selector for a class or element ids
+                        var preppedEvent = _this.nodeMouseout(component, d); 
                         _this.publishPreppedEvent(component,preppedEvent);
                     }
                 })
                 .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
                     bzutils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
-                    var preppedEvent = bzutils.xfcr("nodeMouseover", componentReference, d); 
+                    var preppedEvent = _this.nodeMouseover(component, d); 
                     _this.publishPreppedEvent(component,preppedEvent);
                 }))
                 .on('click', function(d) {
@@ -91,7 +90,6 @@
                 }))
                 ;
 
-            // var nodeAdditionalAttribute = bzutils.xfcr("nodeAdditionalAttribute", componentReference, node); // an html selector for a class or element ids
             var nodeAdditionalAttribute = _this.nodeAdditionalAttribute(component, node);
 
         }
@@ -188,14 +186,14 @@
                 .on('mouseout', function(d) { // hide the div
                     var showPathToolTip = component.get("v.showPathToolTip"); 
                     if (showPathToolTip) {
-                        bzutils.xfcr("pathMouseout", componentReference, pathToolTipDiv); 
+                        _this.pathMouseout(pathToolTipDiv);
                     }
                 })
                 .on('mouseover', $A.getCallback(function(d) { 
                     var showPathToolTip = component.get("v.showPathToolTip"); 
                     console.log("showPathToolTip: " + showPathToolTip);
                     if (showPathToolTip) {
-                        bzutils.xfcr("pathMouseover", componentReference, d, path, pathToolTipDiv); 
+                        _this.pathMouseover(d, path, pathToolTipDiv);
                     }
                 }));
 
@@ -563,7 +561,165 @@
         }
     
         console.log("chartNetworkHelper.textAdditionalAttribute exit");
-    }
+    },
+
+    pathMouseover : function (d,path,pathToolTipDiv) {
+        console.log("chartNetworkHelper.pathMouseover enter");
+    
+        var mouseoverpathid = d.id;
+    
+        path.style("stroke", function(o, i) {
+            var oid =o.id;
+    
+            if (oid === mouseoverpathid) {
+                return "red";
+            }
+            else
+            {
+                return "gray";
+            }
+        });
+    
+        var midx = (d.source.x + d.target.x) / 2
+        var midy = (d.source.y + d.target.y) / 2
+    
+        var content = '<div style="text-align:center;font-size:"6px";>';
+        content += '<p>Type: ' + d.type + '</p>';
+        content += '<p>Linked By ' + d.createdby + '</p>';
+        content += '<p>Notes: ' + d.notes + '</p>';
+        content += '</div>';
+    
+        pathToolTipDiv.transition()
+            .duration(100)
+            .style("opacity", .9);
+        pathToolTipDiv.html(content)
+            .style("left", midx + "px")
+            .style("top", midy + "px");
+    
+        console.log("chartNetworkHelper.pathMouseover exit");
+        
+    },
+    
+    pathMouseout : function (pathToolTipDiv) {
+        console.log("chartNetworkHelper.pathMouseout enter");
+    
+        pathToolTipDiv.transition()
+            .delay(1000)
+            .duration(2000)
+            .style("opacity", 0);
+    
+        console.log("chartNetworkHelper.pathMouseout exit");
+    },
+
+    
+    nodeDataSetFunctionNodes : function (component) { 
+
+        console.log("chartNetworkHelper.nodeDataSetFunctionNodes enter");    
+
+        var componentType = component.get("v.componentType");
+        console.log("nodeDataSetFunctionNodes componentType = " + componentType);
+        var componentReference = component.get("v.componentReference");  
+
+        if (componentType ==  "pack") {
+            return function(datajson) { 
+                console.log("nodeDataSetFunctionNodes computing callback " + componentReference);
+                var root = d3.hierarchy(datajson)
+                .sum(function(d) { return d.size; })
+                .sort(function(a, b) { return b.value - a.value; });
+        
+                var diameter = bzutils.getCache (componentReference, "width") ;  
+                console.log("nodeDataSetFunctionNodes diameter: " + diameter);
+                
+                var pack = d3.pack()
+                .size([diameter - 4, diameter - 4]);
+                return pack(root).descendants();
+            };            
+        }      
+
+        if ((componentType ==  "chart.influence") || (componentType ==  "chart.connections")) {
+            return function(datajson) { return datajson.nodes;};
+        }      
+    },
+
+    nodeMouseover : function (component, d) {
+        console.log("chartNetworkHelper.nodeMouseover enter");
+        var componentReference = component.get("v.componentReference");  
+
+        var componentType = component.get("v.componentType");
+        console.log("nodeMouseover componentType = " + componentType);
+
+        if ((componentType == "chart.connections") || (componentType == "chart.influence")) {
+            // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
+            var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
+            textcontent += '</tspan>'; 
+            textcontent += '<tspan x="10" dy="15">' + d.position;
+            textcontent += ' (' + d.account + ')</tspan>';
+
+            var tselect =  "t" + d.id;
+            var sselect =  "s" + d.id;
+
+            var t = d3.select("#" + tselect);
+            bzutils.log("mouseover: " + textcontent);
+            bzutils.log(t);
+            t.html(textcontent);
+            var s = d3.select("#" + sselect);
+            s.html(textcontent);
+
+            var publishParameters = {"data" : d, "parent" : null};
+            var preppedEvent = bzchart.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
+            return preppedEvent;
+        }
+
+        if (componentType ==  "pack") {
+            // // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
+            // var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
+            // textcontent += '</tspan>'; 
+            // textcontent += '<tspan x="10" dy="15">' + d.position;
+            // textcontent += ' (' + d.account + ')</tspan>';
+        
+            // var tselect =  "t" + d.id;
+            // var sselect =  "s" + d.id;
+        
+            // var t = d3.select("#" + tselect);
+            // bzutils.log("mouseover: " + textcontent);
+            // bzutils.log(t);
+            // t.html(textcontent);
+            // var s = d3.select("#" + sselect);
+            // s.html(textcontent);
+        
+            var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
+        
+            var preppedEvent = bzchart.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
+            return preppedEvent;
+        
+        }
+        
+    },
+    
+    nodeMouseout : function (component, d) {
+        console.log("chartNetworkHelper.nodeMouseout enter.");
+        var componentReference = component.get("v.componentReference");  
+
+        var componentType = component.get("v.componentType");
+        console.log("nodeMouseover componentType = " + componentType);
+
+        if ((componentType == "chart.connections") || (componentType == "chart.influence")) {
+            // revert back to just the name
+            // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
+            var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
+            textcontent += '</tspan>'; 
+
+            var tselect =  "t" + d.id;
+            var sselect =  "s" + d.id;
+                
+            var t = d3.select("#" + tselect);                    
+            t.html(textcontent);
+
+            var s = d3.select("#" + sselect);
+            s.html(textcontent);
+        }
+
+    },
     
 
 
