@@ -91,7 +91,8 @@
                 }))
                 ;
 
-            var nodeAdditionalAttribute = bzutils.xfcr("nodeAdditionalAttribute", componentReference, node); // an html selector for a class or element ids
+            // var nodeAdditionalAttribute = bzutils.xfcr("nodeAdditionalAttribute", componentReference, node); // an html selector for a class or element ids
+            var nodeAdditionalAttribute = _this.nodeAdditionalAttribute(component, node);
 
         }
 
@@ -519,7 +520,33 @@
 
     },
 
+    nodeAdditionalAttribute : function (component, node) {
+        // Not sure this is called
+        console.log("chartNetworkHelper.nodeAdditionalAttribute enter");    
+
+        var componentType = component.get("v.componentType");
+        console.log("nodeAdditionalAttribute componentType = " + componentType);
+
+        if (componentType == "pack") {
+        
+            node.attr("transform", "translate(2,2)") // new
+                .attr("class", function(d) { return d.children ? "packbranch node" : "packleaf node"; })
+                .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+        
+            node.append("title")
+                .text(function(d) { return d.data.name + "\n" + d3.format(",d")(d.value); }); // this is the d3 value accessor which handles sum in hierarchy layout 
+        
+            node.append("circle")
+                .attr("r", function(d) { return d.r; });
+        
+            node.filter(function(d) { return !d.children; }).append("text")
+                .attr("dy", "0.3em")
+                .text(function(d) { return d.data.name.substring(0, d.r / 3); });
+        }
     
+        console.log("chartNetworkHelper.nodeAdditionalAttribute exit");
+    }
+        
 
 
 })
