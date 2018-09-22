@@ -54,6 +54,28 @@
             }
         }
        );
+    },
+
+    /* param is of form "data.name" - this looks at the first part and returns the attribute with the name of the second part of the relevant structure */
+    parseCardParam : function (data, parent, param) {
+        var splitArray = param.split(".");
+        if (splitArray[0] == "data") {
+            if (data != null) {
+                if (splitArray[1] != "otherFields") {
+                    return data[splitArray[1]];
+                }
+                else {
+                    return data[splitArray[1]][splitArray[2]];
+                }
+            }
+        }
+        if (splitArray[0] == "parent") {
+            if (parent != null) {
+                return parent[splitArray[1]];
+            }
+        }
+        return "";
     }
+
 
 })

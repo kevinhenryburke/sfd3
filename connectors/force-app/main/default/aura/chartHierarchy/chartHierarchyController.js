@@ -10,6 +10,10 @@
         helper.initializeVisuals(component);                         
     },
 
+    dataPreprocess: function(component,event,helper){
+        console.log("calling the aura:method dataPreprocess in subcomponent");
+    },
+
     refreshData: function(component,event,helper){
         console.log("calling the aura:method refreshData in subcomponent");
         var args = event.getParam("arguments");

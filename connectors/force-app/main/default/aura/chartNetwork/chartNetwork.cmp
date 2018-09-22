@@ -2,6 +2,11 @@
 
     <aura:method name="initializeVisuals" /> 
 
+    <aura:method name="dataPreprocess"> 
+        <aura:attribute name="datajson" type="Object"/>    
+        <aura:attribute name="datajsonRefresh" type="Object"/>    
+    </aura:method>
+        
     <aura:method name="searchChart"> 
         <aura:attribute name="searchTermId" type="String"/> 
         <aura:attribute name="searchAction" type="String"/> 

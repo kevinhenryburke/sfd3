@@ -12,17 +12,7 @@
 		var textGroup = bzutils.getCache (componentReference, "textGroup") ;  
 		var pathToolTipDiv = bzutils.getCache (componentReference, "pathToolTipDiv") ;  
 		var pathGroupId = bzutils.getCache (componentReference, "pathGroupId") ;  
-        
-        // console.log("PreProcess data");
-        // datajson = bzutils.xfcr("dataPreProcess", componentReference, datajson); // preprocessing of data (if any)
-
-        // use the name convention from d3 tutorials (e.g. http://www.puzzlr.org/force-directed-graph-minimal-working-example/)
-        // variables called simulation, node, path
-
-        // Not used but an alternative way to get node / path values
-        // var node = d3.select("#" + nodeGroupId).selectAll("circle")  ;
-        // var path = d3.select("#" + pathGroupId).selectAll("path")  ;
-        
+                
         var node = {};     
         var text = {};     
         var path = {};     
@@ -228,9 +218,7 @@
         //     forceNodes["nodes"].push(d3this);
         // });
 
-        bzutils.xfcr("runSimulation", componentReference, path, node, text ); 
-        
-        bzutils.showCache (componentReference) ;
+        _this.runSimulation(component, path, node, text);                 
         
 // GARBAGE AFTER HERE - experiments
 
@@ -254,6 +242,10 @@
             d3this.attr("testAttribute" , "yay");
         });
 */        
+    },
+
+    initializeVisuals2: function (component) {
+        console.log("subhelper: enter initializeVisuals2 proper!");
     },
 
     // TODO function appears in many places, try to consolidate
@@ -289,6 +281,225 @@
         }
     },
     
+    runSimulation : function (component, path, node, text) {
+        console.log("chartNetworkHelper.runSimulation enter");
+        var _this = this;
+
+        var componentType = component.get("v.componentType");
+
+        if (componentType ==  "chart.connections") {
+            console.log("chartNetworkHelper.runSimulation " + componentType);
+            _this.runSimulationConnections(component, path, node, text);
+        }
+        if (componentType ==  "chart.influence") {
+            console.log("chartNetworkHelper.runSimulation " + componentType);
+            _this.runSimulationInfluence(component, path, node, text);
+        }
+
+        console.log("chartNetworkHelper.runSimulation exit");
+    },                 
+
+    /* Connections Methods */
+
+    runSimulationConnections : function (component, path, node, text) {
+        console.log("chartNetworkHelper.runSimulationConnections enter");
+        var _this = this;
+
+        var componentReference = component.get("v.componentReference");
+
+        var datajson = bzutils.getCache (componentReference, "datajson") ;
+
+        var simulation = _this.initializeSimulationConnections(componentReference, datajson.nodes);            
+
+        bzutils.setCache (componentReference, "simulation", simulation ) ;
+    
+        var forceLinks = _this.buildForceLinks(path);
+        var link_force =  d3.forceLink(forceLinks.links)
+            .id(function(d) { return d.id; });
+    
+        simulation.force("links",link_force);
+    
+        _this.dragHandler(node, simulation);
+    
+        simulation.on("tick", function() {
+            _this.onTick (componentReference, path, node, text);
+        });             
+    
+        console.log("chartNetworkHelper.runSimulationConnections exit");
+    },                 
+
+    initializeSimulationConnections : function (componentReference, nodes) {
+        var _this = this;
+        console.log("chartNetworkHelper.initializeSimulationConnections enter");
+        var width = bzutils.getCache (componentReference, "width") ;  
+        var height = bzutils.getCache (componentReference, "height") ; 
+    
+        // force example - https://bl.ocks.org/rsk2327/23622500eb512b5de90f6a916c836a40
+        var attractForce = d3.forceManyBody().strength(5).distanceMax(400).distanceMin(60);
+        var repelForce = d3.forceManyBody().strength(-800).distanceMax(200).distanceMin(30);
+    
+        var simulation = d3.forceSimulation()
+            //add nodes
+            .nodes(nodes) 
+            .force("center_force", d3.forceCenter(width / 2, height / 2))
+            .alphaDecay(0.03).force("attractForce",attractForce).force("repelForce",repelForce);
+        
+        console.log("chartNetworkHelper.initializeSimulationConnections enter");
+        return simulation;
+    },
+    
+    dragHandler : function (node, simulation) {
+        var _this = this;
+        console.log("dragHandler enter");
+        var drag_handler = d3.drag()
+        .on("start", function (d) {
+            simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+            })
+        .on("drag", function (d) {
+            d.fx = d3.event.x;
+            d.fy = d3.event.y;
+            })
+        .on("end", function (d) {
+            simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+            });
+    
+        drag_handler(node);
+        console.log("dragHandler exit");
+    },
+        
+    transform : function (d, width, height) {
+        var _this = this;
+        var dx = _this.limitborderx(d.x, width);
+        var dy = _this.limitbordery(d.y, height);
+        return "translate(" + dx + "," + dy + ")";
+    },
+    
+    limitborderx : function (x, width) {
+        var _this = this;
+        return Math.max(Math.min(x, width) -30, 20);
+    },
+    
+    limitbordery : function (y, height) {
+        var _this = this;
+        return Math.max(Math.min(y, height - 50), 20 );
+    },   
+    
+    onTick : function  (componentReference, path, node, text) {
+        var _this = this;
+        var width = bzutils.getCache (componentReference, "width") ;  
+        var height = bzutils.getCache (componentReference, "height") ; 
+    //    if (bzutils.getCache (componentReference, "hasPaths") == true) {
+            path.attr("d", function(d) {
+                var sx = _this.limitborderx(d.source.x, width);
+                var sy = _this.limitbordery(d.source.y, height);
+                var tx = _this.limitborderx(d.target.x, width);
+                var ty = _this.limitbordery(d.target.y, height);
+                var dx = tx - sx;
+                var dy = ty - sy;
+                var dr = Math.sqrt(dx * dx + dy * dy);
+                return "M" + sx + "," + sy + "A" + dr + "," + dr + " 0 0,1 " + tx + "," + ty;
+            });
+    //    }
+        node.attr("transform", function(d) {
+            return _this.transform (d, width, height);
+        });
+        if (bzutils.getCache (componentReference, "hasText") == true) {
+            text.attr("transform", function(d) {
+                return _this.transform (d, width, height);
+            });
+        }
+    },
+    
+    buildForceLinks : function (path) {
+        var _this = this;
+        console.log("buildForceLinks enter: " + JSON.stringify(path)); 
+        var forceLinks = {"links": [] };
+    
+        path.data().forEach(function(p) {
+            var sourceDatum = d3.select("#" + p.sourceid).datum();
+            var targetDatum = d3.select("#" + p.targetid).datum();
+            forceLinks["links"].push(
+                {
+                    "id" : p.id,
+                    "sourceid" : p.sourceid, 
+                    "targetid" : p.targetid,
+                    "type": p.type,
+                    "createdby": p.createdby,
+                    "notes": p.notes,
+                    "stroke": p.stroke,
+                    "source" : sourceDatum,
+                    "target" : targetDatum
+                }
+            );
+        });
+        console.log("buildForceLinks exit"); 
+        return forceLinks;
+    },
+    
+    /* Influence Methods */
+
+    runSimulationInfluence : function (component, path, node, text) {
+        console.log("chartNetworkHelper.runSimulationInfluence enter");
+        var _this = this;
+
+        var componentReference = component.get("v.componentReference");
+
+        var datajson = bzutils.getCache (componentReference, "datajson") ;
+
+        var simulation = _this.initializeSimulationInfluence(componentReference, datajson.nodes);            
+
+        bzutils.setCache (componentReference, "simulation", simulation ) ;
+    
+        var forceLinks = _this.buildForceLinks(path);
+        var link_force =  d3.forceLink(forceLinks.links)
+            .id(function(d) { return d.id; });
+    
+        simulation.force("links",link_force);
+    
+        _this.dragHandler(node, simulation);
+    
+        simulation.on("tick", function() {
+            _this.onTick (componentReference, path, node, text);
+        });             
+    
+
+        console.log("chartNetworkHelper.runSimulationInfluence exit");
+    }, 
+
+
+    initializeSimulationInfluence : function (componentReference, nodes) {
+        console.log("chartNetworkHelper.initializeSimulationInfluence enter");
+        var width = bzutils.getCache (componentReference, "width") ;  
+        var height = bzutils.getCache (componentReference, "height") ; 
+        var sizeDivisor = 100;
+        var nodePadding = 2.5;
+        var currentMeasure = bzutils.getCache (componentReference, "currentMeasure") ; 
+    
+        var simulation = d3.forceSimulation()
+            .force("forceX", d3.forceX().strength(.1).x(width * .5))
+            .force("forceY", d3.forceY().strength(.1).y(height * .5))
+            .force("center", d3.forceCenter().x(width * .5).y(height * .5))
+            .force("charge", d3.forceManyBody().strength(-150));
+    
+        simulation  
+            .nodes(nodes)
+            .force("collide", d3.forceCollide().strength(.5).radius(function(d){
+                return d.measures[currentMeasure].radius + nodePadding; }).iterations(1))
+    //        .force("collide", d3.forceCollide().strength(.5).radius(function(d){ return d.radius + nodePadding; }).iterations(1))
+            .on("tick", function(d){
+              node
+                  .attr("cx", function(d){ return d.x; })
+                  .attr("cy", function(d){ return d.y; })
+            });        
+        
+        console.log("chartNetworkHelper.initializeSimulationInfluence exit");
+        return simulation;
+    }
+        
     
 
 

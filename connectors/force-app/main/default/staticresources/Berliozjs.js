@@ -8,7 +8,6 @@ console.log("loading: Berlioz external libraries");
 
 console.log("loading: bzutils IIFE");
 
-var version = "0.0.1";
 var debugMode = true;
 
 // Data Cache
@@ -97,7 +96,6 @@ function getNodeFromId (id) {
 }
 
 
-
 /* This is how to list all the properties and all functions in a module
 
 console.log(Object.getOwnPropertyNames(bzutils));
@@ -183,45 +181,6 @@ function hasParam(componentType /*, args */) {
     return true;
 }
 
-/* param is of form "data.name" - this looks at the first part and returns the attribute with the name of the second part of the relevant structure */
-function parseCardParam(data, parent, param) {
-    var splitArray = param.split(".");
-    if (splitArray[0] == "data") {
-        if (data != null) {
-            if (splitArray[1] != "otherFields") {
-                return data[splitArray[1]];
-            }
-            else {
-                return data[splitArray[1]][splitArray[2]];
-            }
-        }
-    }
-    if (splitArray[0] == "parent") {
-        if (parent != null) {
-            return parent[splitArray[1]];
-        }
-    }
-    return "";
-}
-
-/*
-// not used at present
-function simpleHash(s) {
-    bzutils.log("bzutils.simpleHash enter for: " + s);
-    var hash = 0;
-    if (s.length == 0) {
-        return hash;
-    }
-    for (var i = 0; i < s.length; i++) {
-        var char = s.charCodeAt(i);
-        hash = ((hash<<5)-hash)+char;
-        hash = hash & hash; // Convert to 32bit integer
-    }
-    return hash;
-}    
-*/
-
-
 // new signatures .... 
 // (topic, publisher, publisherCategory, publisherType, parameters, controller)
 // becomes
@@ -255,7 +214,6 @@ function publishEventHelper(event, topic, parameters, controller) {
     event.fire();
 }
 
-
 /* Different topics may use different event types, implement in this method */
 /* eventType is one of "Component" or "Application" or "Cache" */
 
@@ -278,7 +236,6 @@ exports.xfcr = xfcr;
 exports.xfct = xfct;
 exports.getParam = getParam;
 exports.hasParam = hasParam;
-exports.parseCardParam = parseCardParam;
 exports.initializeAddComponentRef = initializeAddComponentRef;
 exports.addComponentRef = addComponentRef;
 exports.removeComponentRef = removeComponentRef;
@@ -324,10 +281,8 @@ var fns =
         "nodeMouseout" : "bzctree.nodeMouseout",
         "nodeMouseover" : "bzctree.nodeMouseover",
         "nodeDoubleClick" : "bzutils.doNothing",     
-        "runSimulation" : "bzutils.doNothing",      
         "nodeAdditionalAttribute" : "bzpack.nodeAdditionalAttribute", 
         "textAdditionalAttribute" : "bzutils.doNothing", 
-        "dataPreProcess" : "bzutils.doNothing", 
     },
     "pack" : {
         "nodeDataSetFunction" : "bzpack.nodeDataSetFunctionNodes",
@@ -337,10 +292,8 @@ var fns =
         "nodeMouseout" : "bzutils.doNothing",
         "nodeMouseover" : "bzpack.nodeMouseover",
         "nodeDoubleClick" : "bzutils.doNothing",     
-        "runSimulation" : "bzutils.doNothing",      
         "nodeAdditionalAttribute" : "bzpack.nodeAdditionalAttribute", 
         "textAdditionalAttribute" : "bzutils.doNothing", 
-        "dataPreProcess" : "bzutils.doNothing", 
     },
     "chart.connections" : { 
         "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
@@ -350,10 +303,8 @@ var fns =
         "nodeMouseout" : "bzchart.nodeMouseout",
         "nodeMouseover" : "bzchart.nodeMouseover",
         "nodeDoubleClick" : "bzchart.nodeDoubleClick",        
-        "runSimulation" : "bzsimulation.runSimulation",        
         "nodeAdditionalAttribute" : "bzutils.doNothing", 
         "textAdditionalAttribute" : "bzchart.textAdditionalAttribute", 
-        "dataPreProcess" : "bzutils.doNothing", 
     },    
     "chart.influence" : {
         "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
@@ -363,10 +314,8 @@ var fns =
         "nodeMouseout" : "bzchart.nodeMouseout",
         "nodeMouseover" : "bzchart.nodeMouseover",
         "nodeDoubleClick" : "bzchart.nodeDoubleClick",        
-        "runSimulation" : "bzinfluence.runSimulation",        
         "nodeAdditionalAttribute" : "bzutils.doNothing", 
         "textAdditionalAttribute" : "bzchart.textAdditionalAttribute", 
-        "dataPreProcess" : "bzinfluence.tempPreProcess", 
     },    
 } 
 
@@ -442,8 +391,6 @@ console.log("loaded: bzconfig  IIFE");
 }(this, (function (exports) { 'use strict';
 
 console.log("loading: bzchart IIFE");
-
-var version = "0.0.1";
 
 var isiOS = false;
 
@@ -561,12 +508,8 @@ function textAdditionalAttribute (componentReference, text) {
     console.log("bzchart.textAdditionalAttribute exit");    
 }
 
-
-
 function getRelatedNodes (chartPrimaryId, componentReference, level) {
-
     var looplevel = 0;
-
     var linkednodes = [chartPrimaryId];
 
     while (looplevel < level) {
@@ -586,8 +529,6 @@ function getRelatedNodes (chartPrimaryId, componentReference, level) {
                     }
                 }
             );
-
-        var arrayLength = newnodes.length;
 
         for (var i = 0; i < newnodes.length; i++) {
         var index = linkednodes.indexOf(newnodes[i]);
@@ -646,8 +587,6 @@ function prepareEvent(componentReference, topic, parameters) {
     }
 }
 
-
-
 exports.pathMouseover = pathMouseover;
 exports.pathMouseout = pathMouseout;
 exports.nodeMouseover = nodeMouseover;
@@ -671,243 +610,20 @@ console.log("loaded: bzchart  IIFE");
 
 /* Split this into new file */
 
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.bzsimulation = global.bzsimulation || {})));
-}(this, (function (exports) { 'use strict';
+// (function (global, factory) {
+// 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+// 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+// 	(factory((global.bzsimulation = global.bzsimulation || {})));
+// }(this, (function (exports) { 'use strict';
 
-console.log("loading: bzsimulation IIFE");
+// console.log("loading: bzsimulation IIFE");
 
-var version = "0.0.1";
+// Object.defineProperty(exports, '__esModule', { value: true });
 
-function initializeSimulation (componentReference, nodes) {
-    console.log("bzsimulation.initializeSimulation enter");
-    var width = bzutils.getCache (componentReference, "width") ;  
-    var height = bzutils.getCache (componentReference, "height") ; 
+// console.log("loaded: bzsimulation  IIFE");
 
-    // force example - https://bl.ocks.org/rsk2327/23622500eb512b5de90f6a916c836a40
-    var attractForce = d3.forceManyBody().strength(5).distanceMax(400).distanceMin(60);
-    var repelForce = d3.forceManyBody().strength(-800).distanceMax(200).distanceMin(30);
+// })));
 
-    var simulation = d3.forceSimulation()
-        //add nodes
-        .nodes(nodes) 
-        .force("center_force", d3.forceCenter(width / 2, height / 2))
-        .alphaDecay(0.03).force("attractForce",attractForce).force("repelForce",repelForce);
-    
-    console.log("bzsimulation.initializeSimulation exit");
-    return simulation;
-}
-
-function dragHandler (node, simulation) {
-    console.log("bzsimulation.dragHandler enter");
-    var drag_handler = d3.drag()
-    .on("start", function (d) {
-        simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-        })
-    .on("drag", function (d) {
-        d.fx = d3.event.x;
-        d.fy = d3.event.y;
-        })
-    .on("end", function (d) {
-        simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
-        });
-
-    drag_handler(node);
-    console.log("bzsimulation.dragHandler exit");
-}
-    
-function transform (d, width, height) {
-    var dx = limitborderx(d.x, width);
-    var dy = limitbordery(d.y, height);
-    return "translate(" + dx + "," + dy + ")";
-}
-
-function limitborderx(x, width) {
-    return Math.max(Math.min(x, width) -30, 20);
-}
-
-function limitbordery(y, height) {
-    return Math.max(Math.min(y, height - 50), 20 );
-}    
-
-function onTick (componentReference, path, node, text) {
-    var width = bzutils.getCache (componentReference, "width") ;  
-    var height = bzutils.getCache (componentReference, "height") ; 
-//    if (bzutils.getCache (componentReference, "hasPaths") == true) {
-        path.attr("d", function(d) {
-            var sx = limitborderx(d.source.x, width);
-            var sy = limitbordery(d.source.y, height);
-            var tx = limitborderx(d.target.x, width);
-            var ty = limitbordery(d.target.y, height);
-            var dx = tx - sx;
-            var dy = ty - sy;
-            var dr = Math.sqrt(dx * dx + dy * dy);
-            return "M" + sx + "," + sy + "A" + dr + "," + dr + " 0 0,1 " + tx + "," + ty;
-        });
-//    }
-    node.attr("transform", function(d) {
-        return transform (d, width, height);
-    });
-    if (bzutils.getCache (componentReference, "hasText") == true) {
-        text.attr("transform", function(d) {
-            return transform (d, width, height);
-        });
-    }
-}
-
-function buildForceLinks(path) {
-    console.log("buildForceLinks enter: " + JSON.stringify(path)); 
-    var forceLinks = {"links": [] };
-
-    path.data().forEach(function(p) {
-        var sourceDatum = d3.select("#" + p.sourceid).datum();
-        var targetDatum = d3.select("#" + p.targetid).datum();
-        forceLinks["links"].push(
-            {
-                "id" : p.id,
-                "sourceid" : p.sourceid, 
-                "targetid" : p.targetid,
-                "type": p.type,
-                "createdby": p.createdby,
-                "notes": p.notes,
-                "stroke": p.stroke,
-                "source" : sourceDatum,
-                "target" : targetDatum
-            }
-        );
-    });
-    console.log("buildForceLinks exit"); 
-    return forceLinks;
-}
-
-function runSimulation(componentReference, path, node, text ) {
-    console.log("runSimulation enter"); 
-
-    var datajson = bzutils.getCache (componentReference, "datajson") ;
-    var simulation = bzsimulation.initializeSimulation(componentReference, datajson.nodes);            
-    bzutils.setCache (componentReference, "simulation", simulation ) ;
-
-    var forceLinks = bzsimulation.buildForceLinks(path);
-    var link_force =  d3.forceLink(forceLinks.links)
-        .id(function(d) { return d.id; });
-
-    simulation.force("links",link_force);
-
-    bzsimulation.dragHandler(node, simulation);
-
-    simulation.on("tick", function() {
-        bzsimulation.onTick (componentReference, path, node, text);
-    });             
-    console.log("runSimulation exit"); 
-}
-
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
-exports.initializeSimulation = initializeSimulation;
-exports.dragHandler = dragHandler;
-exports.onTick = onTick;
-exports.buildForceLinks = buildForceLinks;
-exports.runSimulation = runSimulation;
-// temporary
-exports.transform = transform;
-exports.limitborderx = limitborderx;
-exports.limitbordery = limitbordery;
-
-
-console.log("loaded: bzsimulation  IIFE");
-
-})));
-
-/* Split this into new file */
-
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-	typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	(factory((global.bzinfluence = global.bzinfluence || {})));
-}(this, (function (exports) { 'use strict';
-
-console.log("loading: bzinfluence IIFE");
-
-var version = "0.0.1";
-
-function runSimulation(componentReference, path, node, text ) {
-    console.log("runSimulation enter"); 
-
-    var datajson = bzutils.getCache (componentReference, "datajson") ;
-    var simulation = bzinfluence.initializeSimulation(componentReference, datajson.nodes);            
-    bzutils.setCache (componentReference, "simulation", simulation ) ;
-
-    var forceLinks = bzsimulation.buildForceLinks(path);
-    var link_force =  d3.forceLink(forceLinks.links)
-        .id(function(d) { return d.id; });
-
-    simulation.force("links",link_force);
-
-    bzsimulation.dragHandler(node, simulation);
-
-    simulation.on("tick", function() {
-        bzsimulation.onTick (componentReference, path, node, text);
-    });             
-    console.log("runSimulation exit"); 
-}
-
-function initializeSimulation (componentReference, nodes) {
-    console.log("bzinfluence.initializeSimulation enter");
-    var width = bzutils.getCache (componentReference, "width") ;  
-    var height = bzutils.getCache (componentReference, "height") ; 
-    var sizeDivisor = 100;
-    var nodePadding = 2.5;
-    var currentMeasure = bzutils.getCache (componentReference, "currentMeasure") ; 
-
-    var simulation = d3.forceSimulation()
-        .force("forceX", d3.forceX().strength(.1).x(width * .5))
-        .force("forceY", d3.forceY().strength(.1).y(height * .5))
-        .force("center", d3.forceCenter().x(width * .5).y(height * .5))
-        .force("charge", d3.forceManyBody().strength(-150));
-
-    simulation  
-        .nodes(nodes)
-        .force("collide", d3.forceCollide().strength(.5).radius(function(d){
-            return d.measures[currentMeasure].radius + nodePadding; }).iterations(1))
-//        .force("collide", d3.forceCollide().strength(.5).radius(function(d){ return d.radius + nodePadding; }).iterations(1))
-        .on("tick", function(d){
-          node
-              .attr("cx", function(d){ return d.x; })
-              .attr("cy", function(d){ return d.y; })
-        });        
-    
-    console.log("bzinfluence.initializeSimulation exit");
-    return simulation;
-}
-
-function tempPreProcess(componentReference, datajsonBefore, datajsonRefresh ) {
-    var all1 = 0;
-    for (var i = 0; i < datajsonBefore.nodes.length; i++){
-//        datajson.nodes[i].measures["Posts"].radius = Math.floor((Math.random() * 60) + 10); 
-        all1 += datajsonRefresh.nodes[i].measures["Posts"].radius;
-        datajsonBefore.nodes[i].measures["Posts"].radius = datajsonRefresh.nodes[i].measures["Posts"].radius;
-    }    
-    console.log("all1: " + all1);
-    bzutils.setCache (componentReference, "datajson", datajsonBefore ) ;
-}    
-
-exports.tempPreProcess = tempPreProcess;
-
-
-exports.runSimulation = runSimulation;
-exports.initializeSimulation = initializeSimulation;
-
-
-console.log("loaded: bzinfluence  IIFE");
-
-})));
 
 
 /* Split this into new file */
@@ -1122,13 +838,6 @@ function update() {
     console.log("loading: bzctree IIFE");
 
     // Note that x and y are seemingly the wrong way round - x is vertical, y is horizontal
-
-    var canExpandColor = "lightsteelblue";
-    var expandedColor = "white";
-
-//    var treemap;
-//    var root;
-    
 
     // LeafParent is either "Leaf" or "Node"
     // TODO - really should be "expanded" or "collapsed"

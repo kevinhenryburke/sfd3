@@ -17,6 +17,33 @@
         helper.initializeVisuals(component);                         
     },
 
+    dataPreprocess: function(component,event,helper){
+        console.log("calling the aura:method dataPreprocess in subcomponent");
+
+        var componentType = component.get("v.componentType");
+        console.log("dataPreprocess componentType = " + componentType);
+
+        if (componentType ==  "chart.influence") {
+            console.log("dataPreprocess subcomponent chart.influence");
+
+            var args = event.getParam("arguments");
+            var datajsonBefore = args.datajson;
+            var datajsonRefresh = args.datajsonRefresh;
+
+            var componentReference = component.get("v.componentReference");        
+
+            var all1 = 0;
+            for (var i = 0; i < datajsonBefore.nodes.length; i++){
+        //        datajson.nodes[i].measures["Posts"].radius = Math.floor((Math.random() * 60) + 10); 
+                all1 += datajsonRefresh.nodes[i].measures["Posts"].radius;
+                datajsonBefore.nodes[i].measures["Posts"].radius = datajsonRefresh.nodes[i].measures["Posts"].radius;
+            }    
+            console.log("all1: " + all1);
+            bzutils.setCache (componentReference, "datajson", datajsonBefore ) ;
+        }
+
+    },
+
     searchChart: function(component,event,helper){
         console.log("aura:method searchChart in subcomponent enter");
         var args = event.getParam("arguments");
@@ -56,7 +83,6 @@
             var showFilters = bzutils.getCache (componentReference, "showFilters") ;
             var primaryNodeId = bzutils.getCache (componentReference, "primaryNodeId") ;        
             // not needed until reinstate measure level visibility
-            var currentMeasure = bzutils.getCache (componentReference, "currentMeasure") ;
         
             var relatedNodes = bzchart.getRelatedNodes(primaryNodeId, componentReference, levels);
         
@@ -135,8 +161,8 @@
             var componentReference = component.get("v.componentReference");        
 
             var primaryid = bzutils.getCache (componentReference, "primaryNodeId") ;
-            var currentMeasure = bzutils.getCache (componentReference, "currentMeasure") ;
-        
+            var currentMeasure = helper.getStore(component, "currentMeasure");
+
             console.log("styleNodes enter: " + currentMeasure + " primaryid: " + primaryid);
         
             var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))

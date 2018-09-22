@@ -104,11 +104,12 @@
                 }
             }
 
-            component.set("v.recordId", bzutils.parseCardParam(displayData, displayParent, "data.id" ));
+            console.log("parseCardParam:");
+            component.set("v.recordId", helper.parseCardParam(displayData, displayParent, "data.id" ));
 
-            component.set("v.card1", bzutils.parseCardParam(displayData, displayParent, cardFieldsArray[0] ));  
-            component.set("v.card2", bzutils.parseCardParam(displayData, displayParent, cardFieldsArray[1] ));  
-            component.set("v.card3", bzutils.parseCardParam(displayData, displayParent, cardFieldsArray[2] ));  
+            component.set("v.card1", helper.parseCardParam(displayData, displayParent, cardFieldsArray[0] ));  
+            component.set("v.card2", helper.parseCardParam(displayData, displayParent, cardFieldsArray[1] ));  
+            component.set("v.card3", helper.parseCardParam(displayData, displayParent, cardFieldsArray[2] ));  
         }
 
         if (topic == "ChartMouseOut")

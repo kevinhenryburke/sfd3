@@ -138,10 +138,13 @@
             datajson["links"].push(link);
         });
 
+        var cc = component.getConcreteComponent();
+
 // cOME BACK
         // merge the old and the new data
         console.log("PreProcess data - not right yet - need to update this method to return nothing");
-        bzutils.xfcr("dataPreProcess", componentReference, datajson, datajsonRefresh); // preprocessing of data (if any)
+//        bzutils.xfcr("dataPreProcess", componentReference, datajson, datajsonRefresh); // preprocessing of data (if any)
+        cc.dataPreprocess(datajson, datajsonRefresh);
 
         datajson = bzutils.getCache (componentReference, "datajson") ;
         
@@ -149,7 +152,6 @@
         var isInit = false;
         _this.initializeGroups(component, datajson, currentMeasure, primaryNodeId, showFilters, isInit);                 
 
-        var cc = component.getConcreteComponent();
         cc.initializeVisuals();
 
         console.log("chartArea: exit refreshData");
@@ -187,6 +189,7 @@
             console.log("hasPrimaryNode false");
         }
 
+        _this.setStore(component, "currentMeasure", currentMeasure);
         bzutils.setCache (componentReference, "currentMeasure", currentMeasure ) ;
         bzutils.setCache (componentReference, "showFilters", showFilters ) ;
 
@@ -456,7 +459,19 @@
             hash = hash & hash; // Convert to 32bit integer
         }
         return hash;
-    },    
+    },  
+    
+    setStore : function (component, key, value) {
+        var store = component.get("v.storeObject");
+        console.log("store: " + store);
+        store[key] = value;
+    },
+    
+    getStore : function (component, key) {
+        var store = component.get("v.storeObject");
+        return store[key];
+    }
+        
 
 })
 

@@ -76,14 +76,19 @@
 
   <aura:method name="styleNodes"> 
   </aura:method>
-  
 
   <aura:method name="initializeVisuals"/> 
+
+  <aura:method name="dataPreprocess"> 
+    <aura:attribute name="datajson" type="Object"/>    
+    <aura:attribute name="datajsonRefresh" type="Object"/>    
+  </aura:method>
 
   <aura:method name="callFromContainer" action="{!c.handle_evt_sfd3}"> 
       <aura:attribute name="tpc" type="Object"/>    
   </aura:method>
 
+  <aura:attribute name="storeObject" type="Object"/> 
 
   <!-- Design Paramters -->  
   <aura:attribute name="UserComponentId" type="String" default="" description="If putting more than one chart on a page then this provides users with a mechanism to set their own for mapping purposes"/>    

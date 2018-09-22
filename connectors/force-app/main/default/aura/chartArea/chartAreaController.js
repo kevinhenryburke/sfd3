@@ -13,6 +13,9 @@
     doInit: function(component, event, helper) {
         console.log('chartArea: doInit enter');   
 
+        var storeObject = JSON.parse("{}");
+        component.set("v.storeObject", storeObject);
+
         var recordId = component.get("v.recordId");
         if (recordId == null) {
             recordId = "";
@@ -106,6 +109,7 @@
     handle_evt_sfd3  : function(component, event, helper) {
         bzutils.log('chartArea: handle_evt_sfd3 enter');
         var topic, parameters, controller;
+        var cc = component.getConcreteComponent();
 
         // if there is an arguments parameter this has been triggered by a method call
         // in which case we need to source our information from a level down in the event
@@ -145,7 +149,6 @@
         if (topic == "ShowLevelsMore")
         {
             bzutils.setCache (componentReference, "showLevels", parameters["levels"] ) ;
-            var cc = component.getConcreteComponent();
             cc.refreshVisibility();                 
     
         }
@@ -157,24 +160,22 @@
         }
         if (topic == "SetMeasure")
         {
-            var measureIndex = parameters["index"];
+            console.log("SetMeasure new");
             var currentMeasure = parameters["measure"];
+            helper.setStore(cc, "currentMeasure", currentMeasure);
 
             bzutils.setCache (componentReference, "currentMeasure", currentMeasure ) ;
             
             // refresh Chart - measure changes but primaryid does not
-            var cc = component.getConcreteComponent();
             cc.styleNodes();                 
         }
         if (topic == "SetFilter")
         {
-            var indexer = parameters["index"];
             var state = parameters["state"];
             var filterType = parameters["filterType"];
 
             var isShown = (state == "Show");
             bzchart.setFilterVisibility(component, filterType, isShown);
-            var cc = component.getConcreteComponent();
             cc.refreshVisibility();                 
         }
         if (topic == "InitializeData")
