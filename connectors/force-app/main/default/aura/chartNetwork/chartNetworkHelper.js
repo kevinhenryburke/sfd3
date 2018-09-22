@@ -126,7 +126,9 @@
                     .attr("class", styleclassTextShadow) // shadow class
                     // .attr("x", 8)
                     // .attr("y", ".31em");
-                bzutils.xfcr("textAdditionalAttribute", componentReference, svgText); // an html selector for a class or element ids
+
+                _this.textAdditionalAttribute (component, svgText);
+
             }
 
             var svgText = text.append("svg:text");
@@ -140,7 +142,7 @@
                 // .attr("x", 8)
                 // .attr("y", ".31em");
 
-            bzutils.xfcr("textAdditionalAttribute", componentReference, svgText); // an html selector for a class or element ids
+            _this.textAdditionalAttribute (component, svgText);
     
         }
 
@@ -545,8 +547,24 @@
         }
     
         console.log("chartNetworkHelper.nodeAdditionalAttribute exit");
+    },
+
+    textAdditionalAttribute : function (component, text) {
+        // Not sure this is called
+        console.log("chartNetworkHelper.textAdditionalAttribute enter");    
+
+        var componentType = component.get("v.componentType");
+        console.log("textAdditionalAttribute componentType = " + componentType);
+
+        if ((componentType == "chart.connections") || (componentType == "chart.influence")) {
+            text
+            .attr("x", 8)
+            .attr("y", ".31em")            
+        }
+    
+        console.log("chartNetworkHelper.textAdditionalAttribute exit");
     }
-        
+    
 
 
 })

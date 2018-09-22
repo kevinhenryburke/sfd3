@@ -280,7 +280,6 @@ var fns =
         "pathMouseout" : "bzchart.pathMouseout",
         "nodeMouseout" : "bzctree.nodeMouseout",
         "nodeMouseover" : "bzctree.nodeMouseover",
-        "textAdditionalAttribute" : "bzutils.doNothing", 
     },
     "pack" : {
         "nodeDataSetFunction" : "bzpack.nodeDataSetFunctionNodes",
@@ -289,7 +288,6 @@ var fns =
         "pathMouseout" : "bzchart.pathMouseout",
         "nodeMouseout" : "bzutils.doNothing",
         "nodeMouseover" : "bzpack.nodeMouseover",
-        "textAdditionalAttribute" : "bzutils.doNothing", 
     },
     "chart.connections" : { 
         "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
@@ -298,7 +296,6 @@ var fns =
         "pathMouseout" : "bzchart.pathMouseout",
         "nodeMouseout" : "bzchart.nodeMouseout",
         "nodeMouseover" : "bzchart.nodeMouseover",
-        "textAdditionalAttribute" : "bzchart.textAdditionalAttribute", 
     },    
     "chart.influence" : {
         "nodeDataSetFunction" : "bzutils.nodeDataSetFunctionNodes",
@@ -307,7 +304,6 @@ var fns =
         "pathMouseout" : "bzchart.pathMouseout",
         "nodeMouseout" : "bzchart.nodeMouseout",
         "nodeMouseover" : "bzchart.nodeMouseover",
-        "textAdditionalAttribute" : "bzchart.textAdditionalAttribute", 
     },    
 } 
 
@@ -479,15 +475,6 @@ function nodeMouseout (componentReference, d) {
     console.log("bzchart.nodeMouseout exit.");
 }
     
-function textAdditionalAttribute (componentReference, text) {
-    console.log("bzchart.textAdditionalAttribute enter");    
-    // push over to right and up a smidge
-    text
-        .attr("x", 8)
-        .attr("y", ".31em")
-    console.log("bzchart.textAdditionalAttribute exit");    
-}
-
 function getRelatedNodes (chartPrimaryId, componentReference, level) {
     var looplevel = 0;
     var linkednodes = [chartPrimaryId];
@@ -571,7 +558,6 @@ exports.pathMouseover = pathMouseover;
 exports.pathMouseout = pathMouseout;
 exports.nodeMouseover = nodeMouseover;
 exports.nodeMouseout = nodeMouseout;
-exports.textAdditionalAttribute = textAdditionalAttribute;
 exports.getRelatedNodes = getRelatedNodes;
 exports.setFilterVisibility = setFilterVisibility;
 exports.clearChart = clearChart;
