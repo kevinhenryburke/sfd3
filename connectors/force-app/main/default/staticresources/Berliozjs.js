@@ -294,64 +294,6 @@ console.log("loaded: bzutils  IIFE");
 
 console.log("loading: bzconfig IIFE");
 
-// Represents the functions to call for each of the configured display areas
-
-
-// var fns = 
-// { 
-//     "ctree" : {
-//     },
-//     "pack" : {
-//     },
-//     "chart.connections" : { 
-//     },    
-//     "chart.influence" : {
-//     },    
-// } 
-
-// var params = 
-// {
-//     "ctree" : {
-//         "node" : {
-//             "selector" : ".node",            
-//             "appendType" : "g",            
-//             "styleclassText" : "chartText",
-//             "styleclassTextShadow" : "chartTextShadow",
-//         },
-//     },
-//     "pack" : {
-//         "node" : {
-//             "selector" : ".node",            
-//             "appendType" : "g",            
-//             "styleclassText" : "chartText",
-//             "styleclassTextShadow" : "chartTextShadow",
-//         },
-//     },
-//     "chart.connections" : { // real
-//         "node" : {  
-//             "selector" : "circle",            
-//             "appendType" : "circle",            
-//             "styleclassText" : "chartText",
-//             "styleclassTextShadow" : "chartTextShadow",
-//         },
-//         "path" : {},
-//         "text" : {},
-//     },    
-//     "chart.influence" : {
-//         "node" : {
-//             "selector" : "circle",            
-//             "appendType" : "circle",            
-//             "styleclassText" : "chartText",
-//             "styleclassTextShadow" : "chartTextShadow",
-//         },
-//         "path" : {},
-//         "text" : {},
-//     },    
-// } 
-
-// // exports.fns = fns;
-// exports.params = params;
-
 Object.defineProperty(exports, '__esModule', { value: true });
 
 console.log("loaded: bzconfig  IIFE");
@@ -446,26 +388,9 @@ function clearChart(componentReference) {
     console.log("clearChart exit "); 
 }
 
-/* Potential way out of the conundrum of firing component events
- have each call to bzchart.publishEvent[FromCache] return an object made up of the parameters for a bzutils.publishEventHelper call
- - except that the event would be eventType
- - then call the event from the calling location via bzutils.publishEventHelper */
-
-function prepareEvent(componentReference, topic, parameters) {
-    var controllerId = bzutils.getCache (componentReference, "UserControllerComponentId") ;
-    var eventType = bzutils.getEventTypeByTopic(topic);
-    return {
-        "eventType" : eventType ,
-        "topic" : topic,
-        "parameters" : parameters,
-        "controllerId" : controllerId
-    }
-}
-
 exports.getRelatedNodes = getRelatedNodes;
 exports.setFilterVisibility = setFilterVisibility;
 exports.clearChart = clearChart;
-exports.prepareEvent = prepareEvent;
 
 exports.isiOS = isiOS;
 

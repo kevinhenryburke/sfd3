@@ -95,8 +95,7 @@
         var eventParameters = { 
             "componentReference" : componentReference
         }    
-//        bzchart.publishEvent(componentReference, "ChartRendered", eventParameters);
-        var preppedEvent = bzchart.prepareEvent(componentReference, "ChartRendered", eventParameters);
+        var preppedEvent = _this.prepareEvent(componentReference, "ChartRendered", eventParameters);
         _this.publishPreppedEvent(component,preppedEvent);
 
         console.log("chartArea: ChartRendered event published ");
@@ -514,8 +513,20 @@
         }
         console.log("hasMasterParam exit: true: " + lastQueriedItem);
         return true;
+    },
+
+    prepareEvent : function (componentReference, topic, parameters) {
+        console.log("chartAreaHelper.prepareEvent enter");
+        var controllerId = bzutils.getCache (componentReference, "UserControllerComponentId") ;
+        var eventType = bzutils.getEventTypeByTopic(topic);
+        return {
+            "eventType" : eventType ,
+            "topic" : topic,
+            "parameters" : parameters,
+            "controllerId" : controllerId
+        }
     }
-    
+        
 
 })
 

@@ -500,7 +500,8 @@
     },
         
     nodeDoubleClick: function(component,primaryNodeId){
-        console.log("calling nodeDoubleClick");
+        var _this = this;
+        console.log("nodeDoubleClick enter");
 
         var componentType = component.get("v.componentType");
         console.log("nodeDoubleClick componentType = " + componentType);
@@ -512,9 +513,9 @@
             // TODO this will need substantial enriching - e.g. pass current measure and whether to add nodes or to refresh etc.
             var cleanId = bzutils.removeComponentRef(componentReference, primaryNodeId);
             var eventParameters = {"primaryNodeId" : cleanId, "componentReference" : componentReference};
-            console.log("bzchart.nodeDoubleClick exit.");
+            console.log("nodeDoubleClick exit.");
         
-            var preppedEvent = bzchart.prepareEvent(componentReference, "InitiateRefreshChart", eventParameters);
+            var preppedEvent = _this.prepareEvent(componentReference, "InitiateRefreshChart", eventParameters);
             return preppedEvent;        
 
         }
@@ -643,6 +644,7 @@
     },
 
     nodeMouseover : function (component, d) {
+        var _this = this;
         console.log("chartNetworkHelper.nodeMouseover enter");
         var componentReference = component.get("v.componentReference");  
 
@@ -667,7 +669,7 @@
             s.html(textcontent);
 
             var publishParameters = {"data" : d, "parent" : null};
-            var preppedEvent = bzchart.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
+            var preppedEvent = _this.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
             return preppedEvent;
         }
 
@@ -690,7 +692,7 @@
         
             var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
         
-            var preppedEvent = bzchart.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
+            var preppedEvent = _this.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
             return preppedEvent;
         
         }

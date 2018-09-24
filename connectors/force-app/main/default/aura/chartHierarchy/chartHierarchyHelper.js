@@ -352,7 +352,7 @@
                 "ChartScaleFactor" : newcsf
             }    
 
-            var preppedEvent = bzchart.prepareEvent(componentReference, "ReScale", eventParameters);
+            var preppedEvent = _this.prepareEvent(componentReference, "ReScale", eventParameters);
             preppedEvent.eventType = "Cache";
             _this.publishPreppedEvent (component,preppedEvent);    
         }
@@ -584,10 +584,11 @@
     },
 
     nodeMouseover : function (componentReference, d) {
+        var _this = this;
         console.log("chartHierarchyHelper.nodeMouseover enter");
         var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
         
-        var preppedEvent = bzchart.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
+        var preppedEvent = _this.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
         preppedEvent.eventType = "Cache";
 
         // attempt to get the lighting info panel to follow the highlight.        
@@ -628,10 +629,11 @@
     },
     
     nodeMouseout : function (componentReference, d) {
+        var _this = this;
         console.log("chartHierarchyHelper.nodeMouseout enter.");
         var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
         
-        var preppedEvent = bzchart.prepareEvent(componentReference, "ChartMouseOut", publishParameters);
+        var preppedEvent = _this.prepareEvent(componentReference, "ChartMouseOut", publishParameters);
         if (d.depth > 1) {
             preppedEvent.eventType = "Cache";
         } 

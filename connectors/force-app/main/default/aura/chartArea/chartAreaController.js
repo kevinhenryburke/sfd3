@@ -94,7 +94,7 @@
         }    
 //        bzchart.publishEvent(componentReference, "ReScale", eventParameters);
 
-        var preppedEvent = bzchart.prepareEvent(componentReference, "ReScale", eventParameters);
+        var preppedEvent = helper.prepareEvent(componentReference, "ReScale", eventParameters);
         helper.publishPreppedEvent(component,preppedEvent);
 
 //        helper.handleScaleChange(component,csf);
