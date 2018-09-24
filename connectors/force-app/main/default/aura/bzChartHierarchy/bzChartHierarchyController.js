@@ -58,11 +58,19 @@ masterConfigObject =
                 "LeafColors" : {"Account" : { "colorBy" : "size" , "values" : [0,22070163,25070163], "colors" : ["white" , "yellow", "green"] }},
                 "ParentColors" : {"Account" : {  "colorBy" : "size" ,  "values" : [0,38970163], "colors" : ["lightsteelblue" , "purple"] }},
                 "showZoomSlider" : false,
-                "clearHighlightedPaths" : true
+                "clearHighlightedPaths" : true,
             },
             "Network" : {
                 "showPathToolTip" : true,
                 "nodestrokewidth" : "0.5px"
+            },
+            "Selectors" : {
+                "node" : {
+                    "selector" : ".node",            
+                    "appendType" : "g",            
+                    "styleclassText" : "chartText",
+                    "styleclassTextShadow" : "chartTextShadow",
+                }        
             }
         }
     },

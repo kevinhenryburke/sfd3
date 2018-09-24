@@ -19,7 +19,7 @@
 
         console.log("chartNetworkHelper: calling nodes");
 
-        var nodeSelector = bzutils.getParam(componentType, "node", "selector"); // an html selector for a class or element ids
+        var nodeSelector = _this.getMasterParam(component, "panels", "ChartPanel", "Selectors", "node", "selector"); // an html selector for a class or element ids
         var nodeDataSetFunction = _this.nodeDataSetFunctionNodes (component); 
 
         var nodeEnterSelection = nodeGroup
@@ -29,9 +29,9 @@
 
 //        nodeSelection.exit().remove();    
 
-        if (bzutils.hasParam(componentType, "node")) {
+        if (_this.hasMasterParam(component, "panels", "ChartPanel", "Selectors", "node")) {
             node = nodeEnterSelection
-                .append(bzutils.getParam(componentType, "node", "appendType"))
+                .append(_this.getMasterParam(component, "panels", "ChartPanel", "Selectors", "node", "appendType"))
                 .attr("id", function(d) {
                     return d.id;
                 })
@@ -96,12 +96,12 @@
 
         console.log("calling text");    
     
-        if (bzutils.hasParam(componentType, "text")) {
+        if (_this.hasMasterParam(component, "panels", "ChartPanel", "Selectors", "text")) {
 
             // pick up the text styling
-            var hasShadow = bzutils.hasParam(componentType, "node", "styleclassTextShadow");
-            var styleclassText = bzutils.getParam(componentType, "node", "styleclassText");
-            var styleclassTextShadow = bzutils.getParam(componentType, "node", "styleclassTextShadow");
+            var hasShadow = _this.hasMasterParam(component, "panels", "ChartPanel", "Selectors", "node", "styleclassTextShadow");
+            var styleclassText = _this.getMasterParam(component, "panels", "ChartPanel", "Selectors", "node", "styleclassText");
+            var styleclassTextShadow = _this.getMasterParam(component, "panels", "ChartPanel", "Selectors", "node", "styleclassTextShadow");
 
             var textEnterSelection = textGroup
                 .selectAll("g")
@@ -146,12 +146,10 @@
 
         console.log("calling paths");
 
-        if (!bzutils.hasParam(componentType, "path")) {
+        if (! _this.hasMasterParam(component, "panels", "ChartPanel", "Selectors", "path")) {
             datajson.links = []; 
         }
 
-//        if (hasPaths) {
-//        if (bzutils.hasParam(componentType, "path")) {
         datajson.links.forEach(function(link) {
                 var sourceElement = d3.select("#" + link.sourceid);
                 var targetElement = d3.select("#" + link.targetid);
@@ -314,7 +312,10 @@
         var forceLinks = _this.buildForceLinks(path);
         var link_force =  d3.forceLink(forceLinks.links)
             .id(function(d) { return d.id; });
-    
+
+        // var hasText = _this.hasMasterParam(component, "panels", "ChartPanel", "Selectors", "text");
+        // bzutils.setCache (componentReference, "hasText", hasText ) ;                
+
         simulation.force("links",link_force);
     
         _this.dragHandler(node, simulation);
@@ -405,11 +406,11 @@
         node.attr("transform", function(d) {
             return _this.transform (d, width, height);
         });
-        if (bzutils.getCache (componentReference, "hasText") == true) {
+//        if (bzutils.getCache (componentReference, "hasText") == true) {
             text.attr("transform", function(d) {
                 return _this.transform (d, width, height);
             });
-        }
+//        }
     },
     
     buildForceLinks : function (path) {

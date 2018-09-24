@@ -1,4 +1,7 @@
 <design:component >
+
+    <design:attribute name="masterConfig" label="Master Config" default="{}" description="Master Configuration for the component" />      
+
     <design:attribute name="componentType" label="Component Type" default="" description="See documentation for a list of these values. For example chart.connections, chart.influence" />
     <design:attribute name="UserComponentId" label="Component Id" default="Network" description="Id for this component" />
     <design:attribute name="UserControllerComponentId" label="Controller Component Id" default="Controller" description="If we want to restrict to a particular controller on the page then put the name here that you used as the Component Id of the Controller. Otherwise all controllers will act on this chart"/>    

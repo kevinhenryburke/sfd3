@@ -89,6 +89,10 @@
                 <name>hasPrimaryNode</name>
                 <value>false</value>
             </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>masterConfig</name>
+                <value>{             &quot;panels&quot;: {                 &quot;ChartPanel&quot;: {                     &quot;Selectors&quot; : {                         &quot;node&quot; : {                             &quot;selector&quot; : &quot;.node&quot;,                                         &quot;appendType&quot; : &quot;g&quot;,                                         &quot;styleclassText&quot; : &quot;chartText&quot;,                             &quot;styleclassTextShadow&quot; : &quot;chartTextShadow&quot;                         }                             }                 }             }         }</value>
+            </componentInstanceProperties>
             <!-- <componentInstanceProperties>
                 <name>nodestrokewidth</name>
                 <value>0.5px</value>

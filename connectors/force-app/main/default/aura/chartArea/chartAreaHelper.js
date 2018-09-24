@@ -1,4 +1,16 @@
 ({
+    areaInit: function (component) {
+        var _this = this;
+        console.log("areaInit enter");
+
+        var masterConfigObject = JSON.parse(component.get("v.masterConfig"));
+        component.set("v.masterConfigObject", masterConfigObject);
+
+
+        console.log("areaInit exit");
+        
+        
+    },
 
     // first method called after all resources are ready
     doneRenderLoad: function (component) {
@@ -162,12 +174,6 @@
         var _this = this;
         var componentReference = component.get("v.componentReference");
         var componentType = bzutils.getCache (componentReference, "componentType");
-
-        console.log("chart: componentType: " + componentType);
-
-        bzutils.setCache (componentReference, "hasNodes", bzutils.hasParam(componentType, "node") ) ;
-        bzutils.setCache (componentReference, "hasPaths", bzutils.hasParam(componentType, "path") ) ;
-        bzutils.setCache (componentReference, "hasText", bzutils.hasParam(componentType, "text") ) ;
 
         console.log("init:initializing initializeGroups with primaryNodeId: " + primaryNodeId);
         
@@ -470,8 +476,46 @@
     getStore : function (component, key) {
         var store = component.get("v.storeObject");
         return store[key];
+    },
+
+    getMasterParam : function (component /*, args */) {
+        console.log("getMasterParam enter");
+        var args = Array.prototype.slice.call(arguments, 1);
+        var retValue = null;
+        var loopJson = component.get("v.masterConfigObject");
+        for (var i=0; i<args.length;i++) {
+            if (loopJson.hasOwnProperty([args[i]])) {
+                console.log("loopJson: " + args[i]);
+                retValue = loopJson[args[i]];
+                loopJson = loopJson[args[i]];
+            }
+            else {
+                return;
+            }    
+        }
+        console.log("getMasterParam exit: " + retValue);
+        return retValue;
+    },
+    
+    hasMasterParam : function (component /*, args */) {
+        var args = Array.prototype.slice.call(arguments, 1);
+        var loopJson = component.get("v.masterConfigObject");
+        var lastQueriedItem = "";
+        for (var i=0; i<args.length;i++) {
+            if (loopJson.hasOwnProperty([args[i]])) {
+                console.log("loopJson: " + args[i]);
+                loopJson = loopJson[args[i]];
+                lastQueriedItem = args[i];
+            }
+            else {
+                console.log("hasMasterParam exit: false");
+                return false;
+            }    
+        }
+        console.log("hasMasterParam exit: true: " + lastQueriedItem);
+        return true;
     }
-        
+    
 
 })
 

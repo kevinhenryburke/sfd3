@@ -108,6 +108,10 @@
                 <value>0.5px</value>
             </componentInstanceProperties> -->
             <componentInstanceProperties>
+                <name>masterConfig</name>
+                <value>{             &quot;panels&quot;: {                 &quot;ChartPanel&quot;: {                     &quot;Selectors&quot; : {                         &quot;node&quot; : {                             &quot;selector&quot; : &quot;.node&quot;,                                         &quot;appendType&quot; : &quot;g&quot;,                                         &quot;styleclassText&quot; : &quot;chartText&quot;,                             &quot;styleclassTextShadow&quot; : &quot;chartTextShadow&quot;                         }                             }                 }             }         }</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
                 <name>objectIcons</name>
                 <value>{&quot;Account&quot; :&quot;standard:account&quot; , &quot;Opportunity&quot; : &quot;standard:opportunity&quot;}</value>
             </componentInstanceProperties>

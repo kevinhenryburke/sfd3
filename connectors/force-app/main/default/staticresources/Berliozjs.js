@@ -146,40 +146,75 @@ If componentType is needed then supply it twice in the calling parameters
 //     return context[func].apply(context, args);
 // }
 
-function getParam(componentType /*, args */) {
-    console.log("getParam enter");
-    var args = Array.prototype.slice.call(arguments, 1);
-    var retValue = null;
-    var loopJson = bzconfig.params[componentType];
-    for (var i=0; i<args.length;i++) {
-        if (loopJson.hasOwnProperty([args[i]])) {
-            console.log("loopJson: " + args[i]);
-            retValue = loopJson[args[i]];
-            loopJson = loopJson[args[i]];
-        }
-        else {
-            return;
-        }    
-    }
-    console.log("getParam exit: " + retValue);
-    return retValue;
-}
 
-function hasParam(componentType /*, args */) {
-    var args = Array.prototype.slice.call(arguments, 1);
-    var retValue = true;
-    var loopJson = bzconfig.params[componentType];
-    for (var i=0; i<args.length;i++) {
-        if (loopJson.hasOwnProperty([args[i]])) {
-            console.log("loopJson: " + args[i]);
-            loopJson = loopJson[args[i]];
-        }
-        else {
-            return false;
-        }    
-    }
-    return true;
-}
+// function getParam2(componentType, config /*, args */) {
+//     console.log("getParam2 enter");
+//     var args = Array.prototype.slice.call(arguments, 2);
+//     var retValue = null;
+//     var loopJson = config[componentType];
+//     for (var i=0; i<args.length;i++) {
+//         if (loopJson.hasOwnProperty([args[i]])) {
+//             console.log("loopJson: " + args[i]);
+//             retValue = loopJson[args[i]];
+//             loopJson = loopJson[args[i]];
+//         }
+//         else {
+//             return;
+//         }    
+//     }
+//     console.log("getParam2 exit: " + retValue);
+//     return retValue;
+// }
+
+// function hasParam2(componentType, config /*, args */) {
+//     var args = Array.prototype.slice.call(arguments, 2);
+//     var loopJson = config[componentType];
+//     for (var i=0; i<args.length;i++) {
+//         if (loopJson.hasOwnProperty([args[i]])) {
+//             console.log("loopJson: " + args[i]);
+//             loopJson = loopJson[args[i]];
+//         }
+//         else {
+//             return false;
+//         }    
+//     }
+//     return true;
+// }
+
+// function getMasterParam(config /*, args */) {
+//     console.log("getMasterParam enter");
+//     var args = Array.prototype.slice.call(arguments, 1);
+//     var retValue = null;
+//     var loopJson = config;
+//     for (var i=0; i<args.length;i++) {
+//         if (loopJson.hasOwnProperty([args[i]])) {
+//             console.log("loopJson: " + args[i]);
+//             retValue = loopJson[args[i]];
+//             loopJson = loopJson[args[i]];
+//         }
+//         else {
+//             return;
+//         }    
+//     }
+//     console.log("getMasterParam exit: " + retValue);
+//     return retValue;
+// }
+
+// function hasMasterParam(config /*, args */) {
+//     var args = Array.prototype.slice.call(arguments, 1);
+//     var loopJson = config;
+//     for (var i=0; i<args.length;i++) {
+//         if (loopJson.hasOwnProperty([args[i]])) {
+//             console.log("loopJson: " + args[i]);
+//             loopJson = loopJson[args[i]];
+//         }
+//         else {
+//             return false;
+//         }    
+//     }
+//     return true;
+// }
+
 
 // new signatures .... 
 // (topic, publisher, publisherCategory, publisherType, parameters, controller)
@@ -225,8 +260,10 @@ exports.log = log;
 exports.doNothing = doNothing;
 // exports.xfcr = xfcr;
 // exports.xfct = xfct;
-exports.getParam = getParam;
-exports.hasParam = hasParam;
+// exports.getParam2 = getParam2;
+// exports.hasParam2 = hasParam2;
+// exports.getMasterParam = getMasterParam;
+// exports.hasMasterParam = hasMasterParam;
 exports.initializeAddComponentRef = initializeAddComponentRef;
 exports.addComponentRef = addComponentRef;
 exports.removeComponentRef = removeComponentRef;
@@ -272,48 +309,48 @@ console.log("loading: bzconfig IIFE");
 //     },    
 // } 
 
-var params = 
-{
-    "ctree" : {
-        "node" : {
-            "selector" : ".node",            
-            "appendType" : "g",            
-            "styleclassText" : "chartText",
-            "styleclassTextShadow" : "chartTextShadow",
-        },
-    },
-    "pack" : {
-        "node" : {
-            "selector" : ".node",            
-            "appendType" : "g",            
-            "styleclassText" : "chartText",
-            "styleclassTextShadow" : "chartTextShadow",
-        },
-    },
-    "chart.connections" : { // real
-        "node" : {  
-            "selector" : "circle",            
-            "appendType" : "circle",            
-            "styleclassText" : "chartText",
-            "styleclassTextShadow" : "chartTextShadow",
-        },
-        "path" : {},
-        "text" : {},
-    },    
-    "chart.influence" : {
-        "node" : {
-            "selector" : "circle",            
-            "appendType" : "circle",            
-            "styleclassText" : "chartText",
-            "styleclassTextShadow" : "chartTextShadow",
-        },
-        "path" : {},
-        "text" : {},
-    },    
-} 
+// var params = 
+// {
+//     "ctree" : {
+//         "node" : {
+//             "selector" : ".node",            
+//             "appendType" : "g",            
+//             "styleclassText" : "chartText",
+//             "styleclassTextShadow" : "chartTextShadow",
+//         },
+//     },
+//     "pack" : {
+//         "node" : {
+//             "selector" : ".node",            
+//             "appendType" : "g",            
+//             "styleclassText" : "chartText",
+//             "styleclassTextShadow" : "chartTextShadow",
+//         },
+//     },
+//     "chart.connections" : { // real
+//         "node" : {  
+//             "selector" : "circle",            
+//             "appendType" : "circle",            
+//             "styleclassText" : "chartText",
+//             "styleclassTextShadow" : "chartTextShadow",
+//         },
+//         "path" : {},
+//         "text" : {},
+//     },    
+//     "chart.influence" : {
+//         "node" : {
+//             "selector" : "circle",            
+//             "appendType" : "circle",            
+//             "styleclassText" : "chartText",
+//             "styleclassTextShadow" : "chartTextShadow",
+//         },
+//         "path" : {},
+//         "text" : {},
+//     },    
+// } 
 
-// exports.fns = fns;
-exports.params = params;
+// // exports.fns = fns;
+// exports.params = params;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
@@ -599,6 +636,6 @@ function update() {
     console.log("loading: bzctree IIFE");
 
     console.log("loaded: bzctree  IIFE");
-    
+
 })));
 

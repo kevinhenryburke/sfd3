@@ -52,6 +52,10 @@
 <aura:attribute name="popoverPanel" type="Aura.Component[]">
 </aura:attribute>
 
+
+<aura:attribute name="masterConfig" type="String" default="{}"/>      
+<aura:attribute name="masterConfigObject" type="Object"/>      
+
   <!-- Methods with different implementations for different chart types -->  
 
   <aura:method name="refreshData"> 
