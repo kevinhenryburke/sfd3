@@ -81,7 +81,7 @@
             var primaryNodeId = bzutils.getCache (componentReference, "primaryNodeId") ;        
             // not needed until reinstate measure level visibility
         
-            var relatedNodes = bzchart.getRelatedNodes(primaryNodeId, componentReference, levels);
+            var relatedNodes = helper.getRelatedNodes(primaryNodeId, componentReference, levels);
         
             var path = d3.select(bzutils.getDivId("pathGroup", componentReference, true))
                 .selectAll("path")  ;

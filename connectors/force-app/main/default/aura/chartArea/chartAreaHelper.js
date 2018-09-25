@@ -120,7 +120,7 @@
 
         // delete the paths and the groups
         // this is not the preferred option - would have preferred to use d3 joins.
-        bzchart.clearChart(componentReference);
+        _this.clearChart(componentReference);
         
         // retrieve the existing underlying data
         var datajson = bzutils.getCache (componentReference, "datajson") ;
@@ -525,7 +525,38 @@
             "parameters" : parameters,
             "controllerId" : controllerId
         }
+    },
+
+    setFilterVisibility : function (component, filterType, isShown) {
+        console.log("chartAreaHelper.setFilterVisibility enter");
+        var componentReference = component.get("v.componentReference");
+        var showFilters = bzutils.getCache (componentReference, "showFilters") ;
+        if (isShown) {
+            console.log("setFilterVisibility: adding " + filterType);
+            showFilters.push(filterType);
+        } else {
+            console.log("setFilterVisibility: removing " + filterType);
+            var index = showFilters.indexOf(filterType);
+            if (index > -1) {
+                showFilters.splice(index, 1);
+            }
+        }
+        bzutils.setCache (componentReference, "showFilters", showFilters ) ;
+        console.log("chartAreaHelper.setFilterVisibility exit");
+    },
+    
+    clearChart : function (componentReference) {
+        console.log("chartAreaHelper.clearChart enter "); 
+        var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
+        var path = svg.selectAll("path").remove();
+        var node = svg.selectAll("circle").remove();
+        var text = svg.selectAll(".nodeText").remove();
+        d3.select(bzutils.getDivId("pathGroup", componentReference, true)).remove();
+        d3.select(bzutils.getDivId("nodeGroup", componentReference, true)).remove();
+        d3.select(bzutils.getDivId("textGroup", componentReference, true)).remove();
+        console.log("chartAreaHelper.clearChart exit "); 
     }
+    
         
 
 })

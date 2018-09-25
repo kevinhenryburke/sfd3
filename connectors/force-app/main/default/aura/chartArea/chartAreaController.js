@@ -92,7 +92,6 @@
             "componentReference" : componentReference,
             "ChartScaleFactor" : csf
         }    
-//        bzchart.publishEvent(componentReference, "ReScale", eventParameters);
 
         var preppedEvent = helper.prepareEvent(componentReference, "ReScale", eventParameters);
         helper.publishPreppedEvent(component,preppedEvent);
@@ -175,7 +174,7 @@
             var filterType = parameters["filterType"];
 
             var isShown = (state == "Show");
-            bzchart.setFilterVisibility(component, filterType, isShown);
+            helper.setFilterVisibility(component, filterType, isShown);
             cc.refreshVisibility();                 
         }
         if (topic == "InitializeData")

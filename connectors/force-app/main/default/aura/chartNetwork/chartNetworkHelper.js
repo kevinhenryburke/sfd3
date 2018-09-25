@@ -721,9 +721,42 @@
             var s = d3.select("#" + sselect);
             s.html(textcontent);
         }
-
     },
     
+    getRelatedNodes : function (chartPrimaryId, componentReference, level) {
+        console.log("chartNetworkHelper.getRelatedNodes enter.");
+        var looplevel = 0;
+        var linkednodes = [chartPrimaryId];
+    
+        while (looplevel < level) {
+            var newnodes = [];
+            looplevel++;
+    
+            var path = d3.select(bzutils.getDivId("pathGroup", componentReference, true))
+                .selectAll("path")
+                .each(function(p) {
+                    var sourceindex = linkednodes.indexOf(p.sourceid);
+                    var targetindex = linkednodes.indexOf(p.targetid);
+                    if (sourceindex === -1 && targetindex > -1) {
+                            newnodes.push(p.sourceid);
+                        }
+                        if (targetindex === -1 && sourceindex > -1) {
+                            newnodes.push(p.targetid);
+                        }
+                    }
+                );
+    
+            for (var i = 0; i < newnodes.length; i++) {
+            var index = linkednodes.indexOf(newnodes[i]);
+                if (index === -1) {
+                    linkednodes.push(newnodes[i]);
+                }
+            }
+    
+        }
+        return linkednodes;
+    }
+        
 
 
 })
