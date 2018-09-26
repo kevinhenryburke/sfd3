@@ -21,9 +21,9 @@
         var showFilters = args.showFilters;
 
         var componentReference = component.get("v.componentReference");
-        var nodeGroup = bzutils.getCache (componentReference, "nodeGroup") ;  
-        var pathGroup = bzutils.getCache (componentReference, "pathGroup") ;  
-        var root = bzutils.getCache (componentReference, "root") ;
+        var nodeGroup = helper.getCache (componentReference, "nodeGroup") ;  
+        var pathGroup = helper.getCache (componentReference, "pathGroup") ;  
+        var root = helper.getCache (componentReference, "root") ;
 
         helper.merge(componentReference, updatejson);
         helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
@@ -37,9 +37,9 @@
         component.set("v.ChartScaleFactor", args.ChartScaleFactor);
 
         var componentReference = component.get("v.componentReference");
-        var nodeGroup = bzutils.getCache (componentReference, "nodeGroup") ;  
-        var pathGroup = bzutils.getCache (componentReference, "pathGroup") ;  
-        var root = bzutils.getCache (componentReference, "root") ;
+        var nodeGroup = helper.getCache (componentReference, "nodeGroup") ;  
+        var pathGroup = helper.getCache (componentReference, "pathGroup") ;  
+        var root = helper.getCache (componentReference, "root") ;
 
         helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
 
@@ -56,9 +56,9 @@
 
         var clearHighlightedPaths = component.get("v.clearHighlightedPaths");
         var componentReference = component.get("v.componentReference");
-        var nodeGroup = bzutils.getCache (componentReference, "nodeGroup") ;  
-        var pathGroup = bzutils.getCache (componentReference, "pathGroup") ;  
-        var root = bzutils.getCache (componentReference, "root") ;
+        var nodeGroup = helper.getCache (componentReference, "nodeGroup") ;  
+        var pathGroup = helper.getCache (componentReference, "pathGroup") ;  
+        var root = helper.getCache (componentReference, "root") ;
 
         if (searchAction == "HighlightOpenPath" || searchAction == "OpenPath" ) {
                 helper.openPathsBy(componentReference, searchTermId, "Id");
@@ -66,7 +66,7 @@
         }
 
         if (searchAction == "HighlightOpenPath" || searchAction == "HighlightPath" ) {
-            var highlightedPaths = bzutils.getCache (componentReference, "highlightedPaths") ;
+            var highlightedPaths = helper.getCache (componentReference, "highlightedPaths") ;
             if (highlightedPaths != null && clearHighlightedPaths == true) {
                 helper.stylePathsStroke(highlightedPaths, false);
             }

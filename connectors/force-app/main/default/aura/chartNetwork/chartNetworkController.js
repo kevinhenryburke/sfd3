@@ -5,11 +5,11 @@
         helper.areaInit(component);
 
         var componentReference = component.get("v.componentReference");        
-        bzutils.setCache (componentReference, "primaryNodeHighlightingOn", component.get("v.primaryNodeHighlightingOn") ) ;
-        bzutils.setCache (componentReference, "primaryNodeHighlightingColour", component.get("v.primaryNodeHighlightingColour") ) ;
-        bzutils.setCache (componentReference, "primaryNodeHighlightingRadius", component.get("v.primaryNodeHighlightingRadius") ) ;
-        bzutils.setCache (componentReference, "retainNodeDetailsMouseOut", component.get("v.retainNodeDetailsMouseOut") ) ;
-        bzutils.setCache (componentReference, "nodestrokewidth", component.get("v.nodestrokewidth") ) ;
+        helper.setCache (componentReference, "primaryNodeHighlightingOn", component.get("v.primaryNodeHighlightingOn") ) ;
+        helper.setCache (componentReference, "primaryNodeHighlightingColour", component.get("v.primaryNodeHighlightingColour") ) ;
+        helper.setCache (componentReference, "primaryNodeHighlightingRadius", component.get("v.primaryNodeHighlightingRadius") ) ;
+        helper.setCache (componentReference, "retainNodeDetailsMouseOut", component.get("v.retainNodeDetailsMouseOut") ) ;
+        helper.setCache (componentReference, "nodestrokewidth", component.get("v.nodestrokewidth") ) ;
 
         helper.initializeVisuals(component);                         
     },
@@ -36,7 +36,7 @@
                 datajsonBefore.nodes[i].measures["Posts"].radius = datajsonRefresh.nodes[i].measures["Posts"].radius;
             }    
             console.log("all1: " + all1);
-            bzutils.setCache (componentReference, "datajson", datajsonBefore ) ;
+            helper.setCache (componentReference, "datajson", datajsonBefore ) ;
         }
 
     },
@@ -51,8 +51,8 @@
 
         var componentReference = component.get("v.componentReference");        
         var primaryNodeId = bzutils.addComponentRef(componentReference, searchTermId);
-        bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
-        bzutils.setCache (componentReference, "showLevels", showLevels) ;
+        helper.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
+        helper.setCache (componentReference, "showLevels", showLevels) ;
 
         var cc = component.getConcreteComponent();
         cc.refreshVisibility();                 
@@ -75,10 +75,10 @@
             var componentReference = component.get("v.componentReference");        
             console.log("refreshVisibility enter "); 
         
-            var levels = bzutils.getCache(componentReference, "showLevels") ;
+            var levels = helper.getCache(componentReference, "showLevels") ;
             
-            var showFilters = bzutils.getCache (componentReference, "showFilters") ;
-            var primaryNodeId = bzutils.getCache (componentReference, "primaryNodeId") ;        
+            var showFilters = helper.getCache (componentReference, "showFilters") ;
+            var primaryNodeId = helper.getCache (componentReference, "primaryNodeId") ;        
             // not needed until reinstate measure level visibility
         
             var relatedNodes = helper.getRelatedNodes(primaryNodeId, componentReference, levels);
@@ -157,7 +157,7 @@
 
             var componentReference = component.get("v.componentReference");        
 
-            var primaryid = bzutils.getCache (componentReference, "primaryNodeId") ;
+            var primaryid = helper.getCache (componentReference, "primaryNodeId") ;
             var currentMeasure = helper.getStore(component, "currentMeasure");
 
             console.log("styleNodes enter: " + currentMeasure + " primaryid: " + primaryid);
@@ -180,19 +180,19 @@
                 var stroke = o.stroke;
                 var oid = o.id;
                 if (oid == primaryid) {
-                    var primaryNodeHighlightingOn = bzutils.getCache (componentReference, "primaryNodeHighlightingOn") ;
+                    var primaryNodeHighlightingOn = helper.getCache (componentReference, "primaryNodeHighlightingOn") ;
                     if (primaryNodeHighlightingOn == true) {
-                        stroke = bzutils.getCache (componentReference, "primaryNodeHighlightingColour") ;
+                        stroke = helper.getCache (componentReference, "primaryNodeHighlightingColour") ;
                     }                
                 }
                 return stroke;
             });
         
             node.style("stroke-width", function(o, i) {
-                var nodestrokewidth = bzutils.getCache (componentReference, "nodestrokewidth") ;
+                var nodestrokewidth = helper.getCache (componentReference, "nodestrokewidth") ;
                 var oid = o.id;
                 if (oid == primaryid) {
-                    nodestrokewidth = bzutils.getCache (componentReference, "primaryNodeHighlightingRadius") ;
+                    nodestrokewidth = helper.getCache (componentReference, "primaryNodeHighlightingRadius") ;
                 }
                 return nodestrokewidth;
             });

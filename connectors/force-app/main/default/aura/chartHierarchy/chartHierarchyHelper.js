@@ -7,18 +7,18 @@
         var componentType = component.get("v.componentType");
         var componentReference = component.get("v.componentReference");
 
-		var datajson = bzutils.getCache (componentReference, "datajson") ;  
-		var nodeGroup = bzutils.getCache (componentReference, "nodeGroup") ;  
-		var pathGroup = bzutils.getCache (componentReference, "pathGroup") ;  
-		var textGroup = bzutils.getCache (componentReference, "textGroup") ;  
-		var pathToolTipDiv = bzutils.getCache (componentReference, "pathToolTipDiv") ;  
-		var pathGroupId = bzutils.getCache (componentReference, "pathGroupId") ;  
+		var datajson = _this.getCache (componentReference, "datajson") ;  
+		var nodeGroup = _this.getCache (componentReference, "nodeGroup") ;  
+		var pathGroup = _this.getCache (componentReference, "pathGroup") ;  
+		var textGroup = _this.getCache (componentReference, "textGroup") ;  
+		var pathToolTipDiv = _this.getCache (componentReference, "pathToolTipDiv") ;  
+		var pathGroupId = _this.getCache (componentReference, "pathGroupId") ;  
 		
-		var width = bzutils.getCache (componentReference, "width") ;  
-		var height = bzutils.getCache (componentReference, "height") ; 
+		var width = _this.getCache (componentReference, "width") ;  
+		var height = _this.getCache (componentReference, "height") ; 
         
         var treemap = d3.tree().size([height, width]);
-        bzutils.setCache (componentReference, "treemap", treemap ) ;
+        _this.setCache (componentReference, "treemap", treemap ) ;
         
         // Assigns parent, children, height, depth
         var root = d3.hierarchy(datajson, function(d) { return d.children; });
@@ -40,13 +40,13 @@
             root.children.forEach(_this.collapse);
         }
 
-        bzutils.setCache (componentReference, "root", root ) ;
+        _this.setCache (componentReference, "root", root ) ;
         _this.update(component, nodeGroup, pathGroup, componentReference, root, false);
 
         // Push out an initial message to highlight the root node to display panels
         // Effecitvely can do this via a mouseover event on root.
         // TODO can move this to a generic location?
-        bzutils.setCache (componentReference, "mouseoverRecordId", root.id ) ;
+        _this.setCache (componentReference, "mouseoverRecordId", root.id ) ;
         _this.restockCache(component);
 
         var preppedEvent = _this.nodeMouseover(componentReference, root); 
@@ -62,11 +62,11 @@
         var shortDuration = 250;
         var fixedDepth = _this.getFixedDepth(component); // this may need to be a function of chart area depth?
         
-        var margin = bzutils.getCache (componentReference, "margin") ;  
+        var margin = _this.getCache (componentReference, "margin") ;  
         
         // Assigns the x and y position for the nodes
 
-        var treemap = bzutils.getCache (componentReference, "treemap" ) ;
+        var treemap = _this.getCache (componentReference, "treemap" ) ;
 
         var treeMappedData;
         if (makeSourceRoot === true) {
@@ -77,7 +77,7 @@
 
         }
         else {
-            var root = bzutils.getCache (componentReference, "root" ) ;
+            var root = _this.getCache (componentReference, "root" ) ;
             treeMappedData = treemap(root);
         }        
       
@@ -92,12 +92,12 @@
 
             // workout the maximum depth in the chart so we can perform any necessary resizing
             if (!bzutils.hasCache (componentReference, "maxDepth")) {
-                bzutils.setCache (componentReference, "maxDepth", 0) ;
+                _this.setCache (componentReference, "maxDepth", 0) ;
             }
-            var maxDepth = bzutils.getCache (componentReference, "maxDepth") ;
+            var maxDepth = _this.getCache (componentReference, "maxDepth") ;
             if (d.depth > maxDepth) {
-                bzutils.setCache (componentReference, "maxDepth", d.depth) ;
-                console.log("maxDepth: " + bzutils.getCache (componentReference, "maxDepth") );
+                _this.setCache (componentReference, "maxDepth", d.depth) ;
+                console.log("maxDepth: " + _this.getCache (componentReference, "maxDepth") );
             }
         });
       
@@ -130,7 +130,7 @@
             })            
             .on('click', click)
 			.on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-				bzutils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
+				_this.setCache (componentReference, "mouseoverRecordId", d.id ) ;
                 var preppedEvent = _this.nodeMouseover(componentReference, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
                 if (d.depth <= 1) { // root or first level
@@ -141,7 +141,7 @@
 
             }))
 			.on('mouseout', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-				bzutils.setCache (componentReference, "mouseoutRecordId", d.id ) ;
+				_this.setCache (componentReference, "mouseoutRecordId", d.id ) ;
                 var preppedEvent = _this.nodeMouseout(componentReference, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
             }))
@@ -306,7 +306,7 @@
 
         // KB: added to ensure highlighted nodes remain highlighted after collapse and expand
         // takes the cached paths and highlights them.
-        var highlightedPaths = bzutils.getCache (componentReference, "highlightedPaths") ;
+        var highlightedPaths = _this.getCache (componentReference, "highlightedPaths") ;
         if (highlightedPaths != null) {
             _this.stylePathsStroke(highlightedPaths, true);
         }
@@ -340,9 +340,9 @@
         }
 
         // finally auto-resize the chart if the bottom nodes are encroaching on the end
-        var maxDepth = bzutils.getCache (componentReference, "maxDepth") ;
+        var maxDepth = _this.getCache (componentReference, "maxDepth") ;
         var maxHorizontal = margin.left + (maxDepth * fixedDepth);
-		var width = bzutils.getCache (componentReference, "width") ;  
+		var width = _this.getCache (componentReference, "width") ;  
 
         if (width - maxHorizontal < 100) {
             var csf = component.get("v.ChartScaleFactor");
@@ -414,7 +414,7 @@
     // open the input paths in the graph, note that need to call update afterwards
     openPathsBy : function (componentReference, searchTerm, searchBy){
         var _this = this;
-        var ultimateRoot = bzutils.getCache (componentReference, "root");
+        var ultimateRoot = _this.getCache (componentReference, "root");
 
         // try to find target node down from the root node
         var paths = _this.searchTree(ultimateRoot,searchTerm,[],searchBy);
@@ -436,13 +436,13 @@
 
     highlightPathsBy : function (componentReference, searchTerm, searchBy, highlightOn){
         var _this = this;
-        var ultimateRoot = bzutils.getCache (componentReference, "root");
+        var ultimateRoot = _this.getCache (componentReference, "root");
 
         // try to find target node down from the root node
         var paths = _this.searchTree(ultimateRoot,searchTerm,[],searchBy);
         _this.stylePathsStroke(paths, highlightOn);
 
-        bzutils.setCache (componentReference, "highlightedPaths", paths ) ;
+        _this.setCache (componentReference, "highlightedPaths", paths ) ;
     },
 
     stylePathsStroke : function(paths, highlightOn) {
@@ -489,7 +489,7 @@
             if (parentNode == null) {
                 bzutils.log("parentNode is undefined - so assuming it is collapsed. Search down from the root node of the base hierarchy");
 
-                var ultimateRoot = bzutils.getCache (componentReference, "root");
+                var ultimateRoot = _this.getCache (componentReference, "root");
 
                 // try to find target node down from the root node
                 var paths = _this.searchTree(ultimateRoot,parentRecordId,[],"Id");
@@ -552,6 +552,7 @@
 
     // TODO function appears in many places, try to consolidate
     publishPreppedEvent : function(component,preppedEvent){
+        var _this = this;
         if (preppedEvent != null) {
             var event;
             console.log("publishPreppedEvent: enter "+ preppedEvent.topic + " and " + preppedEvent.eventType);
@@ -576,7 +577,7 @@
             if (preppedEvent.eventType == "Cache"){
                 console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
                 var componentReference = component.get("v.componentReference");
-                var appEvents = bzutils.getCache (componentReference, "appEvents") ;
+                var appEvents = _this.getCache (componentReference, "appEvents") ;
                 event = appEvents.pop();
             }    
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
@@ -592,7 +593,7 @@
         preppedEvent.eventType = "Cache";
 
         // attempt to get the lighting info panel to follow the highlight.        
-        var infosvg = bzutils.getCache (componentReference, "infosvg") ;
+        var infosvg = _this.getCache (componentReference, "infosvg") ;
         var dx = d.x;
         var dy = d.y;
         console.log("popover:" + dy + " / " + dx);
@@ -643,6 +644,7 @@
     // bzctree methods
     
     getNodeColor : function (componentReference, d, LeafParent) {
+        var _this = this;
         var color;
 
         var objectType = d.data.objectType;
@@ -655,14 +657,14 @@
         var colorBy;      
         var hasObjectSpecificColorBy = bzutils.hasCache (componentReference, LeafParent + "ColorsColorBy" + objectType) ;
         if (hasObjectSpecificColorBy) {
-            colorBy = bzutils.getCache (componentReference, LeafParent + "ColorsColorBy" + objectType) ;
+            colorBy = _this.getCache (componentReference, LeafParent + "ColorsColorBy" + objectType) ;
         }
         else {
-            colorBy = bzutils.getCache (componentReference, LeafParent + "ColorsColorByDefault") ;
+            colorBy = _this.getCache (componentReference, LeafParent + "ColorsColorByDefault") ;
         }
 
-        var ColorsValues = bzutils.getCache (componentReference, LeafParent + "ColorsValues" + objectType) ;
-        var ColorsNames = bzutils.getCache (componentReference, LeafParent + "ColorsNames" + objectType) ;
+        var ColorsValues = _this.getCache (componentReference, LeafParent + "ColorsValues" + objectType) ;
+        var ColorsNames = _this.getCache (componentReference, LeafParent + "ColorsNames" + objectType) ;
 
         for (var i = 0; i < ColorsValues.length; i++) {
             if (colorBy == "size") {
@@ -687,10 +689,11 @@
     },
 
     setColorCache : function(componentReference, ColorsString, ColorsObjectDefault, prefix) {
-        bzutils.setCache (componentReference, prefix + "ColorsObjectDefault", ColorsObjectDefault ) ;
-        bzutils.setCache (componentReference, prefix + "ColorsValuesDefault", ColorsObjectDefault.values ) ;
-        bzutils.setCache (componentReference, prefix + "ColorsNamesDefault", ColorsObjectDefault.colors ) ;
-        bzutils.setCache (componentReference, prefix + "ColorsColorByDefault", ColorsObjectDefault.colorBy ) ;
+        var _this = this;
+        _this.setCache (componentReference, prefix + "ColorsObjectDefault", ColorsObjectDefault ) ;
+        _this.setCache (componentReference, prefix + "ColorsValuesDefault", ColorsObjectDefault.values ) ;
+        _this.setCache (componentReference, prefix + "ColorsNamesDefault", ColorsObjectDefault.colors ) ;
+        _this.setCache (componentReference, prefix + "ColorsColorByDefault", ColorsObjectDefault.colorBy ) ;
 
         var ColorsObject;
         if (ColorsString != null && ColorsString != "") {
@@ -700,10 +703,10 @@
         var arrayObjectKeys = Object.keys(ColorsObject);
 
         arrayObjectKeys.forEach ( function(objectKey) {
-            bzutils.setCache (componentReference, prefix + "ColorsObject" + objectKey, ColorsObject[objectKey] ) ;
-            bzutils.setCache (componentReference, prefix + "ColorsValues" + objectKey, ColorsObject[objectKey].values ) ;
-            bzutils.setCache (componentReference, prefix + "ColorsNames" + objectKey, ColorsObject[objectKey].colors ) ;
-            bzutils.setCache (componentReference, prefix + "ColorsColorBy" + objectKey, ColorsObject[objectKey].colorBy ) ;
+            _this.setCache (componentReference, prefix + "ColorsObject" + objectKey, ColorsObject[objectKey] ) ;
+            _this.setCache (componentReference, prefix + "ColorsValues" + objectKey, ColorsObject[objectKey].values ) ;
+            _this.setCache (componentReference, prefix + "ColorsNames" + objectKey, ColorsObject[objectKey].colors ) ;
+            _this.setCache (componentReference, prefix + "ColorsColorBy" + objectKey, ColorsObject[objectKey].colorBy ) ;
         });
     },
 

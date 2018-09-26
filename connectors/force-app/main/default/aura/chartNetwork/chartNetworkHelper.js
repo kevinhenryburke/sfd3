@@ -6,12 +6,12 @@
         var componentType = component.get("v.componentType");
         var componentReference = component.get("v.componentReference");
 
-		var datajson = bzutils.getCache (componentReference, "datajson") ;  
-		var nodeGroup = bzutils.getCache (componentReference, "nodeGroup") ;  
-		var pathGroup = bzutils.getCache (componentReference, "pathGroup") ;  
-		var textGroup = bzutils.getCache (componentReference, "textGroup") ;  
-		var pathToolTipDiv = bzutils.getCache (componentReference, "pathToolTipDiv") ;  
-		var pathGroupId = bzutils.getCache (componentReference, "pathGroupId") ;  
+		var datajson = _this.getCache (componentReference, "datajson") ;  
+		var nodeGroup = _this.getCache (componentReference, "nodeGroup") ;  
+		var pathGroup = _this.getCache (componentReference, "pathGroup") ;  
+		var textGroup = _this.getCache (componentReference, "textGroup") ;  
+		var pathToolTipDiv = _this.getCache (componentReference, "pathToolTipDiv") ;  
+		var pathGroupId = _this.getCache (componentReference, "pathGroupId") ;  
                 
         var node = {};     
         var text = {};     
@@ -40,7 +40,7 @@
                 })
                 // symbols...           .attr("d", d3.symbol().type( function(d) { return d3.symbols[4];}))
                 .on('mouseout', function(d) { // hide the div
-                    var retainNodeDetailsMouseOut = bzutils.getCache (componentReference, "retainNodeDetailsMouseOut" ) ;
+                    var retainNodeDetailsMouseOut = _this.getCache (componentReference, "retainNodeDetailsMouseOut" ) ;
                     if (!retainNodeDetailsMouseOut)
                     {
                         var preppedEvent = _this.nodeMouseout(component, d); 
@@ -48,7 +48,7 @@
                     }
                 })
                 .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-                    bzutils.setCache (componentReference, "mouseoverRecordId", d.id ) ;
+                    _this.setCache (componentReference, "mouseoverRecordId", d.id ) ;
                     var preppedEvent = _this.nodeMouseover(component, d); 
                     _this.publishPreppedEvent(component,preppedEvent);
                 }))
@@ -57,20 +57,20 @@
                     var isiOS = bzchart.isiOS;
                     if (isiOS) {
                         var now = new Date().getTime();
-                        var lastTouch = bzutils.getCache (componentReference, "lastTouch");
+                        var lastTouch = _this.getCache (componentReference, "lastTouch");
                         var delta = now - lastTouch;
                         if (delta < 350 && delta > 0) {
                             // the second touchend event happened within half a second. Here is where we invoke the double tap code
                             //TODO implement - e.g. var win = window.open("http://news.bbc.co.uk"); win.focus();
                         }
-                        bzutils.setCache (componentReference, "lastTouch", lastTouch) ;
+                        _this.setCache (componentReference, "lastTouch", lastTouch) ;
                     } else {
                         console.log("not iOS");
                     }
                     // reset the clicked node to be the primary
                     // TODO This will need to be passed in the refreshVisibility call.
                     var primaryNodeId = d.id;
-                    bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
+                    _this.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
 
                     var cc = component.getConcreteComponent();
                     cc.refreshVisibility();                 
@@ -82,7 +82,7 @@
                     // send a message identifying the node in question
                     var componentReference = component.get("v.componentReference");
                     var primaryNodeId = d.id;
-                    bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
+                    _this.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
 
                     var preppedEvent = _this.nodeDoubleClick(component,primaryNodeId);
 
@@ -246,6 +246,7 @@
 
     // TODO function appears in many places, try to consolidate
     publishPreppedEvent : function(component,preppedEvent){
+        var _this = this;
         if (preppedEvent != null) {
             var event;
             console.log("publishPreppedEvent: enter "+ preppedEvent.topic + " and " + preppedEvent.eventType);
@@ -270,7 +271,7 @@
             if (preppedEvent.eventType == "Cache"){
                 console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
                 var componentReference = component.get("v.componentReference");
-                var appEvents = bzutils.getCache (componentReference, "appEvents") ;
+                var appEvents = _this.getCache (componentReference, "appEvents") ;
                 event = appEvents.pop();
             }    
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
@@ -303,18 +304,18 @@
 
         var componentReference = component.get("v.componentReference");
 
-        var datajson = bzutils.getCache (componentReference, "datajson") ;
+        var datajson = _this.getCache (componentReference, "datajson") ;
 
         var simulation = _this.initializeSimulationConnections(componentReference, datajson.nodes);            
 
-        bzutils.setCache (componentReference, "simulation", simulation ) ;
+        _this.setCache (componentReference, "simulation", simulation ) ;
     
         var forceLinks = _this.buildForceLinks(path);
         var link_force =  d3.forceLink(forceLinks.links)
             .id(function(d) { return d.id; });
 
         // var hasText = _this.hasMasterParam(component, "panels", "ChartPanel", "Selectors", "text");
-        // bzutils.setCache (componentReference, "hasText", hasText ) ;                
+        // _this.setCache (componentReference, "hasText", hasText ) ;                
 
         simulation.force("links",link_force);
     
@@ -330,8 +331,8 @@
     initializeSimulationConnections : function (componentReference, nodes) {
         var _this = this;
         console.log("chartNetworkHelper.initializeSimulationConnections enter");
-        var width = bzutils.getCache (componentReference, "width") ;  
-        var height = bzutils.getCache (componentReference, "height") ; 
+        var width = _this.getCache (componentReference, "width") ;  
+        var height = _this.getCache (componentReference, "height") ; 
     
         // force example - https://bl.ocks.org/rsk2327/23622500eb512b5de90f6a916c836a40
         var attractForce = d3.forceManyBody().strength(5).distanceMax(400).distanceMin(60);
@@ -389,8 +390,8 @@
     
     onTick : function  (componentReference, path, node, text) {
         var _this = this;
-        var width = bzutils.getCache (componentReference, "width") ;  
-        var height = bzutils.getCache (componentReference, "height") ; 
+        var width = _this.getCache (componentReference, "width") ;  
+        var height = _this.getCache (componentReference, "height") ; 
     //    if (bzutils.getCache (componentReference, "hasPaths") == true) {
             path.attr("d", function(d) {
                 var sx = _this.limitborderx(d.source.x, width);
@@ -447,11 +448,11 @@
 
         var componentReference = component.get("v.componentReference");
 
-        var datajson = bzutils.getCache (componentReference, "datajson") ;
+        var datajson = _this.getCache (componentReference, "datajson") ;
 
         var simulation = _this.initializeSimulationInfluence(componentReference, datajson.nodes);            
 
-        bzutils.setCache (componentReference, "simulation", simulation ) ;
+        _this.setCache (componentReference, "simulation", simulation ) ;
     
         var forceLinks = _this.buildForceLinks(path);
         var link_force =  d3.forceLink(forceLinks.links)
@@ -472,11 +473,12 @@
 
     initializeSimulationInfluence : function (componentReference, nodes) {
         console.log("chartNetworkHelper.initializeSimulationInfluence enter");
-        var width = bzutils.getCache (componentReference, "width") ;  
-        var height = bzutils.getCache (componentReference, "height") ; 
+        var _this = this;
+        var width = _this.getCache (componentReference, "width") ;  
+        var height = _this.getCache (componentReference, "height") ; 
         var sizeDivisor = 100;
         var nodePadding = 2.5;
-        var currentMeasure = bzutils.getCache (componentReference, "currentMeasure") ; 
+        var currentMeasure = _this.getCache (componentReference, "currentMeasure") ; 
     
         var simulation = d3.forceSimulation()
             .force("forceX", d3.forceX().strength(.1).x(width * .5))
@@ -615,8 +617,8 @@
 
     
     nodeDataSetFunctionNodes : function (component) { 
-
         console.log("chartNetworkHelper.nodeDataSetFunctionNodes enter");    
+        var _this = this;
 
         var componentType = component.get("v.componentType");
         console.log("nodeDataSetFunctionNodes componentType = " + componentType);
@@ -629,7 +631,7 @@
                 .sum(function(d) { return d.size; })
                 .sort(function(a, b) { return b.value - a.value; });
         
-                var diameter = bzutils.getCache (componentReference, "width") ;  
+                var diameter = _this.getCache (componentReference, "width") ;  
                 console.log("nodeDataSetFunctionNodes diameter: " + diameter);
                 
                 var pack = d3.pack()

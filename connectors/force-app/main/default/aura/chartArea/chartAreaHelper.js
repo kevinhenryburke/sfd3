@@ -19,27 +19,27 @@
         var componentReference = component.get("v.componentReference");
         console.log("chartArea: doneRenderLoad: componentReference:" + componentReference);
 
-        bzutils.initializeCache (componentReference) ;
+        _this.initializeCache (componentReference) ;
 
-        bzutils.setCache (componentReference, "component", component) ;
-        bzutils.setCache (componentReference, "componentReference", component.get("v.componentReference") ) ;
-        bzutils.setCache (componentReference, "componentType", component.get("v.componentType") ) ;
-        bzutils.setCache (componentReference, "componentCategory", component.get("v.componentCategory") ) ;
-        bzutils.setCache (componentReference, "componentEvent", component.getEvent("evt_bzc")) ;        
-        bzutils.setCache (componentReference, "defaultEventType", component.getEvent("defaultEventType")) ;        
-        bzutils.setCache (componentReference, "appEvents",  []) ;
+        _this.setCache (componentReference, "component", component) ;
+        _this.setCache (componentReference, "componentReference", component.get("v.componentReference") ) ;
+        _this.setCache (componentReference, "componentType", component.get("v.componentType") ) ;
+        _this.setCache (componentReference, "componentCategory", component.get("v.componentCategory") ) ;
+        _this.setCache (componentReference, "componentEvent", component.getEvent("evt_bzc")) ;        
+        _this.setCache (componentReference, "defaultEventType", component.getEvent("defaultEventType")) ;        
+        _this.setCache (componentReference, "appEvents",  []) ;
 
-        bzutils.setCache (componentReference, "UserComponentId", component.get("v.UserComponentId") ) ;
-        bzutils.setCache (componentReference, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
-        bzutils.setCache (componentReference, "hasPrimaryNode", component.get("v.hasPrimaryNode") ) ;
-        bzutils.setCache (componentReference, "showLevels", component.get("v.showLevelsInitial")) ;
+        _this.setCache (componentReference, "UserComponentId", component.get("v.UserComponentId") ) ;
+        _this.setCache (componentReference, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
+        _this.setCache (componentReference, "hasPrimaryNode", component.get("v.hasPrimaryNode") ) ;
+        _this.setCache (componentReference, "showLevels", component.get("v.showLevelsInitial")) ;
 
-        bzutils.setCache (componentReference, "lastTouch", new Date().getTime()) ;
-        bzutils.setCache (componentReference, "width", Math.min(screen.width, screen.height)) ; // review this
-        bzutils.setCache (componentReference, "height", Math.min(screen.width, screen.height)) ; // review this
+        _this.setCache (componentReference, "lastTouch", new Date().getTime()) ;
+        _this.setCache (componentReference, "width", Math.min(screen.width, screen.height)) ; // review this
+        _this.setCache (componentReference, "height", Math.min(screen.width, screen.height)) ; // review this
 
 		var margin = {top: 20, right: 90, bottom: 30, left: 50}; // this should probably be flexi-ed too
-        bzutils.setCache (componentReference, "margin", margin) ;  
+        _this.setCache (componentReference, "margin", margin) ;  
         
         // Differing strategies for computing Width and Height
         // Width depends on width of the container
@@ -48,7 +48,7 @@
         var divElement = divComponent.getElement();
         var clientWidth = divElement.clientWidth;        
         console.log("chartArea: set width: " + clientWidth);
-        bzutils.setCache (componentReference, "width", clientWidth) ; 
+        _this.setCache (componentReference, "width", clientWidth) ; 
 
         // Height we hard code depending on the flexible page width 
         var flexiWidth = component.get("v.flexiWidth");
@@ -62,24 +62,24 @@
 
         if (flexiWidth == "SMALL")
         {
-            bzutils.setCache (componentReference, "height", 800) ;                 
+            _this.setCache (componentReference, "height", 800) ;                 
         }
 
         if (flexiWidth == "MEDIUM")
         {
-            bzutils.setCache (componentReference, "height", 800) ;                 
+            _this.setCache (componentReference, "height", 800) ;                 
         }
 
         if (flexiWidth == "LARGE")
         {
-            bzutils.setCache (componentReference, "height", 1000) ;                 
+            _this.setCache (componentReference, "height", 1000) ;                 
         }
         
         d3.select(bzutils.getDivId("chartArea", componentReference, true))
             .append("svg")
             .attr("id", bzutils.getDivId("svg", componentReference, false)) // If putting more than one chart on a page we need to provide unique ids for the svg elements   
-            .attr("width", bzutils.getCache (componentReference, "width") )
-            .attr("height", bzutils.getCache (componentReference, "height") );
+            .attr("width", _this.getCache (componentReference, "width") )
+            .attr("height", _this.getCache (componentReference, "height") );
 
         console.log("chartArea: svg attached ");
 
@@ -105,7 +105,7 @@
         for (var i = 0; i < 100; i++) {
             appEvents.push($A.get("e.c:evt_sfd3"));
         }
-        bzutils.setCache (componentReference, "appEvents",  appEvents) ;
+        _this.setCache (componentReference, "appEvents",  appEvents) ;
 
         console.log("chartArea: doneRenderLoad exit");
         bzutils.showCacheAll () ;
@@ -123,7 +123,7 @@
         _this.clearChart(componentReference);
         
         // retrieve the existing underlying data
-        var datajson = bzutils.getCache (componentReference, "datajson") ;
+        var datajson = _this.getCache (componentReference, "datajson") ;
 
         // initialize the new raw data, setting component references
         bzutils.initializeAddComponentRef(componentReference, datajsonRefresh);
@@ -157,7 +157,7 @@
 //        bzutils.xfcr("dataPreProcess", componentReference, datajson, datajsonRefresh); // preprocessing of data (if any)
         cc.dataPreprocess(datajson, datajsonRefresh);
 
-        datajson = bzutils.getCache (componentReference, "datajson") ;
+        datajson = _this.getCache (componentReference, "datajson") ;
         
         // re-initialize the chart
         var isInit = false;
@@ -172,7 +172,7 @@
 
         var _this = this;
         var componentReference = component.get("v.componentReference");
-        var componentType = bzutils.getCache (componentReference, "componentType");
+        var componentType = _this.getCache (componentReference, "componentType");
 
         console.log("init:initializing initializeGroups with primaryNodeId: " + primaryNodeId);
         
@@ -180,23 +180,23 @@
             bzutils.initializeAddComponentRef(componentReference, datajson);
         }
 
-        bzutils.setCache (componentReference, "datajson", datajson ) ;
+        _this.setCache (componentReference, "datajson", datajson ) ;
 
-        var hasPrimaryNode = bzutils.getCache (componentReference, "hasPrimaryNode") ;
+        var hasPrimaryNode = _this.getCache (componentReference, "hasPrimaryNode") ;
         // var hasPrimaryNode = component.get("v.hasPrimaryNode") ;
         if (hasPrimaryNode == true) {
             console.log("hasPrimaryNode true");
             console.log("hasPrimaryNode id: " + primaryNodeId);
             primaryNodeId = bzutils.addComponentRef(componentReference, primaryNodeId);
-            bzutils.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
+            _this.setCache (componentReference, "primaryNodeId", primaryNodeId ) ;
         }
         else {
             console.log("hasPrimaryNode false");
         }
 
         _this.setStore(component, "currentMeasure", currentMeasure);
-        bzutils.setCache (componentReference, "currentMeasure", currentMeasure ) ;
-        bzutils.setCache (componentReference, "showFilters", showFilters ) ;
+        _this.setCache (componentReference, "currentMeasure", currentMeasure ) ;
+        _this.setCache (componentReference, "showFilters", showFilters ) ;
 
 		var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
 		
@@ -205,18 +205,18 @@
         // Styling of tooltips - see GitHub prior to Feb 24, 2018
         var pathToolTipDivId = bzutils.addComponentRef(componentReference, "pathToolTip");
         var pathToolTipDiv = d3.select("#" + pathToolTipDivId);
-        bzutils.setCache (componentReference, "pathToolTipDiv", pathToolTipDiv ) ;
+        _this.setCache (componentReference, "pathToolTipDiv", pathToolTipDiv ) ;
 
         console.log("create some groups inside the svg element to store the raw data");
 
         var pathGroupId = bzutils.getDivId("pathGroup", componentReference, false);
-        bzutils.setCache (componentReference, "pathGroupId", pathGroupId ) ;
+        _this.setCache (componentReference, "pathGroupId", pathGroupId ) ;
         var pathGroup = d3.select("#" + pathGroupId);
         if (pathGroup.empty()) {
             console.log("create pathGroup");
             pathGroup = svg.append("g").attr("id",pathGroupId);
         }
-        bzutils.setCache (componentReference, "pathGroup", pathGroup ) ;
+        _this.setCache (componentReference, "pathGroup", pathGroup ) ;
 
         var nodeGroupId = bzutils.getDivId("nodeGroup", componentReference, false);
         var nodeGroup = d3.select("#" + nodeGroupId);
@@ -224,7 +224,7 @@
             console.log("create nodeGroup");
             nodeGroup = svg.append("g").attr("id",nodeGroupId);
         }
-        bzutils.setCache (componentReference, "nodeGroup", nodeGroup ) ;
+        _this.setCache (componentReference, "nodeGroup", nodeGroup ) ;
 
         var textGroupId = bzutils.getDivId("textGroup", componentReference, false);        
         var textGroup = d3.select("#" + textGroupId);
@@ -232,7 +232,7 @@
             console.log("create textGroup");
             textGroup = svg.append("svg:g").attr("id",textGroupId);
         }
-        bzutils.setCache (componentReference, "textGroup", textGroup ) ;
+        _this.setCache (componentReference, "textGroup", textGroup ) ;
 
         var allowPopover = component.get("v.allowPopover");
 
@@ -249,11 +249,12 @@
 
     // create an invisible svg symbol to attach a popover to
     createInfoLocation : function (component) {
+        var _this = this;
         var componentReference = component.get("v.componentReference");
 
         var mdata = [0]; // random data value, not used
 
-        var width = bzutils.getCache (componentReference, "width");
+        var width = _this.getCache (componentReference, "width");
         var popx = width - 10;
         var popy = 200;
 
@@ -271,12 +272,13 @@
 
         var referenceSelector = ".infolocation" + componentReference;
 
-        bzutils.setCache (componentReference, "referenceSelector", referenceSelector ) ;
-        bzutils.setCache (componentReference, "infosvg", infosvg ) ;
+        _this.setCache (componentReference, "referenceSelector", referenceSelector ) ;
+        _this.setCache (componentReference, "infosvg", infosvg ) ;
     },
 
     // creates an informational popover
     createPopOverComponent : function (component) {
+        var _this = this;
 
         // create an overlayLibrary that we can attach the popover to
         $A.createComponent(
@@ -308,7 +310,7 @@
 
                         component.set("v.popoverPanel", newComponent);
                         
-                        var referenceSelector = bzutils.getCache (componentReference, "referenceSelector");
+                        var referenceSelector = _this.getCache (componentReference, "referenceSelector");
                         console.log("createPopOverComponent: createComponent callback: " + referenceSelector);
                         if (status === "SUCCESS") {
                             console.log("createPopOverComponent: createComponent callback: SUCCESS: " );
@@ -322,7 +324,7 @@
                             component.set("v.modalPromise", modalPromise);  
                             modalPromise.then(function (overlay) {
                                 overlay.show();  
-                                bzutils.setCache (componentReference, "overlay", overlay) ; 
+                                _this.setCache (componentReference, "overlay", overlay) ; 
                             });             
                         }
                         else {
@@ -347,6 +349,7 @@
 
     // TODO function appears in many places, try to consolidate
     publishPreppedEvent : function(component,preppedEvent){
+        var _this = this;
         if (preppedEvent != null) {
             var event;
             console.log("publishPreppedEvent: enter "+ preppedEvent.topic + " and " + preppedEvent.eventType);
@@ -371,7 +374,7 @@
             if (preppedEvent.eventType == "Cache"){
                 console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
                 var componentReference = component.get("v.componentReference");
-                var appEvents = bzutils.getCache (componentReference, "appEvents") ;
+                var appEvents = _this.getCache (componentReference, "appEvents") ;
                 event = appEvents.pop();
             }    
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
@@ -387,7 +390,7 @@
         // the issue is that only the top orginally created nodes have lightning context, not sure why
         // alternative would be to pass in a parameter for these nodes and push events only when the attribute is set
 
-        var appEvents = bzutils.getCache (componentReference, "appEvents") ;
+        var appEvents = _this.getCache (componentReference, "appEvents") ;
         console.log("chartArea: push a new cache event length = " + appEvents.length);
 
         if (appEvents.length < 200) { // keep a cap on number of cached events
@@ -408,7 +411,7 @@
             
                 appEvents.push(appEvent);
             }
-            bzutils.setCache (componentReference, "appEvents",  appEvents) ;
+            _this.setCache (componentReference, "appEvents",  appEvents) ;
         }
     }, 
 
@@ -517,7 +520,8 @@
 
     prepareEvent : function (componentReference, topic, parameters) {
         console.log("chartAreaHelper.prepareEvent enter");
-        var controllerId = bzutils.getCache (componentReference, "UserControllerComponentId") ;
+        var _this = this;
+        var controllerId = _this.getCache (componentReference, "UserControllerComponentId") ;
         var eventType = bzutils.getEventTypeByTopic(topic);
         return {
             "eventType" : eventType ,
@@ -529,8 +533,9 @@
 
     setFilterVisibility : function (component, filterType, isShown) {
         console.log("chartAreaHelper.setFilterVisibility enter");
+        var _this = this;
         var componentReference = component.get("v.componentReference");
-        var showFilters = bzutils.getCache (componentReference, "showFilters") ;
+        var showFilters = _this.getCache (componentReference, "showFilters") ;
         if (isShown) {
             console.log("setFilterVisibility: adding " + filterType);
             showFilters.push(filterType);
@@ -541,7 +546,7 @@
                 showFilters.splice(index, 1);
             }
         }
-        bzutils.setCache (componentReference, "showFilters", showFilters ) ;
+        _this.setCache (componentReference, "showFilters", showFilters ) ;
         console.log("chartAreaHelper.setFilterVisibility exit");
     },
     
@@ -555,8 +560,27 @@
         d3.select(bzutils.getDivId("nodeGroup", componentReference, true)).remove();
         d3.select(bzutils.getDivId("textGroup", componentReference, true)).remove();
         console.log("chartAreaHelper.clearChart exit "); 
-    }
+    },
+
+    initializeCache : function (componentReference) {
+        bzutils.componentCache[componentReference] = {};
+        
+    },    
+
+    setCache : function (componentReference, key, value) {
+        bzutils.componentCache[componentReference][key] = value;
+    },
     
+    getCache : function (componentReference, key) {
+        var referenceParameters = bzutils.componentCache[componentReference];
+        return referenceParameters[key];
+    },
+    
+    hasCache : function (componentReference, key) {
+        var referenceParameters = bzutils.componentCache[componentReference];
+        return Object.keys(referenceParameters).includes(key);
+    },
+        
         
 
 })

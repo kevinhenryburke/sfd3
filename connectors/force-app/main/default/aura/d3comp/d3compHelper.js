@@ -496,6 +496,7 @@
 
     // TODO function appears in many places, try to consolidate
     publishPreppedEvent : function(component,preppedEvent){
+        var _this = this;
         if (preppedEvent != null) {
             var event;
             console.log("publishPreppedEvent: enter "+ preppedEvent.topic + " and " + preppedEvent.eventType);
@@ -517,12 +518,13 @@
                 console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
                 event = $A.get("e.c:evt_sfd3");
             }
-            if (preppedEvent.eventType == "Cache"){
-                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
-                var componentReference = component.get("v.componentReference");
-                var appEvents = bzutils.getCache (componentReference, "appEvents") ;
-                event = appEvents.pop();
-            }    
+            // there is no Cache for controllers
+            // if (preppedEvent.eventType == "Cache"){
+            //     console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
+            //     var componentReference = component.get("v.componentReference");
+            //     var appEvents = _this.getCache (componentReference, "appEvents") ;
+            //     event = appEvents.pop();
+            // }    
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
         }
     },

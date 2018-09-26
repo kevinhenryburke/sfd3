@@ -256,6 +256,7 @@ function getEventTypeByTopic(topic) {
     return null;
 }
 
+exports.componentCache = componentCache;
 exports.log = log;
 exports.doNothing = doNothing;
 // exports.xfcr = xfcr;
