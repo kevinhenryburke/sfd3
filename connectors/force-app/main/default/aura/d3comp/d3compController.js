@@ -77,7 +77,7 @@
                         "componentReference" : componentReference
                     }
                         
-                    var preppedEvent = bzutils.prepareEvent("InitializeData", configEventParameters, controllerId);
+                    var preppedEvent = helper.prepareEvent("InitializeData", configEventParameters, controllerId);
                     helper.publishPreppedEvent(component,preppedEvent);
                 }
                 component.set("v.initEventsQueue",[]);
@@ -174,7 +174,7 @@
                 //publish to this component
                 var controllerId = component.get("v.UserComponentId");
 
-                var preppedEvent = bzutils.prepareEvent("InitializeData", configEventParameters, controllerId);
+                var preppedEvent = helper.prepareEvent("InitializeData", configEventParameters, controllerId);
                 helper.publishPreppedEvent(component,preppedEvent);
             
                 // clear the queue
@@ -328,31 +328,31 @@
     onClickMeasureV1 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 1);
         var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = bzutils.prepareEvent("SetMeasure", {"index" : 1, "measure" : currentMeasure }, controllerId);
+        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 1, "measure" : currentMeasure }, controllerId);
         helper.publishPreppedEvent(component,preppedEvent);
     },
     onClickMeasureV2 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 2);
         var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = bzutils.prepareEvent("SetMeasure", {"index" : 2, "measure" : currentMeasure }, controllerId);
+        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 2, "measure" : currentMeasure }, controllerId);
         helper.publishPreppedEvent(component,preppedEvent);
     },
     onClickMeasureV3 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 3);
         var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = bzutils.prepareEvent("SetMeasure", {"index" : 3, "measure" : currentMeasure }, controllerId);
+        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 3, "measure" : currentMeasure }, controllerId);
         helper.publishPreppedEvent(component,preppedEvent);
     },
     onClickMeasureV4 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 4);
         var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = bzutils.prepareEvent("SetMeasure", {"index" : 4, "measure" : currentMeasure }, controllerId);
+        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 4, "measure" : currentMeasure }, controllerId);
         helper.publishPreppedEvent(component,preppedEvent);
     },
     onClickMeasureV5 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 5);
         var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = bzutils.prepareEvent("SetMeasure", {"index" : 5, "measure" : currentMeasure }, controllerId);
+        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 5, "measure" : currentMeasure }, controllerId);
         helper.publishPreppedEvent(component,preppedEvent);
     },
 
@@ -421,7 +421,7 @@ $A.getCallback(function() {
         datajson.nodes[i].measures["Hot"].radius = Math.max(10,datajson.nodes[i].measures["Hot"].radius + Math.floor(Math.random() * 20) - 5); 
     }    
     configEventParameters["datajson"] = datajson;
-    var preppedEvent = bzutils.prepareEvent("RefreshData", configEventParameters, controllerId);
+    var preppedEvent = helper.prepareEvent("RefreshData", configEventParameters, controllerId);
     helper.publishPreppedEvent(component,preppedEvent);
     d.setMonth(d.getMonth() + 1);
 }),

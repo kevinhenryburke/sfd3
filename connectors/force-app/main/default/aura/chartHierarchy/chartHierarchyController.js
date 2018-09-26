@@ -25,7 +25,7 @@
         var pathGroup = helper.getCache (componentReference, "pathGroup") ;  
         var root = helper.getCache (componentReference, "root") ;
 
-        helper.merge(componentReference, updatejson);
+        helper.merge(component, updatejson);
         helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
 
     },
@@ -61,7 +61,7 @@
         var root = helper.getCache (componentReference, "root") ;
 
         if (searchAction == "HighlightOpenPath" || searchAction == "OpenPath" ) {
-                helper.openPathsBy(componentReference, searchTermId, "Id");
+                helper.openPathsBy(component, searchTermId, "Id");
                 helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
         }
 
@@ -71,7 +71,7 @@
                 helper.stylePathsStroke(highlightedPaths, false);
             }
             
-            helper.highlightPathsBy(componentReference, searchTermId, "Id", true);
+            helper.highlightPathsBy(component, searchTermId, "Id", true);
             helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
         }
     },

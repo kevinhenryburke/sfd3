@@ -306,7 +306,7 @@
 
         var datajson = _this.getCache (componentReference, "datajson") ;
 
-        var simulation = _this.initializeSimulationConnections(componentReference, datajson.nodes);            
+        var simulation = _this.initializeSimulationConnections(component, datajson.nodes);            
 
         _this.setCache (componentReference, "simulation", simulation ) ;
     
@@ -322,14 +322,15 @@
         _this.dragHandler(node, simulation);
     
         simulation.on("tick", function() {
-            _this.onTick (componentReference, path, node, text);
+            _this.onTick (component, path, node, text);
         });             
     
         console.log("chartNetworkHelper.runSimulationConnections exit");
     },                 
 
-    initializeSimulationConnections : function (componentReference, nodes) {
+    initializeSimulationConnections : function (component, nodes) {
         var _this = this;
+        var componentReference = component.get("v.componentReference");
         console.log("chartNetworkHelper.initializeSimulationConnections enter");
         var width = _this.getCache (componentReference, "width") ;  
         var height = _this.getCache (componentReference, "height") ; 
@@ -344,7 +345,7 @@
             .force("center_force", d3.forceCenter(width / 2, height / 2))
             .alphaDecay(0.03).force("attractForce",attractForce).force("repelForce",repelForce);
         
-        console.log("chartNetworkHelper.initializeSimulationConnections enter");
+        console.log("chartNetworkHelper.initializeSimulationConnections exit");
         return simulation;
     },
     
@@ -388,8 +389,10 @@
         return Math.max(Math.min(y, height - 50), 20 );
     },   
     
-    onTick : function  (componentReference, path, node, text) {
+    onTick : function  (component, path, node, text) {
         var _this = this;
+        var componentReference = component.get("v.componentReference");
+
         var width = _this.getCache (componentReference, "width") ;  
         var height = _this.getCache (componentReference, "height") ; 
     //    if (bzutils.getCache (componentReference, "hasPaths") == true) {
@@ -450,7 +453,7 @@
 
         var datajson = _this.getCache (componentReference, "datajson") ;
 
-        var simulation = _this.initializeSimulationInfluence(componentReference, datajson.nodes);            
+        var simulation = _this.initializeSimulationInfluence(component, datajson.nodes);            
 
         _this.setCache (componentReference, "simulation", simulation ) ;
     
@@ -463,16 +466,17 @@
         _this.dragHandler(node, simulation);
     
         simulation.on("tick", function() {
-            _this.onTick (componentReference, path, node, text);
+            _this.onTick (component, path, node, text);
         });             
     
 
         console.log("chartNetworkHelper.runSimulationInfluence exit");
     }, 
 
-
-    initializeSimulationInfluence : function (componentReference, nodes) {
+    initializeSimulationInfluence : function (component, nodes) {
         console.log("chartNetworkHelper.initializeSimulationInfluence enter");
+        var componentReference = component.get("v.componentReference");
+
         var _this = this;
         var width = _this.getCache (componentReference, "width") ;  
         var height = _this.getCache (componentReference, "height") ; 
@@ -517,7 +521,7 @@
             var eventParameters = {"primaryNodeId" : cleanId, "componentReference" : componentReference};
             console.log("nodeDoubleClick exit.");
         
-            var preppedEvent = _this.prepareEvent(componentReference, "InitiateRefreshChart", eventParameters);
+            var preppedEvent = _this.prepareEvent(component, "InitiateRefreshChart", eventParameters);
             return preppedEvent;        
 
         }
@@ -671,7 +675,7 @@
             s.html(textcontent);
 
             var publishParameters = {"data" : d, "parent" : null};
-            var preppedEvent = _this.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
+            var preppedEvent = _this.prepareEvent(component, "ChartMouseOver", publishParameters);
             return preppedEvent;
         }
 
@@ -694,7 +698,7 @@
         
             var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
         
-            var preppedEvent = _this.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
+            var preppedEvent = _this.prepareEvent(component, "ChartMouseOver", publishParameters);
             return preppedEvent;
         
         }

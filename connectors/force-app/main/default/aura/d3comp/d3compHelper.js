@@ -181,7 +181,7 @@
 
                 //publish to this component
                 var controllerId = component.get("v.UserComponentId");
-                var preppedEvent = bzutils.prepareEvent("RefreshData", configEventParameters, controllerId);
+                var preppedEvent = _this.prepareEvent("RefreshData", configEventParameters, controllerId);
                 _this.publishPreppedEvent(component,preppedEvent);
             
             }
@@ -205,7 +205,7 @@
 
         //publish to this component
         var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = bzutils.prepareEvent("SearchChart", configEventParameters, controllerId);
+        var preppedEvent = _this.prepareEvent("SearchChart", configEventParameters, controllerId);
         _this.publishPreppedEvent(component,preppedEvent);
 
     },
@@ -232,7 +232,7 @@
             console.log("increasing levels to: " + currentLevels);
             component.set("v.currentLevels", currentLevels);
             var controllerId = component.get("v.UserComponentId");
-            var preppedEvent = bzutils.prepareEvent("ShowLevelsMore", {"levels" : currentLevels}, controllerId);
+            var preppedEvent = _this.prepareEvent("ShowLevelsMore", {"levels" : currentLevels}, controllerId);
             _this.publishPreppedEvent(component,preppedEvent);
         }
     },
@@ -249,7 +249,7 @@
             console.log("decreasing levels to: " + currentLevels);
             component.set("v.currentLevels", currentLevels);
             var controllerId = component.get("v.UserComponentId");
-            var preppedEvent = bzutils.prepareEvent("ShowLevelsFewer", {"levels" : currentLevels}, controllerId);
+            var preppedEvent = _this.prepareEvent("ShowLevelsFewer", {"levels" : currentLevels}, controllerId);
             _this.publishPreppedEvent(component,preppedEvent);
         }
     },
@@ -338,7 +338,7 @@
 
         var configjson = component.get("v.configjson");
         var thisType = configjson.filtertypes[indexer - 1];
-        var preppedEvent = bzutils.prepareEvent("SetFilter", {"index" : indexer, "state" : filterState, "filterType" : thisType }, controllerId);
+        var preppedEvent = _this.prepareEvent("SetFilter", {"index" : indexer, "state" : filterState, "filterType" : thisType }, controllerId);
         _this.publishPreppedEvent(component,preppedEvent);
 
         this.saveFilterVisibility(component, thisType, (filterState == "Show"));
@@ -529,6 +529,16 @@
         }
     },
 
+    prepareEvent : function (topic, parameters, controllerId) {
+        var eventType = bzutils.getEventTypeByTopic(topic);
+        return {
+            "eventType" : eventType ,
+            "topic" : topic,
+            "parameters" : parameters,
+            "controllerId" : controllerId
+        }
+    }
+    
 
     
 

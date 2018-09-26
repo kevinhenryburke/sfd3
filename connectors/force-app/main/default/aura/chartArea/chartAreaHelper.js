@@ -95,7 +95,7 @@
         var eventParameters = { 
             "componentReference" : componentReference
         }    
-        var preppedEvent = _this.prepareEvent(componentReference, "ChartRendered", eventParameters);
+        var preppedEvent = _this.prepareEvent(component, "ChartRendered", eventParameters);
         _this.publishPreppedEvent(component,preppedEvent);
 
         console.log("chartArea: ChartRendered event published ");
@@ -518,9 +518,10 @@
         return true;
     },
 
-    prepareEvent : function (componentReference, topic, parameters) {
+    prepareEvent : function (component, topic, parameters) {
         console.log("chartAreaHelper.prepareEvent enter");
         var _this = this;
+        var componentReference = component.get("v.componentReference");
         var controllerId = _this.getCache (componentReference, "UserControllerComponentId") ;
         var eventType = bzutils.getEventTypeByTopic(topic);
         return {
@@ -563,8 +564,7 @@
     },
 
     initializeCache : function (componentReference) {
-        bzutils.componentCache[componentReference] = {};
-        
+        bzutils.componentCache[componentReference] = {};        
     },    
 
     setCache : function (componentReference, key, value) {

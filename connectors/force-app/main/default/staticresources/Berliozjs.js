@@ -228,15 +228,15 @@ If componentType is needed then supply it twice in the calling parameters
 
 // so don't need publisher, publisherCategory, publisherType
 
-function prepareEvent(topic, parameters, controllerId) {
-    var eventType = bzutils.getEventTypeByTopic(topic);
-    return {
-        "eventType" : eventType ,
-        "topic" : topic,
-        "parameters" : parameters,
-        "controllerId" : controllerId
-    }
-}
+// function prepareEvent(topic, parameters, controllerId) {
+//     var eventType = bzutils.getEventTypeByTopic(topic);
+//     return {
+//         "eventType" : eventType ,
+//         "topic" : topic,
+//         "parameters" : parameters,
+//         "controllerId" : controllerId
+//     }
+// }
 
 function publishEventHelper(event, topic, parameters, controller) {
     console.log("publishEventHelper: controller: " + controller );
@@ -268,7 +268,7 @@ exports.doNothing = doNothing;
 exports.initializeAddComponentRef = initializeAddComponentRef;
 exports.addComponentRef = addComponentRef;
 exports.removeComponentRef = removeComponentRef;
-exports.prepareEvent = prepareEvent;
+// exports.prepareEvent = prepareEvent;
 exports.publishEventHelper = publishEventHelper;
 exports.getEventTypeByTopic = getEventTypeByTopic;
 exports.initializeCache = initializeCache;

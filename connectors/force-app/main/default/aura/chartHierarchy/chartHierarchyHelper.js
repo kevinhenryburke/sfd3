@@ -29,11 +29,11 @@
 
         // have a default for leaves
         var LeafColorsObjectDefault = {"colorBy" : "size", "values" : [0], "colors" : ["white"]};
-        _this.setColorCache (componentReference, component.get("v.LeafColors"), LeafColorsObjectDefault, "Leaf") ;
+        _this.setColorCache (component, component.get("v.LeafColors"), LeafColorsObjectDefault, "Leaf") ;
     
         // have a default for parents
         var ParentColorsObjectDefault = {"colorBy" : "size", "values" : [0], "colors" : ["lightsteelblue"]};
-        _this.setColorCache (componentReference, component.get("v.ParentColors"), ParentColorsObjectDefault, "Parent") ;
+        _this.setColorCache (component, component.get("v.ParentColors"), ParentColorsObjectDefault, "Parent") ;
 
         // Collapse after the second level (provided root has children)
         if (root.children != null) {
@@ -49,7 +49,7 @@
         _this.setCache (componentReference, "mouseoverRecordId", root.id ) ;
         _this.restockCache(component);
 
-        var preppedEvent = _this.nodeMouseover(componentReference, root); 
+        var preppedEvent = _this.nodeMouseover(component, root); 
         _this.publishPreppedEvent(component,preppedEvent);
         _this.updatePopoverDirectly(component, preppedEvent);
     },
@@ -131,7 +131,7 @@
             .on('click', click)
 			.on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
 				_this.setCache (componentReference, "mouseoverRecordId", d.id ) ;
-                var preppedEvent = _this.nodeMouseover(componentReference, d); 
+                var preppedEvent = _this.nodeMouseover(component, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
                 if (d.depth <= 1) { // root or first level
                     _this.restockCache(component);
@@ -142,7 +142,7 @@
             }))
 			.on('mouseout', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
 				_this.setCache (componentReference, "mouseoutRecordId", d.id ) ;
-                var preppedEvent = _this.nodeMouseout(componentReference, d); 
+                var preppedEvent = _this.nodeMouseout(component, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
             }))
 			;
@@ -162,7 +162,7 @@
             })            
             .style("fill", function(d) {
                 // we add new circles only to new nodes - the nodes are forgotten if collapsed
-                return d._children ? _this.getNodeColor(componentReference, d, "Parent") : _this.getNodeColor(componentReference, d, "Leaf");
+                return d._children ? _this.getNodeColor(component, d, "Parent") : _this.getNodeColor(component, d, "Leaf");
             });
       
 
@@ -215,9 +215,9 @@
           .style("fill", function(d) {
               // collapsed children are stored as d._children / expanded as d.children
             if(childLess(d)) {
-                  return _this.getNodeColor(componentReference, d, "Leaf");
+                  return _this.getNodeColor(component, d, "Leaf");
               }
-              return _this.getNodeColor(componentReference, d, "Parent"); 
+              return _this.getNodeColor(component, d, "Parent"); 
           })
           .attr('cursor', 'pointer');      
           
@@ -352,7 +352,7 @@
                 "ChartScaleFactor" : newcsf
             }    
 
-            var preppedEvent = _this.prepareEvent(componentReference, "ReScale", eventParameters);
+            var preppedEvent = _this.prepareEvent(component, "ReScale", eventParameters);
             preppedEvent.eventType = "Cache";
             _this.publishPreppedEvent (component,preppedEvent);    
         }
@@ -412,8 +412,9 @@
     },
 
     // open the input paths in the graph, note that need to call update afterwards
-    openPathsBy : function (componentReference, searchTerm, searchBy){
+    openPathsBy : function (component, searchTerm, searchBy){
         var _this = this;
+        var componentReference = component.get("v.componentReference");
         var ultimateRoot = _this.getCache (componentReference, "root");
 
         // try to find target node down from the root node
@@ -434,8 +435,9 @@
     // searchBy is "name" or "id" depending on what searchTerm we are using
     // highlightOn is boolean - if true we switch highlighting on, otherwise we switch it off
 
-    highlightPathsBy : function (componentReference, searchTerm, searchBy, highlightOn){
+    highlightPathsBy : function (component, searchTerm, searchBy, highlightOn){
         var _this = this;
+        var componentReference = component.get("v.componentReference");
         var ultimateRoot = _this.getCache (componentReference, "root");
 
         // try to find target node down from the root node
@@ -461,8 +463,9 @@
         //TODO - IMPLEMENT
     },
 
-    merge : function(componentReference, updatejson) {
-        bzutils.log("merge enter");
+    merge : function(component, updatejson) {
+        bzutils.log("merge enter.");
+        var componentReference = component.get("v.componentReference");
         var _this = this;
 
         var newjsonarray;
@@ -584,12 +587,13 @@
         }
     },
 
-    nodeMouseover : function (componentReference, d) {
+    nodeMouseover : function (component, d) {
         var _this = this;
+        var componentReference = component.get("v.componentReference");
         console.log("chartHierarchyHelper.nodeMouseover enter");
         var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
         
-        var preppedEvent = _this.prepareEvent(componentReference, "ChartMouseOver", publishParameters);
+        var preppedEvent = _this.prepareEvent(component, "ChartMouseOver", publishParameters);
         preppedEvent.eventType = "Cache";
 
         // attempt to get the lighting info panel to follow the highlight.        
@@ -629,12 +633,13 @@
         
     },
     
-    nodeMouseout : function (componentReference, d) {
+    nodeMouseout : function (component, d) {
         var _this = this;
+        var componentReference = component.get("v.componentReference");
         console.log("chartHierarchyHelper.nodeMouseout enter.");
         var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
         
-        var preppedEvent = _this.prepareEvent(componentReference, "ChartMouseOut", publishParameters);
+        var preppedEvent = _this.prepareEvent(component, "ChartMouseOut", publishParameters);
         if (d.depth > 1) {
             preppedEvent.eventType = "Cache";
         } 
@@ -643,8 +648,10 @@
 
     // bzctree methods
     
-    getNodeColor : function (componentReference, d, LeafParent) {
+    getNodeColor : function (component, d, LeafParent) {
         var _this = this;
+        var componentReference = component.get("v.componentReference");
+
         var color;
 
         var objectType = d.data.objectType;
@@ -688,8 +695,10 @@
         return color;
     },
 
-    setColorCache : function(componentReference, ColorsString, ColorsObjectDefault, prefix) {
+    setColorCache : function(component, ColorsString, ColorsObjectDefault, prefix) {
         var _this = this;
+        var componentReference = component.get("v.componentReference");
+
         _this.setCache (componentReference, prefix + "ColorsObjectDefault", ColorsObjectDefault ) ;
         _this.setCache (componentReference, prefix + "ColorsValuesDefault", ColorsObjectDefault.values ) ;
         _this.setCache (componentReference, prefix + "ColorsNamesDefault", ColorsObjectDefault.colors ) ;

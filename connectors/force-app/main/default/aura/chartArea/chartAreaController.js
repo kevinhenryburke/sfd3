@@ -93,7 +93,7 @@
             "ChartScaleFactor" : csf
         }    
 
-        var preppedEvent = helper.prepareEvent(componentReference, "ReScale", eventParameters);
+        var preppedEvent = helper.prepareEvent(component, "ReScale", eventParameters);
         helper.publishPreppedEvent(component,preppedEvent);
 
 //        helper.handleScaleChange(component,csf);
