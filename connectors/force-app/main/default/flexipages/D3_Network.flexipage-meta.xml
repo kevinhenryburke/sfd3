@@ -70,7 +70,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>componentType</name>
-                <value>chart.connections</value>
+                <value>network.connections</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>hasPrimaryNode</name>

@@ -284,11 +284,11 @@
 
         var componentType = component.get("v.componentType");
 
-        if (componentType ==  "chart.connections") {
+        if (componentType ==  "network.connections") {
             console.log("chartNetworkHelper.runSimulation " + componentType);
             _this.runSimulationConnections(component, path, node, text);
         }
-        if (componentType ==  "chart.influence") {
+        if (componentType ==  "network.influence") {
             console.log("chartNetworkHelper.runSimulation " + componentType);
             _this.runSimulationInfluence(component, path, node, text);
         }
@@ -512,7 +512,7 @@
         var componentType = component.get("v.componentType");
         console.log("nodeDoubleClick componentType = " + componentType);
 
-        if ((componentType ==  "chart.influence") || (componentType ==  "chart.connections")) {
+        if ((componentType ==  "network.influence") || (componentType ==  "network.connections")) {
 
             var componentReference = component.get("v.componentReference");        
 
@@ -535,7 +535,7 @@
         var componentType = component.get("v.componentType");
         console.log("nodeAdditionalAttribute componentType = " + componentType);
 
-        if (componentType == "pack") {
+        if (componentType == "network.pack") {
         
             node.attr("transform", "translate(2,2)") // new
                 .attr("class", function(d) { return d.children ? "packbranch node" : "packleaf node"; })
@@ -562,7 +562,7 @@
         var componentType = component.get("v.componentType");
         console.log("textAdditionalAttribute componentType = " + componentType);
 
-        if ((componentType == "chart.connections") || (componentType == "chart.influence")) {
+        if ((componentType == "network.connections") || (componentType == "network.influence")) {
             text
             .attr("x", 8)
             .attr("y", ".31em")            
@@ -628,7 +628,7 @@
         console.log("nodeDataSetFunctionNodes componentType = " + componentType);
         var componentReference = component.get("v.componentReference");  
 
-        if (componentType ==  "pack") {
+        if (componentType ==  "network.pack") {
             return function(datajson) { 
                 console.log("nodeDataSetFunctionNodes computing callback " + componentReference);
                 var root = d3.hierarchy(datajson)
@@ -644,7 +644,7 @@
             };            
         }      
 
-        if ((componentType ==  "chart.influence") || (componentType ==  "chart.connections")) {
+        if ((componentType ==  "network.influence") || (componentType ==  "network.connections")) {
             return function(datajson) { return datajson.nodes;};
         }      
     },
@@ -657,7 +657,7 @@
         var componentType = component.get("v.componentType");
         console.log("nodeMouseover componentType = " + componentType);
 
-        if ((componentType == "chart.connections") || (componentType == "chart.influence")) {
+        if ((componentType == "network.connections") || (componentType == "network.influence")) {
             // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
             var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
             textcontent += '</tspan>'; 
@@ -679,7 +679,7 @@
             return preppedEvent;
         }
 
-        if (componentType ==  "pack") {
+        if (componentType ==  "network.pack") {
             // // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
             // var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
             // textcontent += '</tspan>'; 
@@ -712,7 +712,7 @@
         var componentType = component.get("v.componentType");
         console.log("nodeMouseover componentType = " + componentType);
 
-        if ((componentType == "chart.connections") || (componentType == "chart.influence")) {
+        if ((componentType == "network.connections") || (componentType == "network.influence")) {
             // revert back to just the name
             // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
             var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;

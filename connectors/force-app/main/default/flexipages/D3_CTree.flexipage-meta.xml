@@ -97,7 +97,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>componentType</name>
-                <value>ctree</value>
+                <value>hierarchy.ctree</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>hasPrimaryNode</name>

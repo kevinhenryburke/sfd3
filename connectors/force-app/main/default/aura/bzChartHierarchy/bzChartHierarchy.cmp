@@ -81,7 +81,7 @@
 
   <c:chartHierarchy aura:id="chartHierarchy"
     defaultEventType = "Component"
-    componentType = "ctree"
+    componentType = "hierarchy.ctree"
     UserComponentId = "Hierarchy"
     UserControllerComponentId = "Controller"
     showLevelsInitial = "{!v.showLevelsInitial}"

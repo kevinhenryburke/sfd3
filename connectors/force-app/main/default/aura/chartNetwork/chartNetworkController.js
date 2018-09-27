@@ -20,8 +20,8 @@
         var componentType = component.get("v.componentType");
         console.log("dataPreprocess componentType = " + componentType);
 
-        if (componentType ==  "chart.influence") {
-            console.log("dataPreprocess subcomponent chart.influence");
+        if (componentType ==  "network.influence") {
+            console.log("dataPreprocess subcomponent network.influence");
 
             var args = event.getParam("arguments");
             var datajsonBefore = args.datajson;
@@ -70,7 +70,7 @@
 
         var componentType = component.get("v.componentType");
 
-        if (componentType ==  "chart.connections") {
+        if (componentType ==  "network.connections") {
 
             var componentReference = component.get("v.componentReference");        
             console.log("refreshVisibility enter "); 
@@ -153,7 +153,7 @@
 
         var componentType = component.get("v.componentType");
 
-        if ((componentType ==  "chart.connections") || (componentType ==  "chart.influence")) {
+        if ((componentType ==  "network.connections") || (componentType ==  "network.influence")) {
 
             var componentReference = component.get("v.componentReference");        
 

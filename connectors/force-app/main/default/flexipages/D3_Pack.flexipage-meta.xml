@@ -73,7 +73,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>componentType</name>
-                <value>pack</value>
+                <value>network.pack</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>hasPrimaryNode</name>

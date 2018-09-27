@@ -2,5 +2,5 @@
 <StaticResource xmlns="http://soap.sforce.com/2006/04/metadata">
     <cacheControl>Public</cacheControl>
     <contentType>application/json</contentType>
-    <description>Test JSON for the pack examples</description>
+    <description>Test JSON for the network.pack examples</description>
 </StaticResource>
