@@ -21,9 +21,9 @@
         var showFilters = args.showFilters;
 
         var componentReference = component.get("v.componentReference");
-        var nodeGroup = helper.getCache (componentReference, "nodeGroup") ;  
-        var pathGroup = helper.getCache (componentReference, "pathGroup") ;  
-        var root = helper.getCache (componentReference, "root") ;
+        var nodeGroup = helper.getCache (component, "nodeGroup") ;  
+        var pathGroup = helper.getCache (component, "pathGroup") ;  
+        var root = helper.getCache (component, "root") ;
 
         helper.merge(component, updatejson);
         helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
@@ -37,9 +37,9 @@
         component.set("v.ChartScaleFactor", args.ChartScaleFactor);
 
         var componentReference = component.get("v.componentReference");
-        var nodeGroup = helper.getCache (componentReference, "nodeGroup") ;  
-        var pathGroup = helper.getCache (componentReference, "pathGroup") ;  
-        var root = helper.getCache (componentReference, "root") ;
+        var nodeGroup = helper.getCache (component, "nodeGroup") ;  
+        var pathGroup = helper.getCache (component, "pathGroup") ;  
+        var root = helper.getCache (component, "root") ;
 
         helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
 
@@ -56,9 +56,9 @@
 
         var clearHighlightedPaths = component.get("v.clearHighlightedPaths");
         var componentReference = component.get("v.componentReference");
-        var nodeGroup = helper.getCache (componentReference, "nodeGroup") ;  
-        var pathGroup = helper.getCache (componentReference, "pathGroup") ;  
-        var root = helper.getCache (componentReference, "root") ;
+        var nodeGroup = helper.getCache (component, "nodeGroup") ;  
+        var pathGroup = helper.getCache (component, "pathGroup") ;  
+        var root = helper.getCache (component, "root") ;
 
         if (searchAction == "HighlightOpenPath" || searchAction == "OpenPath" ) {
                 helper.openPathsBy(component, searchTermId, "Id");
@@ -66,7 +66,7 @@
         }
 
         if (searchAction == "HighlightOpenPath" || searchAction == "HighlightPath" ) {
-            var highlightedPaths = helper.getCache (componentReference, "highlightedPaths") ;
+            var highlightedPaths = helper.getCache (component, "highlightedPaths") ;
             if (highlightedPaths != null && clearHighlightedPaths == true) {
                 helper.stylePathsStroke(highlightedPaths, false);
             }

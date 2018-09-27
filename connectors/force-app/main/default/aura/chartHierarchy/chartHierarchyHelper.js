@@ -7,18 +7,18 @@
         var componentType = component.get("v.componentType");
         var componentReference = component.get("v.componentReference");
 
-		var datajson = _this.getCache (componentReference, "datajson") ;  
-		var nodeGroup = _this.getCache (componentReference, "nodeGroup") ;  
-		var pathGroup = _this.getCache (componentReference, "pathGroup") ;  
-		var textGroup = _this.getCache (componentReference, "textGroup") ;  
-		var pathToolTipDiv = _this.getCache (componentReference, "pathToolTipDiv") ;  
-		var pathGroupId = _this.getCache (componentReference, "pathGroupId") ;  
+		var datajson = _this.getCache (component, "datajson") ;  
+		var nodeGroup = _this.getCache (component, "nodeGroup") ;  
+		var pathGroup = _this.getCache (component, "pathGroup") ;  
+		var textGroup = _this.getCache (component, "textGroup") ;  
+		var pathToolTipDiv = _this.getCache (component, "pathToolTipDiv") ;  
+		var pathGroupId = _this.getCache (component, "pathGroupId") ;  
 		
-		var width = _this.getCache (componentReference, "width") ;  
-		var height = _this.getCache (componentReference, "height") ; 
+		var width = _this.getCache (component, "width") ;  
+		var height = _this.getCache (component, "height") ; 
         
         var treemap = d3.tree().size([height, width]);
-        _this.setCache (componentReference, "treemap", treemap ) ;
+        _this.setCache (component, "treemap", treemap ) ;
         
         // Assigns parent, children, height, depth
         var root = d3.hierarchy(datajson, function(d) { return d.children; });
@@ -40,13 +40,13 @@
             root.children.forEach(_this.collapse);
         }
 
-        _this.setCache (componentReference, "root", root ) ;
+        _this.setCache (component, "root", root ) ;
         _this.update(component, nodeGroup, pathGroup, componentReference, root, false);
 
         // Push out an initial message to highlight the root node to display panels
         // Effecitvely can do this via a mouseover event on root.
         // TODO can move this to a generic location?
-        _this.setCache (componentReference, "mouseoverRecordId", root.id ) ;
+        _this.setCache (component, "mouseoverRecordId", root.id ) ;
         _this.restockCache(component);
 
         var preppedEvent = _this.nodeMouseover(component, root); 
@@ -62,11 +62,11 @@
         var shortDuration = 250;
         var fixedDepth = _this.getFixedDepth(component); // this may need to be a function of chart area depth?
         
-        var margin = _this.getCache (componentReference, "margin") ;  
+        var margin = _this.getCache (component, "margin") ;  
         
         // Assigns the x and y position for the nodes
 
-        var treemap = _this.getCache (componentReference, "treemap" ) ;
+        var treemap = _this.getCache (component, "treemap" ) ;
 
         var treeMappedData;
         if (makeSourceRoot === true) {
@@ -77,7 +77,7 @@
 
         }
         else {
-            var root = _this.getCache (componentReference, "root" ) ;
+            var root = _this.getCache (component, "root" ) ;
             treeMappedData = treemap(root);
         }        
       
@@ -91,13 +91,13 @@
             d.y = margin.left + (d.depth * fixedDepth);
 
             // workout the maximum depth in the chart so we can perform any necessary resizing
-            if (!bzutils.hasCache (componentReference, "maxDepth")) {
-                _this.setCache (componentReference, "maxDepth", 0) ;
+            if (!_this.hasCache (component, "maxDepth")) {
+                _this.setCache (component, "maxDepth", 0) ;
             }
-            var maxDepth = _this.getCache (componentReference, "maxDepth") ;
+            var maxDepth = _this.getCache (component, "maxDepth") ;
             if (d.depth > maxDepth) {
-                _this.setCache (componentReference, "maxDepth", d.depth) ;
-                console.log("maxDepth: " + _this.getCache (componentReference, "maxDepth") );
+                _this.setCache (component, "maxDepth", d.depth) ;
+                console.log("maxDepth: " + _this.getCache (component, "maxDepth") );
             }
         });
       
@@ -130,7 +130,7 @@
             })            
             .on('click', click)
 			.on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-				_this.setCache (componentReference, "mouseoverRecordId", d.id ) ;
+				_this.setCache (component, "mouseoverRecordId", d.id ) ;
                 var preppedEvent = _this.nodeMouseover(component, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
                 if (d.depth <= 1) { // root or first level
@@ -141,7 +141,7 @@
 
             }))
 			.on('mouseout', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-				_this.setCache (componentReference, "mouseoutRecordId", d.id ) ;
+				_this.setCache (component, "mouseoutRecordId", d.id ) ;
                 var preppedEvent = _this.nodeMouseout(component, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
             }))
@@ -306,7 +306,7 @@
 
         // KB: added to ensure highlighted nodes remain highlighted after collapse and expand
         // takes the cached paths and highlights them.
-        var highlightedPaths = _this.getCache (componentReference, "highlightedPaths") ;
+        var highlightedPaths = _this.getCache (component, "highlightedPaths") ;
         if (highlightedPaths != null) {
             _this.stylePathsStroke(highlightedPaths, true);
         }
@@ -340,9 +340,9 @@
         }
 
         // finally auto-resize the chart if the bottom nodes are encroaching on the end
-        var maxDepth = _this.getCache (componentReference, "maxDepth") ;
+        var maxDepth = _this.getCache (component, "maxDepth") ;
         var maxHorizontal = margin.left + (maxDepth * fixedDepth);
-		var width = _this.getCache (componentReference, "width") ;  
+		var width = _this.getCache (component, "width") ;  
 
         if (width - maxHorizontal < 100) {
             var csf = component.get("v.ChartScaleFactor");
@@ -415,7 +415,7 @@
     openPathsBy : function (component, searchTerm, searchBy){
         var _this = this;
         var componentReference = component.get("v.componentReference");
-        var ultimateRoot = _this.getCache (componentReference, "root");
+        var ultimateRoot = _this.getCache (component, "root");
 
         // try to find target node down from the root node
         var paths = _this.searchTree(ultimateRoot,searchTerm,[],searchBy);
@@ -438,13 +438,13 @@
     highlightPathsBy : function (component, searchTerm, searchBy, highlightOn){
         var _this = this;
         var componentReference = component.get("v.componentReference");
-        var ultimateRoot = _this.getCache (componentReference, "root");
+        var ultimateRoot = _this.getCache (component, "root");
 
         // try to find target node down from the root node
         var paths = _this.searchTree(ultimateRoot,searchTerm,[],searchBy);
         _this.stylePathsStroke(paths, highlightOn);
 
-        _this.setCache (componentReference, "highlightedPaths", paths ) ;
+        _this.setCache (component, "highlightedPaths", paths ) ;
     },
 
     stylePathsStroke : function(paths, highlightOn) {
@@ -492,7 +492,7 @@
             if (parentNode == null) {
                 bzutils.log("parentNode is undefined - so assuming it is collapsed. Search down from the root node of the base hierarchy");
 
-                var ultimateRoot = _this.getCache (componentReference, "root");
+                var ultimateRoot = _this.getCache (component, "root");
 
                 // try to find target node down from the root node
                 var paths = _this.searchTree(ultimateRoot,parentRecordId,[],"Id");
@@ -580,7 +580,7 @@
             if (preppedEvent.eventType == "Cache"){
                 console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
                 var componentReference = component.get("v.componentReference");
-                var appEvents = _this.getCache (componentReference, "appEvents") ;
+                var appEvents = _this.getCache (component, "appEvents") ;
                 event = appEvents.pop();
             }    
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
@@ -597,7 +597,7 @@
         preppedEvent.eventType = "Cache";
 
         // attempt to get the lighting info panel to follow the highlight.        
-        var infosvg = _this.getCache (componentReference, "infosvg") ;
+        var infosvg = _this.getCache (component, "infosvg") ;
         var dx = d.x;
         var dy = d.y;
         console.log("popover:" + dy + " / " + dx);
@@ -655,23 +655,23 @@
         var color;
 
         var objectType = d.data.objectType;
-        var hasObjectSpecifics = bzutils.hasCache (componentReference, LeafParent + "ColorsValues" + objectType) ;
+        var hasObjectSpecifics = _this.hasCache (component, LeafParent + "ColorsValues" + objectType) ;
         if (!hasObjectSpecifics) {
             // if there is nothing specifc for an object then use the defaults
             objectType = "Default";
         }
 
         var colorBy;      
-        var hasObjectSpecificColorBy = bzutils.hasCache (componentReference, LeafParent + "ColorsColorBy" + objectType) ;
+        var hasObjectSpecificColorBy = _this.hasCache (component, LeafParent + "ColorsColorBy" + objectType) ;
         if (hasObjectSpecificColorBy) {
-            colorBy = _this.getCache (componentReference, LeafParent + "ColorsColorBy" + objectType) ;
+            colorBy = _this.getCache (component, LeafParent + "ColorsColorBy" + objectType) ;
         }
         else {
-            colorBy = _this.getCache (componentReference, LeafParent + "ColorsColorByDefault") ;
+            colorBy = _this.getCache (component, LeafParent + "ColorsColorByDefault") ;
         }
 
-        var ColorsValues = _this.getCache (componentReference, LeafParent + "ColorsValues" + objectType) ;
-        var ColorsNames = _this.getCache (componentReference, LeafParent + "ColorsNames" + objectType) ;
+        var ColorsValues = _this.getCache (component, LeafParent + "ColorsValues" + objectType) ;
+        var ColorsNames = _this.getCache (component, LeafParent + "ColorsNames" + objectType) ;
 
         for (var i = 0; i < ColorsValues.length; i++) {
             if (colorBy == "size") {
@@ -699,10 +699,10 @@
         var _this = this;
         var componentReference = component.get("v.componentReference");
 
-        _this.setCache (componentReference, prefix + "ColorsObjectDefault", ColorsObjectDefault ) ;
-        _this.setCache (componentReference, prefix + "ColorsValuesDefault", ColorsObjectDefault.values ) ;
-        _this.setCache (componentReference, prefix + "ColorsNamesDefault", ColorsObjectDefault.colors ) ;
-        _this.setCache (componentReference, prefix + "ColorsColorByDefault", ColorsObjectDefault.colorBy ) ;
+        _this.setCache (component, prefix + "ColorsObjectDefault", ColorsObjectDefault ) ;
+        _this.setCache (component, prefix + "ColorsValuesDefault", ColorsObjectDefault.values ) ;
+        _this.setCache (component, prefix + "ColorsNamesDefault", ColorsObjectDefault.colors ) ;
+        _this.setCache (component, prefix + "ColorsColorByDefault", ColorsObjectDefault.colorBy ) ;
 
         var ColorsObject;
         if (ColorsString != null && ColorsString != "") {
@@ -712,10 +712,10 @@
         var arrayObjectKeys = Object.keys(ColorsObject);
 
         arrayObjectKeys.forEach ( function(objectKey) {
-            _this.setCache (componentReference, prefix + "ColorsObject" + objectKey, ColorsObject[objectKey] ) ;
-            _this.setCache (componentReference, prefix + "ColorsValues" + objectKey, ColorsObject[objectKey].values ) ;
-            _this.setCache (componentReference, prefix + "ColorsNames" + objectKey, ColorsObject[objectKey].colors ) ;
-            _this.setCache (componentReference, prefix + "ColorsColorBy" + objectKey, ColorsObject[objectKey].colorBy ) ;
+            _this.setCache (component, prefix + "ColorsObject" + objectKey, ColorsObject[objectKey] ) ;
+            _this.setCache (component, prefix + "ColorsValues" + objectKey, ColorsObject[objectKey].values ) ;
+            _this.setCache (component, prefix + "ColorsNames" + objectKey, ColorsObject[objectKey].colors ) ;
+            _this.setCache (component, prefix + "ColorsColorBy" + objectKey, ColorsObject[objectKey].colorBy ) ;
         });
     },
 

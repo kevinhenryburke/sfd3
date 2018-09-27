@@ -518,13 +518,7 @@
                 console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
                 event = $A.get("e.c:evt_sfd3");
             }
-            // there is no Cache for controllers
-            // if (preppedEvent.eventType == "Cache"){
-            //     console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
-            //     var componentReference = component.get("v.componentReference");
-            //     var appEvents = _this.getCache (componentReference, "appEvents") ;
-            //     event = appEvents.pop();
-            // }    
+            // Note - there is no Cache for controllers
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
         }
     },

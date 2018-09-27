@@ -147,13 +147,13 @@
         
         if (topic == "ShowLevelsMore")
         {
-            helper.setCache (componentReference, "showLevels", parameters["levels"] ) ;
+            helper.setCache (component, "showLevels", parameters["levels"] ) ;
             cc.refreshVisibility();                 
     
         }
         if (topic == "ShowLevelsFewer")
         {
-            helper.setCache (componentReference, "showLevels", parameters["levels"] ) ;
+            helper.setCache (component, "showLevels", parameters["levels"] ) ;
             var cc = component.getConcreteComponent();
             cc.refreshVisibility();                 
         }
@@ -163,7 +163,7 @@
             var currentMeasure = parameters["measure"];
             helper.setStore(cc, "currentMeasure", currentMeasure);
 
-            helper.setCache (componentReference, "currentMeasure", currentMeasure ) ;
+            helper.setCache (component, "currentMeasure", currentMeasure ) ;
             
             // refresh Chart - measure changes but primaryid does not
             cc.styleNodes();                 
@@ -275,7 +275,7 @@
     navigateToRecord : function(component){
         var evtNav = $A.get("e.force:navigateToSObject");
         evtNav.setParams({
-        "recordId": helper.getCache (componentReference, "mouseoverRecordId"),
+        "recordId": helper.getCache (component, "mouseoverRecordId"),
         "slideDevName": "detail"
         });
         sObectEvent.fire(); 

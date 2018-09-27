@@ -16,33 +16,33 @@ var debugMode = true;
 // Each store is indexed by a component reference, hence the name componentCache.
 
 // Data Store to hold data derived from configuration
-var componentCache = {};
+// var componentCache = {};
 
-function initializeCache (componentReference) {
-    componentCache[componentReference] = {};
-}
+// function initializeCache (componentReference) {
+//     componentCache[componentReference] = {};
+// }
 
-function setCache (componentReference, key, value) {
-    componentCache[componentReference][key] = value;
-}
+// function setCache (componentReference, key, value) {
+//     componentCache[componentReference][key] = value;
+// }
 
-function getCache (componentReference, key) {
-    var referenceParameters = componentCache[componentReference];
-    return referenceParameters[key];
-}
+// function getCache (componentReference, key) {
+//     var referenceParameters = componentCache[componentReference];
+//     return referenceParameters[key];
+// }
 
-function hasCache (componentReference, key) {
-    var referenceParameters = componentCache[componentReference];
-    return Object.keys(referenceParameters).includes(key);
-}
+// function hasCache (componentReference, key) {
+//     var referenceParameters = componentCache[componentReference];
+//     return Object.keys(referenceParameters).includes(key);
+// }
 
-function showCache (componentReference) {
-    bzutils.log(componentCache[componentReference]);
-}
+// function showCache (componentReference) {
+//     bzutils.log(componentCache[componentReference]);
+// }
 
-function showCacheAll () {
-    bzutils.log(componentCache);
-}
+// function showCacheAll () {
+//     bzutils.log(componentCache);
+// }
 
 function log (logItem) {
     if (debugMode == true) {
@@ -50,8 +50,6 @@ function log (logItem) {
     } 
 }
 
-function doNothing () {
-}
 
 // replace ids with component specific versions - this will allow multiple charts on a page without conflict
 function initializeAddComponentRef(componentReference, datajson) {
@@ -256,9 +254,8 @@ function getEventTypeByTopic(topic) {
     return null;
 }
 
-exports.componentCache = componentCache;
+// exports.componentCache = componentCache;
 exports.log = log;
-exports.doNothing = doNothing;
 // exports.xfcr = xfcr;
 // exports.xfct = xfct;
 // exports.getParam2 = getParam2;
@@ -271,12 +268,12 @@ exports.removeComponentRef = removeComponentRef;
 // exports.prepareEvent = prepareEvent;
 exports.publishEventHelper = publishEventHelper;
 exports.getEventTypeByTopic = getEventTypeByTopic;
-exports.initializeCache = initializeCache;
-exports.setCache = setCache;
-exports.getCache = getCache;
-exports.hasCache = hasCache;
-exports.showCache = showCache;
-exports.showCacheAll = showCacheAll;
+// exports.initializeCache = initializeCache;
+// exports.setCache = setCache;
+// exports.getCache = getCache;
+// exports.hasCache = hasCache;
+// exports.showCache = showCache;
+// exports.showCacheAll = showCacheAll;
 exports.getDivId = getDivId;
 exports.getNodeFromId = getNodeFromId;
 
