@@ -52,46 +52,46 @@ function log (logItem) {
 
 
 // replace ids with component specific versions - this will allow multiple charts on a page without conflict
-function initializeAddComponentRef(componentReference, datajson) {
-    if (datajson.nodes != null) {
-    datajson.nodes.forEach(function(node) {
-        node["id"] = bzutils.addComponentRef(componentReference, node["id"]);
-        node["recordid"] = bzutils.removeComponentRef(componentReference, node["id"]);
-    })};
+// function initializeAddComponentRef(componentReference, datajson) {
+//     if (datajson.nodes != null) {
+//     datajson.nodes.forEach(function(node) {
+//         node["id"] = bzutils.addComponentRef(componentReference, node["id"]);
+//         node["recordid"] = bzutils.removeComponentRef(componentReference, node["id"]);
+//     })};
         
-    if (datajson.links != null) {
-    datajson.links.forEach(function(link) {
-        link["id"] = bzutils.addComponentRef(componentReference, link["id"]);
-        link["sourceid"] = bzutils.addComponentRef(componentReference, link["sourceid"]);
-        link["targetid"] = bzutils.addComponentRef(componentReference, link["targetid"]);
-    })};
-}    
+//     if (datajson.links != null) {
+//     datajson.links.forEach(function(link) {
+//         link["id"] = bzutils.addComponentRef(componentReference, link["id"]);
+//         link["sourceid"] = bzutils.addComponentRef(componentReference, link["sourceid"]);
+//         link["targetid"] = bzutils.addComponentRef(componentReference, link["targetid"]);
+//     })};
+// }    
 
-function addComponentRef(componentReference, recordid) {
-    if (recordid.indexOf("compref") > -1) { // don't double index  
-        console.log("avoiding a double compref for recordid " + recordid);
-        return recordid;
-    }
-    return componentReference + recordid;
-}
+// function addComponentRef(componentReference, recordid) {
+//     if (recordid.indexOf("compref") > -1) { // don't double index  
+//         console.log("avoiding a double compref for recordid " + recordid);
+//         return recordid;
+//     }
+//     return componentReference + recordid;
+// }
 
-// remove component specific prefix from id - this will allow original references to be retrieved
-function removeComponentRef(componentReference, recordidEnriched) {
-    if (recordidEnriched.indexOf("compref") > -1) { // compref present
-        var indexer = componentReference.length;
-        return recordidEnriched.substring(indexer);
-    }
-    return recordidEnriched;
-}    
+// // remove component specific prefix from id - this will allow original references to be retrieved
+// function removeComponentRef(componentReference, recordidEnriched) {
+//     if (recordidEnriched.indexOf("compref") > -1) { // compref present
+//         var indexer = componentReference.length;
+//         return recordidEnriched.substring(indexer);
+//     }
+//     return recordidEnriched;
+// }    
 
-function getDivId (idType, componentReference, forSelect) {
-    return (forSelect ? "#" : "") + componentReference + idType;
-}
+// function getDivId (idType, componentReference, forSelect) {
+//     return (forSelect ? "#" : "") + componentReference + idType;
+// }
 
-// handy function to retrieve a D3 Node from a DOM id
-function getNodeFromId (id) {
-    return d3.select("#" + id).data()[0];
-}
+// // handy function to retrieve a D3 Node from a DOM id
+// function getNodeFromId (id) {
+//     return d3.select("#" + id).data()[0];
+// }
 
 
 /* This is how to list all the properties and all functions in a module
@@ -262,9 +262,9 @@ exports.log = log;
 // exports.hasParam2 = hasParam2;
 // exports.getMasterParam = getMasterParam;
 // exports.hasMasterParam = hasMasterParam;
-exports.initializeAddComponentRef = initializeAddComponentRef;
-exports.addComponentRef = addComponentRef;
-exports.removeComponentRef = removeComponentRef;
+// exports.initializeAddComponentRef = initializeAddComponentRef;
+// exports.addComponentRef = addComponentRef;
+// exports.removeComponentRef = removeComponentRef;
 // exports.prepareEvent = prepareEvent;
 exports.publishEventHelper = publishEventHelper;
 exports.getEventTypeByTopic = getEventTypeByTopic;
@@ -274,8 +274,8 @@ exports.getEventTypeByTopic = getEventTypeByTopic;
 // exports.hasCache = hasCache;
 // exports.showCache = showCache;
 // exports.showCacheAll = showCacheAll;
-exports.getDivId = getDivId;
-exports.getNodeFromId = getNodeFromId;
+// exports.getDivId = getDivId;
+// exports.getNodeFromId = getNodeFromId;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

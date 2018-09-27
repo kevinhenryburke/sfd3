@@ -106,7 +106,7 @@
         // Update the nodes...
         var node = nodeGroup.selectAll('g.treenode')
             .data(nodes, function(d) {    
-                return d.id || (d.id = bzutils.addComponentRef(componentReference, d.data.id)); 
+                return d.id || (d.id = _this.addComponentRef(componentReference, d.data.id)); 
             });
                 
         // Enter any new modes at the parent's previous position.
@@ -483,11 +483,11 @@
 
             // the first node id of the newjson is assumed to be a pre-existing node and should not result in a new node.
             var parentRecordId = newjson["id"]; 
-            var addToNodeId = bzutils.addComponentRef(componentReference, parentRecordId);
+            var addToNodeId = _this.addComponentRef(componentReference, parentRecordId);
             var parentNodeId = "circle" + addToNodeId;
 
             // see if this is searchable as a node
-            var parentNode = bzutils.getNodeFromId(parentNodeId);
+            var parentNode = _this.getNodeFromId(parentNodeId);
 
             if (parentNode == null) {
                 bzutils.log("parentNode is undefined - so assuming it is collapsed. Search down from the root node of the base hierarchy");
@@ -735,6 +735,8 @@
             d.children = null
         }
     },
+
+
     
 
 

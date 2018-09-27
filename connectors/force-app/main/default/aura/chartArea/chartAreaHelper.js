@@ -75,9 +75,9 @@
             _this.setCache (component, "height", 1000) ;                 
         }
         
-        d3.select(bzutils.getDivId("chartArea", componentReference, true))
+        d3.select(_this.getDivId("chartArea", componentReference, true))
             .append("svg")
-            .attr("id", bzutils.getDivId("svg", componentReference, false)) // If putting more than one chart on a page we need to provide unique ids for the svg elements   
+            .attr("id", _this.getDivId("svg", componentReference, false)) // If putting more than one chart on a page we need to provide unique ids for the svg elements   
             .attr("width", _this.getCache (component, "width") )
             .attr("height", _this.getCache (component, "height") );
 
@@ -125,7 +125,7 @@
         var datajson = _this.getCache (component, "datajson") ;
 
         // initialize the new raw data, setting component references
-        bzutils.initializeAddComponentRef(componentReference, datajsonRefresh);
+        _this.initializeAddComponentRef(componentReference, datajsonRefresh);
 
         var nodeIds = [];
         datajson.nodes.forEach(function(node) {
@@ -176,7 +176,7 @@
         console.log("init:initializing initializeGroups with primaryNodeId: " + primaryNodeId);
         
         if (isInit) {
-            bzutils.initializeAddComponentRef(componentReference, datajson);
+            _this.initializeAddComponentRef(componentReference, datajson);
         }
 
         _this.setCache (component, "datajson", datajson ) ;
@@ -186,7 +186,7 @@
         if (hasPrimaryNode == true) {
             console.log("hasPrimaryNode true");
             console.log("hasPrimaryNode id: " + primaryNodeId);
-            primaryNodeId = bzutils.addComponentRef(componentReference, primaryNodeId);
+            primaryNodeId = _this.addComponentRef(componentReference, primaryNodeId);
             _this.setCache (component, "primaryNodeId", primaryNodeId ) ;
         }
         else {
@@ -197,18 +197,18 @@
         _this.setCache (component, "currentMeasure", currentMeasure ) ;
         _this.setCache (component, "showFilters", showFilters ) ;
 
-		var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
+		var svg = d3.select(_this.getDivId("svg", componentReference, true));
 		
 		console.log("svg is defined ... "); 
         
         // Styling of tooltips - see GitHub prior to Feb 24, 2018
-        var pathToolTipDivId = bzutils.addComponentRef(componentReference, "pathToolTip");
+        var pathToolTipDivId = _this.addComponentRef(componentReference, "pathToolTip");
         var pathToolTipDiv = d3.select("#" + pathToolTipDivId);
         _this.setCache (component, "pathToolTipDiv", pathToolTipDiv ) ;
 
         console.log("create some groups inside the svg element to store the raw data");
 
-        var pathGroupId = bzutils.getDivId("pathGroup", componentReference, false);
+        var pathGroupId = _this.getDivId("pathGroup", componentReference, false);
         _this.setCache (component, "pathGroupId", pathGroupId ) ;
         var pathGroup = d3.select("#" + pathGroupId);
         if (pathGroup.empty()) {
@@ -217,7 +217,7 @@
         }
         _this.setCache (component, "pathGroup", pathGroup ) ;
 
-        var nodeGroupId = bzutils.getDivId("nodeGroup", componentReference, false);
+        var nodeGroupId = _this.getDivId("nodeGroup", componentReference, false);
         var nodeGroup = d3.select("#" + nodeGroupId);
         if (nodeGroup.empty()) {
             console.log("create nodeGroup");
@@ -225,7 +225,7 @@
         }
         _this.setCache (component, "nodeGroup", nodeGroup ) ;
 
-        var textGroupId = bzutils.getDivId("textGroup", componentReference, false);        
+        var textGroupId = _this.getDivId("textGroup", componentReference, false);        
         var textGroup = d3.select("#" + textGroupId);
         if (textGroup.empty()) {
             console.log("create textGroup");
@@ -257,7 +257,7 @@
         var popx = width - 10;
         var popy = 200;
 
-        var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
+        var svg = d3.select(_this.getDivId("svg", componentReference, true));
         var infosvg = 
         svg.selectAll('.symbol')
             .data(mdata)
@@ -552,13 +552,13 @@
     
     clearChart : function (componentReference) {
         console.log("chartAreaHelper.clearChart enter "); 
-        var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
+        var svg = d3.select(_this.getDivId("svg", componentReference, true));
         var path = svg.selectAll("path").remove();
         var node = svg.selectAll("circle").remove();
         var text = svg.selectAll(".nodeText").remove();
-        d3.select(bzutils.getDivId("pathGroup", componentReference, true)).remove();
-        d3.select(bzutils.getDivId("nodeGroup", componentReference, true)).remove();
-        d3.select(bzutils.getDivId("textGroup", componentReference, true)).remove();
+        d3.select(_this.getDivId("pathGroup", componentReference, true)).remove();
+        d3.select(_this.getDivId("nodeGroup", componentReference, true)).remove();
+        d3.select(_this.getDivId("textGroup", componentReference, true)).remove();
         console.log("chartAreaHelper.clearChart exit "); 
     },
 
@@ -579,7 +579,51 @@
         var allkeys = component.get("v.TESTCACHE");
         return Object.keys(allkeys).includes(key);
     },
-        
+
+    // replace ids with component specific versions - this will allow multiple charts on a page without conflict
+    initializeAddComponentRef : function (componentReference, datajson) {
+        var _this = this;
+        if (datajson.nodes != null) {
+        datajson.nodes.forEach(function(node) {
+            node["id"] = _this.addComponentRef(componentReference, node["id"]);
+            node["recordid"] = _this.removeComponentRef(componentReference, node["id"]);
+        })};
+            
+        if (datajson.links != null) {
+        datajson.links.forEach(function(link) {
+            link["id"] = _this.addComponentRef(componentReference, link["id"]);
+            link["sourceid"] = _this.addComponentRef(componentReference, link["sourceid"]);
+            link["targetid"] = _this.addComponentRef(componentReference, link["targetid"]);
+        })};
+    },    
+    
+    addComponentRef : function(componentReference, recordid) {
+        if (recordid.indexOf("compref") > -1) { // don't double index  
+            console.log("avoiding a double compref for recordid " + recordid);
+            return recordid;
+        }
+        return componentReference + recordid;
+    },
+    
+    // remove component specific prefix from id - this will allow original references to be retrieved
+    removeComponentRef : function(componentReference, recordidEnriched) {
+        if (recordidEnriched.indexOf("compref") > -1) { // compref present
+            var indexer = componentReference.length;
+            return recordidEnriched.substring(indexer);
+        }
+        return recordidEnriched;
+    },   
+    
+    // handy function to retrieve a D3 Node from a DOM id
+    getNodeFromId : function (id) {
+        return d3.select("#" + id).data()[0];
+    },
+
+    getDivId : function (idType, componentReference, forSelect) {
+        return (forSelect ? "#" : "") + componentReference + idType;
+    }
+    
+
         
 
 })

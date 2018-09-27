@@ -50,7 +50,7 @@
         var showLevels = args.showLevels;
 
         var componentReference = component.get("v.componentReference");        
-        var primaryNodeId = bzutils.addComponentRef(componentReference, searchTermId);
+        var primaryNodeId = helper.addComponentRef(componentReference, searchTermId);
         helper.setCache (component, "primaryNodeId", primaryNodeId ) ;
         helper.setCache (component, "showLevels", showLevels) ;
 
@@ -83,10 +83,10 @@
         
             var relatedNodes = helper.getRelatedNodes(primaryNodeId, componentReference, levels);
         
-            var path = d3.select(bzutils.getDivId("pathGroup", componentReference, true))
+            var path = d3.select(helper.getDivId("pathGroup", componentReference, true))
                 .selectAll("path")  ;
         
-            var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
+            var node = d3.select(helper.getDivId("nodeGroup", componentReference, true))
                 .selectAll("circle")  
             
             var shownodeids = [];
@@ -162,7 +162,7 @@
 
             console.log("styleNodes enter: " + currentMeasure + " primaryid: " + primaryid);
         
-            var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
+            var node = d3.select(helper.getDivId("nodeGroup", componentReference, true))
                 .selectAll("circle")  ;
         
             bzutils.log("styleNodes:" + JSON.stringify(node));
