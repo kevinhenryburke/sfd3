@@ -22,7 +22,8 @@ public with sharing class HierarchyStructure {
 
     public List<HierarchyStructure> children;   // child records
 
-
+    public List<HierarchyConfiguration.FieldConfiguration> fields;
+    
     /* Computational structures */
     public HierarchyStructure top; // top node in the hierarchy 
     public HierarchyStructure parent; // node containing this in the hierarchy 

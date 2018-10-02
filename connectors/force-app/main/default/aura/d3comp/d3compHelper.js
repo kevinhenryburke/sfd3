@@ -61,7 +61,8 @@
                     component.set("v.levelsIncreaseDecrease", ! configjson.levelsIncreaseOnly);                    
                 }
                 if (key == "autoIncreaseLevels") {
-                    component.set("v.autoIncreaseLevels", true);                    
+                    console.log("xxx: autoIncreaseLevels: set to: " + configjson.autoIncreaseLevels );
+                    component.set("v.autoIncreaseLevels", configjson.autoIncreaseLevels);                    
                 }
 
                 // this is a developer setting to allow some group of test buttons to display

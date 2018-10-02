@@ -19,15 +19,41 @@ public with sharing class HierarchyQuery {
         List<HierarchyStructure> childStructures = new List<HierarchyStructure>();
 
         for (sObject s : childObjects) {
-            id parentId = s.get(oc.parentField).toString();
-            // Concern for update - I've lost context with the top node - pass back and forth seems unperfomant
-            // also we now have multiple "tops"
-            HierarchyStructure hsParent = top.getHierarchyStructureById(parentId);
-            HierarchyStructure hs = new HierarchyStructure(hsParent); 
+            id parentId;
+            HierarchyStructure hsParent;
+            HierarchyStructure hs; 
 
-            hs.id = s.get(oc.requiredFields.get('id')).toString();
-            hs.name = s.get(oc.requiredFields.get('name')).toString();
-            hs.size = (Decimal) s.get(oc.requiredFields.get('size'));
+            for (HierarchyConfiguration.FieldConfiguration field : oc.fields) {
+                if (field.role == 'parentId') {
+                    System.debug('it is a parentId field');
+                    parentId = s.get(field.api).toString();
+                    hsParent = top.getHierarchyStructureById(parentId);
+                    hs = new HierarchyStructure(hsParent); 
+                }
+            }
+
+            // using the full field configuration
+            System.debug('oc.fields.length() ' + oc.fields.size());
+
+            for (HierarchyConfiguration.FieldConfiguration field : oc.fields) {
+                if (field.role == 'id') {
+                    System.debug('it is an id field');
+                    hs.id = s.get(field.api).toString();
+                    System.debug('it is an id value: ' + hs.id);
+                }
+                if (field.role == 'name') {
+                    System.debug('it is a name field');
+                    hs.name = s.get(field.api).toString();
+
+                }
+                if (field.role == 'size') {
+                    System.debug('it is a size field');
+                    hs.size = (Decimal) s.get(field.api);
+
+                }
+                System.debug(field);
+            }
+
             hs.objectType = s.getSObjectType().getDescribe().getName();            
             hs.parent = hsParent;
 
@@ -56,44 +82,45 @@ public with sharing class HierarchyQuery {
 
     public String createQueryString (Set<Id> queryIds, boolean queryParents) {
 
-        // SELECT
+        // using the full field configuration
+        System.debug('createQueryString ' + oc.fields.size());
+        List<String> selectFields = new List<String>();
 
-        // temporary construct to bring together various lists of fields to create the select part of our query
-        List<List<String>> listlist = new List<List<String>>{oc.requiredFields.values()};
+        String orderByField;
+        String parentField;
+        String idField;
 
-        String otherFieldsString = '';
-        if (oc.otherFields != null && oc.otherFields.size() > 0) {
-            listlist.add(oc.otherFields);
+        for (HierarchyConfiguration.FieldConfiguration field : oc.fields) {
+            selectFields.add(field.api);
+
+            if (field.orderByField != null && field.orderByField == true ) {
+                System.debug('it is an ordorderByField er field');
+                orderByField = field.api;
+            }
+            if (field.role == 'id') {
+                idField = field.api;
+            }
+            if (field.role == 'parentId') {
+                parentField = field.api;
+            }
         }
-        if (oc.parentField != null)  {
-            listlist.add(new List<String>{oc.parentField});
-        } 
-        if (oc.orderByField != null)  {
-            listlist.add(new List<String>{oc.orderByField});
-        } 
-
-        List<String> selectFields = mergeDedupe (listlist); 
-
-        String queryString = 'select ' 
-            + String.join(selectFields,',');
-        
-        
-        // WHERE
-        queryString += ' from ' + oc.objectType + ' where ';
+        String queryString = 'select ' + String.join(selectFields,',');                
+        System.debug('createQueryString ' + queryString);
+        queryString += ' from ' + oc.objectType;
 
         if (queryParents)  {
-            queryString += oc.parentField + ' IN : queryIds ' ; // escape single quotes should not be necessary as we are dealing with ids and not expsoing to front end; 
+            queryString += ' where ' + parentField + ' IN : queryIds ' ; // escape single quotes should not be necessary as we are dealing with ids and not expsoing to front end; 
         } 
         else {
-            queryString += oc.requiredFields.get('id') +  ' IN : queryIds ';
+            queryString += ' where ' + idField +  ' IN : queryIds ';
         }
 
-        // ORDER BY
-        if (oc.orderByField != null) {
-            queryString += ' order by ' + oc.orderByField ;
-        }
+        if (orderByField != null) {
+            queryString += ' order by ' + orderByField ;
 
-        return queryString;    
+        }
+        System.debug('createQueryString ' + queryString);
+        return queryString;
 
 
     }
@@ -108,9 +135,29 @@ public with sharing class HierarchyQuery {
         sObject s = listso[0];
 
         HierarchyStructure hs = new HierarchyStructure(id, level); // to signify top element
-        hs.id = s.get(oc.requiredFields.get('id')).toString();
-        hs.name = s.get(oc.requiredFields.get('name')).toString();
-        hs.size = (Decimal) s.get(oc.requiredFields.get('size'));
+
+        // using the full field configuration
+        System.debug('oc.fields.length() ' + oc.fields.size());
+
+        for (HierarchyConfiguration.FieldConfiguration field : oc.fields) {
+            if (field.role == 'id') {
+                System.debug('it is an id field');
+                hs.id = s.get(field.api).toString();
+                System.debug('it is an id value: ' + hs.id);
+            }
+            if (field.role == 'name') {
+                System.debug('it is a name field');
+                hs.name = s.get(field.api).toString();
+
+            }
+            if (field.role == 'size') {
+                System.debug('it is a size field');
+                hs.size = (Decimal) s.get(field.api);
+
+            }
+            System.debug(field);
+        }
+
         hs.objectType = s.getSObjectType().getDescribe().getName();
 
         if (oc.otherFields != null) {
@@ -143,8 +190,18 @@ public with sharing class HierarchyQuery {
 
         Map<Id,List<sObject>> childMap = new Map<Id,List<sObject>>();  
 
+        String parentField;
+
+        for (HierarchyConfiguration.FieldConfiguration field : oc.fields) {
+            if (field.role == 'parentId') {
+                System.debug('it is a parentId field');
+                parentField = field.api;
+                break;
+            }
+        }
+
         for (sObject s : childObjects) {
-            id parentId = s.get(oc.parentField).toString();
+            id parentId = s.get(parentField).toString();
             if (childMap.keyset().contains(parentId)) {
                 List<sObject> siblings = childMap.get(parentId);
                 siblings.add(s);

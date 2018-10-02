@@ -1,4 +1,19 @@
 ({
+
+    sectionExpandCollapseMaster : function(component, letter) {
+        var _this = this;
+        console.log("sectionExpandCollapseMaster: " + letter);
+        var sectionId = "expand" + letter;
+        var expandComponent = component.find(sectionId);
+        var isCollapsed = _this.sectionExpandCollapse(expandComponent);
+        if (isCollapsed) {
+            component.set("v.icon" + letter, "utility:chevronright");
+        } 
+        else {
+            component.set("v.icon" + letter, "utility:chevrondown");
+        } 
+    },
+
     sectionExpandCollapse : function(expandSection) {
         console.log("sectionExpandCollapse: enter");
         var nowShow = $A.util.hasClass(expandSection, 'slds-show');
@@ -56,22 +71,25 @@
        );
     },
 
-    /* param is of form "data.name" - this looks at the first part and returns the attribute with the name of the second part of the relevant structure */
+    /* param is of form "data.xxx" or "parent.xxx" and the first part determines which of the first two input variable we use
+        The code looks at the first part and returns the attribute with the name of the second part of the relevant structure */
     parseCardParam : function (data, parent, param) {
-        var splitArray = param.split(".");
-        if (splitArray[0] == "data") {
+        var paramSplitArray = param.split(".");
+        if (paramSplitArray[0] == "data") {
             if (data != null) {
-                if (splitArray[1] != "otherFields") {
-                    return data[splitArray[1]];
+                if (paramSplitArray[1] != "otherFields") {
+                    // these are the key fields
+                    return data[paramSplitArray[1]];
                 }
                 else {
-                    return data[splitArray[1]][splitArray[2]];
+                    // this is the otherFields parameters
+                    return data[paramSplitArray[1]][paramSplitArray[2]];
                 }
             }
         }
-        if (splitArray[0] == "parent") {
+        if (paramSplitArray[0] == "parent") {
             if (parent != null) {
-                return parent[splitArray[1]];
+                return parent[paramSplitArray[1]];
             }
         }
         return "";

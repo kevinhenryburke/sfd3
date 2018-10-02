@@ -1,27 +1,21 @@
 ({
     areaInit: function (component) {
-        var _this = this;
         console.log("areaInit enter");
 
         var masterConfigObject = JSON.parse(component.get("v.masterConfig"));
         component.set("v.masterConfigObject", masterConfigObject);
 
-
         console.log("areaInit exit");
-        
-        
     },
 
     // first method called after all resources are ready
     doneRenderLoad: function (component) {
         var _this = this;
-        console.log("chartArea: doneRenderLoad enter");
         var componentReference = component.get("v.componentReference");
         console.log("chartArea: doneRenderLoad: componentReference:" + componentReference);
 
         _this.initializeCache (component) ;
 
-        _this.setCache (component, "component", component) ;
         _this.setCache (component, "componentReference", component.get("v.componentReference") ) ;
         _this.setCache (component, "componentType", component.get("v.componentType") ) ;
         _this.setCache (component, "componentCategory", component.get("v.componentCategory") ) ;
@@ -171,7 +165,6 @@
 
         var _this = this;
         var componentReference = component.get("v.componentReference");
-        var componentType = _this.getCache (component, "componentType");
 
         console.log("init:initializing initializeGroups with primaryNodeId: " + primaryNodeId);
         
@@ -372,7 +365,6 @@
             }
             if (preppedEvent.eventType == "Cache"){
                 console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
-                var componentReference = component.get("v.componentReference");
                 var appEvents = _this.getCache (component, "appEvents") ;
                 event = appEvents.pop();
             }    
@@ -383,7 +375,6 @@
     restockCache : function(component) {
         var _this = this;
         console.log("chartArea: restockCache enter:");
-        var componentReference = component.get("v.componentReference");
 
         // reset cache of events for mouseover events to publish - may be a better way to do this!
         // the issue is that only the top orginally created nodes have lightning context, not sure why
@@ -520,7 +511,6 @@
     prepareEvent : function (component, topic, parameters) {
         console.log("chartAreaHelper.prepareEvent enter");
         var _this = this;
-        var componentReference = component.get("v.componentReference");
         var controllerId = _this.getCache (component, "UserControllerComponentId") ;
         var eventType = bzutils.getEventTypeByTopic(topic);
         return {
@@ -534,7 +524,6 @@
     setFilterVisibility : function (component, filterType, isShown) {
         console.log("chartAreaHelper.setFilterVisibility enter");
         var _this = this;
-        var componentReference = component.get("v.componentReference");
         var showFilters = _this.getCache (component, "showFilters") ;
         if (isShown) {
             console.log("setFilterVisibility: adding " + filterType);
@@ -552,6 +541,7 @@
     
     clearChart : function (componentReference) {
         console.log("chartAreaHelper.clearChart enter "); 
+        var _this = this;
         var svg = d3.select(_this.getDivId("svg", componentReference, true));
         var path = svg.selectAll("path").remove();
         var node = svg.selectAll("circle").remove();

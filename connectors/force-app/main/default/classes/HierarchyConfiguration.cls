@@ -20,12 +20,12 @@ public with sharing class HierarchyConfiguration  {
     public class ObjectConfiguration {
 
         public String objectType; // the type of the sObject referenced.
+        public List<HierarchyConfiguration.FieldConfiguration> fields = new List<HierarchyConfiguration.FieldConfiguration> ();
 
         // Salesforce standard fields like id and name must be included plus other depending on chartType.
         // Some concept of a parent will be needed for hierarchies for example
-        public Map<String,String> requiredFields = new Map<String,String>();
         public List<String> otherFields = new List<String>();
-        public String parentField;
+
         public String orderByField = null;
 
         // recursive = true means we need to the same configuration should be used for all levels below
@@ -44,7 +44,13 @@ public with sharing class HierarchyConfiguration  {
         public boolean isValid () {
             return true;
         }
+    }
 
+    public class FieldConfiguration {
+        public String api;
+        public String role;
+        public boolean display;
+        public boolean orderByField = false;
     }
 
     public static HierarchyConfiguration deserialize (String JSONString) {

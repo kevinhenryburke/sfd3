@@ -2,8 +2,6 @@
 
     onInit: function(component, event, helper) {
         console.log('panelDisplay: onInit enter');
-
-        console.log('panelDisplay: onInit exit');
     },
 
 
@@ -18,8 +16,6 @@
     */
 
     handle_evt_sfd3  : function(component, event, helper) {
-
-        var _this = this;
         var topic, parameters, controller;
 
         // if there is an arguments parameter this has been triggered by a method call
@@ -81,7 +77,7 @@
             var cardFields = JSON.parse(cardFieldsString);
             var objectIcons = JSON.parse(objectIconsString);
             // set a default display fields list
-            var cardFieldsArray = ["data.name", "data.size", "parent.name"];
+            var cardFieldsArray; // = ["data.name", "data.size", "parent.name"];
 
             // check if there is an objectType specific display fields list and icons list
             if (cardFields[displayData["objectType"]] != null) {
@@ -105,11 +101,24 @@
             }
 
             console.log("parseCardParam:");
+            console.log(displayData["otherFields"]);
             component.set("v.recordId", helper.parseCardParam(displayData, displayParent, "data.id" ));
 
-            component.set("v.card1", helper.parseCardParam(displayData, displayParent, cardFieldsArray[0] ));  
-            component.set("v.card2", helper.parseCardParam(displayData, displayParent, cardFieldsArray[1] ));  
-            component.set("v.card3", helper.parseCardParam(displayData, displayParent, cardFieldsArray[2] ));  
+            var parsedCardFields = [];
+            for(var i=0;i<cardFieldsArray.length;i++){
+
+                var string = cardFieldsArray[i];
+                var substring = "data.name";
+                string.includes(substring);                
+                if (string.includes(substring)) {
+                    // data.name comes first and will also have a link to the record
+                    component.set("v.card1", helper.parseCardParam(displayData, displayParent, cardFieldsArray[i] ));  
+                }
+                else {
+                    parsedCardFields.push(helper.parseCardParam(displayData, displayParent, cardFieldsArray[i]));
+                }
+            }
+            component.set("v.parsedCardFields", parsedCardFields);  
         }
 
         if (topic == "ChartMouseOut")
@@ -133,7 +142,7 @@
         evtNav.fire(); 
      },
 
-     handleClose : function(component, event, helper) {
+    handleClose : function(component, event, helper) {
         console.log("handleClose: enter");
         var appEvent = $A.get("e.c:evt_sfd3");
         appEvent.setParams({
@@ -141,54 +150,24 @@
             "controller" : component.get("v.hostUserControllerComponentId"), // pass the host component name back for an embedded component 
         });
         appEvent.fire();
-    
+
         // destroy this component
         component.destroy();
-
-        console.log("handleClose: exit");
-     },
-
-     handleShowActiveSectionName: function (cmp, event, helper) {
-        alert(cmp.find("accordion").get('v.activeSectionName'));
     },
-    handleToggleSectionD: function (cmp) {
-        cmp.set('v.isDVisible', !cmp.get('v.isDVisible'));
-    },
-    
+
     handleExpandA : function(component, event, helper) {
         console.log("handleExpandA: enter");
-        var expandComponent = component.find("expandA");
-        var isCollapsed = helper.sectionExpandCollapse(expandComponent);
-        if (isCollapsed) {
-            component.set("v.iconA", "utility:chevronright");
-        }
-        else {
-            component.set("v.iconA", "utility:chevrondown");
-        } 
+        helper.sectionExpandCollapseMaster(component, "A");
     },
 
     handleExpandB : function(component, event, helper) {
         console.log("handleExpandB: enter");
-        var expandComponent = component.find("expandB");
-        var isCollapsed = helper.sectionExpandCollapse(expandComponent);
-        if (isCollapsed) {
-            component.set("v.iconB", "utility:chevronright");
-        }
-        else {
-            component.set("v.iconB", "utility:chevrondown");
-        } 
+        helper.sectionExpandCollapseMaster(component, "B");
     },
 
     handleExpandC : function(component, event, helper) {
         console.log("handleExpandC: enter");
-        var expandComponent = component.find("expandC");
-        var isCollapsed = helper.sectionExpandCollapse(expandComponent);
-        if (isCollapsed) {
-            component.set("v.iconC", "utility:chevronright");
-        }
-        else {
-            component.set("v.iconC", "utility:chevrondown");
-        } 
+        helper.sectionExpandCollapseMaster(component, "C");
     },
 
     handleShowModalView : function (component, event, helper) {

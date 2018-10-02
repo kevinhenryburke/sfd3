@@ -4,15 +4,14 @@
 		console.log("subhelper: enter initializeVisuals proper structure");
 		var _this = this;
 
-        var componentType = component.get("v.componentType");
         var componentReference = component.get("v.componentReference");
 
 		var datajson = _this.getCache (component, "datajson") ;  
 		var nodeGroup = _this.getCache (component, "nodeGroup") ;  
 		var pathGroup = _this.getCache (component, "pathGroup") ;  
-		var textGroup = _this.getCache (component, "textGroup") ;  
-		var pathToolTipDiv = _this.getCache (component, "pathToolTipDiv") ;  
-		var pathGroupId = _this.getCache (component, "pathGroupId") ;  
+		// var textGroup = _this.getCache (component, "textGroup") ;  
+		// var pathToolTipDiv = _this.getCache (component, "pathToolTipDiv") ;  
+		// var pathGroupId = _this.getCache (component, "pathGroupId") ;  
 		
 		var width = _this.getCache (component, "width") ;  
 		var height = _this.getCache (component, "height") ; 
@@ -414,7 +413,6 @@
     // open the input paths in the graph, note that need to call update afterwards
     openPathsBy : function (component, searchTerm, searchBy){
         var _this = this;
-        var componentReference = component.get("v.componentReference");
         var ultimateRoot = _this.getCache (component, "root");
 
         // try to find target node down from the root node
@@ -437,7 +435,6 @@
 
     highlightPathsBy : function (component, searchTerm, searchBy, highlightOn){
         var _this = this;
-        var componentReference = component.get("v.componentReference");
         var ultimateRoot = _this.getCache (component, "root");
 
         // try to find target node down from the root node
@@ -579,7 +576,6 @@
             }
             if (preppedEvent.eventType == "Cache"){
                 console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
-                var componentReference = component.get("v.componentReference");
                 var appEvents = _this.getCache (component, "appEvents") ;
                 event = appEvents.pop();
             }    
@@ -589,7 +585,6 @@
 
     nodeMouseover : function (component, d) {
         var _this = this;
-        var componentReference = component.get("v.componentReference");
         console.log("chartHierarchyHelper.nodeMouseover enter");
         var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
         
@@ -635,7 +630,6 @@
     
     nodeMouseout : function (component, d) {
         var _this = this;
-        var componentReference = component.get("v.componentReference");
         console.log("chartHierarchyHelper.nodeMouseout enter.");
         var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
         
@@ -650,7 +644,6 @@
     
     getNodeColor : function (component, d, LeafParent) {
         var _this = this;
-        var componentReference = component.get("v.componentReference");
 
         var color;
 
@@ -685,6 +678,8 @@
                 // going by a textual value - default to the first color in the list
                 // TODO could add in a default in the config string?
                 color = ColorsNames[0];
+                console.log("ttt: ");
+                console.log(d);
                 if (d.data.otherFields[colorBy] == ColorsValues[i]) {
                     console.log("colorBy Match: " + colorBy);
                     color = ColorsNames[i];
@@ -697,7 +692,6 @@
 
     setColorCache : function(component, ColorsString, ColorsObjectDefault, prefix) {
         var _this = this;
-        var componentReference = component.get("v.componentReference");
 
         _this.setCache (component, prefix + "ColorsObjectDefault", ColorsObjectDefault ) ;
         _this.setCache (component, prefix + "ColorsValuesDefault", ColorsObjectDefault.values ) ;
@@ -735,11 +729,5 @@
             d.children = null
         }
     },
-
-
-    
-
-
-
 
 })

@@ -13,19 +13,43 @@ masterConfigObject =
         "dataSourceMethod": "c.returnDataPack",
         "dataUpdateMethod": "c.returnDataPackUpdate",
         "queryJSON": {
+            "initialLevelsToRetrieve": 2,
+            "chartType": "Hierarchy",
+
             "loc": [{
                 "terminal": false,
                 "recursive": true,
-                "requiredFields": {
-                    "size": "AnnualRevenue",
-                    "name": "name",
-                    "id": "id"
-                },
-                "parentField": "parentId",
+                "fields": [
+                    {
+                         "api" : "AnnualRevenue",                                     
+                         "role" : "size", 
+                         "display" : true,
+                         "orderByField" : true                                   
+                    },
+                    {
+                         "api" : "name",                                     
+                         "role" : "name", 
+                         "display" : true                                     
+                     },
+                     {
+                         "api" : "id",                                     
+                         "role" : "id", 
+                         "display" : true                                     
+                    },                    
+                    {
+                         "api" : "parentId",                                     
+                         "role" : "parentId", 
+                         "display" : true                                     
+                    },                    
+                    {
+                         "api" : "AccountNumber",                                     
+                         "role" : "none", 
+                         "display" : true                                     
+                    }  
+                ],
                 "objectType": "Account"
-            }],
-            "initialLevelsToRetrieve": 2,
-            "chartType": "Hierarchy"
+            }]
+
         },
         "primaryNodeInitialization": "None"
 
@@ -48,7 +72,7 @@ masterConfigObject =
                 "showtestbuttons": true,
                 "levels": 5,
                 "levelsIncreaseOnly": true,
-                "autoIncreaseLevels": false
+                "autoIncreaseLevels": true
             }
         },
         "ChartPanel": {
@@ -58,7 +82,7 @@ masterConfigObject =
                 "LeafColors" : {"Account" : { "colorBy" : "size" , "values" : [0,22070163,25070163], "colors" : ["white" , "yellow", "green"] }},
                 "ParentColors" : {"Account" : {  "colorBy" : "size" ,  "values" : [0,38970163], "colors" : ["lightsteelblue" , "purple"] }},
                 "showZoomSlider" : false,
-                "clearHighlightedPaths" : true,
+                "clearHighlightedPaths" : true
             },
             "Network" : {
                 "showPathToolTip" : true,
@@ -69,7 +93,7 @@ masterConfigObject =
                     "selector" : ".node",            
                     "appendType" : "g",            
                     "styleclassText" : "chartText",
-                    "styleclassTextShadow" : "chartTextShadow",
+                    "styleclassTextShadow" : "chartTextShadow"
                 }        
             }
         }

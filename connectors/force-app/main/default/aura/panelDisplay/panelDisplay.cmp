@@ -20,14 +20,12 @@
     <aura:attribute name="Controller" type="String" default="" description="If you want this card to respond to a particular controller on a page then put the controller's configured name here (unique to the page)"/>    
     <aura:attribute name="objectIcons" type="String" default="{}"/>    
     <aura:attribute name="cardFields" type="String" default="{}"/>    
+    <aura:attribute name="parsedCardFields" type="String[]" default="['No node selected']"/>    
     <aura:attribute name="layoutStyle" type="String" default="card"/>    
     <aura:attribute name="objectType" type="String" default=""/>    
 
     <!-- Design Paramters Panel -->
     <aura:attribute name="card1" type="String" default="No node selected"/>    
-    <aura:attribute name="card2" type="String" default=""/>    
-    <aura:attribute name="card3" type="String" default=""/>    
-    <aura:attribute name="card4" type="String" default=""/>    
 
     <aura:attribute name="recordId" type="String" default=""/>    
     <aura:attribute name="iconName" type="String" default="standard:account"/>    
@@ -49,16 +47,16 @@
     <aura:if isTrue="{!v.layoutStyle == 'card'}"> 
         <lightning:card aura:id="detailcard" title="{!v.card1}" iconName="{!v.iconName}">
             <div class="c-container"  aura:id="detailcardfields" >
-                <lightning:layout horizontalAlign="space">
-                    <lightning:layoutItem flexibility="auto" padding="around-small">
+                <lightning:layout horizontalAlign="space" verticalAlign="stretch">
+
+                <lightning:layoutItem flexibility="auto" padding="around-small">
                         <a href = "" onclick = "{!c.navigateToRecord}">{!v.card1}</a>
                     </lightning:layoutItem>
-                    <lightning:layoutItem flexibility="auto" padding="around-small">
-                        {!v.card2}
-                    </lightning:layoutItem>
-                    <lightning:layoutItem flexibility="auto" padding="around-small">
-                        {!v.card3}
-                    </lightning:layoutItem>
+                    <aura:iteration items="{!v.parsedCardFields}" var="item">
+                        <lightning:layoutItem flexibility="auto" padding="around-small">
+                            {!item}
+                        </lightning:layoutItem>
+                    </aura:iteration>
                 </lightning:layout>
             </div>
         </lightning:card>  
@@ -77,29 +75,15 @@
                         </button>
                     </h3>
                     <div class="slds-section__content slds-show" aura:id="expandA">
-                        <lightning:layout horizontalAlign="space">
-                            <lightning:layoutItem flexibility="auto" padding="around-small" class="slds-text-body_small">
+                        <lightning:layout multipleRows="true" verticalAlign="stretch">
+                            <lightning:layoutItem size="6" padding="around-small" class="slds-text-body_small">
                                 <a href = "" onclick = "{!c.navigateToRecord}">{!v.card1}</a>
                             </lightning:layoutItem>
-                            <lightning:layoutItem flexibility="auto" padding="around-small" class="slds-text-body_small">
-                                {!v.card2}
-                            </lightning:layoutItem>
-                        </lightning:layout>
-                        <lightning:layout horizontalAlign="space">
-                            <lightning:layoutItem flexibility="auto" padding="around-small" class="slds-text-body_small">
-                                {!v.card3}
-                            </lightning:layoutItem>
-                            <lightning:layoutItem flexibility="auto" padding="around-small" class="slds-text-body_small">
-                                {!v.card3}
-                            </lightning:layoutItem>
-                        </lightning:layout>
-                        <lightning:layout horizontalAlign="space">
-                            <lightning:layoutItem flexibility="auto" padding="around-small" class="slds-text-body_small">
-                                {!v.card3}
-                            </lightning:layoutItem>
-                            <lightning:layoutItem flexibility="auto" padding="around-small" class="slds-text-body_small">
-                                {!v.card3}
-                            </lightning:layoutItem>
+                            <aura:iteration items="{!v.parsedCardFields}" var="item">
+                                <lightning:layoutItem size="6" padding="around-small">
+                                    {!item}
+                                </lightning:layoutItem>
+                            </aura:iteration>
                         </lightning:layout>
                     </div>
                 </div>

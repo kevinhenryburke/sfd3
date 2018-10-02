@@ -3,8 +3,6 @@
     initializeVisuals: function (component) {
         console.log("subhelper: enter initializeVisuals proper!");
         var _this = this;
-        var componentType = component.get("v.componentType");
-        var componentReference = component.get("v.componentReference");
 
 		var datajson = _this.getCache (component, "datajson") ;  
 		var nodeGroup = _this.getCache (component, "nodeGroup") ;  
@@ -80,7 +78,6 @@
                     console.log("dblclick");
                     // Two options - complete refresh OR keep and get data from this point?
                     // send a message identifying the node in question
-                    var componentReference = component.get("v.componentReference");
                     var primaryNodeId = d.id;
                     _this.setCache (component, "primaryNodeId", primaryNodeId ) ;
 
@@ -270,7 +267,6 @@
             }
             if (preppedEvent.eventType == "Cache"){
                 console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
-                var componentReference = component.get("v.componentReference");
                 var appEvents = _this.getCache (component, "appEvents") ;
                 event = appEvents.pop();
             }    
@@ -285,15 +281,11 @@
         var componentType = component.get("v.componentType");
 
         if (componentType ==  "network.connections") {
-            console.log("chartNetworkHelper.runSimulation " + componentType);
             _this.runSimulationConnections(component, path, node, text);
         }
         if (componentType ==  "network.influence") {
-            console.log("chartNetworkHelper.runSimulation " + componentType);
             _this.runSimulationInfluence(component, path, node, text);
         }
-
-        console.log("chartNetworkHelper.runSimulation exit");
     },                 
 
     /* Connections Methods */
@@ -301,8 +293,6 @@
     runSimulationConnections : function (component, path, node, text) {
         console.log("chartNetworkHelper.runSimulationConnections enter");
         var _this = this;
-
-        var componentReference = component.get("v.componentReference");
 
         var datajson = _this.getCache (component, "datajson") ;
 
@@ -330,7 +320,6 @@
 
     initializeSimulationConnections : function (component, nodes) {
         var _this = this;
-        var componentReference = component.get("v.componentReference");
         console.log("chartNetworkHelper.initializeSimulationConnections enter");
         var width = _this.getCache (component, "width") ;  
         var height = _this.getCache (component, "height") ; 
@@ -391,7 +380,6 @@
     
     onTick : function  (component, path, node, text) {
         var _this = this;
-        var componentReference = component.get("v.componentReference");
 
         var width = _this.getCache (component, "width") ;  
         var height = _this.getCache (component, "height") ; 
@@ -449,8 +437,6 @@
         console.log("chartNetworkHelper.runSimulationInfluence enter");
         var _this = this;
 
-        var componentReference = component.get("v.componentReference");
-
         var datajson = _this.getCache (component, "datajson") ;
 
         var simulation = _this.initializeSimulationInfluence(component, datajson.nodes);            
@@ -475,7 +461,6 @@
 
     initializeSimulationInfluence : function (component, nodes) {
         console.log("chartNetworkHelper.initializeSimulationInfluence enter");
-        var componentReference = component.get("v.componentReference");
 
         var _this = this;
         var width = _this.getCache (component, "width") ;  
@@ -652,7 +637,6 @@
     nodeMouseover : function (component, d) {
         var _this = this;
         console.log("chartNetworkHelper.nodeMouseover enter");
-        var componentReference = component.get("v.componentReference");  
 
         var componentType = component.get("v.componentType");
         console.log("nodeMouseover componentType = " + componentType);
@@ -700,14 +684,11 @@
         
             var preppedEvent = _this.prepareEvent(component, "ChartMouseOver", publishParameters);
             return preppedEvent;
-        
         }
-        
     },
     
     nodeMouseout : function (component, d) {
         console.log("chartNetworkHelper.nodeMouseout enter.");
-        var componentReference = component.get("v.componentReference");  
 
         var componentType = component.get("v.componentType");
         console.log("nodeMouseover componentType = " + componentType);

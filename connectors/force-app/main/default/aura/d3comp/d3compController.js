@@ -19,6 +19,9 @@
         component.set("v.queryLevels", queryLevels );
         component.set("v.queryLevelIds", queryLevelIds );
 
+        console.log("queryJSONObject");
+        console.log(queryJSONObject);
+
         console.log("recordId:" + component.get("v.recordId"));
         
         action.setParams({
@@ -30,6 +33,7 @@
             var state = response.getState();
             if (state === "SUCCESS") {
                 console.log('data returned from apex');
+                console.log(response.getReturnValue());
                 
                 helper.initializeConfig(component, response.getReturnValue());
 
@@ -194,6 +198,7 @@
         {
             console.log("handle_evt_sfd3: InitializeData received by Controller: " + UserComponentId);
             var autoIncreaseLevels = component.get("v.autoIncreaseLevels");
+            console.log("auto increasing levels: value: " + autoIncreaseLevels);
             if (autoIncreaseLevels == true) {
                 console.log("auto increasing levels");
                 var canIncreaseLevels = helper.canIncreaseLevels(component);

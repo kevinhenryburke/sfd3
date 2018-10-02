@@ -63,16 +63,46 @@ public with sharing class Hierarchy_Test {
         HierarchyConfiguration hc = new HierarchyConfiguration('Hierarchy');
         hc.initialLevelsToRetrieve = 3;
         // Add an Account configuration
-        HierarchyConfiguration.ObjectConfiguration oc = new HierarchyConfiguration.ObjectConfiguration ();
-        oc.objectType = 'Account';
-        oc.recursive = true;
-        oc.requiredFields.put('id', 'id');
-        oc.requiredFields.put('name', 'name');
-        oc.requiredFields.put('size', 'AnnualRevenue');
-        oc.parentField = 'parentId';
-        oc.orderByField = 'AnnualRevenue';
+
+        String queryJSON = 
+        '                {"objectType": "Account",'+
+        '                "recursive": true,'+
+        '                "fields": ['+
+        '                    {'+
+        '                         "api" : "AnnualRevenue", '+                                    
+        '                         "role" : "size", '+
+        '                         "display" : true,'+
+        '                         "orderByField" : true '+                                   
+        '                    },'+
+        '                    {'+
+        '                         "api" : "name",'+                                     
+        '                         "role" : "name", '+
+        '                         "display" : true   '+                                  
+        '                     },'+
+        '                     {'+
+        '                         "api" : "id",'+                                     
+        '                         "role" : "id", '+
+        '                         "display" : true '+                                    
+        '                    },                    '+
+        '                    {'+
+        '                         "api" : "parentId", '+                                    
+        '                         "role" : "parentId", '+
+        '                         "display" : true       '+                              
+        '                    },                    '+
+        '                    {'+
+        '                         "api" : "AccountNumber", '+                                    
+        '                         "role" : "none", '+
+        '                         "display" : true   '+                                  
+        '                    }  '+
+        '                ]'+
+        '            }]'+
+        '        }';
+
+        HierarchyConfiguration.ObjectConfiguration oc = (HierarchyConfiguration.ObjectConfiguration)JSON.deserialize(queryJSON, HierarchyConfiguration.ObjectConfiguration.class);
         hc.loc.add(oc);
         return hc;        
+
+
     }
 
     /* TESTS */

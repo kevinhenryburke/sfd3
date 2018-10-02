@@ -4,7 +4,6 @@
         console.log("calling the aura:method initializeVisuals in subcomponent");
         helper.areaInit(component);
 
-        var componentReference = component.get("v.componentReference");        
         helper.setCache (component, "primaryNodeHighlightingOn", component.get("v.primaryNodeHighlightingOn") ) ;
         helper.setCache (component, "primaryNodeHighlightingColour", component.get("v.primaryNodeHighlightingColour") ) ;
         helper.setCache (component, "primaryNodeHighlightingRadius", component.get("v.primaryNodeHighlightingRadius") ) ;
@@ -26,8 +25,6 @@
             var args = event.getParam("arguments");
             var datajsonBefore = args.datajson;
             var datajsonRefresh = args.datajsonRefresh;
-
-            var componentReference = component.get("v.componentReference");        
 
             var all1 = 0;
             for (var i = 0; i < datajsonBefore.nodes.length; i++){
