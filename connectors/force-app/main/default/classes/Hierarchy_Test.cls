@@ -163,20 +163,6 @@ public with sharing class Hierarchy_Test {
     } 
 
     @IsTest
-    public static void deserializeDataPack() {
-
-        // need to create some configuration and some accounts
-        HierarchyConfiguration hc = factoryConfig();
-        Account rootAccount = factoryAccount();
-
-// TODO FIX to right method signature
-        // String JSONString = DThree.returnDataPack(JSON.serialize(hc));
-        String JSONString = DThree.returnDataPack();
-        HierarchyJSON deserialized =
-          (HierarchyJSON)JSON.deserialize(JSONString, HierarchyJSON.class);
-    }
-
-    @IsTest
     public static void hqmapSObject() {
         Account rootAccount = factoryAccount();
 
@@ -246,6 +232,17 @@ public with sharing class Hierarchy_Test {
         System.assertEquals(3,retList.size());
 
     }
-
+ 
+    @IsTest
+    public static void getFieldType(){
+        String stringType = HierarchyConfiguration.getFieldType('Account', 'name');
+        System.assertEquals('STRING', stringType);
+        String decimalType = HierarchyConfiguration.getFieldType('Account', 'AnnualRevenue');
+        System.assertEquals('CURRENCY', decimalType);
+        String integerType = HierarchyConfiguration.getFieldType('Account', 'NumberOfEmployees');
+        System.assertEquals('INTEGER', integerType);
+        String datetimeType = HierarchyConfiguration.getFieldType('Account', 'CreatedDate');
+        System.assertEquals('DATETIME', datetimeType);        
+    }
 
 }

@@ -63,62 +63,123 @@
         if (topic == "ChartMouseOver")
         {
 
-            // Hiding and showing fields on mouseover, whilst a nice idea, calls all the nodes to bounce
-            // $A.util.removeClass(component.find("detailcardfields"), "slds-hide");
-
             var displayData = parameters["data"];
-            var displayParent = parameters["parent"];
 
-            var cardFieldsString = component.get("v.cardFields");
-            var objectIconsString = component.get("v.objectIcons");
+            // TODO - this needs to be refactored
+            // newStyleREFACTOR is just a switch between the old and new ways of passing display fields
+            // fields
 
-            console.log("cardFieldsString:" + cardFieldsString);
+            var newStyleREFACTOR = false;
 
-            var cardFields = JSON.parse(cardFieldsString);
-            var objectIcons = JSON.parse(objectIconsString);
-            // set a default display fields list
-            var cardFieldsArray; // = ["data.name", "data.size", "parent.name"];
+            if (displayData.fields != null) {
+                newStyleREFACTOR = true;
+            }
 
-            // check if there is an objectType specific display fields list and icons list
-            if (cardFields[displayData["objectType"]] != null) {
-                var objectType = displayData["objectType"];
-                component.set("v.objectType", objectType);
-                cardFieldsArray = cardFields[objectType];
+            if (newStyleREFACTOR == false)
+            {
+    
+                // Hiding and showing fields on mouseover, whilst a nice idea, calls all the nodes to bounce
+                // $A.util.removeClass(component.find("detailcardfields"), "slds-hide");
 
-                component.set("v.iconName", "standard:account");
+                var displayParent = parameters["parent"];
 
-                if (objectType != null && objectIcons[objectType] != null) {
-                    component.set("v.iconName", objectIcons[objectType]);
-                }
-                else {
+                var cardFieldsString = component.get("v.cardFields");
+                var objectIconsString = component.get("v.objectIcons");
+
+                console.log("cardFieldsString old style:" + cardFieldsString);
+                console.log(displayData);
+
+                var cardFields = JSON.parse(cardFieldsString);
+                var objectIcons = JSON.parse(objectIconsString);
+                // set a default display fields list
+                var cardFieldsArray; // = ["data.name", "data.size", "parent.name"];
+
+                // check if there is an objectType specific display fields list and icons list
+                if (cardFields[displayData["objectType"]] != null) {
+                    var objectType = displayData["objectType"];
+                    component.set("v.objectType", objectType);
+                    cardFieldsArray = cardFields[objectType];
+
                     component.set("v.iconName", "standard:account");
-                }
-            }
-            else {
-                if (cardFields["default"] != null) {
-                    cardFieldsArray = cardFields["default"];
-                }
-            }
 
-            console.log("parseCardParam:");
-            console.log(displayData["otherFields"]);
-            component.set("v.recordId", helper.parseCardParam(displayData, displayParent, "data.id" ));
-
-            var parsedCardFields = [];
-            for(var i=0;i<cardFieldsArray.length;i++){
-
-                var string = cardFieldsArray[i];
-                var substring = "data.name";
-                string.includes(substring);                
-                if (string.includes(substring)) {
-                    // data.name comes first and will also have a link to the record
-                    component.set("v.card1", helper.parseCardParam(displayData, displayParent, cardFieldsArray[i] ));  
+                    if (objectType != null && objectIcons[objectType] != null) {
+                        component.set("v.iconName", objectIcons[objectType]);
+                    }
+                    else {
+                        component.set("v.iconName", "standard:account");
+                    }
                 }
                 else {
-                    parsedCardFields.push(helper.parseCardParam(displayData, displayParent, cardFieldsArray[i]));
+                    if (cardFields["default"] != null) {
+                        cardFieldsArray = cardFields["default"];
+                    }
                 }
+
+                console.log("parseCardParam:");
+                component.set("v.recordId", helper.parseCardParam(displayData, displayParent, "data.id" ));
+
+                var parsedCardFields = [];
+                for(var i=0;i<cardFieldsArray.length;i++){
+
+                    var string = cardFieldsArray[i];
+                    var substring = "data.name";
+                    string.includes(substring);                
+                    if (string.includes(substring)) {
+                        // data.name comes first and will also have a link to the record
+                        component.set("v.card1", helper.parseCardParam(displayData, displayParent, cardFieldsArray[i] ));  
+                    }
+                    else {
+                        parsedCardFields.push(helper.parseCardParam(displayData, displayParent, cardFieldsArray[i]));
+                    }
+                }
+                component.set("v.parsedCardFields", parsedCardFields);  
             }
-            component.set("v.parsedCardFields", parsedCardFields);  
+            if (newStyleREFACTOR == true)
+            {
+
+                var extractedDisplayValues = helper.extractDisplayValues (displayData);
+    
+                var cardFieldsString = component.get("v.cardFields");
+                var objectIconsString = component.get("v.objectIcons");
+    
+                console.log("cardFieldsString new style:" + cardFieldsString);
+                console.log(JSON.stringify(displayData));
+    
+                var cardFields = JSON.parse(cardFieldsString);
+                var objectIcons = JSON.parse(objectIconsString);
+                // set a default display fields list
+                var cardFieldsArray; // = ["data.name", "data.size", "parent.name"];
+    
+                // check if there is an objectType specific display fields list and icons list
+                if (cardFields[displayData["objectType"]] != null) {
+                    var objectType = displayData["objectType"];
+                    component.set("v.objectType", objectType);
+                    cardFieldsArray = cardFields[objectType];
+    
+                    component.set("v.iconName", "standard:account");
+    
+                    if (objectType != null && objectIcons[objectType] != null) {
+                        component.set("v.iconName", objectIcons[objectType]);
+                    }
+                    else {
+                        component.set("v.iconName", "standard:account");
+                    }
+                }
+                else {
+                    if (cardFields["default"] != null) {
+                        cardFieldsArray = cardFields["default"];
+                    }
+                }
+    
+                component.set("v.recordId", helper.extractRecordRoleField(displayData, "id"));
+                component.set("v.card1", helper.extractRecordRoleField(displayData, "name"));
+    
+                console.log(extractedDisplayValues);
+                component.set("v.parsedCardFields", extractedDisplayValues);  
+    
+    
+            }
+
         }
 
         if (topic == "ChartMouseOut")

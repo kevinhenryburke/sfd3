@@ -666,21 +666,35 @@
         var ColorsValues = _this.getCache (component, LeafParent + "ColorsValues" + objectType) ;
         var ColorsNames = _this.getCache (component, LeafParent + "ColorsNames" + objectType) ;
 
-        for (var i = 0; i < ColorsValues.length; i++) {
-            if (colorBy == "size") {
+
+        if (colorBy == "size") {
+            for (var i = 0; i < ColorsValues.length; i++) {
                 if (d.data.size != null && d.data.size >= ColorsValues[i]) {
                     color = ColorsNames[i];
                 } else {
                     break;
                 }
             }
-            else { 
+        }
+
+        if (colorBy != "size") {
+            // a few assumptions here, i.e. that it is a text field we are coloring by and that the configuration list is complete
+            var colorValueInRecord;
+
+            // first retrieve the value of the coloring field from the record
+            for (var i = 0; i < d.data.fields.length; i++) {
+                var field = d.data.fields[i];
+                if (field.api == colorBy) {
+                    colorValueInRecord = field.retrievedValue;
+                }
+            }
+    
+            // then match it up with the correct color.
+            for (var i = 0; i < ColorsValues.length; i++) {
                 // going by a textual value - default to the first color in the list
                 // TODO could add in a default in the config string?
                 color = ColorsNames[0];
-                console.log("ttt: ");
-                console.log(d);
-                if (d.data.otherFields[colorBy] == ColorsValues[i]) {
+                if (colorValueInRecord == ColorsValues[i]) {
                     console.log("colorBy Match: " + colorBy);
                     color = ColorsNames[i];
                     break;

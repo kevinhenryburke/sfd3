@@ -1,10 +1,11 @@
 public with sharing class HierarchyConfiguration  {
 
     public HierarchyConfiguration() {
-
+        System.debug('HierarchyConfiguration constructor');
     }
 
     public HierarchyConfiguration(String chartType) {
+        System.debug('HierarchyConfiguration constructor');
         this.chartType = chartType;
     }
 
@@ -24,7 +25,39 @@ public with sharing class HierarchyConfiguration  {
 
         // Salesforce standard fields like id and name must be included plus other depending on chartType.
         // Some concept of a parent will be needed for hierarchies for example
-        public List<String> otherFields = new List<String>();
+
+
+/*
+Tenerife notes on otherFields 
+
+This is just a list of fields
+Parsed in from config and parsed in HierarchyConfiguration as part of an ObjectConfiguration
+This then gets added to a HierarchyStructure for output - it is no longer used at all to construct queries etc.
+And then gets passed to javascript: chartHierarchyHelper and panelDisplayController
+
+How to refactor?
+1) - stop referencing otherFields in the component configuration and use component display fields in the newer configuraiton mechanims
+In HierarchyQuery use the new configuration to push the fields instead of the old config - simplest might be just to push them all and forget about dispaly parameter first
+
+2) - where we d.data.otherFields we should be having d.data.fields. This would need to reflect in both javascript and apex
+Add members - retrievedValue, retrievedInteger etc - to FieldConfiguration
+So HierarchyStructure references could then utilise "fields" member rather than "otherFields" member.
+
+2a) - populate both otherFields and fields.retrievedValue on HierarchyStructure initially
+Then migrate chartHierarcnyHelper to refer to fields rather than otherFields
+
+2b) need to stop passing the otherFields through to display component - need to use fields and let the display components determine what they should show in their configuration!!
+
+2c) - migrate away completely from otherFields
+
+3) add a filtering on the "Display parameter" 
+
+
+STATUS - 1 is done.
+
+
+
+*/
 
         public String orderByField = null;
 
@@ -44,6 +77,14 @@ public with sharing class HierarchyConfiguration  {
         public boolean isValid () {
             return true;
         }
+
+        public void setFieldTypes(){
+            for (HierarchyConfiguration.FieldConfiguration field : this.fields) {
+                field.fieldType = HierarchyConfiguration.getFieldType(this.objectType, field.api);
+                System.debug('oc.setFieldTypes field.fieldType: ' + this.objectType + '.' + field.api + '=' + field.fieldType);
+            }
+        }
+
     }
 
     public class FieldConfiguration {
@@ -51,6 +92,14 @@ public with sharing class HierarchyConfiguration  {
         public String role;
         public boolean display;
         public boolean orderByField = false;
+
+        public String fieldType; // not part of the configuratiom but computed
+
+        // not part of the configuration but returned from the queries
+        public String retrievedValue; 
+        public Integer retrievedInteger; 
+        public Double retrievedCurrency; 
+        public Datetime retrievedDatetime; 
     }
 
     public static HierarchyConfiguration deserialize (String JSONString) {
@@ -87,7 +136,15 @@ public with sharing class HierarchyConfiguration  {
             }
         }
         // this is an explicitly configured level so we return
+        ObjectConfiguration oc = loc[thisLevel];
         return loc[thisLevel];
+    }
+
+    public static String getFieldType(String objectType, String fieldName){
+        Schema.SObjectType t = Schema.getGlobalDescribe().get(objectType);    
+        Schema.DescribeSObjectResult r = t.getDescribe();
+        Schema.DescribeFieldResult f = r.fields.getMap().get(fieldName).getDescribe();
+        return f.getType().name(); 
     }
 
 

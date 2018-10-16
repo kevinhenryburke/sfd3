@@ -1,5 +1,7 @@
 // Represents a Hierarchical data structure. A record of each type represents a node in reality (and the structure beneath that node)
 
+// TODO - poor name, consider a refactor, this is a HierarchyStructureElement or Node rather than the structure
+
 public with sharing class HierarchyStructure {
 
     /* 
@@ -18,7 +20,11 @@ public with sharing class HierarchyStructure {
     public String objectType; // the type of the sObject referenced.
     public Integer level; // level down we have reached in teh structure
 
-    public Map<String,String> otherFields; // map of additional field names and values passed through to the front end
+    // the value retrieved for this record
+    public String retrievedValue; 
+    public Integer retrievedInteger; 
+    public Double retrievedCurrency; 
+    public Datetime retrievedDatetime; 
 
     public List<HierarchyStructure> children;   // child records
 

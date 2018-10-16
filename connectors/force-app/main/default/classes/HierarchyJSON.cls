@@ -1,10 +1,18 @@
 public with sharing class HierarchyJSON {
 
+    /* 
+    This class represents data structures that are passed back to the front end via serialization.
+    It bears a huge similarity to the HierarchyStructure and most of the code herein is mapping HS to HJ
+    
+    Tenerife - is it worth seeing if this could be got rid of - the original reason was that there were structures
+    that the front end could not interpret properly. Is it worth trying to see if those could be nulled before serializing?
+
+    */
+
     public String id; // a unique id - typically a Salesforce record id
     public String name; // the name of the record
     public Decimal size; // a metric associated with the record (optional)
     public String objectType; // the type of the sObject referenced.
-    public Map<String,String> otherFields; // map of additional field names and values passed through to the front end
     public List<HierarchyConfiguration.FieldConfiguration> fields = new List<HierarchyConfiguration.FieldConfiguration> ();
     
     public Integer level; // current level in the structure
@@ -24,7 +32,6 @@ public with sharing class HierarchyJSON {
         hj.level = hs.level;
         hj.childDepth = 0;
         hj.objectType = hs.objectType;
-        hj.otherFields = hs.otherFields;
         hj.fields = hs.fields;
 
         if (hs.children != null) {
@@ -71,6 +78,14 @@ public with sharing class HierarchyJSON {
         System.debug(LoggingLevel.ERROR,JSON.serializePretty(hj,true));
         return hj;
     }
+
+    /* Tenerife 
+    createAdoptedChildren methods are only used in one non-test scenario in DThree class and there is a note there
+    that it's not the right way to do it and should use the same technique in returnDataPackUpdate as for returnDataPack
+    Recommend attempting to get rid of these methods completely.
+    */
+
+
 
     // Adds new level to the chart
     public static List<HierarchyJSON> createAdoptedChildren (HierarchyConfiguration hc, Set<ID> parentLevelIds, Integer thisLevel ) {
