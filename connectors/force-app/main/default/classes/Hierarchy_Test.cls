@@ -99,7 +99,7 @@ public with sharing class Hierarchy_Test {
         '        }';
 
         HierarchyConfiguration.ObjectConfiguration oc = (HierarchyConfiguration.ObjectConfiguration)JSON.deserialize(queryJSON, HierarchyConfiguration.ObjectConfiguration.class);
-        hc.loc.add(oc);
+        hc.objectLevels.add(oc);
         return hc;        
 
 
@@ -187,7 +187,7 @@ public with sharing class Hierarchy_Test {
     @IsTest
     public static void getLevelNonRecursive() {
         HierarchyConfiguration hc = factoryConfig();
-        hc.loc[0].recursive = false;
+        hc.objectLevels[0].recursive = false;
         System.debug(LoggingLevel.ERROR,JSON.serializePretty(hc,false));
         System.assertEquals('Account',hc.getLevel(0).objectType); 
         System.assertEquals(null,hc.getLevel(1)); 

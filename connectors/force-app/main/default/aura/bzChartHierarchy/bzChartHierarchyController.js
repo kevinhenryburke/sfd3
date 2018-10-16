@@ -16,7 +16,7 @@ masterConfigObject =
             "initialLevelsToRetrieve": 2,
             "chartType": "Hierarchy",
 
-            "loc": [{
+            "objectLevels": [{
                 "terminal": false,
                 "recursive": true,
                 "fields": [

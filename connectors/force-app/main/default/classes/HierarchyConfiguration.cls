@@ -16,7 +16,7 @@ public with sharing class HierarchyConfiguration  {
     // levels to retrieve in initial query
     public Integer initialLevelsToRetrieve;
     // maps an object name to its configuration object.
-    public List<ObjectConfiguration> loc = new List<ObjectConfiguration>();
+    public List<ObjectConfiguration> objectLevels = new List<ObjectConfiguration>();
 
     public class ObjectConfiguration {
 
@@ -25,39 +25,6 @@ public with sharing class HierarchyConfiguration  {
 
         // Salesforce standard fields like id and name must be included plus other depending on chartType.
         // Some concept of a parent will be needed for hierarchies for example
-
-
-/*
-Tenerife notes on otherFields 
-
-This is just a list of fields
-Parsed in from config and parsed in HierarchyConfiguration as part of an ObjectConfiguration
-This then gets added to a HierarchyStructure for output - it is no longer used at all to construct queries etc.
-And then gets passed to javascript: chartHierarchyHelper and panelDisplayController
-
-How to refactor?
-1) - stop referencing otherFields in the component configuration and use component display fields in the newer configuraiton mechanims
-In HierarchyQuery use the new configuration to push the fields instead of the old config - simplest might be just to push them all and forget about dispaly parameter first
-
-2) - where we d.data.otherFields we should be having d.data.fields. This would need to reflect in both javascript and apex
-Add members - retrievedValue, retrievedInteger etc - to FieldConfiguration
-So HierarchyStructure references could then utilise "fields" member rather than "otherFields" member.
-
-2a) - populate both otherFields and fields.retrievedValue on HierarchyStructure initially
-Then migrate chartHierarcnyHelper to refer to fields rather than otherFields
-
-2b) need to stop passing the otherFields through to display component - need to use fields and let the display components determine what they should show in their configuration!!
-
-2c) - migrate away completely from otherFields
-
-3) add a filtering on the "Display parameter" 
-
-
-STATUS - 1 is done.
-
-
-
-*/
 
         public String orderByField = null;
 
@@ -115,17 +82,17 @@ STATUS - 1 is done.
     // returns the configuration in the ith position. If the list is of shorter length then returns the final element if that element is marked as recursive
     // otherwise returns null
     public ObjectConfiguration getLevel(Integer thisLevel) {
-        Integer arrayMaxIndex = loc.size() -1;
+        Integer arrayMaxIndex = objectLevels.size() -1;
 
         System.debug('thisLevel: ' + thisLevel);
         System.debug('arrayMaxIndex: ' + arrayMaxIndex);
-        System.debug('loc: ' + loc);
+        System.debug('objectLevels: ' + objectLevels);
 
         if (thisLevel > arrayMaxIndex) {
             System.debug('gone beyond end of array so check if recursive');
 
             // this is not an explicitly configured level but we can still return the final configured level if that level is recursive
-            ObjectConfiguration lastOC = loc[arrayMaxIndex];
+            ObjectConfiguration lastOC = objectLevels[arrayMaxIndex];
             System.debug('lastOC: ' + lastOC);
             if (lastOC.recursive == true) {
                 System.debug('recursive');
@@ -136,8 +103,8 @@ STATUS - 1 is done.
             }
         }
         // this is an explicitly configured level so we return
-        ObjectConfiguration oc = loc[thisLevel];
-        return loc[thisLevel];
+        ObjectConfiguration oc = objectLevels[thisLevel];
+        return objectLevels[thisLevel];
     }
 
     public static String getFieldType(String objectType, String fieldName){

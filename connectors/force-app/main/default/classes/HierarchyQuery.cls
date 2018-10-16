@@ -14,103 +14,6 @@ public with sharing class HierarchyQuery {
         this.oc.setFieldTypes();
     }
 
-
-    public List<HierarchyStructure> addChildStructures (List<sObject> childObjects) {
-
-        List<HierarchyStructure> childStructures = new List<HierarchyStructure>();
-
-        for (sObject s : childObjects) {
-            id parentId;
-            HierarchyStructure hsParent;
-            HierarchyStructure hs; 
-
-            for (HierarchyConfiguration.FieldConfiguration field : oc.fields) {
-                if (field.role == 'parentId') {
-                    System.debug('it is a parentId field');
-                    parentId = s.get(field.api).toString();
-                    hsParent = top.getHierarchyStructureById(parentId);
-                    hs = new HierarchyStructure(hsParent); 
-                }
-            }
-
-            // using the full field configuration
-            System.debug('oc.fields.length() ' + oc.fields.size());
-
-            hs.fields = new List<HierarchyConfiguration.FieldConfiguration>();
-
-            for (HierarchyConfiguration.FieldConfiguration fc : oc.fields) {
-
-                HierarchyConfiguration.FieldConfiguration field = new HierarchyConfiguration.FieldConfiguration();
-
-                field.api = fc.api;
-                field.role = fc.role;
-                field.display = fc.display;
-                field.orderByField = fc.orderByField;
-                field.fieldType = fc.fieldType;
-
-                System.debug('field.role: ' + field.role);
-
-                if (fc.role == 'id') {
-                    hs.id = s.get(fc.api).toString();
-                }
-                if (fc.role == 'parentId') {
-                    parentId = s.get(fc.api).toString();
-                }
-                if (fc.role == 'name') {
-                    hs.name = s.get(fc.api).toString();
-                }
-                if (fc.role == 'size') {
-                    hs.size = (Decimal) s.get(fc.api);
-                }
-                if (fc.role == 'none') {
-                    String mapValue = '';
-                    if (s.get(fc.api) != null) {
-                        mapValue = s.get(fc.api).toString();
-                    }
-                    field.retrievedValue = mapValue;
-                }
-                System.debug(field);
-
-                /* Set the appropriate value field */
-
-                if (s.get(field.api) != null) {
-                    if (field.fieldType == 'STRING' || field.fieldType == 'ID' || field.fieldType == 'REFERENCE' || field.fieldType == 'PICKLIST') {
-                        field.retrievedValue = s.get(field.api).toString();
-                    }
-                    if (field.fieldType == 'DATETIME') {
-                        field.retrievedDatetime = (Datetime) s.get(field.api);
-                    }
-                    if (field.fieldType == 'CURRENCY') {
-                        field.retrievedCurrency = (Decimal) s.get(field.api);
-                    }
-                    if (field.fieldType == 'INTEGER') {
-                        field.retrievedInteger = (Integer) s.get(field.api);
-                    }
-                }
-
-                hs.fields.add(field);
-
-            }
-
-            hs.objectType = s.getSObjectType().getDescribe().getName();            
-            hs.parent = hsParent;
-
-            childStructures.add(hs);
-        }
-
-        System.debug('addChildStructures loop start:' + childStructures.size());
-
-        // This is not at all efficient - should group into common parents and add children that way
-        // currently is taking 0.06 seconds for 120 iterations - so 1700 per second. Good enough probably
-        for (HierarchyStructure hs : childStructures) {
-            List<HierarchyStructure> newChildren = new List<HierarchyStructure>{hs};
-            hs.parent.addChildren(newChildren);
-        }
-
-        System.debug('addChildStructures loop end:' + childStructures.size());
-        return childStructures;
-    }
-
     public String createQueryString (Set<Id> queryIds, boolean queryParents) {
 
         // using the full field configuration
@@ -157,6 +60,48 @@ public with sharing class HierarchyQuery {
     }
 
 
+    public List<HierarchyStructure> createChildStructures (List<sObject> childObjects) {
+
+        List<HierarchyStructure> childStructures = new List<HierarchyStructure>();
+
+        for (sObject s : childObjects) {
+            id parentId;
+            HierarchyStructure hsParent;
+            HierarchyStructure hs; 
+
+            for (HierarchyConfiguration.FieldConfiguration field : oc.fields) {
+                if (field.role == 'parentId') {
+                    System.debug('it is a parentId field');
+                    parentId = s.get(field.api).toString();
+                    hsParent = top.getHierarchyStructureById(parentId);
+                    hs = new HierarchyStructure(hsParent); 
+                }
+            }
+
+            // using the full field configuration
+            System.debug('oc.fields.length() ' + oc.fields.size());
+
+            processFieldsToStructure (s, hs, oc.fields);
+
+            hs.parent = hsParent;
+
+            childStructures.add(hs);
+        }
+
+        System.debug('createChildStructures loop start:' + childStructures.size());
+
+        // This is not at all efficient - should group into common parents and add children that way
+        // currently is taking 0.06 seconds for 120 iterations - so 1700 per second. Good enough probably
+        for (HierarchyStructure hs : childStructures) {
+            List<HierarchyStructure> newChildren = new List<HierarchyStructure>{hs};
+            hs.parent.addChildren(newChildren);
+        }
+
+        System.debug('createChildStructures loop end:' + childStructures.size());
+        return childStructures;
+    }
+
+
     public HierarchyStructure createTopStructure (Id id) {
 
         Set<ID> queryIds = new Set<Id>{id};
@@ -170,30 +115,7 @@ public with sharing class HierarchyQuery {
         // using the full field configuration
         System.debug('oc.fields.length() ' + oc.fields.size());
 
-        for (HierarchyConfiguration.FieldConfiguration field : oc.fields) {
-            if (field.role == 'id') {
-                System.debug('it is an id field');
-                hs.id = s.get(field.api).toString();
-                System.debug('it is an id value: ' + hs.id);
-            }
-            if (field.role == 'name') {
-                System.debug('it is a name field');
-                hs.name = s.get(field.api).toString();
-            }
-            if (field.role == 'size') {
-                System.debug('it is a size field');
-                hs.size = (Decimal) s.get(field.api);
-            }
-            if (field.role == 'none') {
-                System.debug('top: it is a none field: ' + s.get(field.api));
-                String mapValue = '';
-                if (s.get(field.api) != null) {
-                    mapValue = s.get(field.api).toString();
-                }
-            }
-        }
-
-        hs.objectType = s.getSObjectType().getDescribe().getName();
+        processFieldsToStructure (s, hs, oc.fields);
 
         return hs;
     }
@@ -252,7 +174,7 @@ public with sharing class HierarchyQuery {
             top.id = parentId;      
 
             HierarchyQuery hq = new HierarchyQuery(top, hc, level + 1);
-            List<HierarchyStructure> listNextLevelHS = hq.addChildStructures(siblings); // this should map new level nodes to their parents
+            List<HierarchyStructure> listNextLevelHS = hq.createChildStructures(siblings); // this should map new level nodes to their parents
 
             HierarchyJSON hj = HierarchyJSON.mapHierarchyStructure (top);
 
@@ -274,6 +196,71 @@ public with sharing class HierarchyQuery {
         return retList;
 
     }
+
+    public static void mapRetrievedValues (sObject s, HierarchyConfiguration.FieldConfiguration field) {
+        if (s.get(field.api) != null) {
+            if (field.fieldType == 'STRING' || field.fieldType == 'ID' || field.fieldType == 'REFERENCE' || field.fieldType == 'PICKLIST') {
+                field.retrievedValue = s.get(field.api).toString();
+            }
+            if (field.fieldType == 'DATETIME') {
+                field.retrievedDatetime = (Datetime) s.get(field.api);
+            }
+            if (field.fieldType == 'CURRENCY') {
+                field.retrievedCurrency = (Decimal) s.get(field.api);
+            }
+            if (field.fieldType == 'INTEGER') {
+                field.retrievedInteger = (Integer) s.get(field.api);
+            }
+        }
+    }
+
+    public static void mapKeyFields (sObject s, HierarchyConfiguration.FieldConfiguration fc, HierarchyStructure hs) {
+        if (s.get(fc.api) != null) {
+            if (fc.role == 'id') {
+                hs.id = s.get(fc.api).toString();
+            }
+            if (fc.role == 'parentId') {
+                hs.parentId = s.get(fc.api).toString();
+            }
+            if (fc.role == 'name') {
+                hs.name = s.get(fc.api).toString();
+            }
+            if (fc.role == 'size') {
+                hs.size = (Decimal) s.get(fc.api);
+            }
+        }
+    }
+
+
+    public static void processFieldsToStructure (sObject s, HierarchyStructure hs, List<HierarchyConfiguration.FieldConfiguration> listfc) {
+        hs.fields = new List<HierarchyConfiguration.FieldConfiguration>();
+
+        for (HierarchyConfiguration.FieldConfiguration fc : listfc) {
+
+            HierarchyConfiguration.FieldConfiguration field = new HierarchyConfiguration.FieldConfiguration();
+
+            field.api = fc.api;
+            field.role = fc.role;
+            field.display = fc.display;
+            field.orderByField = fc.orderByField;
+            field.fieldType = fc.fieldType;
+
+            System.debug('field.role: ' + field.role);
+
+            /* Set the key fields like id, size, name */
+            mapKeyFields (s, fc, hs);
+
+            /* Set the appropriate retrieved value field */
+            mapRetrievedValues (s, field);
+
+            hs.fields.add(field);
+
+        }
+        hs.objectType = s.getSObjectType().getDescribe().getName();            
+
+    }
+
+
 
 
 }

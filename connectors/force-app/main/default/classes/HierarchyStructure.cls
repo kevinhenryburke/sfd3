@@ -15,6 +15,7 @@ public with sharing class HierarchyStructure {
     /* Data returned from the output structure */
  
     public String id; // a unique id - typically a Salesforce record id
+    public String parentId; // a unique id - typically a Salesforce record id
     public String name; // the name of the record
     public Decimal size; // a metric associated with the record (optional)
     public String objectType; // the type of the sObject referenced.

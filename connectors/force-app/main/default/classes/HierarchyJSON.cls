@@ -4,7 +4,7 @@ public with sharing class HierarchyJSON {
     This class represents data structures that are passed back to the front end via serialization.
     It bears a huge similarity to the HierarchyStructure and most of the code herein is mapping HS to HJ
     
-    Tenerife - is it worth seeing if this could be got rid of - the original reason was that there were structures
+    Is it worth seeing if this could be got rid of - the original reason was that there were structures
     that the front end could not interpret properly. Is it worth trying to see if those could be nulled before serializing?
 
     */
@@ -66,7 +66,7 @@ public with sharing class HierarchyJSON {
 
             List<sObject> childObjects = hq.runQuery ( parentLevelIds);
 
-            List<HierarchyStructure> listNextLevelHS = hq.addChildStructures(childObjects); // this should map new level nodes to their parents
+            List<HierarchyStructure> listNextLevelHS = hq.createChildStructures(childObjects); // this should map new level nodes to their parents
             parentLevelIds = new Set<Id>();
             for (HierarchyStructure hs : listNextLevelHS) {
                 // make the next level ids the parents for the next iteration to get the level below this
