@@ -20,7 +20,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>dataSourceMethod</name>
-                <value>c.returnData</value>
+                <value>c.returnNetworkInitial</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>showBanner</name>
@@ -120,7 +120,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>dataSourceMethod</name>
-                <value>c.returnDataNodesOnly</value>
+                <value>c.returnUnlinkedData</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>showBanner</name>

@@ -20,10 +20,11 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>dataSourceMethod</name>
-                <value>c.returnData</value>
+                <value>c.returnNetworkInitial</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>dataUpdateMethod</name>
+                <value>c.returnNetworkUpdate</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>primaryNodeInitialization</name>

@@ -10,8 +10,8 @@ masterConfigObject =
 {
     "data": {
         "dataFormat": "HierarchyJSON",
-        "dataSourceMethod": "c.returnDataPack",
-        "dataUpdateMethod": "c.returnDataPackUpdate",
+        "dataSourceMethod": "c.returnHierarchyTop",
+        "dataUpdateMethod": "c.returnHierarchyLevels",
         "queryJSON": {
             "initialLevelsToRetrieve": 2,
             "chartType": "Hierarchy",

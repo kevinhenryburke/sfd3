@@ -24,7 +24,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>dataSourceMethod</name>
-                <value>c.returnDataPack</value>
+                <value>c.returnHierarchyTop</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>dataUpdateMethod</name>

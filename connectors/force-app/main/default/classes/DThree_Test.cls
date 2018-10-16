@@ -2,8 +2,8 @@
 public class DThree_Test {
 /*
  @IsTest
- public static void returnData() {
- DThree.returnData();
+ public static void returnNetworkInitial() {
+ DThree.returnNetworkInitial();
  }
  */ 
 

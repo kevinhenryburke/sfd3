@@ -81,7 +81,7 @@ public with sharing class HierarchyJSON {
 
     /* Tenerife 
     createAdoptedChildren methods are only used in one non-test scenario in DThree class and there is a note there
-    that it's not the right way to do it and should use the same technique in returnDataPackUpdate as for returnDataPack
+    that it's not the right way to do it and should use the same technique in returnHierarchyLevels as for returnHierarchyTop
     Recommend attempting to get rid of these methods completely.
     */
 
