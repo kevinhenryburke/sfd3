@@ -67,13 +67,8 @@
     flattenJson : function(component, topnode, datajsonFlat, datajsonSet, isTop) {
         var _this = this;
 
-        if (isTop == true) {
-            console.log("flattenJson enter - top");
-        }
-
         // this is intended to cope with updated nodes...
         if (Array.isArray(topnode) == true) {
-            console.log("flattenJson - break down array input");
             for (var i=0; i < topnode.length; i++ ) {
                 _this.flattenJson(component, topnode[i], datajsonFlat, datajsonSet, false);
             }
@@ -102,7 +97,6 @@
         if (isTop == true) {
             component.set("v.datajsonFlat", datajsonFlat);
             component.set("v.datajsonSet", datajsonSet);
-            console.log("flattenJson exit - top");
         }
     },
 

@@ -62,11 +62,9 @@
         var parentUserComponentIdFromEvent = event.getParam("parentUserComponentId");
         var parentUserComponentId = component.get("v.parentUserComponentId");
         if (parentUserComponentId != parentUserComponentIdFromEvent) {
-            console.log("customLookup: ignoring event: " + parentUserComponentId + "/" + parentUserComponentIdFromEvent);
+            // console.log("customLookup: ignoring event: " + parentUserComponentId + "/" + parentUserComponentIdFromEvent);
         } 
         else {
-            console.log("customLookup: event received");
-
             component.set("v.selectedRecord" , selectedAccountGetFromEvent); 
             
             var forclose = component.find("lookup-pill");
@@ -85,8 +83,6 @@
      },
 
      handle_evt_sfd3  : function(component, event, helper) {
-        console.log('customLookup: handle_evt_sfd3 enter');
-
         var _this = this;
         var topic, parameters, controller; // TODO - for application events this needs to consider controller
 
@@ -95,14 +91,14 @@
         var argumentsParameter = event.getParam("arguments");
 
         if (argumentsParameter != null) {
-            bzutils.log('controller: invoked from method');
+            bzutils.log('customLookup: invoked from method');
             var tpc = argumentsParameter.tpc;
             topic = tpc.topic;
             parameters = tpc.parameters;
             controller = tpc.controller;
         }
         else {
-            bzutils.log('chartArea: invoked from event');
+            console.log('customLookup: invoked from event');
             topic = event.getParam("topic");
             parameters = event.getParam("parameters");
             controller = event.getParam("controller");    
@@ -116,8 +112,6 @@
 
             helper.flattenJson(component, datajson,datajsonFlat, datajsonSet, true);
         }
-
-        console.log('customLookup: handle_evt_sfd3 exit');
     },
      
 

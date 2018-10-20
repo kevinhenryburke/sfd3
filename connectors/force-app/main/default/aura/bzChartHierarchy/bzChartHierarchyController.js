@@ -146,7 +146,7 @@ masterConfigObject =
     /* receive a bubbled component event and distribute this to required children */
 
     handle_evt_sfd3  : function(component, event, helper) {
-        bzutils.log('bzChartHierarchy: handle_evt_sfd3 enter');
+        console.log('bzChartHierarchy: handle_evt_sfd3 enter');
 
         var topic = event.getParam("topic");
         var parameters = event.getParam("parameters");

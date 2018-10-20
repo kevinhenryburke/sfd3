@@ -1,11 +1,8 @@
 ({
     areaInit: function (component) {
         console.log("areaInit enter");
-
         var masterConfigObject = JSON.parse(component.get("v.masterConfig"));
         component.set("v.masterConfigObject", masterConfigObject);
-
-        console.log("areaInit exit");
     },
 
     // first method called after all resources are ready
@@ -41,17 +38,14 @@
         var divComponent = component.find("container1"); // this should be ok as it's an internal search, need to prefix with a unique id is required outside of lightning context
         var divElement = divComponent.getElement();
         var clientWidth = divElement.clientWidth;        
-        console.log("chartArea: set width: " + clientWidth);
         _this.setCache (component, "width", clientWidth) ; 
 
         // Height we hard code depending on the flexible page width 
         var flexiWidth = component.get("v.flexiWidth");
-        console.log("flexiWidth: " + flexiWidth);
 
         if (flexiWidth == null) {
             // this is the case when not embedded in a Lightning Page - e.g. in aura preview
             flexiWidth = "MEDIUM";
-            console.log("defaulting flexiWidth: " + flexiWidth);
         }
 
         if (flexiWidth == "SMALL")
@@ -101,8 +95,6 @@
         }
         _this.setCache (component, "appEvents",  appEvents) ;
 
-        console.log("chartArea: doneRenderLoad exit");
-
     },
 
     // unsophisticated version is to remove everything and re-initialize
@@ -146,7 +138,7 @@
 
 // cOME BACK
         // merge the old and the new data
-        console.log("PreProcess data - not right yet - need to update this method to return nothing");
+        // "PreProcess data - not right yet - need to update this method to return nothing"
 //        bzutils.xfcr("dataPreProcess", componentReference, datajson, datajsonRefresh); // preprocessing of data (if any)
         cc.dataPreprocess(datajson, datajsonRefresh);
 
@@ -158,7 +150,6 @@
 
         cc.initializeVisuals();
 
-        console.log("chartArea: exit refreshData");
     },    
 
 	initializeGroups: function (component, datajson, currentMeasure, primaryNodeId, showFilters, isInit) {
@@ -177,8 +168,6 @@
         var hasPrimaryNode = _this.getCache (component, "hasPrimaryNode") ;
         // var hasPrimaryNode = component.get("v.hasPrimaryNode") ;
         if (hasPrimaryNode == true) {
-            console.log("hasPrimaryNode true");
-            console.log("hasPrimaryNode id: " + primaryNodeId);
             primaryNodeId = _this.addComponentRef(componentReference, primaryNodeId);
             _this.setCache (component, "primaryNodeId", primaryNodeId ) ;
         }
@@ -191,9 +180,7 @@
         _this.setCache (component, "showFilters", showFilters ) ;
 
 		var svg = d3.select(_this.getDivId("svg", componentReference, true));
-		
-		console.log("svg is defined ... "); 
-        
+		        
         // Styling of tooltips - see GitHub prior to Feb 24, 2018
         var pathToolTipDivId = _this.addComponentRef(componentReference, "pathToolTip");
         var pathToolTipDiv = d3.select("#" + pathToolTipDivId);
@@ -333,7 +320,6 @@
     },
 
     handleScaleChange: function(component,csf){
-        bzutils.log("helper: handleScaleChange enter");
         component.set("v.ChartScaleFactor", csf);
         var cc = component.getConcreteComponent();
         cc.reScale(csf);                 
@@ -344,15 +330,13 @@
         var _this = this;
         if (preppedEvent != null) {
             var event;
-            console.log("publishPreppedEvent: enter "+ preppedEvent.topic + " and " + preppedEvent.eventType);
 
             if (preppedEvent.eventType != null) {
-                // go with preset value
-                console.log("publishPreppedEvent: override eventType: " + preppedEvent.eventType);
+                // go with provided eventType
             }
             else {
+                // use the default eventType
                 preppedEvent.eventType = component.get("v.defaultEventType");
-                console.log("publishPreppedEvent: use default eventType: " + preppedEvent.eventType);
             }
 
             if (preppedEvent.eventType == "Component"){
@@ -372,31 +356,28 @@
         }
     },
 
+    // reset cache of events for mouseover events to publish - may be a better way to do this!
+    // the issue is that only the top orginally created nodes have lightning context, not sure why
+    // alternative would be to pass in a parameter for these nodes and push events only when the attribute is set
+
     restockCache : function(component) {
         var _this = this;
-        console.log("chartArea: restockCache enter:");
-
-        // reset cache of events for mouseover events to publish - may be a better way to do this!
-        // the issue is that only the top orginally created nodes have lightning context, not sure why
-        // alternative would be to pass in a parameter for these nodes and push events only when the attribute is set
 
         var appEvents = _this.getCache (component, "appEvents") ;
-        console.log("chartArea: push a new cache event length = " + appEvents.length);
+
+        var defaultEventType = component.get("v.defaultEventType");
+        console.log("chartArea: restockCache: push new cache events: " + appEvents.length + " of event type: " + defaultEventType);
 
         if (appEvents.length < 200) { // keep a cap on number of cached events
             for (var i = 0; i < 100; i++) {
 
-                var defaultEventType = component.get("v.defaultEventType");
                 var appEvent;
             
                 if (defaultEventType == "Application") {
-                    console.log("chartArea: push a new cache event Application");
                     appEvent = $A.get("e.c:evt_sfd3");
                 } 
                 else {
-                    console.log("chartArea: push a new cache event Component");
                     appEvent = component.getEvent("evt_bzc");
-//                    appEvent = $A.get("e.c:evt_sfd3");
                 }
             
                 appEvents.push(appEvent);
@@ -461,7 +442,6 @@
     
     setStore : function (component, key, value) {
         var store = component.get("v.storeObject");
-        console.log("store: " + store);
         store[key] = value;
     },
     
@@ -495,21 +475,17 @@
         var lastQueriedItem = "";
         for (var i=0; i<args.length;i++) {
             if (loopJson.hasOwnProperty([args[i]])) {
-                console.log("loopJson: " + args[i]);
                 loopJson = loopJson[args[i]];
                 lastQueriedItem = args[i];
             }
             else {
-                console.log("hasMasterParam exit: false");
                 return false;
             }    
         }
-        console.log("hasMasterParam exit: true: " + lastQueriedItem);
         return true;
     },
 
     prepareEvent : function (component, topic, parameters) {
-        console.log("chartAreaHelper.prepareEvent enter");
         var _this = this;
         var controllerId = _this.getCache (component, "UserControllerComponentId") ;
         var eventType = bzutils.getEventTypeByTopic(topic);
@@ -522,21 +498,17 @@
     },
 
     setFilterVisibility : function (component, filterType, isShown) {
-        console.log("chartAreaHelper.setFilterVisibility enter");
         var _this = this;
         var showFilters = _this.getCache (component, "showFilters") ;
         if (isShown) {
-            console.log("setFilterVisibility: adding " + filterType);
             showFilters.push(filterType);
         } else {
-            console.log("setFilterVisibility: removing " + filterType);
             var index = showFilters.indexOf(filterType);
             if (index > -1) {
                 showFilters.splice(index, 1);
             }
         }
         _this.setCache (component, "showFilters", showFilters ) ;
-        console.log("chartAreaHelper.setFilterVisibility exit");
     },
     
     clearChart : function (componentReference) {
@@ -565,7 +537,6 @@
     },
     
     hasCache : function (component, key) {
-        console.log("chartAreaHelper.hasCache");
         var allkeys = component.get("v.TESTCACHE");
         return Object.keys(allkeys).includes(key);
     },

@@ -35,8 +35,8 @@
     // we need to avoid race condition between chart rendering and scripts loading, hence the checks in this method
     doneRendering: function(component, event, helper) {
         var rendered = component.get("v.rendered");
-        console.log('chartArea: doneRendering enter. Rendered: ' + rendered);   
         if (rendered == false) {
+            console.log('chartArea: doneRendering enter for first time');   
             var scriptsLoaded = component.get("v.scriptsLoaded");
             if (scriptsLoaded == true) {
                 console.log('chartArea: signalling ready from doneRendering');   
@@ -45,9 +45,8 @@
             else {
                 console.log('chartArea: doneRendering: scripts not loaded so publish RefreshEvent from afterScriptsLoaded');   
             }
+            component.set("v.rendered", true);
         }
-        component.set("v.rendered", true);
-        console.log('chartArea: doneRendering exit');   
     },
 
     // we need to avoid race condition between chart rendering and scripts loading, hence the checks in this method
@@ -60,7 +59,6 @@
             bzutils.log('chartArea: signalling ready from afterScriptsLoaded');   
             helper.doneRenderLoad(component);
         }        
-        bzutils.log('chartArea: afterScriptsLoaded exit');
     },
 
     /* handlers */
@@ -82,7 +80,6 @@
     },
 
     handleScaleChange: function(component,event,helper){
-        bzutils.log("handleScaleChange enter...");        
         var componentReference = component.get("v.componentReference");
 
         var csfp = component.get("v.ChartScaleFactorPercentage");
@@ -95,18 +92,14 @@
 
         var preppedEvent = helper.prepareEvent(component, "ReScale", eventParameters);
         helper.publishPreppedEvent(component,preppedEvent);
-
-//        helper.handleScaleChange(component,csf);
-        bzutils.log("handleScaleChange exit.");        
     },
 
     searchChart: function(component,event,helper){
-        bzutils.log("calling the aura:method searchChart in base");        
+        // bzutils.log("calling the aura:method searchChart in base");        
     },
 
 
     handle_evt_sfd3  : function(component, event, helper) {
-        bzutils.log('chartArea: handle_evt_sfd3 enter');
         var topic, parameters, controller;
         var cc = component.getConcreteComponent();
 
@@ -115,14 +108,14 @@
         var argumentsParameter = event.getParam("arguments");
 
         if (argumentsParameter != null) {
-            bzutils.log('chartArea: invoked from method');
+            console.log('chartArea: invoked from method');
             var tpc = argumentsParameter.tpc;
             topic = tpc.topic;
             parameters = tpc.parameters;
             controller = tpc.controller;
         }
         else {
-            bzutils.log('chartArea: invoked from event');
+            console.log('chartArea: invoked from event');
             topic = event.getParam("topic");
             parameters = event.getParam("parameters");
             controller = event.getParam("controller");    
@@ -263,12 +256,6 @@
                 helper.handleScaleChange(component,csf);
             }
         }
-
-
-
-
-
-        bzutils.log('chartArea: handle_evt_sfd3 exit');
     },
 
 
@@ -282,13 +269,13 @@
      },
 
      refreshVisibility: function(component,event,helper){
-        console.log("aura:method refreshVisibility in chartArea enter");
-        console.log("aura:method refreshVisibility in chartArea exit");
+        // console.log("aura:method refreshVisibility in chartArea enter");
+        // console.log("aura:method refreshVisibility in chartArea exit");
     },
 
     styleNodes: function(component,event,helper){
-        console.log("aura:method styleNodes in chartArea enter");
-        console.log("aura:method styleNodes in chartArea exit");
+        // console.log("aura:method styleNodes in chartArea enter");
+        // console.log("aura:method styleNodes in chartArea exit");
     }
 
 })

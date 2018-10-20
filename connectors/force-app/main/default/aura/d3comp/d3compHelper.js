@@ -4,37 +4,28 @@
 
         var _this = this;
         var initialized = component.get("v.initialized");
-        console.log("init:initialized: " + initialized);
 
         if (initialized != true) {
-            console.log("init:initializing config ");
-
             /* Configuration initialization */
             // TODO - review, this may be better hard coded but design parameter allows for some flexibility for end users
 
-            var configjson = JSON.parse(component.get("v.configjsonString"));
-            
-            console.log('configjson read from design parameter: ');
-            console.log(configjson);
+            var configjson = JSON.parse(component.get("v.configjsonString"));            
             component.set("v.configjson", configjson);
 
             for (var key in configjson) {  
                 var subObj = configjson[key];
-                console.log("here is a key layer 1: " + key);
 
                 if (key == "levels") {
                     component.set("v.configuredLevels", true);                    
                     // set the maximum number of levels
                     var maxlevels = configjson.levels;
-                    console.log("maxlevels:" + maxlevels);
                     if ((typeof maxlevels === 'number'))
                     {
-                        console.log("setting maxlevels from configuration: " + maxlevels);
                         component.set("v.maxlevels", maxlevels);          
                     }  
                     else
                     {
-                        console.log("using default maxlevels ");
+                        // using default maxlevels
                     }
                 }
                 if (key == "filtertypes") {
@@ -73,22 +64,15 @@
                 
 
                 // this may be required if we need to go down another level in the future.
-                console.log("here is a subObj layer 1: " + JSON.stringify(subObj));
                 for (var subKey in subObj) {
-                    console.log("here is a key layer 2: " + subKey);
-                    console.log("here is a subObj layer 2: " + JSON.stringify(subObj[subKey]));
+                    // possible future requirement
                 }
-            }            
-
-
-                
+            }                            
 
             // underlying data parsed to JSON object
             console.log("init:initializing data ");
             var datajson = JSON.parse(datastring);
             component.set("v.datajson", datajson);
-            console.log('datajson');
-            console.log(datajson);
 
             // primary node - this is interesting as could be provided by datajson or config (e.g. on a record detail page)
             var primaryNodeInitialization = component.get("v.primaryNodeInitialization");
@@ -98,8 +82,6 @@
                 var panelPrimaryId = datajson.nodes[0].id;
                 component.set("v.panelPrimaryId", panelPrimaryId);            
             }
-
-            console.log("exit initializeConfig");
         }
     },
 
@@ -196,8 +178,6 @@
         var searchAction = component.get("v.searchAction");
         var showLevels = component.get("v.maxlevels");
 
-        console.log("publishSearchChartEvent: " + showLevels);
-
         var configEventParameters = { 
             "searchTermId" : searchTermId,
             "searchAction" : searchAction,
@@ -212,7 +192,6 @@
     },
 
     canIncreaseLevels : function(component) {
-        console.log("enter canIncreaseLevels");
         var _this = this;
 
         var currentLevels = component.get("v.currentLevels");
@@ -222,7 +201,6 @@
     },
     
     increaseLevels : function(component) {
-        console.log("enter increaseLevels");
         var _this = this;
         var canIncreaseLevels = _this.canIncreaseLevels(component);
 
@@ -230,7 +208,6 @@
         if (canIncreaseLevels) {
             var currentLevels = component.get("v.currentLevels");
             currentLevels++;
-            console.log("increasing levels to: " + currentLevels);
             component.set("v.currentLevels", currentLevels);
             var controllerId = component.get("v.UserComponentId");
             var preppedEvent = _this.prepareEvent("ShowLevelsMore", {"levels" : currentLevels}, controllerId);
@@ -239,15 +216,12 @@
     },
     
     decreaseLevels : function(component) {
-        console.log("enter decreaseLevels");
-
         var _this = this;
         var currentLevels = component.get("v.currentLevels");
 
         // publish event if it is valid to do so
         if (currentLevels > 1) {
             currentLevels--;
-            console.log("decreasing levels to: " + currentLevels);
             component.set("v.currentLevels", currentLevels);
             var controllerId = component.get("v.UserComponentId");
             var preppedEvent = _this.prepareEvent("ShowLevelsFewer", {"levels" : currentLevels}, controllerId);
@@ -259,7 +233,6 @@
     
     setConnectionLevelFewerButtons: function(component) {
         var _this = this;
-        console.log("enter setConnectionLevelFewer");
 
         // we have a different aura:id for the more button for when levels increase only or can decrease also.
         var moreButtonId = _this.getMoreButtonId(component);
@@ -280,7 +253,6 @@
 
     setConnectionLevelMoreButtons: function(component) {
         var _this = this;
-        console.log("enter setConnectionLevelMoreButtons");
         var currentLevels = component.get("v.currentLevels");
         var maxlevels = component.get("v.maxlevels");
 
@@ -303,7 +275,6 @@
 
     setConnectionLevelMaxButtons: function(component) {
         var _this = this;
-        console.log("enter setConnectionLevelMaxButtons");
         var maxlevels = component.get("v.maxlevels");
         component.set("v.currentLevels", maxlevels);
 
@@ -323,7 +294,6 @@
     setMeasure: function(component, measureIndex) {
         var configjson = component.get("v.configjson");
         var thisMeasure = configjson.measures[measureIndex - 1];
-        console.log("setMeasure: Measure=" + thisMeasure);
         component.set("v.panelCurrentMeasure", thisMeasure);
         return thisMeasure;
     },
@@ -382,7 +352,6 @@
     updateButtonStyles: function(cmp, prefix, selectedIndex, numberOfButtons) {
         var selectedButtonLabel = prefix + selectedIndex;
 
-        console.log("updateButtonStyles: other than " + selectedButtonLabel);
         for (var i = 1; i <= numberOfButtons; i++) { 
             var iteratedButtonLabel = prefix + i;
             var cmpTarget = cmp.find(iteratedButtonLabel);

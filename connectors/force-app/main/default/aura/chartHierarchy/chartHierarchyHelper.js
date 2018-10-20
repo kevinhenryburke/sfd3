@@ -183,13 +183,9 @@
             })
             .attr("text-anchor", function(d) {
                 var textAnchor = "middle";
-                console.log("check if root");
                 if (d.depth > 0) {
                     textAnchor = childLess(d) ? "start" : "end";
                 } 
-                else {
-                    console.log("it must be root");
-                }
                 return textAnchor;
             })
             .style("font", function(d) {
@@ -233,13 +229,9 @@
             })
             .attr("text-anchor", function(d) {
                 var textAnchor = "middle";
-                console.log("check if root");
                 if (d.depth > 0) {
                     textAnchor = childLess(d) ? "start" : "end";
                 } 
-                else {
-                    console.log("it must be root");
-                }
                 return textAnchor;
             })
             .style("font", function(d) {
@@ -359,14 +351,13 @@
     },
 
     setDepth : function (baseNode, baseNodeDepth) {
-    console.log("setDepth: " + baseNodeDepth);
-    var _this = this;
-    if(baseNode.children) {
-        baseNode.children.forEach(function(d) {
-            d.depth = baseNodeDepth + 1;
-            _this.setDepth(d,baseNodeDepth +1);            
-        });
-    }        
+        var _this = this;
+        if(baseNode.children) {
+            baseNode.children.forEach(function(d) {
+                d.depth = baseNodeDepth + 1;
+                _this.setDepth(d,baseNodeDepth +1);            
+            });
+        }        
     },
 
     // A way to get the path to an object - this is independent of the search box
@@ -461,7 +452,6 @@
     },
 
     merge : function(component, updatejson) {
-        bzutils.log("merge enter.");
         var componentReference = component.get("v.componentReference");
         var _this = this;
 
@@ -487,8 +477,6 @@
             var parentNode = _this.getNodeFromId(parentNodeId);
 
             if (parentNode == null) {
-                bzutils.log("parentNode is undefined - so assuming it is collapsed. Search down from the root node of the base hierarchy");
-
                 var ultimateRoot = _this.getCache (component, "root");
 
                 // try to find target node down from the root node
@@ -505,17 +493,14 @@
                 newchild.height = parentNode.height - 1;
                 _this.setDepth(newchild, newchild.depth);
                 if (parentNode.children) {
-                    bzutils.log("parentNode has open children");
                     parentNode.children.push(newchild);
                 }
                 else {
                     if (parentNode._children) {
-                        bzutils.log("parentNode has closed children");
                         parentNode._children.push(newchild);
                     }
                     else {
                         // falls through to this case if a node has no children defined but we now want to push children to it
-                        bzutils.log("parentNode has no children defined:" + parentNodeId);
                         parentNode._children = [];
                         parentNode.data.children = [];
                         parentNode._children.push(newchild);
@@ -528,7 +513,6 @@
 
             });        
         }
-        bzutils.log("merge exit");
     },    
 
 

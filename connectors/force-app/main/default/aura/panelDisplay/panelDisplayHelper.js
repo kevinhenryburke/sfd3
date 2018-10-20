@@ -2,7 +2,6 @@
 
     sectionExpandCollapseMaster : function(component, letter) {
         var _this = this;
-        console.log("sectionExpandCollapseMaster: " + letter);
         var sectionId = "expand" + letter;
         var expandComponent = component.find(sectionId);
         var isCollapsed = _this.sectionExpandCollapse(expandComponent);
@@ -15,10 +14,8 @@
     },
 
     sectionExpandCollapse : function(expandSection) {
-        console.log("sectionExpandCollapse: enter");
         var nowShow = $A.util.hasClass(expandSection, 'slds-show');
         var isCollapsed;
-        console.log(expandSection);
 
         if (nowShow == true) {
             $A.util.addClass(expandSection, 'slds-hide');
@@ -30,7 +27,6 @@
             $A.util.removeClass(expandSection, 'slds-hide');    
             isCollapsed = false;
         }
-        console.log("sectionExpandCollapse: exit");
         return isCollapsed;
     },
 
@@ -38,8 +34,6 @@
         var modalBody;
         var modalFooter;
         var modalHeader;
-
-        console.log("showModal: about to create components");
 
         $A.createComponents([
             ["c:modalPanelDisplayContent",{
@@ -55,7 +49,6 @@
                 modalBody = components[0];
                 modalFooter = components[1];
                 modalHeader = "Record Details: " + component.get("v.layoutType");
-                console.log("showModal: got body and footer");
                 component.find('overlayLib').showCustomModal({
                    header: modalHeader,
                    body: modalBody, 

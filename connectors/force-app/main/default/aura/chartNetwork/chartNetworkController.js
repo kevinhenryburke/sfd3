@@ -108,8 +108,6 @@
                     var index = showFilters.indexOf(p.type);
         
                     if (index > -1) {
-                        bzutils.log(p.sourceid + '/' + p.targetid + " will be visible");
-        
                         var indexsource = shownodeids.indexOf(p.sourceid);
                         if (indexsource == -1) {
                             shownodeids.push(p.sourceid);

@@ -1,7 +1,6 @@
 ({
 
     onInit: function(component, event, helper) {
-        console.log('panelDisplay: onInit enter');
     },
 
 
@@ -168,13 +167,11 @@
                 component.set("v.card1", helper.extractRecordRoleField(displayData, "name"));
                 component.set("v.parsedCardFields", extractedDisplayValues);  
             }
-            console.log("ChartMouseOut completed");
 
         }
 
         if (topic == "ChartMouseOut")
         {
-            console.log("panelDisplay: ChartMouseOut");
             // Hiding fields, whilst a nice idea, calls all the nodes to bounce
             // setTimeout(function(){ 
             //     console.log("details: hide " );
@@ -194,7 +191,6 @@
      },
 
     handleClose : function(component, event, helper) {
-        console.log("handleClose: enter");
         var appEvent = $A.get("e.c:evt_sfd3");
         appEvent.setParams({
             "topic" : "CloseDisplayPanel",
@@ -207,17 +203,14 @@
     },
 
     handleExpandA : function(component, event, helper) {
-        console.log("handleExpandA: enter");
         helper.sectionExpandCollapseMaster(component, "A");
     },
 
     handleExpandB : function(component, event, helper) {
-        console.log("handleExpandB: enter");
         helper.sectionExpandCollapseMaster(component, "B");
     },
 
     handleExpandC : function(component, event, helper) {
-        console.log("handleExpandC: enter");
         helper.sectionExpandCollapseMaster(component, "C");
     },
 
@@ -227,14 +220,8 @@
         helper.showModal(component, mode, layoutType);
     },
 
-    // handleShowModalReadOnly : function (component, event, helper) {
-    //     var mode = "readonly";
-    //     var layoutType = "Compact";
-    //     helper.showModal(component, mode, layoutType);
-    // },
-
     handleShowModalEdit : function (component, event, helper) {
-        var mode = "edit";
+        var mode = "edit"; // "readonly" is alternative
         var layoutType = "Compact";
         helper.showModal(component, mode, layoutType);
     },

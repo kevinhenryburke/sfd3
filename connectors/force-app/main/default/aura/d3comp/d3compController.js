@@ -131,7 +131,7 @@
             controller = tpc.controller;
         }
         else {
-            bzutils.log('chartArea: invoked from event');
+            bzutils.log('controller: invoked from event');
             topic = event.getParam("topic");
             parameters = event.getParam("parameters");
             controller = event.getParam("controller");    
