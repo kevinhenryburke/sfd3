@@ -76,8 +76,6 @@
     /* param is of form "data.xxx" or "parent.xxx" and the first part determines which of the first two input variable we use
         The code looks at the first part and returns the attribute with the name of the second part of the relevant structure */
     parseCardParam : function (data, parent, param) {
-        console.log("panelDisplayHelper.parseCardParam");
-
         var paramSplitArray = param.split(".");
         if (paramSplitArray[0] == "data") {
             if (data != null) {
@@ -92,15 +90,11 @@
         return "";
     },
 
-
     extractDisplayValues : function (data) {
         var excludeRoles = ["id", "name"];
 
-        console.log("panelDisplayHelper.extractDisplayValues");
-        console.log(JSON.stringify(data));
-
         var fields = data["fields"];
-        console.log(fields.length);
+        var displayValuesArray = [];
         var displayApiArray = [];
 
         for (var i = 0; i < fields.length; i++) {
@@ -108,30 +102,33 @@
             if (excludeRoles.indexOf(field.role) == -1) { // not in the excluded list
                 if (field.display == true) {
                     if (field.retrievedValue != null) {
-                        displayApiArray.push(field.retrievedValue);
+                        displayApiArray.push(field.api);
+                        displayValuesArray.push(field.retrievedValue);
                     }
                     if (field.retrievedDatetime != null) {
-                        displayApiArray.push(field.retrievedDatetime);
+                        displayApiArray.push(field.api);
+                        displayValuesArray.push(field.retrievedDatetime);
+                    }
+                    if (field.retrievedDate != null) {
+                        displayApiArray.push(field.api);
+                        displayValuesArray.push(field.retrievedDate);
                     }
                     if (field.retrievedCurrency != null) {
-                        displayApiArray.push(field.retrievedCurrency);
+                        displayApiArray.push(field.api);
+                        displayValuesArray.push(field.retrievedCurrency.toLocaleString('en'));
                     }
                     if (field.retrievedInteger != null) {
-                        displayApiArray.push(field.retrievedInteger);
+                        displayApiArray.push(field.api);
+                        displayValuesArray.push(field.retrievedInteger);
                     }
                 }    
             }
         }
-        console.log(displayApiArray);
-        return displayApiArray;
+        return [displayApiArray, displayValuesArray];
     },
 
     extractRecordRoleField : function (data, role) {
-        console.log("panelDisplayHelper.extractRecordRoleField");
-
         var fields = data["fields"];
-        console.log(fields.length);
-
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             if (field.role == role) {

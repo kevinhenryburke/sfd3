@@ -587,15 +587,16 @@
         var _this = this;
         console.log("chartHierarchyHelper.nodeMouseover enter");
         var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
+        console.log(publishParameters);
         
         var preppedEvent = _this.prepareEvent(component, "ChartMouseOver", publishParameters);
         preppedEvent.eventType = "Cache";
 
         // attempt to get the lighting info panel to follow the highlight.        
-        var infosvg = _this.getCache (component, "infosvg") ;
-        var dx = d.x;
-        var dy = d.y;
-        console.log("popover:" + dy + " / " + dx);
+        // var infosvg = _this.getCache (component, "infosvg") ;
+        // var dx = d.x;
+        // var dy = d.y;
+        // console.log("popover:" + dy + " / " + dx);
         // infosvg.attr('transform',function(d,i) { return 'translate(' + dy + ',' + dx + ')';})
 
         // transitions fine but the lightning component only moves on scroll???

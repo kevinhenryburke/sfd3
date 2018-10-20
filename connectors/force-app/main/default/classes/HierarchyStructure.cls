@@ -26,6 +26,7 @@ public with sharing class HierarchyStructure {
     public Integer retrievedInteger; 
     public Double retrievedCurrency; 
     public Datetime retrievedDatetime; 
+    public Date retrievedDate; 
 
     public List<HierarchyStructure> children;   // child records
 

@@ -62,21 +62,24 @@
 
         if (topic == "ChartMouseOver")
         {
+            // There are currently two formats for mouseover
+            // a SIMPLE style (not currently linked to any real Apex implementation) and a FIELDS style (real implementations and the ultimate long-term format)
 
+            // console.log("parameters");
+            // console.log(JSON.stringify(parameters));
+
+            // console.log("displayData");
             var displayData = parameters["data"];
 
-            // TODO - this needs to be refactored
-            // newStyleREFACTOR is just a switch between the old and new ways of passing display fields
-            // fields
-
-            var newStyleREFACTOR = false;
+            var mouseoverMessageFormat = "SIMPLE";
 
             if (displayData.fields != null) {
-                newStyleREFACTOR = true;
+                mouseoverMessageFormat = "FIELDS";
             }
 
-            if (newStyleREFACTOR == false)
+            if (mouseoverMessageFormat == "SIMPLE")
             {
+                console.log(mouseoverMessageFormat);
     
                 // Hiding and showing fields on mouseover, whilst a nice idea, calls all the nodes to bounce
                 // $A.util.removeClass(component.find("detailcardfields"), "slds-hide");
@@ -134,57 +137,44 @@
                 }
                 component.set("v.parsedCardFields", parsedCardFields);  
             }
-            if (newStyleREFACTOR == true)
+
+            if (mouseoverMessageFormat == "FIELDS")
             {
 
-                var extractedDisplayValues = helper.extractDisplayValues (displayData);
+                console.log(mouseoverMessageFormat);
+
+                var extractedDisplayApiAndValues = helper.extractDisplayValues (displayData);
+
+                var extractedApiNames = extractedDisplayApiAndValues[0]; // List of API names, not currently implemented
+                var extractedDisplayValues = extractedDisplayApiAndValues[1];
     
-                var cardFieldsString = component.get("v.cardFields");
-                var objectIconsString = component.get("v.objectIcons");
+                var objectIconsString = component.get("v.objectIcons");    
     
-                console.log("cardFieldsString new style:" + cardFieldsString);
-                console.log(JSON.stringify(displayData));
-    
-                var cardFields = JSON.parse(cardFieldsString);
                 var objectIcons = JSON.parse(objectIconsString);
-                // set a default display fields list
-                var cardFieldsArray; // = ["data.name", "data.size", "parent.name"];
     
-                // check if there is an objectType specific display fields list and icons list
-                if (cardFields[displayData["objectType"]] != null) {
-                    var objectType = displayData["objectType"];
-                    component.set("v.objectType", objectType);
-                    cardFieldsArray = cardFields[objectType];
-    
-                    component.set("v.iconName", "standard:account");
-    
-                    if (objectType != null && objectIcons[objectType] != null) {
-                        component.set("v.iconName", objectIcons[objectType]);
-                    }
-                    else {
-                        component.set("v.iconName", "standard:account");
-                    }
+                var objectType = displayData["objectType"];
+                component.set("v.objectType", objectType);
+
+                component.set("v.iconName", "standard:account");
+
+                if (objectType != null && objectIcons[objectType] != null) {
+                    component.set("v.iconName", objectIcons[objectType]);
                 }
                 else {
-                    if (cardFields["default"] != null) {
-                        cardFieldsArray = cardFields["default"];
-                    }
+                    component.set("v.iconName", "standard:account");
                 }
     
                 component.set("v.recordId", helper.extractRecordRoleField(displayData, "id"));
                 component.set("v.card1", helper.extractRecordRoleField(displayData, "name"));
-    
-                console.log(extractedDisplayValues);
                 component.set("v.parsedCardFields", extractedDisplayValues);  
-    
-    
             }
+            console.log("ChartMouseOut completed");
 
         }
 
         if (topic == "ChartMouseOut")
         {
-            bzutils.log("panelDisplay: ChartMouseOut");
+            console.log("panelDisplay: ChartMouseOut");
             // Hiding fields, whilst a nice idea, calls all the nodes to bounce
             // setTimeout(function(){ 
             //     console.log("details: hide " );

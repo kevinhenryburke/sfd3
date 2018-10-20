@@ -205,6 +205,9 @@ public with sharing class HierarchyQuery {
             if (field.fieldType == 'DATETIME') {
                 field.retrievedDatetime = (Datetime) s.get(field.api);
             }
+            if (field.fieldType == 'DATE') {
+                field.retrievedDate = (Date) s.get(field.api);
+            }
             if (field.fieldType == 'CURRENCY') {
                 field.retrievedCurrency = (Decimal) s.get(field.api);
             }

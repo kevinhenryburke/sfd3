@@ -67,6 +67,7 @@ public with sharing class HierarchyConfiguration  {
         public Integer retrievedInteger; 
         public Double retrievedCurrency; 
         public Datetime retrievedDatetime; 
+        public Date retrievedDate; 
     }
 
     public static HierarchyConfiguration deserialize (String JSONString) {
