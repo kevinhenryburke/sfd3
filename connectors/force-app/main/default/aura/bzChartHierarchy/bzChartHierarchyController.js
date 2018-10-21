@@ -34,12 +34,12 @@ masterConfigObject =
                      {
                          "api" : "id",                                     
                          "role" : "id", 
-                         "display" : true                                     
+                         "display" : false                                     
                     },                    
                     {
                          "api" : "parentId",                                     
                          "role" : "parentId", 
-                         "display" : true                                     
+                         "display" : false                                     
                     },                    
                     {
                          "api" : "AccountNumber",                                     
@@ -56,11 +56,8 @@ masterConfigObject =
     },
     "panels": {
         "InfoPanel": {
-            "showOnTop": false,
+            "showOnTop": true,
             "showPopover": true,
-            "cardFields": {
-                "Account": ["data.name", "data.size", "parent.name"]
-            },
             "objectIcons": {
                 "Account": "standard:account",
                 "Opportunity": "standard:opportunity"
@@ -128,8 +125,8 @@ masterConfigObject =
 
         // <!-- DISPLAY FEATURES - HIERARCHY -->
 
-        component.set("v.cardFields" , JSON.stringify(masterConfigObject["panels"]["InfoPanel"]["cardFields"]));
-        component.set("v.objectIcons" , JSON.stringify(masterConfigObject["panels"]["InfoPanel"]["objectIcons"]));
+//        component.set("v.cardFields" , JSON.stringify(masterConfigObject["panels"]["InfoPanel"]["cardFields"]));
+//        component.set("v.objectIcons" , JSON.stringify(masterConfigObject["panels"]["InfoPanel"]["objectIcons"]));
 
         component.set("v.LeafColors" , JSON.stringify(masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["LeafColors"]));
         component.set("v.ParentColors" , JSON.stringify(masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["ParentColors"]));
@@ -165,6 +162,7 @@ masterConfigObject =
         d3comp.callFromContainer(tpc);
 
         var showTopPanel = component.get("v.showTopPanel");
+
         if (showTopPanel == true) {
             var panelDisplay = component.find("panelDisplay");
             panelDisplay.callFromContainer(tpc);

@@ -16,6 +16,5 @@
     <design:attribute name="showZoomSlider" default="false" label="Show Zoom Slider" description="Show slider to zoom the hierarchy"/>        
     <design:attribute name="allowPopover" default="false" label="Embed Info Panel" description="Select if you want an embeddable floating info panel "/>        
     <design:attribute name="cardFields" default="" label="Card Fields" description=""/>        
-    <design:attribute name="objectIcons" default="" label="Object Icons" description=""/>        
     
 </design:component>

@@ -7,6 +7,9 @@
 
         var action = component.get(dataSourceMethod);
 
+        console.log(component.get("v.queryJSON"));
+
+
         var queryJSONObject = JSON.parse(component.get("v.queryJSON"));
 
         var thisLevel = queryJSONObject.initialLevelsToRetrieve;

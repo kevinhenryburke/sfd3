@@ -64,10 +64,19 @@
             // There are currently two formats for mouseover
             // a SIMPLE style (not currently linked to any real Apex implementation) and a FIELDS style (real implementations and the ultimate long-term format)
 
-            // console.log("parameters");
-            // console.log(JSON.stringify(parameters));
+            console.log("masterConfig: " + objectIcons);
+            var masterConfigObject = JSON.parse(component.get("v.masterConfig"));
+            var objectIcons;
 
-            // console.log("displayData");
+            if (masterConfigObject["panels"] != null) {
+                objectIcons = masterConfigObject["panels"]["InfoPanel"]["objectIcons"];
+                console.log("objectIcons from master: " + objectIcons);
+            }
+            else {
+                objectIcons = {};  
+                console.log("objectIcons from local defaulting to empty");
+            }
+
             var displayData = parameters["data"];
 
             var mouseoverMessageFormat = "SIMPLE";
@@ -86,13 +95,11 @@
                 var displayParent = parameters["parent"];
 
                 var cardFieldsString = component.get("v.cardFields");
-                var objectIconsString = component.get("v.objectIcons");
 
                 console.log("cardFieldsString old style:" + cardFieldsString);
                 console.log(displayData);
 
                 var cardFields = JSON.parse(cardFieldsString);
-                var objectIcons = JSON.parse(objectIconsString);
                 // set a default display fields list
                 var cardFieldsArray; // = ["data.name", "data.size", "parent.name"];
 
@@ -146,10 +153,6 @@
 
                 var extractedApiNames = extractedDisplayApiAndValues[0]; // List of API names, not currently implemented
                 var extractedDisplayValues = extractedDisplayApiAndValues[1];
-    
-                var objectIconsString = component.get("v.objectIcons");    
-    
-                var objectIcons = JSON.parse(objectIconsString);
     
                 var objectType = displayData["objectType"];
                 component.set("v.objectType", objectType);

@@ -52,7 +52,7 @@
                 <value>{&quot;default&quot; : [&quot;data.name&quot;, &quot;data.position&quot;, &quot;data.account&quot;]}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
-                <name>objectIcons</name>
+                <name>masterConfig</name>
             </componentInstanceProperties>
             <componentName>panelDisplay</componentName>
         </componentInstances>

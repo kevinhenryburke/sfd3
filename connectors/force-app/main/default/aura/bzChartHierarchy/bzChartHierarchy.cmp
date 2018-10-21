@@ -67,17 +67,20 @@
     queryJSON = "{!v.queryJSON}"
   />
 
-
   <!-- Card Display Parameters-->
+
+-- GO AFTER PANEL FOR MASTER CONFIG --
 
   <aura:if isTrue="{!v.showTopPanel}">
     <c:panelDisplay aura:id = "panelDisplay" 
       defaultEventType = "Component"
       Controller = "Controller"
-      cardFields = "{!v.cardFields}"
-      objectIcons = "{!v.objectIcons}"  
+      masterConfig = "{!v.masterConfig}"  
     />
   </aura:if>
+<!-- older fields with older config
+    cardFields = "{!v.cardFields}"
+-->
 
   <c:chartHierarchy aura:id="chartHierarchy"
     defaultEventType = "Component"
@@ -91,9 +94,10 @@
     ParentColors = "{!v.ParentColors}"
     showZoomSlider = "{!v.showZoomSlider}"
     allowPopover = "{!v.allowPopover}"
+    masterConfig = "{!v.masterConfig}"  
+    />
+<!-- older fields with older config
     cardFields = "{!v.cardFields}"
-    objectIcons = "{!v.objectIcons}"
-  />
-
+-->
 
 </aura:component>
