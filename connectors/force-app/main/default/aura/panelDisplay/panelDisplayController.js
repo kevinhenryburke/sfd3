@@ -1,6 +1,17 @@
 ({
 
     onInit: function(component, event, helper) {
+        var masterConfig = component.get("v.masterConfig");
+        if (typeof masterConfig === 'string' || masterConfig instanceof String) {
+            console.log("masterConfig is a string: " + masterConfig);
+            JSON.parse(masterConfig);
+            console.log("masterConfig parsed to object");
+            component.set("v.masterConfigObject", JSON.parse(masterConfig));
+        }
+        else {
+            console.log("masterConfig is an object?");
+            component.set("v.masterConfigObject", masterConfig);
+        }
     },
 
 
@@ -64,11 +75,11 @@
             // There are currently two formats for mouseover
             // a SIMPLE style (not currently linked to any real Apex implementation) and a FIELDS style (real implementations and the ultimate long-term format)
 
-            // var masterConfigObject = JSON.parse(component.get("v.masterConfig"));
-            var masterConfigObject = component.get("v.masterConfig");
+            var masterConfigObject = component.get("v.masterConfigObject");
             var objectIcons;
 
             if (masterConfigObject["panels"] != null) {
+                console.log("panels: configured from master");
                 objectIcons = masterConfigObject["panels"]["InfoPanel"]["objectIcons"];
             }
             else {

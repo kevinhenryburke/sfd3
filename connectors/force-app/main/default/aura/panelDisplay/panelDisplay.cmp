@@ -18,6 +18,7 @@
 
     <!-- Master Config -->  
     <aura:attribute name="masterConfig" type="String" default="{}"/>      
+    <aura:attribute name="masterConfigObject" type="Object"/>      
 
     <!-- Design Paramters -->  
     <aura:attribute name="Controller" type="String" default="" description="If you want this card to respond to a particular controller on a page then put the controller's configured name here (unique to the page)"/>    

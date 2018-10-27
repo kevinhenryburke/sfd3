@@ -14,9 +14,6 @@
 
   <!-- DATA -->
 
-  <aura:attribute name="dataFormat" type="String" default=""/>      
-  <aura:attribute name="dataSourceMethod" type="String" default="c.returnUnlinkedData"/>      
-  <aura:attribute name="dataUpdateMethod" type="String" default="c.returnNetworkUpdate"/>      
   <aura:attribute name="queryJSON" type="String" default="{}"/> 
   <aura:attribute name="configjsonString" type="String" />  <!-- this one is a bit of data and a bit of display -->
   <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
