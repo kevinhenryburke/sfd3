@@ -19,11 +19,6 @@
 
         var action = component.get(masterConfigObject["data"]["dataSourceMethod"]);
 
-        console.log(component.get("v.queryJSON"));
-
-
-//        var queryJSONObject = JSON.parse(component.get("v.queryJSON"));
-
         var queryJSONObject = masterConfigObject["data"]["queryJSON"];
 
 
@@ -41,9 +36,13 @@
         console.log(queryJSONObject);
 
         console.log("recordId:" + component.get("v.recordId"));
+
+        var masterConfigObject = component.get("v.masterConfigObject");
+        var queryJSONObject = masterConfigObject["data"]["queryJSON"];
+        var queryJSONString = JSON.stringify(queryJSONObject);        
         
         action.setParams({
-            'queryJSON': component.get("v.queryJSON"),
+            'queryJSON': queryJSONString,
             "recordId" : component.get("v.recordId")
           });
         

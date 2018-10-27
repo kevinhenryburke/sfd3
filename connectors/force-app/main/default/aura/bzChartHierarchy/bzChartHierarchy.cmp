@@ -50,7 +50,6 @@
     UserComponentId = "Controller"  
     primaryNodeInitialization = "{!v.primaryNodeInitialization}"   
     configjsonString = "{!v.configjsonString}" 
-    queryJSON = "{!v.queryJSON}"
     masterConfig = "{!v.masterConfig}"  
     />
 

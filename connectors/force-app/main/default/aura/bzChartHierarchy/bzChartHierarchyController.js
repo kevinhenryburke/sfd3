@@ -22,7 +22,7 @@
 // DONE         "dataFormat": "HierarchyJSON",
 // DONE         "dataSourceMethod": "c.returnHierarchyTop",
 // DONE         "dataUpdateMethod": "c.returnHierarchyLevels",
-//         "queryJSON": {
+// DONE        "queryJSON": {
 //             "initialLevelsToRetrieve": 2,
 //             "chartType": "Hierarchy",
 
@@ -114,7 +114,6 @@
         
         component.set("v.masterConfigObject", masterConfigObject);
 
-        component.set("v.queryJSON" , JSON.stringify(masterConfigObject["data"]["queryJSON"]));
         component.set("v.configjsonString" , JSON.stringify(masterConfigObject["panels"]["ControlPanel"]["configjsonString"]));
         component.set("v.primaryNodeInitialization" , masterConfigObject["data"]["primaryNodeInitialization"]);
 

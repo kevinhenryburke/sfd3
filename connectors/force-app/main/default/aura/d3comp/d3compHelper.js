@@ -102,7 +102,6 @@
 
 
         action.setParams({
-//            'queryJSON': component.get("v.queryJSON"),
             'queryJSON': queryJSONString,
             'queryLevelIds' : queryLevelIds,
             'queryLevel' : thisLevel
