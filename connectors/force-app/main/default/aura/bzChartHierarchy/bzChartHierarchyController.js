@@ -19,9 +19,9 @@
 // masterConfigObject = 
 // {
 //     "data": {
-//         "dataFormat": "HierarchyJSON",
-//         "dataSourceMethod": "c.returnHierarchyTop",
-//         "dataUpdateMethod": "c.returnHierarchyLevels",
+// DONE         "dataFormat": "HierarchyJSON",
+// DONE         "dataSourceMethod": "c.returnHierarchyTop",
+// DONE         "dataUpdateMethod": "c.returnHierarchyLevels",
 //         "queryJSON": {
 //             "initialLevelsToRetrieve": 2,
 //             "chartType": "Hierarchy",
@@ -105,16 +105,14 @@
 //             }
 //         }
 //     },
-//     "search": {
-//         "searchAction": "HighlightOpenPath",
-//         "configuredAllowSearch": true
+// DONE    "search": {
+// DONE         "searchAction": "HighlightOpenPath",
+// DONE         "configuredAllowSearch": true
 //     }
 // }
 //         ;
         
         component.set("v.masterConfigObject", masterConfigObject);
-
-        console.log('bzChartHierarchy: onInit: test: ' + masterConfigObject["data"]["dataFormat"]);
 
         component.set("v.queryJSON" , JSON.stringify(masterConfigObject["data"]["queryJSON"]));
         component.set("v.configjsonString" , JSON.stringify(masterConfigObject["panels"]["ControlPanel"]["configjsonString"]));

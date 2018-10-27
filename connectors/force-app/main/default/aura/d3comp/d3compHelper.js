@@ -90,17 +90,20 @@
         // for a RefreshChart event we assume everything is initialized
 
         var masterConfigObject = component.get("v.masterConfigObject");
-        component.set("v.dataUpdateMethod" , masterConfigObject["data"]["dataUpdateMethod"]);
-        var dataUpdateMethod = component.get("v.dataUpdateMethod");
-
-        var action = component.get(dataUpdateMethod);
+        var action = component.get(masterConfigObject["data"]["dataUpdateMethod"]);
 
         var thisLevel = component.get("v.currentLevels");
 
         var queryLevelIds = _this.getQueryLevelIds(component,thisLevel);
 
+        var masterConfigObject = component.get("v.masterConfigObject");
+        var queryJSONObject = masterConfigObject["data"]["queryJSON"];
+        var queryJSONString = JSON.stringify(queryJSONObject);        
+
+
         action.setParams({
-            'queryJSON': component.get("v.queryJSON"),
+//            'queryJSON': component.get("v.queryJSON"),
+            'queryJSON': queryJSONString,
             'queryLevelIds' : queryLevelIds,
             'queryLevel' : thisLevel
           });
@@ -129,8 +132,6 @@
 
                 // TODO - will need to retrieve data based on new selections
                 var datajson = component.get("v.datajson");
-                // TODO dataFormat is as yet unused.
-                var dataFormat = component.get("v.dataFormat");
                 var configjson = component.get("v.configjson");
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
                 var panelShowFilters = component.get("v.panelShowFilters");     
