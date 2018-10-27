@@ -15,10 +15,6 @@
                 <value>{&quot;filtertypes&quot;:[&quot;Work&quot;,&quot;Social&quot;,&quot;Client&quot;],&quot;measures&quot;:[&quot;Posts&quot;,&quot;Hot&quot;],&quot;levels&quot;:4,&quot;centreonclick&quot;:true}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
-                <name>configuredAllowSearch</name>
-                <value>true</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
                 <name>dataSourceMethod</name>
                 <value>c.returnNetworkInitial</value>
             </componentInstanceProperties>
@@ -27,14 +23,15 @@
                 <value>c.returnNetworkUpdate</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
+                <name>masterConfig</name>
+                <value>{      &quot;search&quot;:{         &quot;searchAction&quot;:&quot;HighlightOpenPath&quot;,       &quot;configuredAllowSearch&quot;:true    } }</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
                 <name>primaryNodeInitialization</name>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>queryJSON</name>
                 <value>{&quot;initialLevelsToRetrieve&quot; : 1}</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>searchAction</name>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>showBanner</name>

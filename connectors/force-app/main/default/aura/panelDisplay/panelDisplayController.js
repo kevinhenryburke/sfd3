@@ -64,17 +64,15 @@
             // There are currently two formats for mouseover
             // a SIMPLE style (not currently linked to any real Apex implementation) and a FIELDS style (real implementations and the ultimate long-term format)
 
-            console.log("masterConfig: " + objectIcons);
-            var masterConfigObject = JSON.parse(component.get("v.masterConfig"));
+            // var masterConfigObject = JSON.parse(component.get("v.masterConfig"));
+            var masterConfigObject = component.get("v.masterConfig");
             var objectIcons;
 
             if (masterConfigObject["panels"] != null) {
                 objectIcons = masterConfigObject["panels"]["InfoPanel"]["objectIcons"];
-                console.log("objectIcons from master: " + objectIcons);
             }
             else {
                 objectIcons = {};  
-                console.log("objectIcons from local defaulting to empty");
             }
 
             var displayData = parameters["data"];

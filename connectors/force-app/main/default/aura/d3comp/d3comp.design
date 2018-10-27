@@ -1,4 +1,7 @@
 <design:component >
+
+    <design:attribute name="masterConfig" label="Master Config" default="{}" description="Master Configuration for the component" />      
+
     <design:attribute name="showBanner" label="Show Top Banner" default="true" description="Click if you want to see the top banner"/>        
     <design:attribute name="Title" default="1" label="Title Text" description=""/>        
     <design:attribute name="UserComponentId" label="Component Id" default="Controller" description="Unique Id for this component" />	
@@ -7,8 +10,6 @@
     <design:attribute name="dataUpdateMethod" label="Data Update Method" default="c.returnNetworkUpdate" description="Apex Method returning updated data" />      
     <design:attribute name="primaryNodeInitialization" label="Primary Node to highlight" default="FirstInData" description="FirstInData (which is Default), RecordId, None" />          
     <design:attribute name="configjsonString" label="Config JSON" description="configuration JSON, do not change this unless you really understand what it does!"/>        
-    <design:attribute name="searchAction" label="Search Action" default="HighlightOpenPath" description="Options whether to highlight or just to open search paths on certain chart types. Options are HighlightPath, OpenPath, HighlightOpenPath"/>        
-    <design:attribute name="configuredAllowSearch" label="Allow Search" default="false" description="Click if allowed to Search chart - not supported for all components"/>        
     <design:attribute name="queryJSON" label="Query JSON" default="{}" description="Configuration for the Salesforce Queries - refer to documentation and do not edit unless you fully understand how this works"/>        
 
     

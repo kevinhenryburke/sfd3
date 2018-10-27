@@ -2,105 +2,115 @@
 
     onInit: function(component, event, helper) {
         console.log('bzChartHierarchy: onInit: enter');
+        console.log(component.get("v.masterConfig"));
 
-        var masterConfigObject = JSON.parse(component.get("v.masterConfig"));
+        var masterConfig = component.get("v.masterConfig");
+        if (typeof masterConfig === 'string' || masterConfig instanceof String) {
+            console.log("masterConfig is a string");
+            component.set("v.masterConfigObject", JSON.parse(masterConfig));
+        }
+        else {
+            console.log("masterConfig is an object?");
+            component.set("v.masterConfigObject", masterConfig);
+        }
+        var masterConfigObject = component.get("v.masterConfigObject");
 
 // TODO remove this so that only read from configuration above - handy for dev speed for now
-masterConfigObject = 
-{
-    "data": {
-        "dataFormat": "HierarchyJSON",
-        "dataSourceMethod": "c.returnHierarchyTop",
-        "dataUpdateMethod": "c.returnHierarchyLevels",
-        "queryJSON": {
-            "initialLevelsToRetrieve": 2,
-            "chartType": "Hierarchy",
+// masterConfigObject = 
+// {
+//     "data": {
+//         "dataFormat": "HierarchyJSON",
+//         "dataSourceMethod": "c.returnHierarchyTop",
+//         "dataUpdateMethod": "c.returnHierarchyLevels",
+//         "queryJSON": {
+//             "initialLevelsToRetrieve": 2,
+//             "chartType": "Hierarchy",
 
-            "objectLevels": [{
-                "terminal": false,
-                "recursive": true,
-                "fields": [
-                    {
-                         "api" : "AnnualRevenue",                                     
-                         "role" : "size", 
-                         "display" : true,
-                         "orderByField" : true                                   
-                    },
-                    {
-                         "api" : "name",                                     
-                         "role" : "name", 
-                         "display" : true                                     
-                     },
-                     {
-                         "api" : "id",                                     
-                         "role" : "id", 
-                         "display" : false                                     
-                    },                    
-                    {
-                         "api" : "parentId",                                     
-                         "role" : "parentId", 
-                         "display" : false                                     
-                    },                    
-                    {
-                         "api" : "AccountNumber",                                     
-                         "role" : "none", 
-                         "display" : true                                     
-                    }  
-                ],
-                "objectType": "Account"
-            }]
+//             "objectLevels": [{
+//                 "terminal": false,
+//                 "recursive": true,
+//                 "fields": [
+//                     {
+//                          "api" : "AnnualRevenue",                                     
+//                          "role" : "size", 
+//                          "display" : true,
+//                          "orderByField" : true                                   
+//                     },
+//                     {
+//                          "api" : "name",                                     
+//                          "role" : "name", 
+//                          "display" : true                                     
+//                      },
+//                      {
+//                          "api" : "id",                                     
+//                          "role" : "id", 
+//                          "display" : false                                     
+//                     },                    
+//                     {
+//                          "api" : "parentId",                                     
+//                          "role" : "parentId", 
+//                          "display" : false                                     
+//                     },                    
+//                     {
+//                          "api" : "AccountNumber",                                     
+//                          "role" : "none", 
+//                          "display" : true                                     
+//                     }  
+//                 ],
+//                 "objectType": "Account"
+//             }]
 
-        },
-        "primaryNodeInitialization": "None"
+//         },
+//         "primaryNodeInitialization": "None"
 
-    },
-    "panels": {
-        "InfoPanel": {
-            "showOnTop": true,
-            "showPopover": true,
-            "objectIcons": {
-                "Account": "standard:account",
-                "Opportunity": "standard:opportunity"
-            }
-        },
-        "ControlPanel": {
-            "showBanner": true,
-            "configjsonString": {
-                "showtestbuttons": true,
-                "levels": 5,
-                "levelsIncreaseOnly": true,
-                "autoIncreaseLevels": true
-            }
-        },
-        "ChartPanel": {
-            "Title": "",
-            "showLevelsInitial": 1,
-            "Hierarchy" : {
-                "LeafColors" : {"Account" : { "colorBy" : "size" , "values" : [0,22070163,25070163], "colors" : ["white" , "yellow", "green"] }},
-                "ParentColors" : {"Account" : {  "colorBy" : "size" ,  "values" : [0,38970163], "colors" : ["lightsteelblue" , "purple"] }},
-                "showZoomSlider" : false,
-                "clearHighlightedPaths" : true
-            },
-            "Network" : {
-                "showPathToolTip" : true,
-                "nodestrokewidth" : "0.5px"
-            },
-            "Selectors" : {
-                "node" : {
-                    "selector" : ".node",            
-                    "appendType" : "g",            
-                    "styleclassText" : "chartText",
-                    "styleclassTextShadow" : "chartTextShadow"
-                }        
-            }
-        }
-    },
-    "search": {
-        "searchAction": "HighlightOpenPath",
-        "configuredAllowSearch": true
-    }
-}
-        ;
+//     },
+//     "panels": {
+//         "InfoPanel": {
+//             "showOnTop": true,
+//             "showPopover": true,
+//             "objectIcons": {
+//                 "Account": "standard:account",
+//                 "Opportunity": "standard:opportunity"
+//             }
+//         },
+//         "ControlPanel": {
+//             "showBanner": true,
+//             "configjsonString": {
+//                 "showtestbuttons": true,
+//                 "levels": 5,
+//                 "levelsIncreaseOnly": true,
+//                 "autoIncreaseLevels": true
+//             }
+//         },
+//         "ChartPanel": {
+//             "Title": "",
+//             "showLevelsInitial": 1,
+//             "Hierarchy" : {
+//                 "LeafColors" : {"Account" : { "colorBy" : "size" , "values" : [0,22070163,25070163], "colors" : ["white" , "yellow", "green"] }},
+//                 "ParentColors" : {"Account" : {  "colorBy" : "size" ,  "values" : [0,38970163], "colors" : ["lightsteelblue" , "purple"] }},
+//                 "showZoomSlider" : false,
+//                 "clearHighlightedPaths" : true
+//             },
+//             "Network" : {
+//                 "showPathToolTip" : true,
+//                 "nodestrokewidth" : "0.5px"
+//             },
+//             "Selectors" : {
+//                 "node" : {
+//                     "selector" : ".node",            
+//                     "appendType" : "g",            
+//                     "styleclassText" : "chartText",
+//                     "styleclassTextShadow" : "chartTextShadow"
+//                 }        
+//             }
+//         }
+//     },
+//     "search": {
+//         "searchAction": "HighlightOpenPath",
+//         "configuredAllowSearch": true
+//     }
+// }
+//         ;
         
         component.set("v.masterConfigObject", masterConfigObject);
 
@@ -116,9 +126,6 @@ masterConfigObject =
         component.set("v.showTopPanel" , masterConfigObject["panels"]["InfoPanel"]["showOnTop"]);
         component.set("v.showBanner" , masterConfigObject["panels"]["ControlPanel"]["showBanner"]);
         component.set("v.allowPopover" , masterConfigObject["panels"]["InfoPanel"]["showPopover"]);
-
-        component.set("v.searchAction" , masterConfigObject["search"]["searchAction"]);
-        component.set("v.configuredAllowSearch" , masterConfigObject["search"]["configuredAllowSearch"]);
 
         component.set("v.Title" , masterConfigObject["panels"]["ChartPanel"]["Title"]);
         component.set("v.showLevelsInitial" , masterConfigObject["panels"]["ChartPanel"]["showLevelsInitial"]);

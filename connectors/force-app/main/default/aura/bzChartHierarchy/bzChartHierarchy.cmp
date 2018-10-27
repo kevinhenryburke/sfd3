@@ -27,11 +27,6 @@
   <aura:attribute name="showBanner" type="Boolean" default="true"/>      
   <aura:attribute name="allowPopover" type="Boolean" default="false"/>    
 
-  <!-- Search -->
-
-  <aura:attribute name="searchAction" type="String"/> 
-  <aura:attribute name="configuredAllowSearch" type="Boolean" default="false"/>    
-
   <!-- DISPLAY FEATURES - GENERAL -->
 
   <aura:attribute name="Title" type="String" />      
@@ -40,7 +35,6 @@
   <!-- DISPLAY FEATURES - HIERARCHY -->
 
   <aura:attribute name="cardFields" type="String" default="{}"/>    
-  <aura:attribute name="objectIcons" type="String" default="{}"/>    
   <aura:attribute name="LeafColors" type="String" default="{&quot;values&quot; : [0], &quot;colors&quot; : [&quot;white&quot;]}" description="Determines the color of a leaf node"/>    
   <aura:attribute name="ParentColors" type="String" default="{&quot;values&quot; : [0], &quot;colors&quot; : [&quot;lightsteelblue&quot; ]}" description="Determines the color of parent node"/>    
   <aura:attribute name="showZoomSlider" type="Boolean" default="false"/>    
@@ -62,10 +56,9 @@
     dataUpdateMethod = "{!v.dataUpdateMethod}"     
     primaryNodeInitialization = "{!v.primaryNodeInitialization}"   
     configjsonString = "{!v.configjsonString}" 
-    searchAction = "{!v.searchAction}"
-    configuredAllowSearch = "{!v.configuredAllowSearch}"
     queryJSON = "{!v.queryJSON}"
-  />
+    masterConfig = "{!v.masterConfig}"  
+    />
 
   <!-- Card Display Parameters-->
 

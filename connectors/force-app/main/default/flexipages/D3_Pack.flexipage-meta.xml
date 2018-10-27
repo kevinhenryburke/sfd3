@@ -15,10 +15,6 @@
                 <value>{&quot;showtestbuttons&quot;:true, &quot;levels&quot;:5, &quot;levelsIncreaseOnly&quot;:true}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
-                <name>configuredAllowSearch</name>
-                <value>false</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
                 <name>dataFormat</name>
                 <value>HierarchyJSON</value>
             </componentInstanceProperties>
@@ -28,6 +24,10 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>dataUpdateMethod</name>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>masterConfig</name>
+                <value>{      &quot;search&quot;:{         &quot;searchAction&quot;:&quot;HighlightOpenPath&quot;,       &quot;configuredAllowSearch&quot;:true    } }</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>primaryNodeInitialization</name>

@@ -66,12 +66,17 @@
   <aura:attribute name="configuredShowTestButtons" type="Boolean" default="false"/>      
 
 
+  <aura:attribute name="abcde" type="Boolean" default="false"/>    
+
   <!-- Technical - Query -->
   <aura:attribute name="levelsIncreaseOnly" type="Boolean" default="false"/> 
   <aura:attribute name="levelsIncreaseDecrease" type="Boolean" default="true"/> 
   <aura:attribute name="autoIncreaseLevels" type="Boolean" default="false"/> 
   <aura:attribute name="queryLevels" type="Object[]" default="[]"/> 
   <aura:attribute name="queryLevelIds" type="Object[]" default="[]"/> 
+
+  <aura:attribute name="masterConfig" type="String" default="{}"/>      
+  <aura:attribute name="masterConfigObject" type="Object"/>      
   
     <div class="slds">
       <div class="slds-page-header" role="banner">

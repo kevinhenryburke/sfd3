@@ -15,10 +15,6 @@
                 <value>{&quot;showtestbuttons&quot;:true, &quot;levels&quot;:5, &quot;levelsIncreaseOnly&quot;:true, &quot;autoIncreaseLevels&quot;:true}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
-                <name>configuredAllowSearch</name>
-                <value>true</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
                 <name>dataFormat</name>
                 <value>HierarchyJSON</value>
             </componentInstanceProperties>
@@ -31,16 +27,16 @@
                 <value>c.returnHierarchyLevels</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
+                <name>masterConfig</name>
+                <value>{      &quot;search&quot;:{         &quot;searchAction&quot;:&quot;HighlightOpenPath&quot;,       &quot;configuredAllowSearch&quot;:true    } }</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
                 <name>primaryNodeInitialization</name>
                 <value>None</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>queryJSON</name>
                 <value>{    &quot;objectLevels&quot;:[       {          &quot;terminal&quot;:false,          &quot;recursive&quot;:true,          &quot;fields&quot;:[             {                &quot;api&quot;:&quot;AnnualRevenue&quot;,                &quot;role&quot;:&quot;size&quot;,                &quot;display&quot;:true             },             {                &quot;api&quot;:&quot;name&quot;,                &quot;role&quot;:&quot;name&quot;,                &quot;display&quot;:true             },             {                &quot;api&quot;:&quot;id&quot;,                &quot;role&quot;:&quot;id&quot;,                &quot;display&quot;:true             },             {                &quot;api&quot;:&quot;parentId&quot;,                &quot;role&quot;:&quot;parentId&quot;,                &quot;display&quot;:true             }          ],          &quot;objectType&quot;:&quot;Account&quot;       }    ],    &quot;initialLevelsToRetrieve&quot;:2,    &quot;chartType&quot;:&quot;Hierarchy&quot; }</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>searchAction</name>
-                <value>HighlightOpenPath</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>showBanner</name>

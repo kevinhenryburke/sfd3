@@ -1,8 +1,16 @@
 ({
     areaInit: function (component) {
         console.log("areaInit enter");
-        var masterConfigObject = JSON.parse(component.get("v.masterConfig"));
-        component.set("v.masterConfigObject", masterConfigObject);
+
+        var masterConfig = component.get("v.masterConfig");
+        if (typeof masterConfig === 'string' || masterConfig instanceof String) {
+            console.log("masterConfig is a string");
+            component.set("v.masterConfigObject", JSON.parse(masterConfig));
+        }
+        else {
+            console.log("masterConfig is an object?");
+            component.set("v.masterConfigObject", masterConfig);
+        }
     },
 
     // first method called after all resources are ready

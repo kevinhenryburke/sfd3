@@ -3,6 +3,20 @@
     onInit: function(component, event, helper) {
         console.log('afterScriptsLoaded panel enter');
 
+        var masterConfig = component.get("v.masterConfig");
+        if (typeof masterConfig === 'string' || masterConfig instanceof String) {
+            console.log("masterConfig is a string");
+            component.set("v.masterConfigObject", JSON.parse(masterConfig));
+        }
+        else {
+            console.log("masterConfig is an object?");
+            component.set("v.masterConfigObject", masterConfig);
+        }
+        var masterConfigObject = component.get("v.masterConfigObject");
+
+        component.set("v.configuredAllowSearch", masterConfigObject["search"]["configuredAllowSearch"]);
+        component.set("v.searchAction", masterConfigObject["search"]["searchAction"]);
+
         var dataSourceMethod = component.get("v.dataSourceMethod");
 
         var action = component.get(dataSourceMethod);
@@ -302,8 +316,6 @@
        var searchTermId = selectedAccountGetFromEvent.id;
 
        component.set("v.searchTermId", searchTermId);
-       // Note: v.searchAction is set via Design Parameter
-
         
         var configuredLevels = component.get("v.configuredLevels");
         if (configuredLevels == true) {
