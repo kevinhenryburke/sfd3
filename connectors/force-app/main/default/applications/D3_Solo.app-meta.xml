@@ -6,7 +6,7 @@
     <formFactors>Large</formFactors>
     <label>D3 Solo</label>
     <navType>Standard</navType>
-    <tab>Account_Hierarchy_Chart</tab>
+    <tab>D3_CTree</tab>
     <uiType>Lightning</uiType>
     <utilityBar>D3_Solo_UtilityBar</utilityBar>
 </CustomApplication>

@@ -20,7 +20,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>masterConfig</name>
-                <value>{      &quot;search&quot;:{         &quot;searchAction&quot;:&quot;HighlightOpenPath&quot;,       &quot;configuredAllowSearch&quot;:false    } }</value>
+                <value>{    &quot;data&quot;:{         &quot;dataFormat&quot;:&quot;&quot;,       &quot;dataSourceMethod&quot;:&quot;c.returnNetworkInitial&quot;,       &quot;dataUpdateMethod&quot;:&quot;&quot;     },   &quot;search&quot;:{         &quot;searchAction&quot;:&quot;HighlightOpenPath&quot;,       &quot;configuredAllowSearch&quot;:false    } }</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>showBanner</name>
@@ -120,7 +120,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>masterConfig</name>
-                <value>{      &quot;search&quot;:{         &quot;searchAction&quot;:&quot;HighlightOpenPath&quot;,       &quot;configuredAllowSearch&quot;:false    } }</value>
+                <value>{    &quot;data&quot;:{         &quot;dataFormat&quot;:&quot;&quot;,       &quot;dataSourceMethod&quot;:&quot;c.returnUnlinkedData&quot;,       &quot;dataUpdateMethod&quot;:&quot;&quot;     },   &quot;search&quot;:{         &quot;searchAction&quot;:&quot;HighlightOpenPath&quot;,       &quot;configuredAllowSearch&quot;:false    } }</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>showBanner</name>

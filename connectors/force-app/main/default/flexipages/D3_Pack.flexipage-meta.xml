@@ -27,7 +27,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>masterConfig</name>
-                <value>{      &quot;search&quot;:{         &quot;searchAction&quot;:&quot;HighlightOpenPath&quot;,       &quot;configuredAllowSearch&quot;:true    } }</value>
+                <value>{      &quot;data&quot;:{         &quot;dataFormat&quot;:&quot;HierarchyJSON&quot;,       &quot;dataSourceMethod&quot;:&quot;c.returnHierarchyTop&quot;,       &quot;dataUpdateMethod&quot;:&quot;&quot;    },    &quot;search&quot;:{         &quot;searchAction&quot;:&quot;HighlightOpenPath&quot;,       &quot;configuredAllowSearch&quot;:true    } }</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>primaryNodeInitialization</name>

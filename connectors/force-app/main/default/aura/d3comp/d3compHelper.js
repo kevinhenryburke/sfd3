@@ -89,6 +89,8 @@
         var _this = this;
         // for a RefreshChart event we assume everything is initialized
 
+        var masterConfigObject = component.get("v.masterConfigObject");
+        component.set("v.dataUpdateMethod" , masterConfigObject["data"]["dataUpdateMethod"]);
         var dataUpdateMethod = component.get("v.dataUpdateMethod");
 
         var action = component.get(dataUpdateMethod);

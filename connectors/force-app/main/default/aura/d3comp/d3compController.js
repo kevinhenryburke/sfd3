@@ -19,6 +19,9 @@
 
         var dataSourceMethod = component.get("v.dataSourceMethod");
 
+        component.set("v.dataSourceMethod" , masterConfigObject["data"]["dataSourceMethod"]);
+        var dataSourceMethod = component.get("v.dataSourceMethod");
+
         var action = component.get(dataSourceMethod);
 
         console.log(component.get("v.queryJSON"));

@@ -116,9 +116,6 @@
 
         console.log('bzChartHierarchy: onInit: test: ' + masterConfigObject["data"]["dataFormat"]);
 
-        component.set("v.dataFormat" , masterConfigObject["data"]["dataFormat"]);
-        component.set("v.dataSourceMethod" , masterConfigObject["data"]["dataSourceMethod"]);
-        component.set("v.dataUpdateMethod" , masterConfigObject["data"]["dataUpdateMethod"]);
         component.set("v.queryJSON" , JSON.stringify(masterConfigObject["data"]["queryJSON"]));
         component.set("v.configjsonString" , JSON.stringify(masterConfigObject["panels"]["ControlPanel"]["configjsonString"]));
         component.set("v.primaryNodeInitialization" , masterConfigObject["data"]["primaryNodeInitialization"]);
