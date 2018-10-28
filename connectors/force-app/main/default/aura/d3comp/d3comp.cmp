@@ -45,7 +45,6 @@
   <aura:attribute name="dataSourceMethod" type="String" default="c.returnUnlinkedData"/>      
   <aura:attribute name="dataUpdateMethod" type="String" default="c.returnNetworkUpdate"/>      
   <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
-  <aura:attribute name="configjsonString" type="String" />
 	<aura:attribute name="searchAction" type="String"/> 
   <aura:attribute name="configuredAllowSearch" type="Boolean" default="false"/>    
 

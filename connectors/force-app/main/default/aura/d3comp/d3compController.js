@@ -16,6 +16,7 @@
 
         component.set("v.configuredAllowSearch", masterConfigObject["search"]["configuredAllowSearch"]);
         component.set("v.searchAction", masterConfigObject["search"]["searchAction"]);
+        component.set("v.showBanner" , masterConfigObject["panels"]["ControlPanel"]["showBanner"]);
 
         var action = component.get(masterConfigObject["data"]["dataSourceMethod"]);
 

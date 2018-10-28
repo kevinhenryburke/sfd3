@@ -19,7 +19,6 @@
   <!-- DISPLAY PANELS -->
 
   <aura:attribute name="showTopPanel" type="Boolean" default="true"/>      
-  <aura:attribute name="showBanner" type="Boolean" default="true"/>      
   <aura:attribute name="allowPopover" type="Boolean" default="false"/>    
 
   <!-- DISPLAY FEATURES - GENERAL -->
@@ -42,7 +41,6 @@
   
   <c:d3comp aura:id = "d3comp"
     defaultEventType = "Component"
-    showBanner = "{!v.showBanner}" 
     recordId = "{!v.recordId}"
     Title = "{!v.Title}" 
     UserComponentId = "Controller"  

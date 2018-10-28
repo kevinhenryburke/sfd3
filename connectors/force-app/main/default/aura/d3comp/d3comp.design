@@ -2,10 +2,8 @@
 
     <design:attribute name="masterConfig" label="Master Config" default="{}" description="Master Configuration for the component" />      
 
-    <design:attribute name="showBanner" label="Show Top Banner" default="true" description="Click if you want to see the top banner"/>        
     <design:attribute name="Title" default="1" label="Title Text" description=""/>        
     <design:attribute name="UserComponentId" label="Component Id" default="Controller" description="Unique Id for this component" />	
     <design:attribute name="primaryNodeInitialization" label="Primary Node to highlight" default="FirstInData" description="FirstInData (which is Default), RecordId, None" />          
-    <design:attribute name="configjsonString" label="Config JSON" description="configuration JSON, do not change this unless you really understand what it does!"/>        
     
 </design:component>

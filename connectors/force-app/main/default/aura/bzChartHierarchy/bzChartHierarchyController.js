@@ -23,44 +23,42 @@
 // DONE         "dataSourceMethod": "c.returnHierarchyTop",
 // DONE         "dataUpdateMethod": "c.returnHierarchyLevels",
 // DONE        "queryJSON": {
-//             "initialLevelsToRetrieve": 2,
-//             "chartType": "Hierarchy",
-
-//             "objectLevels": [{
-//                 "terminal": false,
-//                 "recursive": true,
-//                 "fields": [
-//                     {
-//                          "api" : "AnnualRevenue",                                     
-//                          "role" : "size", 
-//                          "display" : true,
-//                          "orderByField" : true                                   
-//                     },
-//                     {
-//                          "api" : "name",                                     
-//                          "role" : "name", 
-//                          "display" : true                                     
-//                      },
-//                      {
-//                          "api" : "id",                                     
-//                          "role" : "id", 
-//                          "display" : false                                     
-//                     },                    
-//                     {
-//                          "api" : "parentId",                                     
-//                          "role" : "parentId", 
-//                          "display" : false                                     
-//                     },                    
-//                     {
-//                          "api" : "AccountNumber",                                     
-//                          "role" : "none", 
-//                          "display" : true                                     
-//                     }  
-//                 ],
-//                 "objectType": "Account"
-//             }]
-
-//         },
+// DONE            "initialLevelsToRetrieve": 2,
+// DONE            "chartType": "Hierarchy",
+// DONE             "objectLevels": [{
+// DONE                "terminal": false,
+// DONE                "recursive": true,
+// DONE                "fields": [
+// DONE                    {
+// DONE                         "api" : "AnnualRevenue",                                     
+// DONE                         "role" : "size", 
+// DONE                         "display" : true,
+// DONE                         "orderByField" : true                                   
+// DONE                    },
+// DONE                    {
+// DONE                         "api" : "name",                                     
+// DONE                         "role" : "name", 
+// DONE                         "display" : true                                     
+// DONE                     },
+// DONE                     {
+// DONE                         "api" : "id",                                     
+// DONE                         "role" : "id", 
+// DONE                         "display" : false                                     
+// DONE                    },                    
+// DONE                    {
+// DONE                         "api" : "parentId",                                     
+// DONE                         "role" : "parentId", 
+// DONE                         "display" : false                                     
+// DONE                    },                    
+// DONE                    {
+// DONE                         "api" : "AccountNumber",                                     
+// DONE                         "role" : "none", 
+// DONE                         "display" : true                                     
+// DONE                    }  
+// DONE                ],
+// DONE                "objectType": "Account"
+// DONE            }]
+// DONE        },
 //         "primaryNodeInitialization": "None"
 
 //     },
@@ -73,15 +71,15 @@
 //                 "Opportunity": "standard:opportunity"
 //             }
 //         },
-//         "ControlPanel": {
-//             "showBanner": true,
-//             "configjsonString": {
-//                 "showtestbuttons": true,
-//                 "levels": 5,
-//                 "levelsIncreaseOnly": true,
-//                 "autoIncreaseLevels": true
-//             }
-//         },
+// DONE        "ControlPanel": {
+// DONE            "showBanner": true,
+// DONE            "configjsonString": {
+// DONE                "showtestbuttons": true,
+// DONE                "levels": 5,
+// DONE                "levelsIncreaseOnly": true,
+// DONE                "autoIncreaseLevels": true
+// DONE            }
+// DONE        },
 //         "ChartPanel": {
 //             "Title": "",
 //             "showLevelsInitial": 1,
@@ -117,7 +115,6 @@
         component.set("v.primaryNodeInitialization" , masterConfigObject["data"]["primaryNodeInitialization"]);
 
         component.set("v.showTopPanel" , masterConfigObject["panels"]["InfoPanel"]["showOnTop"]);
-        component.set("v.showBanner" , masterConfigObject["panels"]["ControlPanel"]["showBanner"]);
         component.set("v.allowPopover" , masterConfigObject["panels"]["InfoPanel"]["showPopover"]);
 
         component.set("v.Title" , masterConfigObject["panels"]["ChartPanel"]["Title"]);
