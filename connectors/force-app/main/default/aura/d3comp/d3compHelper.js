@@ -73,12 +73,12 @@
             }                            
 
             // underlying data parsed to JSON object
-            console.log("init:initializing data ");
             var datajson = JSON.parse(datastring);
             component.set("v.datajson", datajson);
 
             // primary node - this is interesting as could be provided by datajson or config (e.g. on a record detail page)
-            var primaryNodeInitialization = component.get("v.primaryNodeInitialization");
+            var primaryNodeInitialization = masterConfigObject["data"]["primaryNodeInitialization"];
+
             //TODO - need to add in when primary node is derived from recordId. In which case derive in config section
             if (primaryNodeInitialization == 'FirstInData')
             {

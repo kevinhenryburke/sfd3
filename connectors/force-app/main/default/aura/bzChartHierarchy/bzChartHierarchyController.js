@@ -59,7 +59,7 @@
 // DONE                "objectType": "Account"
 // DONE            }]
 // DONE        },
-//         "primaryNodeInitialization": "None"
+//         "primaryNodeInitialization": "None" // Primary Node to highlight - "FirstInData, RecordId, None"
 
 //     },
 //     "panels": {
@@ -111,8 +111,6 @@
 //         ;
         
         component.set("v.masterConfigObject", masterConfigObject);
-
-        component.set("v.primaryNodeInitialization" , masterConfigObject["data"]["primaryNodeInitialization"]);
 
         component.set("v.showTopPanel" , masterConfigObject["panels"]["InfoPanel"]["showOnTop"]);
         component.set("v.allowPopover" , masterConfigObject["panels"]["InfoPanel"]["showPopover"]);

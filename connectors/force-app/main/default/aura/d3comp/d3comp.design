@@ -4,6 +4,5 @@
 
     <design:attribute name="Title" default="1" label="Title Text" description=""/>        
     <design:attribute name="UserComponentId" label="Component Id" default="Controller" description="Unique Id for this component" />	
-    <design:attribute name="primaryNodeInitialization" label="Primary Node to highlight" default="FirstInData" description="FirstInData (which is Default), RecordId, None" />          
     
 </design:component>

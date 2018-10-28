@@ -2,8 +2,6 @@
 
     <design:attribute name="masterConfig" label="Master Config" default="{}" description="Master Configuration for the component" />      
 
-    <design:attribute name="primaryNodeInitialization" label="Primary Node to highlight" default="FirstInData" description="FirstInData (which is Default), RecordId, None" />          
-
     <design:attribute name="showTopPanel" label="Show Top Info Panel" default="true" description="Check if you want a display panel at the top of the page"/>        
     <design:attribute name="allowPopover" default="false" label="Show Floating Info Panel" description="Check this if you want an embeddable floating info panel "/>        
     

@@ -12,9 +12,6 @@
   <aura:attribute name="masterConfig" type="String" default="{}"/>      
   <aura:attribute name="masterConfigObject" type="Object"/>      
 
-  <!-- DATA -->
-
-  <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
 
   <!-- DISPLAY PANELS -->
 
@@ -44,7 +41,6 @@
     recordId = "{!v.recordId}"
     Title = "{!v.Title}" 
     UserComponentId = "Controller"  
-    primaryNodeInitialization = "{!v.primaryNodeInitialization}"   
     masterConfig = "{!v.masterConfig}"  
     />
 
