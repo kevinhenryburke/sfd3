@@ -73,7 +73,7 @@
 //         },
 // DONE        "ControlPanel": {
 // DONE            "showBanner": true,
-// DONE            "configjsonString": {
+// DONE            "buttonParameters": {
 // DONE                "showtestbuttons": true,
 // DONE                "levels": 5,
 // DONE                "levelsIncreaseOnly": true,

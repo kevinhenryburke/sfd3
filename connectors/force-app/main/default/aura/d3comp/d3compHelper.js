@@ -9,7 +9,7 @@
             /* Configuration initialization */
 
             var masterConfigObject = component.get("v.masterConfigObject");
-            var configjson = masterConfigObject["panels"]["ControlPanel"]["configjsonString"];            
+            var configjson = masterConfigObject["panels"]["ControlPanel"]["buttonParameters"];            
 
 
             component.set("v.configjson", configjson);
