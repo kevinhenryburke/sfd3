@@ -18,7 +18,7 @@
 // TODO remove this so that only read from configuration above - handy for dev speed for now
 // masterConfigObject = 
 // {
-//     "data": {
+// DONE    "data": {
 // DONE         "dataFormat": "HierarchyJSON",
 // DONE         "dataSourceMethod": "c.returnHierarchyTop",
 // DONE         "dataUpdateMethod": "c.returnHierarchyLevels",
@@ -59,9 +59,8 @@
 // DONE                "objectType": "Account"
 // DONE            }]
 // DONE        },
-//         "primaryNodeInitialization": "None" // Primary Node to highlight - "FirstInData, RecordId, None"
-
-//     },
+// DONE        "primaryNodeInitialization": "None" // Primary Node to highlight - "FirstInData, RecordId, None"
+// DONE    },
 //     "panels": {
 //         "InfoPanel": {
 //             "showOnTop": true,

@@ -53,9 +53,6 @@
       masterConfig = "{!v.masterConfig}"  
     />
   </aura:if>
-<!-- older fields with older config
-    cardFields = "{!v.cardFields}"
--->
 
   <c:chartHierarchy aura:id="chartHierarchy"
     defaultEventType = "Component"
@@ -71,8 +68,5 @@
     allowPopover = "{!v.allowPopover}"
     masterConfig = "{!v.masterConfig}"  
     />
-<!-- older fields with older config
-    cardFields = "{!v.cardFields}"
--->
 
 </aura:component>
