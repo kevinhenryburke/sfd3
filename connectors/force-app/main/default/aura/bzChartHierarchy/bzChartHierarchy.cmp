@@ -14,8 +14,6 @@
 
   <!-- DATA -->
 
-  <aura:attribute name="queryJSON" type="String" default="{}"/> 
-  <aura:attribute name="configjsonString" type="String" />  <!-- this one is a bit of data and a bit of display -->
   <aura:attribute name="primaryNodeInitialization" type="String" default="FirstInData" description="RecordId, FirstInData"/>    
 
   <!-- DISPLAY PANELS -->
@@ -49,13 +47,10 @@
     Title = "{!v.Title}" 
     UserComponentId = "Controller"  
     primaryNodeInitialization = "{!v.primaryNodeInitialization}"   
-    configjsonString = "{!v.configjsonString}" 
     masterConfig = "{!v.masterConfig}"  
     />
 
   <!-- Card Display Parameters-->
-
--- GO AFTER PANEL FOR MASTER CONFIG --
 
   <aura:if isTrue="{!v.showTopPanel}">
     <c:panelDisplay aura:id = "panelDisplay" 

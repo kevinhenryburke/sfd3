@@ -2,8 +2,6 @@
 
     <design:attribute name="masterConfig" label="Master Config" default="{}" description="Master Configuration for the component" />      
 
-    <design:attribute name="queryJSON" label="Query JSON" default="{}" description="Configuration for the Salesforce Queries - refer to documentation and do not edit unless you fully understand how this works"/>        
-    <design:attribute name="configjsonString" label="Config JSON" description="configuration JSON, do not change this unless you really understand what it does!"/>        
     <design:attribute name="primaryNodeInitialization" label="Primary Node to highlight" default="FirstInData" description="FirstInData (which is Default), RecordId, None" />          
 
     <design:attribute name="showTopPanel" label="Show Top Info Panel" default="true" description="Check if you want a display panel at the top of the page"/>        

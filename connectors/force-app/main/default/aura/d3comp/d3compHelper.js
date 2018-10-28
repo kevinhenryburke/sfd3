@@ -7,10 +7,13 @@
 
         if (initialized != true) {
             /* Configuration initialization */
-            // TODO - review, this may be better hard coded but design parameter allows for some flexibility for end users
 
-            var configjson = JSON.parse(component.get("v.configjsonString"));            
+            var masterConfigObject = component.get("v.masterConfigObject");
+            var configjson = masterConfigObject["panels"]["ControlPanel"]["configjsonString"];            
+
+
             component.set("v.configjson", configjson);
+
 
             for (var key in configjson) {  
                 var subObj = configjson[key];

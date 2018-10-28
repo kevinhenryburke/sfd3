@@ -7,7 +7,5 @@
     <design:attribute name="UserComponentId" label="Component Id" default="Controller" description="Unique Id for this component" />	
     <design:attribute name="primaryNodeInitialization" label="Primary Node to highlight" default="FirstInData" description="FirstInData (which is Default), RecordId, None" />          
     <design:attribute name="configjsonString" label="Config JSON" description="configuration JSON, do not change this unless you really understand what it does!"/>        
-    <design:attribute name="queryJSON" label="Query JSON" default="{}" description="Configuration for the Salesforce Queries - refer to documentation and do not edit unless you fully understand how this works"/>        
-
     
 </design:component>

@@ -114,7 +114,6 @@
         
         component.set("v.masterConfigObject", masterConfigObject);
 
-        component.set("v.configjsonString" , JSON.stringify(masterConfigObject["panels"]["ControlPanel"]["configjsonString"]));
         component.set("v.primaryNodeInitialization" , masterConfigObject["data"]["primaryNodeInitialization"]);
 
         component.set("v.showTopPanel" , masterConfigObject["panels"]["InfoPanel"]["showOnTop"]);
