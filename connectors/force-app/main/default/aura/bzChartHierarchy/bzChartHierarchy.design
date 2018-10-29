@@ -9,7 +9,5 @@
     <design:attribute name="showLevelsInitial" default="1" label="Initial Connection Levels" description="Initial number of connection levels to show - default is 1"/>    
 
     <design:attribute name="cardFields" default="" label="Card Fields" description=""/>        
-    <design:attribute name="showZoomSlider" default="false" label="Show Zoom Slider" description="Show slider to zoom the hierarchy"/>        
-	<design:attribute name="clearHighlightedPaths" default="true" label="Clear Previous Highlighted Paths" description="If a path is highlighted it is cleared when a new path is highlighted if this is set to true"/>    
 
 </design:component>

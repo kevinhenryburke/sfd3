@@ -83,10 +83,10 @@
 //             "Title": "",
 //             "showLevelsInitial": 1,
 //             "Hierarchy" : {
-//                 "LeafColors" : {"Account" : { "colorBy" : "size" , "values" : [0,22070163,25070163], "colors" : ["white" , "yellow", "green"] }},
-//                 "ParentColors" : {"Account" : {  "colorBy" : "size" ,  "values" : [0,38970163], "colors" : ["lightsteelblue" , "purple"] }},
-//                 "showZoomSlider" : false,
-//                 "clearHighlightedPaths" : true
+// DONE                "LeafColors" : {"Account" : { "colorBy" : "size" , "values" : [0,22070163,25070163], "colors" : ["white" , "yellow", "green"] }},
+// DONE                "ParentColors" : {"Account" : {  "colorBy" : "size" ,  "values" : [0,38970163], "colors" : ["lightsteelblue" , "purple"] }},
+// DONE                "showZoomSlider" : false,
+// DONE                "clearHighlightedPaths" : true
 //             },
 //             "Network" : {
 //                 "showPathToolTip" : true,
@@ -116,11 +116,6 @@
 
         component.set("v.Title" , masterConfigObject["panels"]["ChartPanel"]["Title"]);
         component.set("v.showLevelsInitial" , masterConfigObject["panels"]["ChartPanel"]["showLevelsInitial"]);
-
-        // <!-- DISPLAY FEATURES - HIERARCHY -->
-
-        component.set("v.showZoomSlider" , masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["showZoomSlider"]);
-        component.set("v.clearHighlightedPaths" , masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["clearHighlightedPaths"]);
 
         // <!-- DISPLAY FEATURES - NETWORK -->
         

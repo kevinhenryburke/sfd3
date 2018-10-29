@@ -29,13 +29,12 @@
 
         // have a default for leaves
         var LeafColorsObjectDefault = {"colorBy" : "size", "values" : [0], "colors" : ["white"]};
-        var LeafColors = JSON.stringify(masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["LeafColors"]);
+        var LeafColors = masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["LeafColors"];
         _this.setColorCache (component, LeafColors, LeafColorsObjectDefault, "Leaf") ;
     
         // have a default for parents
         var ParentColorsObjectDefault = {"colorBy" : "size", "values" : [0], "colors" : ["lightsteelblue"]};
-        var ParentColors = JSON.stringify(masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["ParentColors"]);
-        // TODO setColorCache should not take string but object as second argument.
+        var ParentColors = masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["ParentColors"];
         _this.setColorCache (component, ParentColors, ParentColorsObjectDefault, "Parent") ;
 
         // Collapse after the second level (provided root has children)
@@ -693,18 +692,13 @@
         return color;
     },
 
-    setColorCache : function(component, ColorsString, ColorsObjectDefault, prefix) {
+    setColorCache : function(component, ColorsObject, ColorsObjectDefault, prefix) {
         var _this = this;
 
         _this.setCache (component, prefix + "ColorsObjectDefault", ColorsObjectDefault ) ;
         _this.setCache (component, prefix + "ColorsValuesDefault", ColorsObjectDefault.values ) ;
         _this.setCache (component, prefix + "ColorsNamesDefault", ColorsObjectDefault.colors ) ;
         _this.setCache (component, prefix + "ColorsColorByDefault", ColorsObjectDefault.colorBy ) ;
-
-        var ColorsObject;
-        if (ColorsString != null && ColorsString != "") {
-            ColorsObject = JSON.parse(ColorsString);
-        }
 
         var arrayObjectKeys = Object.keys(ColorsObject);
 

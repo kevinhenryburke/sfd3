@@ -30,10 +30,6 @@
     <aura:method name="styleNodes"> 
     </aura:method>
           
-    <aura:attribute name="clearHighlightedPaths" type="Boolean" default="true" description="If a path is highlighted it is cleared when a new path is highlighted if this is set to true"/>    
-    <aura:attribute name="LeafColors" type="String" default="{&quot;values&quot; : [0], &quot;colors&quot; : [&quot;white&quot;]}" description="Determines the color of a leaf node"/>    
-    <aura:attribute name="ParentColors" type="String" default="{&quot;values&quot; : [0], &quot;colors&quot; : [&quot;lightsteelblue&quot; ]}" description="Determines the color of parent node"/>    
-
     <aura:attribute name="ChartScaleFactor" type="Decimal" default="1" description="Scale Factor for chart display. Defaults to 1"/>    
 
 

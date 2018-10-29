@@ -13,6 +13,26 @@
     doInit: function(component, event, helper) {
         console.log('chartArea: doInit enter');   
 
+        var masterConfig = component.get("v.masterConfig");
+        if (typeof masterConfig === 'string' || masterConfig instanceof String) {
+            console.log("masterConfig is a string");
+            component.set("v.masterConfigObject", JSON.parse(masterConfig));
+        }
+        else {
+            console.log("masterConfig is an object?");
+            component.set("v.masterConfigObject", masterConfig);
+        }
+
+        var masterConfigObject = component.get("v.masterConfigObject");
+
+        var showZoomSlider = helper.getMasterParam(component,"panels","ChartPanel","Hierarchy","showZoomSlider");         
+        if (showZoomSlider != null) {
+            component.set("v.showZoomSlider" , masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["showZoomSlider"]);
+        }
+        else {
+            component.set("v.showZoomSlider" , false);
+        }
+
         var storeObject = JSON.parse("{}");
         component.set("v.storeObject", storeObject);
 

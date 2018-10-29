@@ -26,8 +26,6 @@
   <!-- DISPLAY FEATURES - HIERARCHY -->
 
   <aura:attribute name="cardFields" type="String" default="{}"/>    
-  <aura:attribute name="showZoomSlider" type="Boolean" default="false"/>    
-  <aura:attribute name="clearHighlightedPaths" type="Boolean" default="true" description="If a path is highlighted it is cleared when a new path is highlighted if this is set to true"/>    
 
   <!-- DISPLAY FEATURES - NETWORK -->
 
@@ -59,8 +57,6 @@
     UserControllerComponentId = "Controller"
     showLevelsInitial = "{!v.showLevelsInitial}"
     Title = "{!v.Title}"
-    clearHighlightedPaths = "{!v.clearHighlightedPaths}"
-    showZoomSlider = "{!v.showZoomSlider}"
     allowPopover = "{!v.allowPopover}"
     masterConfig = "{!v.masterConfig}"  
     />
