@@ -81,8 +81,8 @@
 // DONE        },
 //         "ChartPanel": {
 //             "Title": "",
-//             "showLevelsInitial": 1,
-//             "Hierarchy" : {
+// DONE            "showLevelsInitial": 1,
+// DONE            "Hierarchy" : {
 // DONE                "LeafColors" : {"Account" : { "colorBy" : "size" , "values" : [0,22070163,25070163], "colors" : ["white" , "yellow", "green"] }},
 // DONE                "ParentColors" : {"Account" : {  "colorBy" : "size" ,  "values" : [0,38970163], "colors" : ["lightsteelblue" , "purple"] }},
 // DONE                "showZoomSlider" : false,
@@ -115,7 +115,6 @@
         component.set("v.allowPopover" , masterConfigObject["panels"]["InfoPanel"]["showPopover"]);
 
         component.set("v.Title" , masterConfigObject["panels"]["ChartPanel"]["Title"]);
-        component.set("v.showLevelsInitial" , masterConfigObject["panels"]["ChartPanel"]["showLevelsInitial"]);
 
         // <!-- DISPLAY FEATURES - NETWORK -->
         

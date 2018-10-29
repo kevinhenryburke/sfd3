@@ -21,7 +21,6 @@
   <!-- DISPLAY FEATURES - GENERAL -->
 
   <aura:attribute name="Title" type="String" />      
-  <aura:attribute name="showLevelsInitial" type="Integer" default="1"/>   
 
   <!-- DISPLAY FEATURES - HIERARCHY -->
 
@@ -55,7 +54,6 @@
     componentType = "hierarchy.ctree"
     UserComponentId = "Hierarchy"
     UserControllerComponentId = "Controller"
-    showLevelsInitial = "{!v.showLevelsInitial}"
     Title = "{!v.Title}"
     allowPopover = "{!v.allowPopover}"
     masterConfig = "{!v.masterConfig}"  

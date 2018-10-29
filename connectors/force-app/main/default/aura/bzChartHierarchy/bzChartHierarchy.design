@@ -6,7 +6,6 @@
     <design:attribute name="allowPopover" default="false" label="Show Floating Info Panel" description="Check this if you want an embeddable floating info panel "/>        
     
     <design:attribute name="Title" default="1" label="Title Text" description=""/>        
-    <design:attribute name="showLevelsInitial" default="1" label="Initial Connection Levels" description="Initial number of connection levels to show - default is 1"/>    
 
     <design:attribute name="cardFields" default="" label="Card Fields" description=""/>        
 

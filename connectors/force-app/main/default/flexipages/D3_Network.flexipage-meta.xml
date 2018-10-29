@@ -53,7 +53,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>masterConfig</name>
-                <value>{             &quot;panels&quot;: {                 &quot;ChartPanel&quot;: {                     &quot;Selectors&quot; : {                         &quot;node&quot; : {                             &quot;selector&quot; : &quot;circle&quot;,                                         &quot;appendType&quot; : &quot;circle&quot;,                                         &quot;styleclassText&quot; : &quot;chartText&quot;,                             &quot;styleclassTextShadow&quot; : &quot;chartTextShadow&quot;                         } ,         &quot;path&quot; : {},         &quot;text&quot; : {}                            }                 }             }         }</value>
+                <value>{             &quot;panels&quot;: {                 &quot;ChartPanel&quot;: {           &quot;Title&quot;:&quot;&quot;,          &quot;showLevelsInitial&quot;:1,              &quot;Selectors&quot; : {                         &quot;node&quot; : {                             &quot;selector&quot; : &quot;circle&quot;,                                         &quot;appendType&quot; : &quot;circle&quot;,                                         &quot;styleclassText&quot; : &quot;chartText&quot;,                             &quot;styleclassTextShadow&quot; : &quot;chartTextShadow&quot;                         } ,         &quot;path&quot; : {},         &quot;text&quot; : {}                            }                 }             }         }</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>nodestrokewidth</name>
@@ -74,10 +74,6 @@
             <componentInstanceProperties>
                 <name>retainNodeDetailsMouseOut</name>
                 <value>true</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>showLevelsInitial</name>
-                <value>1</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>showPathToolTip</name>

@@ -31,7 +31,19 @@
         _this.setCache (component, "UserComponentId", component.get("v.UserComponentId") ) ;
         _this.setCache (component, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
         _this.setCache (component, "hasPrimaryNode", component.get("v.hasPrimaryNode") ) ;
-        _this.setCache (component, "showLevels", component.get("v.showLevelsInitial")) ;
+
+
+        var showLevelsInitial = _this.getMasterParam(component,"panels","ChartPanel","showLevelsInitial");         
+        if (showLevelsInitial != null) {
+            console.log("pickup showLevelsInitial from master ");
+            component.set("v.showLevelsInitial" , showLevelsInitial);
+            _this.setCache (component, "showLevels", showLevelsInitial) ;
+        }
+        else {
+            component.set("v.showLevelsInitial" , 1);
+            _this.setCache (component, "showLevels", 1) ;
+        }
+
 
         _this.setCache (component, "lastTouch", new Date().getTime()) ;
         _this.setCache (component, "width", Math.min(screen.width, screen.height)) ; // review this
