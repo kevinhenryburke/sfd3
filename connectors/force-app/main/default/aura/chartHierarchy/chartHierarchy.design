@@ -8,7 +8,6 @@
 	<design:attribute name="hasPrimaryNode" default="false" label="Chart has Primary Node" description="Determines if the chart has a primary node"/>    
     <design:attribute name="Title" default="1" label="Title Text" description=""/>        
 
-    <design:attribute name="allowPopover" default="false" label="Embed Info Panel" description="Select if you want an embeddable floating info panel "/>        
     <design:attribute name="cardFields" default="" label="Card Fields" description=""/>        
     
 </design:component>

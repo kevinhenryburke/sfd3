@@ -244,7 +244,8 @@
         {      
             console.log("chartArea: CloseDisplayPanel received by Chart : " + componentReference );
 
-            var allowPopover = component.get("v.allowPopover");
+            var allowPopover = helper.getMasterParam(component,"panels","InfoPanel","allowPopover");         
+            if (allowPopover == null) {allowPopover = false;}
 
             if (allowPopover == true) {
                 var modalPromise = component.get("v.modalPromise");

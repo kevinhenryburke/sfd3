@@ -64,7 +64,7 @@
 //     "panels": {
 //         "InfoPanel": {
 //             "showOnTop": true,
-//             "showPopover": true,
+// DONE             "allowPopover": true,
 //             "objectIcons": {
 //                 "Account": "standard:account",
 //                 "Opportunity": "standard:opportunity"
@@ -112,7 +112,6 @@
         component.set("v.masterConfigObject", masterConfigObject);
 
         component.set("v.showTopPanel" , masterConfigObject["panels"]["InfoPanel"]["showOnTop"]);
-        component.set("v.allowPopover" , masterConfigObject["panels"]["InfoPanel"]["showPopover"]);
 
         component.set("v.Title" , masterConfigObject["panels"]["ChartPanel"]["Title"]);
 

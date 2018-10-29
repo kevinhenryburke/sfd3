@@ -16,7 +16,6 @@
   <!-- DISPLAY PANELS -->
 
   <aura:attribute name="showTopPanel" type="Boolean" default="true"/>      
-  <aura:attribute name="allowPopover" type="Boolean" default="false"/>    
 
   <!-- DISPLAY FEATURES - GENERAL -->
 
@@ -55,7 +54,6 @@
     UserComponentId = "Hierarchy"
     UserControllerComponentId = "Controller"
     Title = "{!v.Title}"
-    allowPopover = "{!v.allowPopover}"
     masterConfig = "{!v.masterConfig}"  
     />
 

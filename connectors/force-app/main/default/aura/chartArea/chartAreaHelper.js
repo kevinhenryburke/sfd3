@@ -35,7 +35,6 @@
 
         var showLevelsInitial = _this.getMasterParam(component,"panels","ChartPanel","showLevelsInitial");         
         if (showLevelsInitial != null) {
-            console.log("pickup showLevelsInitial from master ");
             component.set("v.showLevelsInitial" , showLevelsInitial);
             _this.setCache (component, "showLevels", showLevelsInitial) ;
         }
@@ -233,7 +232,8 @@
         }
         _this.setCache (component, "textGroup", textGroup ) ;
 
-        var allowPopover = component.get("v.allowPopover");
+        var allowPopover = _this.getMasterParam(component,"panels","InfoPanel","allowPopover");         
+        if (allowPopover == null) {allowPopover = false;}
 
         if (allowPopover == true) {
             console.log("allowPopover set so create embedded component ... "); 
@@ -415,7 +415,8 @@
         var _this = this;
         console.log("chartArea: updatePopoverDirectly enter");
 
-        var allowPopover = component.get("v.allowPopover");
+        var allowPopover = _this.getMasterParam(component,"panels","InfoPanel","allowPopover");         
+        if (allowPopover == null) {allowPopover = false;}
 
         if (allowPopover == true) {
             var defaultEventType = component.get("v.defaultEventType");
