@@ -29,17 +29,13 @@
 
         // have a default for leaves
         var LeafColorsObjectDefault = {"colorBy" : "size", "values" : [0], "colors" : ["white"]};
-//        var LeafColors = component.get("v.LeafColors");
         var LeafColors = JSON.stringify(masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["LeafColors"]);
-console.log("Colors:" + LeafColors);
-console.log(JSON.stringify(masterConfigObject));
         _this.setColorCache (component, LeafColors, LeafColorsObjectDefault, "Leaf") ;
     
         // have a default for parents
         var ParentColorsObjectDefault = {"colorBy" : "size", "values" : [0], "colors" : ["lightsteelblue"]};
-//        var ParentColors = component.get("v.ParentColors");
         var ParentColors = JSON.stringify(masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["ParentColors"]);
-console.log("Colors:" + ParentColors);
+        // TODO setColorCache should not take string but object as second argument.
         _this.setColorCache (component, ParentColors, ParentColorsObjectDefault, "Parent") ;
 
         // Collapse after the second level (provided root has children)

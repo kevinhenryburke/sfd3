@@ -15,14 +15,6 @@
     <flexiPageRegions>
         <componentInstances>
             <componentInstanceProperties>
-                <name>LeafColors</name>
-                <value>{&quot;Account&quot; : { &quot;colorBy&quot; : &quot;size&quot; , &quot;values&quot; : [0,22070163,25070163], &quot;colors&quot; : [&quot;white&quot; , &quot;yellow&quot;, &quot;green&quot;] }}</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>ParentColors</name>
-                <value>{&quot;Account&quot; : {  &quot;colorBy&quot; : &quot;size&quot; ,  &quot;values&quot; : [0,38970163], &quot;colors&quot; : [&quot;lightsteelblue&quot; , &quot;purple&quot;] }}</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
                 <name>Title</name>
                 <value>Account Hierarchy Component</value>
             </componentInstanceProperties>
