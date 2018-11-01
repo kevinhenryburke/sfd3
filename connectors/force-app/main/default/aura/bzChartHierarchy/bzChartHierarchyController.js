@@ -89,6 +89,10 @@
 // DONE                "clearHighlightedPaths" : true
 //             },
 //             "Network" : {
+//                "primaryNodeHighlightingOn" : true, // description="Determines if selected node should be highlighted"/>    
+//                "primaryNodeHighlightingColour" : "gold", // description="Name of the colour of highlighed node"/>    
+//                "primaryNodeHighlightingRadius" : "10px", // description="Determines width of highlighting on a selected node"/>      
+//                "retainNodeDetailsMouseOut" : true,  // description="Set to true if we wish extended details following a node mouseover to be retain after mouseout"/>    
 //                 "showPathToolTip" : true,
 //                 "nodestrokewidth" : "0.5px"
 //             },
