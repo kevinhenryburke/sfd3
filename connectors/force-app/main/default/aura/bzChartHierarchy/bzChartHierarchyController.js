@@ -17,7 +17,7 @@
 
 // TODO remove this so that only read from configuration above - handy for dev speed for now
 // masterConfigObject = 
-// {
+// { 
 // DONE    "data": {
 // DONE         "dataFormat": "HierarchyJSON",
 // DONE         "dataSourceMethod": "c.returnHierarchyTop",
