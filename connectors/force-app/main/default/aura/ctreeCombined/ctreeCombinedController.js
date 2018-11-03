@@ -1,7 +1,7 @@
 ({
 
     onInit: function(component, event, helper) {
-        console.log('bzChartHierarchy: onInit: enter');
+        console.log('ctreeCombined: onInit: enter');
         console.log(component.get("v.masterConfig"));
 
         var masterConfig = component.get("v.masterConfig");
@@ -129,7 +129,7 @@
     /* receive a bubbled component event and distribute this to required children */
 
     handle_evt_sfd3  : function(component, event, helper) {
-        console.log('bzChartHierarchy: handle_evt_sfd3 enter');
+        console.log('ctreeCombined: handle_evt_sfd3 enter');
 
         var topic = event.getParam("topic");
         var parameters = event.getParam("parameters");
@@ -144,8 +144,8 @@
         var chartHierarchy = component.find("chartHierarchy");
         chartHierarchy.callFromContainer(tpc);
 
-        var d3comp = component.find("d3comp");
-        d3comp.callFromContainer(tpc);
+        var dataControlPanel = component.find("dataControlPanel");
+        dataControlPanel.callFromContainer(tpc);
 
         var showTopPanel = component.get("v.showTopPanel");
 

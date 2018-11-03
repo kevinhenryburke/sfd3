@@ -30,7 +30,7 @@
                 <name>showTopPanel</name>
                 <value>true</value>
             </componentInstanceProperties>
-            <componentName>bzChartHierarchy</componentName>
+            <componentName>ctreeCombined</componentName>
         </componentInstances>
         <name>Facet-e820ae43-07d0-43eb-9be1-158306f14049</name>
         <type>Facet</type>

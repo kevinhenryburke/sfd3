@@ -30,7 +30,7 @@
   <aura:attribute name="showPathToolTip" type="Boolean" default="false"/>    
   <aura:attribute name="nodestrokewidth" type="String" default="0.5px"/>    
   
-  <c:d3comp aura:id = "d3comp"
+  <c:dataControlPanel aura:id = "dataControlPanel"
     defaultEventType = "Component"
     recordId = "{!v.recordId}"
     Title = "{!v.Title}" 

@@ -14,7 +14,7 @@
                 <name>masterConfig</name>
                 <value>{      &quot;data&quot;:{         &quot;dataFormat&quot;:&quot;&quot;,       &quot;dataSourceMethod&quot;:&quot;c.returnNetworkInitial&quot;,       &quot;dataUpdateMethod&quot;:&quot;&quot;,       &quot;queryJSON&quot;:{            &quot;initialLevelsToRetrieve&quot;:1,          &quot;chartType&quot;:&quot;Network&quot;       }  ,  &quot;primaryNodeInitialization&quot;: &quot;FirstInData&quot;  },    &quot;panels&quot;:{         &quot;ControlPanel&quot;:{            &quot;showBanner&quot;:false,          &quot;buttonParameters&quot;:{               &quot;filtertypes&quot;:[                  &quot;Work&quot;,                &quot;Social&quot;,                &quot;Client&quot;             ],             &quot;measures&quot;:[                  &quot;Posts&quot;,                &quot;Hot&quot;             ],             &quot;levels&quot;:4          }       }    },    &quot;search&quot;:{         &quot;searchAction&quot;:&quot;HighlightOpenPath&quot;,       &quot;configuredAllowSearch&quot;:false    } }</value>
             </componentInstanceProperties>
-            <componentName>d3comp</componentName>
+            <componentName>dataControlPanel</componentName>
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>
@@ -98,7 +98,7 @@
                 <name>masterConfig</name>
                 <value>{      &quot;data&quot;:{         &quot;dataFormat&quot;:&quot;&quot;,       &quot;dataSourceMethod&quot;:&quot;c.returnUnlinkedData&quot;,       &quot;dataUpdateMethod&quot;:&quot;&quot;,       &quot;queryJSON&quot;:{            &quot;initialLevelsToRetrieve&quot;:1,          &quot;chartType&quot;:&quot;Network&quot;       } ,  &quot;primaryNodeInitialization&quot;: &quot;FirstInData&quot;   },    &quot;panels&quot;:{         &quot;ControlPanel&quot;:{            &quot;showBanner&quot;:true,          &quot;buttonParameters&quot;:{               &quot;allowrefresh&quot;:true,             &quot;measures&quot;:[                  &quot;Posts&quot;,                &quot;Hot&quot;             ]          }       }    },    &quot;search&quot;:{         &quot;searchAction&quot;:&quot;HighlightOpenPath&quot;,       &quot;configuredAllowSearch&quot;:false    } }</value>
             </componentInstanceProperties>
-            <componentName>d3comp</componentName>
+            <componentName>dataControlPanel</componentName>
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>

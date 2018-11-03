@@ -297,10 +297,10 @@
        var parentUserComponentIdFromEvent = event.getParam("parentUserComponentId");
        var parentUserComponentId = component.get("v.UserComponentId");
        if (parentUserComponentId != parentUserComponentIdFromEvent) {
-           console.log("d3comp: ignoring event: " + parentUserComponentId + "/" + parentUserComponentIdFromEvent);
+           console.log("dataControlPanel: ignoring event: " + parentUserComponentId + "/" + parentUserComponentIdFromEvent);
        } 
        else {
-           console.log("d3comp: event received");
+           console.log("dataControlPanel: event received");
        }
 
        component.set("v.selectedRecord" , selectedAccountGetFromEvent); 
