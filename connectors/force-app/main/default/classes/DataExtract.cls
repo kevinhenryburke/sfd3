@@ -1,4 +1,4 @@
-public class DThree {
+public with sharing class DataExtract {
 
     // Network Methods - from Static Resources
 
