@@ -1,5 +1,5 @@
 ({
-
+ 
     onInit: function(component, event, helper) {
         console.log('ctreeCombined: onInit: enter');
         console.log(component.get("v.masterConfig"));
