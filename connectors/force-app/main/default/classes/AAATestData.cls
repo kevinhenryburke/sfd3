@@ -1,10 +1,4 @@
-
-
 public with sharing class AAATestData {
-    public AAATestData() {
-
-    }
-
 
 // In Execute Anonymous run
 // AAATestData.testScripts(1);
