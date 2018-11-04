@@ -280,7 +280,7 @@
 
         if (topic == "SearchRecordSelected")
         {
-            // for a RefreshChart event we assume everything is initialized
+            // a search item has been selected from the search result set
             console.log("process SearchRecordSelected");
             helper.processSearchRecordSelected(component, event);
         }

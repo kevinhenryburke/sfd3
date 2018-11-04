@@ -1,12 +1,13 @@
 ({
     selectRecord : function(component, event, helper){      
 
-        var getSelectRecord = component.get("v.oRecord");
+        var parentUserComponentId = component.get("v.parentUserComponentId");  
+        var selectedRecord = component.get("v.oRecord");
 
         var SearchRecordSelectedEvent = component.getEvent("evt_bzc");
 
         var topic = "SearchRecordSelected";   
-        var parameters = {"recordByEvent" : getSelectRecord}; 
+        var parameters = {"recordByEvent" : selectedRecord}; 
         var controller = parentUserComponentId; 
 
         SearchRecordSelectedEvent.setParams({
@@ -15,8 +16,5 @@
             "controller" : controller
         });
         SearchRecordSelectedEvent.fire();    
-
-        console.log("SearchRecordSelected fired");
-
     },
  })

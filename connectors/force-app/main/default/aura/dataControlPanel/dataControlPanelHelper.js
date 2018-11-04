@@ -511,7 +511,6 @@
     // Processes selection event from the search component
     // Effectively just extracts record id and invokes a publisher method for the chart to pick up    
     processSearchRecordSelected : function(component, event, helper) {
-        console.log("SearchRecordSelected received by NEW mechanism");
         var _this = this;
 
         var parameters = event.getParam("parameters");
