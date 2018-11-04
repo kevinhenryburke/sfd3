@@ -506,9 +506,36 @@
             "parameters" : parameters,
             "controllerId" : controllerId
         }
-    }
-    
+    },
 
-    
+    // Processes selection event from the search component
+    // Effectively just extracts record id and invokes a publisher method for the chart to pick up    
+    processSearchRecordSelected : function(component, event, helper) {
+        console.log("SearchRecordSelected received by NEW mechanism");
+        var _this = this;
+
+        var parameters = event.getParam("parameters");
+
+        var selectedRecord = parameters["recordByEvent"];    
+        component.set("v.selectedRecord" , selectedRecord); 
+
+        var searchTermId = selectedRecord.id;
+        component.set("v.searchTermId", searchTermId);
+
+        var configuredLevels = component.get("v.configuredLevels");
+        if (configuredLevels == true) {
+            // TODO this is wrong and will need to change 
+            // for networks I'm pushing ot max levels - probably shouldn't
+            // code here is temporary and should probably just go
+            var levelsIncreaseDecrease = component.get("v.levelsIncreaseDecrease");
+            // set the configured levels buttons
+            if (levelsIncreaseDecrease) {
+                _this.setConnectionLevelMaxButtons(component);
+            }
+        }
+
+        _this.publishSearchChartEvent(component);
+
+    },
 
 })

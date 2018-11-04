@@ -100,4 +100,24 @@
         }
     },
 
+    // This function is called when the User Selects any record from the result list in the Embedded List component   
+    processSearchRecordSelected : function(component, event, helper) {
+        var parameters = event.getParam("parameters");
+
+        var selectedRecord = parameters["recordByEvent"];    
+        component.set("v.selectedRecord" , selectedRecord); 
+
+        var lookupPill = component.find("lookup-pill");
+        $A.util.addClass(lookupPill, 'slds-show');
+        $A.util.removeClass(lookupPill, 'slds-hide');
+
+        var searchResults = component.find("searchRes");
+        $A.util.addClass(searchResults, 'slds-is-close');
+        $A.util.removeClass(searchResults, 'slds-is-open');
+
+        var lookUpTarget = component.find("lookupField");
+        $A.util.addClass(lookUpTarget, 'slds-hide');
+        $A.util.removeClass(lookUpTarget, 'slds-show'); 
+    }
+
 })

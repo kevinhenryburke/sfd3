@@ -53,38 +53,8 @@
         component.set("v.selectedRecord", {} );   
     },
     
-    // This function is called when the User Selects any record from the result list in the Embedded List component   
-    handleEmbeddedComponentEvent : function(component, event, helper) {
-        // get the selected Account record from the COMPONETN event 	 
-        var selectedAccountGetFromEvent = event.getParam("recordByEvent");
-
-        // validate that we want to process this - i.e. it is for us?
-        var parentUserComponentIdFromEvent = event.getParam("parentUserComponentId");
-        var parentUserComponentId = component.get("v.parentUserComponentId");
-        if (parentUserComponentId != parentUserComponentIdFromEvent) {
-            // console.log("customLookup: ignoring event: " + parentUserComponentId + "/" + parentUserComponentIdFromEvent);
-        } 
-        else {
-            component.set("v.selectedRecord" , selectedAccountGetFromEvent); 
-            
-            var forclose = component.find("lookup-pill");
-            $A.util.addClass(forclose, 'slds-show');
-            $A.util.removeClass(forclose, 'slds-hide');
-
-            var forclose = component.find("searchRes");
-            $A.util.addClass(forclose, 'slds-is-close');
-            $A.util.removeClass(forclose, 'slds-is-open');
-
-            var lookUpTarget = component.find("lookupField");
-            $A.util.addClass(lookUpTarget, 'slds-hide');
-            $A.util.removeClass(lookUpTarget, 'slds-show'); 
-        }
-
-     },
-
-     handle_evt_sfd3  : function(component, event, helper) {
-        var _this = this;
-        var topic, parameters, controller; // TODO - for application events this needs to consider controller
+    handle_evt_sfd3  : function(component, event, helper) {
+        var topic, parameters, controller; 
 
         // if there is an arguments parameter this has been triggered by a method call
         // in which case we need to source our information from a level down in the event
@@ -104,6 +74,19 @@
             controller = event.getParam("controller");    
         }
 
+        console.log("customLookup: " + topic);
+
+        var UserComponentId = component.get("v.parentUserComponentId");
+
+        console.log("customLookup.handle_evt_sfd3: topic: " + topic + " component: " + UserComponentId);
+
+        // If the event propagated from a component related to another controller then we ignore it.
+        if (UserComponentId != controller) {
+            console.log("customLookup.handle_evt_sfd3: controller: ignoring message in " + UserComponentId + " intended for component " + controller);
+            return;
+        }        
+
+
         if (topic == "InitializeData" || topic == "RefreshData")
         {
             var datajson = parameters["datajson"];
@@ -112,7 +95,14 @@
 
             helper.flattenJson(component, datajson,datajsonFlat, datajsonSet, true);
         }
-    },
+
+        if (topic == "SearchRecordSelected")
+        {
+            // when a search item is selected we change styling related to the box
+            helper.processSearchRecordSelected(component, event);
+        }
+
+    }
      
 
 })

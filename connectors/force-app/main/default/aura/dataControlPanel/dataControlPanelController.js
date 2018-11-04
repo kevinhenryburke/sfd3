@@ -278,6 +278,15 @@
             helper.updateData(component, event);
         }
 
+        if (topic == "SearchRecordSelected")
+        {
+            // for a RefreshChart event we assume everything is initialized
+            console.log("process SearchRecordSelected");
+            helper.processSearchRecordSelected(component, event);
+        }
+
+        
+
         // finally push down to contained components if this is a component event received from a direct method call
         if (argumentsParameter != null) 
         {
@@ -285,52 +294,7 @@
             customLookup.callFromContainer(tpc);
         }
 
-
     },
-
-   // This function call when the end User Select any record from the result list.   
-   handleEmbeddedComponentEvent : function(component, event, helper) {
-    // get the selected Account record from the COMPONETN event 	 
-       var selectedAccountGetFromEvent = event.getParam("recordByEvent");
-
-       // validate that we want to process this - i.e. it is for us?
-       var parentUserComponentIdFromEvent = event.getParam("parentUserComponentId");
-       var parentUserComponentId = component.get("v.UserComponentId");
-       if (parentUserComponentId != parentUserComponentIdFromEvent) {
-           console.log("dataControlPanel: ignoring event: " + parentUserComponentId + "/" + parentUserComponentIdFromEvent);
-       } 
-       else {
-           console.log("dataControlPanel: event received");
-       }
-
-       component.set("v.selectedRecord" , selectedAccountGetFromEvent); 
-       
-       console.log("selectedAccountGetFromEvent");
-       console.log(JSON.stringify(selectedAccountGetFromEvent));
-
-       console.log("id");
-       console.log(selectedAccountGetFromEvent.id);
-
-       var searchTermId = selectedAccountGetFromEvent.id;
-
-       component.set("v.searchTermId", searchTermId);
-        
-        var configuredLevels = component.get("v.configuredLevels");
-        if (configuredLevels == true) {
-            // TODO this is wrong and will need to change 
-            // for networks I'm pushing ot max levels - probably shouldn't
-            // code here is temporary and should probably just go
-            var levelsIncreaseDecrease = component.get("v.levelsIncreaseDecrease");
-            // set the configured levels buttons
-            if (levelsIncreaseDecrease) {
-                helper.setConnectionLevelMaxButtons(component);
-            }
-        }
-
-        helper.publishSearchChartEvent(component);
-        
-    },
-
 
     /* onClick methods */
 
