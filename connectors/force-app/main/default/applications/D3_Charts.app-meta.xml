@@ -6,11 +6,11 @@
     <formFactors>Large</formFactors>
     <label>D3 Charts</label>
     <navType>Standard</navType>
-    <tab>D3_HalfWidth_Chart</tab>
-    <tab>D3_Network</tab>
-    <tab>D3_Pack</tab>
-    <tab>D3_CTree</tab>
-    <tab>D3_CTree_Opp</tab>
+    <tabs>D3_HalfWidth_Chart</tabs>
+    <tabs>D3_Network</tabs>
+    <tabs>D3_Pack</tabs>
+    <tabs>D3_CTree</tabs>
+    <tabs>D3_CTree_Opp</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>D3_Charts_UtilityBar</utilityBar>
 </CustomApplication>

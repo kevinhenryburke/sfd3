@@ -1,11 +1,27 @@
 {
-  "packageDirectories": [
-    {
-      "path": "force-app",
-      "default": true
+    "packageDirectories": [
+        {
+            "path": "force-app",
+            "default": true,
+            "package": "Berlioz Full",
+            "versionName": "ver 0.1",
+            "versionNumber": "0.1.0.NEXT"
+        },
+        {
+            "path": "force-app",
+            "package": "Berlioz Full01",
+            "versionName": "ver 0.1",
+            "versionNumber": "0.1.0.NEXT",
+            "default": false
+        }
+    ],
+    "namespace": "",
+    "sfdcLoginUrl": "https://login.salesforce.com",
+    "sourceApiVersion": "44.0",
+    "packageAliases": {
+        "Berlioz Full": "0HoB0000000PAyMKAW",
+        "Berlioz Full@0.1.0-1": "04tB0000000TuZyIAK",
+        "Berlioz Full01": "0HoB0000000PAyRKAW",
+        "Berlioz Full01@0.1.0-1": "04tB0000000Tua8IAC"
     }
-  ],
-  "namespace": "",
-  "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "41.0"
 }

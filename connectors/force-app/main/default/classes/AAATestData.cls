@@ -2,7 +2,7 @@ public with sharing class AAATestData {
 
 // In Execute Anonymous run
 // AAATestData.testScripts(1);
-// for each of 1 to 9
+// for each of 1 to 9 - can also be run from VSC
 
 public static void testScripts(Integer sectionNumber) {
 
