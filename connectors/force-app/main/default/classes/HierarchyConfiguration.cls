@@ -9,8 +9,8 @@ public with sharing class HierarchyConfiguration  {
         this.chartType = chartType;
     }
 
-
-
+    // allows a SOQL query to be entered that returns an id that will be the root node of the hierarchy. Will only be used if a recordId is not passed into @AuraEnabled method
+    public String topIdDeriveSOQL;
     // chartType is required to provide the mandatory fields for every object
     public String chartType;
     // levels to retrieve in initial query

@@ -27,13 +27,14 @@ public with sharing class DataExtract {
 
     @AuraEnabled
     public static String returnHierarchyTop(String queryJSON, String recordId) {
-        if (recordId == null) {
-            // TEMP - set a default for testing
-            Account a = [select id from Account where name = 'Burke Enterprises' LIMIT 1];
-            recordId = a.id;
-        }
 
         HierarchyConfiguration hc = (HierarchyConfiguration)JSON.deserialize(queryJSON, HierarchyConfiguration.class);
+
+        if (recordId == null) {
+            // TEMP - set a default for testing
+            sObject s = Database.query(hc.topIdDeriveSOQL);
+            recordId = (ID) s.get('id');
+        }
 
         return returnHierarchyTop(hc, recordId);
 

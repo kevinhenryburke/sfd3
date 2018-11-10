@@ -101,8 +101,6 @@ public with sharing class Hierarchy_Test {
         HierarchyConfiguration.ObjectConfiguration oc = (HierarchyConfiguration.ObjectConfiguration)JSON.deserialize(queryJSON, HierarchyConfiguration.ObjectConfiguration.class);
         hc.objectLevels.add(oc);
         return hc;        
-
-
     }
 
     /* TESTS */
@@ -163,7 +161,7 @@ public with sharing class Hierarchy_Test {
     } 
 
     @IsTest
-    public static void hqmapSObject() {
+    public static void retrieveLevels() {
         Account rootAccount = factoryAccount();
 
         HierarchyConfiguration hc = factoryConfig();
