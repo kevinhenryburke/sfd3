@@ -27,20 +27,15 @@ public with sharing class DataExtract {
 
     @AuraEnabled
     public static String returnHierarchyTop(String queryJSON, String recordId) {
-
         HierarchyConfiguration hc = (HierarchyConfiguration)JSON.deserialize(queryJSON, HierarchyConfiguration.class);
-
-        if (recordId == null) {
-            // TEMP - set a default for testing
-            sObject s = Database.query(hc.topIdDeriveSOQL);
-            recordId = (ID) s.get('id');
-        }
-
         return returnHierarchyTop(hc, recordId);
-
     }
 
     public static String returnHierarchyTop(HierarchyConfiguration hc, Id rootId) {
+        if (rootId == null) {
+            sObject s = Database.query(hc.topIdDeriveSOQL);
+            rootId = (ID) s.get('id');
+        }
         HierarchyJSON deserialized = HierarchyJSON.retrieveLevels (hc, rootId);
         return JSON.serialize(deserialized, true);
     }

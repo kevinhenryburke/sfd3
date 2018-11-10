@@ -59,10 +59,7 @@ public with sharing class Hierarchy_Test {
         return a1;
     }
 
-    public static HierarchyConfiguration factoryConfig() {
-        HierarchyConfiguration hc = new HierarchyConfiguration('Hierarchy');
-        hc.initialLevelsToRetrieve = 3;
-        // Add an Account configuration
+    public static String factoryQueryJSON() {
 
         String queryJSON = 
         '                {"objectType": "Account",'+
@@ -98,13 +95,34 @@ public with sharing class Hierarchy_Test {
         '            }]'+
         '        }';
 
+        return queryJSON;
+    }
+
+
+    public static HierarchyConfiguration factoryConfig() {
+        HierarchyConfiguration hc = new HierarchyConfiguration('Hierarchy');
+        hc.initialLevelsToRetrieve = 3;
+        // Add an Account configuration
+
+        String queryJSON = factoryQueryJSON();
+        hc.topIdDeriveSOQL = 'select id from Account where name = \'Burke Enterprises\' LIMIT 1 ';
+
         HierarchyConfiguration.ObjectConfiguration oc = (HierarchyConfiguration.ObjectConfiguration)JSON.deserialize(queryJSON, HierarchyConfiguration.ObjectConfiguration.class);
         hc.objectLevels.add(oc);
         return hc;        
     }
 
     /* TESTS */
-    
+
+
+    @IsTest
+    public static void returnHierarchyTop() {
+        factoryAccount();
+        HierarchyConfiguration hc = factoryConfig();
+        String serialized = DataExtract.returnHierarchyTop(JSON.serialize(hc,true), null) ;
+
+        JSON.deserialize(serialized, HierarchyJSON.class);
+    }
 
     @IsTest
     public static void mapHierarchyStructure() {
