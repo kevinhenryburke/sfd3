@@ -183,6 +183,11 @@
         var searchAction = component.get("v.searchAction");
         var showLevels = component.get("v.maxlevels");
 
+        _this.publishSearchChartEventBase (component, searchTermId, searchAction, showLevels);
+    },
+
+    publishSearchChartEventBase : function(component, searchTermId, searchAction, showLevels) {
+        var _this = this;
         var configEventParameters = { 
             "searchTermId" : searchTermId,
             "searchAction" : searchAction,
@@ -195,6 +200,7 @@
         _this.publishPreppedEvent(component,preppedEvent);
 
     },
+
 
     canIncreaseLevels : function(component) {
         var _this = this;

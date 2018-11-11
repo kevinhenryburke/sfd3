@@ -31,12 +31,24 @@ public with sharing class DataExtract {
         return returnHierarchyTop(hc, recordId);
     }
 
-    public static String returnHierarchyTop(HierarchyConfiguration hc, Id rootId) {
-        if (rootId == null) {
+    public static String returnHierarchyTop(HierarchyConfiguration hc, Id recordId) {
+        // topId is the highest point of the chart to be rendered
+        // It may be recordId but is may also be higher up under conditions below
+        Id topId = recordId;
+        if (recordId == null) {
             sObject s = Database.query(hc.topIdDeriveSOQL);
-            rootId = (ID) s.get('id');
+            topId = (ID) s.get('id');
         }
-        HierarchyJSON deserialized = HierarchyJSON.retrieveLevels (hc, rootId);
+        if (recordId != null && hc.rootIdRelatedSOQL != null) {
+            sObject s = Database.query(hc.rootIdRelatedSOQL);
+            sObject p = s.getSObject(hc.relatedQueryObject);
+            if (p != null) {
+                topId = (ID) p.get('id'); 
+            }
+        }
+
+        HierarchyJSON deserialized = HierarchyJSON.retrieveLevels (hc, topId);
+        deserialized.initialHighlightId = recordId;
         return JSON.serialize(deserialized, true);
     }
 

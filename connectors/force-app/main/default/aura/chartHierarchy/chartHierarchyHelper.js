@@ -7,7 +7,9 @@
         var componentReference = component.get("v.componentReference");
         var masterConfigObject = component.get("v.masterConfigObject");
 
-		var datajson = _this.getCache (component, "datajson") ;  
+        var datajson = _this.getCache (component, "datajson") ;  
+        console.log("xxxxx");
+        console.log(JSON.stringify(datajson));
 		var nodeGroup = _this.getCache (component, "nodeGroup") ;  
 		var pathGroup = _this.getCache (component, "pathGroup") ;  
 		// var textGroup = _this.getCache (component, "textGroup") ;  
@@ -48,12 +50,23 @@
         // Push out an initial message to highlight the root node to display panels
         // Effecitvely can do this via a mouseover event on root.
         // TODO can move this to a generic location?
-        _this.setCache (component, "mouseoverRecordId", root.id ) ;
+
+        var highlightId = datajson["initialHighlightId"];
+        console.log("xxxxx:" + highlightId);
+        _this.setCache (component, "mouseoverRecordId", highlightId ) ;
         _this.restockCache(component);
 
         var preppedEvent = _this.nodeMouseover(component, root); 
         _this.publishPreppedEvent(component,preppedEvent);
         _this.updatePopoverDirectly(component, preppedEvent);
+
+console.log("TEMP xxxx");
+        if (highlightId != null && highlightId != root.id) {
+            _this.highlightPathsBy(component, highlightId, "Id", true);
+            _this.openPathsBy(component, highlightId, "Id");
+        }
+
+        console.log("initialize root path");
     },
 
     update : function(component, nodeGroup, pathGroup, componentReference, source, makeSourceRoot) {

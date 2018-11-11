@@ -19,6 +19,7 @@ public with sharing class HierarchyJSON {
     public Integer childDepth; // depth of levels beneath this.
     public List<HierarchyJSON> children;   // child records
 
+    public String initialHighlightId; // a unique id - typically a Salesforce record id
 
     public HierarchyJSON() {
 

@@ -11,6 +11,13 @@ public with sharing class HierarchyConfiguration  {
 
     // allows a SOQL query to be entered that returns an id that will be the root node of the hierarchy. Will only be used if a recordId is not passed into @AuraEnabled method
     public String topIdDeriveSOQL;
+
+    /* Will be used if a recordId is passed into @AuraEnabled method and we wish to root the chart on a different related record. 
+    A query can be passed that returns an ID value which references in the passed-in recordId
+    */
+    public String rootIdRelatedSOQL;
+    public String relatedQueryObject; 
+
     // chartType is required to provide the mandatory fields for every object
     public String chartType;
     // levels to retrieve in initial query

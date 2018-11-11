@@ -105,7 +105,6 @@ public with sharing class Hierarchy_Test {
         // Add an Account configuration
 
         String queryJSON = factoryQueryJSON();
-        hc.topIdDeriveSOQL = 'select id from Account where name = \'Burke Enterprises\' LIMIT 1 ';
 
         HierarchyConfiguration.ObjectConfiguration oc = (HierarchyConfiguration.ObjectConfiguration)JSON.deserialize(queryJSON, HierarchyConfiguration.ObjectConfiguration.class);
         hc.objectLevels.add(oc);
@@ -116,12 +115,31 @@ public with sharing class Hierarchy_Test {
 
 
     @IsTest
-    public static void returnHierarchyTop() {
+    public static void returnHierarchyTop_DerivedSOQL() {
         factoryAccount();
         HierarchyConfiguration hc = factoryConfig();
+        hc.topIdDeriveSOQL = 'select id from Account where name = \'Burke Enterprises\' LIMIT 1 ';
+
         String serialized = DataExtract.returnHierarchyTop(JSON.serialize(hc,true), null) ;
 
         JSON.deserialize(serialized, HierarchyJSON.class);
+    }
+
+    @IsTest
+    public static void returnHierarchyTop_RelatedSOQL() {
+        factoryAccount();
+        Account a = [select id, name, Parent.id from Account where name = 'Small Company'];
+        HierarchyConfiguration hc = factoryConfig();
+
+        ID passedId = a.id; 
+
+        hc.rootIdRelatedSOQL = 'select Parent.id from Account where id = :recordId LIMIT 1 ';
+        hc.relatedQueryObject = 'Parent';
+
+        String serialized = DataExtract.returnHierarchyTop(JSON.serialize(hc,true), passedId) ;
+
+        HierarchyJSON hj = (HierarchyJSON) JSON.deserialize(serialized, HierarchyJSON.class);
+        System.assertEquals('Burke Enterprises',hj.name);
     }
 
     @IsTest

@@ -22,7 +22,6 @@
 
         var queryJSONObject = masterConfigObject["data"]["queryJSON"];
 
-
         var thisLevel = queryJSONObject.initialLevelsToRetrieve;
         // shift removes from front....
         component.set("v.currentLevels", thisLevel );
