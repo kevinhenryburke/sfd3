@@ -8,8 +8,6 @@
         var masterConfigObject = component.get("v.masterConfigObject");
 
         var datajson = _this.getCache (component, "datajson") ;  
-        console.log("xxxxx");
-        console.log(JSON.stringify(datajson));
 		var nodeGroup = _this.getCache (component, "nodeGroup") ;  
 		var pathGroup = _this.getCache (component, "pathGroup") ;  
 		// var textGroup = _this.getCache (component, "textGroup") ;  
@@ -568,19 +566,15 @@
             }
             else {
                 preppedEvent.eventType = component.get("v.defaultEventType");
-                console.log("publishPreppedEvent: use default eventType: " + preppedEvent.eventType);
             }
 
             if (preppedEvent.eventType == "Component"){
-                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
                 event = component.getEvent("evt_bzc");
             }
             if (preppedEvent.eventType == "Application"){
-                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
                 event = $A.get("e.c:evt_sfd3");
             }
             if (preppedEvent.eventType == "Cache"){
-                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
                 var appEvents = _this.getCache (component, "appEvents") ;
                 event = appEvents.pop();
             }    

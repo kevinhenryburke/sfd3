@@ -4,8 +4,6 @@
     <aura:attribute name="parentUserComponentId" type="String"/> 
     <aura:attribute name="defaultEventType" type="String" default="Application"/>    
  
-  <!--Register the component level event-->
- 
     <aura:registerEvent name="evt_bzc" type="c:evt_bzc"/>
 
     <li role="presentation" class="slds-listbox__item" onclick="{!c.selectRecord}">

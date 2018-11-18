@@ -12,23 +12,20 @@
 
     <aura:attribute name="parentUserComponentId" type="String"/> 
 
+    <aura:attribute name="defaultEventType" type="String" default="Application"/>    
+
     <aura:attribute name="datajsonString" type="String"/> 
     <aura:attribute name="datajsonFlat" type="Object[]"/> 
     <aura:attribute name="datajsonSet" type="Set"/> 
     <aura:attribute name="test" type="String"/> 
 
     <!-- Events and Handlers -->  
-    <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
     <aura:handler event="c:evt_sfd3" action="{!c.handle_evt_sfd3}"/>
 
     <aura:method name="callFromContainer" action="{!c.handle_evt_sfd3}"> 
         <aura:attribute name="tpc" type="Object"/>    
     </aura:method>
-      
-    <!--declare events hendlers-->  
-    <aura:handler name="evt_bzc" event="c:evt_bzc" action="{!c.handle_evt_sfd3}"/>   
-   
-    
+          
     <!-- https://www.lightningdesignsystem.com/components/lookups/ --> 
     
     <div onmouseleave="{!c.onblur}" aura:id="searchRes" class="slds-form-element slds-lookup slds-is-close" data-select="single">
@@ -60,7 +57,7 @@
             <lightning:spinner class="slds-hide" variant="brand" size="small" aura:id="mySpinner"/>
             <center> {!v.Message}</center>
             <aura:iteration items="{!v.listOfSearchRecords}" var="singleRec">
-                <c:customLookupResult parentUserComponentId="{!v.parentUserComponentId}" oRecord="{!singleRec}" IconName="{!v.IconName}"/>
+                <c:customLookupResult parentUserComponentId="{!v.parentUserComponentId}" oRecord="{!singleRec}" IconName="{!v.IconName}" defaultEventType="{!v.defaultEventType}"/>
             </aura:iteration>
         </ul>
     </div>

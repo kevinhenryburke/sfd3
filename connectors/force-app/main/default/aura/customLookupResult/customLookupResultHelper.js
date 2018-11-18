@@ -24,11 +24,6 @@
                 console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
                 event = $A.get("e.c:evt_sfd3");
             }
-            if (preppedEvent.eventType == "Cache"){
-                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
-                var appEvents = _this.getCache (component, "appEvents") ;
-                event = appEvents.pop();
-            }    
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
         }
     },

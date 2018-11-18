@@ -108,11 +108,8 @@
         console.log("chartArea: ChartRendered event published ");
 
         // build up a cache for mouseover events - may be a better way to do this!
-        var appEvents = [];
-        for (var i = 0; i < 100; i++) {
-            appEvents.push($A.get("e.c:evt_sfd3"));
-        }
-        _this.setCache (component, "appEvents",  appEvents) ;
+        _this.setCache (component, "appEvents",  []) ;
+        _this.restockCache(component);
 
     },
 
@@ -360,18 +357,15 @@
             }
 
             if (preppedEvent.eventType == "Component"){
-                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
                 event = component.getEvent("evt_bzc");
             }
             if (preppedEvent.eventType == "Application"){
-                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
                 event = $A.get("e.c:evt_sfd3");
             }
             if (preppedEvent.eventType == "Cache"){
-                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
                 var appEvents = _this.getCache (component, "appEvents") ;
                 event = appEvents.pop();
-            }    
+            } 
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
         }
     },
@@ -546,19 +540,19 @@
     },
 
     initializeCache : function (component) {
-        component.set("v.TESTCACHE", {});        
+        component.set("v.cacheObject", {});        
     },    
 
     setCache : function (component, key, value) {
-        component.get("v.TESTCACHE")[key] = value;        
+        component.get("v.cacheObject")[key] = value;        
     },
     
     getCache : function (component, key) {
-        return component.get("v.TESTCACHE")[key];        
+        return component.get("v.cacheObject")[key];        
     },
     
     hasCache : function (component, key) {
-        var allkeys = component.get("v.TESTCACHE");
+        var allkeys = component.get("v.cacheObject");
         return Object.keys(allkeys).includes(key);
     },
 

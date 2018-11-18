@@ -50,12 +50,10 @@
                     component.set("v.configuredAllowRefresh", true);                    
                 }
                 if (key == "levelsIncreaseOnly") {
-                    console.log("xxx: levelsIncreaseOnly: " + configjson.levelsIncreaseOnly );
                     component.set("v.levelsIncreaseOnly", configjson.levelsIncreaseOnly);                    
                     component.set("v.levelsIncreaseDecrease", ! configjson.levelsIncreaseOnly);                    
                 }
                 if (key == "autoIncreaseLevels") {
-                    console.log("xxx: autoIncreaseLevels: set to: " + configjson.autoIncreaseLevels );
                     component.set("v.autoIncreaseLevels", configjson.autoIncreaseLevels);                    
                 }
 
@@ -102,9 +100,6 @@
         var masterConfigObject = component.get("v.masterConfigObject");
         var queryJSONObject = masterConfigObject["data"]["queryJSON"];
         var queryJSONString = JSON.stringify(queryJSONObject);        
-
-        console.log("panel: xxxxx: currentLevels:" + thisLevel);
-
 
         action.setParams({
             'queryJSON': queryJSONString,
@@ -226,7 +221,6 @@
         if (canIncreaseLevels) {
             var currentLevels = component.get("v.currentLevels");
             currentLevels++;
-            console.log("xxxxx: currentLevels: " + currentLevels);
             component.set("v.currentLevels", currentLevels);
             var controllerId = component.get("v.UserComponentId");
             var preppedEvent = _this.prepareEvent("ShowLevelsMore", {"levels" : currentLevels}, controllerId);
@@ -507,7 +501,6 @@
                 console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
                 event = $A.get("e.c:evt_sfd3");
             }
-            // Note - there is no Cache for controllers
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
         }
     },

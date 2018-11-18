@@ -33,9 +33,8 @@
 
   <!-- Events and Handlers -->  
   <aura:registerEvent name="evt_bzc" type="c:evt_bzc"/>
-  <!-- <aura:handler name="evt_bzc" event="c:evt_bzc" action="{!c.handle_evt_sfd3}"/>    -->
-
   <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
+
   <aura:handler event="c:evt_sfd3" action="{!c.handle_evt_sfd3}"/>
 
   <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
@@ -44,19 +43,12 @@
   <aura:attribute name="modalPromise" type="Aura.Action"/>
   <aura:attribute name="modalShown" type="Boolean" default="false"/>    
   
-<!-- Temporary play with reference to dynamic component -->
-<aura:attribute name="dyno" type="Aura.Component[]">
-<h1>WOWZA!!!</h1>
-</aura:attribute>
+  <aura:attribute name="popoverPanel" type="Aura.Component[]"/>
 
-<aura:attribute name="popoverPanel" type="Aura.Component[]">
-</aura:attribute>
+  <aura:attribute name="masterConfig" type="String" default="{}"/>      
+  <aura:attribute name="masterConfigObject" type="Object"/>      
 
-
-<aura:attribute name="masterConfig" type="String" default="{}"/>      
-<aura:attribute name="masterConfigObject" type="Object"/>      
-
-<aura:attribute name="TESTCACHE" type="Object"/>      
+  <aura:attribute name="cacheObject" type="Object"/>      
 
 
   <!-- Methods with different implementations for different chart types -->  

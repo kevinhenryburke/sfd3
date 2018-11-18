@@ -164,9 +164,7 @@
         if (topic == "ShowLevelsMore")
         {
             helper.setCache (component, "showLevels", parameters["levels"] ) ;
-            console.log("area: xxxxx: currentLevels: " + parameters["levels"]);
-            cc.refreshVisibility();                 
-    
+            cc.refreshVisibility();                     
         }
         if (topic == "ShowLevelsFewer")
         {
