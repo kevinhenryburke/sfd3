@@ -9,7 +9,7 @@
 
   <!--declare events hendlers-->  
   <aura:registerEvent name="evt_bzc" type="c:evt_bzc"/>
-  <aura:handler name="evt_bzc" event="c:evt_bzc" action="{!c.handle_evt_sfd3}"/>   
+  <!-- <aura:handler name="evt_bzc" event="c:evt_bzc" action="{!c.handle_evt_sfd3}"/>    -->
   
   <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
   <aura:handler event="c:evt_sfd3" action="{!c.handle_evt_sfd3}"/> 

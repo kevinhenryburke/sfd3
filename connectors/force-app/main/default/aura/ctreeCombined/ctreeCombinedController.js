@@ -129,11 +129,12 @@
     /* receive a bubbled component event and distribute this to required children */
 
     handle_evt_sfd3  : function(component, event, helper) {
-        console.log('ctreeCombined: handle_evt_sfd3 enter');
 
         var topic = event.getParam("topic");
         var parameters = event.getParam("parameters");
         var controller = event.getParam("controller");
+
+        console.log('ctreeCombined: handle_evt_sfd3 enter, topic: ' + topic);
 
         var tpc = {
             "topic" : topic,

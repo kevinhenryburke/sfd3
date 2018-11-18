@@ -88,7 +88,7 @@
         }
     },
 
-    updateData : function(component, event) {
+    updateData : function(component, parameters) {
         var _this = this;
         // for a RefreshChart event we assume everything is initialized
 
@@ -102,6 +102,8 @@
         var masterConfigObject = component.get("v.masterConfigObject");
         var queryJSONObject = masterConfigObject["data"]["queryJSON"];
         var queryJSONString = JSON.stringify(queryJSONObject);        
+
+        console.log("panel: xxxxx: currentLevels:" + thisLevel);
 
 
         action.setParams({
@@ -140,9 +142,8 @@
 
                 var configEventParameters;
 
-                if (event != null && event.getParam("parameters") != null) {
+                if (parameters != null) {
                     // Extract data from the event to update control panel and send out details.
-                    var parameters = event.getParam("parameters");
                     var componentReference = parameters["componentReference"];
                     bzutils.log("Publish data upon refresh request for charts: " + componentReference);
                     var panelPrimaryId = parameters["primaryNodeId"];            
@@ -178,6 +179,9 @@
     },
 
     publishSearchChartEvent : function(component) {
+
+        console.log("helper.publishSearchChartEvent");
+
         var _this = this;
         var searchTermId = component.get("v.searchTermId");
         var searchAction = component.get("v.searchAction");
@@ -188,6 +192,9 @@
 
     publishSearchChartEventBase : function(component, searchTermId, searchAction, showLevels) {
         var _this = this;
+
+        console.log("helper.publishSearchChartEventBase");
+
         var configEventParameters = { 
             "searchTermId" : searchTermId,
             "searchAction" : searchAction,
@@ -219,6 +226,7 @@
         if (canIncreaseLevels) {
             var currentLevels = component.get("v.currentLevels");
             currentLevels++;
+            console.log("xxxxx: currentLevels: " + currentLevels);
             component.set("v.currentLevels", currentLevels);
             var controllerId = component.get("v.UserComponentId");
             var preppedEvent = _this.prepareEvent("ShowLevelsMore", {"levels" : currentLevels}, controllerId);
@@ -516,10 +524,10 @@
 
     // Processes selection event from the search component
     // Effectively just extracts record id and invokes a publisher method for the chart to pick up    
-    processSearchRecordSelected : function(component, event, helper) {
+    processSearchRecordSelected : function(component, parameters) {
         var _this = this;
 
-        var parameters = event.getParam("parameters");
+        console.log("helper.processSearchRecordSelected enter");
 
         var selectedRecord = parameters["recordByEvent"];    
         component.set("v.selectedRecord" , selectedRecord); 
@@ -538,6 +546,8 @@
                 _this.setConnectionLevelMaxButtons(component);
             }
         }
+
+        console.log("helper.SearchRecordSelected last call");
 
         _this.publishSearchChartEvent(component);
 

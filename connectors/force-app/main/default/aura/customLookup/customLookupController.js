@@ -66,12 +66,14 @@
             topic = tpc.topic;
             parameters = tpc.parameters;
             controller = tpc.controller;
+            console.log('customLookup: handle_evt_sfd3 enter from method, topic: ' + topic);
         }
         else {
             console.log('customLookup: invoked from event');
             topic = event.getParam("topic");
             parameters = event.getParam("parameters");
             controller = event.getParam("controller");    
+            console.log('customLookup: handle_evt_sfd3 enter from event, topic: ' + topic);
         }
 
         console.log("customLookup: " + topic);
@@ -99,6 +101,7 @@
         if (topic == "SearchRecordSelected")
         {
             // when a search item is selected we change styling related to the box
+            console.log("process customLookup.SearchRecordSelected");
             helper.processSearchRecordSelected(component, event);
         }
 

@@ -2,6 +2,7 @@
 	<aura:attribute name="oRecord" type="sObject" />
     <aura:attribute name="IconName" type="string"/> 
     <aura:attribute name="parentUserComponentId" type="String"/> 
+    <aura:attribute name="defaultEventType" type="String" default="Application"/>    
  
   <!--Register the component level event-->
  

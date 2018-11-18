@@ -133,13 +133,16 @@
             topic = tpc.topic;
             parameters = tpc.parameters;
             controller = tpc.controller;
+            console.log('chartArea: handle_evt_sfd3 enter from method, topic: ' + topic);
         }
         else {
             console.log('chartArea: invoked from event');
             topic = event.getParam("topic");
             parameters = event.getParam("parameters");
             controller = event.getParam("controller");    
+            console.log('chartArea: handle_evt_sfd3 enter from event, topic: ' + topic);
         }
+
 
         var componentReference = component.get("v.componentReference");        
         bzutils.log('chartArea: topic:' + topic + " controller " + controller + " componentReference " + componentReference);
@@ -161,6 +164,7 @@
         if (topic == "ShowLevelsMore")
         {
             helper.setCache (component, "showLevels", parameters["levels"] ) ;
+            console.log("area: xxxxx: currentLevels: " + parameters["levels"]);
             cc.refreshVisibility();                 
     
         }

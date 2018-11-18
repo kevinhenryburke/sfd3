@@ -52,19 +52,24 @@
         // TODO can move this to a generic location?
 
         var highlightId = datajson["initialHighlightId"];
-        console.log("xxxxx:" + highlightId);
         _this.setCache (component, "mouseoverRecordId", highlightId ) ;
         _this.restockCache(component);
 
-        var preppedEvent = _this.nodeMouseover(component, root); 
-        _this.publishPreppedEvent(component,preppedEvent);
-        _this.updatePopoverDirectly(component, preppedEvent);
+        var nodeToPublish = root;
 
-console.log("TEMP xxxx");
         if (highlightId != null && highlightId != root.id) {
+            // in some cases we want the primary reference on a chart to be different from the top node
+            // for example if we are showing parent node rather than having our focus node at the top
+
+            nodeToPublish = d3.select("#" + componentReference + highlightId).datum();
+            // in this case we will always highlight the path to the key node and open up that node
             _this.highlightPathsBy(component, highlightId, "Id", true);
             _this.openPathsBy(component, highlightId, "Id");
         }
+
+        var preppedEvent = _this.nodeMouseover(component, nodeToPublish); 
+        _this.publishPreppedEvent(component,preppedEvent);
+        _this.updatePopoverDirectly(component, preppedEvent);
 
         console.log("initialize root path");
     },

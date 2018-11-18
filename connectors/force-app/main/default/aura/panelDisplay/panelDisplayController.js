@@ -38,12 +38,14 @@
             topic = tpc.topic;
             parameters = tpc.parameters;
             controller = tpc.controller;
+            console.log('panelDisplay: handle_evt_sfd3 enter from method, topic: ' + topic);
         }
         else {
             bzutils.log('panelDisplay: invoked from event');
             topic = event.getParam("topic");
             parameters = event.getParam("parameters");
             controller = event.getParam("controller");    
+            console.log('panelDisplay: handle_evt_sfd3 enter from event, topic: ' + topic);
         }
 
         var RelatedControllerId = component.get("v.Controller");

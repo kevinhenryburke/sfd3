@@ -18,10 +18,6 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>DataExtract_TEST</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
         <apexClass>HierarchyConfiguration</apexClass>
         <enabled>true</enabled>
     </classAccesses>

@@ -88,13 +88,14 @@
                     
                     var configEventParameters = { 
                         "datajson" : datajson, 
-//                        "configjson" : configjson, 
                         "currentMeasure" : panelCurrentMeasure, 
                         "primaryId" : panelPrimaryId, 
                         "showFilters" : panelShowFilters,
                         "componentReference" : componentReference
                     }
-                        
+
+                    console.log("publish InitializeData from OnInit method")
+                    
                     var preppedEvent = helper.prepareEvent("InitializeData", configEventParameters, controllerId);
                     helper.publishPreppedEvent(component,preppedEvent);
                 }
@@ -143,12 +144,14 @@
             topic = tpc.topic;
             parameters = tpc.parameters;
             controller = tpc.controller;
+            console.log('dataControlPanel: handle_evt_sfd3 enter from method, topic: ' + topic);
         }
         else {
             bzutils.log('controller: invoked from event');
             topic = event.getParam("topic");
             parameters = event.getParam("parameters");
             controller = event.getParam("controller");    
+            console.log('dataControlPanel: handle_evt_sfd3 enter from event, topic: ' + topic);
         }
 
         var UserComponentId = component.get("v.UserComponentId");
@@ -173,7 +176,6 @@
                 // as the component is initialized we have values for parameters and can publish immediately
 
                 var datajson = component.get("v.datajson");
-                var configjson = component.get("v.configjson");
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
                 var panelPrimaryId = component.get("v.panelPrimaryId");            
                 var panelShowFilters = component.get("v.panelShowFilters");     
@@ -182,7 +184,6 @@
     
                 var configEventParameters = { 
                     "datajson" : datajson, 
-//                    "configjson" : configjson, 
                     "currentMeasure" : panelCurrentMeasure, 
                     "primaryId" : panelPrimaryId, 
                     "showFilters" : panelShowFilters,
@@ -191,6 +192,8 @@
     
                 //publish to this component
                 var controllerId = component.get("v.UserComponentId");
+
+                console.log("publish InitializeData from ChartRendered Event")
 
                 var preppedEvent = helper.prepareEvent("InitializeData", configEventParameters, controllerId);
                 helper.publishPreppedEvent(component,preppedEvent);
@@ -212,12 +215,11 @@
         {
             console.log("handle_evt_sfd3: InitializeData received by Controller: " + UserComponentId);
             var autoIncreaseLevels = component.get("v.autoIncreaseLevels");
-            console.log("auto increasing levels: value: " + autoIncreaseLevels);
             if (autoIncreaseLevels == true) {
-                console.log("auto increasing levels");
+                console.log("InitializeData: auto increasing levels");
                 var canIncreaseLevels = helper.canIncreaseLevels(component);
                 if (canIncreaseLevels) { // if is not strictly necessary as event is disabling the button but keep for now
-                    helper.updateData(component, event);
+                    helper.updateData(component, parameters);
                 }
             }
         }
@@ -226,10 +228,10 @@
             console.log("handle_evt_sfd3: RefreshData received by Controller: " + UserComponentId);
             var autoIncreaseLevels = component.get("v.autoIncreaseLevels");
             if (autoIncreaseLevels == true) {
-                console.log("auto increasing levels");
+                console.log("RefreshData: auto increasing levels");
                 var canIncreaseLevels = helper.canIncreaseLevels(component);
                 if (canIncreaseLevels) { // if is not strictly necessary as event is disabling the button but keep for now
-                    helper.updateData(component, event);
+                    helper.updateData(component, parameters);
                 }
             }            
         }
@@ -274,14 +276,14 @@
         {
             // for a RefreshChart event we assume everything is initialized
             console.log("One time refresh");
-            helper.updateData(component, event);
+            helper.updateData(component, parameters);
         }
 
         if (topic == "SearchRecordSelected")
         {
             // a search item has been selected from the search result set
             console.log("process SearchRecordSelected");
-            helper.processSearchRecordSelected(component, event);
+            helper.processSearchRecordSelected(component, parameters);
         }
 
         
@@ -358,7 +360,8 @@
         console.log("onClickRefreshOneTime enter");
         var canIncreaseLevels = helper.canIncreaseLevels(component);
         if (canIncreaseLevels) { // if is not strictly necessary as event is disabling the button but keep for now
-            helper.updateData(component, event);
+            var parameters = event.getParam("arguments");
+            helper.updateData(component, parameters);
         }
         console.log("onClickRefreshOneTime exit");
     },
