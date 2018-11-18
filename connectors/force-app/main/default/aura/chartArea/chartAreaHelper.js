@@ -4,11 +4,9 @@
 
         var masterConfig = component.get("v.masterConfig");
         if (typeof masterConfig === 'string' || masterConfig instanceof String) {
-            console.log("masterConfig is a string");
             component.set("v.masterConfigObject", JSON.parse(masterConfig));
         }
         else {
-            console.log("masterConfig is an object?");
             component.set("v.masterConfigObject", masterConfig);
         }
     },
@@ -202,7 +200,7 @@
         var pathToolTipDiv = d3.select("#" + pathToolTipDivId);
         _this.setCache (component, "pathToolTipDiv", pathToolTipDiv ) ;
 
-        console.log("create some groups inside the svg element to store the raw data");
+        // create some groups inside the svg element to store the raw data
 
         var pathGroupId = _this.getDivId("pathGroup", componentReference, false);
         _this.setCache (component, "pathGroupId", pathGroupId ) ;
@@ -472,7 +470,7 @@
         var loopJson = component.get("v.masterConfigObject");
         for (var i=0; i<args.length;i++) {
             if (loopJson.hasOwnProperty([args[i]])) {
-                console.log("loopJson: " + args[i]);
+                // console.log("loopJson: " + args[i]);
                 retValue = loopJson[args[i]];
                 loopJson = loopJson[args[i]];
             }
@@ -480,7 +478,7 @@
                 return;
             }    
         }
-        console.log("getMasterParam exit: " + retValue);
+        // console.log("getMasterParam exit: " + retValue);
         return retValue;
     },
     
@@ -527,7 +525,6 @@
     },
     
     clearChart : function (componentReference) {
-        console.log("chartAreaHelper.clearChart enter "); 
         var _this = this;
         var svg = d3.select(_this.getDivId("svg", componentReference, true));
         var path = svg.selectAll("path").remove();
@@ -536,7 +533,6 @@
         d3.select(_this.getDivId("pathGroup", componentReference, true)).remove();
         d3.select(_this.getDivId("nodeGroup", componentReference, true)).remove();
         d3.select(_this.getDivId("textGroup", componentReference, true)).remove();
-        console.log("chartAreaHelper.clearChart exit "); 
     },
 
     initializeCache : function (component) {

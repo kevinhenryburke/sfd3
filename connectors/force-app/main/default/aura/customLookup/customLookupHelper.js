@@ -27,6 +27,13 @@
 
 /*
         // call the apex class method 
+        // Add this component attribute
+
+    <aura:attribute name="objectAPIName" type="string" default=""/>
+
+    // And this controller code
+
+
      var action = component.get("c.fetchLookUpValues");
       // set param to method  
         action.setParams({

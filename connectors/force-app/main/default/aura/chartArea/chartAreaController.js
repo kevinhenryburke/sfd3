@@ -1,12 +1,9 @@
 ({
 
     callFromContainer : function (component, event, helper) {
-        console.log('tpc: callFromContainer enter');   
         var params = event.getParam("arguments");
-        console.log(params);
         var tpc = params.tpc;
         var topic = tpc.topic;
-        console.log(topic);
     },
 
     // bear in mind that doInit can't refresh anything in an external library as it may lose a race condition.
@@ -15,11 +12,9 @@
 
         var masterConfig = component.get("v.masterConfig");
         if (typeof masterConfig === 'string' || masterConfig instanceof String) {
-            console.log("masterConfig is a string");
             component.set("v.masterConfigObject", JSON.parse(masterConfig));
         }
         else {
-            console.log("masterConfig is an object?");
             component.set("v.masterConfigObject", masterConfig);
         }
 
@@ -119,7 +114,7 @@
     },
 
 
-    handle_evt_sfd3  : function(component, event, helper) {
+    handleCustomEvent  : function(component, event, helper) {
         var topic, parameters, controller;
         var cc = component.getConcreteComponent();
 
@@ -128,24 +123,22 @@
         var argumentsParameter = event.getParam("arguments");
 
         if (argumentsParameter != null) {
-            console.log('chartArea: invoked from method');
             var tpc = argumentsParameter.tpc;
             topic = tpc.topic;
             parameters = tpc.parameters;
             controller = tpc.controller;
-            console.log('chartArea: handle_evt_sfd3 enter from method, topic: ' + topic);
+            // console.log('chartArea: handleCustomEvent enter from method, topic: ' + topic);
         }
         else {
-            console.log('chartArea: invoked from event');
             topic = event.getParam("topic");
             parameters = event.getParam("parameters");
             controller = event.getParam("controller");    
-            console.log('chartArea: handle_evt_sfd3 enter from event, topic: ' + topic);
+            // console.log('chartArea: handleCustomEvent enter from event, topic: ' + topic);
         }
 
 
         var componentReference = component.get("v.componentReference");        
-        bzutils.log('chartArea: topic:' + topic + " controller " + controller + " componentReference " + componentReference);
+        // console.log('chartArea: topic:' + topic + " controller " + controller + " componentReference " + componentReference);
 
         var UserControllerComponentId = component.get("v.UserControllerComponentId");
         
@@ -174,7 +167,6 @@
         }
         if (topic == "SetMeasure")
         {
-            console.log("SetMeasure new");
             var currentMeasure = parameters["measure"];
             helper.setStore(cc, "currentMeasure", currentMeasure);
 
@@ -244,8 +236,6 @@
         }
         if (topic == "CloseDisplayPanel")
         {      
-            console.log("chartArea: CloseDisplayPanel received by Chart : " + componentReference );
-
             var allowPopover = helper.getMasterParam(component,"panels","InfoPanel","allowPopover");         
             if (allowPopover == null) {allowPopover = false;}
 

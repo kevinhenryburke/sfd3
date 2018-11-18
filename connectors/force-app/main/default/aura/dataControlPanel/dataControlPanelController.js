@@ -49,8 +49,8 @@
         action.setCallback(this, function(response) {
             var state = response.getState();
             if (state === "SUCCESS") {
-                console.log('data returned from apex');
-                console.log(response.getReturnValue());
+                // console.log('data returned from apex');
+                // console.log(response.getReturnValue());
                 
                 helper.initializeConfig(component, response.getReturnValue());
 
@@ -128,7 +128,7 @@
 
     /* handlers */  
 
-    handle_evt_sfd3  : function(component, event, helper) {
+    handleCustomEvent  : function(component, event, helper) {
 
         var _this = this;
         var topic, parameters, controller;
@@ -144,23 +144,23 @@
             topic = tpc.topic;
             parameters = tpc.parameters;
             controller = tpc.controller;
-            console.log('dataControlPanel: handle_evt_sfd3 enter from method, topic: ' + topic);
+            // console.log('dataControlPanel: handleCustomEvent enter from method, topic: ' + topic);
         }
         else {
             bzutils.log('controller: invoked from event');
             topic = event.getParam("topic");
             parameters = event.getParam("parameters");
             controller = event.getParam("controller");    
-            console.log('dataControlPanel: handle_evt_sfd3 enter from event, topic: ' + topic);
+            // console.log('dataControlPanel: handleCustomEvent enter from event, topic: ' + topic);
         }
 
         var UserComponentId = component.get("v.UserComponentId");
 
-        console.log("handle_evt_sfd3: topic: " + topic + " component: " + UserComponentId);
+        // console.log("handleCustomEvent: topic: " + topic + " component: " + UserComponentId);
 
         // If the event propagated from a component related to another controller then we ignore it.
         if (UserComponentId != controller) {
-            console.log("handle_evt_sfd3: controller: ignoring message in " + UserComponentId + " intended for component " + controller);
+            console.log("handleCustomEvent: controller: ignoring message in " + UserComponentId + " intended for component " + controller);
             return;
         }        
 
@@ -213,7 +213,7 @@
         }
         if (topic == "InitializeData")
         {
-            console.log("handle_evt_sfd3: InitializeData received by Controller: " + UserComponentId);
+            console.log("handleCustomEvent: InitializeData received by Controller: " + UserComponentId);
             var autoIncreaseLevels = component.get("v.autoIncreaseLevels");
             if (autoIncreaseLevels == true) {
                 console.log("InitializeData: auto increasing levels");
@@ -225,7 +225,7 @@
         }
         if (topic == "RefreshData")
         {
-            console.log("handle_evt_sfd3: RefreshData received by Controller: " + UserComponentId);
+            console.log("handleCustomEvent: RefreshData received by Controller: " + UserComponentId);
             var autoIncreaseLevels = component.get("v.autoIncreaseLevels");
             if (autoIncreaseLevels == true) {
                 console.log("RefreshData: auto increasing levels");

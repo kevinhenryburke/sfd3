@@ -3,19 +3,15 @@
     onInit: function(component, event, helper) {
         var masterConfig = component.get("v.masterConfig");
         if (typeof masterConfig === 'string' || masterConfig instanceof String) {
-            console.log("masterConfig is a string: " + masterConfig);
-            JSON.parse(masterConfig);
-            console.log("masterConfig parsed to object");
             component.set("v.masterConfigObject", JSON.parse(masterConfig));
         }
         else {
-            console.log("masterConfig is an object?");
             component.set("v.masterConfigObject", masterConfig);
         }
     },
 
 
-    /* handle_evt_sfd3
+    /* handleCustomEvent
     Logic for accepting messages:
 
     1. If it was created by a controller then reject, this is for responding to chart events
@@ -25,7 +21,7 @@
 
     */
 
-    handle_evt_sfd3  : function(component, event, helper) {
+    handleCustomEvent  : function(component, event, helper) {
         var topic, parameters, controller;
 
         // if there is an arguments parameter this has been triggered by a method call
@@ -38,14 +34,14 @@
             topic = tpc.topic;
             parameters = tpc.parameters;
             controller = tpc.controller;
-            console.log('panelDisplay: handle_evt_sfd3 enter from method, topic: ' + topic);
+            // console.log('panelDisplay: handleCustomEvent enter from method, topic: ' + topic);
         }
         else {
             bzutils.log('panelDisplay: invoked from event');
             topic = event.getParam("topic");
             parameters = event.getParam("parameters");
             controller = event.getParam("controller");    
-            console.log('panelDisplay: handle_evt_sfd3 enter from event, topic: ' + topic);
+            // console.log('panelDisplay: handleCustomEvent enter from event, topic: ' + topic);
         }
 
         var RelatedControllerId = component.get("v.Controller");

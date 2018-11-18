@@ -2,7 +2,7 @@
  
     onInit: function(component, event, helper) {
         console.log('ctreeCombined: onInit: enter');
-        console.log(component.get("v.masterConfig"));
+        // console.log(component.get("v.masterConfig"));
 
         var masterConfig = component.get("v.masterConfig");
         if (typeof masterConfig === 'string' || masterConfig instanceof String) {
@@ -128,13 +128,13 @@
 
     /* receive a bubbled component event and distribute this to required children */
 
-    handle_evt_sfd3  : function(component, event, helper) {
+    handleCustomEvent  : function(component, event, helper) {
 
         var topic = event.getParam("topic");
         var parameters = event.getParam("parameters");
         var controller = event.getParam("controller");
 
-        console.log('ctreeCombined: handle_evt_sfd3 enter, topic: ' + topic);
+        console.log('ctreeCombined: handleCustomEvent enter, topic: ' + topic);
 
         var tpc = {
             "topic" : topic,

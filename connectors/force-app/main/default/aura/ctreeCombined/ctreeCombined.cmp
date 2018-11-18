@@ -7,7 +7,7 @@
   <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
   
   <!-- Events and Handlers -->  
-  <aura:handler name="evt_bzc" event="c:evt_bzc" action="{!c.handle_evt_sfd3}"/>   
+  <aura:handler name="evt_bzc" event="c:evt_bzc" action="{!c.handleCustomEvent}"/>   
 
   <aura:attribute name="masterConfig" type="String" default="{}"/>      
   <aura:attribute name="masterConfigObject" type="Object"/>      

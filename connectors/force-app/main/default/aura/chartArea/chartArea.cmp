@@ -35,7 +35,7 @@
   <aura:registerEvent name="evt_bzc" type="c:evt_bzc"/>
   <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
 
-  <aura:handler event="c:evt_sfd3" action="{!c.handle_evt_sfd3}"/>
+  <aura:handler event="c:evt_sfd3" action="{!c.handleCustomEvent}"/>
 
   <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
   <aura:handler event="aura:doneRendering" action="{!c.doneRendering}"/>
@@ -83,7 +83,7 @@
     <aura:attribute name="datajsonRefresh" type="Object"/>    
   </aura:method>
 
-  <aura:method name="callFromContainer" action="{!c.handle_evt_sfd3}"> 
+  <aura:method name="callFromContainer" action="{!c.handleCustomEvent}"> 
       <aura:attribute name="tpc" type="Object"/>    
   </aura:method>
 

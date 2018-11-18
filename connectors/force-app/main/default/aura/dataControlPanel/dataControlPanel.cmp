@@ -11,13 +11,13 @@
   <aura:registerEvent name="evt_bzc" type="c:evt_bzc"/>
   
   <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
-  <aura:handler event="c:evt_sfd3" action="{!c.handle_evt_sfd3}"/> 
+  <aura:handler event="c:evt_sfd3" action="{!c.handleCustomEvent}"/> 
 
   <aura:attribute name="selectedRecord" type="sObject" default="{}" description="Stores selected search box record"/>
 
   <aura:attribute name="defaultEventType" type="String" default="Application"/>    
 
-  <aura:method name="callFromContainer" action="{!c.handle_evt_sfd3}"> 
+  <aura:method name="callFromContainer" action="{!c.handleCustomEvent}"> 
       <aura:attribute name="tpc" type="Object"/>    
   </aura:method>
 
@@ -146,7 +146,7 @@
           
           <aura:if isTrue="{!v.configuredAllowSearch}">
           <div class="slds-col slds-size_1-of-4 slds-small-size_1-of-2 slds-medium-size_1-of-3">
-              <c:customLookup aura:id="customLookup" parentUserComponentId="{!v.UserComponentId}" objectAPIName="account" IconName="standard:account" selectedRecord="{!v.selectedLookUpRecord}" defaultEventType="{!v.defaultEventType}"/>
+              <c:customLookup aura:id="customLookup" parentUserComponentId="{!v.UserComponentId}" IconName="standard:account" selectedRecord="{!v.selectedLookUpRecord}" defaultEventType="{!v.defaultEventType}"/>
           </div>
         </aura:if>
         </div>

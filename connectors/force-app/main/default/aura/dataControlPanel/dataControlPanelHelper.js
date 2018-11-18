@@ -116,12 +116,11 @@
 
                 var datastring = response.getReturnValue();
                 var datajson = JSON.parse(datastring);
-                bzutils.log('InitiateRefreshChart: datastring: ' + datastring);    
+                // bzutils.log('InitiateRefreshChart: datastring: ' + datastring);    
 
                 // lay down candidate ids for further queries
                 var thisLevel = component.get("v.currentLevels");
                 _this.extractLeafIds(component, datajson, thisLevel);
-//                component.set("v.currentLevels", thisLevel+1);
                 _this.increaseLevels (component);
 
                 // Review - this is setting datajson to be whatever is new ... NOT the full data set in the CHART ...
@@ -131,7 +130,6 @@
 
                 // TODO - will need to retrieve data based on new selections
                 var datajson = component.get("v.datajson");
-                var configjson = component.get("v.configjson");
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
                 var panelShowFilters = component.get("v.panelShowFilters");     
 

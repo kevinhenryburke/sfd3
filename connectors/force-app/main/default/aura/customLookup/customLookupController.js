@@ -53,7 +53,7 @@
         component.set("v.selectedRecord", {} );   
     },
     
-    handle_evt_sfd3  : function(component, event, helper) {
+    handleCustomEvent  : function(component, event, helper) {
         var topic, parameters, controller; 
 
         // if there is an arguments parameter this has been triggered by a method call
@@ -66,25 +66,23 @@
             topic = tpc.topic;
             parameters = tpc.parameters;
             controller = tpc.controller;
-            console.log('customLookup: handle_evt_sfd3 enter from method, topic: ' + topic);
+            // console.log('customLookup: handleCustomEvent enter from method, topic: ' + topic);
         }
         else {
             console.log('customLookup: invoked from event');
             topic = event.getParam("topic");
             parameters = event.getParam("parameters");
             controller = event.getParam("controller");    
-            console.log('customLookup: handle_evt_sfd3 enter from event, topic: ' + topic);
+            // console.log('customLookup: handleCustomEvent enter from event, topic: ' + topic);
         }
-
-        console.log("customLookup: " + topic);
 
         var UserComponentId = component.get("v.parentUserComponentId");
 
-        console.log("customLookup.handle_evt_sfd3: topic: " + topic + " component: " + UserComponentId);
+        console.log("customLookup.handleCustomEvent: topic: " + topic + " component: " + UserComponentId);
 
         // If the event propagated from a component related to another controller then we ignore it.
         if (UserComponentId != controller) {
-            console.log("customLookup.handle_evt_sfd3: controller: ignoring message in " + UserComponentId + " intended for component " + controller);
+            console.log("customLookup.handleCustomEvent: controller: ignoring message in " + UserComponentId + " intended for component " + controller);
             return;
         }        
 
