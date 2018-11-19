@@ -47,7 +47,6 @@
                 }
                 if (key == "levelsIncreaseOnly") {
                     component.set("v.levelsIncreaseOnly", buttonParameters.levelsIncreaseOnly);                    
-                    component.set("v.levelsIncreaseDecrease", ! buttonParameters.levelsIncreaseOnly);                    
                 }
                 if (key == "autoIncreaseLevels") {
                     component.set("v.autoIncreaseLevels", buttonParameters.autoIncreaseLevels);                    
@@ -244,9 +243,9 @@
         // we have a different aura:id for the more button for when levels increase only or can decrease also.
         var moreButtonId = _this.getMoreButtonId(component);
  
-        var levelsIncreaseDecrease = component.get("v.levelsIncreaseDecrease");
+        var levelsIncreaseOnly = component.get("v.levelsIncreaseOnly");
         // if levels cannot decrease then nothing to do here as there is no Fewer Button to press
-        if (levelsIncreaseDecrease) {
+        if (!levelsIncreaseOnly) {
             var currentLevels = component.get("v.currentLevels");
             // "more" button should be enabled, "less" button should be disabled if we've reached lowest level
             var cmpTargetMore = component.find(moreButtonId);
@@ -269,8 +268,8 @@
         // refresh buttons : "less" button should be enabled, "more" button should be disabled if we've reached max level
         // if levels cannot decrease then no action for the "less" button as there is no button to press
 
-        var levelsIncreaseDecrease = component.get("v.levelsIncreaseDecrease");
-        if (levelsIncreaseDecrease) {
+        var levelsIncreaseOnly = component.get("v.levelsIncreaseOnly");
+        if (! levelsIncreaseOnly) {
             var cmpTargetLess = component.find("less");
             cmpTargetLess.set("v.disabled", "false");
         }
@@ -289,8 +288,8 @@
         var moreButtonId = _this.getMoreButtonId(component);
         
         // if levels cannot decrease then no action for the "less" button as there is no button to press
-        var levelsIncreaseDecrease = component.get("v.levelsIncreaseDecrease");
-        if (levelsIncreaseDecrease) {
+        var levelsIncreaseOnly = component.get("v.levelsIncreaseOnly");
+        if (! levelsIncreaseOnly) {
             var cmpTargetLess = component.find("less");
             cmpTargetLess.set("v.disabled", "false");
         }
@@ -467,11 +466,6 @@
     getMoreButtonId : function(component) {
         var _this = this;    
         var moreButtonId = 'more';
-        
-        var levelsIncreaseOnly = component.get("v.levelsIncreaseOnly");
-        if (levelsIncreaseOnly) {
-            moreButtonId = 'moreIncreaseOnly';
-        }
         return moreButtonId;
     },
 
@@ -531,9 +525,9 @@
             // TODO this is wrong and will need to change 
             // for networks I'm pushing ot max levels - probably shouldn't
             // code here is temporary and should probably just go
-            var levelsIncreaseDecrease = component.get("v.levelsIncreaseDecrease");
+            var levelsIncreaseOnly = component.get("v.levelsIncreaseOnly");
             // set the configured levels buttons
-            if (levelsIncreaseDecrease) {
+            if (! levelsIncreaseOnly) {
                 _this.setConnectionLevelMaxButtons(component);
             }
         }

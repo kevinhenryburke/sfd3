@@ -58,7 +58,6 @@
 
   <!-- Technical - Query -->
   <aura:attribute name="levelsIncreaseOnly" type="Boolean" default="false"/> 
-  <aura:attribute name="levelsIncreaseDecrease" type="Boolean" default="true"/> 
   <aura:attribute name="autoIncreaseLevels" type="Boolean" default="false"/> 
   <aura:attribute name="queryLevels" type="Object[]" default="[]"/> 
   <aura:attribute name="queryLevelIds" type="Object[]" default="[]"/> 
@@ -84,11 +83,13 @@
         <div class="slds-grid slds-wrap">
           <!-- Hidden for topic connections -->
  
-          <aura:if isTrue="{!and(v.configuredLevels,v.levelsIncreaseDecrease)}">
+          <aura:if isTrue="{!v.configuredLevels}">
             <div class="slds-col slds-size_1-of-4 slds-small-size_1-of-2 slds-medium-size_1-of-3">
               <h1 class="slds-text-heading_label">Connect Levels</h1>
               <div class="slds slds-button-group" role="group">
-                <c:buttonDynamic aura:id="less" label="Fewer" class="slds-button slds-button_neutral" onclick="{!c.onClickLevelFewer}" disabled="true">Less</c:buttonDynamic>
+                <aura:if isTrue="{!!v.levelsIncreaseOnly}">                
+                  <c:buttonDynamic aura:id="less" label="Fewer" class="slds-button slds-button_neutral" onclick="{!c.onClickLevelFewer}" disabled="true">Less</c:buttonDynamic>
+                </aura:if>
                 <c:buttonDynamic aura:id="displaylevels" label="{!v.currentLevels}" class="slds-button slds-button_brand" disabled="false">1</c:buttonDynamic>
                 <c:buttonDynamic aura:id="more" label="More" class="slds-button slds-button_neutral" onclick="{!c.onClickLevelMore}" disabled="false">More</c:buttonDynamic>
               </div>
@@ -124,16 +125,6 @@
               <div class="slds slds-button-group" role="group">
                 <c:buttonDynamic aura:id="r1" label="Time Refresh" class="slds-button slds-button_brand" onclick="{!c.onClickTimeSeriesRefresh}" disabled="false"></c:buttonDynamic>
               </div>
-            </div>
-          </aura:if>
-          <!-- TODO - ultimately adding paths will be recursive backend function and highlighting paths will be a search box -->
-          <aura:if isTrue="{!and(v.configuredLevels,v.levelsIncreaseOnly)}">
-            <div class="slds-col slds-size_1-of-4 slds-small-size_1-of-2 slds-medium-size_1-of-3">
-                <h1 class="slds-text-heading_label">Current Depth</h1>
-                <div class="slds slds-button-group" role="group">
-                  <c:buttonDynamic aura:id="displaylevels" label="{!v.currentLevels}" class="slds-button slds-button_brand" disabled="false">1</c:buttonDynamic>
-                  <c:buttonDynamic aura:id="moreIncreaseOnly" label="More" class="slds-button slds-button_neutral" onclick="{!c.onClickRefreshOneTime}" disabled="false">More</c:buttonDynamic>
-                </div>
             </div>
           </aura:if>
           

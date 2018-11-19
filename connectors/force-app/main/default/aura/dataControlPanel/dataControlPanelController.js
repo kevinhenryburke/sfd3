@@ -23,7 +23,6 @@
         var queryJSONObject = masterConfigObject["data"]["queryJSON"];
 
         var thisLevel = queryJSONObject.initialLevelsToRetrieve;
-        // shift removes from front....
         component.set("v.currentLevels", thisLevel );
 
         // build up an array of ids that are still to be queried and the levels that are indexed by the arrays   
@@ -31,11 +30,6 @@
         var queryLevelIds = [[]];
         component.set("v.queryLevels", queryLevels );
         component.set("v.queryLevelIds", queryLevelIds );
-
-        console.log("queryJSONObject");
-        console.log(queryJSONObject);
-
-        console.log("recordId:" + component.get("v.recordId"));
 
         var masterConfigObject = component.get("v.masterConfigObject");
         var queryJSONObject = masterConfigObject["data"]["queryJSON"];
