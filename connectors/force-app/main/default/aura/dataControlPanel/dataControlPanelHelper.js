@@ -316,7 +316,6 @@
         var beforeClickedState = $A.util.hasClass(cmpTarget, 'filter_show');
         var filterState = beforeClickedState ? "Hide" : "Show"; // if before it was show then now it is hide
 
-
         var masterConfigObject = component.get("v.masterConfigObject");
         var buttonParameters = masterConfigObject["panels"]["ControlPanel"]["buttonParameters"];            
 
