@@ -52,7 +52,6 @@
 	<aura:attribute name="initialized" type="Boolean" default="false"/>    
   <aura:attribute name="datajson" type="Object" />
   <aura:attribute name="initEventsQueue" type="Object[]" default="[]" />
-  <aura:attribute name="configjson" type="Object" />
 
 	<aura:attribute name="configuredLevels" type="Boolean" default="false"/>    
 	<aura:attribute name="configuredFilterTypes" type="Boolean" default="false"/>    

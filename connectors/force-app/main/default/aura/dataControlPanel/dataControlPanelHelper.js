@@ -9,19 +9,15 @@
             /* Configuration initialization */
 
             var masterConfigObject = component.get("v.masterConfigObject");
-            var configjson = masterConfigObject["panels"]["ControlPanel"]["buttonParameters"];            
+            var buttonParameters = masterConfigObject["panels"]["ControlPanel"]["buttonParameters"];            
 
-
-            component.set("v.configjson", configjson);
-
-
-            for (var key in configjson) {  
-                var subObj = configjson[key];
+            for (var key in buttonParameters) {  
+                var subObj = buttonParameters[key];
 
                 if (key == "levels") {
                     component.set("v.configuredLevels", true);                    
                     // set the maximum number of levels
-                    var maxlevels = configjson.levels;
+                    var maxlevels = buttonParameters.levels;
                     if ((typeof maxlevels === 'number'))
                     {
                         component.set("v.maxlevels", maxlevels);          
@@ -35,7 +31,7 @@
                     component.set("v.configuredFilterTypes", true);                    
                     // set all filters as clicked by default
                     var panelShowFilters = component.get("v.panelShowFilters");
-                    configjson.filtertypes.forEach(function(filtertype) {
+                    buttonParameters.filtertypes.forEach(function(filtertype) {
                         panelShowFilters.push(filtertype);
                     });
                     component.set("v.panelShowFilters", panelShowFilters);
@@ -43,18 +39,18 @@
                 if (key == "measures") {
                     component.set("v.configuredMeasures", true);                    
                     // set the first measure as default
-                    var panelCurrentMeasure = configjson.measures[0];
+                    var panelCurrentMeasure = buttonParameters.measures[0];
                     component.set("v.panelCurrentMeasure", panelCurrentMeasure);
                 }
                 if (key == "allowrefresh") {
                     component.set("v.configuredAllowRefresh", true);                    
                 }
                 if (key == "levelsIncreaseOnly") {
-                    component.set("v.levelsIncreaseOnly", configjson.levelsIncreaseOnly);                    
-                    component.set("v.levelsIncreaseDecrease", ! configjson.levelsIncreaseOnly);                    
+                    component.set("v.levelsIncreaseOnly", buttonParameters.levelsIncreaseOnly);                    
+                    component.set("v.levelsIncreaseDecrease", ! buttonParameters.levelsIncreaseOnly);                    
                 }
                 if (key == "autoIncreaseLevels") {
-                    component.set("v.autoIncreaseLevels", configjson.autoIncreaseLevels);                    
+                    component.set("v.autoIncreaseLevels", buttonParameters.autoIncreaseLevels);                    
                 }
 
                 // this is a developer setting to allow some group of test buttons to display
@@ -303,8 +299,10 @@
     },
     
     setMeasure: function(component, measureIndex) {
-        var configjson = component.get("v.configjson");
-        var thisMeasure = configjson.measures[measureIndex - 1];
+        var masterConfigObject = component.get("v.masterConfigObject");
+        var buttonParameters = masterConfigObject["panels"]["ControlPanel"]["buttonParameters"];            
+
+        var thisMeasure = buttonParameters.measures[measureIndex - 1];
         component.set("v.panelCurrentMeasure", thisMeasure);
         return thisMeasure;
     },
@@ -318,8 +316,11 @@
         var beforeClickedState = $A.util.hasClass(cmpTarget, 'filter_show');
         var filterState = beforeClickedState ? "Hide" : "Show"; // if before it was show then now it is hide
 
-        var configjson = component.get("v.configjson");
-        var thisType = configjson.filtertypes[indexer - 1];
+
+        var masterConfigObject = component.get("v.masterConfigObject");
+        var buttonParameters = masterConfigObject["panels"]["ControlPanel"]["buttonParameters"];            
+
+        var thisType = buttonParameters.filtertypes[indexer - 1];
         var preppedEvent = _this.prepareEvent("SetFilter", {"index" : indexer, "state" : filterState, "filterType" : thisType }, controllerId);
         _this.publishPreppedEvent(component,preppedEvent);
 

@@ -55,20 +55,23 @@
                 helper.initializeConfig(component, response.getReturnValue());
 
                 var datajson = component.get("v.datajson");
-                var configjson = component.get("v.configjson");
+
+                var masterConfigObject = component.get("v.masterConfigObject");
+                var buttonParameters = masterConfigObject["panels"]["ControlPanel"]["buttonParameters"];                
+
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
                 var panelPrimaryId = component.get("v.panelPrimaryId");            
                 var panelShowFilters = component.get("v.panelShowFilters");     
                 
                 if (component.get("v.configuredFilterTypes") == true) {                   
-                    var arrayNames = configjson.filtertypes;
+                    var arrayNames = buttonParameters.filtertypes;
                     var idprefix = "b";
                     var maxbuttons = 5;                
                     helper.formatButtons (component, arrayNames, idprefix, maxbuttons);
                 }
 
                 if (component.get("v.configuredMeasures") == true) {                   
-                    var arrayNames = configjson.measures;
+                    var arrayNames = buttonParameters.measures;
                     var idprefix = "v";
                     var maxbuttons = 5;
                     helper.formatButtons (component, arrayNames, idprefix, maxbuttons);
@@ -374,7 +377,6 @@
 // ALL DUPLICATE WITH other refresh metthod = refactor
 
 var datajson = component.get("v.datajson");
-var configjson = component.get("v.configjson");
 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
 var panelPrimaryId = component.get("v.panelPrimaryId");            
 var panelShowFilters = component.get("v.panelShowFilters");     
@@ -384,11 +386,9 @@ var panelShowFilters = component.get("v.panelShowFilters");
 
 var configEventParameters = { 
     "datajson" : datajson, 
-//                        "configjson" : configjson, 
     "currentMeasure" : panelCurrentMeasure,
     "primaryId" : panelPrimaryId, 
     "showFilters" : panelShowFilters,
-//    "componentReference" : componentReference                
 }
 
 //publish to this component
