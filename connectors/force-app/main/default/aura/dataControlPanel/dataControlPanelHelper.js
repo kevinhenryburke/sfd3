@@ -239,16 +239,12 @@
     
     setConnectionLevelFewerButtons: function(component) {
         var _this = this;
-
-        // we have a different aura:id for the more button for when levels increase only or can decrease also.
-        var moreButtonId = _this.getMoreButtonId(component);
- 
         var levelsIncreaseOnly = component.get("v.levelsIncreaseOnly");
         // if levels cannot decrease then nothing to do here as there is no Fewer Button to press
         if (!levelsIncreaseOnly) {
             var currentLevels = component.get("v.currentLevels");
             // "more" button should be enabled, "less" button should be disabled if we've reached lowest level
-            var cmpTargetMore = component.find(moreButtonId);
+            var cmpTargetMore = component.find('more');
             cmpTargetMore.set("v.disabled", "false");
             if (currentLevels == 1) {
                 var cmpTargetLess = component.find("less");
@@ -262,9 +258,6 @@
         var currentLevels = component.get("v.currentLevels");
         var maxlevels = component.get("v.maxlevels");
 
-        // we have a different aura:id for the more button for when levels increase only or can decrease also.
-        var moreButtonId = _this.getMoreButtonId(component);
-        
         // refresh buttons : "less" button should be enabled, "more" button should be disabled if we've reached max level
         // if levels cannot decrease then no action for the "less" button as there is no button to press
 
@@ -274,7 +267,7 @@
             cmpTargetLess.set("v.disabled", "false");
         }
         if (currentLevels >= maxlevels) {
-            var cmpTargetMore = component.find(moreButtonId);
+            var cmpTargetMore = component.find('more');
             cmpTargetMore.set("v.disabled", "true");
         }
     },
@@ -283,9 +276,6 @@
         var _this = this;
         var maxlevels = component.get("v.maxlevels");
         component.set("v.currentLevels", maxlevels);
-
-        // we have a different aura:id for the more button for when levels increase only or can decrease also.
-        var moreButtonId = _this.getMoreButtonId(component);
         
         // if levels cannot decrease then no action for the "less" button as there is no button to press
         var levelsIncreaseOnly = component.get("v.levelsIncreaseOnly");
@@ -293,7 +283,7 @@
             var cmpTargetLess = component.find("less");
             cmpTargetLess.set("v.disabled", "false");
         }
-        var cmpTargetMore = component.find(moreButtonId);
+        var cmpTargetMore = component.find('more');
         cmpTargetMore.set("v.disabled", "true");
     },
     
@@ -461,12 +451,6 @@
         var queryLevelIds = component.get("v.queryLevelIds");     
         queryLevelIds[levelIndex].push(thisid);
         component.set("v.queryLevelIds", queryLevelIds); 
-    },
-
-    getMoreButtonId : function(component) {
-        var _this = this;    
-        var moreButtonId = 'more';
-        return moreButtonId;
     },
 
     // TODO function appears in many places, try to consolidate
