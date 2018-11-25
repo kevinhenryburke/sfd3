@@ -23,8 +23,6 @@
 
   <!-- DISPLAY FEATURES - HIERARCHY -->
 
-  <aura:attribute name="cardFields" type="String" default="{}"/>    
-
   <!-- DISPLAY FEATURES - NETWORK -->
 
   <aura:attribute name="showPathToolTip" type="Boolean" default="false"/>    

@@ -10,6 +10,31 @@
 
             var masterConfigObject = component.get("v.masterConfigObject");
             var buttonParameters = masterConfigObject["panels"]["ControlPanel"]["buttonParameters"];            
+            var queryJSONObject = masterConfigObject["data"]["queryJSON"];
+            var topObjectLevel = queryJSONObject["objectLevels"][0];
+            var topObjectLevelFields = topObjectLevel.fields;
+
+
+            var measureNames = [];
+            var numberMeasuresFound = 0;
+
+            for (var j = 0; j < topObjectLevelFields.length; j++) {
+                if (topObjectLevelFields[j].measureName != null) {
+                    console.log("xxxxx: topObjectLevelFields[j].measureName: " + topObjectLevelFields[j].measureName);
+                    if (numberMeasuresFound == 0){
+                        component.set("v.configuredMeasures", true);
+                        // set the first measure as default
+                        var panelCurrentMeasure = topObjectLevelFields[j].measureName;
+                        component.set("v.panelCurrentMeasure", panelCurrentMeasure);
+                        console.log("xxxxx: panelCurrentMeasure: " + panelCurrentMeasure);
+                    }
+                    measureNames.push(topObjectLevelFields[j].measureName);
+                    numberMeasuresFound++;
+                }
+            }
+
+            component.set("v.measureNames", measureNames);
+
 
             for (var key in buttonParameters) {  
                 var subObj = buttonParameters[key];
@@ -37,10 +62,6 @@
                     component.set("v.panelShowFilters", panelShowFilters);
                 }
                 if (key == "measures") {
-                    component.set("v.configuredMeasures", true);                    
-                    // set the first measure as default
-                    var panelCurrentMeasure = buttonParameters.measures[0];
-                    component.set("v.panelCurrentMeasure", panelCurrentMeasure);
                 }
                 if (key == "allowrefresh") {
                     component.set("v.configuredAllowRefresh", true);                    
@@ -289,9 +310,9 @@
     
     setMeasure: function(component, measureIndex) {
         var masterConfigObject = component.get("v.masterConfigObject");
-        var buttonParameters = masterConfigObject["panels"]["ControlPanel"]["buttonParameters"];            
 
-        var thisMeasure = buttonParameters.measures[measureIndex - 1];
+        var measureNames = component.get("v.measureNames");
+        var thisMeasure = measureNames[measureIndex - 1];
         component.set("v.panelCurrentMeasure", thisMeasure);
         return thisMeasure;
     },

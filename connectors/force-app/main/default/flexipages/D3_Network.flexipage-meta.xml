@@ -12,7 +12,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>masterConfig</name>
-                <value>{      &quot;data&quot;:{         &quot;dataFormat&quot;:&quot;&quot;,       &quot;dataSourceMethod&quot;:&quot;c.returnNetworkInitial&quot;,       &quot;dataUpdateMethod&quot;:&quot;c.returnNetworkUpdate&quot;,       &quot;queryJSON&quot;:{            &quot;initialLevelsToRetrieve&quot;:1,          &quot;chartType&quot;:&quot;Network&quot;       } , &quot;primaryNodeInitialization&quot;: &quot;FirstInData&quot;   },    &quot;panels&quot;:{         &quot;ControlPanel&quot;:{            &quot;showBanner&quot;:false,          &quot;buttonParameters&quot;:{               &quot;filtertypes&quot;:[                  &quot;Work&quot;,                &quot;Social&quot;,                &quot;Client&quot;             ],             &quot;measures&quot;:[                  &quot;Posts&quot;,                &quot;Hot&quot;             ],             &quot;levels&quot;:4          }       }    },    &quot;search&quot;:{         &quot;searchAction&quot;:&quot;HighlightOpenPath&quot;,       &quot;configuredAllowSearch&quot;:true    } }</value>
+                <value>{     &quot;data&quot;:{       &quot;dataFormat&quot;:&quot;&quot;,     &quot;dataSourceMethod&quot;:&quot;c.returnNetworkInitial&quot;,     &quot;dataUpdateMethod&quot;:&quot;c.returnNetworkUpdate&quot;,     &quot;queryJSON&quot;:{         &quot;initialLevelsToRetrieve&quot;:1,       &quot;chartType&quot;:&quot;Network&quot;,       &quot;objectLevels&quot;:[           {             &quot;terminal&quot;:false,           &quot;recursive&quot;:false,           &quot;fields&quot;:[               {                 &quot;api&quot;:&quot;name&quot;,               &quot;role&quot;:&quot;name&quot;,               &quot;display&quot;:true             },             {                 &quot;api&quot;:&quot;id&quot;,               &quot;role&quot;:&quot;id&quot;,               &quot;display&quot;:true             },             {                 &quot;api&quot;:&quot;Posts&quot;,               &quot;role&quot;:&quot;size&quot;,               &quot;display&quot;:true,               &quot;measureName&quot;:&quot;Posts&quot;             },             {                 &quot;api&quot;:&quot;Hot&quot;,               &quot;role&quot;:&quot;size&quot;,               &quot;display&quot;:true,               &quot;measureName&quot;:&quot;Hot&quot;             },             {                 &quot;api&quot;:&quot;parentId&quot;,               &quot;role&quot;:&quot;parentId&quot;,               &quot;display&quot;:true             }           ],           &quot;objectType&quot;:&quot;Account&quot;         }       ]     },     &quot;primaryNodeInitialization&quot;:&quot;FirstInData&quot;   },   &quot;panels&quot;:{       &quot;ControlPanel&quot;:{         &quot;showBanner&quot;:false,       &quot;buttonParameters&quot;:{           &quot;filtertypes&quot;:[             &quot;Work&quot;,           &quot;Social&quot;,           &quot;Client&quot;         ],       &quot;levels&quot;:4       }     }   },   &quot;search&quot;:{       &quot;searchAction&quot;:&quot;HighlightOpenPath&quot;,     &quot;configuredAllowSearch&quot;:true   } }</value>
             </componentInstanceProperties>
             <componentName>dataControlPanel</componentName>
         </componentInstances>
@@ -20,10 +20,6 @@
             <componentInstanceProperties>
                 <name>Controller</name>
                 <value>Controller</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>cardFields</name>
-                <value>{&quot;default&quot; : [&quot;data.name&quot;, &quot;data.position&quot;, &quot;data.account&quot;]}</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>masterConfig</name>

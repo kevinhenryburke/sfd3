@@ -107,9 +107,9 @@
                         displayApiArray.push(field.api);
                         displayValuesArray.push(field.retrievedDate);
                     }
-                    if (field.retrievedCurrency != null) {
+                    if (field.retrievedDecimal != null) {
                         displayApiArray.push(field.api);
-                        displayValuesArray.push(field.retrievedCurrency.toLocaleString('en'));
+                        displayValuesArray.push(field.retrievedDecimal.toLocaleString('en'));
                     }
                     if (field.retrievedInteger != null) {
                         displayApiArray.push(field.api);

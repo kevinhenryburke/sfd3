@@ -115,8 +115,6 @@
 
   <!-- Popover configuration -->
 	<aura:attribute name="allowPopover" type="Boolean" default="false"/>    
-  <!-- <aura:attribute name="objectIcons" type="String" default="{}"/>     -->
-  <aura:attribute name="cardFields" type="String" default="{}"/>    
 
   <!-- Slider configuration -->
   <aura:attribute name="ChartScaleFactorPercentage" type="Integer" default="100"/> 

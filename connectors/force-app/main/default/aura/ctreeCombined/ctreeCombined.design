@@ -6,6 +6,4 @@
     
     <design:attribute name="Title" default="1" label="Title Text" description=""/>        
 
-    <design:attribute name="cardFields" default="" label="Card Fields" description=""/>        
- 
 </design:component>

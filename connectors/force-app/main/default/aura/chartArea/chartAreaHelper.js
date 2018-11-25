@@ -286,14 +286,12 @@
                 console.log("createPopOverComponent: overlayLib found");
 
                 var componentReference = component.get("v.componentReference");
-                var cardFields = component.get("v.cardFields");
                 var masterConfig = component.get("v.masterConfig");
 
                 $A.createComponent(
                     "c:panelDisplay",
                     {
                         "Controller" : "Top", // TODO is this really ok to hardcode? Should it be same as hosting component's controller?
-                        "cardFields" : cardFields,
                         "masterConfig" : masterConfig,
                         "layoutStyle" : "cardTile",
                         "isHosted" : true,

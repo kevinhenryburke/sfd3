@@ -86,107 +86,31 @@
 
             var displayData = parameters["data"];
 
-            var mouseoverMessageFormat = "SIMPLE";
+            var extractedDisplayApiAndValues = helper.extractDisplayValues (displayData);
 
-            if (displayData.fields != null) {
-                mouseoverMessageFormat = "FIELDS";
+            var extractedApiNames = extractedDisplayApiAndValues[0]; // List of API names, not currently implemented
+            var extractedDisplayValues = extractedDisplayApiAndValues[1];
+
+            var objectType = displayData["objectType"];
+            component.set("v.objectType", objectType);
+
+            component.set("v.iconName", "standard:account");
+
+            if (objectType != null && objectIcons[objectType] != null) {
+                component.set("v.iconName", objectIcons[objectType]);
             }
-
-            if (mouseoverMessageFormat == "SIMPLE")
-            {
-                console.log(mouseoverMessageFormat);
-    
-                // Hiding and showing fields on mouseover, whilst a nice idea, calls all the nodes to bounce
-                // $A.util.removeClass(component.find("detailcardfields"), "slds-hide");
-
-                var displayParent = parameters["parent"];
-
-                var cardFieldsString = component.get("v.cardFields");
-
-                console.log("cardFieldsString old style:" + cardFieldsString);
-                console.log(displayData);
-
-                var cardFields = JSON.parse(cardFieldsString);
-                // set a default display fields list
-                var cardFieldsArray; // = ["data.name", "data.size", "parent.name"];
-
-                // check if there is an objectType specific display fields list and icons list
-                if (cardFields[displayData["objectType"]] != null) {
-                    var objectType = displayData["objectType"];
-                    component.set("v.objectType", objectType);
-                    cardFieldsArray = cardFields[objectType];
-
-                    component.set("v.iconName", "standard:account");
-
-                    if (objectType != null && objectIcons[objectType] != null) {
-                        component.set("v.iconName", objectIcons[objectType]);
-                    }
-                    else {
-                        component.set("v.iconName", "standard:account");
-                    }
-                }
-                else {
-                    if (cardFields["default"] != null) {
-                        cardFieldsArray = cardFields["default"];
-                    }
-                }
-
-                console.log("parseCardParam:");
-                component.set("v.recordId", helper.parseCardParam(displayData, displayParent, "data.id" ));
-
-                var parsedCardFields = [];
-                for(var i=0;i<cardFieldsArray.length;i++){
-
-                    var string = cardFieldsArray[i];
-                    var substring = "data.name";
-                    string.includes(substring);                
-                    if (string.includes(substring)) {
-                        // data.name comes first and will also have a link to the record
-                        component.set("v.card1", helper.parseCardParam(displayData, displayParent, cardFieldsArray[i] ));  
-                    }
-                    else {
-                        parsedCardFields.push(helper.parseCardParam(displayData, displayParent, cardFieldsArray[i]));
-                    }
-                }
-                component.set("v.parsedCardFields", parsedCardFields);  
-            }
-
-            if (mouseoverMessageFormat == "FIELDS")
-            {
-
-                console.log(mouseoverMessageFormat);
-
-                var extractedDisplayApiAndValues = helper.extractDisplayValues (displayData);
-
-                var extractedApiNames = extractedDisplayApiAndValues[0]; // List of API names, not currently implemented
-                var extractedDisplayValues = extractedDisplayApiAndValues[1];
-    
-                var objectType = displayData["objectType"];
-                component.set("v.objectType", objectType);
-
+            else {
                 component.set("v.iconName", "standard:account");
-
-                if (objectType != null && objectIcons[objectType] != null) {
-                    component.set("v.iconName", objectIcons[objectType]);
-                }
-                else {
-                    component.set("v.iconName", "standard:account");
-                }
-    
-                component.set("v.recordId", helper.extractRecordRoleField(displayData, "id"));
-                component.set("v.card1", helper.extractRecordRoleField(displayData, "name"));
-                component.set("v.parsedCardFields", extractedDisplayValues);  
             }
+
+            component.set("v.recordId", helper.extractRecordRoleField(displayData, "id"));
+            component.set("v.card1", helper.extractRecordRoleField(displayData, "name"));
+            component.set("v.extractedDisplayValues", extractedDisplayValues);  
 
         }
 
         if (topic == "ChartMouseOut")
         {
-            // Hiding fields, whilst a nice idea, calls all the nodes to bounce
-            // setTimeout(function(){ 
-            //     console.log("details: hide " );
-            //     $A.util.addClass(component.find("detailcardfields"), "slds-hide");
-            // }, 3000);
 
         }
     },

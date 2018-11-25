@@ -22,6 +22,7 @@
 
   <!-- Technical - Panel -->
   <aura:attribute name="panelCurrentMeasure" type="String"/>    
+  <aura:attribute name="measureNames" type="String[]"/>    
 	<aura:attribute name="panelPrimaryId" type="String"/> 
 	<aura:attribute name="currentLevels" type="Integer" default="1"/>    
 	<aura:attribute name="maxlevels" type="Integer" default="4"/>    

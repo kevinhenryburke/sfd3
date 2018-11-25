@@ -65,7 +65,7 @@
                 }
 
                 if (component.get("v.configuredMeasures") == true) {                   
-                    var arrayNames = buttonParameters.measures;
+                    var arrayNames = component.get("v.measureNames");
                     var idprefix = "v";
                     var maxbuttons = 5;
                     helper.formatButtons (component, arrayNames, idprefix, maxbuttons);
@@ -395,13 +395,31 @@ $A.getCallback(function() {
     configEventParameters["valueDate"] = d;
     for (var i = 0; i < datajson.nodes.length; i++){
         // grow most nodes and shrink a few too but make sure don't go too small.
-        datajson.nodes[i].measures["Posts"].radius = Math.max(10,datajson.nodes[i].measures["Posts"].radius + Math.floor(Math.random() * 20) - 5); 
-        datajson.nodes[i].measures["Hot"].radius = Math.max(10,datajson.nodes[i].measures["Hot"].radius + Math.floor(Math.random() * 20) - 5); 
+        var djNode = datajson.nodes[i];
+        var fields = djNode.fields;
+        for (var j = 0; j < fields.length; j++) {
+            if (fields[j].retrievedInteger != null) {
+                fields[j].retrievedInteger= 
+                    Math.max(10,fields[j].retrievedInteger + Math.floor(Math.random() * 20) - 5); 
+            }
+            if (fields[j].retrievedDecimal != null) {
+                fields[j].retrievedDecimal= 
+                    Math.max(10,fields[j].retrievedDecimal + Math.floor(Math.random() * 20) - 5); 
+            }
+        }
+
+
+
+
     }    
     configEventParameters["datajson"] = datajson;
-    var preppedEvent = helper.prepareEvent("RefreshData", configEventParameters, controllerId);
-    helper.publishPreppedEvent(component,preppedEvent);
-    d.setMonth(d.getMonth() + 1);
+
+    var monthNumber = d.getMonth();
+    if (monthNumber < 6) {
+        var preppedEvent = helper.prepareEvent("RefreshData", configEventParameters, controllerId);
+        helper.publishPreppedEvent(component,preppedEvent);
+        d.setMonth(d.getMonth() + 1);    
+    }
 }),
 1000);
 

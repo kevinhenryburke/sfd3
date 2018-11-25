@@ -24,7 +24,7 @@ public with sharing class HierarchyStructure {
     // the value retrieved for this record
     public String retrievedValue; 
     public Integer retrievedInteger; 
-    public Double retrievedCurrency; 
+    public Double retrievedDecimal; 
     public Datetime retrievedDatetime; 
     public Date retrievedDate; 
 

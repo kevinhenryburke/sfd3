@@ -209,7 +209,7 @@ public with sharing class HierarchyQuery {
                 field.retrievedDate = (Date) s.get(field.api);
             }
             if (field.fieldType == 'CURRENCY') {
-                field.retrievedCurrency = (Decimal) s.get(field.api);
+                field.retrievedDecimal = (Decimal) s.get(field.api);
             }
             if (field.fieldType == 'INTEGER') {
                 field.retrievedInteger = (Integer) s.get(field.api);

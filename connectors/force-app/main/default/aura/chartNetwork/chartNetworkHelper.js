@@ -643,10 +643,26 @@
 
         if ((componentType == "network.connections") || (componentType == "network.influence")) {
             // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
-            var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
+            var fields = d.fields;
+            var fieldsLength = fields.length;
+
+            var displayArray = [d.name];
+            for (var i=0; i<fieldsLength;i++) {
+                if (fields[i].fieldType == "STRING" && fields[i].role != "name") {
+                    displayArray.push(fields[i].retrievedValue);
+                }
+            }
+
+            var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + displayArray[0] ;
             textcontent += '</tspan>'; 
-            textcontent += '<tspan x="10" dy="15">' + d.position;
-            textcontent += ' (' + d.account + ')</tspan>';
+            textcontent += '<tspan x="10" dy="15">' + displayArray[1];
+            if (displayArray.length > 2) {
+                textcontent += ' (' + displayArray[2] + ')';
+            }
+            textcontent += '</tspan>';
+
+            console.log("xxxxx");
+            console.log(d);
 
             var tselect =  "t" + d.id;
             var sselect =  "s" + d.id;

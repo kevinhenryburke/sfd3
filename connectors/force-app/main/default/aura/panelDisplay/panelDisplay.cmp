@@ -23,8 +23,7 @@
     <!-- Design Paramters -->  
     <aura:attribute name="Controller" type="String" default="" description="If you want this card to respond to a particular controller on a page then put the controller's configured name here (unique to the page)"/>    
     <aura:attribute name="objectIcons" type="String" default="{}"/>    
-    <aura:attribute name="cardFields" type="String" default="{}"/>    
-    <aura:attribute name="parsedCardFields" type="String[]" default="['No node selected']"/>    
+    <aura:attribute name="extractedDisplayValues" type="String[]" default="['No node selected']"/>    
     <aura:attribute name="layoutStyle" type="String" default="card"/>    
     <aura:attribute name="objectType" type="String" default=""/>    
 
@@ -50,13 +49,13 @@
     
     <aura:if isTrue="{!v.layoutStyle == 'card'}"> 
         <lightning:card aura:id="detailcard" title="{!v.card1}" iconName="{!v.iconName}">
-            <div class="c-container"  aura:id="detailcardfields" >
+            <div class="c-container">
                 <lightning:layout horizontalAlign="space" verticalAlign="stretch">
 
                 <lightning:layoutItem flexibility="auto" padding="around-small">
                         <a href = "" onclick = "{!c.navigateToRecord}">{!v.card1}</a>
                     </lightning:layoutItem>
-                    <aura:iteration items="{!v.parsedCardFields}" var="item">
+                    <aura:iteration items="{!v.extractedDisplayValues}" var="item">
                         <lightning:layoutItem flexibility="auto" padding="around-small">
                             {!item}
                         </lightning:layoutItem>
@@ -83,7 +82,7 @@
                             <lightning:layoutItem size="6" padding="around-small" class="slds-text-body_small">
                                 <a href = "" onclick = "{!c.navigateToRecord}">{!v.card1}</a>
                             </lightning:layoutItem>
-                            <aura:iteration items="{!v.parsedCardFields}" var="item">
+                            <aura:iteration items="{!v.extractedDisplayValues}" var="item">
                                 <lightning:layoutItem size="6" padding="around-small">
                                     {!item}
                                 </lightning:layoutItem>

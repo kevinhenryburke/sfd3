@@ -26,13 +26,23 @@
             var datajsonBefore = args.datajson;
             var datajsonRefresh = args.datajsonRefresh;
 
-            var all1 = 0;
+            var currentMeasure = helper.getStore(component, "currentMeasure");
+
             for (var i = 0; i < datajsonBefore.nodes.length; i++){
-        //        datajson.nodes[i].measures["Posts"].radius = Math.floor((Math.random() * 60) + 10); 
-                all1 += datajsonRefresh.nodes[i].measures["Posts"].radius;
-                datajsonBefore.nodes[i].measures["Posts"].radius = datajsonRefresh.nodes[i].measures["Posts"].radius;
+                console.log("xxxxx: dataPreprocess: currentMeasure: radius: " + currentMeasure);
+                var djnodeBefore = datajsonBefore.nodes[i];
+                var fieldsBefore = djnodeBefore.fields;
+                var djnodeAfter = datajsonRefresh.nodes[i];
+                var fieldsAfter = djnodeAfter.fields;
+                for (var j = 0; j < fieldsBefore.length; j++) {
+                    if (fieldsBefore[j].retrievedDecimal != null) {
+                        fieldsBefore[j].retrievedDecimal = fieldsAfter[j].retrievedDecimal;
+                    }
+                    if (fieldsBefore[j].retrievedInteger != null) {
+                        fieldsBefore[j].retrievedInteger = fieldsAfter[j].retrievedInteger;
+                    }
+                }
             }    
-            console.log("all1: " + all1);
             helper.setCache (component, "datajson", datajsonBefore ) ;
         }
 
@@ -163,11 +173,17 @@
             bzutils.log("styleNodes:" + JSON.stringify(node));
         
             node.attr("r", function(o, i) {
-                return o.measures[currentMeasure].radius;
+                bzutils.log("xxxxx: currentMeasure: radius: ");
+                bzutils.log(o);
+                for (var i = 0; o.fields.length; i++) {
+                    if (o.fields[i].api == currentMeasure) {
+                        return o.fields[i].retrievedDecimal;
+                    }
+                }
             });
         
             node.style("fill", function(o, i) {
-                bzutils.log("styleNodes: fill: " + o.measures[currentMeasure].color);
+                console.log("styleNodes: fill: " + o.measures[currentMeasure].color);
                 return o.measures[currentMeasure].color;
             });
         
