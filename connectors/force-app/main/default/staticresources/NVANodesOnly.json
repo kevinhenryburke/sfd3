@@ -1,368 +1,145 @@
 {
   "nodes":[
     {
-      "name":"Supply Chain Corruption",
-      "account":"Royal Opera",
-      "position":"Sales Director",
+      "name":"Newcastle",
       "id":"000000000000000000",
-      "type":"Contact",
+      "objectType":"Contact",
       "measures":{
         "Posts":{
-          "color":"#66c2a5",
-          "visible":1,
-          "radius":123
+          "color":"blue",
+          "visible":1
         },
         "Hot":{
           "color":"green",
-          "visible":1,
-          "radius":9
+          "visible":1
         }
-      }
+      },
+      "fields":[  
+        {  
+          "role":"name",
+          "retrievedValue":"Newcastle",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"name"
+        },
+        {  
+          "role":"size",
+          "retrievedDecimal":12,
+          "fieldType":"CURRENCY",
+          "display":true,
+          "api":"Posts"
+        },
+        {  
+          "role":"size",
+          "retrievedDecimal":9,
+          "fieldType":"CURRENCY",
+          "display":true,
+          "api":"Hot"
+        },
+        {  
+          "role":"id",
+          "retrievedValue":"000000000000000000",
+          "fieldType":"ID",
+          "display":false,
+          "api":"id"
+        },
+        {  
+          "role":"none",
+          "retrievedValue":"Sales Director",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"position"
+        },
+        {  
+          "role":"none",
+          "retrievedValue":"Royal Opera",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"account"
+        }
+      ]    
     },
     {
-      "name":"Grow Africa",
-      "account":"Royal Opera",
-      "position":"Sales Director",
+      "name":"Mancester",
       "id":"000000000000000001",
-      "type":"User",
+      "objectType":"User",
       "measures":{
         "Posts":{
-          "color":"#66c2a5",
-          "visible":1,
-          "radius":12
+          "color":"blue",
+          "visible":1
         },
         "Hot":{
           "color":"limegreen",
-          "visible":1,
-          "radius":13
+          "visible":1
         }
-      }
-    },
-    {
-      "name":"Grow Asia",
-      "account":"La Scala",
-      "position":"Sales Director",
-      "id":"000000000000000002",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"#66c2a5",
-          "visible":1,
-          "radius":72
+      },
+      "fields":[  
+        {  
+          "role":"name",
+          "retrievedValue":"Mancester",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"name"
         },
-        "Hot":{
-          "color":"red",
-          "visible":1,
-          "radius":23
-        }
-      }
-    },
-    {
-      "name":"COP21",
-      "account":"New York Met",
-      "position":"Sales Director",
-      "id":"000000000000000003",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"#66c2a5",
-          "visible":1,
-          "radius":41
+        {  
+          "role":"size",
+          "retrievedDecimal":23,
+          "fieldType":"CURRENCY",
+          "display":true,
+          "api":"Posts"
         },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Drought Management",
-      "account":"La Scala",
-      "position":"Sales Director",
-      "id":"000000000000000004",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"#fc8d62",
-          "visible":1,
-          "radius":52
+        {  
+          "role":"size",
+          "retrievedDecimal":12,
+          "fieldType":"CURRENCY",
+          "display":true,
+          "api":"Hot"
         },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Palm Oil",
-      "account":"Royal Opera",
-      "position":"Sales Director",
-      "id":"000000000000000005",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"#fc8d62",
-          "visible":0,
-          "radius":12
+        {  
+          "role":"id",
+          "retrievedValue":"000000000000000001",
+          "fieldType":"ID",
+          "display":false,
+          "api":"id"
         },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Corn",
-      "account":"New York Met",
-      "position":"Sales Director",
-      "id":"000000000000000006",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"#fc8d62",
-          "visible":1,
-          "radius":32
+        {  
+          "role":"none",
+          "retrievedValue":"Sales Director",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"position"
         },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
+        {  
+          "role":"none",
+          "retrievedValue":"Royal Opera",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"account"
         }
-      }
+      ]    
     },
-    {
-      "name":"Conserving Forests",
-      "account":"New York Met",
-      "position":"Sales Director",
-      "id":"000000000000000007",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"#8da0cb",
-          "visible":1,
-          "radius":87
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Urbanization",
-      "account":"La Scala",
-      "position":"Sales Director",
-      "id":"000000000000000008",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"#8da0cb",
-          "visible":1,
-          "radius":41
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Global Warming",
-      "account":"Royal Opera",
-      "position":"Sales Director",
-      "id":"000000000000000009",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"#8da0cb",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Political Upheaval",
-      "account":"New York Met",
-      "position":"Sales Director",
-      "id":"000000000000000010",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"#e78ac3",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Seed Distribution",
-      "account":"New York Met",
-      "position":"Sales Director",
-      "id":"000000000000000011",
-      "type":"Contact",
-      "measures":{
-        "Posts":{
-          "color":"#e78ac3",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Sustainability",
-      "account":"Royal Opera",
-      "position":"Sales Director",
-      "id":"000000000000000012",
-      "type":"Contact",
-      "measures":{
-        "Posts":{
-          "color":"#e78ac3",
-          "visible":1,
-          "radius":28
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Distribution",
-      "account":"La Scala",
-      "position":"Sales Director",
-      "id":"000000000000000013",
-      "type":"Contact",
-      "measures":{
-        "Posts":{
-          "color":"#a6d854",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Soy",
-      "account":"New York Met",
-      "position":"Sales Director",
-      "id":"000000000000000014",
-      "type":"Contact",
-      "measures":{
-        "Posts":{
-          "color":"#a6d854",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Agenda 2020",
-      "account":"La Scala",
-      "position":"Sales Director",
-      "id":"000000000000000015",
-      "type":"Contact",
-      "measures":{
-        "Posts":{
-          "color":"#a6d854",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Fair Trade",
-      "account":"Royal Opera",
-      "position":"Sales Director",
-      "id":"000000000000000016",
-      "type":"Contact",
-      "measures":{
-        "Posts":{
-          "color":"#ffd92f",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"orange",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Farming Education",
-      "account":"New York Met",
-      "position":"Sales Director",
-      "id":"000000000000000017",
-      "type":"Contact",
-      "measures":{
-        "Posts":{
-          "color":"#ffd92f",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Over-Farming",
-      "account":"La Scala",
-      "position":"Sales Director",
-      "id":"000000000000000018",
-      "type":"Contact",
-      "measures":{
-        "Posts":{
-          "color":"#ffd92f",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    }
+    {"name":"Birmingham","id":"000000000000000031","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Birmingham","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000031","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Cardiff","id":"000000000000000032","objectType":"Contact","measures":{"Posts":{"color":"red","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Cardiff","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":8,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":19,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000032","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Derby","id":"000000000000000033","objectType":"Contact","measures":{"Posts":{"color":"orange","visible":1},"Hot":{"color":"blue","visible":1}},"fields":[{"role":"name","retrievedValue":"Derby","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":13,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000033","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Exeter","id":"000000000000000034","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"purple","visible":1}},"fields":[{"role":"name","retrievedValue":"Exeter","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":15,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000034","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Fulham","id":"000000000000000035","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Fulham","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":18,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000035","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Grimsby","id":"000000000000000036","objectType":"Contact","measures":{"Posts":{"color":"orange","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Grimsby","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000036","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Halifax","id":"000000000000000037","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Halifax","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":13,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000037","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Inverness","id":"000000000000000038","objectType":"Contact","measures":{"Posts":{"color":"green","visible":1},"Hot":{"color":"purple","visible":1}},"fields":[{"role":"name","retrievedValue":"Inverness","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000038","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Jutland","id":"000000000000000039","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Jutland","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":16,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000039","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Kilmarnock","id":"000000000000000040","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Kilmarnock","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":11,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000040","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Liverpool","id":"000000000000000041","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Liverpool","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000041","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
   ],
   "links":[
   ]
-
 }

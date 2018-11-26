@@ -1,366 +1,144 @@
 {
   "nodes":[
     {
-      "name":"Supply Chain Corruption",
-      "account":"Royal Opera",
-      "position":"Sales Director",
+      "name":"Newcastle",
       "id":"000000000000000000",
-      "type":"Contact",
+      "objectType":"Contact",
       "measures":{
         "Posts":{
           "color":"blue",
-          "visible":1,
-          "radius":12
+          "visible":1
         },
         "Hot":{
           "color":"green",
-          "visible":1,
-          "radius":9
+          "visible":1
         }
-      }
+      },
+      "fields":[  
+        {  
+          "role":"name",
+          "retrievedValue":"Newcastle",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"name"
+        },
+        {  
+          "role":"size",
+          "retrievedDecimal":12,
+          "fieldType":"CURRENCY",
+          "display":true,
+          "api":"Posts"
+        },
+        {  
+          "role":"size",
+          "retrievedDecimal":9,
+          "fieldType":"CURRENCY",
+          "display":true,
+          "api":"Hot"
+        },
+        {  
+          "role":"id",
+          "retrievedValue":"000000000000000000",
+          "fieldType":"ID",
+          "display":false,
+          "api":"id"
+        },
+        {  
+          "role":"none",
+          "retrievedValue":"Sales Director",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"position"
+        },
+        {  
+          "role":"none",
+          "retrievedValue":"Royal Opera",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"account"
+        }
+      ]    
     },
     {
-      "name":"Grow Africa",
-      "account":"Royal Opera",
-      "position":"Sales Director",
+      "name":"Manchester",
       "id":"000000000000000001",
-      "type":"User",
+      "objectType":"User",
       "measures":{
         "Posts":{
           "color":"blue",
-          "visible":1,
-          "radius":12
+          "visible":1
         },
         "Hot":{
           "color":"limegreen",
-          "visible":1,
-          "radius":13
+          "visible":1
         }
-      }
-    },
-    {
-      "name":"Grow Asia",
-      "account":"La Scala",
-      "position":"Sales Director",
-      "id":"000000000000000002",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"blue",
-          "visible":1,
-          "radius":12
+      },
+      "fields":[  
+        {  
+          "role":"name",
+          "retrievedValue":"Manchester",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"name"
         },
-        "Hot":{
-          "color":"red",
-          "visible":1,
-          "radius":23
-        }
-      }
-    },
-    {
-      "name":"COP21",
-      "account":"New York Met",
-      "position":"Sales Director",
-      "id":"000000000000000003",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"blue",
-          "visible":1,
-          "radius":12
+        {  
+          "role":"size",
+          "retrievedDecimal":23,
+          "fieldType":"CURRENCY",
+          "display":true,
+          "api":"Posts"
         },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Drought Management",
-      "account":"La Scala",
-      "position":"Sales Director",
-      "id":"000000000000000004",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"blue",
-          "visible":1,
-          "radius":12
+        {  
+          "role":"size",
+          "retrievedDecimal":12,
+          "fieldType":"CURRENCY",
+          "display":true,
+          "api":"Hot"
         },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Palm Oil",
-      "account":"Royal Opera",
-      "position":"Sales Director",
-      "id":"000000000000000005",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"blue",
-          "visible":0,
-          "radius":12
+        {  
+          "role":"id",
+          "retrievedValue":"000000000000000001",
+          "fieldType":"ID",
+          "display":false,
+          "api":"id"
         },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Corn",
-      "account":"New York Met",
-      "position":"Sales Director",
-      "id":"000000000000000006",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"blue",
-          "visible":1,
-          "radius":12
+        {  
+          "role":"none",
+          "retrievedValue":"Sales Director",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"position"
         },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
+        {  
+          "role":"none",
+          "retrievedValue":"Royal Opera",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"account"
         }
-      }
+      ]    
     },
-    {
-      "name":"Conserving Forests",
-      "account":"New York Met",
-      "position":"Sales Director",
-      "id":"000000000000000007",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"blue",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Urbanization",
-      "account":"La Scala",
-      "position":"Sales Director",
-      "id":"000000000000000008",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"blue",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Global Warming",
-      "account":"Royal Opera",
-      "position":"Sales Director",
-      "id":"000000000000000009",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"blue",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Political Upheaval",
-      "account":"New York Met",
-      "position":"Sales Director",
-      "id":"000000000000000010",
-      "type":"User",
-      "measures":{
-        "Posts":{
-          "color":"blue",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Seed Distribution",
-      "account":"New York Met",
-      "position":"Sales Director",
-      "id":"000000000000000011",
-      "type":"Contact",
-      "measures":{
-        "Posts":{
-          "color":"blue",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Sustainability",
-      "account":"Royal Opera",
-      "position":"Sales Director",
-      "id":"000000000000000012",
-      "type":"Contact",
-      "measures":{
-        "Posts":{
-          "color":"blue",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Distribution",
-      "account":"La Scala",
-      "position":"Sales Director",
-      "id":"000000000000000013",
-      "type":"Contact",
-      "measures":{
-        "Posts":{
-          "color":"blue",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Soy",
-      "account":"New York Met",
-      "position":"Sales Director",
-      "id":"000000000000000014",
-      "type":"Contact",
-      "measures":{
-        "Posts":{
-          "color":"blue",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Agenda 2020",
-      "account":"La Scala",
-      "position":"Sales Director",
-      "id":"000000000000000015",
-      "type":"Contact",
-      "measures":{
-        "Posts":{
-          "color":"blue",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Fair Trade",
-      "account":"Royal Opera",
-      "position":"Sales Director",
-      "id":"000000000000000016",
-      "type":"Contact",
-      "measures":{
-        "Posts":{
-          "color":"blue",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Farming Education",
-      "account":"New York Met",
-      "position":"Sales Director",
-      "id":"000000000000000017",
-      "type":"Contact",
-      "measures":{
-        "Posts":{
-          "color":"blue",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    },
-    {
-      "name":"Over-Farming",
-      "account":"La Scala",
-      "position":"Sales Director",
-      "id":"000000000000000018",
-      "type":"Contact",
-      "measures":{
-        "Posts":{
-          "color":"blue",
-          "visible":1,
-          "radius":12
-        },
-        "Hot":{
-          "color":"green",
-          "visible":1,
-          "radius":9
-        }
-      }
-    }
+    {"name":"Birmingham","id":"000000000000000031","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Birmingham","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000031","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Cardiff","id":"000000000000000032","objectType":"Contact","measures":{"Posts":{"color":"red","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Cardiff","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":8,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":19,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000032","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Derby","id":"000000000000000033","objectType":"Contact","measures":{"Posts":{"color":"orange","visible":1},"Hot":{"color":"blue","visible":1}},"fields":[{"role":"name","retrievedValue":"Derby","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":13,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000033","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Exeter","id":"000000000000000034","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"purple","visible":1}},"fields":[{"role":"name","retrievedValue":"Exeter","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":15,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000034","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Fulham","id":"000000000000000035","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Fulham","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":18,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000035","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Grimsby","id":"000000000000000036","objectType":"Contact","measures":{"Posts":{"color":"orange","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Grimsby","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000036","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Halifax","id":"000000000000000037","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Halifax","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":13,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000037","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Inverness","id":"000000000000000038","objectType":"Contact","measures":{"Posts":{"color":"green","visible":1},"Hot":{"color":"purple","visible":1}},"fields":[{"role":"name","retrievedValue":"Inverness","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000038","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Jutland","id":"000000000000000039","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Jutland","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":16,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000039","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Kilmarnock","id":"000000000000000040","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Kilmarnock","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":11,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000040","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Liverpool","id":"000000000000000041","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Liverpool","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000041","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
   ],
   "links":[
     {
@@ -373,175 +151,34 @@
       "stroke":"gray"
     },
     {
-      "id":"100000000000000002",
+      "id":"100000000000000071",
       "sourceid":"000000000000000000",
-      "targetid":"000000000000000002",
-      "type":"Client",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    },
-    {
-      "id":"100000000000000003",
-      "sourceid":"000000000000000000",
-      "targetid":"000000000000000003",
-      "type":"Work",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    },
-    {
-      "id":"100000000000000004",
-      "sourceid":"000000000000000000",
-      "targetid":"000000000000000004",
-      "type":"Work",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    },
-    {
-      "id":"100000000000000005",
-      "sourceid":"000000000000000000",
-      "targetid":"000000000000000014",
-      "type":"Work",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    },
-    {
-      "id":"100000000000000006",
-      "sourceid":"000000000000000000",
-      "targetid":"000000000000000015",
-      "type":"Client",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    },
-    {
-      "id":"100000000000000007",
-      "sourceid":"000000000000000000",
-      "targetid":"000000000000000016",
-      "type":"Work",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    },
-    {
-      "id":"100000000000000008",
-      "sourceid":"000000000000000000",
-      "targetid":"000000000000000017",
-      "type":"Work",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    },
-    {
-      "id":"100000000000000009",
-      "sourceid":"000000000000000000",
-      "targetid":"000000000000000018",
-      "type":"Work",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    },
-    {
-      "id":"100000000000000011",
-      "sourceid":"000000000000000001",
-      "targetid":"000000000000000007",
-      "type":"Client",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    },
-    {
-      "id":"100000000000000012",
-      "sourceid":"000000000000000001",
-      "targetid":"000000000000000008",
-      "type":"Work",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    },
-    {
-      "id":"100000000000000013",
-      "sourceid":"000000000000000002",
-      "targetid":"000000000000000004",
-      "type":"Work",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    },
-    {
-      "id":"100000000000000014",
-      "sourceid":"000000000000000003",
-      "targetid":"000000000000000004",
+      "targetid":"000000000000000031",
       "type":"Social",
       "createdby":"Kevin Burke",
       "notes":"worked together at BLW",
       "stroke":"gray"
     },
-    {
-      "id":"100000000000000015",
-      "sourceid":"000000000000000003",
-      "targetid":"000000000000000006",
-      "type":"Social",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    },
-    {
-      "id":"100000000000000016",
-      "sourceid":"000000000000000004",
-      "targetid":"000000000000000005",
-      "type":"Work",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    },
-    {
-      "id":"100000000000000018",
-      "sourceid":"000000000000000005",
-      "targetid":"000000000000000004",
-      "type":"Work",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    },
-    {
-      "id":"100000000000000019",
-      "sourceid":"000000000000000005",
-      "targetid":"000000000000000015",
-      "type":"Social",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    },
-    {
-      "id":"100000000000000020",
-      "sourceid":"000000000000000006",
-      "targetid":"000000000000000012",
-      "type":"Social",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    },
-    {
-      "id":"100000000000000021",
-      "sourceid":"000000000000000006",
-      "targetid":"000000000000000013",
-      "type":"Work",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    },
-    {
-      "id":"100000000000000022",
-      "sourceid":"000000000000000009",
-      "targetid":"000000000000000010",
-      "type":"Work",
-      "createdby":"Kevin Burke",
-      "notes":"worked together at BLW",
-      "stroke":"gray"
-    }
+    {"id":"100000000000000072","sourceid":"000000000000000031","targetid":"000000000000000032","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000073","sourceid":"000000000000000031","targetid":"000000000000000033","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000074","sourceid":"000000000000000031","targetid":"000000000000000034","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000075","sourceid":"000000000000000034","targetid":"000000000000000035","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000076","sourceid":"000000000000000034","targetid":"000000000000000036","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000077","sourceid":"000000000000000034","targetid":"000000000000000037","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000078","sourceid":"000000000000000033","targetid":"000000000000000035","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000079","sourceid":"000000000000000033","targetid":"000000000000000038","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000080","sourceid":"000000000000000033","targetid":"000000000000000039","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000081","sourceid":"000000000000000033","targetid":"000000000000000040","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000082","sourceid":"000000000000000033","targetid":"000000000000000041","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
   ]
 }
