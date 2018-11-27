@@ -27,6 +27,7 @@
             var datajsonRefresh = args.datajsonRefresh;
 
             var currentMeasure = helper.getStore(component, "currentMeasure");
+            var currentMeasureScheme = helper.getStore(component, "currentMeasureScheme");
 
             for (var i = 0; i < datajsonBefore.nodes.length; i++){
                 console.log("xxxxx: dataPreprocess: currentMeasure: radius: " + currentMeasure);
@@ -164,6 +165,7 @@
 
             var primaryid = helper.getCache (component, "primaryNodeId") ;
             var currentMeasure = helper.getStore(component, "currentMeasure");
+            var currentMeasureScheme = helper.getStore(component, "currentMeasureScheme");
 
             console.log("styleNodes enter: " + currentMeasure + " primaryid: " + primaryid);
         
@@ -184,7 +186,28 @@
         
             node.style("fill", function(o, i) {
                 console.log("styleNodes: fill: " + o.measures[currentMeasure].color);
+                for (var i = 0; i < o.fields.length; i++) {
+                    if (o.fields[i].api == currentMeasure) {
+                        var retrievedDecimal = o.fields[i].retrievedDecimal;
+                        // check out the lowest level
+                        var low = currentMeasureScheme[0];
+                        if (retrievedDecimal < low.below) {
+                            return low.color;
+                        } 
+                        else {
+                            // if above the lowest threshhold go to the top and work backwards
+                            var measureSchemeLength = currentMeasureScheme.length;
+                            for (var k = measureSchemeLength - 1; k > 0; k--) {
+                                var high = currentMeasureScheme[k];
+                                if (retrievedDecimal >= high.above) {
+                                    return high.color;
+                                }         
+                            }
+                        }
+                    }
+                }
                 return o.measures[currentMeasure].color;
+
             });
         
             node.style("stroke", function(o, i) {

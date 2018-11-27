@@ -112,7 +112,7 @@
     },
 
     // unsophisticated version is to remove everything and re-initialize
-    refreshData: function (component, datajsonRefresh, currentMeasure, primaryNodeId, showFilters) {
+    refreshData: function (component, datajsonRefresh, currentMeasure, currentMeasureScheme, primaryNodeId, showFilters) {
         var _this = this;
         var componentReference = component.get("v.componentReference");
         console.log("chartArea: enter refreshData with primaryNodeId: " + primaryNodeId);
@@ -160,13 +160,13 @@
         
         // re-initialize the chart
         var isInit = false;
-        _this.initializeGroups(component, datajson, currentMeasure, primaryNodeId, showFilters, isInit);                 
+        _this.initializeGroups(component, datajson, currentMeasure, currentMeasureScheme, primaryNodeId, showFilters, isInit);                 
 
         cc.initializeVisuals();
 
     },    
 
-	initializeGroups: function (component, datajson, currentMeasure, primaryNodeId, showFilters, isInit) {
+	initializeGroups: function (component, datajson, currentMeasure, currentMeasureScheme, primaryNodeId, showFilters, isInit) {
 
         var _this = this;
         var componentReference = component.get("v.componentReference");
@@ -191,6 +191,8 @@
 
         _this.setStore(component, "currentMeasure", currentMeasure);
         _this.setCache (component, "currentMeasure", currentMeasure ) ;
+        _this.setStore(component, "currentMeasureScheme", currentMeasureScheme);
+        _this.setCache (component, "currentMeasureScheme", currentMeasureScheme ) ;
         _this.setCache (component, "showFilters", showFilters ) ;
 
 		var svg = d3.select(_this.getDivId("svg", componentReference, true));

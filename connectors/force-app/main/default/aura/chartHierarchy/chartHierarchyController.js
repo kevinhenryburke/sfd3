@@ -17,6 +17,7 @@
 
         var updatejson = args.datajson;
         var currentMeasure = args.currentMeasure;
+        var currentMeasureScheme = args.currentMeasureScheme;
         var primaryId = args.primaryId; // primaryId can be used for highlight node at end of highlighted paths
         var showFilters = args.showFilters;
 

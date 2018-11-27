@@ -16,6 +16,7 @@
 
 
             var measureNames = [];
+            var measureSchemes = [];
             var numberMeasuresFound = 0;
 
             for (var j = 0; j < topObjectLevelFields.length; j++) {
@@ -26,15 +27,29 @@
                         // set the first measure as default
                         var panelCurrentMeasure = topObjectLevelFields[j].measureName;
                         component.set("v.panelCurrentMeasure", panelCurrentMeasure);
+
+                        var panelCurrentMeasureScheme = topObjectLevelFields[j].measureScheme;
+                        if (panelCurrentMeasureScheme != null) {
+                            component.set("v.panelCurrentMeasureScheme", panelCurrentMeasureScheme);
+                            console.log("xxxxx: panelCurrentMeasureScheme: " + panelCurrentMeasureScheme);
+                        }
                         console.log("xxxxx: panelCurrentMeasure: " + panelCurrentMeasure);
                     }
+                    // create arrays for measure and schemes
                     measureNames.push(topObjectLevelFields[j].measureName);
+                    var panelCurrentMeasureSchemeLoop = topObjectLevelFields[j].measureScheme;
+                    if (panelCurrentMeasureSchemeLoop != null) {
+                        measureSchemes.push(panelCurrentMeasureSchemeLoop);
+                    }
+                    else {
+                        measureSchemes.push(null);
+                    }
                     numberMeasuresFound++;
                 }
             }
 
             component.set("v.measureNames", measureNames);
-
+            component.set("v.measureSchemes", measureSchemes);
 
             for (var key in buttonParameters) {  
                 var subObj = buttonParameters[key];
@@ -147,6 +162,7 @@
                 // TODO - will need to retrieve data based on new selections
                 var datajson = component.get("v.datajson");
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
+                var panelCurrentMeasureScheme = component.get("v.panelCurrentMeasureScheme");
                 var panelShowFilters = component.get("v.panelShowFilters");     
 
                 var configEventParameters;
@@ -163,6 +179,7 @@
                     configEventParameters = { 
                         "datajson" : datajson, 
                         "currentMeasure" : panelCurrentMeasure,
+                        "currentMeasureScheme" : panelCurrentMeasureScheme, 
                         "primaryId" : panelPrimaryId, 
                         "showFilters" : panelShowFilters,
                         "componentReference" : componentReference        // be aware this is the receiving component's reference        
@@ -172,6 +189,7 @@
                     configEventParameters = { 
                         "datajson" : datajson, 
                         "currentMeasure" : panelCurrentMeasure,
+                        "currentMeasureScheme" : panelCurrentMeasureScheme, 
                         "primaryId" : panelPrimaryId, 
                         "showFilters" : panelShowFilters
                     }
@@ -309,12 +327,17 @@
     },
     
     setMeasure: function(component, measureIndex) {
-        var masterConfigObject = component.get("v.masterConfigObject");
-
         var measureNames = component.get("v.measureNames");
         var thisMeasure = measureNames[measureIndex - 1];
         component.set("v.panelCurrentMeasure", thisMeasure);
         return thisMeasure;
+    },
+
+    setMeasureScheme: function(component, measureIndex) {
+        var measureSchemes = component.get("v.measureSchemes");
+        var thisMeasureScheme = measureSchemes[measureIndex - 1];
+        component.set("v.panelCurrentMeasureScheme", thisMeasureScheme);
+        return thisMeasureScheme;
     },
 
     setFilter: function(component, indexer) {

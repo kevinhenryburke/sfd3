@@ -54,6 +54,7 @@
                 var buttonParameters = masterConfigObject["panels"]["ControlPanel"]["buttonParameters"];                
 
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
+                var panelCurrentMeasureScheme = component.get("v.panelCurrentMeasureScheme");
                 var panelPrimaryId = component.get("v.panelPrimaryId");            
                 var panelShowFilters = component.get("v.panelShowFilters");     
                 
@@ -86,6 +87,7 @@
                     var configEventParameters = { 
                         "datajson" : datajson, 
                         "currentMeasure" : panelCurrentMeasure, 
+                        "currentMeasureScheme" : panelCurrentMeasureScheme, 
                         "primaryId" : panelPrimaryId, 
                         "showFilters" : panelShowFilters,
                         "componentReference" : componentReference
@@ -174,6 +176,7 @@
 
                 var datajson = component.get("v.datajson");
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
+                var panelCurrentMeasureScheme = component.get("v.panelCurrentMeasureScheme");
                 var panelPrimaryId = component.get("v.panelPrimaryId");            
                 var panelShowFilters = component.get("v.panelShowFilters");     
                 
@@ -182,6 +185,7 @@
                 var configEventParameters = { 
                     "datajson" : datajson, 
                     "currentMeasure" : panelCurrentMeasure, 
+                    "currentMeasureScheme" : panelCurrentMeasureScheme, 
                     "primaryId" : panelPrimaryId, 
                     "showFilters" : panelShowFilters,
                     "componentReference" : componentReference                
@@ -307,32 +311,39 @@
     
     onClickMeasureV1 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 1);
+        var currentMeasureScheme = helper.setMeasureScheme(component, 1);
+        console.log("xxxxx: onClickMeasureV1: " + JSON.stringify(currentMeasureScheme));
         var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 1, "measure" : currentMeasure }, controllerId);
+        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 1, "measure" : currentMeasure, "measureScheme" : currentMeasureScheme }, controllerId);
         helper.publishPreppedEvent(component,preppedEvent);
     },
     onClickMeasureV2 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 2);
+        var currentMeasureScheme = helper.setMeasureScheme(component, 2);
+        console.log("xxxxx: onClickMeasureV2: " + JSON.stringify(currentMeasureScheme));
         var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 2, "measure" : currentMeasure }, controllerId);
+        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 2, "measure" : currentMeasure, "measureScheme" : currentMeasureScheme  }, controllerId);
         helper.publishPreppedEvent(component,preppedEvent);
     },
     onClickMeasureV3 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 3);
+        var currentMeasureScheme = helper.setMeasureScheme(component, 3);
         var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 3, "measure" : currentMeasure }, controllerId);
+        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 3, "measure" : currentMeasure, "measureScheme" : currentMeasureScheme  }, controllerId);
         helper.publishPreppedEvent(component,preppedEvent);
     },
     onClickMeasureV4 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 4);
+        var currentMeasureScheme = helper.setMeasureScheme(component, 4);
         var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 4, "measure" : currentMeasure }, controllerId);
+        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 4, "measure" : currentMeasure, "measureScheme" : currentMeasureScheme  }, controllerId);
         helper.publishPreppedEvent(component,preppedEvent);
     },
     onClickMeasureV5 : function(component, event, helper) {
         var currentMeasure = helper.setMeasure(component, 5);
+        var currentMeasureScheme = helper.setMeasureScheme(component, 5);
         var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 5, "measure" : currentMeasure }, controllerId);
+        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 5, "measure" : currentMeasure, "measureScheme" : currentMeasureScheme  }, controllerId);
         helper.publishPreppedEvent(component,preppedEvent);
     },
 
@@ -372,6 +383,7 @@
 
 var datajson = component.get("v.datajson");
 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
+var panelCurrentMeasureScheme = component.get("v.panelCurrentMeasureScheme");
 var panelPrimaryId = component.get("v.panelPrimaryId");            
 var panelShowFilters = component.get("v.panelShowFilters");     
 
@@ -381,6 +393,7 @@ var panelShowFilters = component.get("v.panelShowFilters");
 var configEventParameters = { 
     "datajson" : datajson, 
     "currentMeasure" : panelCurrentMeasure,
+    "currentMeasureScheme" : panelCurrentMeasureScheme, 
     "primaryId" : panelPrimaryId, 
     "showFilters" : panelShowFilters,
 }

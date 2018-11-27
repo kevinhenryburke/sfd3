@@ -468,6 +468,7 @@
         var sizeDivisor = 100;
         var nodePadding = 2.5;
         var currentMeasure = _this.getCache (component, "currentMeasure") ; 
+        var currentMeasureScheme = _this.getCache (component, "currentMeasureScheme") ; 
     
         var simulation = d3.forceSimulation()
             .force("forceX", d3.forceX().strength(.1).x(width * .5))

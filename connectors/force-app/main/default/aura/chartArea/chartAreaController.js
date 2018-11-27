@@ -84,10 +84,11 @@
 
         var datajson = args.datajson;
         var currentMeasure = args.currentMeasure;
+        var currentMeasureScheme = args.currentMeasureScheme;
         var primaryId = args.primaryId;
         var showFilters = args.showFilters;
 
-        helper.refreshData(component, datajson, currentMeasure, primaryId, showFilters);                         
+        helper.refreshData(component, datajson, currentMeasure, currentMeasureScheme, primaryId, showFilters);                         
     },
 
     searchChart: function(component,event,helper){
@@ -152,7 +153,7 @@
             }
         }
         
-        // Chart Display handers
+        // Chart Display handlers
         
         if (topic == "ShowLevelsMore")
         {
@@ -169,8 +170,13 @@
         {
             var currentMeasure = parameters["measure"];
             helper.setStore(cc, "currentMeasure", currentMeasure);
-
+            // TODO - why still using setStore AND setCache?
             helper.setCache (component, "currentMeasure", currentMeasure ) ;
+
+            var currentMeasureScheme = parameters["measureScheme"];
+            helper.setStore(cc, "currentMeasureScheme", currentMeasureScheme);
+            // TODO - why still using setStore AND setCache?
+            helper.setCache (component, "currentMeasureScheme", currentMeasureScheme ) ;
             
             // refresh Chart - measure changes but primaryid does not
             cc.styleNodes();                 
@@ -192,7 +198,7 @@
                 bzutils.log("InitializeData with reference: " + componentReference);
                 var isInit = true;
 
-                helper.initializeGroups(component, parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"], isInit);                 
+                helper.initializeGroups(component, parameters["datajson"], parameters["currentMeasure"], parameters["currentMeasureScheme"], parameters["primaryId"], parameters["showFilters"], isInit);                 
 
                 var cc = component.getConcreteComponent();
                 cc.initializeVisuals();
@@ -217,7 +223,7 @@
                 }
 
                 var cc = component.getConcreteComponent();
-                cc.refreshData(parameters["datajson"], parameters["currentMeasure"], parameters["primaryId"], parameters["showFilters"]);                 
+                cc.refreshData(parameters["datajson"], parameters["currentMeasure"], parameters["currentMeasureScheme"], parameters["primaryId"], parameters["showFilters"]);                 
             }
             else {
                 bzutils.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
