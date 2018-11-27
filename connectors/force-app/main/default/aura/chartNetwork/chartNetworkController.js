@@ -187,7 +187,7 @@
             node.style("fill", function(o, i) {
                 console.log("styleNodes: fill: " + o.measures[currentMeasure].color);
                 if (currentMeasureScheme != null) {
-                    helper.colorByMeasureScheme(o, currentMeasureScheme, currentMeasure);
+                    return helper.colorByMeasureScheme(o, currentMeasureScheme, currentMeasure);
                 }
                 return o.measures[currentMeasure].color;
             });
