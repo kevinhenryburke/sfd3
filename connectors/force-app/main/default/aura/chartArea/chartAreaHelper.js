@@ -593,8 +593,31 @@
 
     getDivId : function (idType, componentReference, forSelect) {
         return (forSelect ? "#" : "") + componentReference + idType;
-    }
+    },
     
+    colorByMeasureScheme : function (o, currentMeasureScheme, currentMeasure) {
+            for (var i = 0; i < o.fields.length; i++) {
+            if (o.fields[i].api == currentMeasure) {
+                var retrievedDecimal = o.fields[i].retrievedDecimal;
+                // check out the lowest level
+                var low = currentMeasureScheme[0];
+                if (retrievedDecimal < low.below) {
+                    return low.color;
+                } 
+                else {
+                    // if above the lowest threshhold go to the top and work backwards
+                    var measureSchemeLength = currentMeasureScheme.length;
+                    for (var k = measureSchemeLength - 1; k > 0; k--) {
+                        var high = currentMeasureScheme[k];
+                        if (retrievedDecimal >= high.above) {
+                            return high.color;
+                        }         
+                    }
+                }
+            }
+        }    
+    }
+
 
         
 
