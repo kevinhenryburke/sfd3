@@ -596,7 +596,7 @@
     },
     
     colorByMeasureScheme : function (o, currentMeasureScheme, currentMeasure) {
-            for (var i = 0; i < o.fields.length; i++) {
+        for (var i = 0; i < o.fields.length; i++) {
             if (o.fields[i].api == currentMeasure) {
                 var retrievedDecimal = o.fields[i].retrievedDecimal;
                 // check out the lowest level

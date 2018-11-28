@@ -645,6 +645,15 @@
     getNodeColor : function (component, d, LeafParent) {
         var _this = this;
 
+        var currentMeasure = _this.getStore(component, "currentMeasure");
+        var currentMeasureScheme = _this.getStore(component, "currentMeasureScheme");
+
+        if (currentMeasureScheme != null) {
+            return _this.colorByMeasureScheme(d.data, currentMeasureScheme, currentMeasure);
+        }
+
+        // TEMP TODO - think about removing this .....
+
         var color;
 
         var objectType = d.data.objectType;
