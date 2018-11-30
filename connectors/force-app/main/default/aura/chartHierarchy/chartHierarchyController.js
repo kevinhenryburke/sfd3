@@ -85,8 +85,16 @@
     },
 
     styleNodes: function(component,event,helper){
-        console.log("aura:method styleNodes in chartArea enter");
-        console.log("aura:method styleNodes in chartArea exit");
+        console.log("aura:method styleNodes in chartHierarchy enter");
+        var args = event.getParam("arguments");
+
+        var componentReference = component.get("v.componentReference");
+        var nodeGroup = helper.getCache (component, "nodeGroup") ;  
+        var pathGroup = helper.getCache (component, "pathGroup") ;  
+        var root = helper.getCache (component, "root") ;
+
+        helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
+        console.log("aura:method styleNodes in chartHierarchy exit");
     }
 
 })

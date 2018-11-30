@@ -10,21 +10,23 @@ Account a;
 Account p;
 Opportunity o;
 
+List<Account> la = new List<Account>();
+
 if (sectionNumber == 1) { 
-a=new Account(Name='Burke Enterprises', AnnualRevenue=39281800); insert a;
+la.add(new Account(Name='Burke Enterprises', AnnualRevenue=39281800));
 }
 
 if (sectionNumber == 2) { 
 p=[select id from Account where Name='Burke Enterprises'];
-a=new Account(Name='3i', AnnualRevenue=39177921);a.parentid=p.id;insert a;
-a=new Account(Name='3G Capital', AnnualRevenue=39074042);a.parentid=p.id;insert a;
-a=new Account(Name='ABS Capital', AnnualRevenue=38970163);a.parentid=p.id;insert a;
-a=new Account(Name='ABRY Partners', AnnualRevenue=38866284);a.parentid=p.id;insert a;
-a=new Account(Name='Accel-KKR', AnnualRevenue=38762405);a.parentid=p.id;insert a;
-a=new Account(Name='Actera Group', AnnualRevenue=38658526);a.parentid=p.id;insert a;
-a=new Account(Name='Actis', AnnualRevenue=38554647);a.parentid=p.id;insert a;
-a=new Account(Name='Advent International', AnnualRevenue=38450768);a.parentid=p.id;insert a;
-a=new Account(Name='AEA Investors', AnnualRevenue=38346889);a.parentid=p.id;insert a;
+la.add(new Account(Name='3i', AnnualRevenue=39177921,parentid=p.id));
+la.add(new Account(Name='3G Capital', AnnualRevenue=39074042,parentid=p.id));
+la.add(new Account(Name='ABS Capital', AnnualRevenue=38970163,parentid=p.id));
+la.add(new Account(Name='ABRY Partners', AnnualRevenue=38866284,parentid=p.id));
+la.add(new Account(Name='Accel-KKR', AnnualRevenue=38762405,parentid=p.id));
+la.add(new Account(Name='Actera Group', AnnualRevenue=38658526,parentid=p.id));
+la.add(new Account(Name='Actis', AnnualRevenue=38554647,parentid=p.id));
+la.add(new Account(Name='Advent International', AnnualRevenue=38450768,parentid=p.id));
+la.add(new Account(Name='AEA Investors', AnnualRevenue=38346889,parentid=p.id));
 }
 
 if (sectionNumber == 3) { 
@@ -279,6 +281,8 @@ p=[select id from Account where Name='Trilantic Capital Partners' ];a=new Accoun
 p=[select id from Account where Name='Trivest' ];a=new Account(Name='Zelnick Media Capital', AnnualRevenue=14246961);a.parentid=p.id;insert a;
 p=[select id from Account where Name='TSG Consumer Partners' ];a=new Account(Name='Zhongzhi Capital', AnnualRevenue=14143082);a.parentid=p.id;insert a;
 }
+
+insert la;
 
 if (sectionNumber == 9) { 
 p=[select id from Account where Name='3G Capital' ];

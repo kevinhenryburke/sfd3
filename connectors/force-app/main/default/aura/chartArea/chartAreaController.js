@@ -169,6 +169,7 @@
         if (topic == "SetMeasure")
         {
             var currentMeasure = parameters["measure"];
+            console.log("xxxxx: SetMeasure: " + currentMeasure);
             helper.setStore(cc, "currentMeasure", currentMeasure);
             // TODO - why still using setStore AND setCache?
             helper.setCache (component, "currentMeasure", currentMeasure ) ;

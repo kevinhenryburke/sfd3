@@ -179,6 +179,7 @@
                 return "circle" + d.id;
             })            
             .style("fill", function(d) {
+                console.log("xxxxx: enter: fill");
                 // we add new circles only to new nodes - the nodes are forgotten if collapsed
                 return d._children ? _this.getNodeColor(component, d, "Parent") : _this.getNodeColor(component, d, "Leaf");
             });
@@ -228,7 +229,8 @@
           .attr('r', _this.getRadius(component))
           .style("fill", function(d) {
               // collapsed children are stored as d._children / expanded as d.children
-            if(childLess(d)) {
+              console.log("xxxxx: update: fill");
+              if(childLess(d)) {
                   return _this.getNodeColor(component, d, "Leaf");
               }
               return _this.getNodeColor(component, d, "Parent"); 
@@ -647,9 +649,13 @@
 
         var currentMeasure = _this.getStore(component, "currentMeasure");
         var currentMeasureScheme = _this.getStore(component, "currentMeasureScheme");
+        console.log("xxxxx: getNodeColor: currentMeasure " + currentMeasure);
+        console.log("xxxxx: getNodeColor: currentMeasureScheme " + currentMeasureScheme);
 
         if (currentMeasureScheme != null) {
-            return _this.colorByMeasureScheme(d.data, currentMeasureScheme, currentMeasure);
+            var nodeColor = _this.colorByMeasureScheme(d.data, currentMeasureScheme, currentMeasure);
+            console.log("xxxxx: getNodeColor: colorByMeasureScheme: " + nodeColor );
+            return nodeColor;
         }
 
         // TEMP TODO - think about removing this .....

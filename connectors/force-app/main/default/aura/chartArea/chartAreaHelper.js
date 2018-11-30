@@ -596,12 +596,21 @@
     },
     
     colorByMeasureScheme : function (o, currentMeasureScheme, currentMeasure) {
+        console.log("xxxxx: colorByMeasureScheme");
+        console.log(o);
         for (var i = 0; i < o.fields.length; i++) {
             if (o.fields[i].api == currentMeasure) {
+                var numericValue;
                 var retrievedDecimal = o.fields[i].retrievedDecimal;
+                if (retrievedDecimal != null) {
+                    numericValue = retrievedDecimal;
+                } 
+                else {
+                    numericValue = o.fields[i].retrievedInteger;
+                }
                 // check out the lowest level
                 var low = currentMeasureScheme[0];
-                if (retrievedDecimal < low.below) {
+                if (numericValue < low.below) {
                     return low.color;
                 } 
                 else {
@@ -609,7 +618,7 @@
                     var measureSchemeLength = currentMeasureScheme.length;
                     for (var k = measureSchemeLength - 1; k > 0; k--) {
                         var high = currentMeasureScheme[k];
-                        if (retrievedDecimal >= high.above) {
+                        if (numericValue >= high.above) {
                             return high.color;
                         }         
                     }
