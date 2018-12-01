@@ -653,8 +653,8 @@
         console.log("xxxxx: getNodeColor: currentMeasureScheme " + currentMeasureScheme);
 
         if (currentMeasureScheme != null) {
-            var nodeColor = _this.colorByMeasureScheme(component, d.data, currentMeasureScheme, currentMeasure);
-            console.log("xxxxx: getNodeColor: colorByMeasureScheme: " + nodeColor );
+            var nodeColor = _this.getFromMeasureScheme(component, d.data, currentMeasure, "Color");
+            console.log("xxxxx: getNodeColor: getFromMeasureScheme: " + nodeColor );
             return nodeColor;
         }
 

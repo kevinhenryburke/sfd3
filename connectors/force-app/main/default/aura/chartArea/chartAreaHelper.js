@@ -575,53 +575,29 @@
         return (forSelect ? "#" : "") + componentReference + idType;
     },
     
-    colorByMeasureScheme : function (component, o, currentMeasureScheme, currentMeasure) {
+    // returnType is either "Value" or "Color"
+    getFromMeasureScheme : function (component, o, currentMeasure, returnType) {
         var _this = this;
-        console.log("xxxxx: colorByMeasureScheme: " + currentMeasure);
-        console.log(currentMeasureScheme);
+        console.log("xxxxx: getFromMeasureScheme: " + currentMeasure);
         console.log(o);
         var objectType = o["objectType"];
         console.log(objectType);
 
-        var objectLevels = _this.getMasterParam(component,"data","queryJSON","objectLevels");         
-        console.log(JSON.stringify(objectLevels));
+        var storeKeyAPI = "objmeasureapi" + objectType + currentMeasure;
+        var measureAPI = _this.getStore(component, storeKeyAPI);
+        console.log("xxxxx: measureAPI: " + measureAPI);
 
-        // find the right object from the object level configuration
-        var thisObjectConfig;
-
-        for (var i = 0; i < objectLevels.length; i++) {
-            if (objectType == objectLevels[i].objectType ) {
-                thisObjectConfig = objectLevels[i];
-            }
-        }
+        var storeKeyMeasureScheme = "objmeasurescheme" + objectType + currentMeasure;
+        var currentMeasureScheme = _this.getStore(component, storeKeyMeasureScheme);
 
         // if nothing is set up for this object then just exit
-        if (thisObjectConfig == null) {
+        if (measureAPI == null) {
             return;
         }
-
-        var fieldConfigTop = thisObjectConfig.fields;
                 
-        // TEMP TODO sort out a multilevel scheme
-        console.log(JSON.stringify(fieldConfigTop));
-
-        // TEMP TODO build out a map here and store so don't have to keep looping every time
-        // Needs to go into initialization
-
-        var currentApiName = "";
-
-        for (var i = 0; i < fieldConfigTop.length; i++) {
-            var fieldConfig = fieldConfigTop[i];
-            console.log(JSON.stringify(fieldConfig));
-            if (fieldConfig["measureName"] != null && fieldConfig["measureName"] == currentMeasure) {
-                currentApiName = fieldConfig["api"]; 
-            }
-        }
-
-
+        var numericValue;
         for (var i = 0; i < o.fields.length; i++) {
-            if (o.fields[i].api == currentApiName) {
-                var numericValue;
+            if (o.fields[i].api == measureAPI) {
                 var retrievedDecimal = o.fields[i].retrievedDecimal;
                 if (retrievedDecimal != null) {
                     numericValue = retrievedDecimal;
@@ -629,23 +605,53 @@
                 else {
                     numericValue = o.fields[i].retrievedInteger;
                 }
-                // check out the lowest level
-                var low = currentMeasureScheme[0];
-                if (numericValue < low.below) {
-                    return low.color;
-                } 
-                else {
-                    // if above the lowest threshhold go to the top and work backwards
-                    var measureSchemeLength = currentMeasureScheme.length;
-                    for (var k = measureSchemeLength - 1; k > 0; k--) {
-                        var high = currentMeasureScheme[k];
-                        if (numericValue >= high.above) {
-                            return high.color;
-                        }         
-                    }
+                break;
+            }
+        }
+
+        // check out the lowest level
+        var low = currentMeasureScheme[0];
+        if (numericValue < low.below) {
+            return low.color;
+        } 
+        else {
+            // if above the lowest threshhold go to the top and work backwards
+            var measureSchemeLength = currentMeasureScheme.length;
+            for (var k = measureSchemeLength - 1; k > 0; k--) {
+                var high = currentMeasureScheme[k];
+                if (numericValue >= high.above) {
+                    return high.color;
+                }         
+            }
+        }
+    },
+
+    // during initialization, build a map so we can quickly associate the correct API field to a measure
+    buildMeasureSchemeMap : function (component) {
+        var _this = this;
+        var objectLevels = _this.getMasterParam(component,"data","queryJSON","objectLevels");
+
+        for (var objIndex = 0; objIndex < objectLevels.length; objIndex++) {
+            var thisObjectConfig = objectLevels[objIndex];
+            var objectType = thisObjectConfig.objectType;
+
+            var fields = thisObjectConfig.fields;
+            for (var fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
+                var fieldConfig = fields[fieldIndex];
+                if (fieldConfig["measureName"] != null) {
+                    // store field API name
+                    var storeKeyAPI = "objmeasureapi" + objectType + fieldConfig["measureName"];
+                    var currentApiName = fieldConfig["api"]; 
+                    _this.setStore(component, storeKeyAPI, currentApiName);
+
+                    // store measure scheme configuration
+                    var storeKeyMeasureScheme = "objmeasurescheme" + objectType + fieldConfig["measureName"];
+                    var currentMeasureScheme = fieldConfig["measureScheme"]; 
+                    console.log("xxxxx: storeKeyMeasureScheme: " + JSON.stringify(currentMeasureScheme));
+                    _this.setStore(component, storeKeyMeasureScheme, currentMeasureScheme);
                 }
             }
-        }    
+        }
     }
 
 

@@ -184,6 +184,9 @@
                 var masterConfigObject = parameters["masterConfigObject"];
                 component.set("v.masterConfigObject", masterConfigObject);
 
+                helper.buildMeasureSchemeMap(component);
+
+
                 var showZoomSlider = helper.getMasterParam(component,"panels","ChartPanel","Hierarchy","showZoomSlider");         
                 if (showZoomSlider != null) {
                     component.set("v.showZoomSlider" , showZoomSlider);
