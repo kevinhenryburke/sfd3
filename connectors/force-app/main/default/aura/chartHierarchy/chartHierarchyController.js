@@ -55,8 +55,7 @@
         var searchTermId = args.searchTermId;
         var searchAction = args.searchAction;
 
-        var masterConfigObject = component.get("v.masterConfigObject");
-        var clearHighlightedPaths = masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["clearHighlightedPaths"];
+        var clearHighlightedPaths = helper.getMasterParam(component,"panels","ChartPanel","Hierarchy","clearHighlightedPaths");         
 
         var componentReference = component.get("v.componentReference");
         var nodeGroup = helper.getCache (component, "nodeGroup") ;  

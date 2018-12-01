@@ -29,12 +29,12 @@
 
         // have a default for leaves
         var LeafColorsObjectDefault = {"colorBy" : "size", "values" : [0], "colors" : ["white"]};
-        var LeafColors = masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["LeafColors"];
+        var LeafColors = _this.getMasterParam(component,"panels","ChartPanel","Hierarchy","LeafColors");
         _this.setColorCache (component, LeafColors, LeafColorsObjectDefault, "Leaf") ;
     
         // have a default for parents
         var ParentColorsObjectDefault = {"colorBy" : "size", "values" : [0], "colors" : ["lightsteelblue"]};
-        var ParentColors = masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["ParentColors"];
+        var ParentColors = _this.getMasterParam(component,"panels","ChartPanel","Hierarchy","ParentColors");
         _this.setColorCache (component, ParentColors, ParentColorsObjectDefault, "Parent") ;
 
         // Collapse after the second level (provided root has children)
@@ -653,7 +653,7 @@
         console.log("xxxxx: getNodeColor: currentMeasureScheme " + currentMeasureScheme);
 
         if (currentMeasureScheme != null) {
-            var nodeColor = _this.colorByMeasureScheme(d.data, currentMeasureScheme, currentMeasure);
+            var nodeColor = _this.colorByMeasureScheme(component, d.data, currentMeasureScheme, currentMeasure);
             console.log("xxxxx: getNodeColor: colorByMeasureScheme: " + nodeColor );
             return nodeColor;
         }

@@ -48,10 +48,6 @@
                 <value>true</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
-                <name>masterConfig</name>
-                <value>{}</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
                 <name>nodestrokewidth</name>
                 <value>0.5px</value>
             </componentInstanceProperties>

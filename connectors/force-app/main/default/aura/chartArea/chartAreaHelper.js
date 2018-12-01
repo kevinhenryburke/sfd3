@@ -450,7 +450,7 @@
         var loopJson = component.get("v.masterConfigObject");
         for (var i=0; i<args.length;i++) {
             if (loopJson.hasOwnProperty([args[i]])) {
-                // console.log("loopJson: " + args[i]);
+                console.log("xxxxx: loopJson: " + args[i]);
                 retValue = loopJson[args[i]];
                 loopJson = loopJson[args[i]];
             }
@@ -458,7 +458,7 @@
                 return;
             }    
         }
-        // console.log("getMasterParam exit: " + retValue);
+        console.log("xxxxx: getMasterParam exit: " + retValue);
         return retValue;
     },
     
@@ -575,12 +575,52 @@
         return (forSelect ? "#" : "") + componentReference + idType;
     },
     
-    colorByMeasureScheme : function (o, currentMeasureScheme, currentMeasure) {
+    colorByMeasureScheme : function (component, o, currentMeasureScheme, currentMeasure) {
+        var _this = this;
         console.log("xxxxx: colorByMeasureScheme: " + currentMeasure);
         console.log(currentMeasureScheme);
         console.log(o);
+        var objectType = o["objectType"];
+        console.log(objectType);
+
+        var objectLevels = _this.getMasterParam(component,"data","queryJSON","objectLevels");         
+        console.log(JSON.stringify(objectLevels));
+
+        // find the right object from the object level configuration
+        var thisObjectConfig;
+
+        for (var i = 0; i < objectLevels.length; i++) {
+            if (objectType == objectLevels[i].objectType ) {
+                thisObjectConfig = objectLevels[i];
+            }
+        }
+
+        // if nothing is set up for this object then just exit
+        if (thisObjectConfig == null) {
+            return;
+        }
+
+        var fieldConfigTop = thisObjectConfig.fields;
+                
+        // TEMP TODO sort out a multilevel scheme
+        console.log(JSON.stringify(fieldConfigTop));
+
+        // TEMP TODO build out a map here and store so don't have to keep looping every time
+        // Needs to go into initialization
+
+        var currentApiName = "";
+
+        for (var i = 0; i < fieldConfigTop.length; i++) {
+            var fieldConfig = fieldConfigTop[i];
+            console.log(JSON.stringify(fieldConfig));
+            if (fieldConfig["measureName"] != null && fieldConfig["measureName"] == currentMeasure) {
+                currentApiName = fieldConfig["api"]; 
+            }
+        }
+
+
         for (var i = 0; i < o.fields.length; i++) {
-            if (o.fields[i].api == currentMeasure) {
+            if (o.fields[i].api == currentApiName) {
                 var numericValue;
                 var retrievedDecimal = o.fields[i].retrievedDecimal;
                 if (retrievedDecimal != null) {

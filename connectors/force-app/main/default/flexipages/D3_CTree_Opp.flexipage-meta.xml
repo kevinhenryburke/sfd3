@@ -48,10 +48,6 @@
                 <name>hasPrimaryNode</name>
                 <value>false</value>
             </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>masterConfig</name>
-                <value>{}</value>
-            </componentInstanceProperties>
             <componentName>chartHierarchy</componentName>
         </componentInstances>
         <name>main</name>
