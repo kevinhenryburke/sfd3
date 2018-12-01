@@ -161,6 +161,7 @@
 
                 // TODO - will need to retrieve data based on new selections
                 var datajson = component.get("v.datajson");
+                var masterConfigObject = component.get("v.masterConfigObject");
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
                 var panelCurrentMeasureScheme = component.get("v.panelCurrentMeasureScheme");
                 var panelShowFilters = component.get("v.panelShowFilters");     
@@ -180,6 +181,7 @@
                         "datajson" : datajson, 
                         "currentMeasure" : panelCurrentMeasure,
                         "currentMeasureScheme" : panelCurrentMeasureScheme, 
+                        "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
                         "showFilters" : panelShowFilters,
                         "componentReference" : componentReference        // be aware this is the receiving component's reference        
@@ -190,6 +192,7 @@
                         "datajson" : datajson, 
                         "currentMeasure" : panelCurrentMeasure,
                         "currentMeasureScheme" : panelCurrentMeasureScheme, 
+                        "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
                         "showFilters" : panelShowFilters
                     }

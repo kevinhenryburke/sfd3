@@ -88,6 +88,7 @@
                         "datajson" : datajson, 
                         "currentMeasure" : panelCurrentMeasure, 
                         "currentMeasureScheme" : panelCurrentMeasureScheme, 
+                        "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
                         "showFilters" : panelShowFilters,
                         "componentReference" : componentReference
@@ -180,12 +181,15 @@
                 var panelPrimaryId = component.get("v.panelPrimaryId");            
                 var panelShowFilters = component.get("v.panelShowFilters");     
                 
+                var masterConfigObject = component.get("v.masterConfigObject");
+
                 // publish event - configuration loaded
     
                 var configEventParameters = { 
                     "datajson" : datajson, 
                     "currentMeasure" : panelCurrentMeasure, 
                     "currentMeasureScheme" : panelCurrentMeasureScheme, 
+                    "masterConfigObject" : masterConfigObject,
                     "primaryId" : panelPrimaryId, 
                     "showFilters" : panelShowFilters,
                     "componentReference" : componentReference                
@@ -329,7 +333,7 @@
         var currentMeasure = helper.setMeasure(component, 3);
         var currentMeasureScheme = helper.setMeasureScheme(component, 3);
         var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 3, "measure" : currentMeasure, "measureScheme" : currentMeasureScheme  }, controllerId);
+        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 3, "measure" : currentMeasure, "measureScheme" : currentMeasureScheme}, controllerId);
         helper.publishPreppedEvent(component,preppedEvent);
     },
     onClickMeasureV4 : function(component, event, helper) {

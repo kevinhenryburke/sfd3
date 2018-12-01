@@ -1,14 +1,6 @@
 ({
     areaInit: function (component) {
         console.log("areaInit enter");
-
-        var masterConfig = component.get("v.masterConfig");
-        if (typeof masterConfig === 'string' || masterConfig instanceof String) {
-            component.set("v.masterConfigObject", JSON.parse(masterConfig));
-        }
-        else {
-            component.set("v.masterConfigObject", masterConfig);
-        }
     },
 
     // first method called after all resources are ready
@@ -29,18 +21,6 @@
         _this.setCache (component, "UserComponentId", component.get("v.UserComponentId") ) ;
         _this.setCache (component, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
         _this.setCache (component, "hasPrimaryNode", component.get("v.hasPrimaryNode") ) ;
-
-
-        var showLevelsInitial = _this.getMasterParam(component,"panels","ChartPanel","showLevelsInitial");         
-        if (showLevelsInitial != null) {
-            component.set("v.showLevelsInitial" , showLevelsInitial);
-            _this.setCache (component, "showLevels", showLevelsInitial) ;
-        }
-        else {
-            component.set("v.showLevelsInitial" , 1);
-            _this.setCache (component, "showLevels", 1) ;
-        }
-
 
         _this.setCache (component, "lastTouch", new Date().getTime()) ;
         _this.setCache (component, "width", Math.min(screen.width, screen.height)) ; // review this
@@ -596,7 +576,8 @@
     },
     
     colorByMeasureScheme : function (o, currentMeasureScheme, currentMeasure) {
-        console.log("xxxxx: colorByMeasureScheme");
+        console.log("xxxxx: colorByMeasureScheme: " + currentMeasure);
+        console.log(currentMeasureScheme);
         console.log(o);
         for (var i = 0; i < o.fields.length; i++) {
             if (o.fields[i].api == currentMeasure) {

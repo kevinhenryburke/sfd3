@@ -4,6 +4,14 @@ public with sharing class AAATestData {
 // AAATestData.testScripts(1);
 // for each of 1 to 9 - can also be run from VSC
 
+// then update number of employees
+// List<Account> la = [select id from Account];
+// for (Account a : la) {
+//     Double d = math.random() * 10000;
+// 	a.NumberOfEmployees = d.intValue();
+// }
+// update la;
+
 public static void testScripts(Integer sectionNumber) {
 
 Account a;

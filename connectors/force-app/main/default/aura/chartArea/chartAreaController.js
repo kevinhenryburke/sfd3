@@ -10,24 +10,6 @@
     doInit: function(component, event, helper) {
         console.log('chartArea: doInit enter');   
 
-        var masterConfig = component.get("v.masterConfig");
-        if (typeof masterConfig === 'string' || masterConfig instanceof String) {
-            component.set("v.masterConfigObject", JSON.parse(masterConfig));
-        }
-        else {
-            component.set("v.masterConfigObject", masterConfig);
-        }
-
-        var masterConfigObject = component.get("v.masterConfigObject");
-
-        var showZoomSlider = helper.getMasterParam(component,"panels","ChartPanel","Hierarchy","showZoomSlider");         
-        if (showZoomSlider != null) {
-            component.set("v.showZoomSlider" , masterConfigObject["panels"]["ChartPanel"]["Hierarchy"]["showZoomSlider"]);
-        }
-        else {
-            component.set("v.showZoomSlider" , false);
-        }
-
         var storeObject = JSON.parse("{}");
         component.set("v.storeObject", storeObject);
 
@@ -198,6 +180,27 @@
             if (componentReference == parameters["componentReference"]) {
                 bzutils.log("InitializeData with reference: " + componentReference);
                 var isInit = true;
+
+                var masterConfigObject = parameters["masterConfigObject"];
+                component.set("v.masterConfigObject", masterConfigObject);
+
+                var showZoomSlider = helper.getMasterParam(component,"panels","ChartPanel","Hierarchy","showZoomSlider");         
+                if (showZoomSlider != null) {
+                    component.set("v.showZoomSlider" , showZoomSlider);
+                }
+                else {
+                    component.set("v.showZoomSlider" , false);
+                }        
+
+                var showLevelsInitial = helper.getMasterParam(component,"panels","ChartPanel","showLevelsInitial");         
+                if (showLevelsInitial != null) {
+                    component.set("v.showLevelsInitial" , showLevelsInitial);
+                    helper.setCache (component, "showLevels", showLevelsInitial) ;
+                }
+                else {
+                    component.set("v.showLevelsInitial" , 1);
+                    helper.setCache (component, "showLevels", 1) ;
+                }
 
                 helper.initializeGroups(component, parameters["datajson"], parameters["currentMeasure"], parameters["currentMeasureScheme"], parameters["primaryId"], parameters["showFilters"], isInit);                 
 
