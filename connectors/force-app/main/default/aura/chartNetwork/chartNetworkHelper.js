@@ -662,16 +662,11 @@
             }
             textcontent += '</tspan>';
 
-            console.log("xxxxx");
-            console.log(d);
-
             var tselect =  "t" + d.id;
-            var sselect =  "s" + d.id;
-
             var t = d3.select("#" + tselect);
-            bzutils.log("mouseover: " + textcontent);
-            bzutils.log(t);
             t.html(textcontent);
+
+            var sselect =  "s" + d.id;
             var s = d3.select("#" + sselect);
             s.html(textcontent);
 

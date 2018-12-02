@@ -79,7 +79,10 @@
         var duration = 250;
         var shortDuration = 250;
         var fixedDepth = _this.getFixedDepth(component); // this may need to be a function of chart area depth?
+
+        var currentMeasure = _this.getStore(component, "currentMeasure");
         
+
         var margin = _this.getCache (component, "margin") ;  
         
         // Assigns the x and y position for the nodes
@@ -157,6 +160,17 @@
 
                 _this.updatePopoverDirectly(component, preppedEvent);
 
+                // var textcontent = '<tspan x="100" y="0" style="font-weight: bold;">' + d.data.name ;
+                // textcontent += '</tspan>'; 
+                // textcontent += '<tspan x="10" dy="15">' + ' (' + ')</tspan>';
+    
+                // var tselect =  "t" + d.id;
+                // var s = d3.select("#" + tselect);
+                // console.log("xxxxx: tselect");
+                // console.log(s);
+                // s.html(textcontent);
+
+
             }))
 			.on('mouseout', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
 				_this.setCache (component, "mouseoutRecordId", d.id ) ;
@@ -208,10 +222,37 @@
                 } 
                 return textAnchor;
             })
+            .attr("id", function(d) {
+                return "t" + d.id;
+            })            
             .style("font", function(d) {
                 return _this.getFontSizePX(component) + "px sans-serif";
             })
-            .text(function(d) { return d.data.name; });
+            .text(function(d) { 
+                var textDisplay = d.data.name;
+                return textDisplay;
+            })
+            .append('svg:tspan') // append a second line if measures are to be displayed.
+            .attr("id", function(d) {
+                return "tspan2" + d.id;
+            })            
+            .attr("x", function(d) {
+                if (d.depth > 0) {
+                    return childLess(d) ? _this.getTextOffset(component) : - _this.getTextOffset(component);
+                }
+                return -1;
+            })
+            .attr("dy", function(d) {
+                if (d.depth > 0) {
+                    return "1.35em";
+                }
+                return "-0.35em";
+            })
+            .text(function(d) { 
+                var nodeValue = _this.getFromMeasureScheme(component, d.data, currentMeasure, "Value");
+                return "(" + nodeValue + ")" ;
+            })            
+            ;
       
         // UPDATE
         var nodeUpdate = nodeEnter.merge(node);
@@ -257,8 +298,14 @@
             })
             .style("font", function(d) {
                 return _this.getFontSizePX(component) + "px sans-serif";
-            });
-        
+            })
+            .select('tspan') // update the measures
+            .text(function(d) { 
+                console.log("xxxxx: svg:tspan");
+                var nodeValue = _this.getFromMeasureScheme(component, d.data, currentMeasure, "Value");
+                return "(" + nodeValue + ")" ;
+            })            
+
         // Remove any exiting nodes
         var nodeExit = node.exit().transition()
             .duration(duration)

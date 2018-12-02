@@ -609,6 +609,10 @@
             }
         }
 
+        if (returnType == "Value") {
+            return numericValue;
+        }
+
         // check out the lowest level
         var low = currentMeasureScheme[0];
         if (numericValue < low.below) {
