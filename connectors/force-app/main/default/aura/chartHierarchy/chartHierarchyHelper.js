@@ -81,6 +81,7 @@
         var fixedDepth = _this.getFixedDepth(component); // this may need to be a function of chart area depth?
 
         var currentMeasure = _this.getStore(component, "currentMeasure");
+        var showMeasureValues = _this.getStore(component, "showMeasureValues");
         
 
         var margin = _this.getCache (component, "margin") ;  
@@ -232,7 +233,7 @@
                 var textDisplay = d.data.name;
                 return textDisplay;
             })
-            .append('svg:tspan') // append a second line if measures are to be displayed.
+            .append('svg:tspan') // append a second line if measures are to be displayed. https://stackoverflow.com/questions/16701522/how-to-linebreak-an-svg-text-within-javascript/16701952#16701952
             .attr("id", function(d) {
                 return "tspan2" + d.id;
             })            
@@ -246,11 +247,13 @@
                 if (d.depth > 0) {
                     return "1.35em";
                 }
-                return "-0.35em";
+                return "-1.35em";
             })
             .text(function(d) { 
-                var nodeValue = _this.getFromMeasureScheme(component, d.data, currentMeasure, "Value");
-                return "(" + nodeValue + ")" ;
+                if (showMeasureValues == true) {
+                    var nodeValue = _this.getFromMeasureScheme(component, d.data, currentMeasure, "Value");
+                    return "(" + nodeValue.toLocaleString() + ")" ;    
+                }
             })            
             ;
       
@@ -302,8 +305,12 @@
             .select('tspan') // update the measures
             .text(function(d) { 
                 console.log("xxxxx: svg:tspan");
-                var nodeValue = _this.getFromMeasureScheme(component, d.data, currentMeasure, "Value");
-                return "(" + nodeValue + ")" ;
+
+                if (showMeasureValues == true) {
+                    var nodeValue = _this.getFromMeasureScheme(component, d.data, currentMeasure, "Value");
+                    return "(" + nodeValue.toLocaleString()  + ")" ;
+                }
+
             })            
 
         // Remove any exiting nodes

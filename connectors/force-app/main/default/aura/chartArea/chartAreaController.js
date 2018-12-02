@@ -13,6 +13,9 @@
         var storeObject = JSON.parse("{}");
         component.set("v.storeObject", storeObject);
 
+        helper.setStore(component, "showMeasureValues", false);
+
+
         var recordId = component.get("v.recordId");
         if (recordId == null) {
             recordId = "";
@@ -150,6 +153,9 @@
         }
         if (topic == "SetMeasure")
         {
+
+            helper.setStore(component, "showMeasureValues", true);
+
             var currentMeasure = parameters["measure"];
             console.log("xxxxx: SetMeasure: " + currentMeasure);
             helper.setStore(cc, "currentMeasure", currentMeasure);

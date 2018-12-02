@@ -221,6 +221,8 @@
             console.log("allowPopover not set "); 
         }
 
+
+        
     },
 
     // create an invisible svg symbol to attach a popover to
