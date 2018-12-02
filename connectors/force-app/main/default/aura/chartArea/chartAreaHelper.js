@@ -221,8 +221,6 @@
             console.log("allowPopover not set "); 
         }
 
-
-        
     },
 
     // create an invisible svg symbol to attach a popover to
@@ -253,6 +251,8 @@
         _this.setCache (component, "referenceSelector", referenceSelector ) ;
         _this.setCache (component, "infosvg", infosvg ) ;
     },
+
+
 
     // creates an informational popover
     createPopOverComponent : function (component) {
@@ -315,6 +315,45 @@
         });
 
     },
+
+    // create an invisible svg symbol to attach a popover to
+    createLegendLocation : function (component) {
+        var _this = this;
+        var componentReference = component.get("v.componentReference");
+
+        var currentMeasureScheme = _this.getStore(component, "currentMeasureScheme");
+
+        var svg = d3.select(_this.getDivId("svg", componentReference, true));
+
+        svg.selectAll('.symbol')
+            .data(currentMeasureScheme)
+            .enter()
+            .append('path')
+            .style("stroke" , "black")
+            .style("fill" , function(d,i) { return currentMeasureScheme[i]["color"];})
+            .attr('transform',function(d,i) { return 'translate('+30+','+(i*20+20)+')';})
+            .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[0];}) );
+
+        var textme = svg.selectAll("textme")
+            .data(currentMeasureScheme)
+            .enter()
+            .append("text");            
+
+        var textLabels = textme
+            .attr('transform',function(d,i) { return 'translate('+40+','+(i*20+23)+')';})
+            .attr("font-family", "sans-serif")
+            .text( function (d, i) { 
+                if (currentMeasureScheme[i]["below"] != null) {
+                    return "below " + currentMeasureScheme[i]["below"].toLocaleString();
+                }
+                return "above " + currentMeasureScheme[i]["above"].toLocaleString();
+            })
+            .attr("font-size", "8px")
+            .attr("fill", "gray");
+
+    },
+
+
 
     handleScaleChange: function(component,csf){
         component.set("v.ChartScaleFactor", csf);

@@ -156,6 +156,7 @@
 
             helper.setStore(component, "showMeasureValues", true);
 
+
             var currentMeasure = parameters["measure"];
             console.log("xxxxx: SetMeasure: " + currentMeasure);
             helper.setStore(cc, "currentMeasure", currentMeasure);
@@ -166,7 +167,10 @@
             helper.setStore(cc, "currentMeasureScheme", currentMeasureScheme);
             // TODO - why still using setStore AND setCache?
             helper.setCache (component, "currentMeasureScheme", currentMeasureScheme ) ;
+
+            helper.createLegendLocation(component);
             
+
             // refresh Chart - measure changes but primaryid does not
             cc.styleNodes();                 
         }
