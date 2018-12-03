@@ -209,6 +209,14 @@
         }
         _this.setCache (component, "textGroup", textGroup ) ;
 
+        var legendSymbolGroupId = _this.getDivId("legendSymbolGroup", componentReference, false);
+        var legendSymbolGroup = d3.select("#" + legendSymbolGroupId);
+        if (legendSymbolGroup.empty()) {
+            console.log("create legendSymbolGroup");
+            legendSymbolGroup = svg.append("g").attr("id",legendSymbolGroupId);
+        }
+        _this.setCache (component, "legendSymbolGroup", legendSymbolGroup ) ;
+
         var allowPopover = _this.getMasterParam(component,"panels","InfoPanel","allowPopover");         
         if (allowPopover == null) {allowPopover = false;}
 
@@ -323,10 +331,15 @@
 
         var currentMeasureScheme = _this.getStore(component, "currentMeasureScheme");
 
-        var svg = d3.select(_this.getDivId("svg", componentReference, true));
+        // remove existing legend symbols
+        d3.select(_this.getDivId("legendSymbolGroup", componentReference, true)).selectAll("*").remove();
 
-        svg.selectAll('.symbol')
-            .data(currentMeasureScheme)
+        var legendSymbolGroup = _this.getCache (component, "legendSymbolGroup" ) ;
+
+        var nodeSymbol = legendSymbolGroup.selectAll('.symbol')
+            .data(currentMeasureScheme);
+
+        nodeSymbol
             .enter()
             .append('path')
             .style("stroke" , "black")
@@ -334,7 +347,7 @@
             .attr('transform',function(d,i) { return 'translate('+30+','+(i*20+20)+')';})
             .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[0];}) );
 
-        var textme = svg.selectAll("textme")
+        var textme = legendSymbolGroup.selectAll("textme")
             .data(currentMeasureScheme)
             .enter()
             .append("text");            
