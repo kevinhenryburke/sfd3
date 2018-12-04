@@ -638,6 +638,7 @@
         console.log(objectType);
 
         var storeKeyAPI = "objmeasureapi" + objectType + currentMeasure;
+        console.log("xxxxx: storeKeyAPI: " + storeKeyAPI);
         var measureAPI = _this.getStore(component, storeKeyAPI);
         console.log("xxxxx: measureAPI: " + measureAPI);
 
@@ -705,7 +706,8 @@
                     // store measure scheme configuration
                     var storeKeyMeasureScheme = "objmeasurescheme" + objectType + fieldConfig["measureName"];
                     var currentMeasureScheme = fieldConfig["measureScheme"]; 
-                    console.log("xxxxx: storeKeyMeasureScheme: " + JSON.stringify(currentMeasureScheme));
+                    console.log("xxxxx: storeKeyMeasureScheme: " + storeKeyMeasureScheme);
+                    console.log("xxxxx: currentMeasureScheme: " + JSON.stringify(currentMeasureScheme));
                     _this.setStore(component, storeKeyMeasureScheme, currentMeasureScheme);
                 }
             }
