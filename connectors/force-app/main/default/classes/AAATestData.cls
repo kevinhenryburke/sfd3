@@ -293,6 +293,33 @@ p=[select id from Account where Name='TSG Consumer Partners' ];a=new Account(Nam
 insert la;
 
 if (sectionNumber == 9) { 
+
+
+List<String> AccountTypeValues = new List<String>();
+List<Schema.PicklistEntry> AccountTypePLE = Account.Type.getDescribe().getPicklistValues();
+for( Schema.PicklistEntry pickListVal : AccountTypePLE){
+    AccountTypeValues.add(pickListVal.getLabel());
+}     
+
+List<String> AccountIndustryValues = new List<String>();
+List<Schema.PicklistEntry> AccountIndustryPLE = Account.Industry.getDescribe().getPicklistValues();
+for( Schema.PicklistEntry pickListVal : AccountIndustryPLE){
+    AccountIndustryValues.add(pickListVal.getLabel());
+}     
+
+List<Account> lau = [select id from Account];
+for (Account au : lau) {
+    Double dEmployees = math.random() * 10000;
+    au.NumberOfEmployees = dEmployees.intValue();
+
+    Double indexType = math.random() * AccountTypeValues.size();
+    au.Type = AccountTypeValues[indexType.intValue()];
+
+    Double indexIndustry = math.random() * AccountIndustryValues.size();
+    au.Industry = AccountIndustryValues[indexIndustry.intValue()];
+}
+update lau;
+
 p=[select id from Account where Name='3G Capital' ];
 o=new Opportunity(Name='2018 Q3 Renewal', StageName='Closed Won', Amount=35827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,6,30);insert o;
 o=new Opportunity(Name='2018 Q4 Renewal', StageName='Closed Won', Amount=25827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,9,30);insert o;

@@ -73,6 +73,7 @@
     },
 
     update : function(component, nodeGroup, pathGroup, componentReference, source, makeSourceRoot) {
+        console.log("xxxxx: update: enter");
 		var _this = this;
         var nodes;
         var links;

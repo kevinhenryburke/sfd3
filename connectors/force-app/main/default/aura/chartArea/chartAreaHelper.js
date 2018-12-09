@@ -356,10 +356,15 @@
             .attr('transform',function(d,i) { return 'translate('+40+','+(i*20+23)+')';})
             .attr("font-family", "sans-serif")
             .text( function (d, i) { 
+                if (currentMeasureScheme[i]["name"] != null) {
+                    return currentMeasureScheme[i]["name"].toLocaleString();
+                }
                 if (currentMeasureScheme[i]["below"] != null) {
                     return "below " + currentMeasureScheme[i]["below"].toLocaleString();
                 }
-                return "above " + currentMeasureScheme[i]["above"].toLocaleString();
+                if (currentMeasureScheme[i]["above"] != null) {
+                    return "above " + currentMeasureScheme[i]["above"].toLocaleString();
+                }
             })
             .attr("font-size", "8px")
             .attr("fill", "gray");
@@ -649,19 +654,50 @@
         if (measureAPI == null) {
             return;
         }
-                
-        var numericValue;
+        
+        var thisMeasureSchemeIndex = -1;
+        var thisMeasureSchemeRole = null;
+
         for (var i = 0; i < o.fields.length; i++) {
             if (o.fields[i].api == measureAPI) {
-                var retrievedDecimal = o.fields[i].retrievedDecimal;
-                if (retrievedDecimal != null) {
-                    numericValue = retrievedDecimal;
-                } 
-                else {
-                    numericValue = o.fields[i].retrievedInteger;
-                }
+                thisMeasureSchemeIndex = i;
+                thisMeasureSchemeRole = o.fields[i].role;
+                console.log("xxxxx: thisMeasureSchemeIndex:" + thisMeasureSchemeIndex + "/" + thisMeasureSchemeRole);
                 break;
             }
+        }
+
+        // case when baseing colors and values on picklists
+        if (thisMeasureSchemeRole == "picklist") {
+            var retrievedValue = o.fields[thisMeasureSchemeIndex].retrievedValue;
+
+            if (returnType == "Value") {
+                return retrievedValue;
+            }
+            if (returnType == "Color") {
+                var measureSchemeLength = currentMeasureScheme.length;
+                for (var k = 0; k < measureSchemeLength; k++) {
+                    var cm = currentMeasureScheme[k];
+                    if (retrievedValue == cm.name) {
+                        return cm.color;
+                    }
+                    // return the last color if default
+                    if (k == measureSchemeLength - 1 && cm.name == "default") {
+                        return cm.color;
+                    }
+                }
+                return "white";
+            }
+        }
+
+        // case when baseing colors and values on numerics
+        var numericValue;
+        var retrievedDecimal = o.fields[thisMeasureSchemeIndex].retrievedDecimal;
+        if (retrievedDecimal != null) {
+            numericValue = retrievedDecimal;
+        } 
+        else {
+            numericValue = o.fields[thisMeasureSchemeIndex].retrievedInteger;
         }
 
         if (returnType == "Value") {

@@ -62,7 +62,7 @@
     {
       "name":"Shrink Europe",
       "id":"000000000000000020",
-      "objectType":"User",
+      "objectType":"Contact",
       "measures":{
         "Posts":{
           "color":"red",

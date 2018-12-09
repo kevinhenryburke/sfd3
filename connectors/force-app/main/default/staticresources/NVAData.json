@@ -62,7 +62,7 @@
     {
       "name":"Manchester",
       "id":"000000000000000001",
-      "objectType":"User",
+      "objectType":"Contact",
       "measures":{
         "Posts":{
           "color":"blue",

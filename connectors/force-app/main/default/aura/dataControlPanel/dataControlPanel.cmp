@@ -89,7 +89,7 @@
  
           <aura:if isTrue="{!v.configuredLevels}">
             <div class="slds-col slds-size_1-of-4 slds-small-size_1-of-2 slds-medium-size_1-of-3">
-              <h1 class="slds-text-heading_label">Connect Levels</h1>
+              <h1 class="slds-text-heading_label">Levels</h1>
               <div class="slds slds-button-group" role="group">
                 <aura:if isTrue="{!!v.levelsIncreaseOnly}">                
                   <c:buttonDynamic aura:id="less" label="Fewer" class="slds-button slds-button_neutral" onclick="{!c.onClickLevelFewer}" disabled="true">Less</c:buttonDynamic>
@@ -101,7 +101,7 @@
           </aura:if>
           <aura:if isTrue="{!v.configuredMeasures}">
             <div class="slds-col slds-size_1-of-4 slds-small-size_1-of-2 slds-medium-size_1-of-3">
-              <h1 class="slds-text-heading_label">Size By</h1>
+              <h1 class="slds-text-heading_label">Classification</h1>
               <div class="slds slds-button-group" role="group">
                   <c:buttonDynamic aura:id="v1" label="" class="slds-button slds-button_brand" onclick="{!c.onClickMeasureV1}"/>
                   <c:buttonDynamic aura:id="v2" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV2}"/>
