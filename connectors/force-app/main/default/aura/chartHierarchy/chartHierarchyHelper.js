@@ -25,18 +25,6 @@
         root.x0 = height / 2;
         root.y0 = 0;
 
-        // Establish node coloring paradigm for leaf and parent nodes
-
-        // have a default for leaves
-        var LeafColorsObjectDefault = {"colorBy" : "size", "values" : [0], "colors" : ["white"]};
-        var LeafColors = _this.getMasterParam(component,"panels","ChartPanel","Hierarchy","LeafColors");
-        _this.setColorCache (component, LeafColors, LeafColorsObjectDefault, "Leaf") ;
-    
-        // have a default for parents
-        var ParentColorsObjectDefault = {"colorBy" : "size", "values" : [0], "colors" : ["lightsteelblue"]};
-        var ParentColors = _this.getMasterParam(component,"panels","ChartPanel","Hierarchy","ParentColors");
-        _this.setColorCache (component, ParentColors, ParentColorsObjectDefault, "Parent") ;
-
         // Collapse after the second level (provided root has children)
         if (root.children != null) {
             root.children.forEach(_this.collapse);
@@ -198,6 +186,19 @@
                 console.log("xxxxx: enter: fill");
                 // we add new circles only to new nodes - the nodes are forgotten if collapsed
                 return d._children ? _this.getNodeColor(component, d, "Parent") : _this.getNodeColor(component, d, "Leaf");
+            })          .style("stroke", function(d) {
+                console.log("xxxxx: update: stroke");
+                if(childLess(d)) {
+                    return "black";
+                }
+                return "lightslategray";
+            })
+            .style("stroke-width", function(d) {
+                console.log("xxxxx: update: stroke");
+                if(childLess(d)) {
+                    return "0.5px";
+                }
+                return "4px";
             });
       
 
@@ -280,7 +281,21 @@
               }
               return _this.getNodeColor(component, d, "Parent"); 
           })
-          .attr('cursor', 'pointer');      
+          .style("stroke", function(d) {
+            console.log("xxxxx: update: stroke");
+            if(childLess(d)) {
+                return "black";
+            }
+            return "lightslategray";
+        })
+        .style("stroke-width", function(d) {
+            console.log("xxxxx: update: stroke");
+            if(childLess(d)) {
+                return "0.5px";
+            }
+            return "4px";
+        })
+        .attr('cursor', 'pointer');      
           
         // text box starts to the right for childless nodes, to the left for parents (collapsed or expanded)  
         nodeUpdate.select('text')
@@ -697,8 +712,6 @@
         return preppedEvent;
     },
 
-    // bzctree methods
-    
     getNodeColor : function (component, d, LeafParent) {
         var _this = this;
 
@@ -712,84 +725,6 @@
             console.log("xxxxx: getNodeColor: getFromMeasureScheme: " + nodeColor );
             return nodeColor;
         }
-
-        // TEMP TODO - think about removing this .....
-
-        var color;
-
-        var objectType = d.data.objectType;
-        var hasObjectSpecifics = _this.hasCache (component, LeafParent + "ColorsValues" + objectType) ;
-        if (!hasObjectSpecifics) {
-            // if there is nothing specifc for an object then use the defaults
-            objectType = "Default";
-        }
-
-        var colorBy;      
-        var hasObjectSpecificColorBy = _this.hasCache (component, LeafParent + "ColorsColorBy" + objectType) ;
-        if (hasObjectSpecificColorBy) {
-            colorBy = _this.getCache (component, LeafParent + "ColorsColorBy" + objectType) ;
-        }
-        else {
-            colorBy = _this.getCache (component, LeafParent + "ColorsColorByDefault") ;
-        }
-
-        var ColorsValues = _this.getCache (component, LeafParent + "ColorsValues" + objectType) ;
-        var ColorsNames = _this.getCache (component, LeafParent + "ColorsNames" + objectType) ;
-
-
-        if (colorBy == "size") {
-            for (var i = 0; i < ColorsValues.length; i++) {
-                if (d.data.size != null && d.data.size >= ColorsValues[i]) {
-                    color = ColorsNames[i];
-                } else {
-                    break;
-                }
-            }
-        }
-
-        if (colorBy != "size") {
-            // a few assumptions here, i.e. that it is a text field we are coloring by and that the configuration list is complete
-            var colorValueInRecord;
-
-            // first retrieve the value of the coloring field from the record
-            for (var i = 0; i < d.data.fields.length; i++) {
-                var field = d.data.fields[i];
-                if (field.api == colorBy) {
-                    colorValueInRecord = field.retrievedValue;
-                }
-            }
-    
-            // then match it up with the correct color.
-            for (var i = 0; i < ColorsValues.length; i++) {
-                // going by a textual value - default to the first color in the list
-                // TODO could add in a default in the config string?
-                color = ColorsNames[0];
-                if (colorValueInRecord == ColorsValues[i]) {
-                    console.log("colorBy Match: " + colorBy);
-                    color = ColorsNames[i];
-                    break;
-                }
-            }
-        }
-        return color;
-    },
-
-    setColorCache : function(component, ColorsObject, ColorsObjectDefault, prefix) {
-        var _this = this;
-
-        _this.setCache (component, prefix + "ColorsObjectDefault", ColorsObjectDefault ) ;
-        _this.setCache (component, prefix + "ColorsValuesDefault", ColorsObjectDefault.values ) ;
-        _this.setCache (component, prefix + "ColorsNamesDefault", ColorsObjectDefault.colors ) ;
-        _this.setCache (component, prefix + "ColorsColorByDefault", ColorsObjectDefault.colorBy ) ;
-
-        var arrayObjectKeys = Object.keys(ColorsObject);
-
-        arrayObjectKeys.forEach ( function(objectKey) {
-            _this.setCache (component, prefix + "ColorsObject" + objectKey, ColorsObject[objectKey] ) ;
-            _this.setCache (component, prefix + "ColorsValues" + objectKey, ColorsObject[objectKey].values ) ;
-            _this.setCache (component, prefix + "ColorsNames" + objectKey, ColorsObject[objectKey].colors ) ;
-            _this.setCache (component, prefix + "ColorsColorBy" + objectKey, ColorsObject[objectKey].colorBy ) ;
-        });
     },
 
     // Collapse the node and all its children
