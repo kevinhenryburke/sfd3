@@ -343,6 +343,15 @@
         return thisMeasureScheme;
     },
 
+    setMeasureIndexer : function(component, indexer) {
+        var _this = this;
+        var currentMeasure = _this.setMeasure(component, indexer);
+        var currentMeasureScheme = _this.setMeasureScheme(component, indexer);
+        var controllerId = component.get("v.UserComponentId");
+        var preppedEvent = _this.prepareEvent("SetMeasure", {"index" : indexer, "measure" : currentMeasure, "measureScheme" : currentMeasureScheme  }, controllerId);
+        _this.publishPreppedEvent(component,preppedEvent);
+    },
+
     setFilter: function(component, indexer) {
         var _this = this;
         var cmpTarget = component.find('b' + indexer);

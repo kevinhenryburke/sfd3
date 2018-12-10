@@ -101,13 +101,18 @@
           </aura:if>
           <aura:if isTrue="{!v.configuredMeasures}">
             <div class="slds-col slds-size_1-of-4 slds-small-size_1-of-2 slds-medium-size_1-of-3">
-              <h1 class="slds-text-heading_label">Classification</h1>
+              <h1 class="slds-text-heading_label">Color By</h1>
               <div class="slds slds-button-group" role="group">
                   <c:buttonDynamic aura:id="v1" label="" class="slds-button slds-button_brand" onclick="{!c.onClickMeasureV1}"/>
                   <c:buttonDynamic aura:id="v2" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV2}"/>
                   <c:buttonDynamic aura:id="v3" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV3}"/>
                   <c:buttonDynamic aura:id="v4" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV4}"/>
                   <c:buttonDynamic aura:id="v5" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV5}"/>
+                  <!-- <lightning:buttonMenu alternativeText="Show menu" onselect="{! c.handleSelect }">
+                    <lightning:menuItem aura:id="menuItems" value="MenuItemOne" label="Menu Item One" checked="true" />
+                    <lightning:menuItem aura:id="menuItems" value="MenuItemTwo" label="Menu Item Two" checked="false" />
+                    <lightning:menuItem aura:id="menuItems" value="MenuItemThree" label="Menu Item Three" checked="false" />
+                  </lightning:buttonMenu>  -->
               </div>
             </div>
           </aura:if>

@@ -314,41 +314,23 @@
     },
     
     onClickMeasureV1 : function(component, event, helper) {
-        var currentMeasure = helper.setMeasure(component, 1);
-        var currentMeasureScheme = helper.setMeasureScheme(component, 1);
-        console.log("xxxxx: onClickMeasureV1: " + JSON.stringify(currentMeasureScheme));
-        var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 1, "measure" : currentMeasure, "measureScheme" : currentMeasureScheme }, controllerId);
-        helper.publishPreppedEvent(component,preppedEvent);
+        helper.setMeasureIndexer(component, 1);
     },
+
     onClickMeasureV2 : function(component, event, helper) {
-        var currentMeasure = helper.setMeasure(component, 2);
-        var currentMeasureScheme = helper.setMeasureScheme(component, 2);
-        console.log("xxxxx: onClickMeasureV2: " + JSON.stringify(currentMeasureScheme));
-        var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 2, "measure" : currentMeasure, "measureScheme" : currentMeasureScheme  }, controllerId);
-        helper.publishPreppedEvent(component,preppedEvent);
+        helper.setMeasureIndexer(component, 2);
     },
+
     onClickMeasureV3 : function(component, event, helper) {
-        var currentMeasure = helper.setMeasure(component, 3);
-        var currentMeasureScheme = helper.setMeasureScheme(component, 3);
-        var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 3, "measure" : currentMeasure, "measureScheme" : currentMeasureScheme}, controllerId);
-        helper.publishPreppedEvent(component,preppedEvent);
+        helper.setMeasureIndexer(component, 3);
     },
+
     onClickMeasureV4 : function(component, event, helper) {
-        var currentMeasure = helper.setMeasure(component, 4);
-        var currentMeasureScheme = helper.setMeasureScheme(component, 4);
-        var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 4, "measure" : currentMeasure, "measureScheme" : currentMeasureScheme  }, controllerId);
-        helper.publishPreppedEvent(component,preppedEvent);
+        helper.setMeasureIndexer(component, 4);
     },
+
     onClickMeasureV5 : function(component, event, helper) {
-        var currentMeasure = helper.setMeasure(component, 5);
-        var currentMeasureScheme = helper.setMeasureScheme(component, 5);
-        var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = helper.prepareEvent("SetMeasure", {"index" : 5, "measure" : currentMeasure, "measureScheme" : currentMeasureScheme  }, controllerId);
-        helper.publishPreppedEvent(component,preppedEvent);
+        helper.setMeasureIndexer(component, 5);
     },
 
     onClickFilterB1 : function(component, event, helper) {
