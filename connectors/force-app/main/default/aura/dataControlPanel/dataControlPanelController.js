@@ -60,9 +60,10 @@
                 
                 if (component.get("v.configuredFilterTypes") == true) {                   
                     var arrayNames = buttonParameters.filtertypes;
+                    component.set("v.relationsNumber", arrayNames.length)
                     var idprefix = "b";
                     var maxbuttons = 5;                
-                    helper.formatButtons (component, arrayNames, idprefix, maxbuttons);
+//                    helper.formatButtons (component, arrayNames, idprefix, maxbuttons);
                 }
 
                 if (component.get("v.configuredMeasures") == true) {                   
@@ -254,29 +255,6 @@
             // refresh Buttons
             helper.updateButtonStyles(component, 'v', measureIndex, 5);
         }
-        if (topic == "SetFilter")
-        {
-            // toogle the button styles
-            var indexer = parameters["index"];
-            var cmpTarget = component.find('b' + indexer);
-            // set attributes to indicate filter on/off status
-
-            $A.util.toggleClass(cmpTarget, 'filter_show');
-            $A.util.toggleClass(cmpTarget, 'filter_hide');
-            
-            // restyle is straightforward, flip styles depending on whether we are showing or hiding the filter
-
-            var nowShow = $A.util.hasClass(cmpTarget, 'filter_show');
-
-            if (nowShow) {
-                $A.util.addClass(cmpTarget, 'slds-button_brand');                                
-                $A.util.removeClass(cmpTarget, 'slds-button_neutral');                
-            }
-            else {
-                $A.util.addClass(cmpTarget, 'slds-button_neutral');                                
-                $A.util.removeClass(cmpTarget, 'slds-button_brand');                
-            }
-        }
         if (topic == "InitiateRefreshChart")
         {
             // for a RefreshChart event we assume everything is initialized
@@ -333,21 +311,6 @@
         helper.setMeasureIndexer(component, 5);
     },
 
-    onClickFilterB1 : function(component, event, helper) {
-        helper.setFilter(component, 1);
-    },
-    onClickFilterB2 : function(component, event, helper) {
-		helper.setFilter(component, 2);
-    },
-    onClickFilterB3 : function(component, event, helper) {
-		helper.setFilter(component, 3);
-    },
-    onClickFilterB4 : function(component, event, helper) {
-		helper.setFilter(component, 4);
-    },
-    onClickFilterB5 : function(component, event, helper) {
-		helper.setFilter(component, 5);
-    },
 
     onClickRefreshOneTime : function(component, event, helper) {
         var _this = this;
@@ -359,7 +322,20 @@
         }
         console.log("onClickRefreshOneTime exit");
     },
-    
+
+    handleMenuSelect: function (component, event, helper) {
+        var selectedMenuItemValue = event.getParam("value");
+        console.log("xxxxxx: handleMenuSelect: " + selectedMenuItemValue);
+
+        var menuItems = component.find("actionMenuItems");
+        var menuItem = menuItems.find(function(menuItem) {
+            return menuItem.get("v.value") === selectedMenuItemValue;
+        });
+
+        var newClickedState = !menuItem.get("v.checked");
+        menuItem.set("v.checked", newClickedState);
+        helper.setMenuFilter(component, selectedMenuItemValue, newClickedState);
+    },    
 
     onClickTimeSeriesRefresh : function(component, event, helper) {
         var _this = this;

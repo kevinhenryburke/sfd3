@@ -60,6 +60,9 @@
   <aura:attribute name="configuredAllowRefresh" type="Boolean" default="false"/>    
   <aura:attribute name="configuredShowTestButtons" type="Boolean" default="false"/>      
 
+
+  <aura:attribute name="relationsNumber" type="Integer" default="0"/>      
+
   <!-- Technical - Query -->
   <aura:attribute name="levelsIncreaseOnly" type="Boolean" default="false"/> 
   <aura:attribute name="autoIncreaseLevels" type="Boolean" default="false"/> 
@@ -108,24 +111,18 @@
                   <c:buttonDynamic aura:id="v3" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV3}"/>
                   <c:buttonDynamic aura:id="v4" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV4}"/>
                   <c:buttonDynamic aura:id="v5" label="" class="slds-button slds-button_neutral" onclick="{!c.onClickMeasureV5}"/>
-                  <!-- <lightning:buttonMenu alternativeText="Show menu" onselect="{! c.handleSelect }">
-                    <lightning:menuItem aura:id="menuItems" value="MenuItemOne" label="Menu Item One" checked="true" />
-                    <lightning:menuItem aura:id="menuItems" value="MenuItemTwo" label="Menu Item Two" checked="false" />
-                    <lightning:menuItem aura:id="menuItems" value="MenuItemThree" label="Menu Item Three" checked="false" />
-                  </lightning:buttonMenu>  -->
               </div>
             </div>
           </aura:if>
-          <aura:if isTrue="{!v.configuredFilterTypes}">
+          <aura:if isTrue="{!v.configuredFilterTypes}"> 
             <div class="slds-col slds-size_1-of-4 slds-small-size_1-of-2 slds-medium-size_1-of-3" >
-              <h1 class="slds-text-heading_label">Relation</h1>
-              <div class="slds slds-button-group" role="group">
-                  <c:buttonDynamic aura:id="b1" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB1}"/>
-                  <c:buttonDynamic aura:id="b2" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB2}"/>
-                  <c:buttonDynamic aura:id="b3" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB3}"/>
-                  <c:buttonDynamic aura:id="b4" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB4}"/>
-                  <c:buttonDynamic aura:id="b5" label="" class="slds-button slds-button_brand filter_show" onclick="{!c.onClickFilterB5}"/>
-              </div>
+              <aura:if isTrue="{!v.relationsNumber > 0}">
+                <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuSelect }" label="Filter">
+                    <aura:iteration var="action" items="{! v.panelShowFilters }">
+                        <lightning:menuItem aura:id="actionMenuItems" label="{! action }" value="{! action }" checked="true"/>
+                    </aura:iteration>
+                </lightning:buttonMenu>
+              </aura:if>
             </div>
           </aura:if>
           <aura:if isTrue="{!v.configuredAllowRefresh}">

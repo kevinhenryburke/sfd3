@@ -352,37 +352,14 @@
         _this.publishPreppedEvent(component,preppedEvent);
     },
 
-    setFilter: function(component, indexer) {
+    setMenuFilter: function(component, thisType, newClickedState) {
+        console.log("xxxxx: setMenuFilter");
         var _this = this;
-        var cmpTarget = component.find('b' + indexer);
         var controllerId = component.get("v.UserComponentId");
+        var filterState = newClickedState ? "Show" : "Hide"; // if before it was show then now it is hide
 
-        // check existence of filter_show class to determine what state to publish
-        var beforeClickedState = $A.util.hasClass(cmpTarget, 'filter_show');
-        var filterState = beforeClickedState ? "Hide" : "Show"; // if before it was show then now it is hide
-
-        var masterConfigObject = component.get("v.masterConfigObject");
-        var buttonParameters = masterConfigObject["panels"]["ControlPanel"]["buttonParameters"];            
-
-        var thisType = buttonParameters.filtertypes[indexer - 1];
-        var preppedEvent = _this.prepareEvent("SetFilter", {"index" : indexer, "state" : filterState, "filterType" : thisType }, controllerId);
+        var preppedEvent = _this.prepareEvent("SetFilter", {"state" : filterState, "filterType" : thisType }, controllerId);
         _this.publishPreppedEvent(component,preppedEvent);
-
-        this.saveFilterVisibility(component, thisType, (filterState == "Show"));
-    },
-
-    saveFilterVisibility: function(component, thisType, isClicked) {
-        var _this = this;
-        var showFilters = component.get("v.panelShowFilters");
-        if (isClicked) {
-            showFilters.push(thisType);
-        } else {
-            var index = showFilters.indexOf(thisType);
-            if (index > -1) {
-                showFilters.splice(index, 1);
-            }
-        }
-        component.set("v.panelShowFilters", showFilters);
     },
 
     formatButtons: function(component, arrayNames, idprefix, maxbuttons) {
@@ -396,7 +373,7 @@
                 var cmpTarget = component.find(idprefix + index);
                 cmpTarget.set("v.label", filtertype);
             }
-        });
+        }); 
         // clean up unused buttons
         for (; index < maxbuttons;) {
             index++;
