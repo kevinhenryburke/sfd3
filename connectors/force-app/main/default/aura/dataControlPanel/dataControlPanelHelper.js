@@ -42,8 +42,8 @@
                     var panelCurrentMeasureSchemeLoop = topObjectLevelFields[j].measureScheme;
                     if (panelCurrentMeasureSchemeLoop != null) {
                         measureSchemes.push(panelCurrentMeasureSchemeLoop);
-                        console.log("xxxxx: pushing measureScheme: name:" + topObjectLevelFields[j].measureName);
-                        console.log("xxxxx: pushing measureScheme: scheme" + JSON.stringify(topObjectLevelFields[j].measureScheme));
+                        // console.log("xxxxx: pushing measureScheme: name:" + topObjectLevelFields[j].measureName);
+                        // console.log("xxxxx: pushing measureScheme: scheme" + JSON.stringify(topObjectLevelFields[j].measureScheme));
                         measureSchemesKeyValue[topObjectLevelFields[j].measureName]=topObjectLevelFields[j].measureScheme;
                     }
                     else {

@@ -344,7 +344,7 @@
             .append('path')
             .style("stroke" , "black")
             .style("fill" , function(d,i) { return currentMeasureScheme[i]["color"];})
-            .attr('transform',function(d,i) { return 'translate('+30+','+(i*20+20)+')';})
+            .attr('transform',function(d,i) { return 'translate('+30+','+(i*20+30)+')';})
             .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[0];}) );
 
         var textme = legendSymbolGroup.selectAll("textme")
@@ -353,7 +353,7 @@
             .append("text");            
 
         var textLabels = textme
-            .attr('transform',function(d,i) { return 'translate('+40+','+(i*20+23)+')';})
+            .attr('transform',function(d,i) { return 'translate('+40+','+(i*20+33)+')';})
             .attr("font-family", "sans-serif")
             .text( function (d, i) { 
                 if (currentMeasureScheme[i]["name"] != null) {
@@ -368,6 +368,18 @@
             })
             .attr("font-size", "8px")
             .attr("fill", "gray");
+
+        var currentMeasure = _this.getStore(component, "currentMeasure");
+        var measureArray = [ currentMeasure ];
+
+        var measureText = legendSymbolGroup.selectAll("textme")
+            .data(measureArray)
+            .enter()
+            .append("text")
+            .attr('transform',function(d,i) { return 'translate('+20+','+13+')';})
+            .text( function (d, i) {return "Color Scheme: " + d;})
+            .attr("font-size", "8px")
+            .attr("fill", "black");
 
     },
 

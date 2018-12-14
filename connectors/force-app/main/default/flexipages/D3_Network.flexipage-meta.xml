@@ -29,7 +29,7 @@
         <componentInstances>
             <componentInstanceProperties>
                 <name>Title</name>
-                <value>Gold One Level</value>
+                <value></value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
