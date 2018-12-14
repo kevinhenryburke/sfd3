@@ -61,16 +61,11 @@
                 if (component.get("v.configuredFilterTypes") == true) {                   
                     var arrayNames = buttonParameters.filtertypes;
                     component.set("v.relationsNumber", arrayNames.length)
-                    var idprefix = "b";
-                    var maxbuttons = 5;                
-//                    helper.formatButtons (component, arrayNames, idprefix, maxbuttons);
                 }
 
                 if (component.get("v.configuredMeasures") == true) {                   
                     var arrayNames = component.get("v.measureNames");
-                    var idprefix = "v";
-                    var maxbuttons = 5;
-                    helper.formatButtons (component, arrayNames, idprefix, maxbuttons);
+                    component.set("v.measuresNumber", arrayNames.length)
                 }
 
                 component.set("v.initialized", true);
@@ -249,12 +244,6 @@
         {
             helper.setConnectionLevelFewerButtons(component);
         }
-        if (topic == "SetMeasure")
-        {
-            var measureIndex = parameters["index"];
-            // refresh Buttons
-            helper.updateButtonStyles(component, 'v', measureIndex, 5);
-        }
         if (topic == "InitiateRefreshChart")
         {
             // for a RefreshChart event we assume everything is initialized
@@ -291,27 +280,6 @@
         helper.decreaseLevels(component);
     },
     
-    onClickMeasureV1 : function(component, event, helper) {
-        helper.setMeasureIndexer(component, 1);
-    },
-
-    onClickMeasureV2 : function(component, event, helper) {
-        helper.setMeasureIndexer(component, 2);
-    },
-
-    onClickMeasureV3 : function(component, event, helper) {
-        helper.setMeasureIndexer(component, 3);
-    },
-
-    onClickMeasureV4 : function(component, event, helper) {
-        helper.setMeasureIndexer(component, 4);
-    },
-
-    onClickMeasureV5 : function(component, event, helper) {
-        helper.setMeasureIndexer(component, 5);
-    },
-
-
     onClickRefreshOneTime : function(component, event, helper) {
         var _this = this;
         console.log("onClickRefreshOneTime enter");
@@ -323,11 +291,27 @@
         console.log("onClickRefreshOneTime exit");
     },
 
-    handleMenuSelect: function (component, event, helper) {
+    handleMenuMeasures: function (component, event, helper) {
         var selectedMenuItemValue = event.getParam("value");
-        console.log("xxxxxx: handleMenuSelect: " + selectedMenuItemValue);
 
-        var menuItems = component.find("actionMenuItems");
+        // var menuItems = component.find("actionMenuMeasureItems");
+        // var menuItemsArray = menuItems;
+        // if (!Array.isArray(menuItems)) {
+        //     menuItemsArray = [menuItems];
+        // }
+        // var menuItem = menuItemsArray.find(function(menuItem) {
+        //     return menuItem.get("v.value") === selectedMenuItemValue;
+        // });
+
+        helper.setMenuMeasure(component, selectedMenuItemValue);
+
+    },    
+
+    handleMenuFilter: function (component, event, helper) {
+        var selectedMenuItemValue = event.getParam("value");
+        console.log("xxxxxx: handleMenuFilter: " + selectedMenuItemValue);
+
+        var menuItems = component.find("actionMenuFilterItems");
         var menuItem = menuItems.find(function(menuItem) {
             return menuItem.get("v.value") === selectedMenuItemValue;
         });

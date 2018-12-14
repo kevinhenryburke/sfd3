@@ -16,7 +16,9 @@
 
 
             var measureNames = [];
+            var panelShowMeasures = [];
             var measureSchemes = [];
+            var measureSchemesKeyValue = {};
             var numberMeasuresFound = 0;
 
             for (var j = 0; j < topObjectLevelFields.length; j++) {
@@ -33,13 +35,16 @@
                             component.set("v.panelCurrentMeasureScheme", panelCurrentMeasureScheme);
                             console.log("xxxxx: panelCurrentMeasureScheme: " + panelCurrentMeasureScheme);
                         }
-                        console.log("xxxxx: panelCurrentMeasure: " + panelCurrentMeasure);
                     }
                     // create arrays for measure and schemes
                     measureNames.push(topObjectLevelFields[j].measureName);
+                    panelShowMeasures.push(topObjectLevelFields[j].measureName);
                     var panelCurrentMeasureSchemeLoop = topObjectLevelFields[j].measureScheme;
                     if (panelCurrentMeasureSchemeLoop != null) {
                         measureSchemes.push(panelCurrentMeasureSchemeLoop);
+                        console.log("xxxxx: pushing measureScheme: name:" + topObjectLevelFields[j].measureName);
+                        console.log("xxxxx: pushing measureScheme: scheme" + JSON.stringify(topObjectLevelFields[j].measureScheme));
+                        measureSchemesKeyValue[topObjectLevelFields[j].measureName]=topObjectLevelFields[j].measureScheme;
                     }
                     else {
                         measureSchemes.push(null);
@@ -49,8 +54,10 @@
             }
 
             component.set("v.measureNames", measureNames);
+            component.set("v.panelShowMeasures", panelShowMeasures);
             component.set("v.measureSchemes", measureSchemes);
-
+            component.set("v.measureSchemesKeyValue", measureSchemesKeyValue);
+                        
             for (var key in buttonParameters) {  
                 var subObj = buttonParameters[key];
 
@@ -238,7 +245,6 @@
 
     },
 
-
     canIncreaseLevels : function(component) {
         var _this = this;
 
@@ -328,32 +334,19 @@
         var cmpTargetMore = component.find('more');
         cmpTargetMore.set("v.disabled", "true");
     },
-    
-    setMeasure: function(component, measureIndex) {
-        var measureNames = component.get("v.measureNames");
-        var thisMeasure = measureNames[measureIndex - 1];
-        component.set("v.panelCurrentMeasure", thisMeasure);
-        return thisMeasure;
-    },
 
-    setMeasureScheme: function(component, measureIndex) {
-        var measureSchemes = component.get("v.measureSchemes");
-        var thisMeasureScheme = measureSchemes[measureIndex - 1];
-        component.set("v.panelCurrentMeasureScheme", thisMeasureScheme);
-        return thisMeasureScheme;
-    },
-
-    setMeasureIndexer : function(component, indexer) {
+    setMenuMeasure : function(component, currentMeasure) {
         var _this = this;
-        var currentMeasure = _this.setMeasure(component, indexer);
-        var currentMeasureScheme = _this.setMeasureScheme(component, indexer);
+        component.set("v.panelCurrentMeasure", currentMeasure);
+        var measureSchemesKeyValue = component.get("v.measureSchemesKeyValue");
+        var currentMeasureScheme = measureSchemesKeyValue[currentMeasure];
+        component.set("v.panelCurrentMeasureScheme", currentMeasureScheme);
         var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = _this.prepareEvent("SetMeasure", {"index" : indexer, "measure" : currentMeasure, "measureScheme" : currentMeasureScheme  }, controllerId);
+        var preppedEvent = _this.prepareEvent("SetMeasure", {"measure" : currentMeasure, "measureScheme" : currentMeasureScheme  }, controllerId);
         _this.publishPreppedEvent(component,preppedEvent);
     },
 
     setMenuFilter: function(component, thisType, newClickedState) {
-        console.log("xxxxx: setMenuFilter");
         var _this = this;
         var controllerId = component.get("v.UserComponentId");
         var filterState = newClickedState ? "Show" : "Hide"; // if before it was show then now it is hide
@@ -361,43 +354,6 @@
         var preppedEvent = _this.prepareEvent("SetFilter", {"state" : filterState, "filterType" : thisType }, controllerId);
         _this.publishPreppedEvent(component,preppedEvent);
     },
-
-    formatButtons: function(component, arrayNames, idprefix, maxbuttons) {
-        var _this = this;
-        var arrayNamesLength = arrayNames.length;
-        var index = 0;
-
-        arrayNames.forEach(function(filtertype) {
-            if (index < arrayNamesLength) {
-                index++;
-                var cmpTarget = component.find(idprefix + index);
-                cmpTarget.set("v.label", filtertype);
-            }
-        }); 
-        // clean up unused buttons
-        for (; index < maxbuttons;) {
-            index++;
-            var cmpTarget = component.find(idprefix + index);
-            cmpTarget.set("v.show", "false");
-        }
-    },
-
-    updateButtonStyles: function(cmp, prefix, selectedIndex, numberOfButtons) {
-        var selectedButtonLabel = prefix + selectedIndex;
-
-        for (var i = 1; i <= numberOfButtons; i++) { 
-            var iteratedButtonLabel = prefix + i;
-            var cmpTarget = cmp.find(iteratedButtonLabel);
-            if (selectedButtonLabel != iteratedButtonLabel) {
-                $A.util.addClass(cmpTarget, 'slds-button_neutral');
-                $A.util.removeClass(cmpTarget, 'slds-button_brand');
-            }
-            else {
-                $A.util.addClass(cmpTarget, 'slds-button_brand');
-                $A.util.removeClass(cmpTarget, 'slds-button_neutral');
-            }
-        }
-    }, 
 
     // TODO TODO TODO - come back, not even half finished.
     
