@@ -86,7 +86,6 @@
             return;
         }        
 
-
         if (topic == "InitializeData" || topic == "RefreshData")
         {
             var datajson = parameters["datajson"];
@@ -100,7 +99,7 @@
         {
             // when a search item is selected we change styling related to the box
             console.log("process customLookup.SearchRecordSelected");
-            helper.processSearchRecordSelected(component, event);
+            helper.processSearchRecordSelected(component, parameters);
         }
 
     }

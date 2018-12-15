@@ -108,10 +108,7 @@
     },
 
     // This function is called when the User Selects any record from the result list in the Embedded List component   
-    processSearchRecordSelected : function(component, event) {
-        console.log("customLookup.processSearchRecordSelected enter");
-        var parameters = event.getParam("parameters");
-
+    processSearchRecordSelected : function(component, parameters) {
         var selectedRecord = parameters["recordByEvent"];    
         component.set("v.selectedRecord" , selectedRecord); 
 
@@ -126,7 +123,6 @@
         var lookUpTarget = component.find("lookupField");
         $A.util.addClass(lookUpTarget, 'slds-hide');
         $A.util.removeClass(lookUpTarget, 'slds-show'); 
-        console.log("customLookup.processSearchRecordSelected exit");
     }
 
 })

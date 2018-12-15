@@ -293,18 +293,12 @@
 
     handleMenuMeasures: function (component, event, helper) {
         var selectedMenuItemValue = event.getParam("value");
-
-        // var menuItems = component.find("actionMenuMeasureItems");
-        // var menuItemsArray = menuItems;
-        // if (!Array.isArray(menuItems)) {
-        //     menuItemsArray = [menuItems];
-        // }
-        // var menuItem = menuItemsArray.find(function(menuItem) {
-        //     return menuItem.get("v.value") === selectedMenuItemValue;
-        // });
-
         helper.setMenuMeasure(component, selectedMenuItemValue);
+    },    
 
+    handleMenuSizes: function (component, event, helper) {
+        var selectedMenuItemValue = event.getParam("value");
+        // helper.setMenuSizes(component, selectedMenuItemValue);
     },    
 
     handleMenuFilter: function (component, event, helper) {
