@@ -70,7 +70,6 @@
 
         var currentMeasure = _this.getStore(component, "currentMeasure");
         var showMeasureValues = _this.getStore(component, "showMeasureValues");
-        
 
         var margin = _this.getCache (component, "margin") ;  
         
@@ -96,17 +95,13 @@
         // descendants: nodes will contain all of the visible nodes
         links = treeMappedData.descendants().slice(1);
 
-        console.log("xxxxx: nodes length before:" + nodes.length);
-
-        nodes = nodes.filter(function(d, i) {
+        // Example of how to filter nodes and links
+/*        nodes = nodes.filter(function(d, i) {
             if (d.data.name.length < 10) {
                 return false;
             }
             return true;
         });
-
-        console.log("xxxxx: nodes length after:" + nodes.length);
-
         links = links.filter(function(d, i) {
             if (d.data.name.length < 10) {
                 return false;
@@ -115,8 +110,7 @@
                 return false;
             }
             return true;
-        });
-
+        }); */
 
         // Normalize for fixed-depth.
         nodes.forEach(function(d){ 
@@ -143,11 +137,7 @@
         var node = nodeGroup.selectAll('g.treenode') // note: notation g.treenode means it has both g and treenode classes
             .data(nodes, function(d) {   
                 return d.id || (d.id = _this.addComponentRef(componentReference, d.data.id));
-            })
-            
-            ;  
-            
-        
+            });  
             
         // Enter any new modes at the parent's previous position.
         var nodeEnter = node.enter().append('g')
@@ -174,13 +164,7 @@
             .attr("recordid", function(d) {
                 return d.data.id;
             })            
-            // .filter(function(d, i) {
-            //     if (d.data.name.length < 5) {
-            //         return false;
-            //     }
-            //     return true;
-            // })            
-
+            // .filter(function(d, i) {if (d.data.name.length < 5) { return false; } return true;})            
             .on('click', click)
 			.on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
 				_this.setCache (component, "mouseoverRecordId", d.id ) ;
@@ -240,7 +224,14 @@
                     return "0.5px";
                 }
                 return "4px";
-            });
+            })
+            .style("fill-opacity", function(d, i) {
+                return _this.getFilterOpacity(component, d.data);
+            })
+            .style("stroke-opacity", function(d, i) {
+                return _this.getFilterOpacity(component, d.data);
+            })
+            ;
       
 
         nodeEnter.append('text')
@@ -278,6 +269,9 @@
             .style("font", function(d) {
                 return _this.getFontSizePX(component) + "px sans-serif";
             })
+            .style("opacity", function(d) {
+                return _this.getFilterOpacity(component, d.data);
+            })    
             .text(function(d) { 
                 var textDisplay = d.data.name;
                 return textDisplay;
@@ -339,6 +333,12 @@
                 }
                 return "4px";
             })
+            .style("fill-opacity", function(d, i) {
+                return _this.getFilterOpacity(component, d.data);
+            })
+            .style("stroke-opacity", function(d, i) {
+                return _this.getFilterOpacity(component, d.data);
+            })
             .attr('cursor', 'pointer');      
           
         // text box starts to the right for childless nodes, to the left for parents (collapsed or expanded)  
@@ -362,6 +362,9 @@
             .style("font", function(d) {
                 return _this.getFontSizePX(component) + "px sans-serif";
             })
+            .style("opacity", function(d) {
+                return _this.getFilterOpacity(component, d.data);
+            })    
             .select('tspan') // update the measures
             .text(function(d) { 
                 if (showMeasureValues == true) {
@@ -464,6 +467,8 @@
         function childLess(d) {
             return (typeof d._children == "undefined" || d._children == null) && (typeof d.children == "undefined" || d.children == null) ; 
         }
+
+        
 
         // finally auto-resize the chart if the bottom nodes are encroaching on the end
         var maxDepth = _this.getCache (component, "maxDepth") ;

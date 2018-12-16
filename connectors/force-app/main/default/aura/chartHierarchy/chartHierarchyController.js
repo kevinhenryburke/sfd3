@@ -76,6 +76,24 @@
 
     refreshVisibility: function(component,event,helper){
         console.log("aura:method refreshVisibility in subcomponent enter");
+        var componentReference = component.get("v.componentReference");        
+
+        var node = d3.select(helper.getDivId("nodeGroup", componentReference, true))
+            .selectAll("circle");
+
+        node.style("fill-opacity", function(d, i) {
+            return helper.getFilterOpacity(component, d.data);
+        });
+        node.style("stroke-opacity", function(d, i) {
+            return helper.getFilterOpacity(component, d.data);
+        });
+
+        var text = d3.select(helper.getDivId("nodeGroup", componentReference, true))
+            .selectAll("text");
+
+        text.style("opacity", function(d, i) {
+            return helper.getFilterOpacity(component, d.data);
+        });
         console.log("aura:method refreshVisibility in subcomponent exit");
     },
 

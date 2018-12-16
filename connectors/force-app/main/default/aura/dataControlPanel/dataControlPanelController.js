@@ -56,7 +56,7 @@
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
                 var panelCurrentMeasureScheme = component.get("v.panelCurrentMeasureScheme");
                 var panelPrimaryId = component.get("v.panelPrimaryId");            
-                var panelShowFilters = component.get("v.panelShowFilters");     
+                var filterPublish = component.get("v.filterPublish");     
                 
                 component.set("v.initialized", true);
                 
@@ -76,7 +76,7 @@
                         "currentMeasureScheme" : panelCurrentMeasureScheme, 
                         "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
-                        "showFilters" : panelShowFilters,
+                        "showFilters" : filterPublish,
                         "componentReference" : componentReference
                     }
 
@@ -165,7 +165,7 @@
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
                 var panelCurrentMeasureScheme = component.get("v.panelCurrentMeasureScheme");
                 var panelPrimaryId = component.get("v.panelPrimaryId");            
-                var panelShowFilters = component.get("v.panelShowFilters");     
+                var filterPublish = component.get("v.filterPublish");     
                 
                 var masterConfigObject = component.get("v.masterConfigObject");
 
@@ -177,7 +177,7 @@
                     "currentMeasureScheme" : panelCurrentMeasureScheme, 
                     "masterConfigObject" : masterConfigObject,
                     "primaryId" : panelPrimaryId, 
-                    "showFilters" : panelShowFilters,
+                    "showFilters" : filterPublish,
                     "componentReference" : componentReference                
                 }
     
@@ -315,7 +315,7 @@ var datajson = component.get("v.datajson");
 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
 var panelCurrentMeasureScheme = component.get("v.panelCurrentMeasureScheme");
 var panelPrimaryId = component.get("v.panelPrimaryId");            
-var panelShowFilters = component.get("v.panelShowFilters");     
+var filterPublish = component.get("v.filterPublish");     
 
 
 // publish event - configuration loaded
@@ -325,7 +325,7 @@ var configEventParameters = {
     "currentMeasure" : panelCurrentMeasure,
     "currentMeasureScheme" : panelCurrentMeasureScheme, 
     "primaryId" : panelPrimaryId, 
-    "showFilters" : panelShowFilters,
+    "showFilters" : filterPublish,
 }
 
 //publish to this component

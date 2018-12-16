@@ -45,7 +45,8 @@
 	<aura:attribute name="maxlevels" type="Integer" default="4"/>    
 
 	<aura:attribute name="filterAPIField" type="String"/> 
-  <aura:attribute name="panelShowFilters" type="Object[]" default="[]" />
+	<aura:attribute name="filterPublish" type="Object"/> 
+
   <aura:attribute name="showBanner" type="Boolean" default="true"/>       
 
   <aura:attribute name="selectedRecord" type="sObject" default="{}" description="Stores selected search box record"/>
@@ -132,8 +133,7 @@
               </aura:if>
               <aura:if isTrue="{!v.filterFieldsCount > 0}">
                 <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuFilter }" label="Filter">
-                    <aura:iteration var="action" items="{! v.panelShowFilters }">
-<!-- TODO zzz -->
+                    <aura:iteration var="action" items="{! v.filterPublish.filterValues }">
                     <lightning:menuItem aura:id="actionMenuFilterItems" label="{! action }" value="{! action }" checked="true"/>
                     </aura:iteration>
                 </lightning:buttonMenu>

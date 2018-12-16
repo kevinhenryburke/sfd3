@@ -21,6 +21,8 @@
             var measureSchemesKeyValue = {};
             var numberMeasuresFound = 0;
 
+            var filterPublish = {};
+
             for (var j = 0; j < topObjectLevelFields.length; j++) {
 
                 // measure configuration
@@ -61,10 +63,14 @@
                 // At present only one filter field is possible
                 var panelFilter = topObjectLevelFields[j].filter;
                 if (panelFilter != null) {
-                    component.set("v.panelShowFilters", panelFilter);
                     component.set("v.filterFieldsCount", panelFilter.length);
                     component.set("v.filterAPIField", topObjectLevelFields[j].api);
-console.log("xxxxx: filterAPIField: " + topObjectLevelFields[j].api);
+
+                    filterPublish["filterAPIField"] = topObjectLevelFields[j].api;
+                    filterPublish["filterValues"] = panelFilter;
+                    component.set("v.filterPublish", filterPublish);
+
+                    console.log("xxxxx: filterPublish: " , filterPublish);
                 }
             }
 
@@ -177,7 +183,7 @@ console.log("xxxxx: filterAPIField: " + topObjectLevelFields[j].api);
                 var masterConfigObject = component.get("v.masterConfigObject");
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
                 var panelCurrentMeasureScheme = component.get("v.panelCurrentMeasureScheme");
-                var panelShowFilters = component.get("v.panelShowFilters");     
+                var filterPublish = component.get("v.filterPublish");     
 
                 var configEventParameters;
 
@@ -196,7 +202,7 @@ console.log("xxxxx: filterAPIField: " + topObjectLevelFields[j].api);
                         "currentMeasureScheme" : panelCurrentMeasureScheme, 
                         "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
-                        "showFilters" : panelShowFilters,
+                        "showFilters" : filterPublish,
                         "componentReference" : componentReference        // be aware this is the receiving component's reference        
                     }
                 }
@@ -207,7 +213,7 @@ console.log("xxxxx: filterAPIField: " + topObjectLevelFields[j].api);
                         "currentMeasureScheme" : panelCurrentMeasureScheme, 
                         "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
-                        "showFilters" : panelShowFilters
+                        "showFilters" : filterPublish,
                     }
                 }
 

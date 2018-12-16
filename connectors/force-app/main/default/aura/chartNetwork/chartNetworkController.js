@@ -85,9 +85,7 @@
         
             var levels = helper.getCache(component, "showLevels") ;
 
-// TODO zzz change type here            
-
-            var showFilters = helper.getCache (component, "showFilters") ;
+            var filterValues = helper.getCache (component, "filterValues") ;
             var primaryNodeId = helper.getCache (component, "primaryNodeId") ;        
             // not needed until reinstate measure level visibility
         
@@ -118,7 +116,7 @@
         
                 if ((sourcevis === 1) && (targetvis === 1) && primaryrelated) {
         
-                    var index = showFilters.indexOf(p.type);
+                    var index = filterValues.indexOf(p.type);
         
                     if (index > -1) {
                         var indexsource = shownodeids.indexOf(p.sourceid);

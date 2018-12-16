@@ -15,7 +15,6 @@
 
         helper.setStore(component, "showMeasureValues", false);
 
-
         var recordId = component.get("v.recordId");
         if (recordId == null) {
             recordId = "";
@@ -180,6 +179,7 @@
             var filterType = parameters["filterType"];
 
             var isShown = (state == "Show");
+            console.log("xxxxx: SetFilter: " + filterType + " isShown: " + isShown);
             helper.setFilterVisibility(component, filterType, isShown);
             cc.refreshVisibility();                 
         }

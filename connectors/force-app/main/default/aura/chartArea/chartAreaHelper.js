@@ -173,7 +173,13 @@
         _this.setCache (component, "currentMeasure", currentMeasure ) ;
         _this.setStore(component, "currentMeasureScheme", currentMeasureScheme);
         _this.setCache (component, "currentMeasureScheme", currentMeasureScheme ) ;
-        _this.setCache (component, "showFilters", showFilters ) ;
+        if (showFilters != null) {
+            _this.setCache (component, "filterValues", showFilters.filterValues ) ;
+            _this.setCache (component, "filterAPIField", showFilters.filterAPIField ) ;
+        }
+        else {
+            _this.setCache (component, "filterValues", [] ) ;
+        }
 
 		var svg = d3.select(_this.getDivId("svg", componentReference, true));
 		        
@@ -515,13 +521,11 @@
     },
 
     getMasterParam : function (component /*, args */) {
-        console.log("getMasterParam enter");
         var args = Array.prototype.slice.call(arguments, 1);
         var retValue = null;
         var loopJson = component.get("v.masterConfigObject");
         for (var i=0; i<args.length;i++) {
             if (loopJson.hasOwnProperty([args[i]])) {
-                console.log("xxxxx: loopJson: " + args[i]);
                 retValue = loopJson[args[i]];
                 loopJson = loopJson[args[i]];
             }
@@ -529,7 +533,6 @@
                 return;
             }    
         }
-        console.log("xxxxx: getMasterParam exit: " + retValue);
         return retValue;
     },
     
@@ -563,19 +566,17 @@
 
     setFilterVisibility : function (component, filterType, isShown) {
         var _this = this;
-
-// TODO zzz change type here
-        
-        var showFilters = _this.getCache (component, "showFilters") ;
+        var filterValues = _this.getCache (component, "filterValues") ;
         if (isShown) {
-            showFilters.push(filterType);
+            filterValues.push(filterType);
         } else {
-            var index = showFilters.indexOf(filterType);
+            var index = filterValues.indexOf(filterType);
             if (index > -1) {
-                showFilters.splice(index, 1);
+                filterValues.splice(index, 1);
             }
         }
-        _this.setCache (component, "showFilters", showFilters ) ;
+        console.log("xxxxx: SetFilter: setFilterVisibility: " + filterValues );
+        _this.setCache (component, "filterValues", filterValues ) ;
     },
     
     clearChart : function (componentReference) {
@@ -763,7 +764,30 @@
                 }
             }
         }
-    }
+    },
+
+    getFilterOpacity : function (component, d) {
+        var _this = this;
+        var filterAPIField = _this.getCache (component, "filterAPIField");     
+        var recordValue;
+
+        for (var i = 0; i < d.fields.length; i++) {
+            if (d.fields[i].api == filterAPIField) {
+                recordValue = d.fields[i].retrievedValue;
+                break;
+            }
+        }
+
+        var filterValues = _this.getCache (component, "filterValues");    
+        
+        if (!filterValues.includes(recordValue)) {
+            return 0.1;
+        }
+        return 1;
+    },
+
+
+
 
 
         
