@@ -563,6 +563,9 @@
 
     setFilterVisibility : function (component, filterType, isShown) {
         var _this = this;
+
+// TODO zzz change type here
+        
         var showFilters = _this.getCache (component, "showFilters") ;
         if (isShown) {
             showFilters.push(filterType);

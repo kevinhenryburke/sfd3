@@ -58,16 +58,6 @@
                 var panelPrimaryId = component.get("v.panelPrimaryId");            
                 var panelShowFilters = component.get("v.panelShowFilters");     
                 
-                if (component.get("v.configuredFilterTypes") == true) {                   
-                    var arrayNames = buttonParameters.filtertypes;
-                    component.set("v.relationsNumber", arrayNames.length)
-                }
-
-                if (component.get("v.configuredMeasures") == true) {                   
-                    var arrayNames = component.get("v.measureNames");
-                    component.set("v.measuresNumber", arrayNames.length)
-                }
-
                 component.set("v.initialized", true);
                 
                 // now we have initialized the configuration we can publish all of the events that are enqueued

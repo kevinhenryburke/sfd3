@@ -22,6 +22,8 @@
             var numberMeasuresFound = 0;
 
             for (var j = 0; j < topObjectLevelFields.length; j++) {
+
+                // measure configuration
                 if (topObjectLevelFields[j].measureName != null) {
                     console.log("xxxxx: topObjectLevelFields[j].measureName: " + topObjectLevelFields[j].measureName);
                     if (numberMeasuresFound == 0){
@@ -35,6 +37,9 @@
                             component.set("v.panelCurrentMeasureScheme", panelCurrentMeasureScheme);
                             console.log("xxxxx: panelCurrentMeasureScheme: " + panelCurrentMeasureScheme);
                         }
+
+                        console.log("xxxxx: panelFilter?: " + topObjectLevelFields[j].measureName + "/" + topObjectLevelFields[j].filter);
+
                     }
                     // create arrays for measure and schemes
                     measureNames.push(topObjectLevelFields[j].measureName);
@@ -51,9 +56,21 @@
                     }
                     numberMeasuresFound++;
                 }
+
+                // Filter configuration
+                // At present only one filter field is possible
+                var panelFilter = topObjectLevelFields[j].filter;
+                if (panelFilter != null) {
+                    component.set("v.panelShowFilters", panelFilter);
+                    component.set("v.filterFieldsCount", panelFilter.length);
+                    component.set("v.filterAPIField", topObjectLevelFields[j].api);
+console.log("xxxxx: filterAPIField: " + topObjectLevelFields[j].api);
+                }
             }
 
             component.set("v.measureNames", measureNames);
+            component.set("v.measuresCount", measureNames.length)
+
             component.set("v.panelShowMeasures", panelShowMeasures);
             component.set("v.measureSchemes", measureSchemes);
             component.set("v.measureSchemesKeyValue", measureSchemesKeyValue);
@@ -73,17 +90,6 @@
                     {
                         // using default maxlevels
                     }
-                }
-                if (key == "filtertypes") {
-                    component.set("v.configuredFilterTypes", true);                    
-                    // set all filters as clicked by default
-                    var panelShowFilters = component.get("v.panelShowFilters");
-                    buttonParameters.filtertypes.forEach(function(filtertype) {
-                        panelShowFilters.push(filtertype);
-                    });
-                    component.set("v.panelShowFilters", panelShowFilters);
-                }
-                if (key == "measures") {
                 }
                 if (key == "allowrefresh") {
                     component.set("v.configuredAllowRefresh", true);                    

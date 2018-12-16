@@ -16,10 +16,6 @@
         var args = event.getParam("arguments");
 
         var updatejson = args.datajson;
-        // var currentMeasure = args.currentMeasure;
-        // var currentMeasureScheme = args.currentMeasureScheme;
-        // var primaryId = args.primaryId; // primaryId can be used for highlight node at end of highlighted paths
-        // var showFilters = args.showFilters;
 
         var componentReference = component.get("v.componentReference");
         var nodeGroup = helper.getCache (component, "nodeGroup") ;  

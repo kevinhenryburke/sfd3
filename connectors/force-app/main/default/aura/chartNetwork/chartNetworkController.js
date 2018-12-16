@@ -84,7 +84,9 @@
             console.log("refreshVisibility enter "); 
         
             var levels = helper.getCache(component, "showLevels") ;
-            
+
+// TODO zzz change type here            
+
             var showFilters = helper.getCache (component, "showFilters") ;
             var primaryNodeId = helper.getCache (component, "primaryNodeId") ;        
             // not needed until reinstate measure level visibility

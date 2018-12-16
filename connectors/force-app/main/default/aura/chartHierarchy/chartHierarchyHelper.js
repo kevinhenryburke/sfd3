@@ -61,7 +61,6 @@
     },
 
     update : function(component, nodeGroup, pathGroup, componentReference, source, makeSourceRoot) {
-        console.log("xxxxx: update: enter");
 		var _this = this;
         var nodes;
         var links;
@@ -97,6 +96,28 @@
         // descendants: nodes will contain all of the visible nodes
         links = treeMappedData.descendants().slice(1);
 
+        console.log("xxxxx: nodes length before:" + nodes.length);
+
+        nodes = nodes.filter(function(d, i) {
+            if (d.data.name.length < 10) {
+                return false;
+            }
+            return true;
+        });
+
+        console.log("xxxxx: nodes length after:" + nodes.length);
+
+        links = links.filter(function(d, i) {
+            if (d.data.name.length < 10) {
+                return false;
+            }
+            if (d.parent.data.name.length < 10) {
+                return false;
+            }
+            return true;
+        });
+
+
         // Normalize for fixed-depth.
         nodes.forEach(function(d){ 
             d.y = margin.left + (d.depth * fixedDepth);
@@ -111,20 +132,34 @@
                 console.log("maxDepth: " + _this.getCache (component, "maxDepth") );
             }
         });
-      
+
+
+    
+
         // ****************** Nodes section ***************************
       
         // Update the nodes...
-        var node = nodeGroup.selectAll('g.treenode')
-            .data(nodes, function(d) {    
-                return d.id || (d.id = _this.addComponentRef(componentReference, d.data.id)); 
-            });
-                
+        
+        var node = nodeGroup.selectAll('g.treenode') // note: notation g.treenode means it has both g and treenode classes
+            .data(nodes, function(d) {   
+                return d.id || (d.id = _this.addComponentRef(componentReference, d.data.id));
+            })
+            
+            ;  
+            
+        
+            
         // Enter any new modes at the parent's previous position.
         var nodeEnter = node.enter().append('g')
-            .attr('class', 'treenode')
             .attr("class", function(d) {
-                return 'treenode ' + d.id;
+                var classes = 'treenode ' + d.id;
+                if (d.data.name.length < 5) {
+                    classes += " shortname";
+                }
+                else {
+                    classes += " longname";
+                }
+                return classes;
             })
             .attr("transform", function(d) {
                 var t = "translate(" + source.y0 + "," + source.x0 + ")";
@@ -139,6 +174,13 @@
             .attr("recordid", function(d) {
                 return d.data.id;
             })            
+            // .filter(function(d, i) {
+            //     if (d.data.name.length < 5) {
+            //         return false;
+            //     }
+            //     return true;
+            // })            
+
             .on('click', click)
 			.on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
 				_this.setCache (component, "mouseoverRecordId", d.id ) ;
@@ -168,7 +210,8 @@
                 _this.publishPreppedEvent(component,preppedEvent);
             }))
 			;
-      
+
+
         // Add Circle for the nodes
         nodeEnter.append('circle')
             .attr('class', 'treenode') // redundant
@@ -183,18 +226,16 @@
                 return "circle" + d.id;
             })            
             .style("fill", function(d) {
-                console.log("xxxxx: enter: fill");
                 // we add new circles only to new nodes - the nodes are forgotten if collapsed
                 return d._children ? _this.getNodeColor(component, d, "Parent") : _this.getNodeColor(component, d, "Leaf");
-            })          .style("stroke", function(d) {
-                console.log("xxxxx: update: stroke");
+            })
+            .style("stroke", function(d) {
                 if(childLess(d)) {
                     return "black";
                 }
                 return "lightslategray";
             })
             .style("stroke-width", function(d) {
-                console.log("xxxxx: update: stroke");
                 if(childLess(d)) {
                     return "0.5px";
                 }
@@ -228,6 +269,12 @@
             .attr("id", function(d) {
                 return "t" + d.id;
             })            
+            // .filter(function(d, i) {
+            //     if (d.data.name.length < 5) {
+            //         return false;
+            //     }
+            //     return true;
+            // })            
             .style("font", function(d) {
                 return _this.getFontSizePX(component) + "px sans-serif";
             })
@@ -272,30 +319,27 @@
       
         // Update the node attributes and style
         nodeUpdate.select('circle.treenode')
-          .attr('r', _this.getRadius(component))
-          .style("fill", function(d) {
-              // collapsed children are stored as d._children / expanded as d.children
-              console.log("xxxxx: update: fill");
-              if(childLess(d)) {
-                  return _this.getNodeColor(component, d, "Leaf");
-              }
-              return _this.getNodeColor(component, d, "Parent"); 
-          })
-          .style("stroke", function(d) {
-            console.log("xxxxx: update: stroke");
-            if(childLess(d)) {
-                return "black";
-            }
-            return "lightslategray";
-        })
-        .style("stroke-width", function(d) {
-            console.log("xxxxx: update: stroke");
-            if(childLess(d)) {
-                return "0.5px";
-            }
-            return "4px";
-        })
-        .attr('cursor', 'pointer');      
+            .attr('r', _this.getRadius(component))
+            .style("fill", function(d) {
+                // collapsed children are stored as d._children / expanded as d.children
+                if(childLess(d)) {
+                    return _this.getNodeColor(component, d, "Leaf");
+                }
+                return _this.getNodeColor(component, d, "Parent"); 
+            })
+            .style("stroke", function(d) {
+                if(childLess(d)) {
+                    return "black";
+                }
+                return "lightslategray";
+            })
+            .style("stroke-width", function(d) {
+                if(childLess(d)) {
+                    return "0.5px";
+                }
+                return "4px";
+            })
+            .attr('cursor', 'pointer');      
           
         // text box starts to the right for childless nodes, to the left for parents (collapsed or expanded)  
         nodeUpdate.select('text')
@@ -320,13 +364,10 @@
             })
             .select('tspan') // update the measures
             .text(function(d) { 
-                console.log("xxxxx: svg:tspan");
-
                 if (showMeasureValues == true) {
                     var nodeValue = _this.getFromMeasureScheme(component, d.data, currentMeasure, "Value");
                     return "(" + nodeValue.toLocaleString()  + ")" ;
                 }
-
             })            
 
         // Remove any exiting nodes
@@ -339,11 +380,11 @@
       
         // On exit reduce the node circles size to 0
         nodeExit.select('circle')
-          .attr('r', 1e-6);
+            .attr('r', 1e-6);
       
         // On exit reduce the opacity of text labels
         nodeExit.select('text')
-          .style('fill-opacity', 1e-6);
+            .style('fill-opacity', 1e-6);
       
         // ****************** links section ***************************
       
@@ -360,8 +401,11 @@
             .attr("class", "treelink")
             .attr('d', function(d){
                 var o = {x: source.x0, y: source.y0}
-              return diagonal(o, o)
-            });
+                return diagonal(o, o)
+            })
+            
+            
+            ;
       
         // UPDATE
         var linkUpdate = linkEnter.merge(link);
