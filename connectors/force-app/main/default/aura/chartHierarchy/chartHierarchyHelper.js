@@ -406,17 +406,21 @@
                 var o = {x: source.x0, y: source.y0}
                 return diagonal(o, o)
             })
-            
-            
+            .attr("stroke-opacity", function(d) {
+                return _this.getFilterOpacityPath(component,d);
+            })            
             ;
       
-        // UPDATE
+        // UPDATE        
         var linkUpdate = linkEnter.merge(link);
-      
+
+
         // Transition back to the parent element position
         linkUpdate.transition()
             .duration(shortDuration)
-            .attr('d', function(d){ return diagonal(d, d.parent) });
+            .attr('d', function(d){ return diagonal(d, d.parent) })
+            
+            ;
       
         // Remove any exiting links
         var linkExit = link.exit().transition()
@@ -792,5 +796,19 @@
             d.children = null
         }
     },
+
+    getFilterOpacityPath : function (component, d) {
+        var _this = this;
+        var filteredParent = _this.isFilteredOut(component, d.parent.data);
+        var filteredNode = _this.isFilteredOut(component, d.data);
+
+        if (filteredParent && filteredNode) {
+            return 0.1;
+        }
+        if (filteredParent || filteredNode) {
+            return 0.3;
+        }
+        return 1;
+    }
 
 })

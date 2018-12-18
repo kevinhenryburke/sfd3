@@ -94,6 +94,16 @@
         text.style("opacity", function(d, i) {
             return helper.getFilterOpacity(component, d.data);
         });
+
+        var path = d3.select(helper.getDivId("pathGroup", componentReference, true))
+            .selectAll("path");
+
+        path.style("stroke-opacity", function(d, i) {
+            console.log("xxxxx: update path opacity");
+            return helper.getFilterOpacityPath(component,d);
+        });
+
+
         console.log("aura:method refreshVisibility in subcomponent exit");
     },
 

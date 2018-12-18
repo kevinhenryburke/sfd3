@@ -26,6 +26,8 @@
         _this.setCache (component, "width", Math.min(screen.width, screen.height)) ; // review this
         _this.setCache (component, "height", Math.min(screen.width, screen.height)) ; // review this
 
+        _this.setCache(component, "filtersConfigured", false);
+
 		var margin = {top: 20, right: 90, bottom: 30, left: 50}; // this should probably be flexi-ed too
         _this.setCache (component, "margin", margin) ;  
         
@@ -566,6 +568,7 @@
 
     setFilterVisibility : function (component, filterType, isShown) {
         var _this = this;
+        _this.setCache(component, "filtersConfigured", true);
         var filterValues = _this.getCache (component, "filterValues") ;
         if (isShown) {
             filterValues.push(filterType);
@@ -768,6 +771,22 @@
 
     getFilterOpacity : function (component, d) {
         var _this = this;
+        if (_this.isFilteredOut(component,d)) {
+            return 0.1;
+        }
+        return 1;
+    },
+
+    isFilteredOut : function (component, d) {
+        var _this = this;
+
+        // if there are no filters configured then we're good to go.
+
+        var filtersConfigured = _this.getCache(component, "filtersConfigured");
+        if (filtersConfigured == false) {
+            return false;
+        } 
+
         var filterAPIField = _this.getCache (component, "filterAPIField");     
         var recordValue;
 
@@ -781,11 +800,11 @@
         var filterValues = _this.getCache (component, "filterValues");    
         
         if (!filterValues.includes(recordValue)) {
-            return 0.1;
+            return true;
         }
-        return 1;
-    },
+        return false;
 
+    }
 
 
 
