@@ -73,10 +73,6 @@
         var showFilters = args.showFilters;
 
         helper.setStore(cc, "currentMeasure", currentMeasure);
-        // TODO - why still using setStore AND setCache?
-        helper.setCache (component, "currentMeasure", currentMeasure ) ;
-
-        var currentMeasureScheme = parameters["measureScheme"];
         helper.setStore(cc, "currentMeasureScheme", currentMeasureScheme);
 
         helper.refreshData(component, datajson, primaryId, showFilters);                         
@@ -159,22 +155,14 @@
         }
         if (topic == "SetMeasure")
         {
-
             helper.setStore(component, "showMeasureValues", true);
 
-
             var currentMeasure = parameters["measure"];
-            console.log("xxxxx: SetMeasure: " + currentMeasure);
             helper.setStore(cc, "currentMeasure", currentMeasure);
-            // TODO - why still using setStore AND setCache?
-            helper.setCache (component, "currentMeasure", currentMeasure ) ;
-
             var currentMeasureScheme = parameters["measureScheme"];
             helper.setStore(cc, "currentMeasureScheme", currentMeasureScheme);
 
-            helper.createLegendLocation(component);
-            
-
+            helper.createLegendLocation(component);            
             // refresh Chart - measure changes but primaryid does not
             cc.styleNodes();                 
         }
@@ -220,9 +208,7 @@
                     helper.setCache (component, "showLevels", 1) ;
                 }
 
-                // TODO - why still using setStore AND setCache?
                 helper.setStore(cc, "currentMeasure", parameters["currentMeasure"]);
-                helper.setCache (component, "currentMeasure", parameters["currentMeasure"] ) ;    
                 helper.setStore(cc, "currentMeasureScheme", parameters["currentMeasureScheme"]);    
 
                 helper.initializeGroups(component, parameters["datajson"], parameters["primaryId"], parameters["showFilters"], isInit);                 

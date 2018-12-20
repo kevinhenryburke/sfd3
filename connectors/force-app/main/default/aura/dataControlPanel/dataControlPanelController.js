@@ -51,7 +51,6 @@
                 var datajson = component.get("v.datajson");
 
                 var masterConfigObject = component.get("v.masterConfigObject");
-                var buttonParameters = masterConfigObject["panels"]["ControlPanel"]["buttonParameters"];                
 
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
                 var panelCurrentMeasureScheme = component.get("v.panelCurrentMeasureScheme");
