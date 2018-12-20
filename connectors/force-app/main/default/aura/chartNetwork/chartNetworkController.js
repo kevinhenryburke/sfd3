@@ -26,11 +26,7 @@
             var datajsonBefore = args.datajson;
             var datajsonRefresh = args.datajsonRefresh;
 
-            var currentMeasure = helper.getStore(component, "currentMeasure");
-            var currentMeasureScheme = helper.getStore(component, "currentMeasureScheme");
-
             for (var i = 0; i < datajsonBefore.nodes.length; i++){
-                console.log("xxxxx: dataPreprocess: currentMeasure: radius: " + currentMeasure);
                 var djnodeBefore = datajsonBefore.nodes[i];
                 var fieldsBefore = djnodeBefore.fields;
                 var djnodeAfter = datajsonRefresh.nodes[i];

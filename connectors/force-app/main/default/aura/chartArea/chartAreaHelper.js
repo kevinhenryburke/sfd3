@@ -94,7 +94,7 @@
     },
 
     // unsophisticated version is to remove everything and re-initialize
-    refreshData: function (component, datajsonRefresh, currentMeasure, currentMeasureScheme, primaryNodeId, showFilters) {
+    refreshData: function (component, datajsonRefresh, primaryNodeId, showFilters) {
         var _this = this;
         var componentReference = component.get("v.componentReference");
         console.log("chartArea: enter refreshData with primaryNodeId: " + primaryNodeId);
@@ -142,13 +142,13 @@
         
         // re-initialize the chart
         var isInit = false;
-        _this.initializeGroups(component, datajson, currentMeasure, currentMeasureScheme, primaryNodeId, showFilters, isInit);                 
+        _this.initializeGroups(component, datajson, primaryNodeId, showFilters, isInit);                 
 
         cc.initializeVisuals();
 
     },    
 
-	initializeGroups: function (component, datajson, currentMeasure, currentMeasureScheme, primaryNodeId, showFilters, isInit) {
+	initializeGroups: function (component, datajson, primaryNodeId, showFilters, isInit) {
 
         var _this = this;
         var componentReference = component.get("v.componentReference");
@@ -171,10 +171,6 @@
             console.log("hasPrimaryNode false");
         }
 
-        _this.setStore(component, "currentMeasure", currentMeasure);
-        _this.setCache (component, "currentMeasure", currentMeasure ) ;
-        _this.setStore(component, "currentMeasureScheme", currentMeasureScheme);
-        _this.setCache (component, "currentMeasureScheme", currentMeasureScheme ) ;
         if (showFilters != null) {
             _this.setCache (component, "filterValues", showFilters.filterValues ) ;
             _this.setCache (component, "filterAPIField", showFilters.filterAPIField ) ;

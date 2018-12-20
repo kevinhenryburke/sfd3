@@ -72,7 +72,14 @@
         var primaryId = args.primaryId;
         var showFilters = args.showFilters;
 
-        helper.refreshData(component, datajson, currentMeasure, currentMeasureScheme, primaryId, showFilters);                         
+        helper.setStore(cc, "currentMeasure", currentMeasure);
+        // TODO - why still using setStore AND setCache?
+        helper.setCache (component, "currentMeasure", currentMeasure ) ;
+
+        var currentMeasureScheme = parameters["measureScheme"];
+        helper.setStore(cc, "currentMeasureScheme", currentMeasureScheme);
+
+        helper.refreshData(component, datajson, primaryId, showFilters);                         
     },
 
     searchChart: function(component,event,helper){
@@ -164,8 +171,6 @@
 
             var currentMeasureScheme = parameters["measureScheme"];
             helper.setStore(cc, "currentMeasureScheme", currentMeasureScheme);
-            // TODO - why still using setStore AND setCache?
-            helper.setCache (component, "currentMeasureScheme", currentMeasureScheme ) ;
 
             helper.createLegendLocation(component);
             
@@ -215,7 +220,12 @@
                     helper.setCache (component, "showLevels", 1) ;
                 }
 
-                helper.initializeGroups(component, parameters["datajson"], parameters["currentMeasure"], parameters["currentMeasureScheme"], parameters["primaryId"], parameters["showFilters"], isInit);                 
+                // TODO - why still using setStore AND setCache?
+                helper.setStore(cc, "currentMeasure", parameters["currentMeasure"]);
+                helper.setCache (component, "currentMeasure", parameters["currentMeasure"] ) ;    
+                helper.setStore(cc, "currentMeasureScheme", parameters["currentMeasureScheme"]);    
+
+                helper.initializeGroups(component, parameters["datajson"], parameters["primaryId"], parameters["showFilters"], isInit);                 
 
                 var cc = component.getConcreteComponent();
                 cc.initializeVisuals();
@@ -240,8 +250,13 @@
                     component.set("v.Title", parameters["valueDate"] );
                 }
 
+                // TODO - why still using setStore AND setCache?
+                helper.setStore(cc, "currentMeasure", parameters["currentMeasure"]);
+                helper.setCache (component, "currentMeasure", parameters["currentMeasure"] ) ;    
+                helper.setStore(cc, "currentMeasureScheme", parameters["currentMeasureScheme"]);
+
                 var cc = component.getConcreteComponent();
-                cc.refreshData(parameters["datajson"], parameters["currentMeasure"], parameters["currentMeasureScheme"], parameters["primaryId"], parameters["showFilters"]);                 
+                cc.refreshData(parameters["datajson"], parameters["primaryId"], parameters["showFilters"]);                 
                 cc.refreshVisibility();                 
             }
             else {
