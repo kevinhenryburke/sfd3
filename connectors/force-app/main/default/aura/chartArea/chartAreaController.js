@@ -219,6 +219,7 @@
 
                 var cc = component.getConcreteComponent();
                 cc.initializeVisuals();
+                cc.refreshVisibility();                 
             }
             else {
                 bzutils.log("Chart with reference: " + componentReference + " ignores this event with chart reference: " + parameters["componentReference"]);
@@ -241,6 +242,7 @@
 
                 var cc = component.getConcreteComponent();
                 cc.refreshData(parameters["datajson"], parameters["currentMeasure"], parameters["currentMeasureScheme"], parameters["primaryId"], parameters["showFilters"]);                 
+                cc.refreshVisibility();                 
             }
             else {
                 bzutils.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);

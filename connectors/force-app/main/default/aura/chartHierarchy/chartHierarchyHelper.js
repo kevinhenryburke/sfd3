@@ -809,6 +809,39 @@
             return 0.3;
         }
         return 1;
-    }
+    },
+
+    refreshVisibilityHelper: function(component){
+        var _this = this;
+        console.log("refreshVisibilityHelper enter");
+        var componentReference = component.get("v.componentReference");       
+        
+        var node = d3.select(_this.getDivId("nodeGroup", componentReference, true))
+            .selectAll("circle")
+            .style("fill-opacity", function(d, i) {
+                return _this.getFilterOpacity(component, d.data);
+            })
+            .style("stroke-opacity", function(d, i) {
+                return _this.getFilterOpacity(component, d.data);
+            })            
+            ;
+
+        var text = d3.select(_this.getDivId("nodeGroup", componentReference, true))
+            .selectAll("text")
+            .style("opacity", function(d, i) {
+                return _this.getFilterOpacity(component, d.data);
+            });
+
+        var path = d3.select(_this.getDivId("pathGroup", componentReference, true))
+            .selectAll("path")
+            .style("stroke-opacity", function(d, i) {
+            console.log("xxxxx: update path opacity");
+                return _this.getFilterOpacityPath(component,d);
+            });
+
+
+        console.log("aura:method refreshVisibility in subcomponent exit");
+    },
+
 
 })
