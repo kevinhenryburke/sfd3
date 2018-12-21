@@ -75,7 +75,7 @@
         helper.setStore(cc, "currentMeasure", currentMeasure);
         helper.setStore(cc, "currentMeasureScheme", currentMeasureScheme);
 
-        helper.refreshData(component, datajson, primaryId, showFilters);                         
+        helper.refreshDataHelper(component, datajson, primaryId, showFilters);                         
     },
 
     searchChart: function(component,event,helper){
@@ -144,35 +144,39 @@
         
         if (topic == "ShowLevelsMore")
         {
+            // get the new number of levels and refresh
             helper.setCache (component, "showLevels", parameters["levels"] ) ;
             cc.refreshVisibility();                     
         }
         if (topic == "ShowLevelsFewer")
         {
+            // get the new number of levels and refresh
             helper.setCache (component, "showLevels", parameters["levels"] ) ;
-            var cc = component.getConcreteComponent();
             cc.refreshVisibility();                 
         }
         if (topic == "SetMeasure")
         {
-            helper.setStore(component, "showMeasureValues", true);
-
+            // get the measure and measure scheme
             var currentMeasure = parameters["measure"];
             helper.setStore(cc, "currentMeasure", currentMeasure);
             var currentMeasureScheme = parameters["measureScheme"];
             helper.setStore(cc, "currentMeasureScheme", currentMeasureScheme);
 
+            // display measure legend
+            helper.setStore(component, "showMeasureValues", true);
             helper.createLegendLocation(component);            
-            // refresh Chart - measure changes but primaryid does not
+
+            // refresh node styles
             cc.styleNodes();                 
         }
         if (topic == "SetFilter")
         {
-            var state = parameters["state"];
+            // get the type of filter (essentially which field (group)) and whether we are no Show or Hide
+            var filterState = parameters["filterState"];
             var filterType = parameters["filterType"];
 
-            var isShown = (state == "Show");
-            console.log("xxxxx: SetFilter: " + filterType + " isShown: " + isShown);
+            var isShown = (filterState == "Show");
+            // filter and set visibility of nodes
             helper.setFilterVisibility(component, filterType, isShown);
             cc.refreshVisibility();                 
         }
@@ -236,9 +240,7 @@
                     component.set("v.Title", parameters["valueDate"] );
                 }
 
-                // TODO - why still using setStore AND setCache?
                 helper.setStore(cc, "currentMeasure", parameters["currentMeasure"]);
-                helper.setCache (component, "currentMeasure", parameters["currentMeasure"] ) ;    
                 helper.setStore(cc, "currentMeasureScheme", parameters["currentMeasureScheme"]);
 
                 var cc = component.getConcreteComponent();

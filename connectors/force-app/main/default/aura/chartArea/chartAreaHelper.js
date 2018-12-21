@@ -94,10 +94,9 @@
     },
 
     // unsophisticated version is to remove everything and re-initialize
-    refreshData: function (component, datajsonRefresh, primaryNodeId, showFilters) {
+    refreshDataHelper: function (component, datajsonRefresh, primaryNodeId, showFilters) {
         var _this = this;
         var componentReference = component.get("v.componentReference");
-        console.log("chartArea: enter refreshData with primaryNodeId: " + primaryNodeId);
 
         // delete the paths and the groups
         // this is not the preferred option - would have preferred to use d3 joins.

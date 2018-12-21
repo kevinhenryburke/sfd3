@@ -363,7 +363,7 @@
         var controllerId = component.get("v.UserComponentId");
         var filterState = newClickedState ? "Show" : "Hide"; // if before it was show then now it is hide
 
-        var preppedEvent = _this.prepareEvent("SetFilter", {"state" : filterState, "filterType" : thisType }, controllerId);
+        var preppedEvent = _this.prepareEvent("SetFilter", {"filterState" : filterState, "filterType" : thisType }, controllerId);
         _this.publishPreppedEvent(component,preppedEvent);
     },
 
