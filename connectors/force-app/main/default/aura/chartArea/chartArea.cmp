@@ -53,7 +53,7 @@
 
   <!-- Methods with different implementations for different chart types -->  
 
-  <aura:method name="refreshData"> 
+  <aura:method name="refreshDataController"> 
     <aura:attribute name="datajson" type="Object"/> 
     <aura:attribute name="primaryId" type="String"/> 
     <aura:attribute name="showFilters" type="Object"/> 

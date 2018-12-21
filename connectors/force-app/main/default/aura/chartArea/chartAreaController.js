@@ -62,8 +62,8 @@
 
     /* handlers */
 
-    refreshData: function(component,event,helper){
-        bzutils.log("calling the aura:method refreshData in base");
+    refreshDataController: function(component,event,helper){
+        bzutils.log("calling the aura:method refreshDataController in base");
         var args = event.getParam("arguments");
 
         var datajson = args.datajson;
@@ -244,7 +244,7 @@
                 helper.setStore(cc, "currentMeasureScheme", parameters["currentMeasureScheme"]);
 
                 var cc = component.getConcreteComponent();
-                cc.refreshData(parameters["datajson"], parameters["primaryId"], parameters["showFilters"]);                 
+                cc.refreshDataController(parameters["datajson"], parameters["primaryId"], parameters["showFilters"]);                 
                 cc.refreshVisibility();                 
             }
             else {

@@ -1,6 +1,6 @@
 ({
-    refreshData: function(component,event,helper){
-        bzutils.log("calling the aura:method refreshData in chartNetworkTimeline");
+    refreshDataController: function(component,event,helper){
+        bzutils.log("calling the aura:method refreshDataController in chartNetworkTimeline");
         var args = event.getParam("arguments");
 
         var datajson = args.datajson;

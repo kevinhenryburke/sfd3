@@ -7,7 +7,7 @@
         <aura:attribute name="datajsonRefresh" type="Object"/>    
     </aura:method>
         
-    <aura:method name="refreshData"> 
+    <aura:method name="refreshDataController"> 
         <aura:attribute name="datajson" type="Object"/> 
         <aura:attribute name="primaryId" type="String"/> 
         <aura:attribute name="showFilters" type="Object"/> 
