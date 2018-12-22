@@ -138,24 +138,14 @@
         // "PreProcess data - not right yet - need to update this method to return nothing"
 //        bzutils.xfcr("dataPreProcess", componentReference, datajson, datajsonRefresh); // preprocessing of data (if any)
 
-        console.log("xxxxx: refreshDataHelper: dataPreprocess");
-
         cc.dataPreprocess(datajson, datajsonRefresh);
 
         datajson = _this.getCache (component, "datajson") ;
         
         // re-initialize the chart
         var isInit = false;
-
-        console.log("xxxxx: refreshDataHelper: initializeGroups");
-
         _this.initializeGroups(component, datajson, primaryNodeId, showFilters, isInit);                 
-
-        console.log("xxxxx: refreshDataHelper: initializeVisuals");
-
         cc.initializeVisuals();
-
-        console.log("xxxxx: refreshDataHelper: exit");
 
     },    
 

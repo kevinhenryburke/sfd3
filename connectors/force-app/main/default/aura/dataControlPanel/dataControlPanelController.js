@@ -305,24 +305,14 @@
     },    
 
     onClickTimeSeriesRefresh : function(component, event, helper) {
-        var _this = this;
         console.log("onClickTimeSeriesRefresh enter");
 
-        // ALL DUPLICATE WITH other refresh metthod = refactor
-
         var datajson = component.get("v.datajson");
-        var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
-        var panelCurrentMeasureScheme = component.get("v.panelCurrentMeasureScheme");
         var panelPrimaryId = component.get("v.panelPrimaryId");            
         var filterPublish = component.get("v.filterPublish");     
 
-
-        // publish event - configuration loaded
-
         var configEventParameters = { 
             "datajson" : datajson, 
-            "currentMeasure" : panelCurrentMeasure,
-            // "currentMeasureScheme" : panelCurrentMeasureScheme, 
             "primaryId" : panelPrimaryId, 
             "showFilters" : filterPublish,
         }
@@ -332,9 +322,10 @@
 
         // THIS ALL TEMPORARY
         var d = new Date(2014, 1, 1, 0, 0, 0, 0);
-        var counter = 0;
+        var counter = -1;
         var interval = window.setInterval(
         $A.getCallback(function() {
+            counter++;
             configEventParameters["valueDate"] = d;
             for (var i = 0; i < datajson.nodes.length; i++){
                 // grow most nodes and shrink a few too but make sure don't go too small.
@@ -344,21 +335,20 @@
                 for (var j = 0; j < fields.length; j++) {
                     if (fields[j].retrievedInteger != null) {
                         fields[j].retrievedInteger= 
-                            Math.max(10,fields[j].retrievedInteger + Math.floor(Math.random() * 80) - 5); 
+                            Math.max(10,fields[j].retrievedInteger + Math.floor(Math.random() * 20) - 5); 
                     }
                     if (fields[j].retrievedDecimal != null) {
                         fields[j].retrievedDecimal= 
-                            Math.max(10,fields[j].retrievedDecimal + Math.floor(Math.random() * 80) - 5); 
+                            Math.max(10,fields[j].retrievedDecimal + Math.floor(Math.random() * 20) - 5); 
                     }
                 }
             }    
             configEventParameters["datajson"] = datajson;
 
-            if (counter < 2) {
+            if (counter < 6) {
                 var preppedEvent = helper.prepareEvent("RefreshData", configEventParameters, controllerId);
                 helper.publishPreppedEvent(component,preppedEvent);
                 d.setMonth(d.getMonth() + 1);    
-                counter++;
             }
             else {
                 clearInterval(interval);

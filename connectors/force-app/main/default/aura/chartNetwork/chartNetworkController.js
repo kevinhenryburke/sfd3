@@ -13,6 +13,19 @@
         helper.initializeVisuals(component);                         
     },
 
+    refreshDataController: function(component,event,helper){
+        bzutils.log("calling the aura:method refreshDataController in chartNetwork");
+        var args = event.getParam("arguments");
+        var parameters = args.parameters;
+
+        var datajson = parameters.datajson;
+        var primaryId = parameters.primaryId;
+        var showFilters = parameters.showFilters;
+
+        helper.refreshDataHelper(component, datajson, primaryId, showFilters);                         
+    },
+
+
     dataPreprocess: function(component,event,helper){
         console.log("calling the aura:method dataPreprocess in subcomponent");
 
