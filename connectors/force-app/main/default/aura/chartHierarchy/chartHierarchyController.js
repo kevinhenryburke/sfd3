@@ -14,8 +14,9 @@
     refreshDataController: function(component,event,helper){
         console.log("calling the aura:method refreshDataController in subcomponent");
         var args = event.getParam("arguments");
+        var parameters = args.parameters;
 
-        var updatejson = args.datajson;
+        var updatejson = parameters.datajson;
 
         var componentReference = component.get("v.componentReference");
         var nodeGroup = helper.getCache (component, "nodeGroup") ;  

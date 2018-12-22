@@ -65,12 +65,15 @@
     refreshDataController: function(component,event,helper){
         bzutils.log("calling the aura:method refreshDataController in base");
         var args = event.getParam("arguments");
+        var parameters = args.parameters;
 
-        var datajson = args.datajson;
-        var currentMeasure = args.currentMeasure;
-        var currentMeasureScheme = args.currentMeasureScheme;
-        var primaryId = args.primaryId;
-        var showFilters = args.showFilters;
+        var datajson = parameters.datajson;
+        var currentMeasure = parameters.currentMeasure;
+        var currentMeasureScheme = parameters.currentMeasureScheme;
+        var primaryId = parameters.primaryId;
+        var showFilters = parameters.showFilters;
+
+        console.log("xxxxx: refreshDataController " , datajson, currentMeasure, currentMeasureScheme , primaryId, showFilters);
 
         helper.setStore(cc, "currentMeasure", currentMeasure);
         helper.setStore(cc, "currentMeasureScheme", currentMeasureScheme);
@@ -232,19 +235,11 @@
             // we process if the event is from it's controller and either specifies this component or does not specify any
             if (componentReference == parameters["componentReference"] || ! ("componentReference" in parameters)) {
                 bzutils.log("RefreshData: Refresh Chart with reference: " + componentReference);
-// THIS ALL TEMPORARY FOR TIME-BASED CHARTS
-                bzutils.log("RefreshData: Data: " + parameters["valueDate"]);
-
-                var valueDate = parameters["valueDate"];
-                if (valueDate != null) {
-                    component.set("v.Title", parameters["valueDate"] );
-                }
-
                 helper.setStore(cc, "currentMeasure", parameters["currentMeasure"]);
                 helper.setStore(cc, "currentMeasureScheme", parameters["currentMeasureScheme"]);
 
                 var cc = component.getConcreteComponent();
-                cc.refreshDataController(parameters["datajson"], parameters["primaryId"], parameters["showFilters"]);                 
+                cc.refreshDataController(parameters);                 
                 cc.refreshVisibility();                 
             }
             else {

@@ -54,9 +54,7 @@
   <!-- Methods with different implementations for different chart types -->  
 
   <aura:method name="refreshDataController"> 
-    <aura:attribute name="datajson" type="Object"/> 
-    <aura:attribute name="primaryId" type="String"/> 
-    <aura:attribute name="showFilters" type="Object"/> 
+    <aura:attribute name="parameters" type="Object"/> 
   </aura:method>
 
   <aura:method name="searchChart"> 

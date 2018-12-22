@@ -308,64 +308,65 @@
         var _this = this;
         console.log("onClickTimeSeriesRefresh enter");
 
-// ALL DUPLICATE WITH other refresh metthod = refactor
+        // ALL DUPLICATE WITH other refresh metthod = refactor
 
-var datajson = component.get("v.datajson");
-var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
-var panelCurrentMeasureScheme = component.get("v.panelCurrentMeasureScheme");
-var panelPrimaryId = component.get("v.panelPrimaryId");            
-var filterPublish = component.get("v.filterPublish");     
+        var datajson = component.get("v.datajson");
+        var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
+        var panelCurrentMeasureScheme = component.get("v.panelCurrentMeasureScheme");
+        var panelPrimaryId = component.get("v.panelPrimaryId");            
+        var filterPublish = component.get("v.filterPublish");     
 
 
-// publish event - configuration loaded
+        // publish event - configuration loaded
 
-var configEventParameters = { 
-    "datajson" : datajson, 
-    "currentMeasure" : panelCurrentMeasure,
-    "currentMeasureScheme" : panelCurrentMeasureScheme, 
-    "primaryId" : panelPrimaryId, 
-    "showFilters" : filterPublish,
-}
-
-//publish to this component
-var controllerId = component.get("v.UserComponentId");
-
-// THIS ALL TEMPORARY
-var d = new Date(2014, 1, 1, 0, 0, 0, 0);
-window.setInterval(
-$A.getCallback(function() {
-    configEventParameters["valueDate"] = d;
-    for (var i = 0; i < datajson.nodes.length; i++){
-        // grow most nodes and shrink a few too but make sure don't go too small.
-        var djNode = datajson.nodes[i];
-        var fields = djNode.fields;
-        for (var j = 0; j < fields.length; j++) {
-            if (fields[j].retrievedInteger != null) {
-                fields[j].retrievedInteger= 
-                    Math.max(10,fields[j].retrievedInteger + Math.floor(Math.random() * 20) - 5); 
-            }
-            if (fields[j].retrievedDecimal != null) {
-                fields[j].retrievedDecimal= 
-                    Math.max(10,fields[j].retrievedDecimal + Math.floor(Math.random() * 20) - 5); 
-            }
+        var configEventParameters = { 
+            "datajson" : datajson, 
+            "currentMeasure" : panelCurrentMeasure,
+            // "currentMeasureScheme" : panelCurrentMeasureScheme, 
+            "primaryId" : panelPrimaryId, 
+            "showFilters" : filterPublish,
         }
 
+        //publish to this component
+        var controllerId = component.get("v.UserComponentId");
 
+        // THIS ALL TEMPORARY
+        var d = new Date(2014, 1, 1, 0, 0, 0, 0);
+        var counter = 0;
+        var interval = window.setInterval(
+        $A.getCallback(function() {
+            configEventParameters["valueDate"] = d;
+            for (var i = 0; i < datajson.nodes.length; i++){
+                // grow most nodes and shrink a few too but make sure don't go too small.
+                var djNode = datajson.nodes[i];
+                var fields = djNode.fields;
 
+                for (var j = 0; j < fields.length; j++) {
+                    if (fields[j].retrievedInteger != null) {
+                        fields[j].retrievedInteger= 
+                            Math.max(10,fields[j].retrievedInteger + Math.floor(Math.random() * 80) - 5); 
+                    }
+                    if (fields[j].retrievedDecimal != null) {
+                        fields[j].retrievedDecimal= 
+                            Math.max(10,fields[j].retrievedDecimal + Math.floor(Math.random() * 80) - 5); 
+                    }
+                }
+            }    
+            configEventParameters["datajson"] = datajson;
 
-    }    
-    configEventParameters["datajson"] = datajson;
+            if (counter < 2) {
+                var preppedEvent = helper.prepareEvent("RefreshData", configEventParameters, controllerId);
+                helper.publishPreppedEvent(component,preppedEvent);
+                d.setMonth(d.getMonth() + 1);    
+                counter++;
+            }
+            else {
+                clearInterval(interval);
+            }
+        }),
+        2000);
 
-    var monthNumber = d.getMonth();
-    if (monthNumber < 6) {
-        var preppedEvent = helper.prepareEvent("RefreshData", configEventParameters, controllerId);
-        helper.publishPreppedEvent(component,preppedEvent);
-        d.setMonth(d.getMonth() + 1);    
-    }
-}),
-1000);
-
-console.log("onClickTimeSeriesRefresh exit");
+        console.log("onClickTimeSeriesRefresh exit");
     },
     
     
