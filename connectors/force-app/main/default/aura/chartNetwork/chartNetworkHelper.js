@@ -273,7 +273,65 @@
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
         }
     },
+
+    // unsophisticated version is to remove everything and re-initialize
+    refreshDataHelper: function (component, datajsonRefresh, primaryNodeId, showFilters) {
+        console.log("xxxxx: refreshDataHelper: enter");
+
+        var _this = this;
+        var componentReference = component.get("v.componentReference");
+
+        // delete the paths and the groups
+        // this is not the preferred option - would have preferred to use d3 joins.
+        _this.clearChart(componentReference);
+        
+        // retrieve the existing underlying data
+        var datajson = _this.getCache (component, "datajson") ;
+
+        // initialize the new raw data, setting component references
+        _this.initializeAddComponentRef(componentReference, datajsonRefresh);
+
+        var nodeIds = [];
+        datajson.nodes.forEach(function(node) {
+            nodeIds.push(node["id"]);
+        });        
+
+        datajsonRefresh.nodes.forEach(function(node) {
+            var indexer = nodeIds.indexOf(node["id"]);       
+            if (indexer == -1) {     
+                datajson["nodes"].push(node); // this adds new nodes into datajson
+            }
+        });
+
+        var linkIds = [];
+        datajson.links.forEach(function(link) {
+            linkIds.push(link["id"]);
+        });        
+        
+        datajsonRefresh.links.forEach(function(link) {
+            datajson["links"].push(link);
+        });
+
+        var cc = component.getConcreteComponent();
+
+// cOME BACK
+        // merge the old and the new data
+        // "PreProcess data - not right yet - need to update this method to return nothing"
+//        bzutils.xfcr("dataPreProcess", componentReference, datajson, datajsonRefresh); // preprocessing of data (if any)
+
+        cc.dataPreprocess(datajson, datajsonRefresh);
+
+        datajson = _this.getCache (component, "datajson") ;
+        
+        // re-initialize the chart
+        var isInit = false;
+        _this.initializeGroups(component, datajson, primaryNodeId, showFilters, isInit);                 
+        cc.initializeVisuals();
+
+    },    
+
     
+
     runSimulation : function (component, path, node, text) {
         console.log("chartNetworkHelper.runSimulation enter");
         var _this = this;
