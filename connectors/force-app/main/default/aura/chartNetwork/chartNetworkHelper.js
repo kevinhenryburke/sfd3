@@ -276,8 +276,6 @@
 
     // unsophisticated version is to remove everything and re-initialize
     refreshDataHelper: function (component, datajsonRefresh, primaryNodeId, showFilters) {
-        console.log("xxxxx: refreshDataHelper: enter");
-
         var _this = this;
         var componentReference = component.get("v.componentReference");
 

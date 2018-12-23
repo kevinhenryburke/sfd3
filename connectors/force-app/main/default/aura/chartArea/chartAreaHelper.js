@@ -273,66 +273,6 @@
 
     },
 
-    // create an invisible svg symbol to attach a popover to
-    createLegendLocation : function (component) {
-        var _this = this;
-        var componentReference = component.get("v.componentReference");
-
-        var currentMeasureScheme = _this.getStore(component, "currentMeasureScheme");
-
-        // remove existing legend symbols
-        d3.select(_this.getDivId("legendSymbolGroup", componentReference, true)).selectAll("*").remove();
-
-        var legendSymbolGroup = _this.getCache (component, "legendSymbolGroup" ) ;
-
-        var nodeSymbol = legendSymbolGroup.selectAll('.symbol')
-            .data(currentMeasureScheme);
-
-        nodeSymbol
-            .enter()
-            .append('path')
-            .style("stroke" , "black")
-            .style("fill" , function(d,i) { return currentMeasureScheme[i]["color"];})
-            .attr('transform',function(d,i) { return 'translate('+30+','+(i*20+30)+')';})
-            .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[0];}) );
-
-        var textme = legendSymbolGroup.selectAll("textme")
-            .data(currentMeasureScheme)
-            .enter()
-            .append("text");            
-
-        var textLabels = textme
-            .attr('transform',function(d,i) { return 'translate('+40+','+(i*20+33)+')';})
-            .attr("font-family", "sans-serif")
-            .text( function (d, i) { 
-                if (currentMeasureScheme[i]["name"] != null) {
-                    return currentMeasureScheme[i]["name"].toLocaleString();
-                }
-                if (currentMeasureScheme[i]["below"] != null) {
-                    return "below " + currentMeasureScheme[i]["below"].toLocaleString();
-                }
-                if (currentMeasureScheme[i]["above"] != null) {
-                    return "above " + currentMeasureScheme[i]["above"].toLocaleString();
-                }
-            })
-            .attr("font-size", "8px")
-            .attr("fill", "gray");
-
-        var currentMeasure = _this.getStore(component, "currentMeasure");
-        var measureArray = [ currentMeasure ];
-
-        var measureText = legendSymbolGroup.selectAll("textme")
-            .data(measureArray)
-            .enter()
-            .append("text")
-            .attr('transform',function(d,i) { return 'translate('+20+','+13+')';})
-            .text( function (d, i) {return "Color Scheme: " + d;})
-            .attr("font-size", "8px")
-            .attr("fill", "black");
-
-    },
-
-
 
     handleScaleChange: function(component,csf){
         component.set("v.ChartScaleFactor", csf);
@@ -507,11 +447,10 @@
         }
     },
 
-    setFilterVisibility : function (component, filterType, isShown) {
+    setFilterVisibility : function (component, filterType, filterState) {
         var _this = this;
-        _this.setCache(component, "filtersConfigured", true);
         var filterValues = _this.getCache (component, "filterValues") ;
-        if (isShown) {
+        if (filterState == "Show") {
             filterValues.push(filterType);
         } else {
             var index = filterValues.indexOf(filterType);
@@ -519,7 +458,6 @@
                 filterValues.splice(index, 1);
             }
         }
-        console.log("xxxxx: SetFilter: setFilterVisibility: " + filterValues );
         _this.setCache (component, "filterValues", filterValues ) ;
     },
     
@@ -532,6 +470,8 @@
         d3.select(_this.getDivId("pathGroup", componentReference, true)).remove();
         d3.select(_this.getDivId("nodeGroup", componentReference, true)).remove();
         d3.select(_this.getDivId("textGroup", componentReference, true)).remove();
+        d3.select(_this.getDivId("legendSymbolGroup", componentReference, true)).remove();
+        
     },
 
     initializeCache : function (component) {
@@ -594,57 +534,183 @@
         return (forSelect ? "#" : "") + componentReference + idType;
     },
     
+
+    // during initialization, build a map so we can quickly associate the correct API field to a measure
+    buildMeasureSchemeMap : function (component) {
+        var _this = this;
+        var objectLevels = _this.getMasterParam(component,"data","queryJSON","objectLevels");
+
+        // storage optimized for node colors
+        var measureObjectFieldMap = {};
+        // storage optimized for legend table
+        var measureArrayObjectFieldMap = {};
+
+        for (var objIndex = 0; objIndex < objectLevels.length; objIndex++) {
+            var thisObjectConfig = objectLevels[objIndex];
+            var objectType = thisObjectConfig.objectType;
+
+            var fields = thisObjectConfig.fields;
+            for (var fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
+                var fieldConfig = fields[fieldIndex];
+                if (fieldConfig["measureName"] != null) {
+
+                    var measureName = fieldConfig["measureName"] ;
+                    var currentApiName = fieldConfig["api"]; 
+                    var measureScheme = fieldConfig["measureScheme"]; 
+                    var measureSchemeType = fieldConfig["measureSchemeType"]; 
+
+                    if (measureObjectFieldMap[measureName] == null) {
+                        var measureLevel = {};
+                        measureLevel[objectType] = {"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex};
+                        measureObjectFieldMap[measureName] = measureLevel;
+
+                        measureArrayObjectFieldMap[measureName] = [{"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "objectType" : objectType}];
+
+                    }
+                    else {
+                        var measureLevel = measureObjectFieldMap[measureName]; 
+                        measureLevel[objectType] = {"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType, "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex };
+
+                        measureArrayObjectFieldMap[measureName].push({"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "objectType" : objectType});
+
+                    }
+                }
+            }
+        }
+        _this.setStore(component, "measureObjectFieldMap", measureObjectFieldMap);
+        _this.setStore(component, "measureArrayObjectFieldMap", measureArrayObjectFieldMap);
+    },
+
+    showColorSchemeLegend : function (component) {
+        var _this = this;
+        var componentReference = component.get("v.componentReference");
+        var currentMeasure = _this.getStore(component, "currentMeasure");
+
+        var firstMeasureScheme = _this.getFirstMeasureScheme(component, currentMeasure);
+
+        // remove existing legend symbols
+        d3.select(_this.getDivId("legendSymbolGroup", componentReference, true)).selectAll("*").remove();
+
+        var legendSymbolGroup = _this.getCache (component, "legendSymbolGroup" ) ;
+
+        
+        var ms = firstMeasureScheme.measureScheme;
+        var baseDataArray;
+
+        /*  Measure Scheme is an array in complex cases (value ranges) but is an object with name/value in others
+            We need to baseline our nodes on an array, hence the below
+        */
+
+        if (firstMeasureScheme["measureSchemeType"] == "ValueBand" || firstMeasureScheme["measureSchemeType"] == "Scale") {
+            baseDataArray = ms;
+        }
+        else {
+            baseDataArray = Object.keys(ms);
+        }
+    
+        var nodeSymbol = legendSymbolGroup.selectAll('.symbol')
+            .data(baseDataArray);
+
+        nodeSymbol
+            .enter()
+            .append('path')
+            .style("stroke" , "black")
+            .style("fill" , function(d,i) {return getLegendItemColor (ms, d, i);})
+            .attr('transform',function(d,i) { return 'translate('+30+','+(i*20+30)+')';})
+            .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[0];}) );
+
+        var textme = legendSymbolGroup.selectAll("textme")
+            .data(baseDataArray)
+            .enter()
+            .append("text");            
+
+        var textLabels = textme
+            .attr('transform',function(d,i) { return 'translate('+40+','+(i*20+33)+')';})
+            .attr("font-family", "sans-serif")
+            .text( function(d,i) {return getLegendItemName (ms, d, i);})
+            .attr("font-size", "8px")
+            .attr("fill", "gray");
+
+        var measureArray = [ currentMeasure ];
+
+        var measureText = legendSymbolGroup.selectAll("textme")
+            .data(measureArray)
+            .enter()
+            .append("text")
+            .attr('transform',function(d,i) { return 'translate('+20+','+13+')';})
+            .text( function (d, i) {return "Color Scheme: " + d;})
+            .attr("font-size", "8px")
+            .attr("fill", "black");
+
+
+        function getLegendItemColor(ms, d, i) {
+            if (Array.isArray(ms)) {
+                return ms[i]["color"];
+            }
+            else return ms[d];
+        }
+
+        function getLegendItemName(ms, d, i) {
+            if (Array.isArray(ms)) {
+                if (ms[i]["below"] != null) {
+                    return "below " + ms[i]["below"].toLocaleString();
+                }
+                if (ms[i]["above"] != null) {
+                    return "above " + ms[i]["above"].toLocaleString();
+                }
+            }
+            else return d;
+        }
+            
+
+    },
+
+    getFirstMeasureScheme : function (component, currentMeasure) {
+        var _this = this;
+
+        var measureArrayObjectFieldMap = _this.getStore(component, "measureArrayObjectFieldMap");
+        if (measureArrayObjectFieldMap[currentMeasure] != null) {
+            return measureArrayObjectFieldMap[currentMeasure][0];
+        }
+        else {
+            return null;
+        }
+    },
+
     // returnType is either "Value" or "Color"
     getFromMeasureScheme : function (component, o, currentMeasure, returnType) {
         var _this = this;
-        console.log("xxxxx: getFromMeasureScheme: " + currentMeasure);
-        console.log(o);
+
+        var measureObjectFieldMap = _this.getStore(component, "measureObjectFieldMap");
         var objectType = o["objectType"];
-        console.log(objectType);
 
-        var storeKeyAPI = "objmeasureapi" + objectType + currentMeasure;
-        console.log("xxxxx: storeKeyAPI: " + storeKeyAPI);
-        var measureAPI = _this.getStore(component, storeKeyAPI);
-        console.log("xxxxx: measureAPI: " + measureAPI);
+        var currentMeasureObjectConfig = measureObjectFieldMap[currentMeasure][objectType];
 
-        var storeKeyMeasureScheme = "objmeasurescheme" + objectType + currentMeasure;
-        var currentMeasureScheme = _this.getStore(component, storeKeyMeasureScheme);
-
-        // if nothing is set up for this object then just exit
-        if (measureAPI == null) {
+        if (currentMeasureObjectConfig == null) {
             return;
         }
-        
-        var thisMeasureSchemeIndex = -1;
-        var thisMeasureSchemeRole = null;
 
-        for (var i = 0; i < o.fields.length; i++) {
-            if (o.fields[i].api == measureAPI) {
-                thisMeasureSchemeIndex = i;
-                thisMeasureSchemeRole = o.fields[i].role;
-                console.log("xxxxx: thisMeasureSchemeIndex:" + thisMeasureSchemeIndex + "/" + thisMeasureSchemeRole);
-                break;
-            }
-        }
+        var currentMeasureScheme = currentMeasureObjectConfig["measureScheme"];
+        var currentMeasureSchemeType = currentMeasureObjectConfig["measureSchemeType"];
+        var fieldIndex = currentMeasureObjectConfig["fieldIndex"];
+
+        var thisMeasureSchemeIndex = fieldIndex;
 
         // case when baseing colors and values on picklists
-        if (thisMeasureSchemeRole == "picklist") {
+        if (currentMeasureSchemeType == "StringValue") {
             var retrievedValue = o.fields[thisMeasureSchemeIndex].retrievedValue;
 
             if (returnType == "Value") {
                 return retrievedValue;
             }
             if (returnType == "Color") {
-                var measureSchemeLength = currentMeasureScheme.length;
-                for (var k = 0; k < measureSchemeLength; k++) {
-                    var cm = currentMeasureScheme[k];
-                    if (retrievedValue == cm.name) {
-                        return cm.color;
-                    }
-                    // return the last color if default
-                    if (k == measureSchemeLength - 1 && cm.name == "default") {
-                        return cm.color;
-                    }
+                var valueColor = currentMeasureScheme[retrievedValue];
+                if (valueColor != null) {
+                    return valueColor;
+                }
+                var valueColorDefault = currentMeasureScheme["default"];
+                if (valueColorDefault != null) {
+                    return valueColorDefault;
                 }
                 return "white";
             }
@@ -653,6 +719,7 @@
         // case when baseing colors and values on numerics
         var numericValue;
         var retrievedDecimal = o.fields[thisMeasureSchemeIndex].retrievedDecimal;
+
         if (retrievedDecimal != null) {
             numericValue = retrievedDecimal;
         } 
@@ -681,34 +748,7 @@
         }
     },
 
-    // during initialization, build a map so we can quickly associate the correct API field to a measure
-    buildMeasureSchemeMap : function (component) {
-        var _this = this;
-        var objectLevels = _this.getMasterParam(component,"data","queryJSON","objectLevels");
 
-        for (var objIndex = 0; objIndex < objectLevels.length; objIndex++) {
-            var thisObjectConfig = objectLevels[objIndex];
-            var objectType = thisObjectConfig.objectType;
-
-            var fields = thisObjectConfig.fields;
-            for (var fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
-                var fieldConfig = fields[fieldIndex];
-                if (fieldConfig["measureName"] != null) {
-                    // store field API name
-                    var storeKeyAPI = "objmeasureapi" + objectType + fieldConfig["measureName"];
-                    var currentApiName = fieldConfig["api"]; 
-                    _this.setStore(component, storeKeyAPI, currentApiName);
-
-                    // store measure scheme configuration
-                    var storeKeyMeasureScheme = "objmeasurescheme" + objectType + fieldConfig["measureName"];
-                    var currentMeasureScheme = fieldConfig["measureScheme"]; 
-                    console.log("xxxxx: storeKeyMeasureScheme: " + storeKeyMeasureScheme);
-                    console.log("xxxxx: currentMeasureScheme: " + JSON.stringify(currentMeasureScheme));
-                    _this.setStore(component, storeKeyMeasureScheme, currentMeasureScheme);
-                }
-            }
-        }
-    },
 
     getFilterOpacity : function (component, d) {
         var _this = this;

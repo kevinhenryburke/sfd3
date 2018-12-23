@@ -23,10 +23,8 @@
   <!-- Technical - Panel -->
   <!-- Measure is being split into size and color -->
   <aura:attribute name="panelCurrentMeasure" type="String"/>    
-  <aura:attribute name="panelCurrentMeasureScheme" type="Object"/>    
   <aura:attribute name="measureNames" type="String[]"/>    
   <aura:attribute name="measureSchemes" type="Object[]"/>    
-  <aura:attribute name="measureSchemesKeyValue" type="Object"/>      
   <aura:attribute name="panelShowMeasures" type="Object[]" default="[]" />
 	<aura:attribute name="configuredMeasures" type="Boolean" default="false"/>    
   <aura:attribute name="measuresCount" type="Integer" default="0"/>      

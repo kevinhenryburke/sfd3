@@ -164,7 +164,7 @@
     },
 
     styleNodes: function(component,event,helper){
-        console.log("aura:method styleNodes in chartArea enter");
+        console.log("aura:method styleNodes in chartNetwork enter");
 
         var componentType = component.get("v.componentType");
 
@@ -174,7 +174,6 @@
 
             var primaryid = helper.getCache (component, "primaryNodeId") ;
             var currentMeasure = helper.getStore(component, "currentMeasure");
-            var currentMeasureScheme = helper.getStore(component, "currentMeasureScheme");
 
             console.log("styleNodes enter: " + currentMeasure + " primaryid: " + primaryid);
         
@@ -184,21 +183,20 @@
             bzutils.log("styleNodes:" + JSON.stringify(node));
         
             node.attr("r", function(o, i) {
-                bzutils.log("xxxxx: currentMeasure: radius: ");
-                bzutils.log(o);
                 for (var i = 0; o.fields.length; i++) {
                     if (o.fields[i].api == currentMeasure) {
-                        return o.fields[i].retrievedDecimal;
+                        var numericalValue = o.fields[i].retrievedDecimal;
+                        if (numericalValue != null) {
+                            return numericalValue;
+                        }
+                        return o.fields[i].retrievedInteger;
                     }
                 }
             });
         
             node.style("fill", function(o, i) {
-                console.log("styleNodes: fill: " + o.measures[currentMeasure].color);
-                if (currentMeasureScheme != null) {
-                    return helper.getFromMeasureScheme(component, o, currentMeasure, "Color");
-                }
-                return o.measures[currentMeasure].color;
+                var returnedColor = helper.getFromMeasureScheme(component, o, currentMeasure, "Color");
+                return returnedColor;
             });
         
             node.style("stroke", function(o, i) {
@@ -226,7 +224,7 @@
         
         }
 
-        console.log("aura:method styleNodes in chartArea exit");
+        console.log("aura:method styleNodes in chartNetwork exit");
     }
 
 

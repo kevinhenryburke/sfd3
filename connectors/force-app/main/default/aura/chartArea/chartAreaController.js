@@ -130,6 +130,13 @@
         
         // Chart Display handlers
         
+        /* Code format should be
+        1. store changed values
+        2. run specific code for specified action
+        3. call any refresh methods
+        */
+
+
         if (topic == "ShowLevelsMore")
         {
             // get the new number of levels and refresh
@@ -146,26 +153,26 @@
         {
             // get the measure and measure scheme
             var currentMeasure = parameters["measure"];
-            helper.setStore(cc, "currentMeasure", currentMeasure);
-            var currentMeasureScheme = parameters["measureScheme"];
-            helper.setStore(cc, "currentMeasureScheme", currentMeasureScheme);
-
+            helper.setStore(component, "currentMeasure", currentMeasure);
             // display measure legend
             helper.setStore(component, "showMeasureValues", true);
-            helper.createLegendLocation(component);            
+
+            helper.showColorSchemeLegend(component);            
 
             // refresh node styles
             cc.styleNodes();                 
         }
         if (topic == "SetFilter")
         {
+
+            helper.setCache(component, "filtersConfigured", true);
+
             // get the type of filter (essentially which field (group)) and whether we are no Show or Hide
+            // filter and set visibility of nodes
             var filterState = parameters["filterState"];
             var filterType = parameters["filterType"];
+            helper.setFilterVisibility(component, filterType, filterState);
 
-            var isShown = (filterState == "Show");
-            // filter and set visibility of nodes
-            helper.setFilterVisibility(component, filterType, isShown);
             cc.refreshVisibility();                 
         }
         if (topic == "InitializeData")
@@ -201,7 +208,6 @@
                 }
 
                 helper.setStore(cc, "currentMeasure", parameters["currentMeasure"]);
-                helper.setStore(cc, "currentMeasureScheme", parameters["currentMeasureScheme"]);    
 
                 helper.initializeGroups(component, parameters["datajson"], parameters["primaryId"], parameters["showFilters"], isInit);                 
 

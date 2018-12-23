@@ -53,7 +53,6 @@
                 var masterConfigObject = component.get("v.masterConfigObject");
 
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
-                var panelCurrentMeasureScheme = component.get("v.panelCurrentMeasureScheme");
                 var panelPrimaryId = component.get("v.panelPrimaryId");            
                 var filterPublish = component.get("v.filterPublish");     
                 
@@ -72,7 +71,6 @@
                     var configEventParameters = { 
                         "datajson" : datajson, 
                         "currentMeasure" : panelCurrentMeasure, 
-                        "currentMeasureScheme" : panelCurrentMeasureScheme, 
                         "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
                         "showFilters" : filterPublish,
@@ -162,7 +160,6 @@
 
                 var datajson = component.get("v.datajson");
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
-                var panelCurrentMeasureScheme = component.get("v.panelCurrentMeasureScheme");
                 var panelPrimaryId = component.get("v.panelPrimaryId");            
                 var filterPublish = component.get("v.filterPublish");     
                 
@@ -173,7 +170,6 @@
                 var configEventParameters = { 
                     "datajson" : datajson, 
                     "currentMeasure" : panelCurrentMeasure, 
-                    "currentMeasureScheme" : panelCurrentMeasureScheme, 
                     "masterConfigObject" : masterConfigObject,
                     "primaryId" : panelPrimaryId, 
                     "showFilters" : filterPublish,
@@ -292,7 +288,6 @@
 
     handleMenuFilter: function (component, event, helper) {
         var selectedMenuItemValue = event.getParam("value");
-        console.log("xxxxxx: handleMenuFilter: " + selectedMenuItemValue);
 
         var menuItems = component.find("actionMenuFilterItems");
         var menuItem = menuItems.find(function(menuItem) {

@@ -18,7 +18,6 @@
             var measureNames = [];
             var panelShowMeasures = [];
             var measureSchemes = [];
-            var measureSchemesKeyValue = {};
             var numberMeasuresFound = 0;
 
             var filterPublish = {};
@@ -27,31 +26,18 @@
 
                 // measure configuration
                 if (topObjectLevelFields[j].measureName != null) {
-                    console.log("xxxxx: topObjectLevelFields[j].measureName: " + topObjectLevelFields[j].measureName);
                     if (numberMeasuresFound == 0){
                         component.set("v.configuredMeasures", true);
                         // set the first measure as default
                         var panelCurrentMeasure = topObjectLevelFields[j].measureName;
                         component.set("v.panelCurrentMeasure", panelCurrentMeasure);
-
-                        var panelCurrentMeasureScheme = topObjectLevelFields[j].measureScheme;
-                        if (panelCurrentMeasureScheme != null) {
-                            component.set("v.panelCurrentMeasureScheme", panelCurrentMeasureScheme);
-                            console.log("xxxxx: panelCurrentMeasureScheme: " + panelCurrentMeasureScheme);
-                        }
-
-                        console.log("xxxxx: panelFilter?: " + topObjectLevelFields[j].measureName + "/" + topObjectLevelFields[j].filter);
-
                     }
                     // create arrays for measure and schemes
                     measureNames.push(topObjectLevelFields[j].measureName);
                     panelShowMeasures.push(topObjectLevelFields[j].measureName);
-                    var panelCurrentMeasureSchemeLoop = topObjectLevelFields[j].measureScheme;
-                    if (panelCurrentMeasureSchemeLoop != null) {
-                        measureSchemes.push(panelCurrentMeasureSchemeLoop);
-                        // console.log("xxxxx: pushing measureScheme: name:" + topObjectLevelFields[j].measureName);
-                        // console.log("xxxxx: pushing measureScheme: scheme" + JSON.stringify(topObjectLevelFields[j].measureScheme));
-                        measureSchemesKeyValue[topObjectLevelFields[j].measureName]=topObjectLevelFields[j].measureScheme;
+                    var measureSchemeListLoop = topObjectLevelFields[j].measureScheme;
+                    if (measureSchemeListLoop != null) {
+                        measureSchemes.push(measureSchemeListLoop);
                     }
                     else {
                         measureSchemes.push(null);
@@ -69,8 +55,6 @@
                     filterPublish["filterAPIField"] = topObjectLevelFields[j].api;
                     filterPublish["filterValues"] = panelFilter;
                     component.set("v.filterPublish", filterPublish);
-
-                    console.log("xxxxx: filterPublish: " , filterPublish);
                 }
             }
 
@@ -79,7 +63,6 @@
 
             component.set("v.panelShowMeasures", panelShowMeasures);
             component.set("v.measureSchemes", measureSchemes);
-            component.set("v.measureSchemesKeyValue", measureSchemesKeyValue);
                         
             for (var key in buttonParameters) {  
                 var subObj = buttonParameters[key];
@@ -157,11 +140,11 @@
             'queryLevel' : thisLevel
           });
         
-        console.log('InitiateRefreshChart: running apex callback');    
+        console.log('updateData: running apex callback');    
 
         action.setCallback(_this, $A.getCallback(function(response) {
             var state = response.getState();
-            bzutils.log('InitiateRefreshChart: data returned from apex for udpate with state: ' + state);   
+            console.log('updateData: data returned from apex for udpate with state: ' + state);   
             if (state === "SUCCESS") {
 
                 var datastring = response.getReturnValue();
@@ -175,6 +158,7 @@
 
                 // Review - this is setting datajson to be whatever is new ... NOT the full data set in the CHART ...
                 component.set("v.datajson", datajson);
+                console.log('updateData: datajson: ' , datajson);   
 
     // TODO - this sends data that is picked up by the target component, however work needs to be done on updating / removing nodes
 
@@ -182,7 +166,6 @@
                 var datajson = component.get("v.datajson");
                 var masterConfigObject = component.get("v.masterConfigObject");
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
-                var panelCurrentMeasureScheme = component.get("v.panelCurrentMeasureScheme");
                 var filterPublish = component.get("v.filterPublish");     
 
                 var configEventParameters;
@@ -199,7 +182,6 @@
                     configEventParameters = { 
                         "datajson" : datajson, 
                         "currentMeasure" : panelCurrentMeasure,
-                        "currentMeasureScheme" : panelCurrentMeasureScheme, 
                         "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
                         "showFilters" : filterPublish,
@@ -210,7 +192,6 @@
                     configEventParameters = { 
                         "datajson" : datajson, 
                         "currentMeasure" : panelCurrentMeasure,
-                        "currentMeasureScheme" : panelCurrentMeasureScheme, 
                         "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
                         "showFilters" : filterPublish,
@@ -350,11 +331,8 @@
     setMenuMeasure : function(component, currentMeasure) {
         var _this = this;
         component.set("v.panelCurrentMeasure", currentMeasure);
-        var measureSchemesKeyValue = component.get("v.measureSchemesKeyValue");
-        var currentMeasureScheme = measureSchemesKeyValue[currentMeasure];
-        component.set("v.panelCurrentMeasureScheme", currentMeasureScheme);
         var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = _this.prepareEvent("SetMeasure", {"measure" : currentMeasure, "measureScheme" : currentMeasureScheme  }, controllerId);
+        var preppedEvent = _this.prepareEvent("SetMeasure", {"measure" : currentMeasure }, controllerId);
         _this.publishPreppedEvent(component,preppedEvent);
     },
 

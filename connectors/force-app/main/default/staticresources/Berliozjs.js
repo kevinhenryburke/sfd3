@@ -237,7 +237,7 @@ If componentType is needed then supply it twice in the calling parameters
 // }
 
 function publishEventHelper(event, topic, parameters, controller) {
-    console.log("publishEventHelper: controller: " + controller + " topic: " + topic + " getType: " + event.getType() );
+    console.log("publishEventHelper: controller: " + controller + " topic: " + topic + " getType: " + event.getType(), parameters );
 
     event.setParams({
         "topic" : topic,

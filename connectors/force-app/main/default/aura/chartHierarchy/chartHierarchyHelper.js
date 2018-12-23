@@ -182,8 +182,6 @@
     
                 // var tselect =  "t" + d.id;
                 // var s = d3.select("#" + tselect);
-                // console.log("xxxxx: tselect");
-                // console.log(s);
                 // s.html(textcontent);
 
 
@@ -767,14 +765,9 @@
 
     getNodeColor : function (component, d, LeafParent) {
         var _this = this;
-
         var currentMeasure = _this.getStore(component, "currentMeasure");
-        var currentMeasureScheme = _this.getStore(component, "currentMeasureScheme");
-
-        if (currentMeasureScheme != null) {
-            var nodeColor = _this.getFromMeasureScheme(component, d.data, currentMeasure, "Color");
-            return nodeColor;
-        }
+        var nodeColor = _this.getFromMeasureScheme(component, d.data, currentMeasure, "Color");
+        return nodeColor;
     },
 
     // Collapse the node and all its children
@@ -832,7 +825,6 @@
         var path = d3.select(_this.getDivId("pathGroup", componentReference, true))
             .selectAll("path")
             .style("stroke-opacity", function(d, i) {
-            console.log("xxxxx: update path opacity");
                 return _this.getFilterOpacityPath(component,d);
             });
 
