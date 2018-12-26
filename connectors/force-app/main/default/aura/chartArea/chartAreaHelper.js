@@ -577,21 +577,27 @@
 
                     }
                     if (measureSchemeType == "Scale") {
-
-                        console.log("xxxxx: measureSchemeType: " + measureSchemeType);
+                        var measureScheme = fieldConfig["measureScheme"]; 
+                        var domainlow = measureScheme["domainlow"]; // the lowest
+                        var domainmid = measureScheme["domainmid"]; // the lowest
+                        var domainhigh = measureScheme["domainhigh"];
+                        var colorlow = measureScheme["colorlow"];
+                        var colormid = measureScheme["colormid"];
+                        var colorhigh = measureScheme["colorhigh"];
+                        var domain = measureScheme["domain"]; // the lowest
+                        var range = measureScheme["range"]; // the lowest
 
                         if (measureObjectScaleMap[measureName] == null) {
                             var objectLevel = {};
                             objectLevel[objectType] = 
-                                d3.scaleLinear().domain([0, 10000]).range(['beige', 'red']);
+                                d3.scaleLinear().domain([domainlow, domainmid, domainhigh]).range([colorlow, colormid, colorhigh]);
                             ;
-                            console.log("xxxxx: measureSchemeType adding ", measureName, objectType  );
                             measureObjectScaleMap[measureName] = objectLevel;    
                         }
                         else {
                             var objectLevel = measureObjectScaleMap[measureName]; 
                             objectLevel[objectType] = 
-                                d3.scaleLinear().domain([0, 10000]).range(['beige', 'red']);
+                                d3.scaleLinear().domain([domainlow, domainmid, domainhigh]).range([colorlow, colormid, colorhigh]);
                             ;
                         }
                     }
@@ -623,13 +629,14 @@
             We need to baseline our nodes on an array, hence the below
         */
 
-        if (firstMeasureScheme["measureSchemeType"] == "ValueBand" || firstMeasureScheme["measureSchemeType"] == "Scale") {
-            baseDataArray = ms;
+       switch (firstMeasureScheme["measureSchemeType"]) {
+            case "ValueBand" : baseDataArray = ms; break;
+            case "Scale" : baseDataArray = ["colorlow", "colormid", "colorhigh"]; break;
+            case "StringValue" : baseDataArray = Object.keys(ms); break;
         }
-        else {
-            baseDataArray = Object.keys(ms);
-        }
-    
+
+        console.log("xxxxx: measureSchemeType" , firstMeasureScheme["measureSchemeType"], baseDataArray);
+
         var nodeSymbol = legendSymbolGroup.selectAll('.symbol')
             .data(baseDataArray);
 
@@ -653,10 +660,10 @@
             .attr("font-size", "8px")
             .attr("fill", "gray");
 
-        var measureArray = [ currentMeasure ];
+        var currentMeasureAsArray = [ currentMeasure ];
 
         var measureText = legendSymbolGroup.selectAll("textme")
-            .data(measureArray)
+            .data(currentMeasureAsArray)
             .enter()
             .append("text")
             .attr('transform',function(d,i) { return 'translate('+20+','+13+')';})
@@ -681,10 +688,12 @@
                     return "above " + ms[i]["above"].toLocaleString();
                 }
             }
-            else return d;
+            if (d == "colorlow") {return ms["domainlow"]};
+            if (d == "colormid") {return ms["domainmid"]};
+            if (d == "colorhigh") {return ms["domainhigh"]};
+            return d;
         }
             
-
     },
 
     getFirstMeasureScheme : function (component, currentMeasure) {
