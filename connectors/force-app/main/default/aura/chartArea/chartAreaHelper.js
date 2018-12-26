@@ -540,10 +540,12 @@
         var _this = this;
         var objectLevels = _this.getMasterParam(component,"data","queryJSON","objectLevels");
 
-        // storage optimized for node colors
+        // storage optimized for node colors: object / measureName / measureSchema
         var measureObjectFieldMap = {};
-        // storage optimized for legend table
+        // storage optimized for legend table: measureName / measureSchema (including object type)
         var measureArrayObjectFieldMap = {};
+        // storage of scale functions: object / measureName / measureSchema
+        var measureObjectScaleMap = {};
 
         for (var objIndex = 0; objIndex < objectLevels.length; objIndex++) {
             var thisObjectConfig = objectLevels[objIndex];
@@ -574,11 +576,31 @@
                         measureArrayObjectFieldMap[measureName].push({"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "objectType" : objectType});
 
                     }
+                    if (measureSchemeType == "Scale") {
+
+                        console.log("xxxxx: measureSchemeType: " + measureSchemeType);
+
+                        if (measureObjectScaleMap[measureName] == null) {
+                            var objectLevel = {};
+                            objectLevel[objectType] = 
+                                d3.scaleLinear().domain([0, 10000]).range(['beige', 'red']);
+                            ;
+                            console.log("xxxxx: measureSchemeType adding ", measureName, objectType  );
+                            measureObjectScaleMap[measureName] = objectLevel;    
+                        }
+                        else {
+                            var objectLevel = measureObjectScaleMap[measureName]; 
+                            objectLevel[objectType] = 
+                                d3.scaleLinear().domain([0, 10000]).range(['beige', 'red']);
+                            ;
+                        }
+                    }
                 }
             }
         }
         _this.setStore(component, "measureObjectFieldMap", measureObjectFieldMap);
         _this.setStore(component, "measureArrayObjectFieldMap", measureArrayObjectFieldMap);
+        _this.setStore(component, "measureObjectScaleMap", measureObjectScaleMap);
     },
 
     showColorSchemeLegend : function (component) {
@@ -731,24 +753,31 @@
             return numericValue;
         }
 
-        // check out the lowest level
-        var low = currentMeasureScheme[0];
-        if (numericValue < low.below) {
-            return low.color;
-        } 
-        else {
-            // if above the lowest threshhold go to the top and work backwards
-            var measureSchemeLength = currentMeasureScheme.length;
-            for (var k = measureSchemeLength - 1; k > 0; k--) {
-                var high = currentMeasureScheme[k];
-                if (numericValue >= high.above) {
-                    return high.color;
-                }         
+        if (currentMeasureSchemeType == "ValueBand") {
+            // check out the lowest level
+            var low = currentMeasureScheme[0];
+            if (numericValue < low.below) {
+                return low.color;
+            } 
+            else {
+                // if above the lowest threshhold go to the top and work backwards
+                var measureSchemeLength = currentMeasureScheme.length;
+                for (var k = measureSchemeLength - 1; k > 0; k--) {
+                    var high = currentMeasureScheme[k];
+                    if (numericValue >= high.above) {
+                        return high.color;
+                    }         
+                }
             }
         }
+
+        if (currentMeasureSchemeType == "Scale") {
+            var measureObjectScaleMap = _this.getStore(component, "measureObjectScaleMap");  
+            var currentMeasureObjectConfig = measureObjectScaleMap[currentMeasure][objectType];
+            return currentMeasureObjectConfig(numericValue) ;     
+       }
+
     },
-
-
 
     getFilterOpacity : function (component, d) {
         var _this = this;

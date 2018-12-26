@@ -209,7 +209,7 @@
             })            
             .style("fill", function(d) {
                 // we add new circles only to new nodes - the nodes are forgotten if collapsed
-                return d._children ? _this.getNodeColor(component, d, "Parent") : _this.getNodeColor(component, d, "Leaf");
+                return _this.getFromMeasureScheme(component, d.data, currentMeasure, "Color");
             })
             .style("stroke", function(d) {
                 if(childLess(d)) {
@@ -314,10 +314,12 @@
             .attr('r', _this.getRadius(component))
             .style("fill", function(d) {
                 // collapsed children are stored as d._children / expanded as d.children
+                // at present color is treated the same for parents and children
+
                 if(childLess(d)) {
-                    return _this.getNodeColor(component, d, "Leaf");
+                    return _this.getFromMeasureScheme(component, d.data, currentMeasure, "Color");                
                 }
-                return _this.getNodeColor(component, d, "Parent"); 
+                return _this.getFromMeasureScheme(component, d.data, currentMeasure, "Color");                
             })
             .style("stroke", function(d) {
                 if(childLess(d)) {
@@ -761,13 +763,6 @@
             preppedEvent.eventType = "Cache";
         } 
         return preppedEvent;
-    },
-
-    getNodeColor : function (component, d, LeafParent) {
-        var _this = this;
-        var currentMeasure = _this.getStore(component, "currentMeasure");
-        var nodeColor = _this.getFromMeasureScheme(component, d.data, currentMeasure, "Color");
-        return nodeColor;
     },
 
     // Collapse the node and all its children
