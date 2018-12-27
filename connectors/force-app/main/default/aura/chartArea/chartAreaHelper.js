@@ -578,27 +578,20 @@
                     }
                     if (measureSchemeType == "Scale") {
                         var measureScheme = fieldConfig["measureScheme"]; 
-                        var domainlow = measureScheme["domainlow"]; // the lowest
-                        var domainmid = measureScheme["domainmid"]; // the lowest
-                        var domainhigh = measureScheme["domainhigh"];
-                        var colorlow = measureScheme["colorlow"];
-                        var colormid = measureScheme["colormid"];
-                        var colorhigh = measureScheme["colorhigh"];
-                        var domain = measureScheme["domain"]; // the lowest
-                        var range = measureScheme["range"]; // the lowest
+                        var domain = measureScheme["domain"]; 
+                        var range = measureScheme["range"]; 
 
                         if (measureObjectScaleMap[measureName] == null) {
                             var objectLevel = {};
                             objectLevel[objectType] = 
-                                d3.scaleLinear().domain([domainlow, domainmid, domainhigh]).range([colorlow, colormid, colorhigh]);
+                                d3.scaleLinear().domain(domain).range(range);
                             ;
                             measureObjectScaleMap[measureName] = objectLevel;    
                         }
                         else {
                             var objectLevel = measureObjectScaleMap[measureName]; 
                             objectLevel[objectType] = 
-                                d3.scaleLinear().domain([domainlow, domainmid, domainhigh]).range([colorlow, colormid, colorhigh]);
-                            ;
+                                d3.scaleLinear().domain(domain).range(range);
                         }
                     }
                 }
@@ -620,22 +613,20 @@
         d3.select(_this.getDivId("legendSymbolGroup", componentReference, true)).selectAll("*").remove();
 
         var legendSymbolGroup = _this.getCache (component, "legendSymbolGroup" ) ;
-
         
         var ms = firstMeasureScheme.measureScheme;
+        var mst = firstMeasureScheme["measureSchemeType"];
         var baseDataArray;
 
         /*  Measure Scheme is an array in complex cases (value ranges) but is an object with name/value in others
             We need to baseline our nodes on an array, hence the below
         */
 
-       switch (firstMeasureScheme["measureSchemeType"]) {
+       switch (mst) {
             case "ValueBand" : baseDataArray = ms; break;
-            case "Scale" : baseDataArray = ["colorlow", "colormid", "colorhigh"]; break;
+            case "Scale" : baseDataArray = ms["domain"]; break;
             case "StringValue" : baseDataArray = Object.keys(ms); break;
         }
-
-        console.log("xxxxx: measureSchemeType" , firstMeasureScheme["measureSchemeType"], baseDataArray);
 
         var nodeSymbol = legendSymbolGroup.selectAll('.symbol')
             .data(baseDataArray);
@@ -673,14 +664,19 @@
 
 
         function getLegendItemColor(ms, d, i) {
-            if (Array.isArray(ms)) {
+            if (mst == "ValueBand") {
                 return ms[i]["color"];
             }
-            else return ms[d];
+            if (mst == "Scale") {
+                return ms["range"][i];
+            }
+            if (mst == "StringValue") {
+                return ms[d];
+            }
         }
 
         function getLegendItemName(ms, d, i) {
-            if (Array.isArray(ms)) {
+            if (mst == "ValueBand") {
                 if (ms[i]["below"] != null) {
                     return "below " + ms[i]["below"].toLocaleString();
                 }
@@ -688,10 +684,12 @@
                     return "above " + ms[i]["above"].toLocaleString();
                 }
             }
-            if (d == "colorlow") {return ms["domainlow"]};
-            if (d == "colormid") {return ms["domainmid"]};
-            if (d == "colorhigh") {return ms["domainhigh"]};
-            return d;
+            if (mst == "Scale") {
+                return ms["domain"][i];
+            }
+            if (mst == "StringValue") {
+                return d;
+            }
         }
             
     },
