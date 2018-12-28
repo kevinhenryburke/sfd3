@@ -6,11 +6,11 @@
         var topic = tpc.topic;
     },
 
-    // bear in mind that doInit can't refresh anything in an external library as it may lose a race condition.
+    // bear in mind that doInit can't reference anything in an external library as it may lose a race condition.
     doInit: function(component, event, helper) {
         console.log('chartArea: doInit enter');   
 
-        var storeObject = JSON.parse("{}");
+        let storeObject = {"rendered": false};
         component.set("v.storeObject", storeObject);
 
         helper.setStore(component, "showMeasureValues", false);
@@ -19,8 +19,6 @@
         if (recordId == null) {
             recordId = "";
         }
-
-        console.log('chartArea: doInit enter: ' + recordId);   
 
         // calculate compref from random generator   
         var comprefNumber = Math.floor((Math.random() * 10000000000) + 1); 
@@ -33,7 +31,7 @@
 
     // we need to avoid race condition between chart rendering and scripts loading, hence the checks in this method
     doneRendering: function(component, event, helper) {
-        var rendered = component.get("v.rendered");
+        var rendered = helper.getStore(component, "rendered");
         if (rendered == false) {
             console.log('chartArea: doneRendering enter for first time');   
             var scriptsLoaded = component.get("v.scriptsLoaded");
@@ -44,7 +42,7 @@
             else {
                 console.log('chartArea: doneRendering: scripts not loaded so publish RefreshEvent from afterScriptsLoaded');   
             }
-            component.set("v.rendered", true);
+            helper.setStore(component, "rendered", true);
         }
     },
 
@@ -53,7 +51,7 @@
         bzutils.log('chartArea: afterScriptsLoaded enter');
         component.set("v.scriptsLoaded", true);
 
-        var rendered = component.get("v.rendered");
+        var rendered = helper.getStore(component, "rendered");
         if (rendered == true) {
             bzutils.log('chartArea: signalling ready from afterScriptsLoaded');   
             helper.doneRenderLoad(component);

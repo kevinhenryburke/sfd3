@@ -100,7 +100,6 @@
   <aura:attribute name="componentCategory" type="String" default="Display"/>    
   <aura:attribute name="componentReference" type="String"/> 
   <aura:attribute name="chartAreaDivId" type="String" default="" description="If putting more than one chart on a page need to provide unique ids for the chart components"/>    
-	<aura:attribute name="rendered" type="Boolean" default="false"/>    
 	<aura:attribute name="scriptsLoaded" type="Boolean" default="false"/>    
   <aura:attribute name="defaultEventType" type="String" default="Application"/>    
 

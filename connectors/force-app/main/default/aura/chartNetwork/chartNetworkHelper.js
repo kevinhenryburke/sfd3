@@ -571,9 +571,11 @@
 
     nodeAdditionalAttribute : function (component, node) {
         // Not sure this is called
+        var _this = this;
         console.log("chartNetworkHelper.nodeAdditionalAttribute enter");    
 
         var componentType = component.get("v.componentType");
+        var currentMeasure = component.get("v.currentMeasure");
         console.log("nodeAdditionalAttribute componentType = " + componentType);
 
         if (componentType == "network.pack") {
@@ -586,7 +588,13 @@
                 .text(function(d) { return d.data.name + "\n" + d3.format(",d")(d.value); }); // this is the d3 value accessor which handles sum in hierarchy layout 
         
             node.append("circle")
-                .attr("r", function(d) { return d.r; });
+                .attr("r", function(d) { return d.r; })
+                .style("fill", function(d) { 
+                    // we add new circles only to new nodes - the nodes are forgotten if collapsed
+                    return _this.getFromMeasureScheme(component, d.data, "Employees", "Color");
+                })
+                    
+                ;
         
             node.filter(function(d) { return !d.children; }).append("text")
                 .attr("dy", "0.3em")

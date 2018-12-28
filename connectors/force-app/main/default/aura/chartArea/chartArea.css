@@ -77,21 +77,21 @@
 
 
 .THIS .packleaf circle {
-    fill: #8da0cb;
+/*    fill: #8da0cb; */ /* this is the original color scheme */
     fill-opacity: 1;
     stroke: rgb(31, 119, 180);
     stroke-width: 1px;
   }
 
   .THIS .packbranch circle {
-    fill: #a64854;
+/*    fill: #a64854; */ /* this is the original color scheme */
     fill-opacity: .25;
     stroke: rgb(31, 119, 180);
     stroke-width: 1px;
   }
 
   .THIS .packleaf text {
-    font: 10px sans-serif;
+    font: 8px sans-serif;
     text-anchor: middle;
   }
   
