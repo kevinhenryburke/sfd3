@@ -10,7 +10,9 @@
 		var textGroup = _this.getCache (component, "textGroup") ;  
 		var pathToolTipDiv = _this.getCache (component, "pathToolTipDiv") ;  
 		var pathGroupId = _this.getCache (component, "pathGroupId") ;  
-                
+
+        var componentType = component.get("v.componentType");
+        
         var node = {};     
         var text = {};     
         var path = {};     
@@ -87,7 +89,12 @@
                 }))
                 ;
 
-            var nodeAdditionalAttribute = _this.nodeAdditionalAttribute(component, node);
+
+            if (componentType == "network.pack") {
+                var stylePack = _this.stylePack(component, node);
+            }
+
+
 
         }
 
@@ -569,40 +576,6 @@
 
     },
 
-    nodeAdditionalAttribute : function (component, node) {
-        // Not sure this is called
-        var _this = this;
-        console.log("chartNetworkHelper.nodeAdditionalAttribute enter");    
-
-        var componentType = component.get("v.componentType");
-        var currentMeasure = component.get("v.currentMeasure");
-        console.log("nodeAdditionalAttribute componentType = " + componentType);
-
-        if (componentType == "network.pack") {
-        
-            node.attr("transform", "translate(2,2)") // new
-                .attr("class", function(d) { return d.children ? "packbranch node" : "packleaf node"; })
-                .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-        
-            node.append("title")
-                .text(function(d) { return d.data.name + "\n" + d3.format(",d")(d.value); }); // this is the d3 value accessor which handles sum in hierarchy layout 
-        
-            node.append("circle")
-                .attr("r", function(d) { return d.r; })
-                .style("fill", function(d) { 
-                    // we add new circles only to new nodes - the nodes are forgotten if collapsed
-                    return _this.getFromMeasureScheme(component, d.data, "Employees", "Color");
-                })
-                    
-                ;
-        
-            node.filter(function(d) { return !d.children; }).append("text")
-                .attr("dy", "0.3em")
-                .text(function(d) { return d.data.name.substring(0, d.r / 3); });
-        }
-    
-        console.log("chartNetworkHelper.nodeAdditionalAttribute exit");
-    },
 
     textAdditionalAttribute : function (component, text) {
         // Not sure this is called
@@ -675,22 +648,9 @@
 
         var componentType = component.get("v.componentType");
         console.log("nodeDataSetFunctionNodes componentType = " + componentType);
-        var componentReference = component.get("v.componentReference");  
 
         if (componentType ==  "network.pack") {
-            return function(datajson) { 
-                console.log("nodeDataSetFunctionNodes computing callback " + componentReference);
-                var root = d3.hierarchy(datajson)
-                .sum(function(d) { return d.size; })
-                .sort(function(a, b) { return b.value - a.value; });
-        
-                var diameter = _this.getCache (component, "width") ;  
-                console.log("nodeDataSetFunctionNodes diameter: " + diameter);
-                
-                var pack = d3.pack()
-                .size([diameter - 4, diameter - 4]);
-                return pack(root).descendants();
-            };            
+            return _this.getRootStructurePack(component);
         }      
 
         if ((componentType ==  "network.influence") || (componentType ==  "network.connections")) {
@@ -818,7 +778,63 @@
     
         }
         return linkednodes;
-    }
+    },
+
+    /* Pack methods */
+
+    stylePack : function (component, node) {
+        // Not sure this is called
+        var _this = this;
+        console.log("stylePack enter");    
+
+        var componentType = component.get("v.componentType");
+        var currentMeasure = _this.getStore(component, "currentMeasure");
+        console.log("xxxxx: currentMeasure: " , currentMeasure);
+        console.log("stylePack componentType = " + componentType);
+
+        node.attr("transform", "translate(2,2)") // new
+            .attr("class", function(d) { return d.children ? "packbranch node" : "packleaf node"; })
+            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+    
+        node.append("title")
+            .text(function(d) { return d.data.name + "\n" + d3.format(",d")(d.value); }); // this is the d3 value accessor which handles sum in hierarchy layout 
+    
+        node.append("circle")
+            .attr("r", function(d) { return d.r; })
+            .style("fill", function(d) { 
+                // we add new circles only to new nodes - the nodes are forgotten if collapsed
+                return _this.getFromMeasureScheme(component, d.data, currentMeasure, "Color");
+            })
+                
+            ;
+    
+        node.filter(function(d) { return !d.children; }).append("text")
+            .attr("dy", "0.3em")
+            .text(function(d) { return d.data.name.substring(0, d.r / 3); });
+    
+        console.log("stylePack exit");
+    },
+
+    getRootStructurePack : function (component) {
+        var _this = this;
+        var componentReference = component.get("v.componentReference");  
+
+        return function(datajson) { 
+            console.log("getRootStructurePack computing callback " + componentReference);
+            var root = d3.hierarchy(datajson)
+            .sum((d) => d.size)
+            .sort((a, b) => b.value - a.value);
+
+            var diameter = Math.min(_this.getCache (component, "width"),_this.getCache (component, "height") ) ;  
+            console.log("getRootStructurePack diameter: " + diameter);
+            
+            var pack = d3.pack()
+            .size([diameter - 4, diameter - 4]);
+            return pack(root).descendants();
+        };
+    }        
+
+
         
 
 
