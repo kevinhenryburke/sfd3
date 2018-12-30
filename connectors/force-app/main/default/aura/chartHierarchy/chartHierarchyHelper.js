@@ -15,7 +15,51 @@
 		// var pathGroupId = _this.getCache (component, "pathGroupId") ;  
 		
 		var width = _this.getCache (component, "width") ;  
-		var height = _this.getCache (component, "height") ; 
+        var height = _this.getCache (component, "height") ; 
+
+        /* Pack specification */
+
+        let componentType = component.get("v.componentType");
+
+        if (componentType == "hierarchy.pack") {
+
+            var nodeSelector = _this.getMasterParam(component, "panels", "ChartPanel", "Selectors", "node", "selector"); // an html selector for a class or element ids
+            var nodeDataSetFunction = _this.getRootStructurePack (component); 
+
+            var nodeEnterSelection = nodeGroup
+                .selectAll(nodeSelector)
+                .data(nodeDataSetFunction(datajson), function(d, i) { return d.id;})
+                .enter();
+
+            if (_this.hasMasterParam(component, "panels", "ChartPanel", "Selectors", "node")) {
+
+                let node = nodeEnterSelection
+                    .append(_this.getMasterParam(component, "panels", "ChartPanel", "Selectors", "node", "appendType"))
+                    .attr("id", function(d) {
+                        return d.id;
+                    })
+                    .attr("recordid", function(d) {
+                        return d.recordid;
+                    })
+                    .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
+                        _this.setCache (component, "mouseoverRecordId", d.id ) ;
+                        var preppedEvent = _this.nodeMouseover(component, d); 
+                        _this.publishPreppedEvent(component,preppedEvent);
+                    }))
+                ;
+    
+                let stylePack = _this.stylePack(component, node);
+    
+    
+    
+            }
+
+            return;
+
+        }
+
+        
+        /* Treemap specification */
         
         var treemap = d3.tree().size([height, width]);
         _this.setCache (component, "treemap", treemap ) ;
@@ -58,11 +102,6 @@
         _this.updatePopoverDirectly(component, preppedEvent);
 
 
-        let componentType = component.get("v.componentType");
-
-        if (componentType == "hierarchy.pack") {
-            let stylePack = _this.stylePack(component, node);
-        }
 
 
         console.log("initialize root path");
@@ -889,6 +928,5 @@
             return pack(root).descendants();
         };
     },        
-
 
 })

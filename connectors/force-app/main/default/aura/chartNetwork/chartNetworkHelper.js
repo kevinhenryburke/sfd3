@@ -89,13 +89,6 @@
                 }))
                 ;
 
-
-            if (componentType == "network.pack") {
-                var stylePack = _this.stylePack(component, node);
-            }
-
-
-
         }
 
         console.log("calling text");    
@@ -644,18 +637,7 @@
     
     nodeDataSetFunctionNodes : function (component) { 
         console.log("chartNetworkHelper.nodeDataSetFunctionNodes enter");    
-        var _this = this;
-
-        var componentType = component.get("v.componentType");
-        console.log("nodeDataSetFunctionNodes componentType = " + componentType);
-
-        if (componentType ==  "network.pack") {
-            return _this.getRootStructurePack(component);
-        }      
-
-        if ((componentType ==  "network.influence") || (componentType ==  "network.connections")) {
-            return function(datajson) { return datajson.nodes;};
-        }      
+        return function(datajson) { return datajson.nodes;};
     },
 
     nodeMouseover : function (component, d) {
@@ -694,29 +676,6 @@
             s.html(textcontent);
 
             var publishParameters = {"data" : d, "parent" : null};
-            var preppedEvent = _this.prepareEvent(component, "ChartMouseOver", publishParameters);
-            return preppedEvent;
-        }
-
-        if (componentType ==  "network.pack") {
-            // // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
-            // var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
-            // textcontent += '</tspan>'; 
-            // textcontent += '<tspan x="10" dy="15">' + d.position;
-            // textcontent += ' (' + d.account + ')</tspan>';
-        
-            // var tselect =  "t" + d.id;
-            // var sselect =  "s" + d.id;
-        
-            // var t = d3.select("#" + tselect);
-            // bzutils.log("mouseover: " + textcontent);
-            // bzutils.log(t);
-            // t.html(textcontent);
-            // var s = d3.select("#" + sselect);
-            // s.html(textcontent);
-        
-            var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
-        
             var preppedEvent = _this.prepareEvent(component, "ChartMouseOver", publishParameters);
             return preppedEvent;
         }
@@ -779,63 +738,6 @@
         }
         return linkednodes;
     },
-
-    /* Pack methods */
-
-    stylePack : function (component, node) {
-        // Not sure this is called
-        var _this = this;
-        console.log("stylePack enter");    
-
-        var componentType = component.get("v.componentType");
-        var currentMeasure = _this.getStore(component, "currentMeasure");
-        console.log("xxxxx: currentMeasure: " , currentMeasure);
-        console.log("stylePack componentType = " + componentType);
-
-        node.attr("transform", "translate(2,2)") // new
-            .attr("class", function(d) { return d.children ? "packbranch node" : "packleaf node"; })
-            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-    
-        node.append("title")
-            .text(function(d) { return d.data.name + "\n" + d3.format(",d")(d.value); }); // this is the d3 value accessor which handles sum in hierarchy layout 
-    
-        node.append("circle")
-            .attr("r", function(d) { return d.r; })
-            .style("fill", function(d) { 
-                // we add new circles only to new nodes - the nodes are forgotten if collapsed
-                return _this.getFromMeasureScheme(component, d.data, currentMeasure, "Color");
-            })
-                
-            ;
-    
-        node.filter(function(d) { return !d.children; }).append("text")
-            .attr("dy", "0.3em")
-            .text(function(d) { return d.data.name.substring(0, d.r / 3); });
-    
-        console.log("stylePack exit");
-    },
-
-    getRootStructurePack : function (component) {
-        var _this = this;
-        var componentReference = component.get("v.componentReference");  
-
-        return function(datajson) { 
-            console.log("getRootStructurePack computing callback " + componentReference);
-            var root = d3.hierarchy(datajson)
-            .sum((d) => d.size)
-            .sort((a, b) => b.value - a.value);
-
-            var diameter = Math.min(_this.getCache (component, "width"),_this.getCache (component, "height") ) ;  
-            console.log("getRootStructurePack diameter: " + diameter);
-            
-            var pack = d3.pack()
-            .size([diameter - 4, diameter - 4]);
-            return pack(root).descendants();
-        };
-    }        
-
-
-        
 
 
 })
