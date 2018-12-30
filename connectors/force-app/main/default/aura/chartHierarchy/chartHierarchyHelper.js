@@ -900,6 +900,9 @@
                 // we add new circles only to new nodes - the nodes are forgotten if collapsed
                 return _this.getFromMeasureScheme(component, d.data, currentMeasure, "Color");
             })
+            .style("fill-opacity", function(d, i) {
+                return _this.getFilterOpacity(component, d.data);
+            })
                 
             ;
     
