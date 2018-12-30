@@ -1,0 +1,9 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extends="c:chartHierarchy">
+
+    <aura:method name="initializeVisuals"/> 
+
+    <aura:method name="styleNodes"> 
+    </aura:method>
+
+
+</aura:component>	

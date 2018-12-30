@@ -86,33 +86,6 @@
 
         let componentType = component.get("v.componentType");
 
-        if (componentType == "hierarchy.pack") {
-
-            var currentMeasure = helper.getStore(component, "currentMeasure");
-
-            var nodeGroup = helper.getCache (component, "nodeGroup") ;  
-
-            var datajson = helper.getCache (component, "datajson") ;  
-
-            var nodeSelector = helper.getMasterParam(component, "panels", "ChartPanel", "Selectors", "node", "selector"); // an html selector for a class or element ids
-            var nodeDataSetFunction = helper.getRootStructurePack (component); 
-
-            var node = nodeGroup
-                .selectAll(nodeSelector)
-                .data(nodeDataSetFunction(datajson), function(d, i) { return d.id;})
-                .enter()
-                .selectAll('g')
-                .select('circle')
-
-            node.style("fill", function(d) { 
-                let colorme = helper.getFromMeasureScheme(component, d.data, currentMeasure, "Color");
-                return colorme;
-            });
-    
-            return;
-        }
-
-
         var args = event.getParam("arguments");
 
         var componentReference = component.get("v.componentReference");
