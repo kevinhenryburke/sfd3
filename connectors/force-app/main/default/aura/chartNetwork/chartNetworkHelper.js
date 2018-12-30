@@ -31,7 +31,7 @@
 
         if (_this.hasMasterParam(component, "panels", "ChartPanel", "Selectors", "node")) {
             node = nodeEnterSelection
-                .append(_this.getMasterParam(component, "panels", "ChartPanel", "Selectors", "node", "appendType"))
+                .append("circle")
                 .attr("id", function(d) {
                     return d.id;
                 })
