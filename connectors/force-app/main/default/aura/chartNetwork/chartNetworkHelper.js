@@ -29,67 +29,65 @@
 
 //        nodeSelection.exit().remove();    
 
-        if (_this.hasMasterParam(component, "panels", "ChartPanel", "Selectors", "node")) {
-            node = nodeEnterSelection
-                .append("circle")
-                .attr("id", function(d) {
-                    return d.id;
-                })
-                .attr("recordid", function(d) {
-                    return d.recordid;
-                })
-                // symbols...           .attr("d", d3.symbol().type( function(d) { return d3.symbols[4];}))
-                .on('mouseout', function(d) { // hide the div
-                    var retainNodeDetailsMouseOut = _this.getCache (component, "retainNodeDetailsMouseOut" ) ;
-                    if (!retainNodeDetailsMouseOut)
-                    {
-                        var preppedEvent = _this.nodeMouseout(component, d); 
-                        _this.publishPreppedEvent(component,preppedEvent);
-                    }
-                })
-                .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-                    _this.setCache (component, "mouseoverRecordId", d.id ) ;
-                    var preppedEvent = _this.nodeMouseover(component, d); 
+        node = nodeEnterSelection
+            .append("circle")
+            .attr("id", function(d) {
+                return d.id;
+            })
+            .attr("recordid", function(d) {
+                return d.recordid;
+            })
+            // symbols...           .attr("d", d3.symbol().type( function(d) { return d3.symbols[4];}))
+            .on('mouseout', function(d) { // hide the div
+                var retainNodeDetailsMouseOut = _this.getCache (component, "retainNodeDetailsMouseOut" ) ;
+                if (!retainNodeDetailsMouseOut)
+                {
+                    var preppedEvent = _this.nodeMouseout(component, d); 
                     _this.publishPreppedEvent(component,preppedEvent);
-                }))
-                .on('click', function(d) {
-                    console.log("retrieve info on whether isiOS");
-                    var isiOS = bzchart.isiOS;
-                    if (isiOS) {
-                        var now = new Date().getTime();
-                        var lastTouch = _this.getCache (component, "lastTouch");
-                        var delta = now - lastTouch;
-                        if (delta < 350 && delta > 0) {
-                            // the second touchend event happened within half a second. Here is where we invoke the double tap code
-                            //TODO implement - e.g. var win = window.open("http://news.bbc.co.uk"); win.focus();
-                        }
-                        _this.setCache (component, "lastTouch", lastTouch) ;
-                    } else {
-                        console.log("not iOS");
+                }
+            })
+            .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
+                _this.setCache (component, "mouseoverRecordId", d.id ) ;
+                var preppedEvent = _this.nodeMouseover(component, d); 
+                _this.publishPreppedEvent(component,preppedEvent);
+            }))
+            .on('click', function(d) {
+                console.log("retrieve info on whether isiOS");
+                var isiOS = bzchart.isiOS;
+                if (isiOS) {
+                    var now = new Date().getTime();
+                    var lastTouch = _this.getCache (component, "lastTouch");
+                    var delta = now - lastTouch;
+                    if (delta < 350 && delta > 0) {
+                        // the second touchend event happened within half a second. Here is where we invoke the double tap code
+                        //TODO implement - e.g. var win = window.open("http://news.bbc.co.uk"); win.focus();
                     }
-                    // reset the clicked node to be the primary
-                    // TODO This will need to be passed in the refreshVisibility call.
-                    var primaryNodeId = d.id;
-                    _this.setCache (component, "primaryNodeId", primaryNodeId ) ;
+                    _this.setCache (component, "lastTouch", lastTouch) ;
+                } else {
+                    console.log("not iOS");
+                }
+                // reset the clicked node to be the primary
+                // TODO This will need to be passed in the refreshVisibility call.
+                var primaryNodeId = d.id;
+                _this.setCache (component, "primaryNodeId", primaryNodeId ) ;
 
-                    var cc = component.getConcreteComponent();
-                    cc.refreshVisibility();                 
-                    cc.styleNodes();                 
-                })
-                .on('dblclick', $A.getCallback(function(d) {
-                    console.log("dblclick");
-                    // Two options - complete refresh OR keep and get data from this point?
-                    // send a message identifying the node in question
-                    var primaryNodeId = d.id;
-                    _this.setCache (component, "primaryNodeId", primaryNodeId ) ;
+                var cc = component.getConcreteComponent();
+                cc.refreshVisibility();                 
+                cc.styleNodes();                 
+            })
+            .on('dblclick', $A.getCallback(function(d) {
+                console.log("dblclick");
+                // Two options - complete refresh OR keep and get data from this point?
+                // send a message identifying the node in question
+                var primaryNodeId = d.id;
+                _this.setCache (component, "primaryNodeId", primaryNodeId ) ;
 
-                    var preppedEvent = _this.nodeDoubleClick(component,primaryNodeId);
+                var preppedEvent = _this.nodeDoubleClick(component,primaryNodeId);
 
-                    _this.publishPreppedEvent(component,preppedEvent);
-                }))
-                ;
+                _this.publishPreppedEvent(component,preppedEvent);
+            }))
+            ;
 
-        }
 
         console.log("calling text");    
     
@@ -130,9 +128,9 @@
 
         _this.textAdditionalAttribute (component, svgText);
     
-        console.log("calling paths");
+       // calling paths
 
-        if (! _this.hasMasterParam(component, "panels", "ChartPanel", "Selectors", "path")) {
+        if (datajson.links == null) {
             datajson.links = []; 
         }
 
@@ -348,9 +346,6 @@
         var forceLinks = _this.buildForceLinks(path);
         var link_force =  d3.forceLink(forceLinks.links)
             .id(function(d) { return d.id; });
-
-        // var hasText = _this.hasMasterParam(component, "panels", "ChartPanel", "Selectors", "text");
-        // _this.setCache (component, "hasText", hasText ) ;                
 
         simulation.force("links",link_force);
     
