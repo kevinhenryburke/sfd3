@@ -8,7 +8,7 @@
 
         /* Pack specification */
 
-        let nodeSelector = _this.getMasterParam(component, "panels", "ChartPanel", "Selectors", "node", "selector"); // an html selector for a class or element ids
+        let nodeSelector = "circle";
         let nodeDataSetFunction = _this.getRootStructurePack (component); 
 
         let nodeEnterSelection = nodeGroup

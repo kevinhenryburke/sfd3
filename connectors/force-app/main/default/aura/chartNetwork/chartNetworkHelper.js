@@ -19,7 +19,7 @@
 
         console.log("chartNetworkHelper: calling nodes");
 
-        var nodeSelector = _this.getMasterParam(component, "panels", "ChartPanel", "Selectors", "node", "selector"); // an html selector for a class or element ids
+        let nodeSelector = ".node";
         var nodeDataSetFunction = _this.nodeDataSetFunctionNodes (component); 
 
         var nodeEnterSelection = nodeGroup
@@ -93,54 +93,43 @@
 
         console.log("calling text");    
     
-        if (_this.hasMasterParam(component, "panels", "ChartPanel", "Selectors", "text")) {
+        var textEnterSelection = textGroup
+            .selectAll("g")
+            .data(datajson.nodes,  function(d, i) { return d.id;} )
+            .enter();
+        
+        text = textEnterSelection
+            .append("svg:g")
+            .attr("class", "nodeText"); // TODO what is nodeText class
 
-            // pick up the text styling
-            var hasShadow = _this.hasMasterParam(component, "panels", "ChartPanel", "Selectors", "node", "styleclassTextShadow");
-            var styleclassText = _this.getMasterParam(component, "panels", "ChartPanel", "Selectors", "node", "styleclassText");
-            var styleclassTextShadow = _this.getMasterParam(component, "panels", "ChartPanel", "Selectors", "node", "styleclassTextShadow");
+        // A copy of the text with a thick white stroke for legibility ("s" for shadow, "t" for text).
+        var svgText = text.append("svg:text");
+        svgText.attr("id", function(d) {
+                return "s" + d.id;
+            })
+            .text(function(d) {
+                return d.name;
+            })
+            .attr("class", "chartTextShadow") // shadow class
+            // .attr("x", 8)
+            // .attr("y", ".31em");
 
-            var textEnterSelection = textGroup
-                .selectAll("g")
-                .data(datajson.nodes,  function(d, i) { return d.id;} )
-                .enter();
-            
-            text = textEnterSelection
-                .append("svg:g")
-                .attr("class", "nodeText"); // TODO what is nodeText class
+        _this.textAdditionalAttribute (component, svgText);
 
-            if (hasShadow == true) {                
-                // A copy of the text with a thick white stroke for legibility ("s" for shadow, "t" for text).
-                var svgText = text.append("svg:text");
-                svgText.attr("id", function(d) {
-                        return "s" + d.id;
-                    })
-                    .text(function(d) {
-                        return d.name;
-                    })
-                    .attr("class", styleclassTextShadow) // shadow class
-                    // .attr("x", 8)
-                    // .attr("y", ".31em");
 
-                _this.textAdditionalAttribute (component, svgText);
+        var svgText = text.append("svg:text");
+        svgText.attr("id", function(d) {
+                return "t" + d.id;
+            })
+            .text(function(d) {
+                return d.name;
+            })
+            .attr("class", "chartText") 
+            // .attr("x", 8)
+            // .attr("y", ".31em");
 
-            }
-
-            var svgText = text.append("svg:text");
-            svgText.attr("id", function(d) {
-                    return "t" + d.id;
-                })
-                .text(function(d) {
-                    return d.name;
-                })
-                .attr("class", styleclassText) 
-                // .attr("x", 8)
-                // .attr("y", ".31em");
-
-            _this.textAdditionalAttribute (component, svgText);
+        _this.textAdditionalAttribute (component, svgText);
     
-        }
-
         console.log("calling paths");
 
         if (! _this.hasMasterParam(component, "panels", "ChartPanel", "Selectors", "path")) {
