@@ -31,9 +31,7 @@
 
         node = nodeEnterSelection
             .append("circle")
-            .attr("id", function(d) {
-                return d.id;
-            })
+            .attr("id", d => d.id)            
             .attr("recordid", function(d) {
                 return d.recordid;
             })
@@ -102,9 +100,8 @@
 
         // A copy of the text with a thick white stroke for legibility ("s" for shadow, "t" for text).
         var svgText = text.append("svg:text");
-        svgText.attr("id", function(d) {
-                return "s" + d.id;
-            })
+        svgText
+            .attr("id", d => "s" + d.id)            
             .text(function(d) {
                 return d.name;
             })
@@ -116,9 +113,8 @@
 
 
         var svgText = text.append("svg:text");
-        svgText.attr("id", function(d) {
-                return "t" + d.id;
-            })
+        svgText
+            .attr("id", d => "t" + d.id)            
             .text(function(d) {
                 return d.name;
             })
@@ -153,9 +149,7 @@
                 .attr("stroke", function(d) {
                     return d.stroke;
                 })
-                .attr("id", function(d) {
-                    return d.id;
-                })
+                .attr("id", d => d.id)            
                 .attr("sourceid", function(d) {
                     return d.sourceid;
                 })

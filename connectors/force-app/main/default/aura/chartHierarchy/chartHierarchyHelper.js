@@ -160,15 +160,9 @@
                 var t = "translate(" + source.y0 + "," + source.x0 + ")";
                 return t;
             })
-            .attr("id", function(d) {
-                return d.id;
-            })            
-            .attr("aura:id", function(d) {
-                return d.id;
-            })            
-            .attr("recordid", function(d) {
-                return d.data.id;
-            })            
+            .attr("id", d => d.id)            
+            .attr("aura:id", d => d.id)            
+            .attr("recordid", d => d.data.id)            
             // .filter(function(d, i) {if (d.data.name.length < 5) { return false; } return true;})            
             .on('click', click)
 			.on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
@@ -206,9 +200,7 @@
                 return 'treenode ' + d.id;
             })
             .attr('r', 1e-6)
-            .attr("id", function(d) {
-                return "circle" + d.id;
-            })            
+            .attr("id", d => "circle" + d.id)            
             .attr("aura:id", function(d) {
                 return "circle" + d.id;
             })            
@@ -260,9 +252,7 @@
                 } 
                 return textAnchor;
             })
-            .attr("id", function(d) {
-                return "t" + d.id;
-            })            
+            .attr("id", d => "t" + d.id)            
             // .filter(function(d, i) {
             //     if (d.data.name.length < 5) {
             //         return false;
@@ -280,9 +270,7 @@
                 return textDisplay;
             })
             .append('svg:tspan') // append a second line if measures are to be displayed. https://stackoverflow.com/questions/16701522/how-to-linebreak-an-svg-text-within-javascript/16701952#16701952
-            .attr("id", function(d) {
-                return "tspan2" + d.id;
-            })            
+            .attr("id", d => "tspan2" + d.id)          
             .attr("x", function(d) {
                 if (d.depth > 0) {
                     return childLess(d) ? _this.getTextOffset(component) : - _this.getTextOffset(component);
@@ -404,7 +392,7 @@
       
         // Enter any new links at the parent's previous position.
         var linkEnter = link.enter().insert('path', "g")
-            .attr("id", function(d) { return "path" + d.id; }) // identify a path using its lower level node (so must be unique!)
+            .attr("id", d => "path" + d.id)            
             .attr("aura:id", function(d) { return "path" + d.id; }) // identify a path using its lower level node (so must be unique!)
             .attr("class", "treelink")
             .attr('d', function(d){
