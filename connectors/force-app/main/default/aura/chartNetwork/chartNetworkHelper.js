@@ -320,7 +320,7 @@
         if (componentType ==  "network.connections") {
             _this.runSimulationConnections(component, path, node, text);
         }
-        if (componentType ==  "network.influence") {
+        if (componentType ==  "network.timeline") {
             _this.runSimulationInfluence(component, path, node, text);
         }
     },                 
@@ -531,7 +531,7 @@
         var componentType = component.get("v.componentType");
         console.log("nodeDoubleClick componentType = " + componentType);
 
-        if ((componentType ==  "network.influence") || (componentType ==  "network.connections")) {
+        if ((componentType ==  "network.timeline") || (componentType ==  "network.connections")) {
 
             var componentReference = component.get("v.componentReference");        
 
@@ -555,7 +555,7 @@
         var componentType = component.get("v.componentType");
         console.log("textAdditionalAttribute componentType = " + componentType);
 
-        if ((componentType == "network.connections") || (componentType == "network.influence")) {
+        if ((componentType == "network.connections") || (componentType == "network.timeline")) {
             text
             .attr("x", 8)
             .attr("y", ".31em")            
@@ -625,7 +625,7 @@
         var componentType = component.get("v.componentType");
         console.log("nodeMouseover componentType = " + componentType);
 
-        if ((componentType == "network.connections") || (componentType == "network.influence")) {
+        if ((componentType == "network.connections") || (componentType == "network.timeline")) {
             // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
             var fields = d.fields;
             var fieldsLength = fields.length;
@@ -665,7 +665,7 @@
         var componentType = component.get("v.componentType");
         console.log("nodeMouseover componentType = " + componentType);
 
-        if ((componentType == "network.connections") || (componentType == "network.influence")) {
+        if ((componentType == "network.connections") || (componentType == "network.timeline")) {
             // revert back to just the name
             // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
             var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;

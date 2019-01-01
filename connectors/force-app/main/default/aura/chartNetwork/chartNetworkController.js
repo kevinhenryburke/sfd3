@@ -32,8 +32,8 @@
         var componentType = component.get("v.componentType");
         console.log("dataPreprocess componentType = " + componentType);
 
-        if (componentType ==  "network.influence") {
-            console.log("dataPreprocess subcomponent network.influence");
+        if (componentType ==  "network.timeline") {
+            console.log("dataPreprocess subcomponent network.timeline");
 
             var args = event.getParam("arguments");
             var datajsonBefore = args.datajson;
@@ -168,7 +168,7 @@
 
         var componentType = component.get("v.componentType");
 
-        if ((componentType ==  "network.connections") || (componentType ==  "network.influence")) {
+        if ((componentType ==  "network.connections") || (componentType ==  "network.timeline")) {
 
             var componentReference = component.get("v.componentReference");        
 

@@ -1,6 +1,6 @@
 <design:component >
 
-    <design:attribute name="componentType" label="Component Type" default="" description="See documentation for a list of these values. For example network.connections, network.influence" />
+    <design:attribute name="componentType" label="Component Type" default="network.timeline" description="See documentation for a list of these values. For example network.connections, network.timeline" />
     <design:attribute name="UserComponentId" label="Component Id" default="Network" description="Id for this component" />
     <design:attribute name="UserControllerComponentId" label="Controller Component Id" default="Controller" description="If we want to restrict to a particular controller on the page then put the name here that you used as the Component Id of the Controller. Otherwise all controllers will act on this chart"/>    
 	<design:attribute name="primaryNodeHighlightingOn" default="true" label="Primary Node Highlighting On" description="Determines if selected node should be highlighted"/>    

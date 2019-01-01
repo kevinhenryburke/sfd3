@@ -116,7 +116,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>componentType</name>
-                <value>network.influence</value>
+                <value>network.timeline</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>hasPrimaryNode</name>

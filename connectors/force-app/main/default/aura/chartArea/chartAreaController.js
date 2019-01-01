@@ -153,9 +153,15 @@
             var currentMeasure = parameters["measure"];
             helper.setStore(component, "currentMeasure", currentMeasure);
             // display measure legend
-            helper.setStore(component, "showMeasureValues", true);
 
-            helper.showColorSchemeLegend(component);            
+            var componentType = component.get("v.componentType");
+            if (componentType != "hierarchy.treemap") {
+                helper.showColorSchemeLegend(component);            
+                helper.setStore(component, "showMeasureValues", true);
+            }
+            else {
+                helper.setStore(component, "showMeasureValues", false);
+            }
 
             // refresh node styles
             cc.styleNodes();                 
