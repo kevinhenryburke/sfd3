@@ -49,20 +49,18 @@
         
         var _this = this;
         var componentReference = component.get("v.componentReference");  
+        var currentMeasure = _this.getStore(component, "currentMeasure");
 
         return function(datajson) { 
             console.log("chartHierarchyTreeMapHelper computing callback " + componentReference);
 
-            var diameter = Math.min(_this.getCache (component, "width"),_this.getCache (component, "height") ) ;  
-            console.log("chartHierarchyTreeMapHelper diameter: " + diameter);
-
             var treemap = d3.treemap()
-                .size([diameter - 4, diameter - 4])
+                .size([_this.getCache (component, "width") - 20, _this.getCache (component, "height") - 4])
                 .round(true)
                 .padding(1);
 
             var root = d3.hierarchy(datajson) // <-B
-                .sum((d) => d.size)
+                .sum(_this.valueAccessor(component, currentMeasure))
                 .sort((a, b) => b.value - a.value);
 
             _this.setCache (component, "root", root) ;  
@@ -72,6 +70,15 @@
             return treemap(root);
         };
     },        
+
+    valueAccessor : function (component, currentMeasure) {
+        var _this = this;
+        console.log("chartHierarchyTreeMapHelper valueAccessor");
+        return function (d) {
+            console.log("chartHierarchyTreeMapHelper valueAccessor", d);
+            return _this.getFromMeasureScheme(component, d, currentMeasure, "Value");
+        }
+    },
 
     styleTreemap : function (component, node) {
         // Not sure this is called
@@ -115,18 +122,18 @@
 		console.log("chartHierarchyTreeMapHelper.renderCells enter");
 
         var cellEnter = cells.enter().append("g")
-                .merge(cells)
-                .attr("class", "cell")
-                .attr("transform", function (d) {
-                    return "translate(" + d.x0 + "," + d.y0 + ")"; //<-E
-                })
-                .attr("id", d => d.id)
-                .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-                    console.log("chartHierarchyTreeMapHelper.mouseover enter");
-                    _this.setCache (component, "mouseoverRecordId", d.id ) ;
-                    var preppedEvent = _this.nodeMouseover(component, d); 
-                    _this.publishPreppedEvent(component,preppedEvent);
-                }))
+            .merge(cells)
+            .attr("class", "cell")
+            .attr("transform", function (d) {
+                return "translate(" + d.x0 + "," + d.y0 + ")"; //<-E
+            })
+            .attr("id", d => d.id)
+            .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
+                console.log("chartHierarchyTreeMapHelper.mouseover enter");
+                _this.setCache (component, "mouseoverRecordId", d.id ) ;
+                var preppedEvent = _this.nodeMouseover(component, d); 
+                _this.publishPreppedEvent(component,preppedEvent);
+            }))
         ;
 
         _this.renderRect(cellEnter, cells);
@@ -162,22 +169,22 @@
         cellEnter.append("text");
 
         cellEnter.merge(cells)
-                .select("text") //<-H
-                .style("font-size", 11)
-                .attr("x", function (d) {
-                    return (d.x1 - d.x0) / 2;
-                })
-                .attr("y", function (d) {
-                    return (d.y1 - d.y0) / 2;
-                })
-                .attr("text-anchor", "middle")
-                .text(function (d) {
-                    return d.data.name;
-                })
-                .style("opacity", function (d) {
-                    d.w = this.getComputedTextLength();
-                    return d.w < (d.x1 - d.x0) ? 1 : 0; //<-I
-                });
+            .select("text") //<-H
+            .style("font-size", 11)
+            .attr("x", function (d) {
+                return (d.x1 - d.x0) / 2;
+            })
+            .attr("y", function (d) {
+                return (d.y1 - d.y0) / 2;
+            })
+            .attr("text-anchor", "middle")
+            .text(function (d) {
+                return d.data.name;
+            })
+            .style("opacity", function (d) {
+                d.w = this.getComputedTextLength();
+                return d.w < (d.x1 - d.x0) ? 1 : 0; //<-I
+            });
     }
 
 })

@@ -12,6 +12,18 @@
         let nodeSelector = "circle";
         let nodeDataSetFunction = helper.getRootStructureTreeMap (component); 
 
+        nodeDataSetFunction(datajson);
+
+        let root = helper.getCache (component, "root") ;  
+
+        let cells = nodeGroup
+            .selectAll("g")
+            .data(root.leaves()) // <-D
+
+
+            helper.renderCells(component, cells);
+
+
         // let node = nodeGroup
         //     .selectAll(nodeSelector)
         //     .data(nodeDataSetFunction(datajson), function(d, i) { return d.id;})
