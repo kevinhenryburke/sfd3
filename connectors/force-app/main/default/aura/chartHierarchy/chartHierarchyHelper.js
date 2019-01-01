@@ -17,10 +17,10 @@
 		var width = _this.getCache (component, "width") ;  
         var height = _this.getCache (component, "height") ; 
 
-        /* Treemap specification */
+        /* tree specification */
         
-        var treemap = d3.tree().size([height, width]);
-        _this.setCache (component, "treemap", treemap ) ;
+        var tree = d3.tree().size([height, width]);
+        _this.setCache (component, "tree", tree ) ;
         
         // Assigns parent, children, height, depth
         var root = d3.hierarchy(datajson, function(d) { return d.children; });
@@ -80,25 +80,25 @@
         
         // Assigns the x and y position for the nodes
 
-        var treemap = _this.getCache (component, "treemap" ) ;
+        var tree = _this.getCache (component, "tree" ) ;
 
-        var treeMappedData;
+        var treeData;
         if (makeSourceRoot === true) {
             // INTERESTING -- RE-ROOT OPTION
             // WOULD NEED TO TRANSFROM TO SHIFT EVERYTHING TO THE LEFT
             // can do that by a variant of the nodes.forEach function a few lines below this
-            treeMappedData = treemap(source);
+            treeData = tree(source);
 
         }
         else {
             var root = _this.getCache (component, "root" ) ;
-            treeMappedData = treemap(root);
+            treeData = tree(root);
         }        
       
         // Compute the new tree layout.
-        nodes = treeMappedData.descendants();
+        nodes = treeData.descendants();
         // descendants: nodes will contain all of the visible nodes
-        links = treeMappedData.descendants().slice(1);
+        links = treeData.descendants().slice(1);
 
         // Example of how to filter nodes and links
 /*        nodes = nodes.filter(function(d, i) {
@@ -819,63 +819,5 @@
 
         console.log("aura:method refreshVisibility in subcomponent exit");
     },
-
-
-    /* Pack methods */
-
-    stylePack : function (component, node) {
-        // Not sure this is called
-        var _this = this;
-        console.log("stylePack enter");    
-
-        var componentType = component.get("v.componentType");
-        var currentMeasure = _this.getStore(component, "currentMeasure");
-        console.log("xxxxx: currentMeasure: " , currentMeasure);
-        console.log("stylePack componentType = " + componentType);
-
-        node.attr("transform", "translate(2,2)") // new
-            .attr("class", function(d) { return d.children ? "packbranch node" : "packleaf node"; })
-            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-    
-        node.append("title")
-            .text(function(d) { return d.data.name + "\n" + d3.format(",d")(d.value); }); // this is the d3 value accessor which handles sum in hierarchy layout 
-    
-        node.append("circle")
-            .attr("r", function(d) { return d.r; })
-            .style("fill", function(d) { 
-                // we add new circles only to new nodes - the nodes are forgotten if collapsed
-                return _this.getFromMeasureScheme(component, d.data, currentMeasure, "Color");
-            })
-            .style("fill-opacity", function(d, i) {
-                return _this.getFilterOpacity(component, d.data);
-            })
-                
-            ;
-    
-        node.filter(function(d) { return !d.children; }).append("text")
-            .attr("dy", "0.3em")
-            .text(function(d) { return d.data.name.substring(0, d.r / 3); });
-    
-        console.log("stylePack exit");
-    },
-
-    getRootStructurePack : function (component) {
-        var _this = this;
-        var componentReference = component.get("v.componentReference");  
-
-        return function(datajson) { 
-            console.log("getRootStructurePack computing callback " + componentReference);
-            var root = d3.hierarchy(datajson)
-            .sum((d) => d.size)
-            .sort((a, b) => b.value - a.value);
-
-            var diameter = Math.min(_this.getCache (component, "width"),_this.getCache (component, "height") ) ;  
-            console.log("getRootStructurePack diameter: " + diameter);
-            
-            var pack = d3.pack()
-            .size([diameter - 4, diameter - 4]);
-            return pack(root).descendants();
-        };
-    },        
 
 })
