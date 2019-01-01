@@ -34,29 +34,6 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
-                <value>TreeMap</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>UserControllerComponentId</name>
-                <value>TopPack</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>componentType</name>
-                <value>hierarchy.pack</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>hasPrimaryNode</name>
-                <value>false</value>
-            </componentInstanceProperties>
-            <componentName>chartHierarchyTreeMap</componentName>
-        </componentInstances>
-        <componentInstances>
-            <componentInstanceProperties>
-                <name>Title</name>
-                <value>1</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>UserComponentId</name>
                 <value>HierarchyPack</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
