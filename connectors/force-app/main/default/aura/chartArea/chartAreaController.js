@@ -149,10 +149,8 @@
         }
         if (topic == "SetMeasure")
         {
-            // get the measure and measure scheme
-            var currentMeasure = parameters["measure"];
-            helper.setStore(component, "currentMeasure", currentMeasure);
-            // display measure legend
+            // get the measure
+            helper.setStore(component, "currentMeasure",  parameters["measure"]);
 
             var componentType = component.get("v.componentType");
             if (componentType != "hierarchy.treemap") {
@@ -162,6 +160,14 @@
             else {
                 helper.setStore(component, "showMeasureValues", false);
             }
+
+            // refresh node styles
+            cc.styleNodes();                 
+        }
+        if (topic == "SetSize")
+        {
+            // get the measure
+            helper.setStore(component, "currentMeasure",  parameters["size"]);
 
             // refresh node styles
             cc.styleNodes();                 

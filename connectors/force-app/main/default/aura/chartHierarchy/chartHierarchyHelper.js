@@ -795,14 +795,14 @@
         var componentReference = component.get("v.componentReference");       
         
         var node = d3.select(_this.getDivId("nodeGroup", componentReference, true))
-            .selectAll("circle")
+            .selectAll("circle,rect") // comma separated searches for both
             .style("fill-opacity", function(d, i) {
                 return _this.getFilterOpacity(component, d.data);
             })
             .style("stroke-opacity", function(d, i) {
                 return _this.getFilterOpacity(component, d.data);
             })            
-            ;
+        ;
 
         var text = d3.select(_this.getDivId("nodeGroup", componentReference, true))
             .selectAll("text")

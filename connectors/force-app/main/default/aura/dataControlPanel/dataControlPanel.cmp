@@ -29,14 +29,12 @@
 	<aura:attribute name="configuredMeasures" type="Boolean" default="false"/>    
   <aura:attribute name="measuresCount" type="Integer" default="0"/>      
 
-  <aura:attribute name="panelCurrentSizes" type="String"/>    
-  <aura:attribute name="panelCurrentSizesScheme" type="Object"/>    
-  <aura:attribute name="sizesNames" type="String[]"/>    
-  <aura:attribute name="sizesSchemes" type="Object[]"/>    
-  <aura:attribute name="sizesSchemesKeyValue" type="Object"/>      
+  <aura:attribute name="panelCurrentSize" type="String"/>    
+  <aura:attribute name="sizeNames" type="String[]"/>    
+  <aura:attribute name="sizeSchemes" type="Object[]"/>    
   <aura:attribute name="panelShowSizes" type="Object[]" default="[]" />
 	<aura:attribute name="configuredSizes" type="Boolean" default="false"/>    
-  <aura:attribute name="sizesNumber" type="Integer" default="0"/>      
+  <aura:attribute name="sizesCount" type="Integer" default="0"/>      
 
 	<aura:attribute name="panelPrimaryId" type="String"/> 
 	<aura:attribute name="currentLevels" type="Integer" default="1"/>    
@@ -122,10 +120,10 @@
                       </aura:iteration>
                   </lightning:buttonMenu>
               </aura:if>
-              <aura:if isTrue="{!v.sizesNumber > 0}">
+              <aura:if isTrue="{!v.sizesCount > 0}">
                   <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuSizes }" label="Sizes">
                       <aura:iteration var="action" items="{! v.panelShowSizes }">
-                          <lightning:menuItem aura:id="actionMenuSizesItems" label="{! action }" value="{! action }" checked="{! v.panelCurrentSize == action}"/>
+                          <lightning:menuItem aura:id="actionMenuSizeItems" label="{! action }" value="{! action }" checked="{! v.panelCurrentSize == action}"/>
                       </aura:iteration>
                   </lightning:buttonMenu>
               </aura:if>

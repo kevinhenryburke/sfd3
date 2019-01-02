@@ -560,6 +560,7 @@
                     var currentApiName = fieldConfig["api"]; 
                     var measureScheme = fieldConfig["measureScheme"]; 
                     var measureSchemeType = fieldConfig["measureSchemeType"]; 
+                    var sizeSchemeType = fieldConfig["sizeSchemeType"]; 
 
                     if (measureObjectFieldMap[measureName] == null) {
                         var measureLevel = {};
@@ -712,6 +713,10 @@
 
         var measureObjectFieldMap = _this.getStore(component, "measureObjectFieldMap");
         var objectType = o["objectType"];
+
+        if (currentMeasure == null) {
+            return;
+        }
 
         var currentMeasureObjectConfig = measureObjectFieldMap[currentMeasure][objectType];
 

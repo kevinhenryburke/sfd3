@@ -28,34 +28,6 @@
 
     dataPreprocess: function(component,event,helper){
         console.log("calling the aura:method dataPreprocess in subcomponent");
-
-        var componentType = component.get("v.componentType");
-        console.log("dataPreprocess componentType = " + componentType);
-
-        if (componentType ==  "network.timeline") {
-            console.log("dataPreprocess subcomponent network.timeline");
-
-            var args = event.getParam("arguments");
-            var datajsonBefore = args.datajson;
-            var datajsonRefresh = args.datajsonRefresh;
-
-            for (var i = 0; i < datajsonBefore.nodes.length; i++){
-                var djnodeBefore = datajsonBefore.nodes[i];
-                var fieldsBefore = djnodeBefore.fields;
-                var djnodeAfter = datajsonRefresh.nodes[i];
-                var fieldsAfter = djnodeAfter.fields;
-                for (var j = 0; j < fieldsBefore.length; j++) {
-                    if (fieldsBefore[j].retrievedDecimal != null) {
-                        fieldsBefore[j].retrievedDecimal = fieldsAfter[j].retrievedDecimal;
-                    }
-                    if (fieldsBefore[j].retrievedInteger != null) {
-                        fieldsBefore[j].retrievedInteger = fieldsAfter[j].retrievedInteger;
-                    }
-                }
-            }    
-            helper.setCache (component, "datajson", datajsonBefore ) ;
-        }
-
     },
 
     searchChart: function(component,event,helper){

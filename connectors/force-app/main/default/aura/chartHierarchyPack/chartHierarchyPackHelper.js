@@ -36,8 +36,6 @@
 
         var componentType = component.get("v.componentType");
         var currentMeasure = _this.getStore(component, "currentMeasure");
-        console.log("xxxxx: currentMeasure: " , currentMeasure);
-        console.log("stylePack componentType = " + componentType);
 
         node.attr("transform", "translate(2,2)") // new
             .attr("class", function(d) { return d.children ? "packbranch node" : "packleaf node"; })

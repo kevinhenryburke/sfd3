@@ -53,6 +53,7 @@
                 var masterConfigObject = component.get("v.masterConfigObject");
 
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
+                var panelCurrentSize = component.get("v.panelCurrentSize");
                 var panelPrimaryId = component.get("v.panelPrimaryId");            
                 var filterPublish = component.get("v.filterPublish");     
                 
@@ -71,6 +72,7 @@
                     var configEventParameters = { 
                         "datajson" : datajson, 
                         "currentMeasure" : panelCurrentMeasure, 
+                        "currentSize" : panelCurrentSize, 
                         "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
                         "showFilters" : filterPublish,
@@ -160,6 +162,7 @@
 
                 var datajson = component.get("v.datajson");
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
+                var panelCurrentSize = component.get("v.panelCurrentSize");
                 var panelPrimaryId = component.get("v.panelPrimaryId");            
                 var filterPublish = component.get("v.filterPublish");     
                 
@@ -170,6 +173,7 @@
                 var configEventParameters = { 
                     "datajson" : datajson, 
                     "currentMeasure" : panelCurrentMeasure, 
+                    "currentSize" : panelCurrentSize, 
                     "masterConfigObject" : masterConfigObject,
                     "primaryId" : panelPrimaryId, 
                     "showFilters" : filterPublish,
@@ -283,7 +287,7 @@
 
     handleMenuSizes: function (component, event, helper) {
         var selectedMenuItemValue = event.getParam("value");
-        // helper.setMenuSizes(component, selectedMenuItemValue);
+        helper.setMenuSize(component, selectedMenuItemValue);
     },    
 
     handleMenuFilter: function (component, event, helper) {

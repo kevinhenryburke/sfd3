@@ -14,11 +14,14 @@
             var topObjectLevel = queryJSONObject["objectLevels"][0];
             var topObjectLevelFields = topObjectLevel.fields;
 
-
             var measureNames = [];
             var panelShowMeasures = [];
             var measureSchemes = [];
             var numberMeasuresFound = 0;
+
+            var sizeNames = [];
+            var panelShowSizes = [];
+            var numberSizesFound = 0;
 
             var filterPublish = {};
 
@@ -45,6 +48,21 @@
                     numberMeasuresFound++;
                 }
 
+
+                // size configuration
+                if (topObjectLevelFields[j].sizeName != null) {
+                    if (numberSizesFound == 0){
+                        component.set("v.configuredSizes", true);
+                        // set the first size as default
+                        var panelCurrentSize = topObjectLevelFields[j].sizeName;
+                        component.set("v.panelCurrentSize", panelCurrentSize);
+                    }
+                    // create arrays for size and schemes
+                    sizeNames.push(topObjectLevelFields[j].sizeName);
+                    panelShowSizes.push(topObjectLevelFields[j].sizeName);
+                    numberSizesFound++;
+                }
+
                 // Filter configuration
                 // At present only one filter field is possible
                 var panelFilter = topObjectLevelFields[j].filter;
@@ -60,10 +78,13 @@
 
             component.set("v.measureNames", measureNames);
             component.set("v.measuresCount", measureNames.length)
-
             component.set("v.panelShowMeasures", panelShowMeasures);
             component.set("v.measureSchemes", measureSchemes);
-                        
+
+            component.set("v.sizeNames", sizeNames);
+            component.set("v.sizesCount", sizeNames.length)
+            component.set("v.panelShowSizes", panelShowSizes);
+            
             for (var key in buttonParameters) {  
                 var subObj = buttonParameters[key];
 
@@ -166,6 +187,7 @@
                 var datajson = component.get("v.datajson");
                 var masterConfigObject = component.get("v.masterConfigObject");
                 var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
+                var panelCurrentSize = component.get("v.panelCurrentSize");
                 var filterPublish = component.get("v.filterPublish");     
 
                 var configEventParameters;
@@ -182,6 +204,7 @@
                     configEventParameters = { 
                         "datajson" : datajson, 
                         "currentMeasure" : panelCurrentMeasure,
+                        "currentSize" : panelCurrentSize,
                         "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
                         "showFilters" : filterPublish,
@@ -192,6 +215,7 @@
                     configEventParameters = { 
                         "datajson" : datajson, 
                         "currentMeasure" : panelCurrentMeasure,
+                        "currentSize" : panelCurrentSize,
                         "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
                         "showFilters" : filterPublish,
@@ -335,6 +359,16 @@
         var preppedEvent = _this.prepareEvent("SetMeasure", {"measure" : currentMeasure }, controllerId);
         _this.publishPreppedEvent(component,preppedEvent);
     },
+
+    setMenuSize : function(component, currentSize) {
+        var _this = this;
+        component.set("v.panelCurrentSize", currentSize);
+        var controllerId = component.get("v.UserComponentId");
+        var preppedEvent = _this.prepareEvent("SetSize", {"size" : currentSize }, controllerId);
+        _this.publishPreppedEvent(component,preppedEvent);
+    },
+
+
 
     setMenuFilter: function(component, thisType, newClickedState) {
         var _this = this;
