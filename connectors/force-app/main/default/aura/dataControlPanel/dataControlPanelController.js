@@ -69,10 +69,6 @@
 
                     console.log("enrich queued event and publish from onInit, componentReference: " + componentReference);
 
-                    console.log("xxxxx: currentMeasure: " + panelCurrentMeasure);
-                    console.log("xxxxx: currentSize: " + panelCurrentSize);
-
-
                     var configEventParameters = { 
                         "datajson" : datajson, 
                         "currentMeasure" : panelCurrentMeasure, 

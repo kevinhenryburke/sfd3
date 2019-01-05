@@ -21,6 +21,7 @@
             return colorme;
         });
 
+        // helper.stylePack(component, node);
     },
 
     getDefaultSize: function(component,event,helper){

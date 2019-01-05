@@ -151,15 +151,14 @@
         {
             // get the measure
 
-//TODO - should I just set the measure scheme here, once, in one place???
-// could improve performance a lot?            
+            //TODO - should I just set the measure scheme here, once, in one place???
+            // could improve performance a lot?            
 
             helper.setStore(component, "currentMeasure",  parameters["measure"]);
             helper.setStore(component, "relevantMeasure",  parameters["measure"]);
             helper.setStore(component, "latestSizeOrColor",  "color");
-            helper.setStore(cc, "updateColor", true);
-            helper.setStore(cc, "updateSize", false);
-
+            helper.setStore(component, "updateColor", true);
+            helper.setStore(component, "updateSize", false);
 
             var componentType = component.get("v.componentType");
             if (componentType != "hierarchy.treemap") {
@@ -180,13 +179,10 @@
             helper.setStore(component, "relevantMeasure",  parameters["size"]);
             helper.setStore(component, "latestSizeOrColor",  "size");
 
-            helper.setStore(cc, "updateColor", false);
-            helper.setStore(cc, "updateSize", true);
+            helper.setStore(component, "updateColor", false);
+            helper.setStore(component, "updateSize", true);
             
-// TEMP
-console.log("xxxxx: SetSize " + helper.getStore(component, "currentSize"));
-//helper.setStore(component, "currentMeasure",  parameters["size"]);
-// refresh node styles
+            // refresh node styles
             cc.styleNodes();                 
         }
         if (topic == "SetFilter")
@@ -234,41 +230,29 @@ console.log("xxxxx: SetSize " + helper.getStore(component, "currentSize"));
                     helper.setCache (component, "showLevels", 1) ;
                 }
 
-// set latest values for color and size
-if (parameters["currentMeasure"] != null) {
-    helper.setStore(cc, "currentMeasure", parameters["currentMeasure"]);
-}                
-else {
-    helper.setStore(cc, "currentMeasure", "bzDefault");
-}
+                // set latest values for color and size
 
-if (parameters["currentSize"] != null) {
-    helper.setStore(cc, "currentSize", parameters["currentSize"]);
-}                
-else {
-    helper.setStore(cc, "currentSize", "bzDefault");
-}
+                helper.setStore(component, "currentMeasure", 
+                    parameters["currentMeasure"] != null ? parameters["currentMeasure"] : "bzDefault");
+                helper.setStore(component, "currentSize", 
+                    parameters["currentSize"] != null ? parameters["currentSize"] : "bzDefault");
+                
+                // set relevantMeasure
+                if (parameters["currentMeasure"] != null) {
+                    helper.setStore(component, "relevantMeasure", parameters["currentMeasure"]);
+                }                
+                else if (parameters["currentSize"] != null) {
+                    helper.setStore(component, "relevantMeasure", parameters["currentSize"]);
+                }                
+                else { // if there are no colors or sizes then mark this as bzDefault
+                    helper.setStore(component, "relevantMeasure", "bzDefault");
+                }
 
-// set relevantMeasure
-if (parameters["currentMeasure"] != null) {
-    helper.setStore(cc, "relevantMeasure", parameters["currentMeasure"]);
-}                
-else if (parameters["currentSize"] != null) {
-    helper.setStore(cc, "relevantMeasure", parameters["currentSize"]);
-}                
-else {
-    helper.setStore(cc, "relevantMeasure", null);
-}
-
-
-
-helper.setStore(cc, "defaultColor", cc.getDefaultColor());
-helper.setStore(cc, "defaultSize", cc.getDefaultSize());
-console.log("xxxxxx: defaultColor: " + helper.getStore(cc, "defaultColor"));
-console.log("xxxxxx: defaultSize: " + helper.getStore(cc, "defaultSize"));
-helper.setStore(cc, "updateColor", true);
-helper.setStore(cc, "updateSize", true);
-helper.setStore(cc, "latestSizeOrColor",  "none");
+                helper.setStore(component, "defaultColor", cc.getDefaultColor());
+                helper.setStore(component, "defaultSize", cc.getDefaultSize());
+                helper.setStore(component, "updateColor", true);
+                helper.setStore(component, "updateSize", true);
+                helper.setStore(component, "latestSizeOrColor",  "none");
 
 
                 helper.initializeGroups(component, parameters["datajson"], parameters["primaryId"], parameters["showFilters"], isInit);                 

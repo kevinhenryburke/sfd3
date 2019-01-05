@@ -709,103 +709,113 @@
 
     // returnType is either "Value" or "Color" or "Size"
 
-    getFromMeasureScheme : function (component, o, returnType) {
+    getDefaultValueForReturnType : function (component, returnType) {
         var _this = this;
-
-        // relevantMeasure is set on initialization of data in component and changed on color or size events.
-        let relevantMeasure = _this.getStore(component, "relevantMeasure"); 
-
-        console.log("xxxxx: relevantMeasure: " + relevantMeasure);
-
-
         let retValDefault; 
         switch (returnType) {
             case "Color" : retValDefault = _this.getStore(component, "defaultColor") ; break;
             case "Value" : retValDefault = ""; break;
             case "Size" : retValDefault = _this.getStore(component, "defaultSize"); break;
         }
+        return retValDefault;
+    },
 
+    getStringValue : function (currentMeasureScheme, retrievedField, returnType) {
+        var _this = this;
+        var retrievedValue = retrievedField.retrievedValue;
+        if (returnType == "Value") { // for Value just return the String Value in the relevant field
+            return retrievedValue;
+        }
+        if (returnType == "Color") { // try to match with the value with the configured list, if not found return the default color
+            var valueColor = currentMeasureScheme[retrievedValue];
+            if (valueColor != null) {
+                return valueColor;
+            }
 
+            var valueColorDefault = currentMeasureScheme["default"];
+            if (valueColorDefault != null) {
+                return valueColorDefault;
+            }
+            return _this.getDefaultValueForReturnType (component, "Color");    
+        }
+    },
+
+    getFromMeasureScheme : function (component, ddata, returnType) {
+        var _this = this;
+
+        // relevantMeasure is set on initialization of data in component and changed on color or size events.
+        let relevantMeasure = _this.getStore(component, "relevantMeasure"); 
         // deal with the case when there are no colors or sizes configured
-        if (relevantMeasure == null) { 
-            return retValDefault;    
+        if (relevantMeasure == null || relevantMeasure == "bzDefault") { 
+            return _this.getDefaultValueForReturnType (component, returnType);    
         }
 
-/// TODO - all of this could be moved out into a one time call when initializing or new color or size event
+        let objectType = ddata["objectType"];
+
 
         // deal with the case when there are no colors or sizes configured for the current object
         var measureObjectFieldMap = _this.getStore(component, "measureObjectFieldMap");
-        var objectType = o["objectType"];
         var currentMeasureObjectConfig = measureObjectFieldMap[relevantMeasure][objectType];
 
         if (currentMeasureObjectConfig == null) {
-            return retValDefault;    
+            return _this.getDefaultValueForReturnType (component, returnType);    
         }
 
         // from here on we can assume that there is some object configuration for this measure
         var currentMeasureScheme = currentMeasureObjectConfig["measureScheme"];
         var currentMeasureSchemeType = currentMeasureObjectConfig["measureSchemeType"];
         var fieldIndex = currentMeasureObjectConfig["fieldIndex"];
-
-        // case when baseing colors and values on picklists (not currently relevant for sizes)
-        if (currentMeasureSchemeType == "StringValue") {
-            var retrievedValue = o.fields[fieldIndex].retrievedValue;
-
-            if (returnType == "Value") {
-                return retrievedValue;
-            }
-            if (returnType == "Color") {
-                var valueColor = currentMeasureScheme[retrievedValue];
-                if (valueColor != null) {
-                    return valueColor;
-                }
-                var valueColorDefault = currentMeasureScheme["default"];
-                if (valueColorDefault != null) {
-                    return valueColorDefault;
-                }
-                return retValDefault;
-            }
-        }
-
-        // case when baseing colors and values on numerics
-
-        // bring the Decimal and Integer options into a single variable
-        var numericValue;
-        var retrievedDecimal = o.fields[fieldIndex].retrievedDecimal;
-        if (retrievedDecimal != null) {
-            numericValue = retrievedDecimal;
-        } 
-        else {
-            numericValue = o.fields[fieldIndex].retrievedInteger;
-        }
+        let retrievedField = ddata.fields[fieldIndex];
 
         if (returnType == "Value" || returnType == "Size") {
+            // bring the Decimal and Integer options into a single variable
+
+            if (currentMeasureSchemeType == "StringValue") {
+                return _this.getStringValue (currentMeasureScheme, retrievedField,  "Value");
+            }
+
+            let numericValue = (retrievedField.retrievedDecimal != null) 
+                ? retrievedField.retrievedDecimal : retrievedField.retrievedInteger;
             return numericValue;
         }
 
-        if (currentMeasureSchemeType == "ValueBand") {
-            // check out the lowest level
-            var low = currentMeasureScheme[0];
-            if (numericValue < low.below) {
-                return low.color;
-            } 
-            else {
-                // if above the lowest threshhold go to the top and work backwards
-                var measureSchemeLength = currentMeasureScheme.length;
-                for (var k = measureSchemeLength - 1; k > 0; k--) {
-                    var high = currentMeasureScheme[k];
-                    if (numericValue >= high.above) {
-                        return high.color;
-                    }         
+        if (returnType == "Color" ) {
+            // case when baseing colors and values on picklists (not currently relevant for sizes)
+            if (currentMeasureSchemeType == "StringValue") {
+                return _this.getStringValue (currentMeasureScheme, retrievedField, returnType);
+            }
+
+            // case when baseing colors and values on numerics
+
+            // bring the Decimal and Integer options into a single variable
+            var numericValue = (retrievedField.retrievedDecimal != null) 
+                ? retrievedField.retrievedDecimal : retrievedField.retrievedInteger;
+
+            if (currentMeasureSchemeType == "ValueBand") {
+                // check out the lowest level
+                var low = currentMeasureScheme[0];
+                if (numericValue < low.below) {
+                    return low.color;
+                } 
+                else {
+                    // if above the lowest threshhold go to the top and work backwards
+                    var measureSchemeLength = currentMeasureScheme.length;
+                    for (var k = measureSchemeLength - 1; k > 0; k--) {
+                        var high = currentMeasureScheme[k];
+                        if (numericValue >= high.above) {
+                            return high.color;
+                        }         
+                    }
                 }
+            }
+
+            if (currentMeasureSchemeType == "Scale") {
+                var measureObjectScaleMap = _this.getStore(component, "measureObjectScaleMap");  
+                var currentMeasureObjectConfig = measureObjectScaleMap[relevantMeasure][objectType];
+                return currentMeasureObjectConfig(numericValue) ;     
             }
         }
 
-        if (currentMeasureSchemeType == "Scale") {
-            var measureObjectScaleMap = _this.getStore(component, "measureObjectScaleMap");  
-            var currentMeasureObjectConfig = measureObjectScaleMap[relevantMeasure][objectType];
-            return currentMeasureObjectConfig(numericValue) ;     
-       }
 
     },
 
