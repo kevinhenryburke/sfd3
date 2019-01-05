@@ -95,6 +95,18 @@
 
         helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
         console.log("aura:method styleNodes in chartHierarchy exit");
+    },
+
+    getDefaultSize: function(component,event,helper){
+        // console.log("aura:method getDefaultSize in chartHierarchy enter");
+        // console.log("aura:method getDefaultSize in chartHierarchy exit");
+        return 10;
+    },
+
+    getDefaultColor: function(component,event,helper){
+        // console.log("aura:method getDefaultColor in chartHierarchy enter");
+        // console.log("aura:method getDefaultColor in chartHierarchy exit");
+        return "lightsteelblue";
     }
 
 })

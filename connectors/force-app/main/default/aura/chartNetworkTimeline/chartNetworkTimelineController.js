@@ -43,6 +43,18 @@
 
     },
 
+    getDefaultSize: function(component,event,helper){
+        // console.log("aura:method getDefaultSize in chartNetworkTimeline enter");
+        // console.log("aura:method getDefaultSize in chartNetworkTimeline exit");
+        return 20;
+    },
+
+    getDefaultColor: function(component,event,helper){
+        // console.log("aura:method getDefaultColor in chartNetworkTimeline enter");
+        // console.log("aura:method getDefaultColor in chartNetworkTimeline exit");
+        return "lightsteelblue";
+    }
+
 
 
 })

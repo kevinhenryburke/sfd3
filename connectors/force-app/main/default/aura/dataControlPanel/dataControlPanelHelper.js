@@ -28,9 +28,8 @@
             for (var j = 0; j < topObjectLevelFields.length; j++) {
 
                 // measure configuration
-                if (topObjectLevelFields[j].measureName != null) {
+                if (topObjectLevelFields[j].measureSchemeType != null) {
                     if (numberMeasuresFound == 0){
-                        component.set("v.configuredMeasures", true);
                         // set the first measure as default
                         var panelCurrentMeasure = topObjectLevelFields[j].measureName;
                         component.set("v.panelCurrentMeasure", panelCurrentMeasure);
@@ -50,16 +49,16 @@
 
 
                 // size configuration
-                if (topObjectLevelFields[j].sizeName != null) {
+                if (topObjectLevelFields[j].sizeSchemeType != null) {
                     if (numberSizesFound == 0){
                         component.set("v.configuredSizes", true);
                         // set the first size as default
-                        var panelCurrentSize = topObjectLevelFields[j].sizeName;
+                        var panelCurrentSize = topObjectLevelFields[j].measureName;
                         component.set("v.panelCurrentSize", panelCurrentSize);
                     }
                     // create arrays for size and schemes
-                    sizeNames.push(topObjectLevelFields[j].sizeName);
-                    panelShowSizes.push(topObjectLevelFields[j].sizeName);
+                    sizeNames.push(topObjectLevelFields[j].measureName);
+                    panelShowSizes.push(topObjectLevelFields[j].measureName);
                     numberSizesFound++;
                 }
 

@@ -150,7 +150,16 @@
         if (topic == "SetMeasure")
         {
             // get the measure
+
+//TODO - should I just set the measure scheme here, once, in one place???
+// could improve performance a lot?            
+
             helper.setStore(component, "currentMeasure",  parameters["measure"]);
+            helper.setStore(component, "relevantMeasure",  parameters["measure"]);
+            helper.setStore(component, "latestSizeOrColor",  "color");
+            helper.setStore(cc, "updateColor", true);
+            helper.setStore(cc, "updateSize", false);
+
 
             var componentType = component.get("v.componentType");
             if (componentType != "hierarchy.treemap") {
@@ -167,9 +176,17 @@
         if (topic == "SetSize")
         {
             // get the measure
-            helper.setStore(component, "currentMeasure",  parameters["size"]);
+            helper.setStore(component, "currentSize",  parameters["size"]);
+            helper.setStore(component, "relevantMeasure",  parameters["size"]);
+            helper.setStore(component, "latestSizeOrColor",  "size");
 
-            // refresh node styles
+            helper.setStore(cc, "updateColor", false);
+            helper.setStore(cc, "updateSize", true);
+            
+// TEMP
+console.log("xxxxx: SetSize " + helper.getStore(component, "currentSize"));
+//helper.setStore(component, "currentMeasure",  parameters["size"]);
+// refresh node styles
             cc.styleNodes();                 
         }
         if (topic == "SetFilter")
@@ -217,7 +234,42 @@
                     helper.setCache (component, "showLevels", 1) ;
                 }
 
-                helper.setStore(cc, "currentMeasure", parameters["currentMeasure"]);
+// set latest values for color and size
+if (parameters["currentMeasure"] != null) {
+    helper.setStore(cc, "currentMeasure", parameters["currentMeasure"]);
+}                
+else {
+    helper.setStore(cc, "currentMeasure", "bzDefault");
+}
+
+if (parameters["currentSize"] != null) {
+    helper.setStore(cc, "currentSize", parameters["currentSize"]);
+}                
+else {
+    helper.setStore(cc, "currentSize", "bzDefault");
+}
+
+// set relevantMeasure
+if (parameters["currentMeasure"] != null) {
+    helper.setStore(cc, "relevantMeasure", parameters["currentMeasure"]);
+}                
+else if (parameters["currentSize"] != null) {
+    helper.setStore(cc, "relevantMeasure", parameters["currentSize"]);
+}                
+else {
+    helper.setStore(cc, "relevantMeasure", null);
+}
+
+
+
+helper.setStore(cc, "defaultColor", cc.getDefaultColor());
+helper.setStore(cc, "defaultSize", cc.getDefaultSize());
+console.log("xxxxxx: defaultColor: " + helper.getStore(cc, "defaultColor"));
+console.log("xxxxxx: defaultSize: " + helper.getStore(cc, "defaultSize"));
+helper.setStore(cc, "updateColor", true);
+helper.setStore(cc, "updateSize", true);
+helper.setStore(cc, "latestSizeOrColor",  "none");
+
 
                 helper.initializeGroups(component, parameters["datajson"], parameters["primaryId"], parameters["showFilters"], isInit);                 
 
@@ -310,6 +362,18 @@
     styleNodes: function(component,event,helper){
         // console.log("aura:method styleNodes in chartArea enter");
         // console.log("aura:method styleNodes in chartArea exit");
+    },
+
+    getDefaultSize: function(component,event,helper){
+        // console.log("aura:method getDefaultSize in chartArea enter");
+        // console.log("aura:method getDefaultSize in chartArea exit");
+        return "lightsteelblue";
+    },
+
+    getDefaultColor: function(component,event,helper){
+        // console.log("aura:method getDefaultColor in chartArea enter");
+        // console.log("aura:method getDefaultColor in chartArea exit");
+        return 10;
     }
 
 })

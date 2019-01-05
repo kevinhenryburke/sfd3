@@ -10,7 +10,13 @@
     <aura:method name="refreshDataController"> 
         <aura:attribute name="parameters" type="Object"/> 
     </aura:method>
-    
+
+    <aura:method name="getDefaultSize"> 
+    </aura:method>
+  
+    <aura:method name="getDefaultColor"> 
+    </aura:method>
+      
     <aura:method name="searchChart"> 
         <aura:attribute name="searchTermId" type="String"/> 
         <aura:attribute name="searchAction" type="String"/> 

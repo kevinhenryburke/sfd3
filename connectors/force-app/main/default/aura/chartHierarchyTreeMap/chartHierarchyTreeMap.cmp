@@ -5,5 +5,10 @@
     <aura:method name="styleNodes"> 
     </aura:method>
 
+    <aura:method name="getDefaultSize"> 
+    </aura:method>
+  
+    <aura:method name="getDefaultColor"> 
+    </aura:method>
 
 </aura:component>	

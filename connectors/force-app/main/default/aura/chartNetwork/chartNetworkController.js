@@ -146,30 +146,24 @@
 
             var primaryid = helper.getCache (component, "primaryNodeId") ;
             var currentMeasure = helper.getStore(component, "currentMeasure");
+            var currentSize = helper.getStore(component, "currentSize");
 
             console.log("styleNodes enter: " + currentMeasure + " primaryid: " + primaryid);
         
             var node = d3.select(helper.getDivId("nodeGroup", componentReference, true))
                 .selectAll("circle")  ;
-        
-            bzutils.log("styleNodes:" + JSON.stringify(node));
-        
-            node.attr("r", function(o, i) {
-                for (var i = 0; o.fields.length; i++) {
-                    if (o.fields[i].api == currentMeasure) {
-                        var numericalValue = o.fields[i].retrievedDecimal;
-                        if (numericalValue != null) {
-                            return numericalValue;
-                        }
-                        return o.fields[i].retrievedInteger;
-                    }
-                }
-            });
-        
-            node.style("fill", function(o, i) {
-                var returnedColor = helper.getFromMeasureScheme(component, o, currentMeasure, "Color");
-                return returnedColor;
-            });
+
+            if (helper.getStore(component, "updateSize")) {            
+                node.attr("r", function(o, i) {
+                    return helper.getFromMeasureScheme(component, o, "Size");
+                });
+            }
+
+            if (helper.getStore(component, "updateColor")) {            
+                node.style("fill", function(o, i) {
+                    return helper.getFromMeasureScheme(component, o, "Color");
+                });
+            }
         
             node.style("stroke", function(o, i) {
                 var stroke = o.stroke;
@@ -197,6 +191,18 @@
         }
 
         console.log("aura:method styleNodes in chartNetwork exit");
+    },
+
+    getDefaultSize: function(component,event,helper){
+        // console.log("aura:method getDefaultSize in chartNetwork enter");
+        // console.log("aura:method getDefaultSize in chartNetwork exit");
+        return 20;
+    },
+
+    getDefaultColor: function(component,event,helper){
+        // console.log("aura:method getDefaultColor in chartNetwork enter");
+        // console.log("aura:method getDefaultColor in chartNetwork exit");
+        return "lightsteelblue";
     }
 
 

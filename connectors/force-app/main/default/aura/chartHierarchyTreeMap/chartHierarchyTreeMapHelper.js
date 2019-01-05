@@ -25,7 +25,8 @@
         
         var _this = this;
         var componentReference = component.get("v.componentReference");  
-        var currentMeasure = _this.getStore(component, "currentMeasure");
+        var currentSize = _this.getStore(component, "currentSize");
+        console.log("xxxxx: currentSize: " + currentSize);
 
         return function(datajson) { 
             console.log("chartHierarchyTreeMapHelper computing callback " + componentReference);
@@ -36,7 +37,7 @@
                 .padding(1);
 
             var root = d3.hierarchy(datajson) // <-B
-                .sum(_this.valueAccessor(component, currentMeasure))
+                .sum(_this.valueAccessor(component))
                 .sort((a, b) => b.value - a.value);
 
             _this.setCache (component, "root", root) ;  
@@ -47,12 +48,10 @@
         };
     },        
 
-    valueAccessor : function (component, currentMeasure) {
+    valueAccessor : function (component) {
         var _this = this;
-        console.log("chartHierarchyTreeMapHelper valueAccessor");
         return function (d) {
-            console.log("chartHierarchyTreeMapHelper valueAccessor", d);
-            return _this.getFromMeasureScheme(component, d, currentMeasure, "Value");
+            return _this.getFromMeasureScheme(component, d, "Value");
         }
     },
 

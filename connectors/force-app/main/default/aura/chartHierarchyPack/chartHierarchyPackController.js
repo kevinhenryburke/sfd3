@@ -2,9 +2,6 @@
     styleNodes: function(component,event,helper){
         console.log("aura:method styleNodes in chartHierarchyPack enter");
 
-
-        let currentMeasure = helper.getStore(component, "currentMeasure");
-
         let nodeGroup = helper.getCache (component, "nodeGroup") ;  
 
         let datajson = helper.getCache (component, "datajson") ;  
@@ -20,9 +17,21 @@
             .select('circle')
 
         node.style("fill", function(d) { 
-            let colorme = helper.getFromMeasureScheme(component, d.data, currentMeasure, "Color");
+            let colorme = helper.getFromMeasureScheme(component, d.data, "Color");
             return colorme;
         });
 
     },
+
+    getDefaultSize: function(component,event,helper){
+        // console.log("aura:method getDefaultSize in chartHierarchyPack enter");
+        // console.log("aura:method getDefaultSize in chartHierarchyPack exit");
+        return 10;
+    },
+
+    getDefaultColor: function(component,event,helper){
+        // console.log("aura:method getDefaultColor in chartHierarchyPack enter");
+        // console.log("aura:method getDefaultColor in chartHierarchyPack exit");
+        return "lightsteelblue";
+    }
 })

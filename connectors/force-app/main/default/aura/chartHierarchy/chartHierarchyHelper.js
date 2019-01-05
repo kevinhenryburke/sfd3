@@ -73,7 +73,6 @@
         var shortDuration = 250;
         var fixedDepth = _this.getFixedDepth(component); // this may need to be a function of chart area depth?
 
-        var currentMeasure = _this.getStore(component, "currentMeasure");
         var showMeasureValues = _this.getStore(component, "showMeasureValues");
 
         var margin = _this.getCache (component, "margin") ;  
@@ -204,10 +203,6 @@
             .attr("aura:id", function(d) {
                 return "circle" + d.id;
             })            
-            .style("fill", function(d) {
-                // we add new circles only to new nodes - the nodes are forgotten if collapsed
-                return _this.getFromMeasureScheme(component, d.data, currentMeasure, "Color");
-            })
             .style("stroke", function(d) {
                 if(childLess(d)) {
                     return "black";
@@ -227,7 +222,6 @@
                 return _this.getFilterOpacity(component, d.data);
             })
             ;
-      
 
         nodeEnter.append('text')
             .attr("childLess", function(d) {
@@ -253,12 +247,6 @@
                 return textAnchor;
             })
             .attr("id", d => "t" + d.id)            
-            // .filter(function(d, i) {
-            //     if (d.data.name.length < 5) {
-            //         return false;
-            //     }
-            //     return true;
-            // })            
             .style("font", function(d) {
                 return _this.getFontSizePX(component) + "px sans-serif";
             })
@@ -283,12 +271,6 @@
                 }
                 return "-1.35em";
             })
-            .text(function(d) { 
-                if (showMeasureValues == true) {
-                    var nodeValue = _this.getFromMeasureScheme(component, d.data, currentMeasure, "Value");
-                    return "(" + nodeValue.toLocaleString() + ")" ;    
-                }
-            })            
             ;
       
         // UPDATE
@@ -303,17 +285,8 @@
            });
       
         // Update the node attributes and style
-        nodeUpdate.select('circle.treenode')
+        var nuc = nodeUpdate.select('circle.treenode')
             .attr('r', _this.getRadius(component))
-            .style("fill", function(d) {
-                // collapsed children are stored as d._children / expanded as d.children
-                // at present color is treated the same for parents and children
-
-                if(childLess(d)) {
-                    return _this.getFromMeasureScheme(component, d.data, currentMeasure, "Color");                
-                }
-                return _this.getFromMeasureScheme(component, d.data, currentMeasure, "Color");                
-            })
             .style("stroke", function(d) {
                 if(childLess(d)) {
                     return "black";
@@ -333,9 +306,22 @@
                 return _this.getFilterOpacity(component, d.data);
             })
             .attr('cursor', 'pointer');      
+
+        /* TODO - wrap this is a check as to whether to change */   
+        
+        if (_this.getStore(component, "updateColor")) {
+            nuc.style("fill", function(d) {
+                // collapsed children are stored as d._children / expanded as d.children
+                // at present color is treated the same for parents and children
+                if(childLess(d)) {
+                    return _this.getFromMeasureScheme(component, d.data, "Color");                
+                }
+                return _this.getFromMeasureScheme(component, d.data, "Color");                
+            })
+        }
           
         // text box starts to the right for childless nodes, to the left for parents (collapsed or expanded)  
-        nodeUpdate.select('text')
+        var nut = nodeUpdate.select('text')
             .attr("childLess", function(d) {
                 return childLess(d);
             })
@@ -361,8 +347,11 @@
             .select('tspan') // update the measures
             .text(function(d) { 
                 if (showMeasureValues == true) {
-                    var nodeValue = _this.getFromMeasureScheme(component, d.data, currentMeasure, "Value");
-                    return "(" + nodeValue.toLocaleString()  + ")" ;
+                    // we don't have updates on size for tree hierarchies
+                    if (_this.getStore(component, "updateColor")) {
+                        var nodeValue = _this.getFromMeasureScheme(component, d.data, "Value");
+                        return "(" + nodeValue.toLocaleString()  + ")" ;
+                    }
                 }
             })            
 

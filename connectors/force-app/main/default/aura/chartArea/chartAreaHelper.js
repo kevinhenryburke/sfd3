@@ -564,17 +564,17 @@
 
                     if (measureObjectFieldMap[measureName] == null) {
                         var measureLevel = {};
-                        measureLevel[objectType] = {"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex};
+                        measureLevel[objectType] = {"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "sizeSchemeType" : sizeSchemeType};
                         measureObjectFieldMap[measureName] = measureLevel;
 
-                        measureArrayObjectFieldMap[measureName] = [{"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "objectType" : objectType}];
+                        measureArrayObjectFieldMap[measureName] = [{"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "objectType" : objectType, "sizeSchemeType" : sizeSchemeType}];
 
                     }
                     else {
                         var measureLevel = measureObjectFieldMap[measureName]; 
-                        measureLevel[objectType] = {"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType, "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex };
+                        measureLevel[objectType] = {"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType, "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "sizeSchemeType" : sizeSchemeType };
 
-                        measureArrayObjectFieldMap[measureName].push({"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "objectType" : objectType});
+                        measureArrayObjectFieldMap[measureName].push({"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "objectType" : objectType, "sizeSchemeType" : sizeSchemeType});
 
                     }
                     if (measureSchemeType == "Scale") {
@@ -608,7 +608,7 @@
         var componentReference = component.get("v.componentReference");
         var currentMeasure = _this.getStore(component, "currentMeasure");
 
-        var firstMeasureScheme = _this.getFirstMeasureScheme(component, currentMeasure);
+        var firstMeasureScheme = _this.getFirstMeasureSchemeLegend(component, currentMeasure);
 
         // remove existing legend symbols
         d3.select(_this.getDivId("legendSymbolGroup", componentReference, true)).selectAll("*").remove();
@@ -695,7 +695,7 @@
             
     },
 
-    getFirstMeasureScheme : function (component, currentMeasure) {
+    getFirstMeasureSchemeLegend : function (component, currentMeasure) {
         var _this = this;
 
         var measureArrayObjectFieldMap = _this.getStore(component, "measureArrayObjectFieldMap");
@@ -707,32 +707,49 @@
         }
     },
 
-    // returnType is either "Value" or "Color"
-    getFromMeasureScheme : function (component, o, currentMeasure, returnType) {
+    // returnType is either "Value" or "Color" or "Size"
+
+    getFromMeasureScheme : function (component, o, returnType) {
         var _this = this;
 
+        // relevantMeasure is set on initialization of data in component and changed on color or size events.
+        let relevantMeasure = _this.getStore(component, "relevantMeasure"); 
+
+        console.log("xxxxx: relevantMeasure: " + relevantMeasure);
+
+
+        let retValDefault; 
+        switch (returnType) {
+            case "Color" : retValDefault = _this.getStore(component, "defaultColor") ; break;
+            case "Value" : retValDefault = ""; break;
+            case "Size" : retValDefault = _this.getStore(component, "defaultSize"); break;
+        }
+
+
+        // deal with the case when there are no colors or sizes configured
+        if (relevantMeasure == null) { 
+            return retValDefault;    
+        }
+
+/// TODO - all of this could be moved out into a one time call when initializing or new color or size event
+
+        // deal with the case when there are no colors or sizes configured for the current object
         var measureObjectFieldMap = _this.getStore(component, "measureObjectFieldMap");
         var objectType = o["objectType"];
-
-        if (currentMeasure == null) {
-            return;
-        }
-
-        var currentMeasureObjectConfig = measureObjectFieldMap[currentMeasure][objectType];
+        var currentMeasureObjectConfig = measureObjectFieldMap[relevantMeasure][objectType];
 
         if (currentMeasureObjectConfig == null) {
-            return;
+            return retValDefault;    
         }
 
+        // from here on we can assume that there is some object configuration for this measure
         var currentMeasureScheme = currentMeasureObjectConfig["measureScheme"];
         var currentMeasureSchemeType = currentMeasureObjectConfig["measureSchemeType"];
         var fieldIndex = currentMeasureObjectConfig["fieldIndex"];
 
-        var thisMeasureSchemeIndex = fieldIndex;
-
-        // case when baseing colors and values on picklists
+        // case when baseing colors and values on picklists (not currently relevant for sizes)
         if (currentMeasureSchemeType == "StringValue") {
-            var retrievedValue = o.fields[thisMeasureSchemeIndex].retrievedValue;
+            var retrievedValue = o.fields[fieldIndex].retrievedValue;
 
             if (returnType == "Value") {
                 return retrievedValue;
@@ -746,22 +763,23 @@
                 if (valueColorDefault != null) {
                     return valueColorDefault;
                 }
-                return "white";
+                return retValDefault;
             }
         }
 
         // case when baseing colors and values on numerics
-        var numericValue;
-        var retrievedDecimal = o.fields[thisMeasureSchemeIndex].retrievedDecimal;
 
+        // bring the Decimal and Integer options into a single variable
+        var numericValue;
+        var retrievedDecimal = o.fields[fieldIndex].retrievedDecimal;
         if (retrievedDecimal != null) {
             numericValue = retrievedDecimal;
         } 
         else {
-            numericValue = o.fields[thisMeasureSchemeIndex].retrievedInteger;
+            numericValue = o.fields[fieldIndex].retrievedInteger;
         }
 
-        if (returnType == "Value") {
+        if (returnType == "Value" || returnType == "Size") {
             return numericValue;
         }
 
@@ -785,7 +803,7 @@
 
         if (currentMeasureSchemeType == "Scale") {
             var measureObjectScaleMap = _this.getStore(component, "measureObjectScaleMap");  
-            var currentMeasureObjectConfig = measureObjectScaleMap[currentMeasure][objectType];
+            var currentMeasureObjectConfig = measureObjectScaleMap[relevantMeasure][objectType];
             return currentMeasureObjectConfig(numericValue) ;     
        }
 

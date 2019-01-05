@@ -34,9 +34,6 @@
         var _this = this;
         console.log("stylePack enter");    
 
-        var componentType = component.get("v.componentType");
-        var currentMeasure = _this.getStore(component, "currentMeasure");
-
         node.attr("transform", "translate(2,2)") // new
             .attr("class", function(d) { return d.children ? "packbranch node" : "packleaf node"; })
             .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
@@ -48,7 +45,7 @@
             .attr("r", function(d) { return d.r; })
             .style("fill", function(d) { 
                 // we add new circles only to new nodes - the nodes are forgotten if collapsed
-                return _this.getFromMeasureScheme(component, d.data, currentMeasure, "Color");
+                return _this.getFromMeasureScheme(component, d.data, "Color");
             })
             .style("fill-opacity", function(d, i) {
                 return _this.getFilterOpacity(component, d.data);

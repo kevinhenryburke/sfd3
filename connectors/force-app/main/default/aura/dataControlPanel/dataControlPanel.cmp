@@ -26,7 +26,6 @@
   <aura:attribute name="measureNames" type="String[]"/>    
   <aura:attribute name="measureSchemes" type="Object[]"/>    
   <aura:attribute name="panelShowMeasures" type="Object[]" default="[]" />
-	<aura:attribute name="configuredMeasures" type="Boolean" default="false"/>    
   <aura:attribute name="measuresCount" type="Integer" default="0"/>      
 
   <aura:attribute name="panelCurrentSize" type="String"/>    
@@ -111,31 +110,29 @@
               </div>
             </div>
           </aura:if>
-          <aura:if isTrue="{!v.configuredMeasures}">
-            <div class="slds-col slds-size_1-of-4 slds-small-size_1-of-2 slds-medium-size_1-of-3">
-              <aura:if isTrue="{!v.measuresCount > 0}">
-                  <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuMeasures }" label="Colors">
-                      <aura:iteration var="action" items="{! v.panelShowMeasures }">
-                          <lightning:menuItem aura:id="actionMenuMeasureItems" label="{! action }" value="{! action }" checked="{! v.panelCurrentMeasure == action}"/>
-                      </aura:iteration>
-                  </lightning:buttonMenu>
-              </aura:if>
-              <aura:if isTrue="{!v.sizesCount > 0}">
-                  <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuSizes }" label="Sizes">
-                      <aura:iteration var="action" items="{! v.panelShowSizes }">
-                          <lightning:menuItem aura:id="actionMenuSizeItems" label="{! action }" value="{! action }" checked="{! v.panelCurrentSize == action}"/>
-                      </aura:iteration>
-                  </lightning:buttonMenu>
-              </aura:if>
-              <aura:if isTrue="{!v.filterFieldsCount > 0}">
-                <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuFilter }" label="Filter">
-                    <aura:iteration var="action" items="{! v.filterPublish.filterValues }">
-                    <lightning:menuItem aura:id="actionMenuFilterItems" label="{! action }" value="{! action }" checked="true"/>
+          <div class="slds-col slds-size_1-of-4 slds-small-size_1-of-2 slds-medium-size_1-of-3">
+            <aura:if isTrue="{!v.measuresCount > 0}">
+                <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuMeasures }" label="Colors">
+                    <aura:iteration var="action" items="{! v.panelShowMeasures }">
+                        <lightning:menuItem aura:id="actionMenuMeasureItems" label="{! action }" value="{! action }" checked="{! v.panelCurrentMeasure == action}"/>
                     </aura:iteration>
                 </lightning:buttonMenu>
-              </aura:if>
-            </div>
-          </aura:if>
+            </aura:if>
+            <aura:if isTrue="{!v.sizesCount > 0}">
+                <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuSizes }" label="Sizes">
+                    <aura:iteration var="action" items="{! v.panelShowSizes }">
+                        <lightning:menuItem aura:id="actionMenuSizeItems" label="{! action }" value="{! action }" checked="{! v.panelCurrentSize == action}"/>
+                    </aura:iteration>
+                </lightning:buttonMenu>
+            </aura:if>
+            <aura:if isTrue="{!v.filterFieldsCount > 0}">
+              <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuFilter }" label="Filter">
+                  <aura:iteration var="action" items="{! v.filterPublish.filterValues }">
+                  <lightning:menuItem aura:id="actionMenuFilterItems" label="{! action }" value="{! action }" checked="true"/>
+                  </aura:iteration>
+              </lightning:buttonMenu>
+            </aura:if>
+          </div>
           <aura:if isTrue="{!v.configuredAllowRefresh}">
             <div class="slds-col slds-size_1-of-4 slds-small-size_1-of-2 slds-medium-size_1-of-3">
               <div class="slds slds-button-group" role="group">
