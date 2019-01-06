@@ -1,25 +1,44 @@
 ({
     styleNodes: function(component,event,helper){
+        let _this = this;
+
         console.log("aura:method styleNodes in chartHierarchyPack enter");
 
-        let nodeGroup = helper.getCache (component, "nodeGroup") ;  
+        let latestSizeOrColor = helper.getStore(component, "latestSizeOrColor");
+        console.log("xxxxxx:" , latestSizeOrColor);
 
-        let datajson = helper.getCache (component, "datajson") ;  
+        if (latestSizeOrColor == "color") {
 
-        let nodeSelector = "circle";
-        let nodeDataSetFunction = helper.getRootStructurePack (component); 
+            let nodeGroup = helper.getCache (component, "nodeGroup") ;  
 
-        let node = nodeGroup
-            .selectAll(nodeSelector)
-            .data(nodeDataSetFunction(datajson), function(d, i) { return d.id;})
-            .enter()
-            .selectAll('g')
-            .select('circle')
+            let datajson = helper.getCache (component, "datajson") ;  
+            console.log("xxxxxx:" , JSON.stringify(datajson));
 
-        node.style("fill", function(d) { 
-            let colorme = helper.getFromMeasureScheme(component, d.data, "Color");
-            return colorme;
-        });
+
+
+            let nodeSelector = "circle";
+            let nodeDataSetFunction = helper.getRootStructurePack (component); 
+
+            let node = nodeGroup
+                .selectAll(nodeSelector)
+                .data(nodeDataSetFunction(datajson), function(d, i) { return d.id;})
+                .enter()
+                .selectAll('g')
+                .select('circle')
+
+            node.style("fill", function(d) { 
+                let colorme = helper.getFromMeasureScheme(component, d.data, "Color");
+                return colorme;
+            });
+                
+        }
+
+        if (latestSizeOrColor == "size") {
+            var componentReference = component.get("v.componentReference");
+            helper.clearElements(componentReference);
+            helper.initializeVisuals(component);
+        }
+
 
         // helper.stylePack(component, node);
     },

@@ -460,18 +460,22 @@
         }
         _this.setCache (component, "filterValues", filterValues ) ;
     },
-    
-    clearChart : function (componentReference) {
+
+    /* clearElements removes all paths, nodes, rects, text from the chart */
+    clearElements : function (componentReference) {
         var _this = this;
         var svg = d3.select(_this.getDivId("svg", componentReference, true));
-        var path = svg.selectAll("path").remove();
-        var node = svg.selectAll("circle").remove();
-        var text = svg.selectAll(".nodeText").remove();
+        svg.selectAll("path,circle,rect,text").remove(); // comma separated acts as union
+    },
+            
+    /* clearChart removes all elements and groups from the chart */
+    clearChart : function (componentReference) {
+        var _this = this;
+        _this.clearElements(componentReference);
         d3.select(_this.getDivId("pathGroup", componentReference, true)).remove();
         d3.select(_this.getDivId("nodeGroup", componentReference, true)).remove();
         d3.select(_this.getDivId("textGroup", componentReference, true)).remove();
         d3.select(_this.getDivId("legendSymbolGroup", componentReference, true)).remove();
-        
     },
 
     initializeCache : function (component) {

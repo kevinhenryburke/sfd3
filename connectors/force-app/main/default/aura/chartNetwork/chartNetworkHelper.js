@@ -96,7 +96,7 @@
         
         text = textEnterSelection
             .append("svg:g")
-            .attr("class", "nodeText"); // TODO what is nodeText class
+            .attr("class", "nodeText"); 
 
         // A copy of the text with a thick white stroke for legibility ("s" for shadow, "t" for text).
         var svgText = text.append("svg:text");
