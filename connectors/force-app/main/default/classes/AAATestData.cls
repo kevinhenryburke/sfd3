@@ -1,4 +1,4 @@
-public with sharing class AAATestData {
+public inherited sharing class AAATestData {
 
 /* In Execute Anonymous run, sequentially
 

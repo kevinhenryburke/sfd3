@@ -1,4 +1,4 @@
-public with sharing class HierarchyJSON {
+public inherited sharing class HierarchyJSON {
 
     /* 
     This class represents data structures that are passed back to the front end via serialization.

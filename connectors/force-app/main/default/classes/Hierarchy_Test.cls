@@ -1,5 +1,5 @@
 @IsTest
-public with sharing class Hierarchy_Test {
+public inherited sharing class Hierarchy_Test {
 
     /* Factories */
 

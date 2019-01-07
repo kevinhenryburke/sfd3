@@ -5,43 +5,34 @@
         console.log("aura:method styleNodes in chartHierarchyPack enter");
 
         let latestSizeOrColor = helper.getStore(component, "latestSizeOrColor");
-        console.log("xxxxxx:" , latestSizeOrColor);
 
-        if (latestSizeOrColor == "color") {
+        var componentReference = component.get("v.componentReference");
+        helper.clearElements(componentReference);
 
-            let nodeGroup = helper.getCache (component, "nodeGroup") ;  
-
-            let datajson = helper.getCache (component, "datajson") ;  
-            console.log("xxxxxx:" , JSON.stringify(datajson));
-
-
-
-            let nodeSelector = "circle";
-            let nodeDataSetFunction = helper.getRootStructurePack (component); 
-
-            let node = nodeGroup
-                .selectAll(nodeSelector)
-                .data(nodeDataSetFunction(datajson), function(d, i) { return d.id;})
-                .enter()
-                .selectAll('g')
-                .select('circle')
-
-            node.style("fill", function(d) { 
-                let colorme = helper.getFromMeasureScheme(component, d.data, "Color");
-                return colorme;
-            });
-                
-        }
+        let datajson = helper.getCache (component, "datajson") ;  
+        let datajsonRefresh = helper.getCache (component, "datajson") ;  
 
         if (latestSizeOrColor == "size") {
-            var componentReference = component.get("v.componentReference");
-            helper.clearElements(componentReference);
-            helper.initializeVisuals(component);
+            var cc = component.getConcreteComponent();
+            cc.dataPreprocess(datajson, datajsonRefresh);    
         }
 
-
-        // helper.stylePack(component, node);
+        helper.initializeVisuals(component);
     },
+
+    dataPreprocess: function(component,event,helper){
+        console.log("calling the aura:method chartHierarchyPack in chart");
+
+        var args = event.getParam("arguments");
+        var datajsonBefore = args.datajson;
+
+        helper.recursiveMap(component,datajsonBefore, true);
+
+
+
+
+    },
+
 
     getDefaultSize: function(component,event,helper){
         // console.log("aura:method getDefaultSize in chartHierarchyPack enter");

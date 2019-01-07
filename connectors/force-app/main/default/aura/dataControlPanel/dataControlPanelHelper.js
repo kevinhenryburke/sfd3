@@ -3,6 +3,7 @@
     initializeConfig: function(component, datastring) {
 
         var _this = this;
+
         var initialized = component.get("v.initialized");
 
         if (initialized != true) {

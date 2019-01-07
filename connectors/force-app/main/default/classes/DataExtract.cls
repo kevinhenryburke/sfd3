@@ -1,4 +1,4 @@
-public with sharing class DataExtract {
+public inherited sharing class DataExtract {
 
     // Network Methods - from Static Resources
 

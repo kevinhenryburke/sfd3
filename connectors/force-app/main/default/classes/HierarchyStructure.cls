@@ -2,7 +2,7 @@
 
 // TODO - poor name, consider a refactor, this is a HierarchyStructureElement or Node rather than the structure
 
-public with sharing class HierarchyStructure {
+public inherited sharing class HierarchyStructure {
 
     /* 
         High Level - a query is run that returns ids, a parent id and some data fields

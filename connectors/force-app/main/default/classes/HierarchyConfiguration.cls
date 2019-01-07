@@ -1,4 +1,4 @@
-public with sharing class HierarchyConfiguration  {
+public inherited sharing class HierarchyConfiguration  {
 
     public HierarchyConfiguration() {
         System.debug('HierarchyConfiguration constructor');

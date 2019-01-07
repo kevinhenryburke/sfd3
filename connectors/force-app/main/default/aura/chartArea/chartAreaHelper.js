@@ -565,20 +565,21 @@
                     var measureScheme = fieldConfig["measureScheme"]; 
                     var measureSchemeType = fieldConfig["measureSchemeType"]; 
                     var sizeSchemeType = fieldConfig["sizeSchemeType"]; 
+                    var sizeChangesColor = fieldConfig["sizeChangesColor"]; 
 
                     if (measureObjectFieldMap[measureName] == null) {
                         var measureLevel = {};
-                        measureLevel[objectType] = {"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "sizeSchemeType" : sizeSchemeType};
+                        measureLevel[objectType] = {"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "sizeSchemeType" : sizeSchemeType, "sizeChangesColor" : sizeChangesColor};
                         measureObjectFieldMap[measureName] = measureLevel;
 
-                        measureArrayObjectFieldMap[measureName] = [{"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "objectType" : objectType, "sizeSchemeType" : sizeSchemeType}];
+                        measureArrayObjectFieldMap[measureName] = [{"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "objectType" : objectType, "sizeSchemeType" : sizeSchemeType, "sizeChangesColor" : sizeChangesColor}];
 
                     }
                     else {
                         var measureLevel = measureObjectFieldMap[measureName]; 
-                        measureLevel[objectType] = {"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType, "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "sizeSchemeType" : sizeSchemeType };
+                        measureLevel[objectType] = {"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType, "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "sizeSchemeType" : sizeSchemeType, "sizeChangesColor" : sizeChangesColor };
 
-                        measureArrayObjectFieldMap[measureName].push({"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "objectType" : objectType, "sizeSchemeType" : sizeSchemeType});
+                        measureArrayObjectFieldMap[measureName].push({"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "objectType" : objectType, "sizeSchemeType" : sizeSchemeType, "sizeChangesColor" : sizeChangesColor});
 
                     }
                     if (measureSchemeType == "Scale") {
@@ -756,7 +757,6 @@
 
         let objectType = ddata["objectType"];
 
-
         // deal with the case when there are no colors or sizes configured for the current object
         var measureObjectFieldMap = _this.getStore(component, "measureObjectFieldMap");
         var currentMeasureObjectConfig = measureObjectFieldMap[relevantMeasure][objectType];
@@ -766,6 +766,19 @@
         }
 
         // from here on we can assume that there is some object configuration for this measure
+
+        let sizeChangesColor =  currentMeasureObjectConfig["sizeChangesColor"];
+        let latestSizeOrColor = _this.getStore(component, "latestSizeOrColor"); 
+
+        if (returnType == "Color" && !sizeChangesColor && latestSizeOrColor == "size") {
+            relevantMeasure = _this.getStore(component, "currentMeasure"); 
+            currentMeasureObjectConfig = measureObjectFieldMap[relevantMeasure][objectType];
+
+            if (currentMeasureObjectConfig == null) {
+                return _this.getDefaultValueForReturnType (component, returnType);    
+            }
+        }
+
         var currentMeasureScheme = currentMeasureObjectConfig["measureScheme"];
         var currentMeasureSchemeType = currentMeasureObjectConfig["measureSchemeType"];
         var fieldIndex = currentMeasureObjectConfig["fieldIndex"];

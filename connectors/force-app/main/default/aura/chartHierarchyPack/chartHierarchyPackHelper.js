@@ -41,18 +41,21 @@
         node.append("title")
             .text(function(d) { return d.data.name + "\n" + d3.format(",d")(d.value); }); // this is the d3 value accessor which handles sum in hierarchy layout 
     
-        node.append("circle")
+        var noc = node.append("circle")
             .attr("r", function(d) { return d.r; })
-            .style("fill", function(d) { 
+            .style("fill-opacity", function(d, i) {
+                return _this.getFilterOpacity(component, d.data);
+            });
+
+        let latestSizeOrColor = _this.getStore(component, "latestSizeOrColor");
+
+        // if (latestSizeOrColor == "color" || latestSizeOrColor == "none") {
+            noc.style("fill", function(d) { 
                 // we add new circles only to new nodes - the nodes are forgotten if collapsed
                 return _this.getFromMeasureScheme(component, d.data, "Color");
             })
-            .style("fill-opacity", function(d, i) {
-                return _this.getFilterOpacity(component, d.data);
-            })
-                
-            ;
-    
+        // }
+
         node.filter(function(d) { return !d.children; }).append("text")
             .attr("dy", "0.3em")
             .text(function(d) { return d.data.name.substring(0, d.r / 3); });
@@ -79,5 +82,22 @@
         };
     },        
 
+    recursiveMap: function(component,datajsonBefore, topCall){
+        // console.log("chartNetworkTimeline.recursiveMap enter");
+        var _this = this;
+
+        datajsonBefore["size"] =  _this.getFromMeasureScheme(component, datajsonBefore, "Size");
+
+        if (datajsonBefore.children != null && datajsonBefore.children.length > 0) {
+            for (var i = 0; i < datajsonBefore.children.length; i++){
+                _this.recursiveMap(component, datajsonBefore.children[i], false);
+            } 
+        }
+        else {
+            return;
+        }
+    },
+
+    
 
 })

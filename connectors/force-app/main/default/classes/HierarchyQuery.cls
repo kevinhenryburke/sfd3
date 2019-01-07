@@ -1,4 +1,4 @@
-public with sharing class HierarchyQuery {
+public inherited sharing class HierarchyQuery {
 
     // map between the JSON attributes expected in the Chart and the Salesforce field names.
     public HierarchyStructure top; // top node in the hierarchy 
