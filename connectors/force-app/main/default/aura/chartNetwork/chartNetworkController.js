@@ -84,9 +84,6 @@
         
                 var retval = "hidden";
         
-                //TODO temporarily removing the measure level visibility functionaliy, reinstate later if useful
-                // var sourcevis = p.source.measures[currentMeasure].visible;
-                // var targetvis = p.target.measures[currentMeasure].visible;
                 var sourcevis = 1;
                 var targetvis = 1;
         
@@ -145,11 +142,7 @@
             var componentReference = component.get("v.componentReference");        
 
             var primaryid = helper.getCache (component, "primaryNodeId") ;
-            var currentMeasure = helper.getStore(component, "currentMeasure");
-            var currentSize = helper.getStore(component, "currentSize");
 
-            console.log("styleNodes enter: " + currentMeasure + " primaryid: " + primaryid);
-        
             var node = d3.select(helper.getDivId("nodeGroup", componentReference, true))
                 .selectAll("circle")  ;
 

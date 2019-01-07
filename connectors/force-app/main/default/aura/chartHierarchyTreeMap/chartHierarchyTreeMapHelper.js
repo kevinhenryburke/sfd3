@@ -25,7 +25,7 @@
         
         var _this = this;
         var componentReference = component.get("v.componentReference");  
-        var currentSize = _this.getStore(component, "currentSize");
+        var currentSizeLabel = _this.getStore(component, "currentSizeLabel");
 
         return function(datajson) { 
             console.log("chartHierarchyTreeMapHelper computing callback " + componentReference);

@@ -32,8 +32,8 @@
                 if (topObjectLevelFields[j].measureSchemeType != null) {
                     if (numberMeasuresFound == 0){
                         // set the first measure as default
-                        var panelCurrentMeasure = topObjectLevelFields[j].measureName;
-                        component.set("v.panelCurrentMeasure", panelCurrentMeasure);
+                        var panelCurrentColor = topObjectLevelFields[j].measureName;
+                        component.set("v.panelCurrentColor", panelCurrentColor);
                     }
                     // create arrays for measure and schemes
                     measureNames.push(topObjectLevelFields[j].measureName);
@@ -186,7 +186,7 @@
                 // TODO - will need to retrieve data based on new selections
                 var datajson = component.get("v.datajson");
                 var masterConfigObject = component.get("v.masterConfigObject");
-                var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
+                var panelCurrentColor = component.get("v.panelCurrentColor");
                 var panelCurrentSize = component.get("v.panelCurrentSize");
                 var filterPublish = component.get("v.filterPublish");     
 
@@ -203,7 +203,7 @@
 
                     configEventParameters = { 
                         "datajson" : datajson, 
-                        "currentMeasure" : panelCurrentMeasure,
+                        "currentMeasure" : panelCurrentColor,
                         "currentSize" : panelCurrentSize,
                         "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
@@ -214,7 +214,7 @@
                 else {
                     configEventParameters = { 
                         "datajson" : datajson, 
-                        "currentMeasure" : panelCurrentMeasure,
+                        "currentMeasure" : panelCurrentColor,
                         "currentSize" : panelCurrentSize,
                         "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
@@ -354,7 +354,7 @@
 
     setMenuMeasure : function(component, currentMeasure) {
         var _this = this;
-        component.set("v.panelCurrentMeasure", currentMeasure);
+        component.set("v.panelCurrentColor", currentMeasure);
         var controllerId = component.get("v.UserComponentId");
         var preppedEvent = _this.prepareEvent("SetMeasure", {"measure" : currentMeasure }, controllerId);
         _this.publishPreppedEvent(component,preppedEvent);

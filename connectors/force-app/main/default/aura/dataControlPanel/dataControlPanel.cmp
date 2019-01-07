@@ -22,7 +22,7 @@
 
   <!-- Technical - Panel -->
   <!-- Measure is being split into size and color -->
-  <aura:attribute name="panelCurrentMeasure" type="String"/>    
+  <aura:attribute name="panelCurrentColor" type="String"/>    
   <aura:attribute name="measureNames" type="String[]"/>    
   <aura:attribute name="measureSchemes" type="Object[]"/>    
   <aura:attribute name="panelShowMeasures" type="Object[]" default="[]" />
@@ -114,7 +114,7 @@
             <aura:if isTrue="{!v.measuresCount > 0}">
                 <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuMeasures }" label="Colors">
                     <aura:iteration var="action" items="{! v.panelShowMeasures }">
-                        <lightning:menuItem aura:id="actionMenuMeasureItems" label="{! action }" value="{! action }" checked="{! v.panelCurrentMeasure == action}"/>
+                        <lightning:menuItem aura:id="actionMenuMeasureItems" label="{! action }" value="{! action }" checked="{! v.panelCurrentColor == action}"/>
                     </aura:iteration>
                 </lightning:buttonMenu>
             </aura:if>

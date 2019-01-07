@@ -154,7 +154,7 @@
             //TODO - should I just set the measure scheme here, once, in one place???
             // could improve performance a lot?            
 
-            helper.setStore(component, "currentMeasure",  parameters["measure"]);
+            helper.setStore(component, "currentColorLabel",  parameters["measure"]);
             helper.setStore(component, "relevantMeasure",  parameters["measure"]);
             helper.setStore(component, "latestSizeOrColor",  "color");
             helper.setStore(component, "updateColor", true);
@@ -175,7 +175,7 @@
         if (topic == "SetSize")
         {
             // get the measure
-            helper.setStore(component, "currentSize",  parameters["size"]);
+            helper.setStore(component, "currentSizeLabel",  parameters["size"]);
             helper.setStore(component, "relevantMeasure",  parameters["size"]);
             helper.setStore(component, "latestSizeOrColor",  "size");
 
@@ -232,17 +232,17 @@
 
                 // set latest values for color and size
 
-                helper.setStore(component, "currentMeasure", 
+                helper.setStore(component, "currentColorLabel", 
                     parameters["currentMeasure"] != null ? parameters["currentMeasure"] : "bzDefault");
-                helper.setStore(component, "currentSize", 
-                    parameters["currentSize"] != null ? parameters["currentSize"] : "bzDefault");
+                helper.setStore(component, "currentSizeLabel", 
+                    parameters["currentSizeLabel"] != null ? parameters["currentSizeLabel"] : "bzDefault");
                 
                 // set relevantMeasure
                 if (parameters["currentMeasure"] != null) {
                     helper.setStore(component, "relevantMeasure", parameters["currentMeasure"]);
                 }                
-                else if (parameters["currentSize"] != null) {
-                    helper.setStore(component, "relevantMeasure", parameters["currentSize"]);
+                else if (parameters["currentSizeLabel"] != null) {
+                    helper.setStore(component, "relevantMeasure", parameters["currentSizeLabel"]);
                 }                
                 else { // if there are no colors or sizes then mark this as bzDefault
                     helper.setStore(component, "relevantMeasure", "bzDefault");

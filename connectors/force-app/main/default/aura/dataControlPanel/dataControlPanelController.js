@@ -52,7 +52,7 @@
 
                 var masterConfigObject = component.get("v.masterConfigObject");
 
-                var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
+                var panelCurrentColor = component.get("v.panelCurrentColor");
                 var panelCurrentSize = component.get("v.panelCurrentSize");
                 var panelPrimaryId = component.get("v.panelPrimaryId");            
                 var filterPublish = component.get("v.filterPublish");     
@@ -71,7 +71,7 @@
 
                     var configEventParameters = { 
                         "datajson" : datajson, 
-                        "currentMeasure" : panelCurrentMeasure, 
+                        "currentMeasure" : panelCurrentColor, 
                         "currentSize" : panelCurrentSize, 
                         "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
@@ -161,7 +161,7 @@
                 // as the component is initialized we have values for parameters and can publish immediately
 
                 var datajson = component.get("v.datajson");
-                var panelCurrentMeasure = component.get("v.panelCurrentMeasure");
+                var panelCurrentColor = component.get("v.panelCurrentColor");
                 var panelCurrentSize = component.get("v.panelCurrentSize");
                 var panelPrimaryId = component.get("v.panelPrimaryId");            
                 var filterPublish = component.get("v.filterPublish");     
@@ -172,7 +172,7 @@
     
                 var configEventParameters = { 
                     "datajson" : datajson, 
-                    "currentMeasure" : panelCurrentMeasure, 
+                    "currentMeasure" : panelCurrentColor, 
                     "currentSize" : panelCurrentSize, 
                     "masterConfigObject" : masterConfigObject,
                     "primaryId" : panelPrimaryId, 

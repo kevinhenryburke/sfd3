@@ -611,9 +611,9 @@
     showColorSchemeLegend : function (component) {
         var _this = this;
         var componentReference = component.get("v.componentReference");
-        var currentMeasure = _this.getStore(component, "currentMeasure");
+        var currentColorLabel = _this.getStore(component, "currentColorLabel");
 
-        var firstMeasureScheme = _this.getFirstMeasureSchemeLegend(component, currentMeasure);
+        var firstMeasureScheme = _this.getFirstColorSchemeLegend(component, currentColorLabel);
 
         // remove existing legend symbols
         d3.select(_this.getDivId("legendSymbolGroup", componentReference, true)).selectAll("*").remove();
@@ -657,10 +657,10 @@
             .attr("font-size", "8px")
             .attr("fill", "gray");
 
-        var currentMeasureAsArray = [ currentMeasure ];
+        var currentColorLabelAsArray = [ currentColorLabel ];
 
         var measureText = legendSymbolGroup.selectAll("textme")
-            .data(currentMeasureAsArray)
+            .data(currentColorLabelAsArray)
             .enter()
             .append("text")
             .attr('transform',function(d,i) { return 'translate('+20+','+13+')';})
@@ -700,12 +700,12 @@
             
     },
 
-    getFirstMeasureSchemeLegend : function (component, currentMeasure) {
+    getFirstColorSchemeLegend : function (component, currentColorLabel) {
         var _this = this;
 
         var measureArrayObjectFieldMap = _this.getStore(component, "measureArrayObjectFieldMap");
-        if (measureArrayObjectFieldMap[currentMeasure] != null) {
-            return measureArrayObjectFieldMap[currentMeasure][0];
+        if (measureArrayObjectFieldMap[currentColorLabel] != null) {
+            return measureArrayObjectFieldMap[currentColorLabel][0];
         }
         else {
             return null;
@@ -771,7 +771,7 @@
         let latestSizeOrColor = _this.getStore(component, "latestSizeOrColor"); 
 
         if (returnType == "Color" && !sizeChangesColor && latestSizeOrColor == "size") {
-            relevantMeasure = _this.getStore(component, "currentMeasure"); 
+            relevantMeasure = _this.getStore(component, "currentColorLabel"); 
             currentMeasureObjectConfig = measureObjectFieldMap[relevantMeasure][objectType];
 
             if (currentMeasureObjectConfig == null) {

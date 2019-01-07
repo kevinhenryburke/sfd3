@@ -501,7 +501,7 @@
         var height = _this.getCache (component, "height") ; 
         var sizeDivisor = 100;
         var nodePadding = 2.5;
-        var currentMeasure = _this.getStore (component, "currentMeasure") ; 
+        var currentColorLabel = _this.getStore (component, "currentColorLabel") ; 
     
         var simulation = d3.forceSimulation()
             .force("forceX", d3.forceX().strength(.1).x(width * .5))
@@ -512,7 +512,7 @@
         simulation  
             .nodes(nodes)
             .force("collide", d3.forceCollide().strength(.5).radius(function(d){
-                return d.measures[currentMeasure].radius + nodePadding; }).iterations(1))
+                return d.measures[currentColorLabel].radius + nodePadding; }).iterations(1))
     //        .force("collide", d3.forceCollide().strength(.5).radius(function(d){ return d.radius + nodePadding; }).iterations(1))
             .on("tick", function(d){
               node
