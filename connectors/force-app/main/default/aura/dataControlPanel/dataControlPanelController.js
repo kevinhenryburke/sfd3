@@ -71,8 +71,8 @@
 
                     var configEventParameters = { 
                         "datajson" : datajson, 
-                        "currentMeasure" : panelCurrentColor, 
-                        "currentSize" : panelCurrentSize, 
+                        "currentColorLabel" : panelCurrentColor, 
+                        "currentSizeLabel" : panelCurrentSize, 
                         "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
                         "showFilters" : filterPublish,
@@ -172,8 +172,8 @@
     
                 var configEventParameters = { 
                     "datajson" : datajson, 
-                    "currentMeasure" : panelCurrentColor, 
-                    "currentSize" : panelCurrentSize, 
+                    "currentColorLabel" : panelCurrentColor, 
+                    "currentSizeLabel" : panelCurrentSize, 
                     "masterConfigObject" : masterConfigObject,
                     "primaryId" : panelPrimaryId, 
                     "showFilters" : filterPublish,

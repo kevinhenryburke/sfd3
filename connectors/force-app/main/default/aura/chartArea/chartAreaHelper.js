@@ -562,30 +562,29 @@
 
                     var measureName = fieldConfig["measureName"] ;
                     var currentApiName = fieldConfig["api"]; 
-                    var measureScheme = fieldConfig["measureScheme"]; 
+                    var colorScheme = fieldConfig["measureScheme"]; 
                     var measureSchemeType = fieldConfig["measureSchemeType"]; 
                     var sizeSchemeType = fieldConfig["sizeSchemeType"]; 
                     var sizeChangesColor = fieldConfig["sizeChangesColor"]; 
 
                     if (measureObjectFieldMap[measureName] == null) {
                         var measureLevel = {};
-                        measureLevel[objectType] = {"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "sizeSchemeType" : sizeSchemeType, "sizeChangesColor" : sizeChangesColor};
+                        measureLevel[objectType] = {"measureScheme" : colorScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "sizeSchemeType" : sizeSchemeType, "sizeChangesColor" : sizeChangesColor};
                         measureObjectFieldMap[measureName] = measureLevel;
 
-                        measureArrayObjectFieldMap[measureName] = [{"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "objectType" : objectType, "sizeSchemeType" : sizeSchemeType, "sizeChangesColor" : sizeChangesColor}];
+                        measureArrayObjectFieldMap[measureName] = [{"measureScheme" : colorScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "objectType" : objectType, "sizeSchemeType" : sizeSchemeType, "sizeChangesColor" : sizeChangesColor}];
 
                     }
                     else {
                         var measureLevel = measureObjectFieldMap[measureName]; 
-                        measureLevel[objectType] = {"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType, "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "sizeSchemeType" : sizeSchemeType, "sizeChangesColor" : sizeChangesColor };
+                        measureLevel[objectType] = {"measureScheme" : colorScheme, "measureSchemeType" : measureSchemeType, "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "sizeSchemeType" : sizeSchemeType, "sizeChangesColor" : sizeChangesColor };
 
-                        measureArrayObjectFieldMap[measureName].push({"measureScheme" : measureScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "objectType" : objectType, "sizeSchemeType" : sizeSchemeType, "sizeChangesColor" : sizeChangesColor});
+                        measureArrayObjectFieldMap[measureName].push({"measureScheme" : colorScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "objectType" : objectType, "sizeSchemeType" : sizeSchemeType, "sizeChangesColor" : sizeChangesColor});
 
                     }
                     if (measureSchemeType == "Scale") {
-                        var measureScheme = fieldConfig["measureScheme"]; 
-                        var domain = measureScheme["domain"]; 
-                        var range = measureScheme["range"]; 
+                        var domain = colorScheme["domain"]; 
+                        var range = colorScheme["range"]; 
 
                         if (measureObjectScaleMap[measureName] == null) {
                             var objectLevel = {};

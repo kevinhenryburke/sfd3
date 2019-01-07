@@ -15,10 +15,10 @@
             var topObjectLevel = queryJSONObject["objectLevels"][0];
             var topObjectLevelFields = topObjectLevel.fields;
 
-            var measureNames = [];
-            var panelShowMeasures = [];
-            var measureSchemes = [];
-            var numberMeasuresFound = 0;
+            var colorsNames = [];
+            var panelShowColors = [];
+            var colorSchemes = [];
+            var numberColorsFound = 0;
 
             var sizeNames = [];
             var panelShowSizes = [];
@@ -30,22 +30,22 @@
 
                 // measure configuration
                 if (topObjectLevelFields[j].measureSchemeType != null) {
-                    if (numberMeasuresFound == 0){
+                    if (numberColorsFound == 0){
                         // set the first measure as default
                         var panelCurrentColor = topObjectLevelFields[j].measureName;
                         component.set("v.panelCurrentColor", panelCurrentColor);
                     }
                     // create arrays for measure and schemes
-                    measureNames.push(topObjectLevelFields[j].measureName);
-                    panelShowMeasures.push(topObjectLevelFields[j].measureName);
+                    colorsNames.push(topObjectLevelFields[j].measureName);
+                    panelShowColors.push(topObjectLevelFields[j].measureName);
                     var measureSchemeListLoop = topObjectLevelFields[j].measureScheme;
                     if (measureSchemeListLoop != null) {
-                        measureSchemes.push(measureSchemeListLoop);
+                        colorSchemes.push(measureSchemeListLoop);
                     }
                     else {
-                        measureSchemes.push(null);
+                        colorSchemes.push(null);
                     }
-                    numberMeasuresFound++;
+                    numberColorsFound++;
                 }
 
 
@@ -76,13 +76,11 @@
                 }
             }
 
-            component.set("v.measureNames", measureNames);
-            component.set("v.measuresCount", measureNames.length)
-            component.set("v.panelShowMeasures", panelShowMeasures);
-            component.set("v.measureSchemes", measureSchemes);
+            component.set("v.colorsNames", colorsNames);
+            component.set("v.panelShowColors", panelShowColors);
+            component.set("v.colorSchemes", colorSchemes);
 
             component.set("v.sizeNames", sizeNames);
-            component.set("v.sizesCount", sizeNames.length)
             component.set("v.panelShowSizes", panelShowSizes);
             
             for (var key in buttonParameters) {  
@@ -203,8 +201,8 @@
 
                     configEventParameters = { 
                         "datajson" : datajson, 
-                        "currentMeasure" : panelCurrentColor,
-                        "currentSize" : panelCurrentSize,
+                        "currentColorLabel" : panelCurrentColor,
+                        "currentSizeLabel" : panelCurrentSize,
                         "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
                         "showFilters" : filterPublish,
@@ -214,8 +212,8 @@
                 else {
                     configEventParameters = { 
                         "datajson" : datajson, 
-                        "currentMeasure" : panelCurrentColor,
-                        "currentSize" : panelCurrentSize,
+                        "currentColorLabel" : panelCurrentColor,
+                        "currentSizeLabel" : panelCurrentSize,
                         "masterConfigObject" : masterConfigObject,
                         "primaryId" : panelPrimaryId, 
                         "showFilters" : filterPublish,
@@ -356,7 +354,7 @@
         var _this = this;
         component.set("v.panelCurrentColor", currentMeasure);
         var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = _this.prepareEvent("SetMeasure", {"measure" : currentMeasure }, controllerId);
+        var preppedEvent = _this.prepareEvent("SetColor", {"measure" : currentMeasure }, controllerId);
         _this.publishPreppedEvent(component,preppedEvent);
     },
 

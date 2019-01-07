@@ -23,17 +23,15 @@
   <!-- Technical - Panel -->
   <!-- Measure is being split into size and color -->
   <aura:attribute name="panelCurrentColor" type="String"/>    
-  <aura:attribute name="measureNames" type="String[]"/>    
-  <aura:attribute name="measureSchemes" type="Object[]"/>    
-  <aura:attribute name="panelShowMeasures" type="Object[]" default="[]" />
-  <aura:attribute name="measuresCount" type="Integer" default="0"/>      
+  <aura:attribute name="colorsNames" type="String[]"/>    
+  <aura:attribute name="colorSchemes" type="Object[]"/>    
+  <aura:attribute name="panelShowColors" type="Object[]" default="[]" />
 
   <aura:attribute name="panelCurrentSize" type="String"/>    
   <aura:attribute name="sizeNames" type="String[]"/>    
   <aura:attribute name="sizeSchemes" type="Object[]"/>    
   <aura:attribute name="panelShowSizes" type="Object[]" default="[]" />
 	<aura:attribute name="configuredSizes" type="Boolean" default="false"/>    
-  <aura:attribute name="sizesCount" type="Integer" default="0"/>      
 
 	<aura:attribute name="panelPrimaryId" type="String"/> 
 	<aura:attribute name="currentLevels" type="Integer" default="1"/>    
@@ -111,14 +109,14 @@
             </div>
           </aura:if>
           <div class="slds-col slds-size_1-of-4 slds-small-size_1-of-2 slds-medium-size_1-of-3">
-            <aura:if isTrue="{!v.measuresCount > 0}">
+            <aura:if isTrue="{!v.colorsNames.length > 0}">
                 <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuMeasures }" label="Colors">
-                    <aura:iteration var="action" items="{! v.panelShowMeasures }">
+                    <aura:iteration var="action" items="{! v.panelShowColors }">
                         <lightning:menuItem aura:id="actionMenuMeasureItems" label="{! action }" value="{! action }" checked="{! v.panelCurrentColor == action}"/>
                     </aura:iteration>
                 </lightning:buttonMenu>
             </aura:if>
-            <aura:if isTrue="{!v.sizesCount > 0}">
+            <aura:if isTrue="{!v.sizeNames.length > 0}">
                 <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuSizes }" label="Sizes">
                     <aura:iteration var="action" items="{! v.panelShowSizes }">
                         <lightning:menuItem aura:id="actionMenuSizeItems" label="{! action }" value="{! action }" checked="{! v.panelCurrentSize == action}"/>

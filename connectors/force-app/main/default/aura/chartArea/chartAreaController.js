@@ -147,7 +147,7 @@
             helper.setCache (component, "showLevels", parameters["levels"] ) ;
             cc.refreshVisibility();                 
         }
-        if (topic == "SetMeasure")
+        if (topic == "SetColor")
         {
             // get the measure
 
@@ -233,13 +233,13 @@
                 // set latest values for color and size
 
                 helper.setStore(component, "currentColorLabel", 
-                    parameters["currentMeasure"] != null ? parameters["currentMeasure"] : "bzDefault");
+                    parameters["currentColorLabel"] != null ? parameters["currentColorLabel"] : "bzDefault");
                 helper.setStore(component, "currentSizeLabel", 
                     parameters["currentSizeLabel"] != null ? parameters["currentSizeLabel"] : "bzDefault");
                 
                 // set relevantMeasure
-                if (parameters["currentMeasure"] != null) {
-                    helper.setStore(component, "relevantMeasure", parameters["currentMeasure"]);
+                if (parameters["currentColorLabel"] != null) {
+                    helper.setStore(component, "relevantMeasure", parameters["currentColorLabel"]);
                 }                
                 else if (parameters["currentSizeLabel"] != null) {
                     helper.setStore(component, "relevantMeasure", parameters["currentSizeLabel"]);
