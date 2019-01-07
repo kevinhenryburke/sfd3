@@ -229,7 +229,9 @@ public inherited sharing class HierarchyQuery {
                 hs.name = s.get(fc.api).toString();
             }
             if (fc.role == 'size') {
-                hs.size = (Decimal) s.get(fc.api);
+                if (hs.size == null) { // set the first size field to be the returned value
+                    hs.size = (Decimal) s.get(fc.api);
+                }
             }
         }
     }
