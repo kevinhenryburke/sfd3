@@ -67,7 +67,6 @@
                 // At present only one filter field is possible
                 var panelFilter = topObjectLevelFields[j].filter;
                 if (panelFilter != null) {
-                    component.set("v.filterFieldsCount", panelFilter.length);
                     component.set("v.filterAPIField", topObjectLevelFields[j].api);
 
                     filterPublish["filterAPIField"] = topObjectLevelFields[j].api;
@@ -350,11 +349,11 @@
         cmpTargetMore.set("v.disabled", "true");
     },
 
-    setMenuMeasure : function(component, currentMeasure) {
+    setMenuColor : function(component, currentColor) {
         var _this = this;
-        component.set("v.panelCurrentColor", currentMeasure);
+        component.set("v.panelCurrentColor", currentColor);
         var controllerId = component.get("v.UserComponentId");
-        var preppedEvent = _this.prepareEvent("SetColor", {"measure" : currentMeasure }, controllerId);
+        var preppedEvent = _this.prepareEvent("SetColor", {"measure" : currentColor }, controllerId);
         _this.publishPreppedEvent(component,preppedEvent);
     },
 

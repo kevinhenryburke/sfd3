@@ -280,9 +280,9 @@
         console.log("onClickRefreshOneTime exit");
     },
 
-    handleMenuMeasures: function (component, event, helper) {
+    handleMenuColors: function (component, event, helper) {
         var selectedMenuItemValue = event.getParam("value");
-        helper.setMenuMeasure(component, selectedMenuItemValue);
+        helper.setMenuColor(component, selectedMenuItemValue);
     },    
 
     handleMenuSizes: function (component, event, helper) {

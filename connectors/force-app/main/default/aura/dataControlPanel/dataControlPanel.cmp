@@ -69,9 +69,6 @@
   <aura:attribute name="configuredAllowRefresh" type="Boolean" default="false"/>    
   <aura:attribute name="configuredShowTestButtons" type="Boolean" default="false"/>      
 
-
-  <aura:attribute name="filterFieldsCount" type="Integer" default="0"/>      
-
   <!-- Technical - Query -->
   <aura:attribute name="levelsIncreaseOnly" type="Boolean" default="false"/> 
   <aura:attribute name="autoIncreaseLevels" type="Boolean" default="false"/> 
@@ -110,7 +107,7 @@
           </aura:if>
           <div class="slds-col slds-size_1-of-4 slds-small-size_1-of-2 slds-medium-size_1-of-3">
             <aura:if isTrue="{!v.colorsNames.length > 0}">
-                <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuMeasures }" label="Colors">
+                <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuColors }" label="Colors">
                     <aura:iteration var="action" items="{! v.panelShowColors }">
                         <lightning:menuItem aura:id="actionMenuMeasureItems" label="{! action }" value="{! action }" checked="{! v.panelCurrentColor == action}"/>
                     </aura:iteration>
@@ -123,7 +120,7 @@
                     </aura:iteration>
                 </lightning:buttonMenu>
             </aura:if>
-            <aura:if isTrue="{!v.filterFieldsCount > 0}">
+            <aura:if isTrue="{!v.filterPublish.filterValues.length > 0}">
               <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuFilter }" label="Filter">
                   <aura:iteration var="action" items="{! v.filterPublish.filterValues }">
                   <lightning:menuItem aura:id="actionMenuFilterItems" label="{! action }" value="{! action }" checked="true"/>

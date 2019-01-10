@@ -611,6 +611,7 @@
         var _this = this;
         var componentReference = component.get("v.componentReference");
         var currentColorLabel = _this.getStore(component, "currentColorLabel");
+        var currentSizeLabel = _this.getStore(component, "currentSizeLabel");
 
         var firstMeasureScheme = _this.getFirstColorSchemeLegend(component, currentColorLabel);
 
@@ -633,39 +634,57 @@
             case "StringValue" : baseDataArray = Object.keys(ms); break;
         }
 
-        var nodeSymbol = legendSymbolGroup.selectAll('.symbol')
-            .data(baseDataArray);
+        var currentColorLabelAsArray = [];
+        var schemeTextPrefix = [];
 
-        nodeSymbol
-            .enter()
-            .append('path')
-            .style("stroke" , "black")
-            .style("fill" , function(d,i) {return getLegendItemColor (ms, d, i);})
-            .attr('transform',function(d,i) { return 'translate('+30+','+(i*20+30)+')';})
-            .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[0];}) );
+        let xSchemeTextOffset = 20, xSymbolOffset = 30, xSymbolTextOffset = 40;
+        let ySchemeTextOffset = 13, yLineDepth = 20, yFirstSymbolOffset = 30, yFirstSymbolTextOffset = 33;
 
-        var textme = legendSymbolGroup.selectAll("textme")
-            .data(baseDataArray)
-            .enter()
-            .append("text");            
+        if (currentSizeLabel != "bzDefault") {
+            schemeTextPrefix.push("Size Scheme: ");
+            currentColorLabelAsArray.push(currentSizeLabel);
+            yFirstSymbolOffset += 30;
+            yFirstSymbolTextOffset += 30;    
+        }
 
-        var textLabels = textme
-            .attr('transform',function(d,i) { return 'translate('+40+','+(i*20+33)+')';})
-            .attr("font-family", "sans-serif")
-            .text( function(d,i) {return getLegendItemName (ms, d, i);})
-            .attr("font-size", "8px")
-            .attr("fill", "gray");
-
-        var currentColorLabelAsArray = [ currentColorLabel ];
+        if (currentColorLabel != "bzDefault") {
+            schemeTextPrefix.push("Color Scheme: ");
+            currentColorLabelAsArray.push(currentColorLabel);
+        }
 
         var measureText = legendSymbolGroup.selectAll("textme")
             .data(currentColorLabelAsArray)
             .enter()
             .append("text")
-            .attr('transform',function(d,i) { return 'translate('+20+','+13+')';})
-            .text( function (d, i) {return "Color Scheme: " + d;})
+            .attr('transform',function(d,i) { return 'translate('+xSchemeTextOffset+','+(i*yLineDepth+ySchemeTextOffset)+')';})  
+            .text( function (d, i) {return schemeTextPrefix[i] + d;})
             .attr("font-size", "8px")
             .attr("fill", "black");
+
+        if (currentColorLabel != "bzDefault") {
+            var textme = legendSymbolGroup.selectAll("textme")
+                .data(baseDataArray)
+                .enter()
+                .append("text");            
+
+            var textLabels = textme
+                .attr('transform',function(d,i) { return 'translate('+xSymbolTextOffset+','+(i*yLineDepth+yFirstSymbolTextOffset)+')';})
+                .attr("font-family", "sans-serif")
+                .text( function(d,i) {return getLegendItemName (ms, d, i);})
+                .attr("font-size", "8px")
+                .attr("fill", "gray");
+
+            var nodeSymbol = legendSymbolGroup.selectAll('.symbol')
+                .data(baseDataArray);
+
+            nodeSymbol
+                .enter()
+                .append('path')
+                .style("stroke" , "black")
+                .style("fill" , function(d,i) {return getLegendItemColor (ms, d, i);})
+                .attr('transform',function(d,i) { return 'translate('+xSymbolOffset+','+(i*yLineDepth+yFirstSymbolOffset)+')';})
+                .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[0];}) );
+        }
 
 
         function getLegendItemColor(ms, d, i) {
