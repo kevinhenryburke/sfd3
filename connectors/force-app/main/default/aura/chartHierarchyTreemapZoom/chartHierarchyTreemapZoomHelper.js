@@ -2,7 +2,7 @@
     initializeVisuals: function (component) {
 		console.log("chartHierarchyTreeMapHelper.initializeVisuals enter");
 		let _this = this;
-
+        var componentReference = component.get("v.componentReference");
 
         window.onerror = function (errorMsg, url, lineNumber, column, errorObj) {
             alert('Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + lineNumber
@@ -15,38 +15,101 @@
             "children": [
               {
                 "name": "6.1 Identify and plan learning needs",
-                "shortName": "AITSL-A61",
+                "shortName": "Level 1 Item 1",
                 "size": null,
                 "children": [
                   {
                     "name": "Analyse the Standards for.",
-                    "shortName": "AITSL-A61-H",
-                    "size": 59,
+                    "shortName": "Level 1 Item 1 Sub 1",
+                    "size": null,
                     "children": [
-                      
+                        {
+                            "name": "Bottom 1",
+                            "shortName": "Level 1 Item 1 Sub 1 A",
+                            "size": 148,
+                            "children": [
+                              
+                            ]
+                          },
+                          {
+                            "name": "Bottom 2",
+                            "shortName": "Level 1 Item 1 Sub 1 B",
+                            "size": 259,
+                            "children": [
+                              
+                            ]
+                          }                              
                     ]
                   },
                   {
                     "name": "Demonstrate an  of the role of the",
-                    "shortName": "AITSL-A61-G",
+                    "shortName": "Level 1 Item 1 Sub 2",
                     "size": 448,
                     "children": [
+                        {
+                            "name": "Bottom 1",
+                            "shortName": "Level 1 Item 1 Sub 2 A",
+                            "size": 148,
+                            "children": [
+                              
+                            ]
+                          },
+                          {
+                            "name": "Bottom 2",
+                            "shortName": "Level 1 Item 1 Sub 2 B",
+                            "size": 259,
+                            "children": [
+                              
+                            ]
+                          }                              
                       
                     ]
                   },
                   {
                     "name": "Use  knowledge of the Standards for ",
-                    "shortName": "AITSL-A61-L",
+                    "shortName": "Level 1 Item 1 Sub 3",
                     "size": 59,
                     "children": [
+                        {
+                            "name": "Bottom 1",
+                            "shortName": "Level 1 Item 1 Sub 3 A",
+                            "size": 148,
+                            "children": [
+                              
+                            ]
+                          },
+                          {
+                            "name": "Bottom 2",
+                            "shortName": "Level 1 Item 1 Sub 3 B",
+                            "size": 259,
+                            "children": [
+                              
+                            ]
+                          }                              
                       
                     ]
                   },
                   {
                     "name": "Use the  plan learning needs.",
-                    "shortName": "AITSL-A61-P",
+                    "shortName": "Level 1 Item 1 Sub 4",
                     "size": 101,
                     "children": [
+                        {
+                            "name": "Bottom 1",
+                            "shortName": "Level 1 Item 1 Sub 4 A",
+                            "size": 148,
+                            "children": [
+                              
+                            ]
+                          },
+                          {
+                            "name": "Bottom 2",
+                            "shortName": "Level 1 Item 1 Sub 4 B",
+                            "size": 259,
+                            "children": [
+                              
+                            ]
+                          }                              
                       
                     ]
                   }
@@ -54,7 +117,7 @@
               },
               {
                 "name": "6.2 Engage in improve practice",
-                "shortName": "AITSL-A62",
+                "shortName": "Level 1 Item 2",
                 "size": null,
                 "children": [
                   {
@@ -93,7 +156,7 @@
               },
               {
                 "name": "6.3 Engage with  and improve practice",
-                "shortName": "AITSL-A63",
+                "shortName": "Level 1 Item 3",
                 "size": null,
                 "children": [
                   {
@@ -132,7 +195,7 @@
               },
               {
                 "name": "6.4 Apply  improve learning",
-                "shortName": "AITSL-A64",
+                "shortName": "Level 1 Item 4",
                 "size": null,
                 "children": [
                   {
@@ -174,13 +237,13 @@
 
         _this.setCache (component, "datajson", datajson) ;  
 
-        let nodeGroup = _this.getCache (component, "nodeGroup") ;  
-        let width = _this.getCache (component, "width") - 50; // TODO not great  
-        let height = _this.getCache (component, "height") ;  
-
-        var margin = {top: 20, right: 0, bottom: 0, left: 0},
+        var margin = {top: 20, right: 20, bottom: 0, left: 20},
         formatNumber = d3.format(",d"),
         transitioning;
+
+        let nodeGroup = _this.getCache (component, "nodeGroup") ;  
+        var width = _this.getCache (component, "width")  - margin.left - margin.right; // TODO not great  
+        var height = _this.getCache (component, "height") ;  
         
         var x = d3.scaleLinear()
             .domain([0, width])
@@ -193,8 +256,9 @@
         // var color = d3.scaleOrdinal()
         //     .range(d3.schemeCategory10
         //     .map(function(c) { c = d3.rgb(c); c.opacity = 1; return c; }));
+        // NOTE original had c.opacity = 0.6
 
-       var color = d3.scaleOrdinal(d3.schemeCategory20c);
+        var color = d3.scaleOrdinal(d3.schemeCategory20c);
             
         var treemap;
         
@@ -202,102 +266,65 @@
         
         updateDrillDown();
             
+        function updateDrillDown() {
+            console.log("updateDrillDown enter");
 
+            var svg = d3.select(_this.getDivId("svg", componentReference, true))
+                .attr("width", width - margin.left - margin.right)
+                .attr("height", height - margin.bottom - margin.top)
+                .style("margin-left", -margin.left + "px")
+                .style("margin.right", -margin.right + "px");
 
+            nodeGroup
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                .style("shape-rendering", "crispEdges");		
 
-/************
- * 
- * 
- * 
- * 
- * 
- */
-
-
-
-
-function updateDrillDown() {
-	
-	// if (svg) {
-
-    //     console.log("xxxxx: svg remove");
-	// 	nodeGroup.selectAll("*").remove();
-    // } 
-    // else {
-
-		
-		
-//		 var treemap = d3.layout.treemap()
-//	      .children(function(d, depth) { return depth ? null : d._children; })
-//	      .sort(function(a, b) { return a.value - b.value; })
-//	      .ratio(height / width * 0.5 * (1 + Math.sqrt(5)))
-//	      .round(false);
-
-var componentReference = component.get("v.componentReference");
-
-
-var svg = d3.select(_this.getDivId("svg", componentReference, true));
-
-
-
-//	  svg = d3.select("#domainDrillDown").append("svg")
-
-svg
-       .attr("width", width - margin.left - margin.right)
-	      .attr("height", height - margin.bottom - margin.top)
-	      .style("margin-left", -margin.left + "px")
-	      .style("margin.right", -margin.right + "px")
-
-nodeGroup
-//            .append("g")
-	      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-	      .style("shape-rendering", "crispEdges");		
-		
-		
-		 // KB great a grandparent group and a rectangle and text within it
-		  grandparent = nodeGroup.append("g")
-		      .attr("class", "grandparent");
+            // KB great a grandparent group and a rectangle and text within it
+            grandparent = nodeGroup.append("g")
+                .attr("class", "grandparent");
 		  
-		  grandparent.append("rect")
-		      .attr("y", -margin.top)
-		      .attr("width", width)
-		      .attr("height", margin.top);
+            grandparent.append("rect")
+                .attr("y", -margin.top)
+                .attr("width", width)
+                .attr("height", margin.top);
 		  
-		  grandparent.append("text")
-		      .attr("x", 6)
-		      .attr("y", 6 - margin.top)
-		      .attr("dy", ".75em");		 
+            grandparent.append("text")
+                .attr("x", 6)
+                .attr("y", 6 - margin.top)
+                .attr("dy", ".75em");		 
 		 
-		 treemap = d3.treemap()
-		    .tile(d3.treemapResquarify)
-		    .size([width, height])
-		    .round(false)
-		    .paddingInner(1);
-//	}
+            treemap = d3.treemap()
+                .tile(d3.treemapResquarify)
+                .size([width, height])
+                .round(false)
+                .paddingInner(1);
 				  
-		  var root = d3.hierarchy(datajson)
-		      .eachBefore(function(d) { d.id = (d.parent ? d.parent.id + "." : "") + d.data.shortName; })
-		      .sum((d) => d.size)
-		      .sort(function(a, b) {
-		      console.log('initial root sort a ' + a.value + ' b ' + b.value);
-		        return b.height - a.height || b.value - a.value; });
+            var root = d3.hierarchy(datajson)
+                .eachBefore(function(d) { d.id = (d.parent ? d.parent.id + "." : "") + d.data.shortName; })
+                .sum((d) => d.size)
+                .sort(function(a, b) {
+                    console.log('xxxxx: initial root sort a ' + a.value + ' b ' + b.value);
+                    return b.value - a.value; 
+                });
 		  
-		  initialize(root);
-		  accumulate(root);
-		  layout(root);
-		  treemap(root);
-		  display(root);
+            initialize(root);
+            accumulate(root);
+            layout(root);
+            treemap(root);
+            display(root);
 
-};
+            console.log("updateDrillDown exit");
+
+        };
 
 
 
-function initialize(root) {
-    root.x = root.y = 0;
-    root.x1 = width;
-    root.y1 = height;
-    root.depth = 0;
-  }
+        function initialize(root) {
+            root.x = root.y = 0;
+            root.x1 = width;
+            root.y1 = height;
+            root.depth = 0;
+        }
 
   // Aggregate the values for internal nodes. This is normally done by the
   // treemap layout, but not here because of our custom implementation.
@@ -320,11 +347,17 @@ function initialize(root) {
 // of sibling was laid out in 1×1, we must rescale to fit using absolute
 // coordinates. This lets us use a viewport to zoom.
 function layout(d) {
+    console.log("xxxxx: layout enter");
   if (d._children) {
 //    treemap.nodes({_children: d._children});
-//	  treemap(d);
+// 	  treemap(d);
+
     d._children.forEach(function(c) {
+        console.log("xxxxx: layout child: ", c.data.shortName);
+        console.log("xxxxx: c.x0 =>: ", c.x0);
+
       c.x0 = d.x0 + c.x0 * d.x1;
+      console.log("xxxxx: c.x0 =>>>: ", c.x0);
       c.y0 = d.y0 + c.y0 * d.y1;
       c.x1 *= d.x1;
       c.y1 *= d.y1;
@@ -394,38 +427,50 @@ function display(d) {
 	
 
   function transition(d) {
-    if (transitioning || !d) return;
-    transitioning = true;
+      console.log("xxxxx: transitioning");
+        if (transitioning || !d) return;
+        transitioning = true;
 
-    var g2 = display(d),
-        t1 = g1.transition().duration(750),
-        t2 = g2.transition().duration(750);
+        var g2 = display(d),
+            t1 = g1.transition().duration(750),
+            t2 = g2.transition().duration(750);
     
-    // Update the domain only after entering new elements.
-    x.domain([d.x0, d.x0 + d.x1]);
-    y.domain([d.y0, d.y0 + d.y1]);
+        // Update the domain only after entering new elements.
+
+        console.log("xxxxx: x.domain: ", d.x0, d.x1);
+
+        // x.domain([d.x0, d.x0 + d.x1]);
+        // y.domain([d.y0, d.y0 + d.y1]);
+        x.domain([d.x0, d.x1]);
+        y.domain([d.y0, d.y1]);
 
     // Enable anti-aliasing during the transition.
     nodeGroup.style("shape-rendering", null);
 
-    // Draw child nodes on top of parent nodes.
+    // Draw child nodes on top of parent nodes. (KB this is key, we draw on top!)
     nodeGroup.selectAll(".depth").sort(function(a, b) { 
-    	console.log('.depth sort a ' + a.depth + ' b ' + b.depth);
+    	console.log('xxxx: .depth sort a ' + a.depth + ' b ' + b.depth);
     	return a.depth - b.depth; });
 
     // Fade-in entering text.
     g2.selectAll("text").style("fill-opacity", 0);
 
     // Transition to the new view.
-    t1.selectAll("text").call(text).style("fill-opacity", 0);
-    t2.selectAll("text").call(text).style("fill-opacity", 1);
+
+    t1.selectAll(".ptext").call(text).style("fill-opacity", 0);
+    t1.selectAll(".ctext").call(text2).style("fill-opacity", 0);
+    t2.selectAll(".ptext").call(text).style("fill-opacity", 1);
+    t2.selectAll(".ctext").call(text2).style("fill-opacity", 1);
+
+    // t1.selectAll("text").call(text).style("fill-opacity", 0);
+    // t2.selectAll("text").call(text).style("fill-opacity", 1);
     t1.selectAll("rect").call(rect);
     t2.selectAll("rect").call(rect);
 
     // Remove the old node when the transition is finished.
     t1.remove().on("end", function() {
         nodeGroup.style("shape-rendering", "crispEdges");
-      transitioning = false;
+        transitioning = false;
     });
   }
 
@@ -447,11 +492,22 @@ function text(text) {
 
   // this is the bottom right text box
   function text2(text) {
+    
     text.attr("x", function(d) { return x(d.x0 + d.x1) - this.getComputedTextLength() - 6; })
-        .attr("y", function(d) { return y(d.y0 + d.y1) - 6; })
+        .attr("y", function(d) { 
+            console.log("text2 " + d.data.shortName + " y:" + d.y0 + " diff:" + d.y1);
+            return y(d.y0 + d.y1) - 6; })
         .style("opacity", function(d) { return this.getComputedTextLength() < x(d.x0 + d.x1) - x(d.x0) ? 1 : 0; });
   }
 
+  function rect(rect) {
+    rect.attr("x", function(d) { return x(d.x0); })
+        .attr("y", function(d) { return y(d.y0); })
+        .attr("width", function(d) { return x(d.x0 + d.x1) - y(d.x0); })
+        .attr("height", function(d) { return y(d.y0 + d.y1) - y(d.y0); });
+  }
+
+/*  
   function rect(rect) {
     rect.attr("x", function(d) { return x(d.x0); })
         .attr("y", function(d) { return y(d.y0); })
@@ -470,6 +526,7 @@ function text(text) {
       
         	});
   }
+*/
 
   function name(d) {
     return d.parent
