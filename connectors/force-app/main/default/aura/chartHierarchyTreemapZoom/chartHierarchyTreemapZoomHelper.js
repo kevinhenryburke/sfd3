@@ -175,34 +175,30 @@
         _this.setCache (component, "datajson", datajson) ;  
 
         let nodeGroup = _this.getCache (component, "nodeGroup") ;  
+        let width = _this.getCache (component, "width") - 50; // TODO not great  
+        let height = _this.getCache (component, "height") ;  
 
         var margin = {top: 20, right: 0, bottom: 0, left: 0},
-        width = 640, //640
-        height = 530,
         formatNumber = d3.format(",d"),
         transitioning;
         
         var x = d3.scaleLinear()
-        .domain([0, width])
-        .range([0, width]);
+            .domain([0, width])
+            .range([0, width]);
         
         var y = d3.scaleLinear()
-        .domain([0, height - margin.top - margin.bottom])
-        .range([0, height - margin.top - margin.bottom]);
-        
-        
-        var color = d3.scaleOrdinal()
-        .range(d3.schemeCategory10
-            .map(function(c) { c = d3.rgb(c); c.opacity = 0.6; return c; }));
+            .domain([0, height - margin.top - margin.bottom])
+            .range([0, height - margin.top - margin.bottom]);
                 
+        // var color = d3.scaleOrdinal()
+        //     .range(d3.schemeCategory10
+        //     .map(function(c) { c = d3.rgb(c); c.opacity = 1; return c; }));
 
-        var fader = function(color) { return d3.interpolateRgb(color, "#fff")(0.2); };
-
-        var format = d3.format(",d");
-        
+       var color = d3.scaleOrdinal(d3.schemeCategory20c);
+            
         var treemap;
         
-        var svg, grandparent;
+        var grandparent;
         
         updateDrillDown();
             
@@ -219,13 +215,15 @@
 
 
 
-//var color = d3.scaleOrdinal(d3.schemeCategory20.map(fader));
 
 function updateDrillDown() {
 	
-	if (svg) {
-		nodeGroup.selectAll("*").remove();
-	} else {
+	// if (svg) {
+
+    //     console.log("xxxxx: svg remove");
+	// 	nodeGroup.selectAll("*").remove();
+    // } 
+    // else {
 
 		
 		
@@ -244,11 +242,11 @@ var svg = d3.select(_this.getDivId("svg", componentReference, true));
 
 //	  svg = d3.select("#domainDrillDown").append("svg")
 
-// svg = svg
-//        .attr("width", width - margin.left - margin.right)
-// 	      .attr("height", height - margin.bottom - margin.top)
-// 	      .style("margin-left", -margin.left + "px")
-// 	      .style("margin.right", -margin.right + "px")
+svg
+       .attr("width", width - margin.left - margin.right)
+	      .attr("height", height - margin.bottom - margin.top)
+	      .style("margin-left", -margin.left + "px")
+	      .style("margin.right", -margin.right + "px")
 
 nodeGroup
 //            .append("g")
@@ -271,11 +269,11 @@ nodeGroup
 		      .attr("dy", ".75em");		 
 		 
 		 treemap = d3.treemap()
-		    //.tile(d3.treemapResquarify)
+		    .tile(d3.treemapResquarify)
 		    .size([width, height])
 		    .round(false)
 		    .paddingInner(1);
-	}
+//	}
 				  
 		  var root = d3.hierarchy(datajson)
 		      .eachBefore(function(d) { d.id = (d.parent ? d.parent.id + "." : "") + d.data.shortName; })
@@ -339,7 +337,8 @@ function layout(d) {
 
 
 function display(d) {
-	
+    
+    // the top box
   grandparent
       .datum(d.parent)
       .on("click", transition)
@@ -401,9 +400,6 @@ function display(d) {
     var g2 = display(d),
         t1 = g1.transition().duration(750),
         t2 = g2.transition().duration(750);
-
-    
-    
     
     // Update the domain only after entering new elements.
     x.domain([d.x0, d.x0 + d.x1]);
@@ -436,6 +432,8 @@ function display(d) {
   return g;
 }
 
+  // this is the top left text box
+
 function text(text) {
     text.selectAll("tspan")
         .attr("x", function(d) { return x(d.x0) + 6; })
@@ -447,6 +445,7 @@ function text(text) {
         });
   }
 
+  // this is the bottom right text box
   function text2(text) {
     text.attr("x", function(d) { return x(d.x0 + d.x1) - this.getComputedTextLength() - 6; })
         .attr("y", function(d) { return y(d.y0 + d.y1) - 6; })
@@ -458,14 +457,16 @@ function text(text) {
         .attr("y", function(d) { return y(d.y0); })
         .attr("width", function(d) {
         	console.log('id ' + d.id+' rect width ' + (d.x1 - d.x0));
+// KB: next line is from the online example but doesn't work well with opacity and width
         	return x(d.x0 + d.x1) - x(d.x0); 
-        	//return (d.x1 -d.x0);
+// KB: next is an alternative that doesn't work well on drill down
+//return (d.x1 -d.x0);
       
         	})
         .attr("height", function(d) { 
         	console.log('id ' + d.id+' rect height ' + (d.y1 - d.y0) + ' ordinal ' + (y(d.y1 +d.y0)  - y(d.y0)));
         	return y(d.y0 + d.y1) - y(d.y0);
-        	//return y(d.y1 - d.y0);
+//        	return y(d.y1 - d.y0);
       
         	});
   }
