@@ -1,0 +1,47 @@
+.THIS text {
+    pointer-events: none;
+  }
+  
+  .THIS   .grandparent text {
+    font-weight: bold;
+  }
+  
+  .THIS   rect {
+    fill: none;
+    stroke: #fff;
+  }
+  
+  .THIS  rect.parent {
+    stroke-width: 2px;
+  }
+
+  .THIS   .grandparent rect {
+    stroke-width: 2px;
+  }
+  
+  .THIS  .grandparent rect {
+    fill: orange;
+  }
+  
+  .THIS  .grandparent:hover rect {
+    fill: #ee9700;
+  }
+  
+  .THIS  children rect.parent {
+    cursor: pointer;
+  }
+
+
+  .THIS  .grandparent rect {
+    cursor: pointer;
+  }
+  
+.THIS  .children rect.parent {
+    fill: #bbb;
+    fill-opacity: .5;
+  }
+  
+.THIS  .children:hover rect.child {
+    fill: #bbb;
+  }
+
