@@ -378,11 +378,11 @@ function display(d) {
     .select("text")
       .text(name(d));
 
-  var g1 = nodeGroup.insert("g", ".grandparent")
+  var grandparentgp = nodeGroup.insert("g", ".grandparent")
       .datum(d)
       .attr("class", "depth");
   
-  var g = g1.selectAll("g")
+  var g = grandparentgp.selectAll("g")
       .data(d._children)
     .enter().append("g");
 
@@ -427,22 +427,22 @@ function display(d) {
 	
 
   function transition(d) {
-      console.log("xxxxx: transitioning");
-        if (transitioning || !d) return;
-        transitioning = true;
+    console.log("xxxxx: transitioning");
+    if (transitioning || !d) return;
+    transitioning = true;
 
-        var g2 = display(d),
-            t1 = g1.transition().duration(750),
-            t2 = g2.transition().duration(750);
-    
-        // Update the domain only after entering new elements.
+    var parentsgp = display(d);
+    var grandparenttransition = grandparentgp.transition().duration(750);
+    var parentstransition = parentsgp.transition().duration(750);
 
-        console.log("xxxxx: x.domain: ", d.x0, d.x1);
+    // Update the domain only after entering new elements.
+    // KB: The new domain focuses in on the area now in focus and blows that up to the whole canvas
+    console.log("xxxxx: x.domain: ", d.x0, d.x1);
 
-        // x.domain([d.x0, d.x0 + d.x1]);
-        // y.domain([d.y0, d.y0 + d.y1]);
-        x.domain([d.x0, d.x1]);
-        y.domain([d.y0, d.y1]);
+    // x.domain([d.x0, d.x0 + d.x1]);
+    // y.domain([d.y0, d.y0 + d.y1]);
+    x.domain([d.x0, d.x1]);
+    y.domain([d.y0, d.y1]);
 
     // Enable anti-aliasing during the transition.
     nodeGroup.style("shape-rendering", null);
@@ -453,22 +453,22 @@ function display(d) {
     	return a.depth - b.depth; });
 
     // Fade-in entering text.
-    g2.selectAll("text").style("fill-opacity", 0);
+    parentsgp.selectAll("text").style("fill-opacity", 0);
 
     // Transition to the new view.
 
-    t1.selectAll(".ptext").call(text).style("fill-opacity", 0);
-    t1.selectAll(".ctext").call(text2).style("fill-opacity", 0);
-    t2.selectAll(".ptext").call(text).style("fill-opacity", 1);
-    t2.selectAll(".ctext").call(text2).style("fill-opacity", 1);
+    grandparenttransition.selectAll(".ptext").call(text).style("fill-opacity", 0);
+    grandparenttransition.selectAll(".ctext").call(text2).style("fill-opacity", 0);
+    parentstransition.selectAll(".ptext").call(text).style("fill-opacity", 1);
+    parentstransition.selectAll(".ctext").call(text2).style("fill-opacity", 1);
 
-    // t1.selectAll("text").call(text).style("fill-opacity", 0);
-    // t2.selectAll("text").call(text).style("fill-opacity", 1);
-    t1.selectAll("rect").call(rect);
-    t2.selectAll("rect").call(rect);
+    // grandparenttransition.selectAll("text").call(text).style("fill-opacity", 0);
+    // parentstransition.selectAll("text").call(text).style("fill-opacity", 1);
+    grandparenttransition.selectAll("rect").call(rect);
+    parentstransition.selectAll("rect").call(rect);
 
-    // Remove the old node when the transition is finished.
-    t1.remove().on("end", function() {
+    // Remove the old grandparent node when the transition is finished.
+    grandparenttransition.remove().on("end", function() {
         nodeGroup.style("shape-rendering", "crispEdges");
         transitioning = false;
     });
@@ -493,19 +493,39 @@ function text(text) {
   // this is the bottom right text box
   function text2(text) {
     
-    text.attr("x", function(d) { return x(d.x0 + d.x1) - this.getComputedTextLength() - 6; })
+    text.attr("x", function(d) { return x(d.x1) - this.getComputedTextLength() - 6; })
         .attr("y", function(d) { 
             console.log("text2 " + d.data.shortName + " y:" + d.y0 + " diff:" + d.y1);
-            return y(d.y0 + d.y1) - 6; })
+            return y(d.y1) - 6; })
         .style("opacity", function(d) { return this.getComputedTextLength() < x(d.x0 + d.x1) - x(d.x0) ? 1 : 0; });
-  }
+
+        // This version is original
+        // text.attr("x", function(d) { return x(d.x0 + d.x1) - this.getComputedTextLength() - 6; })
+        // .attr("y", function(d) { 
+        //     console.log("text2 " + d.data.shortName + " y:" + d.y0 + " diff:" + d.y1);
+        //     return y(d.y0 + d.y1) - 6; })
+        // .style("opacity", function(d) { return this.getComputedTextLength() < x(d.x0 + d.x1) - x(d.x0) ? 1 : 0; });
+
+
+}
 
   function rect(rect) {
+
+    /*
     rect.attr("x", function(d) { return x(d.x0); })
         .attr("y", function(d) { return y(d.y0); })
-        .attr("width", function(d) { return x(d.x0 + d.x1) - y(d.x0); })
+        .attr("width", function(d) { return x(d.x0 + d.x1) - x(d.x0); })
         .attr("height", function(d) { return y(d.y0 + d.y1) - y(d.y0); });
-  }
+*/
+        rect.attr("x", function(d) { return x(d.x0); })
+            .attr("y", function(d) { return y(d.y0); })
+            .attr("width", function(d) { 
+                
+                console.log("xxxxx: rect: " , d.data.shortName, d.x0, d.x1, x(d.x1 - d.x0));
+                
+                return x(d.x1) - x(d.x0); })
+            .attr("height", function(d) { return y(d.y1) - y(d.y0); });
+    }
 
 /*  
   function rect(rect) {
