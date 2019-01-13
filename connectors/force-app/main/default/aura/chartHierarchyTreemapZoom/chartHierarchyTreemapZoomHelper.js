@@ -237,21 +237,24 @@
 
         _this.setCache (component, "datajson", datajson) ;  
 
-        var margin = {top: 20, right: 20, bottom: 0, left: 20},
+        var margin = {top: 20, right: 0, bottom: 0, left: 0},
         formatNumber = d3.format(",d"),
         transitioning;
 
         let nodeGroup = _this.getCache (component, "nodeGroup") ;  
-        var width = _this.getCache (component, "width")  - margin.left - margin.right; // TODO not great  
-        var height = _this.getCache (component, "height") ;  
+        var width = _this.getCache (component, "width")  - margin.left - margin.right - 50; // TODO not great  
+        var height = _this.getCache (component, "height")  - margin.top - margin.bottom - 650;  
+//        var height = _this.getCache (component, "height") - 650;  
         
+          console.log("xxxxx: height: " , height);
+
         var x = d3.scaleLinear()
             .domain([0, width])
             .range([0, width]);
         
         var y = d3.scaleLinear()
-            .domain([0, height - margin.top - margin.bottom])
-            .range([0, height - margin.top - margin.bottom]);
+            .domain([0, height])
+            .range([0, height - margin.top]);
                 
         // var color = d3.scaleOrdinal()
         //     .range(d3.schemeCategory10
@@ -271,10 +274,12 @@
 
             var svg = d3.select(_this.getDivId("svg", componentReference, true))
                 .attr("width", width - margin.left - margin.right)
-                .attr("height", height - margin.bottom - margin.top)
+                .attr("height", height)
                 .style("margin-left", -margin.left + "px")
-                .style("margin.right", -margin.right + "px");
+                .style("margin.right", -margin.right + "px")
+                ;
 
+            // we move the nodeGroup down by margin.top to allow room for the grandparent with -ve y-axis            
             nodeGroup
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
                 .style("shape-rendering", "crispEdges");		
@@ -282,7 +287,8 @@
             // KB great a grandparent group and a rectangle and text within it
             grandparent = nodeGroup.append("g")
                 .attr("class", "grandparent");
-		  
+          
+            // grandparent has a negative y coordinate so main panel starts at zero    
             grandparent.append("rect")
                 .attr("y", -margin.top)
                 .attr("width", width)
@@ -303,7 +309,7 @@
                 .eachBefore(function(d) { d.id = (d.parent ? d.parent.id + "." : "") + d.data.shortName; })
                 .sum((d) => d.size)
                 .sort(function(a, b) {
-                    console.log('xxxxx: initial root sort a ' + a.value + ' b ' + b.value);
+                    // console.log('xxxxx: initial root sort a ' + a.value + ' b ' + b.value);
                     return b.value - a.value; 
                 });
 		  
@@ -320,7 +326,8 @@
 
 
         function initialize(root) {
-            root.x = root.y = 0;
+            root.x = 0;
+            root.y = 0;
             root.x1 = width;
             root.y1 = height;
             root.depth = 0;
@@ -353,11 +360,8 @@ function layout(d) {
 // 	  treemap(d);
 
     d._children.forEach(function(c) {
-        console.log("xxxxx: layout child: ", c.data.shortName);
-        console.log("xxxxx: c.x0 =>: ", c.x0);
 
       c.x0 = d.x0 + c.x0 * d.x1;
-      console.log("xxxxx: c.x0 =>>>: ", c.x0);
       c.y0 = d.y0 + c.y0 * d.y1;
       c.x1 *= d.x1;
       c.y1 *= d.y1;
@@ -383,16 +387,18 @@ function display(d) {
       .attr("class", "depth");
   
   var g = grandparentgp.selectAll("g")
-      .data(d._children)
-    .enter().append("g");
+    .data(d._children)
+    .enter()
+    .append("g");
 
   g.filter(function(d) { return d._children; })
       .classed("children", true)
       .on("click", transition);
 
   var children = g.selectAll(".child")
-      .data(function(d) { return d._children || [d]; })
-    .enter().append("g");
+    .data(function(d) { return d._children || [d]; })
+    .enter()
+    .append("g");
 
   children.append("rect")
       .attr("class", "child")
@@ -438,6 +444,7 @@ function display(d) {
     // Update the domain only after entering new elements.
     // KB: The new domain focuses in on the area now in focus and blows that up to the whole canvas
     console.log("xxxxx: x.domain: ", d.x0, d.x1);
+    console.log("xxxxx: y.domain: ", d.y0, d.y1);
 
     // x.domain([d.x0, d.x0 + d.x1]);
     // y.domain([d.y0, d.y0 + d.y1]);
@@ -449,7 +456,6 @@ function display(d) {
 
     // Draw child nodes on top of parent nodes. (KB this is key, we draw on top!)
     nodeGroup.selectAll(".depth").sort(function(a, b) { 
-    	console.log('xxxx: .depth sort a ' + a.depth + ' b ' + b.depth);
     	return a.depth - b.depth; });
 
     // Fade-in entering text.
@@ -521,10 +527,13 @@ function text(text) {
             .attr("y", function(d) { return y(d.y0); })
             .attr("width", function(d) { 
                 
-                console.log("xxxxx: rect: " , d.data.shortName, d.x0, d.x1, x(d.x1 - d.x0));
                 
                 return x(d.x1) - x(d.x0); })
-            .attr("height", function(d) { return y(d.y1) - y(d.y0); });
+            .attr("height", function(d) { 
+                console.log("xxxxx: rect: " , d.data.shortName, d.y0, d.y1, y(d.y1 - d.y0));
+                
+                return y(d.y1) - y(d.y0); 
+            });
     }
 
 /*  
