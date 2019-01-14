@@ -10,30 +10,30 @@
         }
 
         let datajson = {
+            "id": 'Sample',
             "name": 'Sample',
-            "shortName": 'Sample',
             "children": [
               {
-                "name": "6.1 Identify and plan learning needs",
-                "shortName": "Level 1 Item 1",
+                "id": "6.1 Identify and plan learning needs",
+                "name": "Level 1 Item 1",
                 "size": null,
                 "children": [
                   {
-                    "name": "Analyse the Standards for.",
-                    "shortName": "Level 1 Item 1 Sub 1",
+                    "id": "Analyse the Standards for.",
+                    "name": "Level 1 Item 1 Sub 1",
                     "size": null,
                     "children": [
                         {
-                            "name": "Bottom 1",
-                            "shortName": "Level 1 Item 1 Sub 1 A",
+                            "id": "Bottom 1",
+                            "name": "Level 1 Item 1 Sub 1 A",
                             "size": 148,
                             "children": [
                               
                             ]
                           },
                           {
-                            "name": "Bottom 2",
-                            "shortName": "Level 1 Item 1 Sub 1 B",
+                            "id": "Bottom 2",
+                            "name": "Level 1 Item 1 Sub 1 B",
                             "size": 259,
                             "children": [
                               
@@ -42,21 +42,21 @@
                     ]
                   },
                   {
-                    "name": "Demonstrate an  of the role of the",
-                    "shortName": "Level 1 Item 1 Sub 2",
+                    "id": "Demonstrate an  of the role of the",
+                    "name": "Level 1 Item 1 Sub 2",
                     "size": 448,
                     "children": [
                         {
-                            "name": "Bottom 1",
-                            "shortName": "Level 1 Item 1 Sub 2 A",
+                            "id": "Bottom 1",
+                            "name": "Level 1 Item 1 Sub 2 A",
                             "size": 148,
                             "children": [
                               
                             ]
                           },
                           {
-                            "name": "Bottom 2",
-                            "shortName": "Level 1 Item 1 Sub 2 B",
+                            "id": "Bottom 2",
+                            "name": "Level 1 Item 1 Sub 2 B",
                             "size": 259,
                             "children": [
                               
@@ -66,21 +66,21 @@
                     ]
                   },
                   {
-                    "name": "Use  knowledge of the Standards for ",
-                    "shortName": "Level 1 Item 1 Sub 3",
+                    "id": "Use  knowledge of the Standards for ",
+                    "name": "Level 1 Item 1 Sub 3",
                     "size": 59,
                     "children": [
                         {
-                            "name": "Bottom 1",
-                            "shortName": "Level 1 Item 1 Sub 3 A",
+                            "id": "Bottom 1",
+                            "name": "Level 1 Item 1 Sub 3 A",
                             "size": 148,
                             "children": [
                               
                             ]
                           },
                           {
-                            "name": "Bottom 2",
-                            "shortName": "Level 1 Item 1 Sub 3 B",
+                            "id": "Bottom 2",
+                            "name": "Level 1 Item 1 Sub 3 B",
                             "size": 259,
                             "children": [
                               
@@ -90,21 +90,21 @@
                     ]
                   },
                   {
-                    "name": "Use the  plan learning needs.",
-                    "shortName": "Level 1 Item 1 Sub 4",
+                    "id": "Use the  plan learning needs.",
+                    "name": "Level 1 Item 1 Sub 4",
                     "size": 101,
                     "children": [
                         {
-                            "name": "Bottom 1",
-                            "shortName": "Level 1 Item 1 Sub 4 A",
+                            "id": "Bottom 1",
+                            "name": "Level 1 Item 1 Sub 4 A",
                             "size": 148,
                             "children": [
                               
                             ]
                           },
                           {
-                            "name": "Bottom 2",
-                            "shortName": "Level 1 Item 1 Sub 4 B",
+                            "id": "Bottom 2",
+                            "name": "Level 1 Item 1 Sub 4 B",
                             "size": 259,
                             "children": [
                               
@@ -116,37 +116,37 @@
                 ]
               },
               {
-                "name": "6.2 Engage in improve practice",
-                "shortName": "Level 1 Item 2",
+                "id": "6.2 Engage in improve practice",
+                "name": "Level 1 Item 2",
                 "size": null,
                 "children": [
                   {
-                    "name": "Participate in to update knowledge .",
-                    "shortName": "AITSL-A62-P",
+                    "id": "Participate in to update knowledge .",
+                    "name": "Level 1 Item 2 Sub 1",
                     "size": 92,
                     "children": [
                       
                     ]
                   },
                   {
-                    "name": "Understand appropriate sources of .",
-                    "shortName": "AITSL-A62-G",
+                    "id": "Understand appropriate sources of .",
+                    "name": "Level 1 Item 2 Sub 2",
                     "size": 405,
                     "children": [
                       
                     ]
                   },
                   {
-                    "name": "Plan for  and critiquing ",
-                    "shortName": "AITSL-A62-H",
+                    "id": "Plan for  and critiquing ",
+                    "name": "Level 1 Item 2 Sub 3",
                     "size": 49,
                     "children": [
                       
                     ]
                   },
                   {
-                    "name": "Initiate to expand opportunities.",
-                    "shortName": "AITSL-A62-L",
+                    "id": "Initiate to expand opportunities.",
+                    "name": "Level 1 Item 2 Sub 4",
                     "size": 47,
                     "children": [
                       
@@ -155,37 +155,37 @@
                 ]
               },
               {
-                "name": "6.3 Engage with  and improve practice",
-                "shortName": "Level 1 Item 3",
+                "id": "6.3 Engage with  and improve practice",
+                "name": "Level 1 Item 3",
                 "size": null,
                 "children": [
                   {
-                    "name": "Contribute to collegial  and apply.",
-                    "shortName": "AITSL-A63-P",
+                    "id": "Contribute to collegial  and apply.",
+                    "name": "Level 1 Item 3 Sub 1",
                     "size": 84,
                     "children": [
                       
                     ]
                   },
                   {
-                    "name": "Initiate and engage in  discussions.",
-                    "shortName": "AITSL-A63-H",
+                    "id": "Initiate and engage in  discussions.",
+                    "name": "Level 1 Item 3 Sub 2",
                     "size": 51,
                     "children": [
                       
                     ]
                   },
                   {
-                    "name": "Seek and feedback from .",
-                    "shortName": "AITSL-A63-G",
+                    "id": "Seek and feedback from .",
+                    "name": "Level 1 Item 3 Sub 3",
                     "size": 458,
                     "children": [
                       
                     ]
                   },
                   {
-                    "name": "Implement  dialogue within   by .",
-                    "shortName": "AITSL-A63-L",
+                    "id": "Implement  dialogue within   by .",
+                    "name": "Level 1 Item 3 Sub 4",
                     "size": 40,
                     "children": [
                       
@@ -194,37 +194,37 @@
                 ]
               },
               {
-                "name": "6.4 Apply  improve learning",
-                "shortName": "Level 1 Item 4",
+                "id": "6.4 Apply  improve learning",
+                "name": "Level 1 Item 4",
                 "size": null,
                 "children": [
                   {
-                    "name": "Undertake  .",
-                    "shortName": "AITSL-A64-P",
+                    "id": "Undertake  .",
+                    "name": "Level 1 Item 4 Sub 1",
                     "size": 76,
                     "children": [
                       
                     ]
                   },
                   {
-                    "name": "Demonstrate an  of the rationale.",
-                    "shortName": "AITSL-A64-G",
+                    "id": "Demonstrate an  of the rationale.",
+                    "name": "Level 1 Item 4 Sub 2",
                     "size": 426,
                     "children": [
                       
                     ]
                   },
                   {
-                    "name": "Engage with  to evaluate the .",
-                    "shortName": "AITSL-A64-H",
+                    "id": "Engage with  to evaluate the .",
+                    "name": "Level 1 Item 4 Sub 3",
                     "size": 54,
                     "children": [
                       
                     ]
                   },
                   {
-                    "name": "Advocate,  in and lead high-quality .",
-                    "shortName": "AITSL-A64-L",
+                    "id": "Advocate,  in and lead high-quality .",
+                    "name": "Level 1 Item 4 Sub 4",
                     "size": 43,
                     "children": [
                       
@@ -234,6 +234,9 @@
               }
             ]
           };
+
+        datajson = _this.getCache (component, "datajson") ;  
+
 
         _this.setCache (component, "datajson", datajson) ;  
 
@@ -254,7 +257,7 @@
         
         var y = d3.scaleLinear()
             .domain([0, height])
-            .range([0, height - margin.top]);
+            .range([0, height - margin.top]); // this is crucial, without substracting the margin.top the bottom cells fall over the line.
                 
         // var color = d3.scaleOrdinal()
         //     .range(d3.schemeCategory10
@@ -306,7 +309,7 @@
                 .paddingInner(1);
 				  
             var root = d3.hierarchy(datajson)
-                .eachBefore(function(d) { d.id = (d.parent ? d.parent.id + "." : "") + d.data.shortName; })
+                .eachBefore(function(d) { d.id = (d.parent ? d.parent.id + "." : "") + d.data.name; })
                 .sum((d) => d.size)
                 .sort(function(a, b) {
                     // console.log('xxxxx: initial root sort a ' + a.value + ' b ' + b.value);
@@ -338,7 +341,6 @@
   // We also take a snapshot of the original children (_children) to avoid
   // the children being overwritten when when layout is computed.
   function accumulate(d) {
-	  console.log('accumulate called ' + d.data.name);
     return (d._children = d.children)
         ? d.value = d.children.reduce(function(p, v) { return p + accumulate(v); }, 0)
         : d.value;
@@ -380,7 +382,7 @@ function display(d) {
       .datum(d.parent)
       .on("click", transition)
     .select("text")
-      .text(name(d));
+      .text(displayNameValue(d));
 
   var grandparentgp = nodeGroup.insert("g", ".grandparent")
       .datum(d)
@@ -404,11 +406,11 @@ function display(d) {
       .attr("class", "child")
       .call(rect)
     .append("title")
-      .text(function(d) { return d.data.shortName + " (" + formatNumber(d.value) + ")"; });
+      .text(function(d) { return d.data.name + " (" + formatNumber(d.value) + ")"; });
 
   children.append("text")
       .attr("class", "ctext")
-      .text(function(d) { return d.data.shortName; })
+      .text(function(d) { return d.data.name; })
       .call(text2);
 
   g.append("rect")
@@ -421,14 +423,14 @@ function display(d) {
 	  .attr("dy", ".75em")
 	
 	t.append("tspan")
-	  .text(function(d) { return d.data.shortName; });
+	  .text(function(d) { return d.data.name; });
 	t.append("tspan")
 	  .attr("dy", "1.0em")
 	  .text(function(d) { return formatNumber(d.value); });
 	t.call(text);
 	
 	g.selectAll("rect")
-	  .style("fill", function(d) { return color(d.data.shortName); });
+	  .style("fill", function(d) { return color(d.data.name); });
 	
 	
 
@@ -491,7 +493,6 @@ function text(text) {
     text.attr("x", function(d) { return x(d.x0) + 6; })
         .attr("y", function(d) { return y(d.y0) + 10; })
         .style("opacity", function(d) {
-        	console.log("text opacity setting textlength " + this.getComputedTextLength() + " d size " + (x(d.x0 + d.x1) - x(d.x0)));
         	return this.getComputedTextLength() < x(d.x0 + d.x1) - x(d.x0) ? 1 : 0; 
         });
   }
@@ -501,14 +502,13 @@ function text(text) {
     
     text.attr("x", function(d) { return x(d.x1) - this.getComputedTextLength() - 6; })
         .attr("y", function(d) { 
-            console.log("text2 " + d.data.shortName + " y:" + d.y0 + " diff:" + d.y1);
             return y(d.y1) - 6; })
         .style("opacity", function(d) { return this.getComputedTextLength() < x(d.x0 + d.x1) - x(d.x0) ? 1 : 0; });
 
         // This version is original
         // text.attr("x", function(d) { return x(d.x0 + d.x1) - this.getComputedTextLength() - 6; })
         // .attr("y", function(d) { 
-        //     console.log("text2 " + d.data.shortName + " y:" + d.y0 + " diff:" + d.y1);
+        //     console.log("text2 " + d.data.name + " y:" + d.y0 + " diff:" + d.y1);
         //     return y(d.y0 + d.y1) - 6; })
         // .style("opacity", function(d) { return this.getComputedTextLength() < x(d.x0 + d.x1) - x(d.x0) ? 1 : 0; });
 
@@ -530,7 +530,7 @@ function text(text) {
                 
                 return x(d.x1) - x(d.x0); })
             .attr("height", function(d) { 
-                console.log("xxxxx: rect: " , d.data.shortName, d.y0, d.y1, y(d.y1 - d.y0));
+                console.log("xxxxx: rect: " , d.data.name, d.y0, d.y1, y(d.y1 - d.y0));
                 
                 return y(d.y1) - y(d.y0); 
             });
@@ -557,10 +557,10 @@ function text(text) {
   }
 */
 
-  function name(d) {
+  function displayNameValue(d) {
     return d.parent
-        ? name(d.parent) + " / " + d.data.shortName + " (" + formatNumber(d.value) + ")"
-        : d.data.shortName + " (" + formatNumber(d.value) + ")";
+        ? displayNameValue(d.parent) + " / " + d.data.name + " (" + formatNumber(d.value) + ")"
+        : d.data.name + " (" + formatNumber(d.value) + ")";
   }
 
 },
