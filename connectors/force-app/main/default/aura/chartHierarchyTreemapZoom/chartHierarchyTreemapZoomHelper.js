@@ -1,7 +1,7 @@
 ({
     initializeVisuals: function (component) {
 		console.log("chartHierarchyTreeMapHelper.initializeVisuals enter");
-		let _this = this;
+		var _this = this;
         var componentReference = component.get("v.componentReference");
 
         window.onerror = function (errorMsg, url, lineNumber, column, errorObj) {
@@ -9,233 +9,7 @@
             + ' Column: ' + column + ' StackTrace: ' +  errorObj);
         }
 
-        let datajson = {
-            "id": 'Sample',
-            "name": 'Sample',
-            "children": [
-              {
-                "id": "6.1 Identify and plan learning needs",
-                "name": "Level 1 Item 1",
-                "size": null,
-                "children": [
-                  {
-                    "id": "Analyse the Standards for.",
-                    "name": "Level 1 Item 1 Sub 1",
-                    "size": null,
-                    "children": [
-                        {
-                            "id": "Bottom 1",
-                            "name": "Level 1 Item 1 Sub 1 A",
-                            "size": 148,
-                            "children": [
-                              
-                            ]
-                          },
-                          {
-                            "id": "Bottom 2",
-                            "name": "Level 1 Item 1 Sub 1 B",
-                            "size": 259,
-                            "children": [
-                              
-                            ]
-                          }                              
-                    ]
-                  },
-                  {
-                    "id": "Demonstrate an  of the role of the",
-                    "name": "Level 1 Item 1 Sub 2",
-                    "size": 448,
-                    "children": [
-                        {
-                            "id": "Bottom 1",
-                            "name": "Level 1 Item 1 Sub 2 A",
-                            "size": 148,
-                            "children": [
-                              
-                            ]
-                          },
-                          {
-                            "id": "Bottom 2",
-                            "name": "Level 1 Item 1 Sub 2 B",
-                            "size": 259,
-                            "children": [
-                              
-                            ]
-                          }                              
-                      
-                    ]
-                  },
-                  {
-                    "id": "Use  knowledge of the Standards for ",
-                    "name": "Level 1 Item 1 Sub 3",
-                    "size": 59,
-                    "children": [
-                        {
-                            "id": "Bottom 1",
-                            "name": "Level 1 Item 1 Sub 3 A",
-                            "size": 148,
-                            "children": [
-                              
-                            ]
-                          },
-                          {
-                            "id": "Bottom 2",
-                            "name": "Level 1 Item 1 Sub 3 B",
-                            "size": 259,
-                            "children": [
-                              
-                            ]
-                          }                              
-                      
-                    ]
-                  },
-                  {
-                    "id": "Use the  plan learning needs.",
-                    "name": "Level 1 Item 1 Sub 4",
-                    "size": 101,
-                    "children": [
-                        {
-                            "id": "Bottom 1",
-                            "name": "Level 1 Item 1 Sub 4 A",
-                            "size": 148,
-                            "children": [
-                              
-                            ]
-                          },
-                          {
-                            "id": "Bottom 2",
-                            "name": "Level 1 Item 1 Sub 4 B",
-                            "size": 259,
-                            "children": [
-                              
-                            ]
-                          }                              
-                      
-                    ]
-                  }
-                ]
-              },
-              {
-                "id": "6.2 Engage in improve practice",
-                "name": "Level 1 Item 2",
-                "size": null,
-                "children": [
-                  {
-                    "id": "Participate in to update knowledge .",
-                    "name": "Level 1 Item 2 Sub 1",
-                    "size": 92,
-                    "children": [
-                      
-                    ]
-                  },
-                  {
-                    "id": "Understand appropriate sources of .",
-                    "name": "Level 1 Item 2 Sub 2",
-                    "size": 405,
-                    "children": [
-                      
-                    ]
-                  },
-                  {
-                    "id": "Plan for  and critiquing ",
-                    "name": "Level 1 Item 2 Sub 3",
-                    "size": 49,
-                    "children": [
-                      
-                    ]
-                  },
-                  {
-                    "id": "Initiate to expand opportunities.",
-                    "name": "Level 1 Item 2 Sub 4",
-                    "size": 47,
-                    "children": [
-                      
-                    ]
-                  }
-                ]
-              },
-              {
-                "id": "6.3 Engage with  and improve practice",
-                "name": "Level 1 Item 3",
-                "size": null,
-                "children": [
-                  {
-                    "id": "Contribute to collegial  and apply.",
-                    "name": "Level 1 Item 3 Sub 1",
-                    "size": 84,
-                    "children": [
-                      
-                    ]
-                  },
-                  {
-                    "id": "Initiate and engage in  discussions.",
-                    "name": "Level 1 Item 3 Sub 2",
-                    "size": 51,
-                    "children": [
-                      
-                    ]
-                  },
-                  {
-                    "id": "Seek and feedback from .",
-                    "name": "Level 1 Item 3 Sub 3",
-                    "size": 458,
-                    "children": [
-                      
-                    ]
-                  },
-                  {
-                    "id": "Implement  dialogue within   by .",
-                    "name": "Level 1 Item 3 Sub 4",
-                    "size": 40,
-                    "children": [
-                      
-                    ]
-                  }
-                ]
-              },
-              {
-                "id": "6.4 Apply  improve learning",
-                "name": "Level 1 Item 4",
-                "size": null,
-                "children": [
-                  {
-                    "id": "Undertake  .",
-                    "name": "Level 1 Item 4 Sub 1",
-                    "size": 76,
-                    "children": [
-                      
-                    ]
-                  },
-                  {
-                    "id": "Demonstrate an  of the rationale.",
-                    "name": "Level 1 Item 4 Sub 2",
-                    "size": 426,
-                    "children": [
-                      
-                    ]
-                  },
-                  {
-                    "id": "Engage with  to evaluate the .",
-                    "name": "Level 1 Item 4 Sub 3",
-                    "size": 54,
-                    "children": [
-                      
-                    ]
-                  },
-                  {
-                    "id": "Advocate,  in and lead high-quality .",
-                    "name": "Level 1 Item 4 Sub 4",
-                    "size": 43,
-                    "children": [
-                      
-                    ]
-                  }
-                ]
-              }
-            ]
-          };
-
-        datajson = _this.getCache (component, "datajson") ;  
+        var datajson = _this.getCache (component, "datajson") ;  
 
 
         _this.setCache (component, "datajson", datajson) ;  
@@ -243,6 +17,7 @@
         var margin = {top: 20, right: 0, bottom: 0, left: 0},
         formatNumber = d3.format(",d"),
         transitioning;
+        var grandparentDepth = 0;
 
         let nodeGroup = _this.getCache (component, "nodeGroup") ;  
         var width = _this.getCache (component, "width")  - margin.left - margin.right - 50; // TODO not great  
@@ -252,7 +27,7 @@
           console.log("xxxxx: height: " , height);
 
         var x = d3.scaleLinear()
-            .domain([0, width])
+            .domain([0, width]) 
             .range([0, width]);
         
         var y = d3.scaleLinear()
@@ -287,11 +62,11 @@
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
                 .style("shape-rendering", "crispEdges");		
 
-            // KB great a grandparent group and a rectangle and text within it
+            // create a grandparent group and a rectangle and text within it
             grandparent = nodeGroup.append("g")
                 .attr("class", "grandparent");
           
-            // grandparent has a negative y coordinate so main panel starts at zero    
+            // grandparent is given a negative y coordinate so main panel starts at zero    
             grandparent.append("rect")
                 .attr("y", -margin.top)
                 .attr("width", width)
@@ -308,11 +83,15 @@
                 .round(false)
                 .paddingInner(1);
 				  
-            var root = d3.hierarchy(datajson)
-                .eachBefore(function(d) { d.id = (d.parent ? d.parent.id + "." : "") + d.data.name; })
+            // id of an element is built up from concatenating the ids of the parents.
+            // KB: change this to Salesforce record id?
+                var root = d3.hierarchy(datajson)
+                .eachBefore(function(d) { 
+                    console.log("xxxxx: eachBefore: ",  d.data.id , d);
+                    d.id = d.data.id; })
+// .id((d) => d.id)
                 .sum((d) => d.size)
                 .sort(function(a, b) {
-                    // console.log('xxxxx: initial root sort a ' + a.value + ' b ' + b.value);
                     return b.value - a.value; 
                 });
 		  
@@ -376,11 +155,10 @@ function layout(d) {
 
 
 function display(d) {
-    
     // the top box
   grandparent
       .datum(d.parent)
-      .on("click", transition)
+      .on("click", transitionLower)
     .select("text")
       .text(displayNameValue(d));
 
@@ -395,7 +173,7 @@ function display(d) {
 
   g.filter(function(d) { return d._children; })
       .classed("children", true)
-      .on("click", transition);
+      .on("click", transitionHigher);
 
   var children = g.selectAll(".child")
     .data(function(d) { return d._children || [d]; })
@@ -430,9 +208,34 @@ function display(d) {
 	t.call(text);
 	
 	g.selectAll("rect")
-	  .style("fill", function(d) { return color(d.data.name); });
+    .style("fill", function(d) { return color(d.data.name); })
+
+    .attr("id", d => d.id)
+
+    .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
+        console.log("chartHierarchyTreemapZoomHelper.mouseover enter" , d);
+        console.log("chartHierarchyTreemapZoomHelper.mouseover enter id " , d.id);
+        console.log("chartHierarchyTreemapZoomHelper.mouseover enter component " , component);
+        _this.setCache (component, "mouseoverRecordId", d.id ) ;
+       var preppedEvent = _this.nodeMouseover(component, d); 
+       _this.publishPreppedEvent(component,preppedEvent);
+   }))
+
+      ;
 	
-	
+    function transitionHigher(d) {
+        console.log("xxxxx: transitionHigher before: " +  grandparentDepth);
+        grandparentDepth++;
+        console.log("xxxxx: transitionHigher after: " +  grandparentDepth);
+        transition(d);
+    }
+
+    function transitionLower(d) {
+        console.log("xxxxx: transitionLower before: " +  grandparentDepth);
+        grandparentDepth--;
+        console.log("xxxxx: transitionLower after: " +  grandparentDepth);
+        transition(d);
+    }
 
   function transition(d) {
     console.log("xxxxx: transitioning");
@@ -456,7 +259,7 @@ function display(d) {
     // Enable anti-aliasing during the transition.
     nodeGroup.style("shape-rendering", null);
 
-    // Draw child nodes on top of parent nodes. (KB this is key, we draw on top!)
+    // Draw child nodes on top of parent nodes. (KB this is key, we draw on top by sorting the nodes in terms of depth
     nodeGroup.selectAll(".depth").sort(function(a, b) { 
     	return a.depth - b.depth; });
 
@@ -492,48 +295,41 @@ function text(text) {
         .attr("x", function(d) { return x(d.x0) + 6; })
     text.attr("x", function(d) { return x(d.x0) + 6; })
         .attr("y", function(d) { return y(d.y0) + 10; })
+        .attr("font-size", "10px")
+        .attr("fill", "black")
         .style("opacity", function(d) {
-        	return this.getComputedTextLength() < x(d.x0 + d.x1) - x(d.x0) ? 1 : 0; 
+        	return this.getComputedTextLength() < x(d.x1) - x(d.x0) ? 1 : 0; 
         });
   }
 
   // this is the bottom right text box
   function text2(text) {
-    
     text.attr("x", function(d) { return x(d.x1) - this.getComputedTextLength() - 6; })
         .attr("y", function(d) { 
             return y(d.y1) - 6; })
-        .style("opacity", function(d) { return this.getComputedTextLength() < x(d.x0 + d.x1) - x(d.x0) ? 1 : 0; });
+        .style("opacity", function(d) { return this.getComputedTextLength() < x(d.x1) - x(d.x0) ? 0.7 : 0; })
+        .attr("font-size", "10px")
+        .attr("fill", "black");
 
-        // This version is original
-        // text.attr("x", function(d) { return x(d.x0 + d.x1) - this.getComputedTextLength() - 6; })
-        // .attr("y", function(d) { 
-        //     console.log("text2 " + d.data.name + " y:" + d.y0 + " diff:" + d.y1);
-        //     return y(d.y0 + d.y1) - 6; })
-        // .style("opacity", function(d) { return this.getComputedTextLength() < x(d.x0 + d.x1) - x(d.x0) ? 1 : 0; });
-
-
-}
+    }
 
   function rect(rect) {
-
     /*
     rect.attr("x", function(d) { return x(d.x0); })
         .attr("y", function(d) { return y(d.y0); })
         .attr("width", function(d) { return x(d.x0 + d.x1) - x(d.x0); })
         .attr("height", function(d) { return y(d.y0 + d.y1) - y(d.y0); });
 */
-        rect.attr("x", function(d) { return x(d.x0); })
-            .attr("y", function(d) { return y(d.y0); })
-            .attr("width", function(d) { 
-                
-                
-                return x(d.x1) - x(d.x0); })
-            .attr("height", function(d) { 
-                console.log("xxxxx: rect: " , d.data.name, d.y0, d.y1, y(d.y1 - d.y0));
-                
-                return y(d.y1) - y(d.y0); 
-            });
+
+        rect.attr("x", function(d) { 
+            console.log("xxxxx depth:" + d.depth );
+            return x(d.x0); })
+            .attr("y", (d) => y(d.y0))
+            .attr("width", (d) =>  x(d.x1) - x(d.x0))
+            .attr("height", (d) =>  y(d.y1) - y(d.y0))
+            
+            
+            ;
     }
 
 /*  
