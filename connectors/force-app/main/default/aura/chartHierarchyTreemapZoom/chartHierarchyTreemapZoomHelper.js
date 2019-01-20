@@ -81,7 +81,7 @@
                 .eachBefore(function (d) {
                     d.id = d.data.id;
                 })
-                .sum((d) => d.size)
+                .sum((d) =>  _this.getFromMeasureScheme(component, d, "Value"))
                 .sort(function (a, b) {
                     return b.value - a.value;
                 });
@@ -290,7 +290,7 @@ console.log("xxxxx: display");
                 // select all the parent stuff and make it visible
                 grandparenttransition.selectAll(".ptext").call(text).style("fill-opacity", 0);
                 grandparenttransition.selectAll(".ctext").call(text2).style("fill-opacity", 0);
-                parentstransition.selectAll(".ptext").call(text).style("fill-opacity", 1);
+                parentstransition.selectAll(".ptext").call(text).style("fill-opacity", 1).style("font-weight", "bold");
                 parentstransition.selectAll(".ctext").call(text2).style("fill-opacity", 1);
 
                 grandparenttransition.selectAll("rect").call(rect);

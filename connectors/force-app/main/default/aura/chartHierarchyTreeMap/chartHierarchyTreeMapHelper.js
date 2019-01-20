@@ -48,10 +48,8 @@
     },        
 
     valueAccessor : function (component) {
-        var _this = this;
-        return function (d) {
-            return _this.getFromMeasureScheme(component, d, "Value");
-        }
+        var _this = this;        
+        return (d) =>  _this.getFromMeasureScheme(component, d, "Value");
     },
 
     renderCells : function (component, cells) {
