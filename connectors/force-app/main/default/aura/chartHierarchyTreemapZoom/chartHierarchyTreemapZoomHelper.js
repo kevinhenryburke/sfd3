@@ -1,6 +1,9 @@
 ({
 
     // I possiblly need to change the "displayed" rects around so that it's lower level not higher.
+    // want the lowest level node text in the bottom right corner
+    // want the lowest level node hover text to show
+    // want the parent level text to show in the top left
 
     initializeVisuals: function (component) {
         console.log("chartHierarchyTreeMapHelper.initializeVisuals enter");
@@ -137,7 +140,25 @@
             }
         }
 
+/* Aiming for a structure with two top level groups
+1. Group with class="grandparent" which represents and element that sits on top
+2. Group with class="depth" which is the parent group of all visible rectangles
 
+Inside the depth construct we have
+3. Groups with class="children" - these represent the top level visible rects. 
+
+The "children" themselves have 
+A rect element with class "parent" and a text element with class "ptext"
+4. subgroups with class = "child" which contain the next level down
+
+The "child" elements have
+A rect element with class "child" and a text element with class "ctext"
+
+Items below this depth do not have groups associated with them.
+
+When you click to drill down the same structure is recreated started at the next data point.
+
+*/
 
         function display(d) {
 
@@ -162,6 +183,7 @@ console.log("xxxxx: display");
             g.filter(function (d) { return d._children; })
                 .classed("children", true)
                 .on("click", transitionHigher);
+                
 
             var children = g.selectAll(".child")
                 .data(function (d) { return d._children || [d]; })
@@ -185,7 +207,7 @@ console.log("xxxxx: display");
 // My issue is that most of the elements on the chart are coming through as parents
 // Need to do something with the relative depth.
 
-                g.append("rect")
+            g.append("rect")
                 .attr("class", "parent")
                 .call(rect)
                 .append("title")
@@ -193,7 +215,6 @@ console.log("xxxxx: display");
                     console.log("xxxxx: highlight text: " , d.data.name, formatNumber(d.value));
                     return d.data.name + " (" + formatNumber(d.value) + ")"; })
                 ;
-
 
             var t = g.append("text")
                 .attr("class", "ptext")
@@ -207,8 +228,11 @@ console.log("xxxxx: display");
             t.call(text);
 
             g.selectAll("rect")
-                .style("fill", function (d) { return color(d.data.name); })
+                .style("fill", d => color(d.data.name))
                 .attr("id", d => d.id)
+            ;
+
+            g.selectAll("rect") // KB this is selecting all rects, can use rect.parent to select all the parents
                 .on('mouseover', $A.getCallback(function (d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
                     console.log("chartHierarchyTreemapZoomHelper.mouseover enter", d);
                     console.log("chartHierarchyTreemapZoomHelper.mouseover enter id ", d.id);
@@ -217,8 +241,9 @@ console.log("xxxxx: display");
                     var preppedEvent = _this.nodeMouseover(component, d);
                     _this.publishPreppedEvent(component, preppedEvent);
                 }))
+            ;
 
-                ;
+
 
             function transitionHigher(d) {
                 console.log("xxxxx: transitionHigher before: " + grandparentDepthInData);
@@ -239,6 +264,7 @@ console.log("xxxxx: display");
                 if (transitioning || !d) return;
                 transitioning = true;
 
+                // assign the target state via display and set up the transitions.
                 var parentsgp = display(d);
                 var grandparenttransition = grandparentgp.transition().duration(750);
                 var parentstransition = parentsgp.transition().duration(750);
@@ -260,14 +286,13 @@ console.log("xxxxx: display");
                 parentsgp.selectAll("text").style("fill-opacity", 0);
 
                 // Transition to the new view.
-
+                // select all the grandparent stuff and make it invisible
+                // select all the parent stuff and make it visible
                 grandparenttransition.selectAll(".ptext").call(text).style("fill-opacity", 0);
                 grandparenttransition.selectAll(".ctext").call(text2).style("fill-opacity", 0);
                 parentstransition.selectAll(".ptext").call(text).style("fill-opacity", 1);
                 parentstransition.selectAll(".ctext").call(text2).style("fill-opacity", 1);
 
-                // grandparenttransition.selectAll("text").call(text).style("fill-opacity", 0);
-                // parentstransition.selectAll("text").call(text).style("fill-opacity", 1);
                 grandparenttransition.selectAll("rect").call(rect);
                 parentstransition.selectAll("rect").call(rect);
 
@@ -282,7 +307,6 @@ console.log("xxxxx: display");
         }
 
         // this is the top left text box
-
         function text(text) {
             text.selectAll("tspan")
                 .attr("x", function (d) { return x(d.x0) + 6; })
@@ -307,14 +331,8 @@ console.log("xxxxx: display");
 
         }
 
+        // this is any rectangle
         function rect(rect) {
-            /*
-            rect.attr("x", function(d) { return x(d.x0); })
-                .attr("y", function(d) { return y(d.y0); })
-                .attr("width", function(d) { return x(d.x0 + d.x1) - x(d.x0); })
-                .attr("height", function(d) { return y(d.y0 + d.y1) - y(d.y0); });
-        */
-
             rect.attr("x", function (d) {
                 console.log("xxxxx depth:" + d.depth);
                 return x(d.x0);

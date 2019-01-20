@@ -2,43 +2,40 @@
     pointer-events: none;
   }
   
-  .THIS   .grandparent text {
-    font-weight: bold;
-  }
-  
-  .THIS   rect {
-    fill: none;
-    stroke: #fff;
-  }
-  
-  .THIS  rect.parent {
-    stroke-width: 2px;
-  }
+.THIS   .grandparent text {
+  font-weight: bold;
+}
 
-  .THIS   .grandparent rect {
-    stroke-width: 2px;
-  }
+.THIS   .grandparent rect {
+  stroke-width: 2px;
+}
   
-  .THIS  .grandparent rect {
-    fill: orange;
-  }
-  
-  .THIS  .grandparent:hover rect {
-    fill: #ee9700;
-  }
-  
-  .THIS  children rect.parent {
-    cursor: pointer;
-  }
+.THIS  .grandparent rect {
+  fill: orange;
+  cursor: pointer;
+}
 
+.THIS  .grandparent:hover rect {
+  fill: #ee9700;
+}
 
-  .THIS  .grandparent rect {
-    cursor: pointer;
-  }
+.THIS   rect {
+  fill: none;
+  stroke: #fff;
+}
   
-.THIS  .children rect.parent {
+.THIS  rect.parent {
+  stroke-width: 2px;
+}
+
+.THIS  children rect.parent {
+  cursor: pointer;
+}
+
+  
+.THIS .children:hover rect.parent {
     fill: #bbb;
-    fill-opacity: .5;
+    fill-opacity: 0.6;
   }
   
 .THIS  .children:hover rect.child {
