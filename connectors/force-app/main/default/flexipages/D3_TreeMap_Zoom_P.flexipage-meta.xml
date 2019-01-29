@@ -7,7 +7,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
-                <value>TreeMapZoomController</value>
+                <value>TreeMapZoomPController</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>masterConfig</name>
@@ -18,7 +18,7 @@
         <componentInstances>
             <componentInstanceProperties>
                 <name>Controller</name>
-                <value>TreeMapZoomController</value>
+                <value>TreeMapZoomPController</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>masterConfig</name>
@@ -29,7 +29,6 @@
         <componentInstances>
             <componentInstanceProperties>
                 <name>Title</name>
-                <value>1</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
@@ -37,11 +36,11 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserControllerComponentId</name>
-                <value>TreeMapZoomController</value>
+                <value>TreeMapZoomPController</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>componentType</name>
-                <value>hierarchy.treemapzoom</value>
+                <value>hierarchy.treemappzoom</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>hasPrimaryNode</name>
@@ -52,7 +51,7 @@
         <name>main</name>
         <type>Region</type>
     </flexiPageRegions>
-    <masterLabel>D3 TreeMap Zoom</masterLabel>
+    <masterLabel>D3 TreeMap Zoom P</masterLabel>
     <template>
         <name>flexipage:defaultAppHomeTemplate</name>
     </template>

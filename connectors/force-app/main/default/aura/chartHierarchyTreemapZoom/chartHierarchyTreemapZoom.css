@@ -28,11 +28,17 @@
   fill: #ee9700;
 }
 
-  
 .THIS  rect.parent {
+/*  stroke: #50377e; */
+  stroke: #3952a1; 
   stroke-width: 2px;
   fill-opacity: 0.9;
   pointer-events: none;  
+}
+
+.THIS  rect.child {
+  stroke: #FFFFFF;
+  stroke-width: 2px;
 }
 
 .THIS  .children rect.parent {

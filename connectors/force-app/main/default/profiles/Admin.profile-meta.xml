@@ -73,6 +73,10 @@
         <tab>D3_TreeMap_Zoom</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
+    <tabVisibilities>
+        <tab>D3_TreeMap_Zoom_P</tab>
+        <visibility>DefaultOn</visibility>
+    </tabVisibilities>
     <userLicense>Salesforce</userLicense>
     <userPermissions>
         <enabled>true</enabled>

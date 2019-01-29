@@ -15,6 +15,7 @@
     <tabs>D3_TreeMap</tabs>
     <tabs>D3_CTree</tabs>
     <tabs>D3_CTree_Opp</tabs>
+    <tabs>D3_TreeMap_Zoom_P</tabs>
     <tabs>D3_TreeMap_Zoom</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>D3_Charts_UtilityBar</utilityBar>

@@ -1,12 +1,56 @@
 ({
 
+/*
+Converting this to use a single object and hierarchy via picklists
+
+if (!err) {
+            console.log(res);
+            var data = d3.nest().key(function(d) { return d.region; }).key(function(d) { return d.subregion; }).entries(res);
+            main({title: "World Population"}, {key: "World", values: data});
+        }
+
+In the configuration, pull back only a single object level
+in the role field put group0, group1 etc for our various layers
+
+In buildMeasureSchemeMap create an array of groups (groupArray) ordered by level.
+in each array element store the field name and the index of the group
+
+Also will need to change the mouseover for these groups where there is no Salesforce record to display
+
+
+In the zoom controller implement the following method dataPreprocess (started)
+
+    dataPreprocess: function(component,event,helper){
+        console.log("calling the aura:method dataPreprocess in chartHierarchyTreemapZoom");
+
+        var args = event.getParam("arguments");
+        var datajson = args.datajson;
+
+        // need to check how long the groupArray is to determine how many levels to nest?
+        // question - is it possible to iterate these calls to key - need to check d3.nest documentation
+// answer - quite likely, see https://github.com/d3/d3-collection - 
+// "Conceptually, this is similar to applying map.entries to the associative array returned by nest.map, but it applies to every level of the hierarchy rather than just the first (outermost) level. ""
+        datajson = d3.nest()
+            .key(function(d){ return d[groupArray[group0Index]]; }) // something like this....
+            .key(function(d) { return d.subregion; }) // original ....
+            .entries(datajson);
+        component.set("v.datajson", datajson);
+        helper.setCache (component, "datajson", datajson ) ;
+    }
+
+
+
+
+
+*/
+
     // I possiblly need to change the "displayed" rects around so that it's lower level not higher.
     // want the lowest level node text in the bottom right corner
     // want the lowest level node hover text to show
     // want the parent level text to show in the top left
 
     initializeVisuals: function (component) {
-        console.log("chartHierarchyTreeMapHelper.initializeVisuals enter");
+        console.log("chartHierarchyTreemapZoomHelper.initializeVisuals enter");
         var _this = this;
         var componentReference = component.get("v.componentReference");
 
@@ -20,6 +64,9 @@
         }
 
         var datajson = _this.getCache(component, "datajson");
+
+        var cc = component.getConcreteComponent();
+        cc.dataPreprocess(datajson);
 
         var margin = { top: 20, right: 0, bottom: 0, left: 0 };
         var formatNumber = d3.format(",d");
@@ -42,7 +89,6 @@
         updateDrillDown();
 
         function updateDrillDown() {
-            console.log("updateDrillDown enter");
 
             var svg = d3.select(_this.getDivId("svg", componentReference, true))
                 .attr("width", width - margin.left - margin.right)
@@ -75,7 +121,7 @@
                 .tile(d3.treemapResquarify)
                 .size([width, height])
                 .round(false)
-                .paddingInner(1);
+                .paddingInner(0); // padding options explained at https://d3indepth.com/layouts/
 
             var root = d3.hierarchy(datajson)
                 .eachBefore(function (d) {
@@ -91,8 +137,6 @@
             layout(root);
             treemap(root);
             display(root);
-
-            console.log("updateDrillDown exit");
 
         };
 
@@ -124,7 +168,6 @@
         // of sibling was laid out in 1×1, we must rescale to fit using absolute
         // coordinates. This lets us use a viewport to zoom.
         function layout(d) {
-            console.log("xxxxx: layout enter");
             if (d._children) {
                 //    treemap.nodes({_children: d._children});
                 // 	  treemap(d);
@@ -161,8 +204,6 @@ When you click to drill down the same structure is recreated started at the next
 */
 
         function display(d) {
-
-console.log("xxxxx: display");
 
             // the top box
             grandparent
@@ -338,11 +379,8 @@ console.log("xxxxx: display");
                 return x(d.x0);
             })
                 .attr("y", (d) => y(d.y0))
-                .attr("width", (d) => x(d.x1) - x(d.x0))
-                .attr("height", (d) => y(d.y1) - y(d.y0))
-
-
-                ;
+                .attr("width", (d) => x(d.x1) - x(d.x0))  
+                .attr("height", (d) => y(d.y1) - y(d.y0));
         }
 
         function displayNameValue(d) {
