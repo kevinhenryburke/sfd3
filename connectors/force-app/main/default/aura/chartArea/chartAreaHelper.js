@@ -550,6 +550,9 @@
         var measureArrayObjectFieldMap = {};
         // storage of scale functions: object / measureName / measureSchema
         var measureObjectScaleMap = {};
+        // storage of grouping fields for hierarchy zoom charts on picklists: 
+        // top level only at this point, grouping is in the order of the fields in config
+        var groupingFields = [];
 
         for (var objIndex = 0; objIndex < objectLevels.length; objIndex++) {
             var thisObjectConfig = objectLevels[objIndex];
@@ -600,11 +603,15 @@
                         }
                     }
                 }
+                if (objIndex == 0 && fieldConfig["role"] == "group") { // top object level only at present
+                    groupingFields.push( {"fieldIndex" : fieldIndex , "api" : fieldConfig["api"]});
+                }
             }
         }
         _this.setStore(component, "measureObjectFieldMap", measureObjectFieldMap);
         _this.setStore(component, "measureArrayObjectFieldMap", measureArrayObjectFieldMap);
         _this.setStore(component, "measureObjectScaleMap", measureObjectScaleMap);
+        _this.setStore(component, "groupingFields", groupingFields);
     },
 
     showColorSchemeLegend : function (component) {

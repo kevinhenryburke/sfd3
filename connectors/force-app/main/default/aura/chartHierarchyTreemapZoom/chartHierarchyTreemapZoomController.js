@@ -31,14 +31,17 @@
         if (componentType == "hierarchy.treemappzoom") {
             let datajsonBefore = datajson.children; 
 
-            // TODO this must be cretaed dynamically by the role groupings
-            let numberOfGroupings = 1;
+
+            let groupingFields = helper.getStore(component, "groupingFields");
+            let numberOfGroupings = groupingFields.length;
+
+            console.log("xxxxx: groupingFields:", groupingFields);
 
             // we use d3.nest to produce the levels and utilize to create a new version of datajson
             let nestData = d3.nest()
             .key(function(d){  
-                console.log("xxxxx: retrievedValue" , d.fields[2].retrievedValue);
-                return d.fields[2].retrievedValue;
+                console.log("xxxxx: retrievedValue" , d.fields[groupingFields[0].fieldIndex].retrievedValue);
+                return d.fields[groupingFields[0].fieldIndex].retrievedValue;
             }) // something like this....
             // .key(function(d){  
             //     console.log("xxxxx: retrievedValue" , d.fields[3].retrievedValue);
@@ -52,17 +55,17 @@
             // })
             .entries(datajsonBefore);
 
-            let datajsonAfter = {"name" : "Total", "objectType" : "Account", "size" : 20391};
-
+            // Top (Total) level
+            let datajsonAfter = {"name" : "Total"};
             datajsonAfter["children"] = [];
 
             var arrayLength = nestData.length;
             for (var i = 0; i < arrayLength; i++) {
                 console.log("xxxxx: dataPreprocess: outer array", nestData[i]);
-                var innerNest = {"name" : nestData[i].key, "objectType" : "Account", "size" : 20391};
+                var innerNest = {"name" : nestData[i].key};
                 innerNest["children"] = [];
-                var innerArrayLength = nestData[i]["values"].length;
 
+                var innerArrayLength = nestData[i]["values"].length;
                 for (var j = 0; j < innerArrayLength; j++) {
                     innerNest["children"].push(nestData[i]["values"][j]);
                 }
@@ -76,8 +79,6 @@
                 .eachBefore(function (d) {
                     d.id = d.data.id;
                 })
-//                .sum((d) =>  helper.getFromMeasureScheme(component, d, "Value"))
-//                .sum((d) =>  32)
                 .sum(function (d) {
                     if (d.childDepth != null && d.childDepth == 0) {
                         return helper.getFromMeasureScheme(component, d, "Value");
@@ -88,7 +89,7 @@
                 .sort(function (a, b) {
                     return b.value - a.value;
                 });
-    }
+        }
         if (componentType == "hierarchy.treemapzoom") {
             rootAfter = d3.hierarchy(datajson)
                 .eachBefore(function (d) {
@@ -99,7 +100,6 @@
                     return b.value - a.value;
                 });
         }
-//        console.log("xxxxx: dataPreprocess: rootAfter", JSON.parse(JSON.stringify(rootAfter, null, 2)));
         helper.setCache (component, "d3root", rootAfter ) ;    
 
     }
