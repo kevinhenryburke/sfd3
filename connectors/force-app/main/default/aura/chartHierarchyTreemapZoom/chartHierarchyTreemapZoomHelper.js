@@ -123,14 +123,7 @@ In the zoom controller implement the following method dataPreprocess (started)
                 .round(false)
                 .paddingInner(0); // padding options explained at https://d3indepth.com/layouts/
 
-            var root = d3.hierarchy(datajson)
-                .eachBefore(function (d) {
-                    d.id = d.data.id;
-                })
-                .sum((d) =>  _this.getFromMeasureScheme(component, d, "Value"))
-                .sort(function (a, b) {
-                    return b.value - a.value;
-                });
+            var root = _this.getCache (component, "d3root" );    
 
             initialize(root);
             accumulate(root);
