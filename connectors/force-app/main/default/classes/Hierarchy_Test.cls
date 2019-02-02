@@ -100,7 +100,8 @@ public inherited sharing class Hierarchy_Test {
 
 
     public static HierarchyConfiguration factoryConfig() {
-        HierarchyConfiguration hc = new HierarchyConfiguration('Hierarchy');
+//        HierarchyConfiguration hc = new HierarchyConfiguration('Hierarchy');
+        HierarchyConfiguration hc = new HierarchyConfiguration();
         hc.initialLevelsToRetrieve = 3;
         // Add an Account configuration
 

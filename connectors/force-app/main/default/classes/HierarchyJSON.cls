@@ -59,13 +59,17 @@ public inherited sharing class HierarchyJSON {
         HierarchyStructure top = hqTop.createTopStructure(rootId);        
 
 //        thisLevel = 1;
-        Set<Id> parentLevelIds = new Set<Id>{rootId}; // the top node id
+
+        Set<ID> parentLevelIds = new Set<Id>{};
+        if (rootId != null) { // the top node id
+            parentLevelIds.add(rootId);
+        }
 
         for (thisLevel = 0; thisLevel < hc.initialLevelsToRetrieve; thisLevel++ ) {
             // we create the query for each level
             HierarchyQuery hq = new HierarchyQuery(top, hc, thisLevel);
 
-            List<sObject> childObjects = hq.runQuery ( parentLevelIds);
+            List<sObject> childObjects = hq.runQuery ( parentLevelIds, true);
 
             List<HierarchyStructure> listNextLevelHS = hq.createChildStructures(childObjects); // this should map new level nodes to their parents
             parentLevelIds = new Set<Id>();

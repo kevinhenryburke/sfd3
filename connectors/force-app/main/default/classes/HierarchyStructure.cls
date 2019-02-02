@@ -52,9 +52,9 @@ public inherited sharing class HierarchyStructure {
     /* Class Constructor for child elements */    
     public HierarchyStructure(HierarchyStructure parent) {
         isTop = false;
-        this.top = parent.top;
+        this.top = parent != null ? parent.top : null;
         this.parent = parent;
-        this.level = parent.level + 1;
+        this.level = parent != null ? parent.level + 1 : 1;
     }
 
 

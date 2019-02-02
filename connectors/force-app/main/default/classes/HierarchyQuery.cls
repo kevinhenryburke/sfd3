@@ -16,8 +16,6 @@ public inherited sharing class HierarchyQuery {
 
     public String createQueryString (Set<Id> queryIds, boolean queryParents) {
 
-        // using the full field configuration
-        System.debug('createQueryString ' + oc.fields.size());
         List<String> selectFields = new List<String>();
 
         String orderByField;
@@ -28,7 +26,6 @@ public inherited sharing class HierarchyQuery {
             selectFields.add(field.api);
 
             if (field.orderByField != null && field.orderByField == true ) {
-                System.debug('it is an ordorderByField er field');
                 orderByField = field.api;
             }
             if (field.role == 'id') {
@@ -38,25 +35,29 @@ public inherited sharing class HierarchyQuery {
                 parentField = field.api;
             }
         }
-        String queryString = 'select ' + String.join(selectFields,',');                
-        System.debug('createQueryString ' + queryString);
-        queryString += ' from ' + oc.objectType;
+        String queryString = 'select ' + String.join(selectFields,',') + ' from ' + oc.objectType;
 
-        if (queryParents)  {
-            queryString += ' where ' + parentField + ' IN : queryIds ' ; // escape single quotes should not be necessary as we are dealing with ids and not expsoing to front end; 
-        } 
-        else {
-            queryString += ' where ' + idField +  ' IN : queryIds ';
+        /* Build up where clause - id fields */
+        boolean firstClauseIsSet = false;
+        if (queryIds != null && queryIds.size() > 0) {
+            String idFieldAPI = queryParents ? parentField : idField;
+            queryString += ' where ' + idFieldAPI + ' IN : queryIds ' ; // escape single quotes should not be necessary as we are dealing with ids and not expsoing to front end; 
+            firstClauseIsSet = true;
         }
 
+        /* Build up where clause - where clause fields */
+        if (oc.whereClause != null) {
+            queryString += (firstClauseIsSet ? ' and ' : ' where '); 
+            queryString += oc.whereClause ; 
+            firstClauseIsSet = true;
+        }
+
+        /* Order by */
         if (orderByField != null) {
             queryString += ' order by ' + orderByField ;
-
         }
         System.debug('createQueryString ' + queryString);
         return queryString;
-
-
     }
 
 
@@ -81,6 +82,11 @@ public inherited sharing class HierarchyQuery {
             // using the full field configuration
             System.debug('oc.fields.length() ' + oc.fields.size());
 
+            if (hs == null) {
+                hsParent = top;
+                hs = new HierarchyStructure(hsParent); 
+            }
+
             processFieldsToStructure (s, hs, oc.fields);
 
             hs.parent = hsParent;
@@ -104,7 +110,10 @@ public inherited sharing class HierarchyQuery {
 
     public HierarchyStructure createTopStructure (Id id) {
 
-        Set<ID> queryIds = new Set<Id>{id};
+        Set<ID> queryIds = new Set<Id>{};
+        if (id != null) {
+            queryIds.add(id);
+        }
         String queryString = createQueryString (queryIds, false);
 
         List<sObject> listso = Database.query(queryString);
@@ -120,10 +129,8 @@ public inherited sharing class HierarchyQuery {
         return hs;
     }
 
-    public List<sObject> runQuery (Set<Id> queryIds) {
-
-        String queryString = createQueryString (queryIds, true);
-
+    public List<sObject> runQuery (Set<Id> queryIds, boolean queryParents) {
+        String queryString = createQueryString (queryIds, queryParents);
         List<sObject> listso = Database.query(queryString);
         return listso;
     }
@@ -134,7 +141,7 @@ public inherited sharing class HierarchyQuery {
 
         // We have the parentIds as input... potentialParentIds (some may not be parents)
         // run the query against these ids
-        List<sObject> childObjects = runQuery ( potentialParentIds);
+        List<sObject> childObjects = runQuery ( potentialParentIds, true);
 
         // group by parentId from the query output (some of the input potentialParentIds may not be parents) 
 

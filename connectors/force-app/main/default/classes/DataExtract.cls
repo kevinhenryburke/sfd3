@@ -26,6 +26,7 @@ public inherited sharing class DataExtract {
     // Hierarchy Methods - full implementation
 
     @AuraEnabled
+    /* arguments are split into configuration and into context */
     public static String returnHierarchyTop(String queryJSON, String recordId) {
         HierarchyConfiguration hc = (HierarchyConfiguration)JSON.deserialize(queryJSON, HierarchyConfiguration.class);
         return returnHierarchyTop(hc, recordId);
@@ -34,10 +35,15 @@ public inherited sharing class DataExtract {
     public static String returnHierarchyTop(HierarchyConfiguration hc, Id recordId) {
         // topId is the highest point of the chart to be rendered
         // It may be recordId but is may also be higher up under conditions below
+        // we may also have no top element, for example if a where clause is used instead
+
         Id topId = recordId;
         if (recordId == null) {
-            sObject s = Database.query(hc.topIdDeriveSOQL);
-            topId = (ID) s.get('id');
+            if (hc.topIdDeriveSOQL != null) {
+                sObject s = Database.query(hc.topIdDeriveSOQL);
+                topId = (ID) s.get('id');
+            }
+            // otherwise we are using only the whereClause to define context and topId is null
         }
         if (recordId != null && hc.rootIdRelatedSOQL != null) {
             sObject s = Database.query(hc.rootIdRelatedSOQL);
