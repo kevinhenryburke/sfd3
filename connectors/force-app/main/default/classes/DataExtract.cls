@@ -53,7 +53,8 @@ public inherited sharing class DataExtract {
             }
         }
 
-        HierarchyJSON deserialized = HierarchyJSON.retrieveLevels (hc, topId);
+        Integer thisLevel = 0;
+        HierarchyJSON deserialized = HierarchyBuilder.retrieveLevels (hc, topId, thisLevel);
         deserialized.initialHighlightId = recordId;
         return JSON.serialize(deserialized, true);
     }
@@ -67,7 +68,10 @@ public inherited sharing class DataExtract {
         HierarchyConfiguration hc = (HierarchyConfiguration)JSON.deserialize(queryJSON, HierarchyConfiguration.class);
 
         Integer intQueryLevel = Integer.valueOf(queryLevel);
-        List<HierarchyJSON> listhj = HierarchyJSON.createAdoptedChildren (hc, queryLevelIds, intQueryLevel );
+
+        List<HierarchyStructure> lisths = HierarchyBuilder.createAdoptedChildrenStructure (hc, queryLevelIds, intQueryLevel );
+        List<HierarchyJSON> listhj = HierarchyJSON.convertTo(lisths);
+
         return JSON.serialize(listhj, true);
     }
 

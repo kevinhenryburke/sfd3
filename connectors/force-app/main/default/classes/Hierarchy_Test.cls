@@ -204,7 +204,8 @@ public inherited sharing class Hierarchy_Test {
         HierarchyConfiguration hc = factoryConfig();
         ID rootId = rootAccount.id;
 
-        HierarchyJSON hj = HierarchyJSON.retrieveLevels (hc, rootId);
+        Integer thisLevel = 0;
+        HierarchyJSON hj = HierarchyBuilder.retrieveLevels (hc, rootId, thisLevel);
 
         System.assertEquals(3, hj.childDepth);            
         System.assertEquals('Account', hj.objectType);            
@@ -230,7 +231,7 @@ public inherited sharing class Hierarchy_Test {
 
 
     @IsTest
-    public static void createAdoptedChildren() {
+    public static void createAdoptedChildrenStructure() {
 
         HierarchyConfiguration hc = factoryConfig();
 
@@ -241,31 +242,17 @@ public inherited sharing class Hierarchy_Test {
         Account a3 = [select id, name, AnnualRevenue, parentid from Account where name = 'Medium Company' LIMIT 1];
         Account a4 = [select id, name, AnnualRevenue, parentid from Account where name = 'Medium-Small Company' LIMIT 1];
 
-        Set<ID> parentLevelIds = new Set<Id>{a3.id, a4.id};
+        List<ID> parentLevelIds = new List<Id>{a3.id, a4.id};
         Integer thisLevel = 2;
 
-        List<HierarchyJSON> listhj = HierarchyJSON.createAdoptedChildren (hc, parentLevelIds, thisLevel );
+        List<HierarchyStructure> lisths = HierarchyBuilder.createAdoptedChildrenStructure (hc, parentLevelIds, thisLevel );
+        List<HierarchyJSON> listhj = HierarchyJSON.convertTo(lisths);
+
 
         System.debug(LoggingLevel.ERROR,JSON.serializePretty(listhj,false));
         System.assertEquals(2,listhj.size()); 
         System.assertEquals(2,listhj[0].level); 
-        System.assertEquals(3,listhj[0].children[0].level); 
-
-        
-    }
-
-    @IsTest
-    public static void mergeDedupe() {
-        List<List<String>> listlist = new List<List<String>>();
-
-        List<String> list1 = new List<String>{'one', 'two'};
-        List<String> list2 = new List<String>{'one', 'three'};
-        listlist.add(list1);
-        listlist.add(list2);
-
-        List<String> retList = HierarchyQuery.mergeDedupe (listlist);
-        System.assertEquals(3,retList.size());
-
+        System.assertEquals(3,listhj[0].children[0].level);         
     }
  
     @IsTest

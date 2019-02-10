@@ -49,72 +49,12 @@ public inherited sharing class HierarchyJSON {
         return hj;
     }
 
-    // this method initializes the first levels of the chart.
-    public static HierarchyJSON retrieveLevels (HierarchyConfiguration hc, ID rootId ) {
-
-        Integer thisLevel = 0;
-
-        // get the top level structure and baseline queries to it.
-        HierarchyQuery hqTop = new HierarchyQuery(null, hc, thisLevel);
-        HierarchyStructure top = hqTop.createTopStructure(rootId);        
-
-//        thisLevel = 1;
-
-        Set<ID> parentLevelIds = new Set<Id>{};
-        if (rootId != null) { // the top node id
-            parentLevelIds.add(rootId);
-        }
-
-        for (thisLevel = 0; thisLevel < hc.initialLevelsToRetrieve; thisLevel++ ) {
-            // we create the query for each level
-            HierarchyQuery hq = new HierarchyQuery(top, hc, thisLevel);
-
-            List<sObject> childObjects = hq.runQuery ( parentLevelIds, true);
-
-            List<HierarchyStructure> listNextLevelHS = hq.createChildStructures(childObjects); // this should map new level nodes to their parents
-            parentLevelIds = new Set<Id>();
-            for (HierarchyStructure hs : listNextLevelHS) {
-                // make the next level ids the parents for the next iteration to get the level below this
-                parentLevelIds.add(hs.id);
-            }
-        }
-
-        HierarchyJSON hj = HierarchyJSON.mapHierarchyStructure (top);
-        System.debug(LoggingLevel.ERROR,JSON.serializePretty(hj,true));
-        return hj;
-    }
-
-    /* Tenerife 
-    createAdoptedChildren methods are only used in one non-test scenario in DThree class and there is a note there
-    that it's not the right way to do it and should use the same technique in returnHierarchyLevels as for returnHierarchyTop
-    Recommend attempting to get rid of these methods completely.
-    */
-
-
-
-    // Adds new level to the chart
-    public static List<HierarchyJSON> createAdoptedChildren (HierarchyConfiguration hc, Set<ID> parentLevelIds, Integer thisLevel ) {
-
-        HierarchyQuery hq = new HierarchyQuery(null, hc, thisLevel); 
-
-        List<HierarchyStructure> lisths = hq.adoptChildren (parentLevelIds);
-
+    public static List<HierarchyJSON> convertTo (List<HierarchyStructure> lisths) {
         List<HierarchyJSON> listhj = new List<HierarchyJSON>();
-
         for (HierarchyStructure hs : lisths) {
             listhj.add(HierarchyJSON.mapHierarchyStructure (hs));
         }
-
         return listhj;
-
-    }
-    
-    public static List<HierarchyJSON> createAdoptedChildren (HierarchyConfiguration hc, List<ID> listParentLevelIds, Integer thisLevel ) {
-        Set<Id> parentLevelIds = new Set<Id>();
-        for (ID id : listParentLevelIds) {
-            parentLevelIds.add(id);
-        }
-        return createAdoptedChildren (hc, parentLevelIds, thisLevel);
     }
 
 

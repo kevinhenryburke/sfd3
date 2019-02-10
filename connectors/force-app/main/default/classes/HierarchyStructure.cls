@@ -70,6 +70,14 @@ public inherited sharing class HierarchyStructure {
         }
     }
 
+    public HierarchyStructure getHierarchyStructureById (String id) {        
+        // retrieve the map from the top node 
+        Map<Id,HierarchyStructure> mapIdHierarchyStructure = this.top.mapIdHierarchyStructure;
+        return mapIdHierarchyStructure.get(id);
+    }
+
+    /* Private Helper Methods */
+
     private void addReferences (List<HierarchyStructure> listHierarchyStructure) {        
         // retrieve the map from the top node 
         Map<Id,HierarchyStructure> mapIdHierarchyStructure = this.top.mapIdHierarchyStructure;
@@ -79,11 +87,74 @@ public inherited sharing class HierarchyStructure {
         }
     }
 
-    public HierarchyStructure getHierarchyStructureById (String id) {        
-        // retrieve the map from the top node 
-        Map<Id,HierarchyStructure> mapIdHierarchyStructure = this.top.mapIdHierarchyStructure;
-        return mapIdHierarchyStructure.get(id);
+    private static void mapRetrievedValues (sObject s, HierarchyConfiguration.FieldConfiguration field) {
+        if (s.get(field.api) != null) {
+            if (field.fieldType == 'STRING' || field.fieldType == 'ID' || field.fieldType == 'REFERENCE' || field.fieldType == 'PICKLIST') {
+                field.retrievedValue = s.get(field.api).toString();
+            }
+            if (field.fieldType == 'DATETIME') {
+                field.retrievedDatetime = (Datetime) s.get(field.api);
+            }
+            if (field.fieldType == 'DATE') {
+                field.retrievedDate = (Date) s.get(field.api);
+            }
+            if (field.fieldType == 'CURRENCY') {
+                field.retrievedDecimal = (Decimal) s.get(field.api);
+            }
+            if (field.fieldType == 'INTEGER') {
+                field.retrievedInteger = (Integer) s.get(field.api);
+            }
+        }
     }
+
+    private static void mapKeyFields (sObject s, HierarchyConfiguration.FieldConfiguration fc, HierarchyStructure hs) {
+        if (s.get(fc.api) != null) {
+            if (fc.role == 'id') {
+                hs.id = s.get(fc.api).toString();
+            }
+            if (fc.role == 'parentId') {
+                hs.parentId = s.get(fc.api).toString();
+            }
+            if (fc.role == 'name') {
+                hs.name = s.get(fc.api).toString();
+            }
+            if (fc.role == 'size') {
+                if (hs.size == null) { // set the first size field to be the returned value
+                    hs.size = (Decimal) s.get(fc.api);
+                }
+            }
+        }
+    }
+
+
+    public static void processFieldsToStructure (sObject s, HierarchyStructure hs, List<HierarchyConfiguration.FieldConfiguration> listfc) {
+        hs.fields = new List<HierarchyConfiguration.FieldConfiguration>();
+
+        for (HierarchyConfiguration.FieldConfiguration fc : listfc) {
+
+            HierarchyConfiguration.FieldConfiguration field = new HierarchyConfiguration.FieldConfiguration();
+
+            field.api = fc.api;
+            field.role = fc.role;
+            field.display = fc.display;
+            field.orderByField = fc.orderByField;
+            field.fieldType = fc.fieldType;
+
+            System.debug('field.role: ' + field.role);
+
+            /* Set the key fields like id, size, name */
+            mapKeyFields (s, fc, hs);
+
+            /* Set the appropriate retrieved value field */
+            mapRetrievedValues (s, field);
+
+            hs.fields.add(field);
+
+        }
+        hs.objectType = s.getSObjectType().getDescribe().getName();            
+
+    }
+
 
 
 }
