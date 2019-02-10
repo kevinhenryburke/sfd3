@@ -198,14 +198,15 @@ public inherited sharing class Hierarchy_Test {
     } 
 
     @IsTest
-    public static void retrieveLevels() {
+    public static void retrieveStructureLevels() {
         Account rootAccount = factoryAccount();
 
         HierarchyConfiguration hc = factoryConfig();
         ID rootId = rootAccount.id;
 
         Integer thisLevel = 0;
-        HierarchyJSON hj = HierarchyBuilder.retrieveLevels (hc, rootId, thisLevel);
+        HierarchyStructure top = HierarchyBuilder.retrieveStructureLevels (hc, rootId, thisLevel);
+        HierarchyJSON hj = HierarchyJSON.mapHierarchyStructure (top);
 
         System.assertEquals(3, hj.childDepth);            
         System.assertEquals('Account', hj.objectType);            

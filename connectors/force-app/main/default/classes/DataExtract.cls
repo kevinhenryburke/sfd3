@@ -54,14 +54,15 @@ public inherited sharing class DataExtract {
         }
 
         Integer thisLevel = 0;
-        HierarchyJSON deserialized = HierarchyBuilder.retrieveLevels (hc, topId, thisLevel);
+        HierarchyStructure top = HierarchyBuilder.retrieveStructureLevels (hc, topId, thisLevel);
+        HierarchyJSON deserialized = HierarchyJSON.mapHierarchyStructure (top);
         deserialized.initialHighlightId = recordId;
         return JSON.serialize(deserialized, true);
     }
 
 
     @AuraEnabled
-    public static String returnHierarchyLevels(String queryJSON, List<Id> queryLevelIds, Integer queryLevel) {
+    public static String returnHierarchyUpdate(String queryJSON, List<Id> queryLevelIds, Integer queryLevel) {
         // TODO - use the same techniques as returnHierarchyTop when done
         // TODO - really should be one method not too anyway
 

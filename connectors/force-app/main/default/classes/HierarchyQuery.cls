@@ -61,8 +61,13 @@ public inherited sharing class HierarchyQuery {
         return queryString;
     }
 
-    public List<sObject> runQuery (Set<Id> queryIds, boolean queryParents) {
-        String queryString = createQueryString (queryIds, queryParents);
+    public List<sObject> runQuery (List<Id> queryIds, boolean queryParents) {
+        Set<ID> ids = new Set<Id>{};
+        for (ID thisId : queryIds) {
+            ids.add(thisId);
+        }
+
+        String queryString = createQueryString (ids, queryParents);
         List<sObject> listso = Database.query(queryString);
         return listso;
     }

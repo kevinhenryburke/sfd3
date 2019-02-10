@@ -42,6 +42,16 @@ public inherited sharing class HierarchyConfiguration  {
             }
         }
 
+        public String getParentFieldApi() { 
+            String parentField = null;
+            for (HierarchyConfiguration.FieldConfiguration field : fields) {
+                if (field.role == 'parentId') {
+                    parentField = field.api;
+                    break;
+                }
+            }
+            return parentField;
+        }
     }
 
     public class FieldConfiguration {
