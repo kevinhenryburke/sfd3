@@ -54,7 +54,7 @@ public inherited sharing class DataExtract {
         }
 
         Integer thisLevel = 0;
-        HierarchyStructure top = HierarchyBuilder.retrieveStructureLevels (hc, topId, thisLevel);
+        HierarchyStructure top = HierarchyBuilder.retrieveStructureLevels (hc, new List<Id>{topId}, thisLevel);
         HierarchyJSON deserialized = HierarchyJSON.mapHierarchyStructure (top);
         deserialized.initialHighlightId = recordId;
         return JSON.serialize(deserialized, true);

@@ -4,30 +4,33 @@ public with sharing class HierarchyBuilder {
     }
 
     // this method initializes the first levels of the chart.
-    public static HierarchyStructure retrieveStructureLevels (HierarchyConfiguration hc, ID rootId, Integer thisLevel ) {
+    public static HierarchyStructure retrieveStructureLevels (HierarchyConfiguration hc, List<ID> queryIds, Integer thisLevel ) {
 
         // get the top level structure and baseline queries to it.
-        HierarchyQuery hqTop = new HierarchyQuery(null, hc, thisLevel);
+        HierarchyQuery hq = new HierarchyQuery(null, hc, thisLevel);
+        sObject s = hq.runQuery (queryIds, false)[0];
 
-        List<ID> queryIds = new List<Id>{rootId};
+// REFACTOR DEVIATION.. first level
+        ID rootId = queryIds[0];
 
-        sObject s = hqTop.runQuery (queryIds, false)[0];
         HierarchyStructure top = new HierarchyStructure(rootId, thisLevel); // to signify top element
-        HierarchyStructure.processFieldsToStructure (s, top, hqTop.oc.fields);
+        HierarchyStructure.processFieldsToStructure (s, top, hq.oc.fields);
 
         // then work on the lower levels
-        List<ID> parentLevelIds = new List<Id>{rootId};
+
+
+//TODO I'm really not sure this is right, level 0 should be root node?
 
         for (thisLevel = 0; thisLevel < hc.initialLevelsToRetrieve; thisLevel++ ) {
             // we create the query for each level
-            HierarchyQuery hq = new HierarchyQuery(top, hc, thisLevel);
-            List<sObject> childObjects = hq.runQuery ( parentLevelIds, true);
+            hq = new HierarchyQuery(top, hc, thisLevel);
+            List<sObject> childObjects = hq.runQuery ( queryIds, true);
 
             List<HierarchyStructure> listNextLevelHS = createChildStructures(hc, childObjects, top, thisLevel); // this should map new level nodes to their parents
-            parentLevelIds = new List<Id>();
+            queryIds = new List<Id>();
             for (HierarchyStructure hs : listNextLevelHS) {
                 // make the next level ids the parents for the next iteration to get the level below this
-                parentLevelIds.add(hs.id);
+                queryIds.add(hs.id);
             }
         }
 
@@ -41,22 +44,27 @@ public with sharing class HierarchyBuilder {
     createAdoptedChildrenStructure methods are only used in one non-test scenario in DThree class and there is a note there
     that it's not the right way to do it and should use the same technique in returnHierarchyUpdate as for returnHierarchyTop
     Recommend attempting to get rid of these methods completely.
+    
+    Key difference between the methods is that the initial method builds up a Structure
+    This means that the structure is available when we go through the loop
+    However the update one does not and has to reference ids that do not belong to a structure that it knows
+    This get pinned to the correct parent in the front end
+
+
     */
 
     // Adds new level to the chart
-    // We have the parentIds as input... listPotentialParentIds (some may not be parents)
     public static List<HierarchyStructure> createAdoptedChildrenStructure (HierarchyConfiguration hc, List<ID> listPotentialParentIds, Integer thisLevel ) {
-        HierarchyQuery hqChildren = new HierarchyQuery(null, hc, thisLevel); 
+        HierarchyQuery hq = new HierarchyQuery(null, hc, thisLevel); 
 
-        // run the query against these ids
-        List<sObject> childObjects = hqChildren.runQuery ( listPotentialParentIds, true);
+        // We have the parentIds as input... listPotentialParentIds (some may not be parents but leaf nodes but we don't know till we query)
+        List<sObject> childObjects = hq.runQuery ( listPotentialParentIds, true);
 
-        // group by parentId from the query output (some of the input listPotentialParentIds may not be parents) 
+        // The query does not group children
+        // We group by parentId from the query output (some of the input listPotentialParentIds may not be parents) 
 
         Map<Id,List<sObject>> childMap = new Map<Id,List<sObject>>();  
-
-        String parentField = hqChildren.oc.getParentFieldApi();
-
+        String parentField = hq.oc.getParentFieldApi();
         for (sObject s : childObjects) {
             id parentId = s.get(parentField).toString();
             if (childMap.keyset().contains(parentId)) {
@@ -68,17 +76,17 @@ public with sharing class HierarchyBuilder {
             }
         }
 
-        // create a list to hold a structure for each of these parents, it will be 1:1
+        // create a list to hold a structure for each of these parents, it will be 1:1 with the childMap keyset
         List<HierarchyStructure> lisths = new List<HierarchyStructure> ();
 
         for (Id parentId : childMap.keyset()) {
             List<sObject> siblings = childMap.get(parentId);
 
-            HierarchyStructure top = new HierarchyStructure(parentId, hqChildren.level); // to signify top element
-            top.id = parentId;      
+            HierarchyStructure parent = new HierarchyStructure(parentId, hq.level); // to signify top element
+            parent.id = parentId;      
 
-            createChildStructures(hc, siblings, top, hqChildren.level + 1); // this should map new level nodes to their parents
-            lisths.add(top);
+            createChildStructures(hc, siblings, parent, hq.level + 1); // this should map new level nodes to their parents
+            lisths.add(parent);
         }
 
         return lisths;
