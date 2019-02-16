@@ -38,8 +38,7 @@ public inherited sharing class DataExtract {
         // we may also have no top element, for example if a where clause is used instead
         List<Id> topIDs = getTopIds(hc, recordId);
 
-        Integer thisLevel = 0;
-        HierarchyStructure top = HierarchyBuilder.retrieveStructureFlat (hc, topIDs, thisLevel);
+        HierarchyStructure top = HierarchyBuilder.retrieveStructureFlat (hc, topIDs);
         HierarchyJSON deserialized = HierarchyJSON.mapHierarchyStructure (top);
         deserialized.initialHighlightId = recordId;
         return JSON.serialize(deserialized, true);

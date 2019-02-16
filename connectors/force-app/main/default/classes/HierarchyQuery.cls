@@ -13,6 +13,21 @@ public inherited sharing class HierarchyQuery {
         this.oc.setFieldTypes();
     }
 
+    public List<sObject> runQuery (List<Id> queryIds, boolean queryParents) {
+        Set<ID> ids = new Set<Id>{};
+        for (ID thisId : queryIds) {
+            ids.add(thisId);
+        }
+
+        String queryString = createQueryString (ids, queryParents);
+        List<sObject> listso = Database.query(queryString);
+        return listso;
+    }
+
+    // PRIVATE METHODS
+
+
+
     private String createQueryString (Set<Id> queryIds, boolean queryParents) {
 
         List<String> selectFields = new List<String>();
@@ -59,15 +74,5 @@ public inherited sharing class HierarchyQuery {
         return queryString;
     }
 
-    public List<sObject> runQuery (List<Id> queryIds, boolean queryParents) {
-        Set<ID> ids = new Set<Id>{};
-        for (ID thisId : queryIds) {
-            ids.add(thisId);
-        }
-
-        String queryString = createQueryString (ids, queryParents);
-        List<sObject> listso = Database.query(queryString);
-        return listso;
-    }
     
 }

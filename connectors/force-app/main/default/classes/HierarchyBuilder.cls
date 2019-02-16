@@ -4,15 +4,14 @@ public with sharing class HierarchyBuilder {
     }
 
     // this method initializes the first levels of the chart.
-    public static HierarchyStructure retrieveStructureFlat (HierarchyConfiguration hc, List<ID> queryIds, Integer thisLevel ) {
+    public static HierarchyStructure retrieveStructureFlat (HierarchyConfiguration hc, List<ID> queryIds) {
 
         // to match hierarchy format, create a top level structure which does not hold elements and baseline queries to it.
-
+        Integer thisLevel = 0;
         HierarchyStructure parent = new HierarchyStructure(null, thisLevel); // to signify parent element
-
         HierarchyQuery hq = new HierarchyQuery(hc, thisLevel);
         List<sObject> childObjects = hq.runQuery ( queryIds, true);
-        List<HierarchyStructure> listNextLevelHS = createChildStructures(hc, childObjects, parent, 0); // this should map new level nodes to their parents
+        List<HierarchyStructure> listNextLevelHS = createChildStructures(hc, childObjects, parent, thisLevel); // this should map new level nodes to their parents
 
         return parent;
     }
@@ -22,47 +21,56 @@ public with sharing class HierarchyBuilder {
     // this method initializes the first levels of the chart.
     public static HierarchyStructure retrieveStructureLevels (HierarchyConfiguration hc, List<ID> queryIds, Integer thisLevel ) {
 
+        HierarchyStructure top;
         // get the top level structure and baseline queries to it.
         HierarchyQuery hq = new HierarchyQuery(hc, thisLevel);
-        List<sObject> lists = hq.runQuery (queryIds, false);
+        List<sObject> topObjects = hq.runQuery (queryIds, false);
 
-        sObject s = lists[0];
-
-
-
-// REFACTOR DEVIATION.. first level
-        ID rootId = (queryIds.size() > 0 ) ? lists[0].id : null;
-
-        List<HierarchyStructure> lisths = new List<HierarchyStructure> ();
-
-//TODO - loop through all initializing structures
-//TODO - add in the loop here and below
-
-//        for (sObject s : lists) {
-            HierarchyStructure parent = new HierarchyStructure(s.id, thisLevel); // to signify parent element
+        sObject s;
+        HierarchyStructure parent; 
+        if (topObjects.size() == 1) {
+            s = topObjects[0];                        
+            parent = new HierarchyStructure(s.id, thisLevel); // to signify parent element
             HierarchyStructure.processFieldsToStructure (s, parent, hq.oc.fields);
+            top = parent;
+        }
+        else {
+            // Case where more than one top node - not fully implemented
+            boolean first = true;
+            HierarchyStructure falseTop = new HierarchyStructure(null, -1); // to signify parent element
+            top = falseTop;
 
-            lisths.add(parent);
-//        }
+            for (sObject sloop : topObjects) {
+                if (first) {
+                    s = sloop;
+                    parent = new HierarchyStructure(s.id, thisLevel); // to signify parent element
+                    HierarchyStructure.processFieldsToStructure (s, parent, hq.oc.fields);
+                    falseTop.addChildren(new List<HierarchyStructure>{parent});
+                    top = parent;
+                    first = false;
+                }
+            }
+        }
 
-        // then work on the lower levels
-
-
-//TODO I'm really not sure this is right, level 0 should be root node?
+        //TODO I'm really not sure this is right, level 0 should be root node?
 
         for (thisLevel = 0; thisLevel < hc.initialLevelsToRetrieve; thisLevel++ ) {
             // we create the query for each level
             hq = new HierarchyQuery(hc, thisLevel);
-            List<sObject> childObjects = hq.runQuery ( queryIds, true);
+            List<sObject> childObjects = hq.runQuery ( queryIds, true); // queryIds are parent ids
             List<HierarchyStructure> listNextLevelHS = createChildStructures(hc, childObjects, null, thisLevel); // this should map new level nodes to their parents
             queryIds = new List<Id>();
-            for (HierarchyStructure hs : listNextLevelHS) {
-                // make the next level ids the parents for the next iteration to get the level below this
-                queryIds.add(hs.id);
-            }
+
+            Boolean lastRun = (hc.initialLevelsToRetrieve - thisLevel == 1) ? true : false;
+            // make the next level ids the parents for the next iteration to get the level below this
+           if (!lastRun) { // no point in update queryId list is no further queries are to be run.
+                for (HierarchyStructure hs : listNextLevelHS) {
+                    queryIds.add(hs.id);
+                }
+           }
         }
 //TODO return list of parents
-        return parent;
+        return top;
 
     }
 
