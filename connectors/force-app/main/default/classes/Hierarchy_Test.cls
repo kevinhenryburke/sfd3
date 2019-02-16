@@ -155,14 +155,14 @@ public inherited sharing class Hierarchy_Test {
     @IsTest
     public static void getHierarchyStructureById() {
         HierarchyStructure top = factoryHS();
-        HierarchyStructure hsFound = top.getHierarchyStructureById(C1_ID);
+        HierarchyStructure hsFound = HierarchyStructure.getHierarchyStructureById(C1_ID);
         System.assertEquals(C1_ID, hsFound.id);
     }
 
     @IsTest
     public static void addChildById() {
         HierarchyStructure top = factoryHS();
-        HierarchyStructure hsFound = top.getHierarchyStructureById(C1_ID);
+        HierarchyStructure hsFound = HierarchyStructure.getHierarchyStructureById(C1_ID);
 
         // create some child nodes
         HierarchyStructure newChild = new HierarchyStructure(hsFound);
@@ -178,7 +178,7 @@ public inherited sharing class Hierarchy_Test {
         Test.stopTest();
 
         // retrieve the node we added and check the structure and above
-        HierarchyStructure checkNew = top.getHierarchyStructureById(newChild.id);
+        HierarchyStructure checkNew = HierarchyStructure.getHierarchyStructureById(newChild.id);
         HierarchyStructure checkNewParent = checkNew.parent;
         HierarchyStructure checkNewTop = checkNew.top;
          

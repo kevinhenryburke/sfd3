@@ -23,7 +23,29 @@ public inherited sharing class DataExtract {
         return docs[0].body.toString();
     }
 
-    // Hierarchy Methods - full implementation
+    /* Flat Structure Methods - full implementation */
+
+    @AuraEnabled
+    /* arguments are split into configuration and into context */
+    public static String returnHierarchyFlat(String queryJSON, String recordId) {
+        HierarchyConfiguration hc = (HierarchyConfiguration)JSON.deserialize(queryJSON, HierarchyConfiguration.class);
+        return returnHierarchyFlat(hc, recordId);
+    }
+
+    public static String returnHierarchyFlat(HierarchyConfiguration hc, Id recordId) {
+        // topId is the highest point of the chart to be rendered
+        // It may be recordId but is may also be higher up under conditions below
+        // we may also have no top element, for example if a where clause is used instead
+        List<Id> topIDs = getTopIds(hc, recordId);
+
+        Integer thisLevel = 0;
+        HierarchyStructure top = HierarchyBuilder.retrieveStructureFlat (hc, topIDs, thisLevel);
+        HierarchyJSON deserialized = HierarchyJSON.mapHierarchyStructure (top);
+        deserialized.initialHighlightId = recordId;
+        return JSON.serialize(deserialized, true);
+    }
+
+    /* Hierarchy Methods - full implementation */
 
     @AuraEnabled
     /* arguments are split into configuration and into context */
@@ -37,28 +59,17 @@ public inherited sharing class DataExtract {
         // It may be recordId but is may also be higher up under conditions below
         // we may also have no top element, for example if a where clause is used instead
 
-        Id topId = recordId;
-        if (recordId == null) {
-            if (hc.topIdDeriveSOQL != null) {
-                sObject s = Database.query(hc.topIdDeriveSOQL);
-                topId = (ID) s.get('id');
-            }
-            // otherwise we are using only the whereClause to define context and topId is null
-        }
-        if (recordId != null && hc.rootIdRelatedSOQL != null) {
-            sObject s = Database.query(hc.rootIdRelatedSOQL);
-            sObject p = s.getSObject(hc.relatedQueryObject);
-            if (p != null) {
-                topId = (ID) p.get('id'); 
-            }
-        }
+        System.debug('xxxxxx: returnHierarchyTop recordId ' + recordId);
+
+        List<Id> topIDs = getTopIds(hc, recordId);
 
         Integer thisLevel = 0;
-        HierarchyStructure top = HierarchyBuilder.retrieveStructureLevels (hc, new List<Id>{topId}, thisLevel);
+        HierarchyStructure top = HierarchyBuilder.retrieveStructureLevels (hc, topIDs, thisLevel);
         HierarchyJSON deserialized = HierarchyJSON.mapHierarchyStructure (top);
         deserialized.initialHighlightId = recordId;
         return JSON.serialize(deserialized, true);
     }
+
 
 
     @AuraEnabled
@@ -75,5 +86,39 @@ public inherited sharing class DataExtract {
 
         return JSON.serialize(listhj, true);
     }
+
+    /* PRIVATE METHODS */
+
+
+    private static List<Id> getTopIds(HierarchyConfiguration hc, Id recordId) {
+        List<Id> topIDs = new List<Id>();
+
+        Id topId = recordId;
+        if (recordId == null) {
+            if (hc.topIdDeriveSOQL != null) {
+                List<sObject> lists = Database.query(hc.topIdDeriveSOQL);
+                for (sObject s : lists) {
+                    topIDs.add( (ID) s.get('id'));
+                }
+            }
+            // otherwise we are using only the whereClause to define context and topId is null
+        }
+        if (recordId != null && hc.rootIdRelatedSOQL != null) {
+            sObject s = Database.query(hc.rootIdRelatedSOQL);
+            sObject p = s.getSObject(hc.relatedQueryObject);
+            if (p != null) {
+                topId = (ID) p.get('id'); 
+                topIDs.add(topId);
+            }
+            else {
+                topIDs.add(recordId);
+            }
+        }
+
+        System.debug('xxxxxx: getTopIds topIDs ' + topIDs);
+        return topIDs;
+    }
+
+
 
 }

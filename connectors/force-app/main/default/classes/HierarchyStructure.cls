@@ -12,6 +12,10 @@ public inherited sharing class HierarchyStructure {
         Once the parent node is available the children are added to its data structure and the sum of child nodes is computed
     */
 
+
+    /* Store a static Map of ids to HierarchyStructure objects against the top node of the hierarchy */
+    public static Map<Id,HierarchyStructure> mapIdHierarchyStructure = new Map<Id,HierarchyStructure>(); // only populated on the top node
+
     /* Data returned from the output structure */
  
     public String id; // a unique id - typically a Salesforce record id
@@ -36,9 +40,6 @@ public inherited sharing class HierarchyStructure {
     public HierarchyStructure top; // top node in the hierarchy 
     public HierarchyStructure parent; // node containing this in the hierarchy 
     public boolean isTop = false; // is this the top node of the hierarchy
-    /* Store a list of Map of ids to HierarchyStructure objects against the top node of the hierarchy */
-    public Map<Id,HierarchyStructure> mapIdHierarchyStructure = new Map<Id,HierarchyStructure>(); // only populated on the top node
-
 
     /* Class Constructor for top element */    
     public HierarchyStructure(Id Id, Integer level) {
@@ -60,7 +61,7 @@ public inherited sharing class HierarchyStructure {
 
     public void addChildren (List<HierarchyStructure> newChildren) {        
         // add the children to the top node map
-        addReferences (newChildren);
+        HierarchyStructure.addReferences (newChildren);
         // bulk add the nodes to the structure
         if (this.children != null) {
             this.children.addAll(newChildren);
@@ -70,18 +71,13 @@ public inherited sharing class HierarchyStructure {
         }
     }
 
-    public HierarchyStructure getHierarchyStructureById (String id) {        
-        // retrieve the map from the top node 
-        Map<Id,HierarchyStructure> mapIdHierarchyStructure = this.top.mapIdHierarchyStructure;
+    public static HierarchyStructure getHierarchyStructureById (String id) {        
         return mapIdHierarchyStructure.get(id);
     }
 
     /* Private Helper Methods */
 
-    private void addReferences (List<HierarchyStructure> listHierarchyStructure) {        
-        // retrieve the map from the top node 
-        Map<Id,HierarchyStructure> mapIdHierarchyStructure = this.top.mapIdHierarchyStructure;
-
+    private static void addReferences (List<HierarchyStructure> listHierarchyStructure) {        
         for(HierarchyStructure hs : listHierarchyStructure ) {
             mapIdHierarchyStructure.put(hs.id, hs);
         }
@@ -140,7 +136,7 @@ public inherited sharing class HierarchyStructure {
             field.orderByField = fc.orderByField;
             field.fieldType = fc.fieldType;
 
-            System.debug('field.role: ' + field.role);
+            // System.debug('field.role: ' + field.role);
 
             /* Set the key fields like id, size, name */
             mapKeyFields (s, fc, hs);

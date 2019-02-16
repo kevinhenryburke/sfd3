@@ -4,17 +4,46 @@ public with sharing class HierarchyBuilder {
     }
 
     // this method initializes the first levels of the chart.
+    public static HierarchyStructure retrieveStructureFlat (HierarchyConfiguration hc, List<ID> queryIds, Integer thisLevel ) {
+
+        // to match hierarchy format, create a top level structure which does not hold elements and baseline queries to it.
+
+        HierarchyStructure parent = new HierarchyStructure(null, thisLevel); // to signify parent element
+
+        HierarchyQuery hq = new HierarchyQuery(hc, thisLevel);
+        List<sObject> childObjects = hq.runQuery ( queryIds, true);
+        List<HierarchyStructure> listNextLevelHS = createChildStructures(hc, childObjects, parent, 0); // this should map new level nodes to their parents
+
+        return parent;
+    }
+
+
+
+    // this method initializes the first levels of the chart.
     public static HierarchyStructure retrieveStructureLevels (HierarchyConfiguration hc, List<ID> queryIds, Integer thisLevel ) {
 
         // get the top level structure and baseline queries to it.
-        HierarchyQuery hq = new HierarchyQuery(null, hc, thisLevel);
-        sObject s = hq.runQuery (queryIds, false)[0];
+        HierarchyQuery hq = new HierarchyQuery(hc, thisLevel);
+        List<sObject> lists = hq.runQuery (queryIds, false);
+
+        sObject s = lists[0];
+
+
 
 // REFACTOR DEVIATION.. first level
-        ID rootId = queryIds[0];
+        ID rootId = (queryIds.size() > 0 ) ? lists[0].id : null;
 
-        HierarchyStructure top = new HierarchyStructure(rootId, thisLevel); // to signify top element
-        HierarchyStructure.processFieldsToStructure (s, top, hq.oc.fields);
+        List<HierarchyStructure> lisths = new List<HierarchyStructure> ();
+
+//TODO - loop through all initializing structures
+//TODO - add in the loop here and below
+
+//        for (sObject s : lists) {
+            HierarchyStructure parent = new HierarchyStructure(s.id, thisLevel); // to signify parent element
+            HierarchyStructure.processFieldsToStructure (s, parent, hq.oc.fields);
+
+            lisths.add(parent);
+//        }
 
         // then work on the lower levels
 
@@ -23,18 +52,17 @@ public with sharing class HierarchyBuilder {
 
         for (thisLevel = 0; thisLevel < hc.initialLevelsToRetrieve; thisLevel++ ) {
             // we create the query for each level
-            hq = new HierarchyQuery(top, hc, thisLevel);
+            hq = new HierarchyQuery(hc, thisLevel);
             List<sObject> childObjects = hq.runQuery ( queryIds, true);
-
-            List<HierarchyStructure> listNextLevelHS = createChildStructures(hc, childObjects, top, thisLevel); // this should map new level nodes to their parents
+            List<HierarchyStructure> listNextLevelHS = createChildStructures(hc, childObjects, null, thisLevel); // this should map new level nodes to their parents
             queryIds = new List<Id>();
             for (HierarchyStructure hs : listNextLevelHS) {
                 // make the next level ids the parents for the next iteration to get the level below this
                 queryIds.add(hs.id);
             }
         }
-
-        return top;
+//TODO return list of parents
+        return parent;
 
     }
 
@@ -55,12 +83,12 @@ public with sharing class HierarchyBuilder {
 
     // Adds new level to the chart
     public static List<HierarchyStructure> createAdoptedChildrenStructure (HierarchyConfiguration hc, List<ID> listPotentialParentIds, Integer thisLevel ) {
-        HierarchyQuery hq = new HierarchyQuery(null, hc, thisLevel); 
+        HierarchyQuery hq = new HierarchyQuery(hc, thisLevel); 
 
         // We have the parentIds as input... listPotentialParentIds (some may not be parents but leaf nodes but we don't know till we query)
         List<sObject> childObjects = hq.runQuery ( listPotentialParentIds, true);
 
-        // The query does not group children
+        // The raw query does not group children
         // We group by parentId from the query output (some of the input listPotentialParentIds may not be parents) 
 
         Map<Id,List<sObject>> childMap = new Map<Id,List<sObject>>();  
@@ -82,10 +110,10 @@ public with sharing class HierarchyBuilder {
         for (Id parentId : childMap.keyset()) {
             List<sObject> siblings = childMap.get(parentId);
 
-            HierarchyStructure parent = new HierarchyStructure(parentId, hq.level); // to signify top element
+            HierarchyStructure parent = new HierarchyStructure(parentId, hq.level); // to signify parent element
             parent.id = parentId;      
 
-            createChildStructures(hc, siblings, parent, hq.level + 1); // this should map new level nodes to their parents
+            createChildStructures(hc, siblings, null, hq.level + 1); // this should map new level nodes to their parents
             lisths.add(parent);
         }
 
@@ -93,7 +121,7 @@ public with sharing class HierarchyBuilder {
 
     }
 
-    private static List<HierarchyStructure> createChildStructures (HierarchyConfiguration hc, List<sObject> childObjects, HierarchyStructure top, Integer thisLevel) {
+    private static List<HierarchyStructure> createChildStructures (HierarchyConfiguration hc, List<sObject> childObjects, HierarchyStructure parent, Integer thisLevel) {
 
         HierarchyConfiguration.ObjectConfiguration oc = hc.getLevel(thisLevel);
 
@@ -104,17 +132,18 @@ public with sharing class HierarchyBuilder {
 
         for (sObject s : childObjects) {
             id parentId;
+            // we need to retrieve or create a parent structure so the front end knows where to place the new elenents
             HierarchyStructure hsParent;
             HierarchyStructure hs; 
 
             if (hasParentField) {
                 parentId = s.get(parentField).toString();
-                hsParent = top.getHierarchyStructureById(parentId);
+                hsParent = HierarchyStructure.getHierarchyStructureById(parentId);
                 hs = new HierarchyStructure(hsParent); 
             }
             else {
-                hsParent = top;
-                hs = new HierarchyStructure(hsParent); 
+                hsParent = parent;
+                hs = new HierarchyStructure(null); 
             }
 
             HierarchyStructure.processFieldsToStructure (s, hs, oc.fields);

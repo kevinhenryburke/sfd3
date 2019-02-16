@@ -1,14 +1,12 @@
 public inherited sharing class HierarchyQuery {
 
     // map between the JSON attributes expected in the Chart and the Salesforce field names.
-    public HierarchyStructure top; // top node in the hierarchy 
     public HierarchyConfiguration.ObjectConfiguration oc;
     public HierarchyConfiguration hc;
     public Integer level;
 
     // To run and place an element in a query we need to relate the structure above it, the level it is at and configuration for the related object
-    public HierarchyQuery(HierarchyStructure top, HierarchyConfiguration hc, Integer level) {
-        this.top = top;
+    public HierarchyQuery(HierarchyConfiguration hc, Integer level) {
         this.level = level;
         this.hc = hc;
         this.oc = hc.getLevel(level); 
