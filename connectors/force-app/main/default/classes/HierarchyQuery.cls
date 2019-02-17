@@ -70,7 +70,7 @@ public inherited sharing class HierarchyQuery {
         if (orderByField != null) {
             queryString += ' order by ' + orderByField ;
         }
-        System.debug('createQueryString ' + queryString);
+        // System.debug('createQueryString ' + queryString);
         return queryString;
     }
 

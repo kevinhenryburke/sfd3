@@ -59,11 +59,11 @@ public inherited sharing class Hierarchy_Test {
         return a1;
     }
 
-    public static String factoryQueryJSON() {
+    public static String factoryQueryJSON(boolean recursive) {
 
         String queryJSON = 
         '                {"objectType": "Account",'+
-        '                "recursive": true,'+
+        '                "recursive": ' + recursive + ','+
         '                "fields": ['+
         '                    {'+
         '                         "api" : "AnnualRevenue", '+                                    
@@ -98,14 +98,58 @@ public inherited sharing class Hierarchy_Test {
         return queryJSON;
     }
 
+    public static String factoryQueryJSONFlat(boolean recursive) {
 
-    public static HierarchyConfiguration factoryConfig() {
+        String queryJSON = 
+        '         {  '+
+        '           "whereClause":"parentid != null",'+
+        '           "terminal":true,'+
+        '                "recursive": ' + recursive + ','+
+        '          "fields":[  '+
+        '             {  '+
+        '               "api":"NumberOfEmployees",'+
+        '               "role":"size",'+
+        '               "display":true,'+
+        '               "measureName":"Employees",'+
+        '               "sizeSchemeType":"Linear",'+
+        '               "sizeChangesColor":true'+
+        '             },'+
+        '            {  '+
+        '              "api":"name",'+
+        '              "role":"name",'+
+        '              "display":true'+
+        '            },'+
+        '            {  '+
+        '              "api":"id",'+
+        '              "role":"id",'+
+        '              "display":false'+
+        '            },'+
+        '            {  '+
+        '              "api":"parentId",'+
+        '              "role":"parentId",'+
+        '              "display":false'+
+        '            }'+
+        '          ],'+
+        '          "objectType":"Account"'+
+        '        }';
+
+        return queryJSON;
+    }
+
+    public static HierarchyConfiguration factoryConfig(string baseJSON, Integer initialLevelsToRetrieve, boolean recursive) {
 //        HierarchyConfiguration hc = new HierarchyConfiguration('Hierarchy');
         HierarchyConfiguration hc = new HierarchyConfiguration();
-        hc.initialLevelsToRetrieve = 3;
+        hc.initialLevelsToRetrieve = initialLevelsToRetrieve;
         // Add an Account configuration
 
-        String queryJSON = factoryQueryJSON();
+        String queryJSON;
+        
+        if (baseJSON == 'Hierarchy') {
+            queryJSON = factoryQueryJSON(recursive);
+        }
+        if (baseJSON == 'Flat') {
+            queryJSON = factoryQueryJSONFlat(recursive);
+        }
 
         HierarchyConfiguration.ObjectConfiguration oc = (HierarchyConfiguration.ObjectConfiguration)JSON.deserialize(queryJSON, HierarchyConfiguration.ObjectConfiguration.class);
         hc.objectLevels.add(oc);
@@ -118,7 +162,7 @@ public inherited sharing class Hierarchy_Test {
     @IsTest
     public static void returnHierarchyTop_DerivedSOQL() {
         factoryAccount();
-        HierarchyConfiguration hc = factoryConfig();
+        HierarchyConfiguration hc = factoryConfig('Hierarchy',3, true);
         hc.topIdDeriveSOQL = 'select id from Account where name = \'Burke Enterprises\' LIMIT 1 ';
 
         String serialized = DataExtract.returnHierarchyTop(JSON.serialize(hc,true), null) ;
@@ -130,7 +174,7 @@ public inherited sharing class Hierarchy_Test {
     public static void returnHierarchyTop_RelatedSOQL() {
         factoryAccount();
         Account a = [select id, name, Parent.id from Account where name = 'Small Company'];
-        HierarchyConfiguration hc = factoryConfig();
+        HierarchyConfiguration hc = factoryConfig('Hierarchy',3, true);
 
         ID passedId = a.id; 
 
@@ -201,7 +245,7 @@ public inherited sharing class Hierarchy_Test {
     public static void retrieveStructureLevels() {
         Account rootAccount = factoryAccount();
 
-        HierarchyConfiguration hc = factoryConfig();
+        HierarchyConfiguration hc = factoryConfig('Hierarchy',3, true);
         ID rootId = rootAccount.id;
 
         Integer thisLevel = 0;
@@ -214,8 +258,27 @@ public inherited sharing class Hierarchy_Test {
     }
 
     @IsTest
+    public static void retrieveStructureFlat() {
+        Account rootAccount = factoryAccount();
+
+        HierarchyConfiguration hc = factoryConfig('Flat',1, false);
+        ID rootId = rootAccount.id;
+
+        Integer thisLevel = 0;
+        HierarchyStructure top = HierarchyBuilder.retrieveStructureFlat (hc, new List<Id>{});
+        HierarchyJSON hj = HierarchyJSON.mapHierarchyStructure (top);
+
+        System.debug(LoggingLevel.ERROR,JSON.serializePretty(hj,false));
+
+        System.assertEquals(6, hj.children.size());            
+        System.assertEquals('Account', hj.children[0].objectType);            
+        
+    }
+
+
+    @IsTest
     public static void getLevelRecursive() {
-        HierarchyConfiguration hc = factoryConfig();
+        HierarchyConfiguration hc = factoryConfig('Hierarchy',3, true);
         System.debug(LoggingLevel.ERROR,JSON.serializePretty(hc,false));
         System.assertEquals('Account',hc.getLevel(0).objectType); 
         System.assertEquals('Account',hc.getLevel(1).objectType); 
@@ -223,7 +286,7 @@ public inherited sharing class Hierarchy_Test {
 
     @IsTest
     public static void getLevelNonRecursive() {
-        HierarchyConfiguration hc = factoryConfig();
+        HierarchyConfiguration hc = factoryConfig('Hierarchy',3, true);
         hc.objectLevels[0].recursive = false;
         System.debug(LoggingLevel.ERROR,JSON.serializePretty(hc,false));
         System.assertEquals('Account',hc.getLevel(0).objectType); 
@@ -234,7 +297,7 @@ public inherited sharing class Hierarchy_Test {
     @IsTest
     public static void createAdoptedChildrenStructure() {
 
-        HierarchyConfiguration hc = factoryConfig();
+        HierarchyConfiguration hc = factoryConfig('Hierarchy',3, true);
 
         Account rootAccount = factoryAccount();
         ID rootId = rootAccount.id;

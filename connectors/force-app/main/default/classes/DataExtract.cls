@@ -58,8 +58,6 @@ public inherited sharing class DataExtract {
         // It may be recordId but is may also be higher up under conditions below
         // we may also have no top element, for example if a where clause is used instead
 
-        System.debug('xxxxxx: returnHierarchyTop recordId ' + recordId);
-
         List<Id> topIDs = getTopIds(hc, recordId);
 
         Integer thisLevel = 0;
@@ -114,7 +112,6 @@ public inherited sharing class DataExtract {
             }
         }
 
-        System.debug('xxxxxx: getTopIds topIDs ' + topIDs);
         return topIDs;
     }
 

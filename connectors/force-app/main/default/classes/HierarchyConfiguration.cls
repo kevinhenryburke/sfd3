@@ -38,7 +38,7 @@ public inherited sharing class HierarchyConfiguration  {
         public void setFieldTypes(){
             for (HierarchyConfiguration.FieldConfiguration field : this.fields) {
                 field.fieldType = HierarchyConfiguration.getFieldType(this.objectType, field.api);
-                System.debug('oc.setFieldTypes field.fieldType: ' + this.objectType + '.' + field.api + '=' + field.fieldType);
+                // System.debug('oc.setFieldTypes field.fieldType: ' + this.objectType + '.' + field.api + '=' + field.fieldType);
             }
         }
 
