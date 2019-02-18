@@ -3,7 +3,7 @@ public with sharing class HierarchyBuilder {
 
     }
 
-    // this method initializes the first levels of the chart.
+    // this method returns a list of structure below a top level component
     public static HierarchyStructure retrieveStructureFlat (HierarchyConfiguration hc, List<ID> queryIds) {
 
         // to match hierarchy format, create a top level structure which does not hold elements and baseline queries to it.
@@ -122,6 +122,10 @@ public with sharing class HierarchyBuilder {
             parent.id = parentId;      
 
             createChildStructures(hc, siblings, null, hq.level + 1); // this should map new level nodes to their parents
+
+// Question - why not this....?
+//            createChildStructuresOneParent(hc, siblings, parent, hq.level + 1); // this should map new level nodes to their parents
+
             lisths.add(parent);
         }
 
@@ -181,19 +185,10 @@ public with sharing class HierarchyBuilder {
         HierarchyConfiguration.ObjectConfiguration oc = hc.getLevel(thisLevel);
         List<HierarchyStructure> childStructures = new List<HierarchyStructure>();
 
-        String parentField = oc.getParentFieldApi();
-
         for (sObject s : childObjects) {
-            id parentId;
-            // we need to retrieve or create a parent structure so the front end knows where to place the new elenents
-            HierarchyStructure hsParent;
-            HierarchyStructure hs; 
-
-            hsParent = parent;
-            hs = new HierarchyStructure(null); 
-
+            HierarchyStructure hs = new HierarchyStructure(null); 
+            hs.parent = parent;
             HierarchyStructure.processFieldsToStructure (s, hs, oc.fields);
-            hs.parent = hsParent;
             childStructures.add(hs);
         }
 
