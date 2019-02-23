@@ -30,50 +30,27 @@
 
         if (componentType == "hierarchy.treemappzoom") {
             let datajsonBefore = datajson.children; 
-
-
             let groupingFields = helper.getStore(component, "groupingFields");
-            let numberOfGroupings = groupingFields.length;
-
-            console.log("xxxxx: groupingFields:", groupingFields);
+            let numberOfGroupings = groupingFields.length; // TODO SUPER TEMPORARY
 
             // we use d3.nest to produce the levels and utilize to create a new version of datajson
             let nestData = d3.nest()
             .key(function(d){  
-                console.log("xxxxx: retrievedValue" , d.fields[groupingFields[0].fieldIndex].retrievedValue);
                 return d.fields[groupingFields[0].fieldIndex].retrievedValue;
-            }) // something like this....
-            // .key(function(d){  
-            //     console.log("xxxxx: retrievedValue" , d.fields[3].retrievedValue);
-            //     return d.fields[3].retrievedValue;
-            // }) // something like this....
-            // .key(function(d){  
-            //     return d.fields[3].retrievedValue;
-            // }) // something like this....
-            // .rollup(function(values) { // hm, rollups replace leaf nodes
-            //     return d3.sum(values, function(d) {return +d.fields[0].retrievedInteger; }) 
-            // })
-            .entries(datajsonBefore);
+            }) 
+            if (numberOfGroupings >= 2) {
+                nestData = nestData.key(d => d.fields[groupingFields[1].fieldIndex].retrievedValue);
+            }
+            if (numberOfGroupings >= 3) {
+                nestData = nestData.key(d => d.fields[groupingFields[2].fieldIndex].retrievedValue);
+            }
+
+            nestData = nestData.entries(datajsonBefore);
 
             // Top (Total) level
-            let datajsonAfter = {"name" : "Total"};
-            datajsonAfter["children"] = [];
+            let djSetup = {"name" : "Total", "children" : []};
 
-            var arrayLength = nestData.length;
-            for (var i = 0; i < arrayLength; i++) {
-                console.log("xxxxx: dataPreprocess: outer array", nestData[i]);
-                var innerNest = {"name" : nestData[i].key};
-                innerNest["children"] = [];
-
-                var innerArrayLength = nestData[i]["values"].length;
-                for (var j = 0; j < innerArrayLength; j++) {
-                    innerNest["children"].push(nestData[i]["values"][j]);
-                }
-                datajsonAfter["children"].push(innerNest) ;
-            }            
-
-
-            console.log("xxxxx: dataPreprocess: datajsonAfter", JSON.parse(JSON.stringify(datajsonAfter, null, 2)));
+            let datajsonAfter = helper.nestChildren(djSetup, nestData, numberOfGroupings);
 
             rootAfter = d3.hierarchy(datajsonAfter)
                 .eachBefore(function (d) {

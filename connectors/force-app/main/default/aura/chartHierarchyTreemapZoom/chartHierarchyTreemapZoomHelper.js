@@ -411,4 +411,29 @@ When you click to drill down the same structure is recreated started at the next
     },
 
 
+    nestChildren: function (jsonStructure, nestData, levelsFromBottom) {
+        var _this = this;
+
+        for (var i = 0; i < nestData.length; i++) {
+            let innerArrayLength = nestData[i]["values"].length;
+            let newJsonSegment = {"name" : nestData[i].key};
+            newJsonSegment["children"] = [];
+
+            if (levelsFromBottom > 1) {
+                let nextLevelDown = levelsFromBottom - 1;
+                let childStructureToAdd = _this.nestChildren(newJsonSegment, nestData[i]["values"], nextLevelDown);
+                jsonStructure["children"].push(childStructureToAdd) ;
+            }
+
+            // we have leaf nodes to add
+            if (levelsFromBottom == 1) {
+                for (var j = 0; j < nestData[i]["values"].length; j++) {
+                    newJsonSegment["children"].push(nestData[i]["values"][j]);
+                }
+                jsonStructure["children"].push(newJsonSegment) ;
+            }
+        }           
+        return jsonStructure; 
+    }
+
 })
