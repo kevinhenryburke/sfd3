@@ -161,7 +161,7 @@
             helper.setStore(component, "updateSize", false);
 
             var componentType = component.get("v.componentType");
-            if (componentType != "hierarchy.treemap" && componentType != "hierarchy.treemapzoom"  && componentType != "hierarchy.treemappzoom") {
+            if (componentType != "hierarchy.treemap" && componentType != "hierarchy.treemapzoom"  && componentType != "hierarchy.treemappicklistzoom") {
                 helper.showColorSchemeLegend(component);            
                 helper.setStore(component, "showMeasureValues", true);
             }
@@ -183,7 +183,7 @@
             helper.setStore(component, "updateSize", true);
 
             var componentType = component.get("v.componentType");
-            if (componentType != "hierarchy.treemap" && componentType != "hierarchy.treemapzoom" && componentType != "hierarchy.treemappzoom") {
+            if (componentType != "hierarchy.treemap" && componentType != "hierarchy.treemapzoom" && componentType != "hierarchy.treemappicklistzoom") {
                 helper.showColorSchemeLegend(component);            
                 helper.setStore(component, "showMeasureValues", true);
             }

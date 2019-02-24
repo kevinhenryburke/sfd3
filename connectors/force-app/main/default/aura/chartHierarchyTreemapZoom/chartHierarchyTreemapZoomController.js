@@ -28,10 +28,10 @@
 
         console.log("xxxxx: dataPreprocess: datajson", JSON.parse(JSON.stringify(datajson, null, 2)));
 
-        if (componentType == "hierarchy.treemappzoom") {
+        if (componentType == "hierarchy.treemappicklistzoom") {
             let datajsonBefore = datajson.children; 
             let groupingFields = helper.getStore(component, "groupingFields");
-            let numberOfGroupings = groupingFields.length; // TODO SUPER TEMPORARY
+            let numberOfGroupings = groupingFields.length; 
 
             // we use d3.nest to produce the levels and utilize to create a new version of datajson
             let nestData = d3.nest()
