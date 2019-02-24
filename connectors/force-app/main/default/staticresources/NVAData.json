@@ -1,0 +1,184 @@
+{
+  "nodes":[
+    {
+      "name":"Newcastle",
+      "id":"000000000000000000",
+      "objectType":"Contact",
+      "measures":{
+        "Posts":{
+          "color":"blue",
+          "visible":1
+        },
+        "Hot":{
+          "color":"green",
+          "visible":1
+        }
+      },
+      "fields":[  
+        {  
+          "role":"name",
+          "retrievedValue":"Newcastle",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"name"
+        },
+        {  
+          "role":"size",
+          "retrievedDecimal":12,
+          "fieldType":"CURRENCY",
+          "display":true,
+          "api":"Posts"
+        },
+        {  
+          "role":"size",
+          "retrievedDecimal":9,
+          "fieldType":"CURRENCY",
+          "display":true,
+          "api":"Hot"
+        },
+        {  
+          "role":"id",
+          "retrievedValue":"000000000000000000",
+          "fieldType":"ID",
+          "display":false,
+          "api":"id"
+        },
+        {  
+          "role":"none",
+          "retrievedValue":"Sales Director",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"position"
+        },
+        {  
+          "role":"none",
+          "retrievedValue":"Royal Opera",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"account"
+        }
+      ]    
+    },
+    {
+      "name":"Manchester",
+      "id":"000000000000000001",
+      "objectType":"Contact",
+      "measures":{
+        "Posts":{
+          "color":"blue",
+          "visible":1
+        },
+        "Hot":{
+          "color":"limegreen",
+          "visible":1
+        }
+      },
+      "fields":[  
+        {  
+          "role":"name",
+          "retrievedValue":"Manchester",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"name"
+        },
+        {  
+          "role":"size",
+          "retrievedDecimal":23,
+          "fieldType":"CURRENCY",
+          "display":true,
+          "api":"Posts"
+        },
+        {  
+          "role":"size",
+          "retrievedDecimal":12,
+          "fieldType":"CURRENCY",
+          "display":true,
+          "api":"Hot"
+        },
+        {  
+          "role":"id",
+          "retrievedValue":"000000000000000001",
+          "fieldType":"ID",
+          "display":false,
+          "api":"id"
+        },
+        {  
+          "role":"none",
+          "retrievedValue":"Sales Director",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"position"
+        },
+        {  
+          "role":"none",
+          "retrievedValue":"Royal Opera",
+          "fieldType":"STRING",
+          "display":true,
+          "api":"account"
+        }
+      ]    
+    },
+    {"name":"Birmingham","id":"000000000000000031","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Birmingham","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000031","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Cardiff","id":"000000000000000032","objectType":"Contact","measures":{"Posts":{"color":"red","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Cardiff","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":8,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":19,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000032","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Derby","id":"000000000000000033","objectType":"Contact","measures":{"Posts":{"color":"orange","visible":1},"Hot":{"color":"blue","visible":1}},"fields":[{"role":"name","retrievedValue":"Derby","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":13,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000033","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Exeter","id":"000000000000000034","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"purple","visible":1}},"fields":[{"role":"name","retrievedValue":"Exeter","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":15,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000034","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Fulham","id":"000000000000000035","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Fulham","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":18,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000035","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Grimsby","id":"000000000000000036","objectType":"Contact","measures":{"Posts":{"color":"orange","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Grimsby","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000036","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Halifax","id":"000000000000000037","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Halifax","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":13,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000037","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Inverness","id":"000000000000000038","objectType":"Contact","measures":{"Posts":{"color":"green","visible":1},"Hot":{"color":"purple","visible":1}},"fields":[{"role":"name","retrievedValue":"Inverness","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000038","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Jutland","id":"000000000000000039","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Jutland","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":16,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000039","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Kilmarnock","id":"000000000000000040","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Kilmarnock","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":11,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000040","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+    ,
+    {"name":"Liverpool","id":"000000000000000041","objectType":"Contact","measures":{"Posts":{"color":"blue","visible":1},"Hot":{"color":"green","visible":1}},"fields":[{"role":"name","retrievedValue":"Liverpool","fieldType":"STRING","display":true,"api":"name"},{"role":"size","retrievedDecimal":12,"fieldType":"CURRENCY","display":true,"api":"Posts"},{"role":"size","retrievedDecimal":9,"fieldType":"CURRENCY","display":true,"api":"Hot"},{"role":"id","retrievedValue":"000000000000000041","fieldType":"ID","display":false,"api":"id"},{"role":"none","retrievedValue":"Sales Director","fieldType":"STRING","display":true,"api":"position"},{"role":"none","retrievedValue":"Royal Opera","fieldType":"STRING","display":true,"api":"account"}]}
+  ],
+  "links":[
+    {
+      "id":"100000000000000001",
+      "sourceid":"000000000000000000",
+      "targetid":"000000000000000001",
+      "type":"Social",
+      "createdby":"Kevin Burke",
+      "notes":"worked together at BLW",
+      "stroke":"gray"
+    },
+    {
+      "id":"100000000000000071",
+      "sourceid":"000000000000000000",
+      "targetid":"000000000000000031",
+      "type":"Social",
+      "createdby":"Kevin Burke",
+      "notes":"worked together at BLW",
+      "stroke":"gray"
+    },
+    {"id":"100000000000000072","sourceid":"000000000000000031","targetid":"000000000000000032","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000073","sourceid":"000000000000000031","targetid":"000000000000000033","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000074","sourceid":"000000000000000031","targetid":"000000000000000034","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000075","sourceid":"000000000000000034","targetid":"000000000000000035","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000076","sourceid":"000000000000000034","targetid":"000000000000000036","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000077","sourceid":"000000000000000034","targetid":"000000000000000037","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000078","sourceid":"000000000000000033","targetid":"000000000000000035","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000079","sourceid":"000000000000000033","targetid":"000000000000000038","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000080","sourceid":"000000000000000033","targetid":"000000000000000039","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000081","sourceid":"000000000000000033","targetid":"000000000000000040","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+    ,
+    {"id":"100000000000000082","sourceid":"000000000000000033","targetid":"000000000000000041","type":"Social","createdby":"Kevin Burke","notes":"worked together at BLW","stroke":"gray"}
+  ]
+}

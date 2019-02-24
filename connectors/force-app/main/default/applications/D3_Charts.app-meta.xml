@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <brand>
+        <headerColor>#0070D2</headerColor>
+        <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
+    </brand>
+    <formFactors>Large</formFactors>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+    <label>D3 Charts</label>
+    <navType>Standard</navType>
+    <tabs>D3_HalfWidth_Chart</tabs>
+    <tabs>D3_Network</tabs>
+    <tabs>D3_Pack</tabs>
+    <tabs>D3_TreeMap</tabs>
+    <tabs>D3_CTree</tabs>
+    <tabs>D3_CTree_Opp</tabs>
+    <tabs>D3_TreeMap_Zoom_P</tabs>
+    <tabs>D3_TreeMap_Zoom</tabs>
+    <uiType>Lightning</uiType>
+    <utilityBar>D3_Charts_UtilityBar</utilityBar>
+</CustomApplication>

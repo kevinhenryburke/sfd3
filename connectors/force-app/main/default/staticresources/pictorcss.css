@@ -1,0 +1,87 @@
+/*
+.link {
+  fill: none;
+  stroke-width: 1.5px;
+}
+*/
+
+/*
+#Work {
+  fill: red;
+}
+
+.link.Work {
+}
+
+marker#Work {
+    fill: green;
+}
+marker#Social, marker#Client {
+    fill: black;
+}
+
+.link.Social {
+  stroke-dasharray: 0,2 1;
+}
+*/
+
+/*
+text {
+  font: 10px sans-serif;
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+
+text.shadow {
+    stroke: #fff;
+    stroke-width: 3px;
+    stroke-opacity: .8;
+}
+*/
+
+.d3-tip {
+  line-height: 1;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #000;
+  font: Arial;
+  border: 1px dashed;  
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+body, .container {
+    background-color: white;
+    margin: 0px;
+}
+
+#sidebar {
+    position: absolute;
+    z-index: 2;
+    background-color: #FFF;
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #6895b4;
+    min-height: 3px;
+    min-width: 8px;
+}
+

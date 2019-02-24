@@ -1,0 +1,148 @@
+<aura:component implements="force:hasRecordId,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="DataExtract">
+
+  <ltng:require 
+    scripts="/resource/Berliozjs"
+  />
+
+  <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+
+  <!--declare event fires and hendlers-->  
+  <aura:registerEvent name="evt_bzc" type="c:evt_bzc"/>  
+  <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
+  <aura:handler event="c:evt_sfd3" action="{!c.handleCustomEvent}"/> 
+
+  <aura:attribute name="defaultEventType" type="String" default="Application"/>    
+
+  <aura:method name="callFromContainer" action="{!c.handleCustomEvent}"> 
+      <aura:attribute name="tpc" type="Object"/>    
+  </aura:method>
+
+  <!-- Design Paramters Panel -->
+
+
+  <!-- Technical - Panel -->
+  <!-- Measure is being split into size and color -->
+  <aura:attribute name="panelCurrentColor" type="String"/>    
+  <aura:attribute name="colorsNames" type="String[]"/>    
+  <aura:attribute name="colorSchemes" type="Object[]"/>    
+  <aura:attribute name="panelShowColors" type="Object[]" default="[]" />
+
+  <aura:attribute name="panelCurrentSize" type="String"/>    
+  <aura:attribute name="sizeNames" type="String[]"/>    
+  <aura:attribute name="sizeSchemes" type="Object[]"/>    
+  <aura:attribute name="panelShowSizes" type="Object[]" default="[]" />
+	<aura:attribute name="configuredSizes" type="Boolean" default="false"/>    
+
+	<aura:attribute name="panelPrimaryId" type="String"/> 
+	<aura:attribute name="currentLevels" type="Integer" default="1"/>    
+	<aura:attribute name="maxlevels" type="Integer" default="4"/>    
+
+	<aura:attribute name="filterAPIField" type="String"/> 
+	<aura:attribute name="filterPublish" type="Object"/> 
+
+  <aura:attribute name="showBanner" type="Boolean" default="true"/>       
+
+  <aura:attribute name="selectedRecord" type="sObject" default="{}" description="Stores selected search box record"/>
+  <aura:attribute name="searchTermId" type="String"/> 
+  <aura:attribute name="searchText" type="String" default=""/>
+	<aura:attribute name="searchAction" type="String"/> 
+  <aura:attribute name="configuredAllowSearch" type="Boolean" default="false"/>    
+ 
+  <!-- Design Paramters -->  
+  <aura:attribute name="Title" type="String" />      
+  <aura:attribute name="UserComponentId" type="String" default="" description="If you want charts to only respond to particular controllers on a page then give this controller a name here (unique to the page) and associate it using the Controller Component Id option on the chart"/>    
+
+  <!-- Technical - Chart -->
+
+  <aura:attribute name="componentCategory" type="String" default="Controller"/>    
+	<aura:attribute name="componentType" type="String" default="Controller"/>   <!-- this may move to Design Parameters when we get different types --> 
+	<aura:attribute name="initialized" type="Boolean" default="false"/>    
+  <aura:attribute name="datajson" type="Object" />
+  <aura:attribute name="initEventsQueue" type="Object[]" default="[]" />
+
+  <aura:attribute name="dataFormat" type="String" default=""/>       
+  <aura:attribute name="dataSourceMethod" type="String" default="c.returnUnlinkedData"/>      
+  <aura:attribute name="dataUpdateMethod" type="String" default="c.returnNetworkUpdate"/>      
+
+	<aura:attribute name="configuredLevels" type="Boolean" default="false"/>    
+	<aura:attribute name="configuredFilterTypes" type="Boolean" default="false"/>    
+  <aura:attribute name="configuredAllowRefresh" type="Boolean" default="false"/>    
+  <aura:attribute name="configuredShowTestButtons" type="Boolean" default="false"/>      
+
+  <!-- Technical - Query -->
+  <aura:attribute name="levelsIncreaseOnly" type="Boolean" default="false"/> 
+  <aura:attribute name="autoIncreaseLevels" type="Boolean" default="false"/> 
+  <aura:attribute name="queryLevels" type="Object[]" default="[]"/> 
+  <aura:attribute name="queryLevelIds" type="Object[]" default="[]"/> 
+
+  <aura:attribute name="masterConfig" type="String" default="{}"/>      
+  <aura:attribute name="masterConfigObject" type="Object"/>      
+  
+    <div class="slds">
+      <div class="slds-page-header" role="banner">
+          <aura:if isTrue="{!v.showBanner}">
+            <div class="slds-media">
+              <div class="slds-media__figure">
+                <lightning:icon iconName="action:approval" size="small" alternativeText="Connections"/>
+              </div>
+              <div class="slds-media__body">
+                <div class="slds-grid">
+                  <h1 class="slds-text-heading_medium slds-m-right_small slds-truncate slds-align-middle" title="Record Title">{!v.Title}</h1>
+                </div>
+              </div>
+
+            </div>
+          </aura:if>
+        <div class="slds-grid slds-wrap">
+          <aura:if isTrue="{!v.configuredLevels}">
+            <div class="slds-col slds-size_1-of-4 slds-small-size_1-of-2 slds-medium-size_1-of-3">
+              <div class="slds slds-button-group" role="group">
+                  <aura:if isTrue="{!!v.levelsIncreaseOnly}">                
+                  <c:buttonDynamic aura:id="less" label="Levels -" class="slds-button slds-button_neutral" onclick="{!c.onClickLevelFewer}" disabled="true"></c:buttonDynamic>
+                </aura:if>
+                <!-- <c:buttonDynamic aura:id="displaylevels" label="{!v.currentLevels}" class="slds-button slds-button_brand" disabled="false">1</c:buttonDynamic> -->
+                <c:buttonDynamic aura:id="more" label="Levels +" class="slds-button slds-button_neutral" onclick="{!c.onClickLevelMore}" disabled="false"></c:buttonDynamic>
+              </div>
+            </div>
+          </aura:if>
+          <div class="slds-col slds-size_1-of-4 slds-small-size_1-of-2 slds-medium-size_1-of-3">
+            <aura:if isTrue="{!v.colorsNames.length > 0}">
+                <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuColors }" label="Colors">
+                    <aura:iteration var="action" items="{! v.panelShowColors }">
+                        <lightning:menuItem aura:id="actionMenuMeasureItems" label="{! action }" value="{! action }" checked="{! v.panelCurrentColor == action}"/>
+                    </aura:iteration>
+                </lightning:buttonMenu>
+            </aura:if>
+            <aura:if isTrue="{!v.sizeNames.length > 0}">
+                <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuSizes }" label="Sizes">
+                    <aura:iteration var="action" items="{! v.panelShowSizes }">
+                        <lightning:menuItem aura:id="actionMenuSizeItems" label="{! action }" value="{! action }" checked="{! v.panelCurrentSize == action}"/>
+                    </aura:iteration>
+                </lightning:buttonMenu>
+            </aura:if>
+            <aura:if isTrue="{!v.filterPublish.filterValues.length > 0}">
+              <lightning:buttonMenu alternativeText="Action" onselect="{! c.handleMenuFilter }" label="Filter">
+                  <aura:iteration var="action" items="{! v.filterPublish.filterValues }">
+                  <lightning:menuItem aura:id="actionMenuFilterItems" label="{! action }" value="{! action }" checked="true"/>
+                  </aura:iteration>
+              </lightning:buttonMenu>
+            </aura:if>
+          </div>
+          <aura:if isTrue="{!v.configuredAllowRefresh}">
+            <div class="slds-col slds-size_1-of-4 slds-small-size_1-of-2 slds-medium-size_1-of-3">
+              <div class="slds slds-button-group" role="group">
+                <c:buttonDynamic aura:id="r1" label="Time Refresh" class="slds-button slds-button_brand" onclick="{!c.onClickTimeSeriesRefresh}" disabled="false"></c:buttonDynamic>
+              </div>
+            </div>
+          </aura:if>          
+          <aura:if isTrue="{!v.configuredAllowSearch}">
+            <div class="slds-col slds-size_1-of-4 slds-small-size_1-of-2 slds-medium-size_1-of-3">
+              <c:customLookup aura:id="customLookup" parentUserComponentId="{!v.UserComponentId}" IconName="standard:account" defaultEventType="{!v.defaultEventType}"/>
+            </div>
+          </aura:if>
+        </div>
+      </div>
+    </div>
+
+
+</aura:component>

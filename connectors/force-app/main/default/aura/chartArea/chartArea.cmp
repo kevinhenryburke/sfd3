@@ -1,0 +1,157 @@
+<aura:component implements="force:hasRecordId,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extensible="true" abstract="true">
+
+<!--
+<ltng:require 
+  styles="/resource/pictorcss"
+  scripts="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"
+  afterScriptsLoaded="{!c.afterScriptsLoaded}"
+/>
+-->
+ 
+  <ltng:require 
+  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs)}"
+  afterScriptsLoaded="{!c.afterScriptsLoaded}"
+  />
+
+    
+<!-- if ever need to add a second script then use join syntax
+  scripts="{!join(',',$Resource.jq331,$Resource.d3minjs)}"
+
+  e.g 
+
+<ltng:require 
+  styles="/resource/pictorcss"
+  scripts="{!join(',',$Resource.d3minjs,$Resource.pictorjs)}"
+  afterScriptsLoaded="{!c.afterScriptsLoaded}"
+/>
+-->
+
+<!-- attribute types: 
+  https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/ref_aura_attribute.htm
+
+-->
+
+  <!-- Events and Handlers -->  
+  <aura:registerEvent name="evt_bzc" type="c:evt_bzc"/>
+  <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
+
+  <aura:handler event="c:evt_sfd3" action="{!c.handleCustomEvent}"/>
+
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+  <aura:handler event="aura:doneRendering" action="{!c.doneRendering}"/>
+
+  <aura:attribute name="modalPromise" type="Aura.Action"/>
+  <aura:attribute name="modalShown" type="Boolean" default="false"/>    
+  
+  <aura:attribute name="popoverPanel" type="Aura.Component[]"/>
+
+  <aura:attribute name="masterConfig" type="String" default="{}"/>      
+  <aura:attribute name="masterConfigObject" type="Object"/>      
+
+  <aura:attribute name="cacheObject" type="Object"/>      
+
+
+  <!-- Methods with different implementations for different chart types -->  
+
+  <aura:method name="refreshDataController"> 
+    <aura:attribute name="parameters" type="Object"/> 
+  </aura:method>
+
+  <aura:method name="searchChart"> 
+    <aura:attribute name="searchTermId" type="String"/> 
+    <aura:attribute name="searchAction" type="String"/> 
+    <aura:attribute name="showLevels" type="Integer"/> 
+  </aura:method>
+
+  <aura:method name="reScale"> 
+    <aura:attribute name="ChartScaleFactor" type="Decimal"/> 
+  </aura:method>
+
+  <aura:method name="refreshVisibility"> 
+  </aura:method>
+
+  <aura:method name="styleNodes"> 
+  </aura:method>
+
+  <aura:method name="getDefaultSize"> 
+  </aura:method>
+
+  <aura:method name="getDefaultColor"> 
+  </aura:method>
+
+  <aura:method name="initializeVisuals"/> 
+
+  <aura:method name="dataPreprocess"> 
+    <aura:attribute name="datajson" type="Object"/>    
+    <aura:attribute name="datajsonRefresh" type="Object"/>    
+  </aura:method>
+
+  <aura:method name="callFromContainer" action="{!c.handleCustomEvent}"> 
+      <aura:attribute name="tpc" type="Object"/>    
+  </aura:method>
+
+  <aura:attribute name="storeObject" type="Object"/> 
+
+  <!-- Design Paramters -->  
+  <aura:attribute name="UserComponentId" type="String" default="" description="If putting more than one chart on a page then this provides users with a mechanism to set their own for mapping purposes"/>    
+  <aura:attribute name="UserControllerComponentId" type="String" default="" description="If we want to restrict to a particular controller on the page then put the name here that you used as the Component Id of the Controller. Otherwise all controllers will act on this chart"/>    
+  <aura:attribute name="hasPrimaryNode" type="Boolean" default="false" description="Determines if the chart has a primary node"/>    
+  <aura:attribute name="showLevelsInitial" type="Integer" default="1"/>   
+  <aura:attribute name="Title" type="String" default=""/>       
+  <aura:attribute name="componentType" type="String" default="Chart"/>    
+  <aura:attribute name="showZoomSlider" type="Boolean" default="false"/>    
+  
+  <!-- Technical - Chart -->
+  <!-- need to accessed or set before all libraries may be available -->
+  <aura:attribute name="componentCategory" type="String" default="Display"/>    
+  <aura:attribute name="componentReference" type="String"/> 
+  <aura:attribute name="chartAreaDivId" type="String" default="" description="If putting more than one chart on a page need to provide unique ids for the chart components"/>    
+	<aura:attribute name="scriptsLoaded" type="Boolean" default="false"/>    
+  <aura:attribute name="defaultEventType" type="String" default="Application"/>    
+
+	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
+  
+  <!-- Required for flexible layouts -->
+  <aura:attribute name="flexiWidth" type="String"/>
+  <lightning:flexipageRegionInfo width="{!v.flexiWidth}"/>
+
+  <!-- Popover configuration -->
+	<aura:attribute name="allowPopover" type="Boolean" default="false"/>    
+
+  <!-- Slider configuration -->
+  <aura:attribute name="ChartScaleFactorPercentage" type="Integer" default="100"/> 
+
+
+  <body class="bodycontainer" style="background-color: white;">
+<!-- 8792 {!v.flexiWidth} {!v.chartAreaDivId} {!v.componentReference} {!v.UserComponentId} -->
+
+<!-- to pass in stuff from a sub component use {!v.body}  see https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/oo_cmp_attributes.htm   -->
+
+
+    <aura:if isTrue="{!v.Title != ''}">{!v.Title}</aura:if> 
+
+    <aura:if isTrue="{!v.showZoomSlider == true}">
+      <div class="slds-m-left_large">
+          <!-- hide label via variant="label-hidden" -->
+          <lightning:slider size="small" label="Zoom" variant="label-hidden" step="10" min="50" max="120" value="{!v.ChartScaleFactorPercentage}" onchange="{! c.handleScaleChange }"/>
+      </div>
+    </aura:if>
+      
+      <div class="c-container" id="container1" aura:id="container1" >
+          <lightning:layout horizontalAlign="space" verticalAlign="end">
+              <lightning:layoutItem flexibility="grow" padding="around-small" size="12">
+<!--                 Mechanism for tooltips is based on https://bl.ocks.org/d3noob/257c360b3650b9f0a52dd8257d7a2d73
+                The tooltip exists as a position : absolute div that is moved around when a path is moused over
+                Note that we need to use the Lightning method of defining absolute position or the box can appear relative to the page itself
+ -->                
+                <div class="slds-is-absolute">
+                  <div id="{!v.componentReference + 'pathToolTip'}" class="pathToolTip"></div>
+                </div>
+                <div id="{!v.chartAreaDivId}" aura:id="{!v.chartAreaDivId}" class="chartarea"></div>
+                  <!-- <div id="nodeToolTip" class="nodeToolTip"></div> -->
+              </lightning:layoutItem>
+            </lightning:layout>
+      </div>
+</body>
+
+</aura:component>

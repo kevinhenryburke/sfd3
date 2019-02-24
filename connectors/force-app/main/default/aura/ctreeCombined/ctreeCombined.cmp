@@ -1,0 +1,58 @@
+<aura:component implements="force:hasRecordId,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes">
+
+  <ltng:require 
+    scripts="/resource/Berliozjs"
+  />
+ 
+  <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+  
+  <!-- Events and Handlers -->  
+  <aura:handler name="evt_bzc" event="c:evt_bzc" action="{!c.handleCustomEvent}"/>   
+
+  <aura:attribute name="masterConfig" type="String" default="{}"/>      
+  <aura:attribute name="masterConfigObject" type="Object"/>      
+
+
+  <!-- DISPLAY PANELS -->
+
+  <aura:attribute name="showTopPanel" type="Boolean" default="true"/>      
+
+  <!-- DISPLAY FEATURES - GENERAL -->
+
+  <aura:attribute name="Title" type="String" />      
+
+  <!-- DISPLAY FEATURES - HIERARCHY -->
+
+  <!-- DISPLAY FEATURES - NETWORK -->
+
+  <aura:attribute name="showPathToolTip" type="Boolean" default="false"/>    
+  <aura:attribute name="nodestrokewidth" type="String" default="0.5px"/>    
+  
+  <c:dataControlPanel aura:id = "dataControlPanel"
+    defaultEventType = "Component"
+    recordId = "{!v.recordId}"
+    Title = "{!v.Title}" 
+    UserComponentId = "Controller"  
+    masterConfig = "{!v.masterConfig}"  
+    />
+
+  <!-- Card Display Parameters-->
+
+  <aura:if isTrue="{!v.showTopPanel}">
+    <c:panelDisplay aura:id = "panelDisplay" 
+      defaultEventType = "Component"
+      Controller = "Controller"
+      masterConfig = "{!v.masterConfig}"  
+    />
+  </aura:if>
+
+  <c:chartHierarchy aura:id="chartHierarchy"
+    defaultEventType = "Component"
+    componentType = "hierarchy.ctree"
+    UserComponentId = "Hierarchy"
+    UserControllerComponentId = "Controller"
+    Title = "{!v.Title}"
+    masterConfig = "{!v.masterConfig}"  
+    />
+
+</aura:component>

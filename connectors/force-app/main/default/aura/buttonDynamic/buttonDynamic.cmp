@@ -1,0 +1,15 @@
+<aura:component >
+
+    <aura:attribute name="id" type="String"/>
+    <aura:attribute name="label" type="String"/>
+    <aura:attribute name="onclick" type="String"/>
+    <aura:attribute name="class" type="String"/>
+    <aura:attribute name="disabled" type="Boolean" default="false"/>
+    <aura:attribute name="show" type="Boolean" default="true"/>
+    
+    <!-- not sure why using aura:id as v.id does not work here -->
+
+    <aura:if isTrue="{!v.show}">
+        <lightning:button aura:id="{!v.id}" class="{!v.class}" onclick="{!v.onclick}" disabled="{!v.disabled}">{!v.label}</lightning:button>
+    </aura:if>
+</aura:component>

@@ -1,0 +1,8 @@
+<aura:event type="APPLICATION">
+    <aura:attribute name="topic" type="String" description="Topic"/>
+    <aura:attribute name="publisher" type="String" description="Component Id of the component creating this event"/>
+    <aura:attribute name="publisherCategory" type="String" description="High level Component Category of the component creating this event, e.g. Controller, Display"/>
+    <aura:attribute name="publisherType" type="String" description="Component Type of the component creating this event"/>
+    <aura:attribute name="controller" type="String" description="Chart elements can have a specified controller, in which case its configured Component Id is populated here"/>
+    <aura:attribute name="parameters" type="String" description="a JSON formatted parameter, name/value pairs"/>
+</aura:event>

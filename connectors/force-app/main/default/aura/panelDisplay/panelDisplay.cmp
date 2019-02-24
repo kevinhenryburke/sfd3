@@ -1,0 +1,134 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="DataExtract">
+
+    <ltng:require scripts="/resource/Berliozjs" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+
+    <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
+    <aura:handler event="c:evt_sfd3" action="{!c.handleCustomEvent}"/> 
+
+    <aura:method name="callFromContainer" action="{!c.handleCustomEvent}"> 
+        <aura:attribute name="tpc" type="Object"/>    
+    </aura:method>      
+      
+    <aura:attribute name="defaultEventType" type="String" default="APPLICATION"/>    
+
+    <lightning:overlayLibrary aura:id="overlayLib"/>
+
+
+    <!-- Master Config -->  
+    <aura:attribute name="masterConfig" type="String" default="{}"/>      
+    <aura:attribute name="masterConfigObject" type="Object"/>      
+
+    <!-- Design Paramters -->  
+    <aura:attribute name="Controller" type="String" default="" description="If you want this card to respond to a particular controller on a page then put the controller's configured name here (unique to the page)"/>    
+    <aura:attribute name="objectIcons" type="String" default="{}"/>    
+    <aura:attribute name="extractedDisplayValues" type="String[]" default="['No node selected']"/>    
+    <aura:attribute name="layoutStyle" type="String" default="card"/>    
+    <aura:attribute name="objectType" type="String" default=""/>    
+
+    <!-- Design Paramters Panel -->
+    <aura:attribute name="card1" type="String" default="No node selected"/>    
+
+    <aura:attribute name="recordId" type="String" default=""/>    
+    <aura:attribute name="iconName" type="String" default="standard:account"/>    
+    <aura:attribute name="hostUserControllerComponentId" type="String" default="" description="If this component is embedded in a chart, this is the controller of the host"/>    
+    <aura:attribute name="hostComponentReference" type="String" default="" description="If this component is embedded in a chart, this is the name of the host"/>    
+    <aura:attribute name="isHosted" type="Boolean" default="false" description="If this component is embedded in a chart, then this is set to true"/>    
+
+    <aura:attribute name="isDVisible" type="Boolean" default="false" />
+    <aura:attribute name="iconA" type="String" default="utility:chevrondown"/>    
+    <aura:attribute name="iconB" type="String" default="utility:chevronright"/>    
+    <aura:attribute name="iconC" type="String" default="utility:chevronright"/>    
+
+    <!-- passed into modal layout, may not be needed as attributes but potentially could be useful to pass in -->
+    <aura:attribute name="layoutType" type="String" default="Compact"/>    
+    <aura:attribute name="mode" type="String"/>    
+
+    <div class="slds">
+    
+    <aura:if isTrue="{!v.layoutStyle == 'card'}"> 
+        <lightning:card aura:id="detailcard" title="{!v.card1}" iconName="{!v.iconName}">
+            <div class="c-container">
+                <lightning:layout horizontalAlign="space" verticalAlign="stretch">
+
+                <lightning:layoutItem flexibility="auto" padding="around-small">
+                        <a href = "" onclick = "{!c.navigateToRecord}">{!v.card1}</a>
+                    </lightning:layoutItem>
+                    <aura:iteration items="{!v.extractedDisplayValues}" var="item">
+                        <lightning:layoutItem flexibility="auto" padding="around-small">
+                            {!item}
+                        </lightning:layoutItem>
+                    </aura:iteration>
+                </lightning:layout>
+            </div>
+        </lightning:card>  
+    </aura:if>
+
+    <aura:if isTrue="{!v.layoutStyle == 'cardTile'}">
+            <lightning:card variant="Narrow" aura:id="detailcard" title="{!v.card1}" iconName="{!v.iconName}" class="slds-truncate slds-text-body_regular">
+                <aura:set attribute="actions">
+                    <lightning:buttonIcon iconName="utility:close" variant="bare" onclick="{! c.handleClose }" alternativeText="Close" />
+                </aura:set>
+                <div class="slds-section slds-is-open">
+                    <h3 class="slds-section__title">
+                        <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                            <lightning:buttonIcon aura:id="iconA" iconName="{!v.iconA}" variant="bare" onclick="{! c.handleExpandA }" alternativeText="Expand" />
+                            <span class="slds-truncate slds-text-body_regular" title="Section Title">Details</span>
+                        </button>
+                    </h3>
+                    <div class="slds-section__content slds-show" aura:id="expandA">
+                        <lightning:layout multipleRows="true" verticalAlign="stretch">
+                            <lightning:layoutItem size="6" padding="around-small" class="slds-text-body_small">
+                                <a href = "" onclick = "{!c.navigateToRecord}">{!v.card1}</a>
+                            </lightning:layoutItem>
+                            <aura:iteration items="{!v.extractedDisplayValues}" var="item">
+                                <lightning:layoutItem size="6" padding="around-small">
+                                    {!item}
+                                </lightning:layoutItem>
+                            </aura:iteration>
+                        </lightning:layout>
+                    </div>
+                </div>
+                <div class="slds-section slds-is-open">
+                    <h3 class="slds-section__title">
+                        <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                            <lightning:buttonIcon aura:id="iconB" iconName="{!v.iconB}" variant="bare" onclick="{! c.handleExpandB }" alternativeText="Expand" />
+                            <span class="slds-truncate slds-text-body_regular" title="Section Title">Options</span>
+                        </button>
+                    </h3>
+                    <div class="slds-section__content slds-hide" aura:id="expandB">
+                        <lightning:layout horizontalAlign="space">
+                            <lightning:layoutItem flexibility="auto" padding="around-small">
+                                <lightning:button onclick="{!c.navigateToRecord}" label="Go to Record" class="slds-button slds-button_neutral slds-text-body_regular"/>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem flexibility="auto" padding="around-small">
+                                <lightning:button onclick="{!c.navigateToRecord}" label="Go to Parent" class="slds-button slds-button_neutral slds-text-body_regular"/>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+                </div>
+                <div class="slds-section slds-is-open">
+                        <h3 class="slds-section__title">
+                            <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action">
+                                <lightning:buttonIcon aura:id="iconC" iconName="{!v.iconC}" variant="bare" onclick="{! c.handleExpandC }" alternativeText="Expand" />
+                                <span class="slds-truncate slds-text-body_regular" title="Section Title">View and Edit</span>
+                            </button>
+                        </h3>
+                        <div class="slds-section__content slds-hide" aura:id="expandC">
+                            <lightning:layout horizontalAlign="space">
+                                <lightning:layoutItem flexibility="auto" padding="around-small">
+                                    <lightning:button onclick="{!c.handleShowModalView}" label="View" class="slds-button slds-button_neutral slds-text-body_regular"/>
+                                </lightning:layoutItem>
+                                <lightning:layoutItem flexibility="auto" padding="around-small">
+                                    <lightning:button onclick="{!c.handleShowModalEdit}" label="Edit" class="slds-button slds-button_neutral slds-text-body_regular"/>
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </div>
+                    </div>
+                </lightning:card>
+        </aura:if>
+    </div>
+
+
+</aura:component>

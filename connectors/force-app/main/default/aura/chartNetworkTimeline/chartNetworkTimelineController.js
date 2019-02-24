@@ -1,0 +1,60 @@
+({
+    refreshDataController: function(component,event,helper){
+        bzutils.log("calling the aura:method refreshDataController in chartNetworkTimeline");
+        var args = event.getParam("arguments");
+        var parameters = args.parameters;
+
+        var datajson = parameters.datajson;
+        var primaryId = parameters.primaryId;
+        var showFilters = parameters.showFilters;
+
+        // THIS ALL TEMPORARY FOR TIME-BASED CHARTS
+
+        var valueDate = parameters["valueDate"];
+        if (valueDate != null) {
+            component.set("v.Title", parameters["valueDate"] );
+        }
+
+        helper.refreshDataHelper(component, datajson, primaryId, showFilters);                         
+    },
+
+    dataPreprocess: function(component,event,helper){
+        console.log("calling the aura:method dataPreprocess in chartNetworkTimeline");
+
+        var args = event.getParam("arguments");
+        var datajsonBefore = args.datajson;
+        var datajsonRefresh = args.datajsonRefresh;
+
+        for (var i = 0; i < datajsonBefore.nodes.length; i++){
+            var djnodeBefore = datajsonBefore.nodes[i];
+            var fieldsBefore = djnodeBefore.fields;
+            var djnodeAfter = datajsonRefresh.nodes[i];
+            var fieldsAfter = djnodeAfter.fields;
+            for (var j = 0; j < fieldsBefore.length; j++) {
+                if (fieldsBefore[j].retrievedDecimal != null) {
+                    fieldsBefore[j].retrievedDecimal = fieldsAfter[j].retrievedDecimal;
+                }
+                if (fieldsBefore[j].retrievedInteger != null) {
+                    fieldsBefore[j].retrievedInteger = fieldsAfter[j].retrievedInteger;
+                }
+            }
+        }    
+        helper.setCache (component, "datajson", datajsonBefore ) ;
+
+    },
+
+    getDefaultSize: function(component,event,helper){
+        // console.log("aura:method getDefaultSize in chartNetworkTimeline enter");
+        // console.log("aura:method getDefaultSize in chartNetworkTimeline exit");
+        return 20;
+    },
+
+    getDefaultColor: function(component,event,helper){
+        // console.log("aura:method getDefaultColor in chartNetworkTimeline enter");
+        // console.log("aura:method getDefaultColor in chartNetworkTimeline exit");
+        return "lightsteelblue";
+    }
+
+
+
+})
