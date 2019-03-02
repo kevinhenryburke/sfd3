@@ -807,6 +807,57 @@
 
 
         console.log("aura:method refreshVisibility in subcomponent exit");
+    },
+
+    nestChildren: function (jsonStructure, nestData, levelsFromBottom) {
+        var _this = this;
+
+        for (var i = 0; i < nestData.length; i++) {
+            let innerArrayLength = nestData[i]["values"].length;
+            let newJsonSegment = {"name" : nestData[i].key};
+            newJsonSegment["children"] = [];
+
+            if (levelsFromBottom > 1) {
+                let nextLevelDown = levelsFromBottom - 1;
+                let childStructureToAdd = _this.nestChildren(newJsonSegment, nestData[i]["values"], nextLevelDown);
+                jsonStructure["children"].push(childStructureToAdd) ;
+            }
+
+            // we have leaf nodes to add
+            if (levelsFromBottom == 1) {
+                for (var j = 0; j < nestData[i]["values"].length; j++) {
+                    newJsonSegment["children"].push(nestData[i]["values"][j]);
+                }
+                jsonStructure["children"].push(newJsonSegment) ;
+            }
+        }           
+        return jsonStructure; 
+    },
+
+    picklistNest : function (component, datajson) {
+        var _this = this;
+
+        let groupingFields = _this.getStore(component, "groupingFields");
+        let numberOfGroupings = groupingFields.length; 
+
+        // we use d3.nest to produce the levels and utilize to create a new version of datajson
+        let nestData = d3.nest()
+            .key(function(d){  
+                return d.fields[groupingFields[0].fieldIndex].retrievedValue;
+            }) 
+            if (numberOfGroupings >= 2) {
+                nestData = nestData.key(d => d.fields[groupingFields[1].fieldIndex].retrievedValue);
+            }
+            if (numberOfGroupings >= 3) {
+                nestData = nestData.key(d => d.fields[groupingFields[2].fieldIndex].retrievedValue);
+            }
+
+        nestData = nestData.entries(datajson.children);
+
+        // Top (Total) level
+        let djSetup = {"name" : "Total", "children" : []};
+
+        return _this.nestChildren(djSetup, nestData, numberOfGroupings);
     }
 
 })

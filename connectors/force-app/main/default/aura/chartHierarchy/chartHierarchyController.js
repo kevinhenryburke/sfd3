@@ -7,6 +7,7 @@
         helper.initializeVisuals(component);                         
     },
 
+    // dataPreprocess works by resetting datajson value in Cache
     dataPreprocess: function(component,event,helper){
         console.log("calling the aura:method dataPreprocess in subcomponent");
     },
