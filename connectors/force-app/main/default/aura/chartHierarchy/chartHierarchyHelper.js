@@ -807,6 +807,6 @@
 
 
         console.log("aura:method refreshVisibility in subcomponent exit");
-    },
+    }
 
 })

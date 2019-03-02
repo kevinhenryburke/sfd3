@@ -21,10 +21,11 @@
 
     dataPreprocess: function(component,event,helper){
         console.log("calling the aura:method dataPreprocess in chartHierarchyTreemapZoom");
-        let componentType = component.get("v.componentType");
         let args = event.getParam("arguments");
-        let rootAfter;
         let datajson = args.datajson; 
+
+        let componentType = component.get("v.componentType");
+        let rootAfter;
 
         console.log("xxxxx: dataPreprocess: datajson", JSON.parse(JSON.stringify(datajson, null, 2)));
 
