@@ -19,21 +19,4 @@
         return "lightsteelblue";
     },    
 
-    dataPreprocess: function(component,event,helper){
-        console.log("calling the aura:method dataPreprocess in chartHierarchyTreemapZoom");
-        let args = event.getParam("arguments");
-        let datajson = args.datajson; 
-
-        let componentType = component.get("v.componentType");
-
-        let groupingFields = helper.getStore(component, "groupingFields");
-
-        // console.log("xxxxx: dataPreprocess: datajson", JSON.parse(JSON.stringify(datajson, null, 2)));
-
-        if (groupingFields.length > 0) {
-            datajson = helper.picklistNest(component, datajson);
-        }
-        helper.setCache (component, "datajson", datajson ) ;    
-    }
-
 })
