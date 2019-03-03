@@ -40,7 +40,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>componentType</name>
-                <value>hierarchy.treemappicklistzoom</value>
+                <value>hierarchy.treemapzoom</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>hasPrimaryNode</name>

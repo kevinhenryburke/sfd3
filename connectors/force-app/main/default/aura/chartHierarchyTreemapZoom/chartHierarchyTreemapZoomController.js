@@ -26,9 +26,11 @@
 
         let componentType = component.get("v.componentType");
 
-        console.log("xxxxx: dataPreprocess: datajson", JSON.parse(JSON.stringify(datajson, null, 2)));
+        let groupingFields = helper.getStore(component, "groupingFields");
 
-        if (componentType == "hierarchy.treemappicklistzoom") {
+        // console.log("xxxxx: dataPreprocess: datajson", JSON.parse(JSON.stringify(datajson, null, 2)));
+
+        if (groupingFields.length > 0) {
             datajson = helper.picklistNest(component, datajson);
         }
         helper.setCache (component, "datajson", datajson ) ;    
