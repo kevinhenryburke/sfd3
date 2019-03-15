@@ -17,6 +17,11 @@
 		var width = _this.getCache (component, "width") ;  
         var height = _this.getCache (component, "height") ; 
 
+        var cc = component.getConcreteComponent();
+        // dataPreprocess will set datajson in cache
+        cc.dataPreprocess(datajson);
+        datajson = _this.getCache (component, "datajson") ;  
+
         /* tree specification */
         
         var tree = d3.tree().size([height, width]);
@@ -33,6 +38,7 @@
         }
 
         _this.setCache (component, "root", root ) ;
+
         _this.update(component, nodeGroup, pathGroup, componentReference, root, false);
 
         // Push out an initial message to highlight the root node to display panels
@@ -132,6 +138,7 @@
         });
 
 
+console.log("xxxxx 1: " );
     
 
         // ****************** Nodes section ***************************
@@ -140,14 +147,23 @@
         
         var node = nodeGroup.selectAll('g.treenode') // note: notation g.treenode means it has both g and treenode classes
             .data(nodes, function(d) {   
-                return d.id || (d.id = _this.addComponentRef(componentReference, d.data.id));
+                let retVal = d.id; 
+                if (retVal != null ) {
+                    return retVal;
+                }
+                if (retVal == null && d.data.id != null) {
+                    d.id = _this.addComponentRef(componentReference, d.data.id);
+                    return d.id;
+                }
+                d.id = _this.addComponentRef(componentReference, "000000000000000000");
+                return d.id;
             });  
-            
+
         // Enter any new modes at the parent's previous position.
         var nodeEnter = node.enter().append('g')
             .attr("class", function(d) {
                 var classes = 'treenode ' + d.id;
-                if (d.data.name.length < 5) {
+                if (d.data.name == null || d.data.name.length < 5) {
                     classes += " shortname";
                 }
                 else {
@@ -190,7 +206,6 @@
                 _this.publishPreppedEvent(component,preppedEvent);
             }))
 			;
-
 
         // Add Circle for the nodes
         nodeEnter.append('circle')
@@ -272,7 +287,7 @@
                 return "-1.35em";
             })
             ;
-      
+
         // UPDATE
         var nodeUpdate = nodeEnter.merge(node);
       
@@ -808,5 +823,56 @@
 
         console.log("aura:method refreshVisibility in subcomponent exit");
     },
+
+    nestChildren: function (jsonStructure, nestData, levelsFromBottom) {
+        var _this = this;
+
+        for (var i = 0; i < nestData.length; i++) {
+            let innerArrayLength = nestData[i]["values"].length;
+            let newJsonSegment = {"name" : nestData[i].key};
+            newJsonSegment["children"] = [];
+
+            if (levelsFromBottom > 1) {
+                let nextLevelDown = levelsFromBottom - 1;
+                let childStructureToAdd = _this.nestChildren(newJsonSegment, nestData[i]["values"], nextLevelDown);
+                jsonStructure["children"].push(childStructureToAdd) ;
+            }
+
+            // we have leaf nodes to add
+            if (levelsFromBottom == 1) {
+                for (var j = 0; j < nestData[i]["values"].length; j++) {
+                    newJsonSegment["children"].push(nestData[i]["values"][j]);
+                }
+                jsonStructure["children"].push(newJsonSegment) ;
+            }
+        }           
+        return jsonStructure; 
+    },
+
+    picklistNest : function (component, datajson) {
+        var _this = this;
+
+        let groupingFields = _this.getStore(component, "groupingFields");
+        let numberOfGroupings = groupingFields.length; 
+
+        // we use d3.nest to produce the levels and utilize to create a new version of datajson
+        let nestData = d3.nest()
+            .key(function(d){  
+                return d.fields[groupingFields[0].fieldIndex].retrievedValue;
+            }) 
+            if (numberOfGroupings >= 2) {
+                nestData = nestData.key(d => d.fields[groupingFields[1].fieldIndex].retrievedValue);
+            }
+            if (numberOfGroupings >= 3) {
+                nestData = nestData.key(d => d.fields[groupingFields[2].fieldIndex].retrievedValue);
+            }
+
+        nestData = nestData.entries(datajson.children);
+
+        // Top (Total) level
+        let djSetup = {"name" : "Total", "children" : []};
+
+        return _this.nestChildren(djSetup, nestData, numberOfGroupings);
+    }
 
 })

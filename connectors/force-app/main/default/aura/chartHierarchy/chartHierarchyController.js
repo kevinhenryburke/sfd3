@@ -7,8 +7,17 @@
         helper.initializeVisuals(component);                         
     },
 
+    // dataPreprocess works by resetting datajson value in Cache
     dataPreprocess: function(component,event,helper){
-        console.log("calling the aura:method dataPreprocess in subcomponent");
+        console.log("calling the aura:method dataPreprocess in chartHierarchyController");
+        let args = event.getParam("arguments");
+        let datajson = args.datajson; 
+        let groupingFields = helper.getStore(component, "groupingFields");
+
+        if (groupingFields.length > 0) {
+            datajson = helper.picklistNest(component, datajson);
+            helper.setCache (component, "datajson", datajson ) ;    
+        }
     },
 
     refreshDataController: function(component,event,helper){
