@@ -21,6 +21,7 @@ aaa.runScripts(9);
 
     List<Account> la = new List<Account>();
 
+/*
     private void nextLevel () {
         insert la;
         las.add(la);
@@ -533,5 +534,69 @@ aaa.runScripts(9);
         o=new Opportunity(Name='2019 Q4 Renewal', StageName='Closed Lost', Amount=5827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,9,30);insert o;
     }
 
+    // THIS METHOD EVENS OUT MANAGERS FOR DEMOS ONLY!! Adds in managers if using SDO
+
+    public static void addManagers () {
+        Map<Id,Integer> manLevels = new Map<Id,Integer>();
+        Set<Id> manIds = new Set<Id>();
+        List<Id> manIdsList = new List<Id>();
+        Map<Integer,List<User>> levels = new Map<Integer,List<User>>();
+
+
+        List<User> listMan =
+            [select id, ManagerId from User where usertype = 'Standard' and ManagerId != null];
+
+        Integer hierLevel = 1;
+
+        for(User userMan : listMan ) {
+            // these are managers
+            manLevels.put(userMan.ManagerId, hierLevel);
+            manIds.add(userMan.ManagerId);
+            manIdsList.add(userMan.ManagerId);
+        }
+
+        // These guys need to be assigned managers
+        List<User> nonManagersWithNoManagers =
+            [select id, ManagerId from User where usertype = 'Standard' and ManagerId = null and Id NOT IN :manIds];
+
+        while (manIds.size() > 1) {
+            hierLevel++;
+            listMan =
+                [select id, ManagerId from User where usertype = 'Standard' and Id IN :manIds];
+            
+            manIds = new Set<Id>();
+            for(User userMan : listMan ) {
+                if (userMan.ManagerId != null) {
+                    // these are hierarchy managers
+                    manLevels.put(userMan.ManagerId, hierLevel);
+                    manIds.add(userMan.ManagerId);            
+                    manIdsList.add(userMan.ManagerId);            
+                }
+            }        
+        }
+
+        System.debug(manLevels);
+
+        // Simple for now - just add these guys into levels
+
+        Integer manIdsSize = manIds.size();
+
+        for (Integer i = 0; i < nonManagersWithNoManagers.size(); i++ ) {
+            
+        //    Double dEmployees = math.random() * manIdsSize;
+        //    Integer randomManager = dEmployees.intValue();
+
+            Integer randomManager = Math.mod(i ,manIdsList.size());     
+            System.debug(randomManager);
+            
+            nonManagersWithNoManagers[i].ManagerId = manIdsList[randomManager];
+        }
+
+        update nonManagersWithNoManagers;
+
+
+
+    }
+*/
 
 }
