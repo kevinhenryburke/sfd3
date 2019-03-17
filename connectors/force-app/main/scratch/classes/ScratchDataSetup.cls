@@ -1,14 +1,15 @@
-public inherited sharing class AAATestData {
+
+public inherited sharing class ScratchDataSetup {
 
 /* In Execute Anonymous run, sequentially
 
-AAATestData aaa = new AAATestData();
+ScratchDataSetup aaa = new ScratchDataSetup();
 aaa.insertData(1);
 
-AAATestData aaa = new AAATestData();
+ScratchDataSetup aaa = new ScratchDataSetup();
 aaa.insertOpportunities();
 
-AAATestData aaa = new AAATestData();
+ScratchDataSetup aaa = new ScratchDataSetup();
 aaa.runScripts(9);
 
 */
@@ -21,7 +22,7 @@ aaa.runScripts(9);
 
     List<Account> la = new List<Account>();
 
-/*
+
     private void nextLevel () {
         insert la;
         las.add(la);
@@ -594,9 +595,6 @@ aaa.runScripts(9);
 
         update nonManagersWithNoManagers;
 
-
-
     }
-*/
 
 }

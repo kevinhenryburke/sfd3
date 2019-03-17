@@ -7,9 +7,12 @@ declare module "@salesforce/apex/DataExtract.returnNetworkUpdate" {
 declare module "@salesforce/apex/DataExtract.returnUnlinkedData" {
   export default function returnUnlinkedData(param: {queryJSON: any, recordId: any}): Promise<any>;
 }
+declare module "@salesforce/apex/DataExtract.returnHierarchyFlat" {
+  export default function returnHierarchyFlat(param: {queryJSON: any, recordId: any}): Promise<any>;
+}
 declare module "@salesforce/apex/DataExtract.returnHierarchyTop" {
   export default function returnHierarchyTop(param: {queryJSON: any, recordId: any}): Promise<any>;
 }
-declare module "@salesforce/apex/DataExtract.returnHierarchyLevels" {
-  export default function returnHierarchyLevels(param: {queryJSON: any, queryLevelIds: any, queryLevel: any}): Promise<any>;
+declare module "@salesforce/apex/DataExtract.returnHierarchyUpdate" {
+  export default function returnHierarchyUpdate(param: {queryJSON: any, queryLevelIds: any, queryLevel: any}): Promise<any>;
 }
