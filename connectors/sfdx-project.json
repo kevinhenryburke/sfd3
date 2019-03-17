@@ -13,6 +13,13 @@
             "versionName": "ver 0.1",
             "versionNumber": "0.1.0.NEXT",
             "default": false
+        },
+        {
+            "path": "force-app",
+            "package": "Berlioz Full02",
+            "versionName": "ver 0.1",
+            "versionNumber": "0.1.0.NEXT",
+            "default": false
         }
     ],
     "namespace": "",
@@ -22,6 +29,9 @@
         "Berlioz Full": "0HoB0000000PAyMKAW",
         "Berlioz Full@0.1.0-1": "04tB0000000TuZyIAK",
         "Berlioz Full01": "0HoB0000000PAyRKAW",
-        "Berlioz Full01@0.1.0-1": "04tB0000000Tua8IAC"
+        "Berlioz Full01@0.1.0-1": "04tB0000000Tua8IAC",
+        "Berlioz Full02": "0HoB0000000Kz8gKAC",
+        "Berlioz Full02@0.1.0-1": "04tB0000000YPF5IAO",
+        "Berlioz Full02@0.1.0-2": "04tB0000000YPFPIA4"
     }
 }
