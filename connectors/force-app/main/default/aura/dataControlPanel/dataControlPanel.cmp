@@ -1,4 +1,4 @@
-<aura:component implements="force:hasRecordId,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="DataExtract">
+<aura:component implements="force:hasRecordId,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="DataExtract"  access="global">
 
   <ltng:require 
     scripts="/resource/Berliozjs"
@@ -22,61 +22,61 @@
 
   <!-- Technical - Panel -->
   <!-- Measure is being split into size and color -->
-  <aura:attribute name="panelCurrentColor" type="String"/>    
-  <aura:attribute name="colorsNames" type="String[]"/>    
-  <aura:attribute name="colorSchemes" type="Object[]"/>    
-  <aura:attribute name="panelShowColors" type="Object[]" default="[]" />
+  <aura:attribute name="panelCurrentColor" access="global" type="String"/>    
+  <aura:attribute name="colorsNames" access="global" type="String[]"/>    
+  <aura:attribute name="colorSchemes" access="global" type="Object[]"/>    
+  <aura:attribute name="panelShowColors" access="global" type="Object[]" default="[]" />
 
-  <aura:attribute name="panelCurrentSize" type="String"/>    
-  <aura:attribute name="sizeNames" type="String[]"/>    
-  <aura:attribute name="sizeSchemes" type="Object[]"/>    
-  <aura:attribute name="panelShowSizes" type="Object[]" default="[]" />
-	<aura:attribute name="configuredSizes" type="Boolean" default="false"/>    
+  <aura:attribute name="panelCurrentSize" access="global"  type="String"/>    
+  <aura:attribute name="sizeNames" access="global"  type="String[]"/>    
+  <aura:attribute name="sizeSchemes" access="global"  type="Object[]"/>    
+  <aura:attribute name="panelShowSizes" access="global" type="Object[]" default="[]" />
+	<aura:attribute name="configuredSizes" access="global" type="Boolean" default="false"/>    
 
-	<aura:attribute name="panelPrimaryId" type="String"/> 
-	<aura:attribute name="currentLevels" type="Integer" default="1"/>    
-	<aura:attribute name="maxlevels" type="Integer" default="4"/>    
+	<aura:attribute name="panelPrimaryId" access="global" type="String"/> 
+	<aura:attribute name="currentLevels" access="global" type="Integer" default="1"/>    
+	<aura:attribute name="maxlevels" access="global" type="Integer" default="4"/>    
 
-	<aura:attribute name="filterAPIField" type="String"/> 
-	<aura:attribute name="filterPublish" type="Object"/> 
+	<aura:attribute name="filterAPIField" access="global" type="String"/> 
+	<aura:attribute name="filterPublish" access="global" type="Object"/> 
 
-  <aura:attribute name="showBanner" type="Boolean" default="true"/>       
+  <aura:attribute name="showBanner" access="global" type="Boolean" default="true"/>       
 
-  <aura:attribute name="selectedRecord" type="sObject" default="{}" description="Stores selected search box record"/>
-  <aura:attribute name="searchTermId" type="String"/> 
-  <aura:attribute name="searchText" type="String" default=""/>
-	<aura:attribute name="searchAction" type="String"/> 
-  <aura:attribute name="configuredAllowSearch" type="Boolean" default="false"/>    
+  <aura:attribute name="selectedRecord" access="global" type="sObject" default="{}" description="Stores selected search box record"/>
+  <aura:attribute name="searchTermId" access="global" type="String"/> 
+  <aura:attribute name="searchText" access="global" type="String" default=""/>
+	<aura:attribute name="searchAction" access="global" type="String"/> 
+  <aura:attribute name="configuredAllowSearch" access="global" type="Boolean" default="false"/>    
  
   <!-- Design Paramters -->  
-  <aura:attribute name="Title" type="String" />      
-  <aura:attribute name="UserComponentId" type="String" default="" description="If you want charts to only respond to particular controllers on a page then give this controller a name here (unique to the page) and associate it using the Controller Component Id option on the chart"/>    
+  <aura:attribute name="Title" access="global" type="String" />      
+  <aura:attribute name="UserComponentId" access="global" type="String" default="" description="If you want charts to only respond to particular controllers on a page then give this controller a name here (unique to the page) and associate it using the Controller Component Id option on the chart"/>    
 
   <!-- Technical - Chart -->
 
-  <aura:attribute name="componentCategory" type="String" default="Controller"/>    
-	<aura:attribute name="componentType" type="String" default="Controller"/>   <!-- this may move to Design Parameters when we get different types --> 
-	<aura:attribute name="initialized" type="Boolean" default="false"/>    
-  <aura:attribute name="datajson" type="Object" />
-  <aura:attribute name="initEventsQueue" type="Object[]" default="[]" />
+  <aura:attribute name="componentCategory" access="global" type="String" default="Controller"/>    
+	<aura:attribute name="componentType" access="global" type="String" default="Controller"/>   <!-- this may move to Design Parameters when we get different types --> 
+	<aura:attribute name="initialized" access="global" type="Boolean" default="false"/>    
+  <aura:attribute name="datajson" access="global" type="Object" />
+  <aura:attribute name="initEventsQueue" access="global" type="Object[]" default="[]" />
 
-  <aura:attribute name="dataFormat" type="String" default=""/>       
-  <aura:attribute name="dataSourceMethod" type="String" default="c.returnUnlinkedData"/>      
-  <aura:attribute name="dataUpdateMethod" type="String" default="c.returnNetworkUpdate"/>      
+  <aura:attribute name="dataFormat" access="global" type="String" default=""/>       
+  <aura:attribute name="dataSourceMethod" access="global" type="String" default="c.returnUnlinkedData"/>      
+  <aura:attribute name="dataUpdateMethod" access="global" type="String" default="c.returnNetworkUpdate"/>      
 
-	<aura:attribute name="configuredLevels" type="Boolean" default="false"/>    
-	<aura:attribute name="configuredFilterTypes" type="Boolean" default="false"/>    
-  <aura:attribute name="configuredAllowRefresh" type="Boolean" default="false"/>    
-  <aura:attribute name="configuredShowTestButtons" type="Boolean" default="false"/>      
+	<aura:attribute name="configuredLevels" access="global" type="Boolean" default="false"/>    
+	<aura:attribute name="configuredFilterTypes" access="global" type="Boolean" default="false"/>    
+  <aura:attribute name="configuredAllowRefresh" access="global" type="Boolean" default="false"/>    
+  <aura:attribute name="configuredShowTestButtons" access="global" type="Boolean" default="false"/>      
 
   <!-- Technical - Query -->
-  <aura:attribute name="levelsIncreaseOnly" type="Boolean" default="false"/> 
-  <aura:attribute name="autoIncreaseLevels" type="Boolean" default="false"/> 
-  <aura:attribute name="queryLevels" type="Object[]" default="[]"/> 
-  <aura:attribute name="queryLevelIds" type="Object[]" default="[]"/> 
+  <aura:attribute name="levelsIncreaseOnly" access="global" type="Boolean" default="false"/> 
+  <aura:attribute name="autoIncreaseLevels" access="global" type="Boolean" default="false"/> 
+  <aura:attribute name="queryLevels" access="global" type="Object[]" default="[]"/> 
+  <aura:attribute name="queryLevelIds" access="global" type="Object[]" default="[]"/> 
 
-  <aura:attribute name="masterConfig" type="String" default="{}"/>      
-  <aura:attribute name="masterConfigObject" type="Object"/>      
+  <aura:attribute name="masterConfig" access="global" type="String" default="{}"/>      
+  <aura:attribute name="masterConfigObject" access="global" type="Object"/>      
   
     <div class="slds">
       <div class="slds-page-header" role="banner">

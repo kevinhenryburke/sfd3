@@ -1,4 +1,4 @@
-<aura:component implements="force:hasRecordId,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes">
+<aura:component implements="force:hasRecordId,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" access="global">
 
   <ltng:require 
     scripts="/resource/Berliozjs"
@@ -9,17 +9,16 @@
   <!-- Events and Handlers -->  
   <aura:handler name="evt_bzc" event="c:evt_bzc" action="{!c.handleCustomEvent}"/>   
 
-  <aura:attribute name="masterConfig" type="String" default="{}"/>      
-  <aura:attribute name="masterConfigObject" type="Object"/>      
-
+  <aura:attribute name="masterConfig" access="global" type="String" default="{}"/>      
+  <aura:attribute name="masterConfigObject" access="global" type="Object"/>      
 
   <!-- DISPLAY PANELS -->
 
-  <aura:attribute name="showTopPanel" type="Boolean" default="true"/>      
+  <aura:attribute name="showTopPanel" access="global" type="Boolean" default="true"/>      
 
   <!-- DISPLAY FEATURES - GENERAL -->
 
-  <aura:attribute name="Title" type="String" />      
+  <aura:attribute name="Title" access="global" type="String" />      
 
   <!-- DISPLAY FEATURES - HIERARCHY -->
 

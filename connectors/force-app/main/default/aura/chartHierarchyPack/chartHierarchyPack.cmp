@@ -1,4 +1,4 @@
-<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extends="c:chartHierarchy">
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extends="c:chartHierarchy"  access="global">
 
     <aura:method name="initializeVisuals"/> 
 

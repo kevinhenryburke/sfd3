@@ -1,4 +1,4 @@
-<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extends="c:chartNetwork"  >
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extends="c:chartNetwork"  access="global" >
 
     <aura:method name="initializeVisuals" /> 
 

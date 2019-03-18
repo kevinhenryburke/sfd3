@@ -1,4 +1,4 @@
-<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="DataExtract">
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="DataExtract"  access="global">
 
     <ltng:require scripts="/resource/Berliozjs" />
 
@@ -17,11 +17,11 @@
 
 
     <!-- Master Config -->  
-    <aura:attribute name="masterConfig" type="String" default="{}"/>      
+    <aura:attribute name="masterConfig" access="global" type="String" default="{}"/>      
     <aura:attribute name="masterConfigObject" type="Object"/>      
 
     <!-- Design Paramters -->  
-    <aura:attribute name="Controller" type="String" default="" description="If you want this card to respond to a particular controller on a page then put the controller's configured name here (unique to the page)"/>    
+    <aura:attribute name="Controller" access="global" type="String" default="" description="If you want this card to respond to a particular controller on a page then put the controller's configured name here (unique to the page)"/>    
     <aura:attribute name="objectIcons" type="String" default="{}"/>    
     <aura:attribute name="extractedDisplayValues" type="String[]" default="['No node selected']"/>    
     <aura:attribute name="layoutStyle" type="String" default="card"/>    
