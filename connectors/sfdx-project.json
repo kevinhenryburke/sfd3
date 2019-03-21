@@ -38,7 +38,7 @@
     ],
     "namespace": "bzno",
     "sfdcLoginUrl": "https://login.salesforce.com",
-    "sourceApiVersion": "44.0",
+    "sourceApiVersion": "45.0",
     "packageAliases": {
         "Berlioz Full": "0HoB0000000PAyMKAW",
         "Berlioz Full@0.1.0-1": "04tB0000000TuZyIAK",
@@ -49,6 +49,7 @@
         "Berlioz Full02@0.1.0-2": "04tB0000000YPFPIA4",
         "Berlioz Full03": "0HoB0000000Kz8qKAC",
         "Berlioz Full03@0.1.0-1": "04tB0000000YPFtIAO",
-        "Berlioz Managed": "0HoB0000000Kz90KAC"
+        "Berlioz Managed": "0HoB0000000Kz90KAC",
+        "Berlioz Managed@0.1.0-1": "04tB0000000YPGSIA4"
     }
 }
