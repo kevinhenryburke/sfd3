@@ -93,7 +93,7 @@
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
             if (excludeRoles.indexOf(field.role) == -1) { // not in the excluded list
-                console.log("field.api: " + field.api + " " + field.display);
+                console.log("field.api: " + field.api + " " + field.display + " /field:  " , field);
                 if (field.display == true) {
                     if (field.retrievedValue != null) {
                         displayApiArray.push(field.api);

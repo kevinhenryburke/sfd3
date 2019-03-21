@@ -85,7 +85,7 @@ public inherited sharing class HierarchyStructure {
 
     private static void mapRetrievedValues (sObject s, HierarchyConfiguration.FieldConfiguration field) {
         if (s.get(field.api) != null) {
-            if (field.fieldType == 'STRING' || field.fieldType == 'ID' || field.fieldType == 'REFERENCE' || field.fieldType == 'PICKLIST') {
+            if (field.fieldType == 'STRING' || field.fieldType == 'ID' || field.fieldType == 'REFERENCE' || field.fieldType == 'PICKLIST' || field.fieldType == 'EMAIL' || field.fieldType == 'PHONE' || field.fieldType == 'URL') {
                 field.retrievedValue = s.get(field.api).toString();
             }
             if (field.fieldType == 'DATETIME') {
