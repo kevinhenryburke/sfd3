@@ -86,10 +86,7 @@
 
             var displayData = parameters["data"];
 
-            var extractedDisplayApiAndValues = helper.extractDisplayValues (displayData);
-
-            var extractedApiNames = extractedDisplayApiAndValues[0]; // List of API names, not currently implemented
-            var extractedDisplayValues = extractedDisplayApiAndValues[1];
+            var extractedDisplayValues = helper.extractDisplayValues (displayData);
 
             var objectType = displayData["objectType"];
             component.set("v.objectType", objectType);

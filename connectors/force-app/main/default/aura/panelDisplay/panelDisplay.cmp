@@ -23,7 +23,8 @@
     <!-- Design Paramters -->  
     <aura:attribute name="Controller" access="global" type="String" default="" description="If you want this card to respond to a particular controller on a page then put the controller's configured name here (unique to the page)"/>    
     <aura:attribute name="objectIcons" type="String" default="{}"/>    
-    <aura:attribute name="extractedDisplayValues" type="String[]" default="['No node selected']"/>    
+    <aura:attribute name="extractedDisplayValues" type="Object[]" default="[]"/>    
+    
     <aura:attribute name="layoutStyle" type="String" default="card"/>    
     <aura:attribute name="objectType" type="String" default=""/>    
 
@@ -36,7 +37,6 @@
     <aura:attribute name="hostComponentReference" type="String" default="" description="If this component is embedded in a chart, this is the name of the host"/>    
     <aura:attribute name="isHosted" type="Boolean" default="false" description="If this component is embedded in a chart, then this is set to true"/>    
 
-    <aura:attribute name="isDVisible" type="Boolean" default="false" />
     <aura:attribute name="iconA" type="String" default="utility:chevrondown"/>    
     <aura:attribute name="iconB" type="String" default="utility:chevronright"/>    
     <aura:attribute name="iconC" type="String" default="utility:chevronright"/>    
@@ -57,7 +57,37 @@
                     </lightning:layoutItem>
                     <aura:iteration items="{!v.extractedDisplayValues}" var="item">
                         <lightning:layoutItem flexibility="auto" padding="around-small">
-                            {!item}
+                            <aura:if isTrue="{!item.formatAs == 'PHONE'}"> 
+                                <p><lightning:formattedPhone value="{!item.value}"/></p>
+                            </aura:if>
+                            <aura:if isTrue="{!item.formatAs == 'EMAIL'}"> 
+                                <p><lightning:formattedEmail value="{!item.value}"/></p>
+                            </aura:if>
+                            <aura:if isTrue="{!item.formatAs == 'URL'}"> 
+                                <p><lightning:formattedUrl value="{!item.value}"/></p>
+                            </aura:if>
+                            <aura:if isTrue="{!item.formatAs == 'CURRENCY'}"> 
+                                <p><lightning:formattedNumber value="{!item.value}" style="currency" currencyCode="USD" currencyDisplayAs="symbol"></lightning:formattedNumber></p>
+                            </aura:if>
+                            <aura:if isTrue="{!item.formatAs == 'DECIMAL'}"> 
+                                <p><lightning:formattedNumber value="{!item.value}" style="decimal" maximumFractionDigits="2"></lightning:formattedNumber></p>
+                            </aura:if>
+                            <aura:if isTrue="{!item.formatAs == 'INTEGER'}"> 
+                                <p><lightning:formattedNumber value="{!item.value}" style="decimal" maximumFractionDigits="0"></lightning:formattedNumber></p>
+                            </aura:if>
+                            <aura:if isTrue="{!item.formatAs == 'DATETIME'}"> 
+                                <p><lightning:formattedDateTime value="{!item.value}" year="numeric" day="2-digit" month="long" ></lightning:formattedDateTime></p>
+                            </aura:if>
+
+                            <aura:if isTrue="{!item.formatAs == 'PHOTOURL'}"> 
+                                <img src="{!item.value}" alt="Profile photo" />
+                            </aura:if>
+
+
+
+                            <aura:if isTrue="{!item.formatAs == 'None'}"> 
+                                {!item.value}
+                            </aura:if>
                         </lightning:layoutItem>
                     </aura:iteration>
                 </lightning:layout>
@@ -84,7 +114,7 @@
                             </lightning:layoutItem>
                             <aura:iteration items="{!v.extractedDisplayValues}" var="item">
                                 <lightning:layoutItem size="6" padding="around-small">
-                                    {!item}
+                                    {!item.value}
                                 </lightning:layoutItem>
                             </aura:iteration>
                         </lightning:layout>
