@@ -92,6 +92,16 @@ public inherited sharing class HierarchyConfiguration  {
     }
 
     public static String getFieldType(String objectType, String fieldName){
+        System.debug('getFieldType: ' + objectType + '/' + fieldName);
+
+         // handle parent object fields 
+         // For now, assume we are only dealing with parent object, not higher
+         // Also assume that it is a string field
+
+        if (fieldName.contains('.')) {
+            return 'STRING';
+        }
+
         Schema.SObjectType t = Schema.getGlobalDescribe().get(objectType);    
         Schema.DescribeSObjectResult r = t.getDescribe();
         Schema.DescribeFieldResult f = r.fields.getMap().get(fieldName).getDescribe();

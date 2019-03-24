@@ -84,6 +84,24 @@ public inherited sharing class HierarchyStructure {
     }
 
     private static void mapRetrievedValues (sObject s, HierarchyConfiguration.FieldConfiguration field) {
+
+         // handle parent object fields 
+         // For now, assume we are only dealing with parent object, not higher
+         // Also assume that it is a string field
+
+        if (field.api.contains('.')) {
+             List<String> lstAlpha = field.api.split('\\.'); // need to escape a fullstop to use it as a regular expression in split
+             Map<String,Object> populatedFieldsAsMap = s.getPopulatedFieldsAsMap();
+
+            Object parentObj = populatedFieldsAsMap.get(lstAlpha[0]);
+            String parentJson = JSON.serialize(parentObj);
+            Map<String, Object> m = (Map<String, Object>) JSON.deserializeUntyped(parentJson);
+
+            field.retrievedValue = (String) m.get(lstAlpha[0]);
+            return;
+        }
+
+
         if (s.get(field.api) != null) {
             if (field.fieldType == 'STRING' || field.fieldType == 'ID' || field.fieldType == 'REFERENCE' || field.fieldType == 'PICKLIST' || field.fieldType == 'EMAIL' || field.fieldType == 'PHONE' || field.fieldType == 'URL') {
                 field.retrievedValue = s.get(field.api).toString();
@@ -104,7 +122,8 @@ public inherited sharing class HierarchyStructure {
     }
 
     private static void mapKeyFields (sObject s, HierarchyConfiguration.FieldConfiguration fc, HierarchyStructure hs) {
-        if (s.get(fc.api) != null) {
+        System.debug('mapKeyFields: ' + s);
+        if (!fc.api.contains('.') && s.get(fc.api) != null) {
             if (fc.role == 'id') {
                 hs.id = s.get(fc.api).toString();
             }
