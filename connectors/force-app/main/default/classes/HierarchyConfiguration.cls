@@ -37,7 +37,7 @@ public inherited sharing class HierarchyConfiguration  {
 
         public void setFieldTypes(){
             for (HierarchyConfiguration.FieldConfiguration field : this.fields) {
-                field.fieldType = HierarchyConfiguration.getFieldType(this.objectType, field.api);
+                field.fieldType = HierarchyConfiguration.getFieldType(this.objectType, field);
                 // System.debug('oc.setFieldTypes field.fieldType: ' + this.objectType + '.' + field.api + '=' + field.fieldType);
             }
         }
@@ -59,8 +59,10 @@ public inherited sharing class HierarchyConfiguration  {
         public String role;
         public boolean display;
         public boolean orderByField = false;
+        public String parentObjectType; // object type of parent object if field referenced is on a lookup object
 
         public String fieldType; // not part of the configuratiom but computed
+
 
         // not part of the configuration but returned from the queries
         public String retrievedValue; 
@@ -91,15 +93,16 @@ public inherited sharing class HierarchyConfiguration  {
         return objectLevels[thisLevel];
     }
 
-    public static String getFieldType(String objectType, String fieldName){
-        System.debug('getFieldType: ' + objectType + '/' + fieldName);
+    public static String getFieldType(String objectType, HierarchyConfiguration.FieldConfiguration fc){
+        String fieldName = fc.api;
 
          // handle parent object fields 
          // For now, assume we are only dealing with parent object, not higher
-         // Also assume that it is a string field
 
         if (fieldName.contains('.')) {
-            return 'STRING';
+            List<String> lstAlpha = fieldName.split('\\.'); // need to escape a fullstop to use it as a regular expression in split
+            fieldName = lstAlpha[1];
+            objectType = fc.parentObjectType;
         }
 
         Schema.SObjectType t = Schema.getGlobalDescribe().get(objectType);    

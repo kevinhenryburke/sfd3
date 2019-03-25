@@ -84,39 +84,41 @@ public inherited sharing class HierarchyStructure {
     }
 
     private static void mapRetrievedValues (sObject s, HierarchyConfiguration.FieldConfiguration field) {
+        Object o;
 
-         // handle parent object fields 
-         // For now, assume we are only dealing with parent object, not higher
-         // Also assume that it is a string field
-
+        // handle parent object fields 
         if (field.api.contains('.')) {
-             List<String> lstAlpha = field.api.split('\\.'); // need to escape a fullstop to use it as a regular expression in split
-             Map<String,Object> populatedFieldsAsMap = s.getPopulatedFieldsAsMap();
+            // For now, assume we are only dealing with parent object, not higher
+            List<String> lstAlpha = field.api.split('\\.'); // need to escape a fullstop to use it as a regular expression in split
+            Map<String,Object> populatedFieldsAsMap = s.getPopulatedFieldsAsMap();
 
             Object parentObj = populatedFieldsAsMap.get(lstAlpha[0]);
             String parentJson = JSON.serialize(parentObj);
             Map<String, Object> m = (Map<String, Object>) JSON.deserializeUntyped(parentJson);
 
-            field.retrievedValue = (String) m.get(lstAlpha[0]);
+            field.retrievedValue = (String) m.get(lstAlpha[1]);
+            o = m.get(lstAlpha[1]);
             return;
         }
+        else {
+            o = s.get(field.api);
+        }
 
-
-        if (s.get(field.api) != null) {
+        if (o != null) {
             if (field.fieldType == 'STRING' || field.fieldType == 'ID' || field.fieldType == 'REFERENCE' || field.fieldType == 'PICKLIST' || field.fieldType == 'EMAIL' || field.fieldType == 'PHONE' || field.fieldType == 'URL') {
-                field.retrievedValue = s.get(field.api).toString();
+                field.retrievedValue = o.toString();
             }
             if (field.fieldType == 'DATETIME') {
-                field.retrievedDatetime = (Datetime) s.get(field.api);
+                field.retrievedDatetime = (Datetime) o;
             }
             if (field.fieldType == 'DATE') {
-                field.retrievedDate = (Date) s.get(field.api);
+                field.retrievedDate = (Date) o;
             }
             if (field.fieldType == 'CURRENCY') {
-                field.retrievedDecimal = (Decimal) s.get(field.api);
+                field.retrievedDecimal = (Decimal) o;
             }
             if (field.fieldType == 'INTEGER') {
-                field.retrievedInteger = (Integer) s.get(field.api);
+                field.retrievedInteger = (Integer) o;
             }
         }
     }
