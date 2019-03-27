@@ -24,14 +24,14 @@
         },
         {  
           "role":"size",
-          "retrievedDecimal":12,
+          "retrievedValue":12,
           "fieldType":"CURRENCY",
           "display":true,
           "api":"Posts"
         },
         {  
           "role":"size",
-          "retrievedDecimal":9,
+          "retrievedValue":9,
           "fieldType":"CURRENCY",
           "display":true,
           "api":"Hot"
@@ -83,14 +83,14 @@
         },
         {  
           "role":"size",
-          "retrievedDecimal":15,
+          "retrievedValue":15,
           "fieldType":"CURRENCY",
           "display":true,
           "api":"Posts"
         },
         {  
           "role":"size",
-          "retrievedDecimal":19,
+          "retrievedValue":19,
           "fieldType":"CURRENCY",
           "display":true,
           "api":"Hot"

@@ -816,9 +816,13 @@
                 return _this.getStringValue (currentMeasureScheme, retrievedField,  "Value");
             }
 
-            let numericValue = (retrievedField.retrievedDecimal != null) 
-                ? retrievedField.retrievedDecimal : retrievedField.retrievedInteger;
-            return numericValue;
+            if ((retrievedField.fieldType == "CURRENCY" || retrievedField.fieldType == "DECIMAL" || retrievedField.fieldType == "DOUBLE") && retrievedField.retrievedValue != null) {
+                return retrievedField.retrievedValue;
+            }
+
+            if (retrievedField.fieldType == "INTEGER" && retrievedField.retrievedValue != null) {
+                return retrievedField.retrievedValue;
+            }
         }
 
         if (returnType == "Color" ) {
@@ -830,8 +834,16 @@
             // case when baseing colors and values on numerics
 
             // bring the Decimal and Integer options into a single variable
-            var numericValue = (retrievedField.retrievedDecimal != null) 
-                ? retrievedField.retrievedDecimal : retrievedField.retrievedInteger;
+            var numericValue; 
+
+            if ((retrievedField.fieldType == "CURRENCY" || retrievedField.fieldType == "DECIMAL" || retrievedField.fieldType == "DOUBLE") && retrievedField.retrievedValue != null) {
+                numericValue = retrievedField.retrievedValue;
+            }
+
+            if (retrievedField.fieldType == "INTEGER" && retrievedField.retrievedValue != null) {
+                numericValue = retrievedField.retrievedValue;
+            }
+    
 
             if (currentMeasureSchemeType == "ValueBand") {
                 // check out the lowest level

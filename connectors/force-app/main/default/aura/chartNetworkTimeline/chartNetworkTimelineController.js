@@ -31,11 +31,11 @@
             var djnodeAfter = datajsonRefresh.nodes[i];
             var fieldsAfter = djnodeAfter.fields;
             for (var j = 0; j < fieldsBefore.length; j++) {
-                if (fieldsBefore[j].retrievedDecimal != null) {
-                    fieldsBefore[j].retrievedDecimal = fieldsAfter[j].retrievedDecimal;
+                if ((fieldsBefore[j].fieldType == "CURRENCY" || fieldsBefore[j].fieldType == "DECIMAL" || fieldsBefore[j].fieldType == "DOUBLE") && fieldsBefore[j].retrievedValue != null) {
+                    fieldsBefore[j].retrievedValue = fieldsAfter[j].retrievedValue;
                 }
-                if (fieldsBefore[j].retrievedInteger != null) {
-                    fieldsBefore[j].retrievedInteger = fieldsAfter[j].retrievedInteger;
+                if (fieldsBefore[j].fieldType == "INTEGER" && fieldsBefore[j].retrievedValue != null) {
+                    fieldsBefore[j].retrievedValue = fieldsAfter[j].retrievedValue;
                 }
             }
         }    

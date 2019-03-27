@@ -332,13 +332,14 @@
                 var fields = djNode.fields;
 
                 for (var j = 0; j < fields.length; j++) {
-                    if (fields[j].retrievedInteger != null) {
-                        fields[j].retrievedInteger= 
-                            Math.max(10,fields[j].retrievedInteger + Math.floor(Math.random() * 20) - 5); 
+                    let field = fields[j];
+                    if ((field.fieldType == "CURRENCY" || field.fieldType == "DECIMAL" || field.fieldType == "DOUBLE") && field.retrievedValue != null) {
+                        field.retrievedValue = 
+                            Math.max(10,field.retrievedValue + Math.floor(Math.random() * 20) - 5); 
                     }
-                    if (fields[j].retrievedDecimal != null) {
-                        fields[j].retrievedDecimal= 
-                            Math.max(10,fields[j].retrievedDecimal + Math.floor(Math.random() * 20) - 5); 
+                    if (field.fieldType == "INTEGER" && field.retrievedValue != null) {
+                        field.retrievedValue = 
+                            Math.max(10,field.retrievedValue + Math.floor(Math.random() * 20) - 5); 
                     }
                 }
             }    

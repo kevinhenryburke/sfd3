@@ -27,10 +27,6 @@ public inherited sharing class HierarchyStructure {
 
     // the value retrieved for this record
     public String retrievedValue; 
-    public Integer retrievedInteger; 
-    public Double retrievedDecimal; 
-    public Datetime retrievedDatetime; 
-    public Date retrievedDate; 
 
     public List<HierarchyStructure> children;   // child records
 
@@ -105,20 +101,12 @@ public inherited sharing class HierarchyStructure {
         }
 
         if (o != null) {
+            // convert data types to strings
             if (field.fieldType == 'STRING' || field.fieldType == 'ID' || field.fieldType == 'REFERENCE' || field.fieldType == 'PICKLIST' || field.fieldType == 'EMAIL' || field.fieldType == 'PHONE' || field.fieldType == 'URL') {
                 field.retrievedValue = o.toString();
             }
-            if (field.fieldType == 'DATETIME') {
-                field.retrievedDatetime = (Datetime) o;
-            }
-            if (field.fieldType == 'DATE') {
-                field.retrievedDate = (Date) o;
-            }
-            if (field.fieldType == 'CURRENCY') {
-                field.retrievedDecimal = (Decimal) o;
-            }
-            if (field.fieldType == 'INTEGER') {
-                field.retrievedInteger = (Integer) o;
+            if (field.fieldType == 'DATETIME' || field.fieldType == 'DATE' || field.fieldType == 'CURRENCY' || field.fieldType == 'INTEGER') {
+                field.retrievedValue = String.valueOf(o);
             }
         }
     }

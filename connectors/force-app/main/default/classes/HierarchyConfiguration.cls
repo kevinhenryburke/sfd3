@@ -66,10 +66,6 @@ public inherited sharing class HierarchyConfiguration  {
 
         // not part of the configuration but returned from the queries
         public String retrievedValue; 
-        public Integer retrievedInteger; 
-        public Double retrievedDecimal; 
-        public Datetime retrievedDatetime; 
-        public Date retrievedDate; 
     }
 
     public static HierarchyConfiguration deserialize (String JSONString) {

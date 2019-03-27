@@ -99,18 +99,17 @@
                     if (field.retrievedValue != null) {
                         rv = field.retrievedValue;
                     }
-                    if (field.retrievedDatetime != null) {
-                        rv = field.retrievedDatetime;
+                    if (field.fieldType == "DATETIME" && field.retrievedValue != null) {
+                        rv = new Date(field.retrievedValue);
                     }
-                    if (field.retrievedDate != null) {
-                        rv = field.retrievedDate;
+                    if (field.fieldType == "DATE" && field.retrievedValue != null) {
+                        rv = new Date(field.retrievedValue);
                     }
-                    if (field.retrievedDecimal != null) {
-//                        rv = field.retrievedDecimal.toLocaleString('en');
-                        rv = field.retrievedDecimal;
+                    if ((field.fieldType == "CURRENCY" || field.fieldType == "DECIMAL" || field.fieldType == "DOUBLE") && field.retrievedValue != null) {
+                        rv = field.retrievedValue;
                     }
-                    if (field.retrievedInteger != null) {
-                        rv = field.retrievedInteger;
+                    if (field.fieldType == "INTEGER" && field.retrievedValue != null) {
+                        rv = field.retrievedValue;
                     }
                     // This is horrible but necessary as component auar:if logic does not have a way of boolean and/or more than 2 items
                     switch (field.fieldType) {
@@ -121,7 +120,8 @@
                         case "DECIMAL" : formatAs = "DECIMAL"; break;
                         case "DOUBLE" : formatAs = "DECIMAL"; break;
                         case "INTEGER" : formatAs = "INTEGER"; break;
-                        case "DATETIME" : formatAs = "DATETIME"; break;
+                        case "DATETIME" : formatAs = "DATE"; break;
+                        case "DATE" : formatAs = "DATE"; break;
                     }
 
                     // special case for photo url on a user record
