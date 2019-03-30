@@ -95,7 +95,7 @@
                 console.log("rf6 field.api: " + field.api + " " + field.display + " /field:  " , field);
                 if (field.display == true) {
                     let rv;
-                    let formatAs = 'None';
+                    let formatAs = 'STRING';
                     if (field.retrievedValue != null) {
                         rv = field.retrievedValue;
                     }
@@ -129,7 +129,14 @@
                         rv = field.retrievedValue;
                         formatAs = "PHOTOURL";
                     }
-                    displayValuesArray.push({"value" : rv, "api" : field.api, "fieldType" : field.fieldType, "formatAs" : formatAs });
+                    if (field.api == "Name" || field.api.endsWith(".Name")) {
+                        rv = field.retrievedValue;
+                        formatAs = "NAME";
+                    }
+                    if (field.lookupId != null) {
+                        formatAs = "LOOKUP";
+                    }
+                    displayValuesArray.push({"value" : rv, "api" : field.api, "fieldType" : field.fieldType, "formatAs" : formatAs, "lookupId" : field.lookupId });
                 }    
             }
         }

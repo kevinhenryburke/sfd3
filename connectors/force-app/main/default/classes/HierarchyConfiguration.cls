@@ -58,6 +58,7 @@ public inherited sharing class HierarchyConfiguration  {
         public String api;
         public String role;
         public boolean display;
+        public String lookupIdField;
         public boolean orderByField = false;
         public String parentObjectType; // object type of parent object if field referenced is on a lookup object
 
@@ -66,6 +67,7 @@ public inherited sharing class HierarchyConfiguration  {
 
         // not part of the configuration but returned from the queries
         public String retrievedValue; 
+        public String lookupId; 
     }
 
     public static HierarchyConfiguration deserialize (String JSONString) {

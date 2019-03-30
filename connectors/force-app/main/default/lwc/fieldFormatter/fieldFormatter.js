@@ -28,8 +28,20 @@ export default class FieldFormatter extends LightningElement {
     }
 
     get isString() { 
-        return (this.item.formatAs === "None") ? true : false;
+        // console.log("xxxxx: LWC String: ",this.item.api,this.item.lookupId);
+        return (this.item.formatAs === "STRING") ? true : false;
     }
 
+    get isName() { 
+        return (this.item.formatAs === "NAME") ? true : false;
+    }
+
+    get isLookup() { 
+        return (this.item.formatAs === "LOOKUP") ? true : false;
+    }
+
+    get localURL() {
+        return "/" + this.item.lookupId;
+    }
 
 }

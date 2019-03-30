@@ -20,5 +20,8 @@
     <div if:true={isString}>
         <lightning-formatted-text value={item.value} linkify></lightning-formatted-text>
     </div>
-    
+    <div if:true={isLookup}>
+        <lightning-formatted-url value={localURL} tooltip="Go to record" label={item.value} target="_blank" ></lightning-formatted-url>
+    </div>
+        
 </template>
