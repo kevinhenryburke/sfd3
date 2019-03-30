@@ -1,0 +1,24 @@
+<template>
+    <div if:true={isPhone}>
+        <lightning-formatted-phone value={item.value}></lightning-formatted-phone>
+    </div>
+    <div if:true={isEmail}>
+        <lightning-formatted-email value={item.value}></lightning-formatted-email>
+    </div>
+    <div if:true={isURL}>
+        <lightning-formatted-url value={item.value}></lightning-formatted-url>
+    </div>
+    <div if:true={isNumber}>
+        <lightning-formatted-number value={item.value}></lightning-formatted-number>
+    </div>
+    <div if:true={isDateTime}>
+        <lightning-formatted-date-time value={item.value}></lightning-formatted-date-time>
+    </div>
+    <div if:true={isPhotoURL}>
+        <img src={item.value} alt="Profile photo" />
+    </div>
+    <div if:true={isString}>
+        <lightning-formatted-text value={item.value} linkify></lightning-formatted-text>
+    </div>
+    
+</template>
