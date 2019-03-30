@@ -89,6 +89,8 @@ public inherited sharing class HierarchyStructure {
             Map<String,Object> populatedFieldsAsMap = s.getPopulatedFieldsAsMap();
 
             Object parentObj = populatedFieldsAsMap.get(lstAlpha[0]);
+            if (parentObj == null) {return;} // the lookup is null, therefore don't try to inspect the object, just exit
+
             String parentJson = JSON.serialize(parentObj);
             Map<String, Object> m = (Map<String, Object>) JSON.deserializeUntyped(parentJson);
 
