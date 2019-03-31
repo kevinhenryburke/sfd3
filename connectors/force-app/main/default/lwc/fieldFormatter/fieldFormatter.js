@@ -1,6 +1,7 @@
 import { LightningElement, api } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
 
-export default class FieldFormatter extends LightningElement {
+export default class FieldFormatter extends NavigationMixin(LightningElement) {
     @api item;
 
     get isPhone() { 
@@ -40,8 +41,43 @@ export default class FieldFormatter extends LightningElement {
         return (this.item.formatAs === "LOOKUP") ? true : false;
     }
 
+    get isTextArea() { 
+        return (this.item.formatAs === "TEXTAREA") ? true : false;
+    }
+
     get localURL() {
         return "/" + this.item.lookupId;
     }
 
+    // this is the official way to naviage but it does not seem to work
+
+    /*
+    navigateToRecordViewPage() {
+        // // View a custom object record.
+
+        // console.log("xxxxx: nav to " , this.item.lookupId);
+
+        // this[NavigationMixin.Navigate]({
+        //     type: 'standard__recordPage',
+        //     attributes: {
+        //         recordId: this.item.lookupId,
+        //         objectApiName: 'Account',
+        //         actionName: 'view'
+        //     }
+        // });
+
+        // OR 
+
+        // // Generate a URL to a User record page
+        // this[NavigationMixin.GenerateUrl]({
+        //     type: 'standard__recordPage',
+        //     attributes: {
+        //         recordId: this.item.lookupId,
+        //         actionName: 'view',
+        //     },
+        // }).then(url => {
+        //     this.recordPageUrl = url;
+        // });        
+    }    
+    */
 }

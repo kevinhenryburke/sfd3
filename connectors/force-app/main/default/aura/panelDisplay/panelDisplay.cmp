@@ -29,7 +29,7 @@
     <aura:attribute name="objectType" type="String" default=""/>    
 
     <!-- Design Paramters Panel -->
-    <aura:attribute name="card1" type="String" default="No node selected"/>    
+    <aura:attribute name="recordName" type="String" default="No node selected"/>    
 
     <aura:attribute name="recordId" type="String" default=""/>    
     <aura:attribute name="iconName" type="String" default="standard:account"/>    
@@ -46,48 +46,31 @@
     <aura:attribute name="mode" type="String"/>    
 
     <div class="slds">
-    
-    <aura:if isTrue="{!v.layoutStyle == 'card'}"> 
-        <lightning:card aura:id="detailcard" title="{!v.card1}" iconName="{!v.iconName}">
-            <div class="c-container">
-                <lightning:layout horizontalAlign="space" verticalAlign="stretch">
 
-                <lightning:layoutItem flexibility="auto" padding="around-small">
-                        <a href = "" onclick = "{!c.navigateToRecord}">{!v.card1}</a>
-                    </lightning:layoutItem>
+    <!-- <aura:if isTrue="{!v.layoutStyle == 'card'}">  -->
+    <aura:if isTrue="{!v.layoutStyle == 'cardTile'}">
+        <lightning:card aura:id="detailcard" variant="narrow" title="{!v.recordName}">
+            <aura:set attribute="actions">
+                <lightning:buttonIcon iconName="utility:close" variant="bare" onclick="{! c.handleClose }" alternativeText="Close" />
+            </aura:set>
+            <div class="c-container">
+                <!-- <p class="slds-p-horizontal_small"><a href = "" onclick = "{!c.navigateToRecord}">{!v.recordName}</a></p> -->
+
+                <aura:iteration items="{!v.extractedDisplayValues}" var="item">
+                    <p class="slds-p-horizontal_small"><c:fieldFormatter item="{!item}"/></p>    
+                </aura:iteration>
+            </div>
+        </lightning:card>  
+    </aura:if>
+
+
+    <aura:if isTrue="{!v.layoutStyle == 'card'}"> 
+        <lightning:card aura:id="detailcard" title="{!v.recordName}" iconName="{!v.iconName}">
+            <div class="c-container">
+                <lightning:layout horizontalAlign="space" verticalAlign="stretch" multipleRows="true">
                     <aura:iteration items="{!v.extractedDisplayValues}" var="item">
                         <lightning:layoutItem flexibility="auto" padding="around-small">
-                            <aura:if isTrue="{!item.formatAs == 'PHONE'}"> 
-                                <p><lightning:formattedPhone value="{!item.value}"/></p>
-                            </aura:if>
-                            <aura:if isTrue="{!item.formatAs == 'EMAIL'}"> 
-                                <p><lightning:formattedEmail value="{!item.value}"/></p>
-                            </aura:if>
-                            <aura:if isTrue="{!item.formatAs == 'URL'}"> 
-                                <p><lightning:formattedUrl value="{!item.value}"/></p>
-                            </aura:if>
-                            <aura:if isTrue="{!item.formatAs == 'CURRENCY'}"> 
-                                <p><lightning:formattedNumber value="{!item.value}" style="currency" currencyCode="USD" currencyDisplayAs="symbol"></lightning:formattedNumber></p>
-                            </aura:if>
-                            <aura:if isTrue="{!item.formatAs == 'DECIMAL'}"> 
-                                <p><lightning:formattedNumber value="{!item.value}" style="decimal" maximumFractionDigits="2"></lightning:formattedNumber></p>
-                            </aura:if>
-                            <aura:if isTrue="{!item.formatAs == 'INTEGER'}"> 
-                                <p><lightning:formattedNumber value="{!item.value}" style="decimal" maximumFractionDigits="0"></lightning:formattedNumber></p>
-                            </aura:if>
-                            <aura:if isTrue="{!item.formatAs == 'DATETIME'}"> 
-                                <p><lightning:formattedDateTime value="{!item.value}" year="numeric" day="2-digit" month="long" ></lightning:formattedDateTime></p>
-                            </aura:if>
-
-                            <aura:if isTrue="{!item.formatAs == 'PHOTOURL'}"> 
-                                <img src="{!item.value}" alt="Profile photo" />
-                            </aura:if>
-
-
-
-                            <aura:if isTrue="{!item.formatAs == 'None'}"> 
-                                {!item.value}
-                            </aura:if>
+                            <p><c:fieldFormatter item="{!item}"/></p>    
                         </lightning:layoutItem>
                     </aura:iteration>
                 </lightning:layout>
@@ -95,8 +78,12 @@
         </lightning:card>  
     </aura:if>
 
+
+<!-- Temporary concentrate on the simple -->            
+<aura:if isTrue="false">            
+
     <aura:if isTrue="{!v.layoutStyle == 'cardTile'}">
-            <lightning:card variant="Narrow" aura:id="detailcard" title="{!v.card1}" iconName="{!v.iconName}" class="slds-truncate slds-text-body_regular">
+            <lightning:card variant="Narrow" aura:id="detailcard" title="{!v.recordName}" iconName="{!v.iconName}" class="slds-truncate slds-text-body_regular">
                 <aura:set attribute="actions">
                     <lightning:buttonIcon iconName="utility:close" variant="bare" onclick="{! c.handleClose }" alternativeText="Close" />
                 </aura:set>
@@ -110,11 +97,11 @@
                     <div class="slds-section__content slds-show" aura:id="expandA">
                         <lightning:layout multipleRows="true" verticalAlign="stretch">
                             <lightning:layoutItem size="6" padding="around-small" class="slds-text-body_small">
-                                <a href = "" onclick = "{!c.navigateToRecord}">{!v.card1}</a>
+                                <a href = "" onclick = "{!c.navigateToRecord}">{!v.recordName}</a>
                             </lightning:layoutItem>
                             <aura:iteration items="{!v.extractedDisplayValues}" var="item">
                                 <lightning:layoutItem size="6" padding="around-small">
-                                    {!item.value}
+                                    <p><c:fieldFormatter item="{!item}"/></p>    
                                 </lightning:layoutItem>
                             </aura:iteration>
                         </lightning:layout>
@@ -158,6 +145,7 @@
                     </div>
                 </lightning:card>
         </aura:if>
+    </aura:if>
     </div>
 
 

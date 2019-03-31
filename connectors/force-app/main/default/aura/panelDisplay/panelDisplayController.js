@@ -101,7 +101,7 @@
             }
 
             component.set("v.recordId", helper.extractRecordRoleField(displayData, "id"));
-            component.set("v.card1", helper.extractRecordRoleField(displayData, "name"));
+            component.set("v.recordName", helper.extractRecordRoleField(displayData, "name"));
             component.set("v.extractedDisplayValues", extractedDisplayValues);  
 
         }

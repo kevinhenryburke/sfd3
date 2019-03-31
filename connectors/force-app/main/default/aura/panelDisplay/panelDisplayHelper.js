@@ -84,61 +84,58 @@
     },
 
     extractDisplayValues : function (data) {
-        var excludeRoles = ["id", "name"];
-
         var fields = data["fields"];
         var displayValuesArray = [];
 
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
-            if (excludeRoles.indexOf(field.role) == -1) { // not in the excluded list
-                console.log("rf6 field.api: " + field.api + " " + field.display + " /field:  " , field);
-                if (field.display == true) {
-                    let rv;
-                    let formatAs = 'STRING';
-                    if (field.retrievedValue != null) {
-                        rv = field.retrievedValue;
-                    }
-                    if (field.fieldType == "DATETIME" && field.retrievedValue != null) {
-                        rv = new Date(field.retrievedValue);
-                    }
-                    if (field.fieldType == "DATE" && field.retrievedValue != null) {
-                        rv = new Date(field.retrievedValue);
-                    }
-                    if ((field.fieldType == "CURRENCY" || field.fieldType == "DECIMAL" || field.fieldType == "DOUBLE") && field.retrievedValue != null) {
-                        rv = field.retrievedValue;
-                    }
-                    if (field.fieldType == "INTEGER" && field.retrievedValue != null) {
-                        rv = field.retrievedValue;
-                    }
-                    // This is horrible but necessary as component auar:if logic does not have a way of boolean and/or more than 2 items
-                    switch (field.fieldType) {
-                        case "URL" : formatAs = "URL"; break;
-                        case "EMAIL" : formatAs = "EMAIL"; break;
-                        case "PHONE" : formatAs = "PHONE"; break;
-                        case "CURRENCY" : formatAs = "CURRENCY"; break;
-                        case "DECIMAL" : formatAs = "DECIMAL"; break;
-                        case "DOUBLE" : formatAs = "DECIMAL"; break;
-                        case "INTEGER" : formatAs = "INTEGER"; break;
-                        case "DATETIME" : formatAs = "DATE"; break;
-                        case "DATE" : formatAs = "DATE"; break;
-                    }
+            console.log("rf6 field.api: " + field.api + " " + field.display + " /field:  " , field);
+            if (field.display == true) {
+                let rv;
+                let formatAs = 'STRING';
+                if (field.retrievedValue != null) {
+                    rv = field.retrievedValue;
+                }
+                if (field.fieldType == "DATETIME" && field.retrievedValue != null) {
+                    rv = new Date(field.retrievedValue);
+                }
+                if (field.fieldType == "DATE" && field.retrievedValue != null) {
+                    rv = new Date(field.retrievedValue);
+                }
+                if ((field.fieldType == "CURRENCY" || field.fieldType == "DECIMAL" || field.fieldType == "DOUBLE") && field.retrievedValue != null) {
+                    rv = field.retrievedValue;
+                }
+                if (field.fieldType == "INTEGER" && field.retrievedValue != null) {
+                    rv = field.retrievedValue;
+                }
+                // This is horrible but necessary as component auar:if logic does not have a way of boolean and/or more than 2 items
+                switch (field.fieldType) {
+                    case "URL" : formatAs = "URL"; break;
+                    case "EMAIL" : formatAs = "EMAIL"; break;
+                    case "PHONE" : formatAs = "PHONE"; break;
+                    case "CURRENCY" : formatAs = "CURRENCY"; break;
+                    case "DECIMAL" : formatAs = "DECIMAL"; break;
+                    case "DOUBLE" : formatAs = "DECIMAL"; break;
+                    case "INTEGER" : formatAs = "INTEGER"; break;
+                    case "DATETIME" : formatAs = "DATE"; break;
+                    case "DATE" : formatAs = "DATE"; break;
+                    case "TEXTAREA" : formatAs = "TEXTAREA"; break;
+                }
 
-                    // special case for photo url on a user record
-                    if (field.api == "SmallPhotoUrl") {
-                        rv = field.retrievedValue;
-                        formatAs = "PHOTOURL";
-                    }
-                    if (field.api == "Name" || field.api.endsWith(".Name")) {
-                        rv = field.retrievedValue;
-                        formatAs = "NAME";
-                    }
-                    if (field.lookupId != null) {
-                        formatAs = "LOOKUP";
-                    }
-                    displayValuesArray.push({"value" : rv, "api" : field.api, "fieldType" : field.fieldType, "formatAs" : formatAs, "lookupId" : field.lookupId });
-                }    
-            }
+                // special case for photo url on a user record
+                if (field.api == "SmallPhotoUrl") {
+                    rv = field.retrievedValue;
+                    formatAs = "PHOTOURL";
+                }
+                if (field.api == "Name" || field.api.endsWith(".Name")) {
+                    rv = field.retrievedValue;
+                    formatAs = "NAME";
+                }
+                if (field.lookupId != null) {
+                    formatAs = "LOOKUP";
+                }
+                displayValuesArray.push({"value" : rv, "api" : field.api, "fieldType" : field.fieldType, "formatAs" : formatAs, "lookupId" : field.lookupId });
+            }    
         }
         return displayValuesArray;
     },

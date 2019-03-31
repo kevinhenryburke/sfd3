@@ -104,7 +104,7 @@ public inherited sharing class HierarchyStructure {
 
         if (o != null) {
             // convert data types to strings
-            if (field.fieldType == 'STRING' || field.fieldType == 'ID' || field.fieldType == 'REFERENCE' || field.fieldType == 'PICKLIST' || field.fieldType == 'EMAIL' || field.fieldType == 'PHONE' || field.fieldType == 'URL') {
+            if (field.fieldType == 'STRING' || field.fieldType == 'ID' || field.fieldType == 'REFERENCE' || field.fieldType == 'PICKLIST' || field.fieldType == 'EMAIL' || field.fieldType == 'PHONE' || field.fieldType == 'URL' || field.fieldType == 'TEXTAREA') {
                 field.retrievedValue = o.toString();
             }
             if (field.fieldType == 'DATETIME' || field.fieldType == 'DATE' || field.fieldType == 'CURRENCY' || field.fieldType == 'INTEGER') {
