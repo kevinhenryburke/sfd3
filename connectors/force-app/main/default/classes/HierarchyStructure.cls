@@ -108,7 +108,7 @@ public inherited sharing class HierarchyStructure {
             if (field.fieldType == 'STRING' || field.fieldType == 'ID' || field.fieldType == 'REFERENCE' || field.fieldType == 'PICKLIST' || field.fieldType == 'EMAIL' || field.fieldType == 'PHONE' || field.fieldType == 'URL' || field.fieldType == 'TEXTAREA') {
                 field.retrievedValue = o.toString();
             }
-            if (field.fieldType == 'DATETIME' || field.fieldType == 'DATE' || field.fieldType == 'CURRENCY' || field.fieldType == 'INTEGER') {
+            if (field.fieldType == 'DATETIME' || field.fieldType == 'DATE' || field.fieldType == 'CURRENCY' || field.fieldType == 'DOUBLE' || field.fieldType == 'DECIMAL' || field.fieldType == 'INTEGER') {
                 field.retrievedValue = String.valueOf(o);
             }
         }
