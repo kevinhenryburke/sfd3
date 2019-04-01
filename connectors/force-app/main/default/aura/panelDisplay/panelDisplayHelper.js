@@ -134,7 +134,7 @@
                 if (field.lookupId != null) {
                     formatAs = "LOOKUP";
                 }
-                displayValuesArray.push({"value" : rv, "api" : field.api, "fieldType" : field.fieldType, "formatAs" : formatAs, "lookupId" : field.lookupId });
+                displayValuesArray.push({"value" : rv, "api" : field.api, "fieldType" : field.fieldType, "formatAs" : formatAs, "lookupId" : field.lookupId, "displayPrefix" : field.displayPrefix });
             }    
         }
         return displayValuesArray;

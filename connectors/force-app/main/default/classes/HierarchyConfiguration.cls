@@ -59,6 +59,7 @@ public inherited sharing class HierarchyConfiguration  {
         public String role;
         public boolean display;
         public String lookupIdField;
+        public String displayPrefix;
         public boolean orderByField = false;
         public String parentObjectType; // object type of parent object if field referenced is on a lookup object
 

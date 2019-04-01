@@ -28,6 +28,7 @@ public inherited sharing class HierarchyStructure {
     // the value retrieved for this record
     public String retrievedValue; 
     public String lookupId; 
+    public String displayPrefix; 
 
     public List<HierarchyStructure> children;   // child records
 
@@ -151,6 +152,9 @@ public inherited sharing class HierarchyStructure {
             field.display = fc.display;
 
             field.lookupIdField = fc.lookupIdField;
+            if (fc.displayPrefix != null) {
+                field.displayPrefix = fc.displayPrefix;
+            }
             field.orderByField = fc.orderByField;
             field.fieldType = fc.fieldType;
 
