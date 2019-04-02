@@ -12,22 +12,22 @@
         <lightning-formatted-number value={item.value}></lightning-formatted-number>
     </div>
     <div if:true={isDateTime}>
-        <lightning-formatted-date-time value={item.value}></lightning-formatted-date-time>
+        {item.displayPrefix}<lightning-formatted-date-time value={item.value}></lightning-formatted-date-time>
     </div>
     <div if:true={isPhotoURL}>
         <img src={item.value} alt="Profile photo" />
     </div>
     <div if:true={isString}>
-        <lightning-formatted-text value={item.value} linkify></lightning-formatted-text>
+        {item.displayPrefix}<lightning-formatted-text value={item.value} linkify></lightning-formatted-text>
     </div>
     <div if:true={isLookup}>
-        <lightning-formatted-url value={localURL} tooltip="Go to record" label={item.value} target="_blank" ></lightning-formatted-url>
+        {item.displayPrefix}<lightning-formatted-url value={localURL} tooltip="Go to record" label={item.value} target="_blank" ></lightning-formatted-url>
         <!-- this is the official way to naviage but it does not seem to work -->
         <!-- https://developer.salesforce.com/docs/component-library/documentation/lwc/lwc.use_navigate-->
         <!-- <a href="" onclick={navigateToRecordViewPage}>{item.value}</a> -->
     </div>
     <div if:true={isTextArea}>
-        <lightning-formatted-rich-text value={item.value} linkify></lightning-formatted-rich-text>
+        {item.displayPrefix}<lightning-formatted-rich-text value={item.value} linkify></lightning-formatted-rich-text>
     </div>
             
 </template>
