@@ -11,8 +11,6 @@
         <aura:attribute name="tpc" type="Object"/>    
     </aura:method>      
       
-    <aura:attribute name="defaultEventType" type="String" default="APPLICATION"/>    
-
     <lightning:overlayLibrary aura:id="overlayLib"/>
 
 

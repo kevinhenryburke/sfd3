@@ -39,7 +39,6 @@
 
   <aura:if isTrue="{!v.showTopPanel}">
     <c:panelDisplay aura:id = "panelDisplay" 
-      defaultEventType = "Component"
       Controller = "Controller"
       masterConfig = "{!v.masterConfig}"  
     />

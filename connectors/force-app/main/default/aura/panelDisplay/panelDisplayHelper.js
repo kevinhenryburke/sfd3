@@ -89,7 +89,7 @@
 
         for (var i = 0; i < fields.length; i++) {
             var field = fields[i];
-            console.log("rf6 field.api: " + field.api + " " + field.display + " /field:  " , field);
+            console.log("rf6 field.api: " + field.api + " " + field.display + " " + field.fieldType + " /field:  " , field);
             if (field.display == true) {
                 let rv;
                 let formatAs = 'STRING';
@@ -102,7 +102,8 @@
                 if (field.fieldType == "DATE" && field.retrievedValue != null) {
                     rv = new Date(field.retrievedValue);
                 }
-                if ((field.fieldType == "CURRENCY" || field.fieldType == "DECIMAL" || field.fieldType == "DOUBLE") && field.retrievedValue != null) {
+                if (field.fieldType == "CURRENCY" || field.fieldType == "DECIMAL" || field.fieldType == "DOUBLE") {
+                    console.log("rf6 numeric: " + field.retrievedValue);
                     rv = field.retrievedValue;
                 }
                 if (field.fieldType == "INTEGER" && field.retrievedValue != null) {
@@ -134,6 +135,8 @@
                 if (field.lookupId != null) {
                     formatAs = "LOOKUP";
                 }
+                console.log("rf6 formatAs: " + formatAs);
+
                 displayValuesArray.push({"value" : rv, "api" : field.api, "fieldType" : field.fieldType, "formatAs" : formatAs, "lookupId" : field.lookupId, "displayPrefix" : field.displayPrefix });
             }    
         }

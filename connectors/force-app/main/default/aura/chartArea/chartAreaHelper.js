@@ -91,6 +91,9 @@
         _this.setCache (component, "appEvents",  []) ;
         _this.restockCache(component);
 
+        var panelDisplayEmbedded = component.find("panelDisplayEmbedded"); // this should be ok as it's an internal search, need to prefix with a unique id is required outside of lightning context
+        _this.setCache (component, "panelDisplayEmbedded", panelDisplayEmbedded) ; 
+
     },
 
 	initializeGroups: function (component, datajson, primaryNodeId, showFilters, isInit) {
@@ -178,6 +181,7 @@
             console.log("allowPopover not set "); 
         }
 
+
     },
 
     // create an invisible svg symbol to attach a popover to
@@ -188,8 +192,10 @@
         var mdata = [0]; // random data value, not used
 
         var width = _this.getCache (component, "width");
-        var popx = width - 10;
-        var popy = 200;
+        // var popx = width - 10;
+        // var popy = 200;
+        var popx = width - 260;
+        var popy = 110;
 
         var svg = d3.select(_this.getDivId("svg", componentReference, true));
         var infosvg = 
@@ -246,13 +252,13 @@
                         var referenceSelector = _this.getCache (component, "referenceSelector");
                         console.log("createPopOverComponent: createComponent callback: " + referenceSelector);
                         if (status === "SUCCESS") {
-                            console.log("createPopOverComponent: createComponent callback: SUCCESS: " );
+                            console.log("xxxxx: createPopOverComponent: createComponent callback: SUCCESS: " );
 
                             var modalPromise = overlayLibElement.showCustomPopover({
                                 body: newComponent,
                                 referenceSelector: referenceSelector,
                                 // cssClass: "slds-hide,popoverclass,slds-popover,slds-popover_panel,slds-nubbin_left,no-pointer,cPopoverTest"
-                                cssClass: "popoverclass,slds-popover,slds-popover_panel,no-pointer,cChartArea"
+                                cssClass: "popoverclass,slds-popover,slds-popover_panel,no-pointer,slds-popover__body_small,slds-popover_small,slds-popover__body_small,cChartArea"
                             });
                             component.set("v.modalPromise", modalPromise);  
                             modalPromise.then(function (overlay) {

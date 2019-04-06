@@ -116,7 +116,7 @@
   <lightning:flexipageRegionInfo width="{!v.flexiWidth}"/>
 
   <!-- Popover configuration -->
-	<aura:attribute name="allowPopover" type="Boolean" default="false"/>    
+	<aura:attribute name="showEmbeddedPanel" type="Boolean" default="true"/>    
 
   <!-- Slider configuration -->
   <aura:attribute name="ChartScaleFactorPercentage" type="Integer" default="100"/> 
@@ -126,7 +126,23 @@
 <!-- 8792 {!v.flexiWidth} {!v.chartAreaDivId} {!v.componentReference} {!v.UserComponentId} -->
 
 <!-- to pass in stuff from a sub component use {!v.body}  see https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/oo_cmp_attributes.htm   -->
-
+    <aura:if isTrue="{!v.showEmbeddedPanel == true}">
+      <div class="slds-is-relative" style="right : 0;">
+        <div class="slds-is-absolute" style="right : 0;">
+          <div style="height: 250px; width: 200px; background: rgb(255, 255, 255);">
+              <c:panelDisplay 
+              aura:id = "panelDisplayEmbedded" 
+              layoutStyle = "cardTile"
+              Controller = "{!v.UserControllerComponentId}"
+              masterConfig = "{!v.masterConfig}" 
+              isHosted = "true"
+              hostComponentReference = "{!v.componentReference}"
+              hostUserControllerComponentId = "{!v.UserControllerComponentId}"
+            />
+          </div> 
+        </div>
+      </div>
+    </aura:if>
 
     <aura:if isTrue="{!v.Title != ''}">{!v.Title}</aura:if> 
 
@@ -147,10 +163,13 @@
                 <div class="slds-is-absolute">
                   <div id="{!v.componentReference + 'pathToolTip'}" class="pathToolTip"></div>
                 </div>
-                <div id="{!v.chartAreaDivId}" aura:id="{!v.chartAreaDivId}" class="chartarea"></div>
+        
+              <div id="{!v.chartAreaDivId}" aura:id="{!v.chartAreaDivId}" class="chartarea"></div>
                   <!-- <div id="nodeToolTip" class="nodeToolTip"></div> -->
               </lightning:layoutItem>
             </lightning:layout>
+
+
       </div>
 </body>
 
