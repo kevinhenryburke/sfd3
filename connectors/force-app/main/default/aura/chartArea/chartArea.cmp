@@ -127,7 +127,7 @@
 
 <!-- to pass in stuff from a sub component use {!v.body}  see https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/oo_cmp_attributes.htm   -->
     <aura:if isTrue="{!v.showEmbeddedPanel == true}">
-      <div class="slds-is-relative" style="right : 0;">
+      <div aura:id = "panelDisplayEmbeddedOuter" class="slds-is-relative" style="right : 0; opacity : 0.5">
         <div class="slds-is-absolute" style="right : 0;">
           <div style="height: 250px; width: 200px; background: rgb(255, 255, 255);">
               <c:panelDisplay 

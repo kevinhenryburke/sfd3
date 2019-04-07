@@ -320,7 +320,33 @@
             var panelDisplayEmbedded = helper.getCache (component, "panelDisplayEmbedded") ; 
             var showEmbeddedPanel = helper.getCache (component, "showEmbeddedPanel" ) ;
             console.log('chartArea: panelDisplayEmbedded, showEmbeddedPanel: ', showEmbeddedPanel);
-            
+
+            var panelDisplayEmbeddedOuter = helper.getCache (component, "panelDisplayEmbeddedOuter") ; 
+
+            var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
+            console.log('chartArea: panelDisplayEmbeddedOuterElement: ', panelDisplayEmbeddedOuterElement);
+            var opacity = panelDisplayEmbeddedOuterElement.style["opacity"];        
+            helper.setCache (component, "opacity", opacity) ; 
+            console.log('chartArea: opacity: ', opacity);
+            opacity = parseFloat(opacity);
+            console.log('chartArea: opacity typeof: ', typeof opacity);
+
+            if (opacity === 0) {
+                console.log('chartArea: opacity is zero: ', opacity);
+                panelDisplayEmbeddedOuterElement.style.opacity = "1";
+
+            //     panelDisplayEmbeddedOuterElement.style["opacity"] = 1;
+            }
+            else {
+                console.log('chartArea: opacity is non-zero: ', opacity);
+                panelDisplayEmbeddedOuterElement.style.opacity = "0";
+            }
+            // if (opacity == 1) {
+            //     panelDisplayEmbeddedOuterElement.style["opacity"] = 0;
+            // }
+
+                
+
 //            if (showEmbeddedPanel == true) {
                 var tpc = {
                     "topic" : topic,

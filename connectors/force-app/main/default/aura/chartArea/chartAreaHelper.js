@@ -94,6 +94,9 @@
         var panelDisplayEmbedded = component.find("panelDisplayEmbedded"); // this should be ok as it's an internal search, need to prefix with a unique id is required outside of lightning context
         _this.setCache (component, "panelDisplayEmbedded", panelDisplayEmbedded) ; 
 
+        var panelDisplayEmbeddedOuter = component.find("panelDisplayEmbeddedOuter"); // this should be ok as it's an internal search, need to prefix with a unique id is required outside of lightning context
+        _this.setCache (component, "panelDisplayEmbeddedOuter", panelDisplayEmbeddedOuter) ; 
+
     },
 
 	initializeGroups: function (component, datajson, primaryNodeId, showFilters, isInit) {
