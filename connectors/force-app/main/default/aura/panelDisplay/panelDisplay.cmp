@@ -49,9 +49,10 @@
     <aura:if isTrue="{!v.layoutStyle == 'cardTile'}">
         <lightning:card aura:id="detailcard" variant="narrow" title="{!v.recordName}">
             <aura:set attribute="actions">
+                <lightning:buttonIcon iconName="utility:hide" variant="bare" onclick="{! c.handleFade }" alternativeText="Fade" />
                 <lightning:buttonIcon iconName="utility:close" variant="bare" onclick="{! c.handleClose }" alternativeText="Close" />
             </aura:set>
-            <div class="c-container">
+            <div class="c-container" style="overflow:scroll; height:200px;">
                 <!-- <p class="slds-p-horizontal_small"><a href = "" onclick = "{!c.navigateToRecord}">{!v.recordName}</a></p> -->
 
                 <aura:iteration items="{!v.extractedDisplayValues}" var="item">

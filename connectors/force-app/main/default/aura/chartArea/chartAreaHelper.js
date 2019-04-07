@@ -86,7 +86,7 @@
         _this.publishPreppedEvent(component,preppedEvent);
 
         console.log("chartArea: ChartRendered event published ");
-
+ 
         // build up a cache for mouseover events - may be a better way to do this!
         _this.setCache (component, "appEvents",  []) ;
         _this.restockCache(component);

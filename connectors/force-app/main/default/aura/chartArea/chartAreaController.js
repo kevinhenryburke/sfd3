@@ -311,11 +311,40 @@
                     });
                 }
             }
+
+            // if we have destroyed the component then we need to make the panel area transparent
+            var panelDisplayEmbeddedOuter = helper.getCache (component, "panelDisplayEmbeddedOuter") ; 
+            var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
+            panelDisplayEmbeddedOuterElement.style.opacity = "0";
+        } 
+        if (topic == "FadeDisplayPanel")
+        {      
+            // we toggle the opacity of the display panel
+            var panelDisplayEmbedded = helper.getCache (component, "panelDisplayEmbedded") ; 
+            var showEmbeddedPanel = helper.getCache (component, "showEmbeddedPanel" ) ;
+            console.log('chartArea: FadeDisplayPanel: ', showEmbeddedPanel);
+
+            if (showEmbeddedPanel) {
+
+                var panelDisplayEmbeddedOuter = helper.getCache (component, "panelDisplayEmbeddedOuter") ; 
+
+                var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
+                var opacity = panelDisplayEmbeddedOuterElement.style["opacity"];        
+                opacity = parseFloat(opacity); // as the style element is returned as a string
+
+                if (opacity < 0.5) {
+                    panelDisplayEmbeddedOuterElement.style.opacity = "1";
+                }
+                else {
+                    panelDisplayEmbeddedOuterElement.style.opacity = "0.3";
+                }                
+            }
+
         } 
         if (topic == "ChartMouseOver")
         {
+            
             bzutils.log("chartArea: ChartMouseOver received by Chart: " + componentReference + "/" + parameters["componentReference"]);
-            console.log('chartArea: ChartMouseOver, topic/parameters/controller: ', topic, parameters, controller);
 
             var panelDisplayEmbedded = helper.getCache (component, "panelDisplayEmbedded") ; 
             var showEmbeddedPanel = helper.getCache (component, "showEmbeddedPanel" ) ;
@@ -324,37 +353,15 @@
             var panelDisplayEmbeddedOuter = helper.getCache (component, "panelDisplayEmbeddedOuter") ; 
 
             var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
-            console.log('chartArea: panelDisplayEmbeddedOuterElement: ', panelDisplayEmbeddedOuterElement);
             var opacity = panelDisplayEmbeddedOuterElement.style["opacity"];        
-            helper.setCache (component, "opacity", opacity) ; 
-            console.log('chartArea: opacity: ', opacity);
             opacity = parseFloat(opacity);
-            console.log('chartArea: opacity typeof: ', typeof opacity);
-
-            if (opacity === 0) {
-                console.log('chartArea: opacity is zero: ', opacity);
-                panelDisplayEmbeddedOuterElement.style.opacity = "1";
-
-            //     panelDisplayEmbeddedOuterElement.style["opacity"] = 1;
-            }
-            else {
-                console.log('chartArea: opacity is non-zero: ', opacity);
-                panelDisplayEmbeddedOuterElement.style.opacity = "0";
-            }
-            // if (opacity == 1) {
-            //     panelDisplayEmbeddedOuterElement.style["opacity"] = 0;
-            // }
-
                 
-
-//            if (showEmbeddedPanel == true) {
-                var tpc = {
-                    "topic" : topic,
-                    "parameters" : parameters,
-                    "controller" : controller
-                };
-                panelDisplayEmbedded.callFromContainer(tpc);               
-//            }
+            var tpc = {
+                "topic" : topic,
+                "parameters" : parameters,
+                "controller" : controller
+            };
+            panelDisplayEmbedded.callFromContainer(tpc);               
 
         }
         if (topic == "ReScale")

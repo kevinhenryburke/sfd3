@@ -133,6 +133,15 @@
         component.destroy();
     },
 
+    handleFade : function(component, event, helper) {
+        var appEvent = $A.get("e.c:evt_sfd3");
+        appEvent.setParams({
+            "topic" : "FadeDisplayPanel",
+            "controller" : component.get("v.hostUserControllerComponentId"), // pass the host component name back for an embedded component 
+        });
+        appEvent.fire();
+    },
+
     handleExpandA : function(component, event, helper) {
         helper.sectionExpandCollapseMaster(component, "A");
     },
