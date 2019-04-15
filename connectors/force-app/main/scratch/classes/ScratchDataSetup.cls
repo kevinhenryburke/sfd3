@@ -1,7 +1,8 @@
 
 public inherited sharing class ScratchDataSetup {
 
-/* In Execute Anonymous run, sequentially
+/* 
+If setting up a scratch org then in Execute Anonymous run, sequentially
 
 ScratchDataSetup aaa = new ScratchDataSetup();
 aaa.insertData(1);
@@ -11,6 +12,16 @@ aaa.insertOpportunities();
 
 ScratchDataSetup aaa = new ScratchDataSetup();
 aaa.runScripts(9);
+
+ScratchDataSetup.updateUserUserManager();
+ 
+
+If setting up an SDO then instead run
+
+ScratchDataSetup.addManagers();
+ScratchDataSetup.updateTenure();
+ScratchDataSetup.updateGrade();
+
 
 */
 
@@ -463,6 +474,21 @@ aaa.runScripts(9);
             update lau;
         }
     }
+
+    public static void updateUserUserManager () {
+        User securityUser = [select id from User where Name='Security User' ];
+        User userUser = [select id from User where Name='User User' ];
+
+        securityUser.firstName = 'Janet';
+        securityUser.lastName = 'Baker';
+        userUser.firstName = 'Kevin';
+        userUser.lastName = 'Burke';
+        userUser.ManagerId = securityUser.id;
+
+        update securityUser;
+        update userUser;
+    }
+
 
     public void insertOpportunities () {
 
