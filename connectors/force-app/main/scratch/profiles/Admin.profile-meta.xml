@@ -153,6 +153,10 @@
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
     <tabVisibilities>
+        <tab>D3_UAO</tab>
+        <visibility>DefaultOn</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
         <tab>Data_Service</tab>
         <visibility>Hidden</visibility>
     </tabVisibilities>
