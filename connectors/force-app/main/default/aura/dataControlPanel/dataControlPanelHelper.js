@@ -12,8 +12,10 @@
             var masterConfigObject = component.get("v.masterConfigObject");
             var buttonParameters = masterConfigObject["panels"]["ControlPanel"]["buttonParameters"];            
             var queryJSONObject = masterConfigObject["data"]["queryJSON"];
-            var topObjectLevel = queryJSONObject["objectLevels"][0];
-            var topObjectLevelFields = topObjectLevel.fields;
+
+
+            let bottomObjectLevel = queryJSONObject["objectLevels"][queryJSONObject["objectLevels"].length - 1];            
+            let bottomObjectLevelFields = bottomObjectLevel.fields;
 
             var colorsNames = [];
             var panelShowColors = [];
@@ -26,19 +28,25 @@
 
             var filterPublish = {};
 
-            for (var j = 0; j < topObjectLevelFields.length; j++) {
+            /* #Documentation
+            We build up color, size and filter select menus from the configuration of the lowest level object
+            Color and Size may be derived from any field of the correct type, string is best for color but no mandated, numeric is required for size
+            Filter can be based on one field only.
+            */
+
+            for (var j = 0; j < bottomObjectLevelFields.length; j++) {
 
                 // measure configuration
-                if (topObjectLevelFields[j].measureSchemeType != null) {
+                if (bottomObjectLevelFields[j].measureSchemeType != null) {
                     if (numberColorsFound == 0){
                         // set the first measure as default
-                        var panelCurrentColor = topObjectLevelFields[j].measureName;
+                        var panelCurrentColor = bottomObjectLevelFields[j].measureName;
                         component.set("v.panelCurrentColor", panelCurrentColor);
                     }
                     // create arrays for measure and schemes
-                    colorsNames.push(topObjectLevelFields[j].measureName);
-                    panelShowColors.push(topObjectLevelFields[j].measureName);
-                    var measureSchemeListLoop = topObjectLevelFields[j].measureScheme;
+                    colorsNames.push(bottomObjectLevelFields[j].measureName);
+                    panelShowColors.push(bottomObjectLevelFields[j].measureName);
+                    var measureSchemeListLoop = bottomObjectLevelFields[j].measureScheme;
                     if (measureSchemeListLoop != null) {
                         colorSchemes.push(measureSchemeListLoop);
                     }
@@ -50,26 +58,26 @@
 
 
                 // size configuration
-                if (topObjectLevelFields[j].sizeSchemeType != null) {
+                if (bottomObjectLevelFields[j].sizeSchemeType != null) {
                     if (numberSizesFound == 0){
                         component.set("v.configuredSizes", true);
                         // set the first size as default
-                        var panelCurrentSize = topObjectLevelFields[j].measureName;
+                        var panelCurrentSize = bottomObjectLevelFields[j].measureName;
                         component.set("v.panelCurrentSize", panelCurrentSize);
                     }
                     // create arrays for size and schemes
-                    sizeNames.push(topObjectLevelFields[j].measureName);
-                    panelShowSizes.push(topObjectLevelFields[j].measureName);
+                    sizeNames.push(bottomObjectLevelFields[j].measureName);
+                    panelShowSizes.push(bottomObjectLevelFields[j].measureName);
                     numberSizesFound++;
                 }
 
                 // Filter configuration
                 // At present only one filter field is possible
-                var panelFilter = topObjectLevelFields[j].filter;
+                var panelFilter = bottomObjectLevelFields[j].filter;
                 if (panelFilter != null) {
-                    component.set("v.filterAPIField", topObjectLevelFields[j].api);
+                    component.set("v.filterAPIField", bottomObjectLevelFields[j].api);
 
-                    filterPublish["filterAPIField"] = topObjectLevelFields[j].api;
+                    filterPublish["filterAPIField"] = bottomObjectLevelFields[j].api;
                     filterPublish["filterValues"] = panelFilter;
                     component.set("v.filterPublish", filterPublish);
                 }
