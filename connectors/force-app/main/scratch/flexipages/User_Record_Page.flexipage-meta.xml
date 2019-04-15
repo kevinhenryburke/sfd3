@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <flexiPageRegions>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>collapsed</name>
+                <value>false</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>numVisibleActions</name>
+                <value>3</value>
+            </componentInstanceProperties>
+            <componentName>force:highlightsPanel</componentName>
+        </componentInstances>
+        <mode>Replace</mode>
+        <name>header</name>
+        <type>Region</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <componentInstances>
+            <componentName>force:detailPanel</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>Title</name>
+                <value>Org Hierarchy Tree</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>masterConfig</name>
+                <value>{&quot;data&quot;:{&quot;dataFormat&quot;:&quot;HierarchyJSON&quot;,&quot;dataSourceMethod&quot;:&quot;c.returnHierarchyTop&quot;,&quot;dataUpdateMethod&quot;:&quot;c.returnHierarchyUpdate&quot;,&quot;queryJSON&quot;:{&quot;rootIdRelatedSOQL&quot;:&quot;select Manager.id from User where id = :recordId LIMIT 1&quot;,&quot;relatedQueryObject&quot;:&quot;Manager&quot;,&quot;initialLevelsToRetrieve&quot;:2,&quot;chartType&quot;:&quot;Hierarchy&quot;,&quot;objectLevels&quot;:[{&quot;terminal&quot;:false,&quot;recursive&quot;:true,&quot;fields&quot;:[{&quot;api&quot;:&quot;SmallPhotoUrl&quot;,&quot;role&quot;:&quot;none&quot;,&quot;display&quot;:true},{&quot;api&quot;:&quot;name&quot;,&quot;lookupIdField&quot;:&quot;id&quot;,&quot;role&quot;:&quot;name&quot;,&quot;display&quot;:true},{&quot;api&quot;:&quot;Manager.Name&quot;,&quot;parentObjectType&quot;:&quot;User&quot;,&quot;lookupIdField&quot;:&quot;managerid&quot;,&quot;role&quot;:&quot;none&quot;,&quot;display&quot;:true,&quot;displayPrefix&quot;:&quot;Manager: &quot;},{&quot;api&quot;:&quot;id&quot;,&quot;role&quot;:&quot;id&quot;,&quot;display&quot;:false},{&quot;api&quot;:&quot;managerid&quot;,&quot;role&quot;:&quot;parentId&quot;,&quot;display&quot;:false},{&quot;api&quot;:&quot;Title&quot;,&quot;role&quot;:&quot;none&quot;,&quot;display&quot;:true},{&quot;api&quot;:&quot;CreatedDate&quot;,&quot;role&quot;:&quot;none&quot;,&quot;display&quot;:true,&quot;displayPrefix&quot;:&quot;Hired: &quot;},{&quot;api&quot;:&quot;Email&quot;,&quot;role&quot;:&quot;none&quot;,&quot;display&quot;:true},{&quot;api&quot;:&quot;Phone&quot;,&quot;role&quot;:&quot;none&quot;,&quot;display&quot;:true},{&quot;api&quot;:&quot;grade__c&quot;,&quot;role&quot;:&quot;size&quot;,&quot;display&quot;:false,&quot;measureName&quot;:&quot;Grade&quot;,&quot;measureSchemeType&quot;:&quot;Scale&quot;,&quot;measureScheme&quot;:{&quot;domain&quot;:[0,5,10],&quot;range&quot;:[&quot;white&quot;,&quot;yellow&quot;,&quot;red&quot;]}},{&quot;api&quot;:&quot;tenure__c&quot;,&quot;role&quot;:&quot;size&quot;,&quot;display&quot;:false,&quot;measureName&quot;:&quot;Tenure&quot;,&quot;measureSchemeType&quot;:&quot;ValueBand&quot;,&quot;measureScheme&quot;:[{&quot;below&quot;:2,&quot;color&quot;:&quot;red&quot;},{&quot;above&quot;:2,&quot;color&quot;:&quot;orange&quot;},{&quot;above&quot;:3,&quot;color&quot;:&quot;yellow&quot;},{&quot;above&quot;:4,&quot;color&quot;:&quot;green&quot;},{&quot;above&quot;:6,&quot;color&quot;:&quot;blue&quot;},{&quot;above&quot;:8,&quot;color&quot;:&quot;purple&quot;},{&quot;above&quot;:9,&quot;color&quot;:&quot;white&quot;}]},{&quot;api&quot;:&quot;AboutMe&quot;,&quot;role&quot;:&quot;none&quot;,&quot;display&quot;:true,&quot;displayPrefix&quot;:&quot;About Me: &quot;},{&quot;api&quot;:&quot;Role_Category__c&quot;,&quot;role&quot;:&quot;none&quot;,&quot;display&quot;:false,&quot;filter&quot;:[&quot;CEO&quot;,&quot;CIO&quot;,&quot;Customer Service&quot;,&quot;Director&quot;,&quot;EVP&quot;,&quot;Sales Executive&quot;,&quot;Sales Manager&quot;,&quot;Specialist&quot;,&quot;SVP&quot;,&quot;Team Lead&quot;,&quot;Technician&quot;,&quot;VP&quot;,&quot;Other&quot;]}],&quot;objectType&quot;:&quot;User&quot;}]},&quot;primaryNodeInitialization&quot;:&quot;None&quot;},&quot;panels&quot;:{&quot;InfoPanel&quot;:{&quot;showOnTop&quot;:false,&quot;allowPopover&quot;:false,&quot;showEmbeddedPanel&quot;:true,&quot;objectIcons&quot;:{&quot;User&quot;:&quot;standard:user&quot;}},&quot;ControlPanel&quot;:{&quot;showBanner&quot;:false,&quot;buttonParameters&quot;:{&quot;showtestbuttons&quot;:true,&quot;levels&quot;:5,&quot;levelsIncreaseOnly&quot;:true,&quot;autoIncreaseLevels&quot;:true}},&quot;ChartPanel&quot;:{&quot;Title&quot;:&quot;&quot;,&quot;showLevelsInitial&quot;:1,&quot;Hierarchy&quot;:{&quot;showZoomSlider&quot;:false,&quot;clearHighlightedPaths&quot;:true},&quot;Network&quot;:{&quot;showPathToolTip&quot;:true,&quot;nodestrokewidth&quot;:&quot;0.5px&quot;}}},&quot;search&quot;:{&quot;searchAction&quot;:&quot;HighlightOpenPath&quot;,&quot;configuredAllowSearch&quot;:true}}</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>showTopPanel</name>
+                <value>true</value>
+            </componentInstanceProperties>
+            <componentName>ctreeCombined</componentName>
+        </componentInstances>
+        <componentInstances>
+            <componentName>forceChatter:recordFeedContainer</componentName>
+        </componentInstances>
+        <mode>Replace</mode>
+        <name>main</name>
+        <type>Region</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <componentInstances>
+            <componentInstanceProperties>
+                <name>relatedListComponentOverride</name>
+                <value>NONE</value>
+            </componentInstanceProperties>
+            <componentName>force:relatedListContainer</componentName>
+        </componentInstances>
+        <mode>Replace</mode>
+        <name>sidebar</name>
+        <type>Region</type>
+    </flexiPageRegions>
+    <masterLabel>User Record Page</masterLabel>
+    <parentFlexiPage>forceChatter__User_rec_L</parentFlexiPage>
+    <sobjectType>User</sobjectType>
+    <template>
+        <name>flexipage:recordHomeTemplateDesktop</name>
+    </template>
+    <type>RecordPage</type>
+</FlexiPage>

@@ -1,4 +1,4 @@
-<aura:component implements="force:hasRecordId">
+<aura:component implements="force:hasRecordId"  access="global">
 
     <aura:attribute name="objectApiName" type="String"/>    
     <aura:attribute name="layoutType" type="String"/>    

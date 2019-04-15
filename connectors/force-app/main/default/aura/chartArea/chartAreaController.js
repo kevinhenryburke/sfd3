@@ -1,11 +1,5 @@
 ({
 
-    callFromContainer : function (component, event, helper) {
-        var params = event.getParam("arguments");
-        var tpc = params.tpc;
-        var topic = tpc.topic;
-    },
-
     // bear in mind that doInit can't reference anything in an external library as it may lose a race condition.
     doInit: function(component, event, helper) {
         console.log('chartArea: doInit enter');   
@@ -101,15 +95,12 @@
             topic = tpc.topic;
             parameters = tpc.parameters;
             controller = tpc.controller;
-            // console.log('chartArea: handleCustomEvent enter from method, topic: ' + topic);
         }
         else {
             topic = event.getParam("topic");
             parameters = event.getParam("parameters");
             controller = event.getParam("controller");    
-            // console.log('chartArea: handleCustomEvent enter from event, topic: ' + topic);
         }
-
 
         var componentReference = component.get("v.componentReference");        
         // console.log('chartArea: topic:' + topic + " controller " + controller + " componentReference " + componentReference);
@@ -227,7 +218,12 @@
                 }
                 else {
                     component.set("v.showZoomSlider" , false);
-                }        
+                }      
+                
+                var showEmbeddedPanel = helper.getMasterParam(component,"panels","InfoPanel","showEmbeddedPanel");         
+                if (showEmbeddedPanel == null) {showEmbeddedPanel = false;}
+                helper.setCache (component, "showEmbeddedPanel", showEmbeddedPanel ) ;
+                component.set("v.showEmbeddedPanel", showEmbeddedPanel);
 
                 var showLevelsInitial = helper.getMasterParam(component,"panels","ChartPanel","showLevelsInitial");         
                 if (showLevelsInitial != null) {
@@ -315,10 +311,58 @@
                     });
                 }
             }
+
+            // if we have destroyed the component then we need to make the panel area transparent
+            var panelDisplayEmbeddedOuter = helper.getCache (component, "panelDisplayEmbeddedOuter") ; 
+            var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
+            panelDisplayEmbeddedOuterElement.style.opacity = "0";
+        } 
+        if (topic == "FadeDisplayPanel")
+        {      
+            // we toggle the opacity of the display panel
+            var panelDisplayEmbedded = helper.getCache (component, "panelDisplayEmbedded") ; 
+            var showEmbeddedPanel = helper.getCache (component, "showEmbeddedPanel" ) ;
+            console.log('chartArea: FadeDisplayPanel: ', showEmbeddedPanel);
+
+            if (showEmbeddedPanel) {
+
+                var panelDisplayEmbeddedOuter = helper.getCache (component, "panelDisplayEmbeddedOuter") ; 
+
+                var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
+                var opacity = panelDisplayEmbeddedOuterElement.style["opacity"];        
+                opacity = parseFloat(opacity); // as the style element is returned as a string
+
+                if (opacity < 0.5) {
+                    panelDisplayEmbeddedOuterElement.style.opacity = "1";
+                }
+                else {
+                    panelDisplayEmbeddedOuterElement.style.opacity = "0.3";
+                }                
+            }
+
         } 
         if (topic == "ChartMouseOver")
         {
+            
             bzutils.log("chartArea: ChartMouseOver received by Chart: " + componentReference + "/" + parameters["componentReference"]);
+
+            var panelDisplayEmbedded = helper.getCache (component, "panelDisplayEmbedded") ; 
+            var showEmbeddedPanel = helper.getCache (component, "showEmbeddedPanel" ) ;
+            console.log('chartArea: panelDisplayEmbedded, showEmbeddedPanel: ', showEmbeddedPanel);
+
+            var panelDisplayEmbeddedOuter = helper.getCache (component, "panelDisplayEmbeddedOuter") ; 
+
+            var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
+            var opacity = panelDisplayEmbeddedOuterElement.style["opacity"];        
+            opacity = parseFloat(opacity);
+                
+            var tpc = {
+                "topic" : topic,
+                "parameters" : parameters,
+                "controller" : controller
+            };
+            panelDisplayEmbedded.callFromContainer(tpc);               
+
         }
         if (topic == "ReScale")
         {

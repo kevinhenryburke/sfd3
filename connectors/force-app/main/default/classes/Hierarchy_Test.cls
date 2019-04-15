@@ -321,14 +321,20 @@ public inherited sharing class Hierarchy_Test {
  
     @IsTest
     public static void getFieldType(){
-        String stringType = HierarchyConfiguration.getFieldType('Account', 'name');
+        HierarchyConfiguration.FieldConfiguration fc = new HierarchyConfiguration.FieldConfiguration();
+        fc.api = 'name';
+        String stringType = HierarchyConfiguration.getFieldType('Account', fc);
         System.assertEquals('STRING', stringType);
-        String decimalType = HierarchyConfiguration.getFieldType('Account', 'AnnualRevenue');
+        fc.api = 'AnnualRevenue';
+        String decimalType = HierarchyConfiguration.getFieldType('Account', fc);
         System.assertEquals('CURRENCY', decimalType);
-        String integerType = HierarchyConfiguration.getFieldType('Account', 'NumberOfEmployees');
+        fc.api = 'NumberOfEmployees';
+        String integerType = HierarchyConfiguration.getFieldType('Account', fc);
         System.assertEquals('INTEGER', integerType);
-        String datetimeType = HierarchyConfiguration.getFieldType('Account', 'CreatedDate');
+        fc.api = 'CreatedDate';
+        String datetimeType = HierarchyConfiguration.getFieldType('Account', fc);
         System.assertEquals('DATETIME', datetimeType);        
+
     }
 
 }

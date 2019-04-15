@@ -1,4 +1,4 @@
-<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="DataExtract">
+<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="DataExtract"  access="global">
 
     <ltng:require scripts="/resource/Berliozjs" />
 
@@ -11,24 +11,23 @@
         <aura:attribute name="tpc" type="Object"/>    
     </aura:method>      
       
-    <aura:attribute name="defaultEventType" type="String" default="APPLICATION"/>    
-
     <lightning:overlayLibrary aura:id="overlayLib"/>
 
 
     <!-- Master Config -->  
-    <aura:attribute name="masterConfig" type="String" default="{}"/>      
+    <aura:attribute name="masterConfig" access="global" type="String" default="{}"/>      
     <aura:attribute name="masterConfigObject" type="Object"/>      
 
     <!-- Design Paramters -->  
-    <aura:attribute name="Controller" type="String" default="" description="If you want this card to respond to a particular controller on a page then put the controller's configured name here (unique to the page)"/>    
+    <aura:attribute name="Controller" access="global" type="String" default="" description="If you want this card to respond to a particular controller on a page then put the controller's configured name here (unique to the page)"/>    
     <aura:attribute name="objectIcons" type="String" default="{}"/>    
-    <aura:attribute name="extractedDisplayValues" type="String[]" default="['No node selected']"/>    
+    <aura:attribute name="extractedDisplayValues" type="Object[]" default="[]"/>    
+    
     <aura:attribute name="layoutStyle" type="String" default="card"/>    
     <aura:attribute name="objectType" type="String" default=""/>    
 
     <!-- Design Paramters Panel -->
-    <aura:attribute name="card1" type="String" default="No node selected"/>    
+    <aura:attribute name="recordName" type="String" default="No node selected"/>    
 
     <aura:attribute name="recordId" type="String" default=""/>    
     <aura:attribute name="iconName" type="String" default="standard:account"/>    
@@ -36,7 +35,6 @@
     <aura:attribute name="hostComponentReference" type="String" default="" description="If this component is embedded in a chart, this is the name of the host"/>    
     <aura:attribute name="isHosted" type="Boolean" default="false" description="If this component is embedded in a chart, then this is set to true"/>    
 
-    <aura:attribute name="isDVisible" type="Boolean" default="false" />
     <aura:attribute name="iconA" type="String" default="utility:chevrondown"/>    
     <aura:attribute name="iconB" type="String" default="utility:chevronright"/>    
     <aura:attribute name="iconC" type="String" default="utility:chevronright"/>    
@@ -46,18 +44,32 @@
     <aura:attribute name="mode" type="String"/>    
 
     <div class="slds">
-    
-    <aura:if isTrue="{!v.layoutStyle == 'card'}"> 
-        <lightning:card aura:id="detailcard" title="{!v.card1}" iconName="{!v.iconName}">
-            <div class="c-container">
-                <lightning:layout horizontalAlign="space" verticalAlign="stretch">
 
-                <lightning:layoutItem flexibility="auto" padding="around-small">
-                        <a href = "" onclick = "{!c.navigateToRecord}">{!v.card1}</a>
-                    </lightning:layoutItem>
+    <!-- <aura:if isTrue="{!v.layoutStyle == 'card'}">  -->
+    <aura:if isTrue="{!v.layoutStyle == 'cardTile'}">
+        <lightning:card aura:id="detailcard" variant="narrow" title="{!v.recordName}">
+            <aura:set attribute="actions">
+                <lightning:buttonIcon iconName="utility:hide" variant="bare" onclick="{! c.handleFade }" alternativeText="Fade" />
+                <lightning:buttonIcon iconName="utility:close" variant="bare" onclick="{! c.handleClose }" alternativeText="Close" />
+            </aura:set>
+            <div class="c-container" style="overflow:scroll; height:200px;">
+                <!-- <p class="slds-p-horizontal_small"><a href = "" onclick = "{!c.navigateToRecord}">{!v.recordName}</a></p> -->
+
+                <aura:iteration items="{!v.extractedDisplayValues}" var="item">
+                    <p class="slds-p-horizontal_small"><c:fieldFormatter item="{!item}"/></p>    
+                </aura:iteration>
+            </div>
+        </lightning:card>  
+    </aura:if>
+
+
+    <aura:if isTrue="{!v.layoutStyle == 'card'}"> 
+        <lightning:card aura:id="detailcard" title="{!v.recordName}" iconName="{!v.iconName}">
+            <div class="c-container">
+                <lightning:layout horizontalAlign="space" verticalAlign="stretch" multipleRows="true">
                     <aura:iteration items="{!v.extractedDisplayValues}" var="item">
                         <lightning:layoutItem flexibility="auto" padding="around-small">
-                            {!item}
+                            <p><c:fieldFormatter item="{!item}"/></p>    
                         </lightning:layoutItem>
                     </aura:iteration>
                 </lightning:layout>
@@ -65,8 +77,12 @@
         </lightning:card>  
     </aura:if>
 
+
+<!-- Temporary concentrate on the simple -->            
+<aura:if isTrue="false">            
+
     <aura:if isTrue="{!v.layoutStyle == 'cardTile'}">
-            <lightning:card variant="Narrow" aura:id="detailcard" title="{!v.card1}" iconName="{!v.iconName}" class="slds-truncate slds-text-body_regular">
+            <lightning:card variant="Narrow" aura:id="detailcard" title="{!v.recordName}" iconName="{!v.iconName}" class="slds-truncate slds-text-body_regular">
                 <aura:set attribute="actions">
                     <lightning:buttonIcon iconName="utility:close" variant="bare" onclick="{! c.handleClose }" alternativeText="Close" />
                 </aura:set>
@@ -80,11 +96,11 @@
                     <div class="slds-section__content slds-show" aura:id="expandA">
                         <lightning:layout multipleRows="true" verticalAlign="stretch">
                             <lightning:layoutItem size="6" padding="around-small" class="slds-text-body_small">
-                                <a href = "" onclick = "{!c.navigateToRecord}">{!v.card1}</a>
+                                <a href = "" onclick = "{!c.navigateToRecord}">{!v.recordName}</a>
                             </lightning:layoutItem>
                             <aura:iteration items="{!v.extractedDisplayValues}" var="item">
                                 <lightning:layoutItem size="6" padding="around-small">
-                                    {!item}
+                                    <p><c:fieldFormatter item="{!item}"/></p>    
                                 </lightning:layoutItem>
                             </aura:iteration>
                         </lightning:layout>
@@ -128,6 +144,7 @@
                     </div>
                 </lightning:card>
         </aura:if>
+    </aura:if>
     </div>
 
 

@@ -86,10 +86,7 @@
 
             var displayData = parameters["data"];
 
-            var extractedDisplayApiAndValues = helper.extractDisplayValues (displayData);
-
-            var extractedApiNames = extractedDisplayApiAndValues[0]; // List of API names, not currently implemented
-            var extractedDisplayValues = extractedDisplayApiAndValues[1];
+            var extractedDisplayValues = helper.extractDisplayValues (displayData);
 
             var objectType = displayData["objectType"];
             component.set("v.objectType", objectType);
@@ -104,7 +101,7 @@
             }
 
             component.set("v.recordId", helper.extractRecordRoleField(displayData, "id"));
-            component.set("v.card1", helper.extractRecordRoleField(displayData, "name"));
+            component.set("v.recordName", helper.extractRecordRoleField(displayData, "name"));
             component.set("v.extractedDisplayValues", extractedDisplayValues);  
 
         }
@@ -134,6 +131,15 @@
 
         // destroy this component
         component.destroy();
+    },
+
+    handleFade : function(component, event, helper) {
+        var appEvent = $A.get("e.c:evt_sfd3");
+        appEvent.setParams({
+            "topic" : "FadeDisplayPanel",
+            "controller" : component.get("v.hostUserControllerComponentId"), // pass the host component name back for an embedded component 
+        });
+        appEvent.fire();
     },
 
     handleExpandA : function(component, event, helper) {

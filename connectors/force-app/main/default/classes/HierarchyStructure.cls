@@ -27,10 +27,8 @@ public inherited sharing class HierarchyStructure {
 
     // the value retrieved for this record
     public String retrievedValue; 
-    public Integer retrievedInteger; 
-    public Double retrievedDecimal; 
-    public Datetime retrievedDatetime; 
-    public Date retrievedDate; 
+    public String lookupId; 
+    public String displayPrefix; 
 
     public List<HierarchyStructure> children;   // child records
 
@@ -83,28 +81,43 @@ public inherited sharing class HierarchyStructure {
         }
     }
 
-    private static void mapRetrievedValues (sObject s, HierarchyConfiguration.FieldConfiguration field) {
-        if (s.get(field.api) != null) {
-            if (field.fieldType == 'STRING' || field.fieldType == 'ID' || field.fieldType == 'REFERENCE' || field.fieldType == 'PICKLIST') {
-                field.retrievedValue = s.get(field.api).toString();
+    private static String[] mapRetrievedValues (sObject s, HierarchyConfiguration.FieldConfiguration field) {
+        Object o;
+
+        // handle parent object fields 
+        if (field.api.contains('.')) {
+            // For now, assume we are only dealing with parent object, not higher
+            List<String> lstAlpha = field.api.split('\\.'); // need to escape a fullstop to use it as a regular expression in split
+            Map<String,Object> populatedFieldsAsMap = s.getPopulatedFieldsAsMap();
+
+            Object parentObj = populatedFieldsAsMap.get(lstAlpha[0]);
+            if (parentObj == null) {return new String[]{field.api, null};} // the lookup is null, therefore don't try to inspect the object, just exit
+
+            String parentJson = JSON.serialize(parentObj);
+            Map<String, Object> m = (Map<String, Object>) JSON.deserializeUntyped(parentJson);
+
+            field.retrievedValue = (String) m.get(lstAlpha[1]);
+            o = m.get(lstAlpha[1]);
+        }
+        else {
+            o = s.get(field.api);
+        }
+
+        if (o != null) {
+            // convert data types to strings
+            if (field.fieldType == 'STRING' || field.fieldType == 'ID' || field.fieldType == 'REFERENCE' || field.fieldType == 'PICKLIST' || field.fieldType == 'EMAIL' || field.fieldType == 'PHONE' || field.fieldType == 'URL' || field.fieldType == 'TEXTAREA') {
+                field.retrievedValue = o.toString();
             }
-            if (field.fieldType == 'DATETIME') {
-                field.retrievedDatetime = (Datetime) s.get(field.api);
-            }
-            if (field.fieldType == 'DATE') {
-                field.retrievedDate = (Date) s.get(field.api);
-            }
-            if (field.fieldType == 'CURRENCY') {
-                field.retrievedDecimal = (Decimal) s.get(field.api);
-            }
-            if (field.fieldType == 'INTEGER') {
-                field.retrievedInteger = (Integer) s.get(field.api);
+            if (field.fieldType == 'DATETIME' || field.fieldType == 'DATE' || field.fieldType == 'CURRENCY' || field.fieldType == 'DOUBLE' || field.fieldType == 'DECIMAL' || field.fieldType == 'INTEGER') {
+                field.retrievedValue = String.valueOf(o);
             }
         }
+        return new String[]{field.api,field.retrievedValue};
     }
 
     private static void mapKeyFields (sObject s, HierarchyConfiguration.FieldConfiguration fc, HierarchyStructure hs) {
-        if (s.get(fc.api) != null) {
+        System.debug('mapKeyFields: ' + s);
+        if (!fc.api.contains('.') && s.get(fc.api) != null) {
             if (fc.role == 'id') {
                 hs.id = s.get(fc.api).toString();
             }
@@ -125,14 +138,23 @@ public inherited sharing class HierarchyStructure {
 
     public static void processFieldsToStructure (sObject s, HierarchyStructure hs, List<HierarchyConfiguration.FieldConfiguration> listfc) {
         hs.fields = new List<HierarchyConfiguration.FieldConfiguration>();
+        Map<String,String> mapAPIRetrievedValue = new Map<String,String>(); 
+        Integer index = 0;
+        Map<Integer,String> mapIndexAPI = new Map<Integer,String>(); 
 
         for (HierarchyConfiguration.FieldConfiguration fc : listfc) {
+            
 
             HierarchyConfiguration.FieldConfiguration field = new HierarchyConfiguration.FieldConfiguration();
 
             field.api = fc.api;
             field.role = fc.role;
             field.display = fc.display;
+
+            field.lookupIdField = fc.lookupIdField;
+            if (fc.displayPrefix != null) {
+                field.displayPrefix = fc.displayPrefix;
+            }
             field.orderByField = fc.orderByField;
             field.fieldType = fc.fieldType;
 
@@ -142,15 +164,24 @@ public inherited sharing class HierarchyStructure {
             mapKeyFields (s, fc, hs);
 
             /* Set the appropriate retrieved value field */
-            mapRetrievedValues (s, field);
+            String[] thisMapAPIRetrievedValue = mapRetrievedValues (s, field);
+            mapAPIRetrievedValue.put(thisMapAPIRetrievedValue[0],thisMapAPIRetrievedValue[1]);
 
             hs.fields.add(field);
 
+            if (fc.lookupIdField != null) {
+                mapIndexAPI.put(index,fc.lookupIdField);
+            }
+            index++;
         }
+
+        for (Integer lookupIndex : mapIndexAPI.keySet()) {
+            String lookupAPI = mapIndexAPI.get(lookupIndex);
+            String lookupId = mapAPIRetrievedValue.get(lookupAPI);
+            hs.fields[lookupIndex].lookupId = lookupId;
+        }
+
         hs.objectType = s.getSObjectType().getDescribe().getName();            
-
     }
-
-
 
 }

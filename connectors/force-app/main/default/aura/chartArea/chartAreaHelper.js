@@ -86,10 +86,16 @@
         _this.publishPreppedEvent(component,preppedEvent);
 
         console.log("chartArea: ChartRendered event published ");
-
+ 
         // build up a cache for mouseover events - may be a better way to do this!
         _this.setCache (component, "appEvents",  []) ;
         _this.restockCache(component);
+
+        var panelDisplayEmbedded = component.find("panelDisplayEmbedded"); // this should be ok as it's an internal search, need to prefix with a unique id is required outside of lightning context
+        _this.setCache (component, "panelDisplayEmbedded", panelDisplayEmbedded) ; 
+
+        var panelDisplayEmbeddedOuter = component.find("panelDisplayEmbeddedOuter"); // this should be ok as it's an internal search, need to prefix with a unique id is required outside of lightning context
+        _this.setCache (component, "panelDisplayEmbeddedOuter", panelDisplayEmbeddedOuter) ; 
 
     },
 
@@ -178,6 +184,7 @@
             console.log("allowPopover not set "); 
         }
 
+
     },
 
     // create an invisible svg symbol to attach a popover to
@@ -188,8 +195,10 @@
         var mdata = [0]; // random data value, not used
 
         var width = _this.getCache (component, "width");
-        var popx = width - 10;
-        var popy = 200;
+        // var popx = width - 10;
+        // var popy = 200;
+        var popx = width - 260;
+        var popy = 110;
 
         var svg = d3.select(_this.getDivId("svg", componentReference, true));
         var infosvg = 
@@ -246,13 +255,13 @@
                         var referenceSelector = _this.getCache (component, "referenceSelector");
                         console.log("createPopOverComponent: createComponent callback: " + referenceSelector);
                         if (status === "SUCCESS") {
-                            console.log("createPopOverComponent: createComponent callback: SUCCESS: " );
+                            console.log("xxxxx: createPopOverComponent: createComponent callback: SUCCESS: " );
 
                             var modalPromise = overlayLibElement.showCustomPopover({
                                 body: newComponent,
                                 referenceSelector: referenceSelector,
                                 // cssClass: "slds-hide,popoverclass,slds-popover,slds-popover_panel,slds-nubbin_left,no-pointer,cPopoverTest"
-                                cssClass: "popoverclass,slds-popover,slds-popover_panel,no-pointer,cChartArea"
+                                cssClass: "popoverclass,slds-popover,slds-popover_panel,no-pointer,slds-popover__body_small,slds-popover_small,slds-popover__body_small,cChartArea"
                             });
                             component.set("v.modalPromise", modalPromise);  
                             modalPromise.then(function (overlay) {
@@ -816,9 +825,13 @@
                 return _this.getStringValue (currentMeasureScheme, retrievedField,  "Value");
             }
 
-            let numericValue = (retrievedField.retrievedDecimal != null) 
-                ? retrievedField.retrievedDecimal : retrievedField.retrievedInteger;
-            return numericValue;
+            if ((retrievedField.fieldType == "CURRENCY" || retrievedField.fieldType == "DECIMAL" || retrievedField.fieldType == "DOUBLE") && retrievedField.retrievedValue != null) {
+                return retrievedField.retrievedValue;
+            }
+
+            if (retrievedField.fieldType == "INTEGER" && retrievedField.retrievedValue != null) {
+                return retrievedField.retrievedValue;
+            }
         }
 
         if (returnType == "Color" ) {
@@ -830,8 +843,16 @@
             // case when baseing colors and values on numerics
 
             // bring the Decimal and Integer options into a single variable
-            var numericValue = (retrievedField.retrievedDecimal != null) 
-                ? retrievedField.retrievedDecimal : retrievedField.retrievedInteger;
+            var numericValue; 
+
+            if ((retrievedField.fieldType == "CURRENCY" || retrievedField.fieldType == "DECIMAL" || retrievedField.fieldType == "DOUBLE") && retrievedField.retrievedValue != null) {
+                numericValue = retrievedField.retrievedValue;
+            }
+
+            if (retrievedField.fieldType == "INTEGER" && retrievedField.retrievedValue != null) {
+                numericValue = retrievedField.retrievedValue;
+            }
+    
 
             if (currentMeasureSchemeType == "ValueBand") {
                 // check out the lowest level

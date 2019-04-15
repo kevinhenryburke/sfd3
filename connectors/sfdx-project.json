@@ -1,30 +1,44 @@
 {
     "packageDirectories": [
         {
-            "path": "force-app",
+            "path": "force-app/main/default",
             "default": true,
             "package": "Berlioz Full",
             "versionName": "ver 0.1",
             "versionNumber": "0.1.0.NEXT"
         },
         {
-            "path": "force-app",
+            "path": "force-app/main/default",
             "package": "Berlioz Full01",
             "versionName": "ver 0.1",
             "versionNumber": "0.1.0.NEXT",
             "default": false
         },
         {
-            "path": "force-app",
+            "path": "force-app/main/default",
             "package": "Berlioz Full02",
+            "versionName": "ver 0.1",
+            "versionNumber": "0.1.0.NEXT",
+            "default": false
+        },
+        {
+            "path": "force-app/main/default",
+            "package": "Berlioz Full03",
+            "versionName": "ver 0.1",
+            "versionNumber": "0.1.0.NEXT",
+            "default": false
+        },
+        {
+            "path": "force-app/main/default",
+            "package": "Berlioz Managed",
             "versionName": "ver 0.1",
             "versionNumber": "0.1.0.NEXT",
             "default": false
         }
     ],
-    "namespace": "",
+    "namespace": "bzno",
     "sfdcLoginUrl": "https://login.salesforce.com",
-    "sourceApiVersion": "44.0",
+    "sourceApiVersion": "45.0",
     "packageAliases": {
         "Berlioz Full": "0HoB0000000PAyMKAW",
         "Berlioz Full@0.1.0-1": "04tB0000000TuZyIAK",
@@ -32,6 +46,10 @@
         "Berlioz Full01@0.1.0-1": "04tB0000000Tua8IAC",
         "Berlioz Full02": "0HoB0000000Kz8gKAC",
         "Berlioz Full02@0.1.0-1": "04tB0000000YPF5IAO",
-        "Berlioz Full02@0.1.0-2": "04tB0000000YPFPIA4"
+        "Berlioz Full02@0.1.0-2": "04tB0000000YPFPIA4",
+        "Berlioz Full03": "0HoB0000000Kz8qKAC",
+        "Berlioz Full03@0.1.0-1": "04tB0000000YPFtIAO",
+        "Berlioz Managed": "0HoB0000000Kz90KAC",
+        "Berlioz Managed@0.1.0-1": "04tB0000000YPGSIA4"
     }
 }

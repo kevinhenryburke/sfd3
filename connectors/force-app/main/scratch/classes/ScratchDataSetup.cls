@@ -597,4 +597,50 @@ aaa.runScripts(9);
 
     }
 
+
+    public static void updateTenure () {
+        List<User> listMan =
+            [select id, ManagerId from User where usertype = 'Standard'];
+
+        Integer i = 0; 
+        for(User userMan : listMan ) {
+            Integer tenure = Math.mod(i ,12);   
+            userMan.tenure__c = tenure;  
+            i++;
+        }
+
+        update listMan;
+    }
+
+    public static void updateGrade () {
+        List<User> listMan =
+            [select id from User where usertype = 'Standard' and name = 'Elliot Executive' LIMIT 1];
+
+        System.debug('exec list: ' + listMan);
+
+        User executive = listMan[0];
+        executive.grade__c = 10;
+        update executive;    
+
+        Set<Id> manIds = new Set<Id>{executive.id};
+        while (manIds.size() > 0) {
+            System.debug('before manIds: ' + manIds.size());
+            listMan =
+                [select id, name, ManagerId, Manager.grade__c from User where usertype = 'Standard' and ManagerId IN :manIds];
+            
+            manIds = new Set<Id>();
+            for(User userMan : listMan ) {
+                manIds.add(userMan.id);   
+                Integer decreaseBy = 1;
+                if (userMan.name.length() > 13) {
+                    decreaseBy = 2;
+                }         
+                userMan.grade__c = Math.max(userMan.Manager.grade__c - decreaseBy, 1);
+                System.debug('new grade: ' + userMan.name + ':' + userMan.grade__c);
+            }        
+            System.debug('after manIds: ' + manIds.size());
+            update listMan;
+        }
+    }
+
 }
