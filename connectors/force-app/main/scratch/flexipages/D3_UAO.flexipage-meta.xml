@@ -3,7 +3,7 @@
     <flexiPageRegions>
         <componentInstances>
             <componentInstanceProperties>
-                <name>Title</name>
+                <name>Title</name> 
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>

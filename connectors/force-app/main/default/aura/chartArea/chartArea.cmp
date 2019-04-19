@@ -7,13 +7,48 @@
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
 />
 -->
- 
+<aura:if isTrue="{!v.componentType == 'hierarchy.ctree'}">
   <ltng:require 
   scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs)}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
   />
+</aura:if>
 
-    
+<aura:if isTrue="{!v.componentType == 'hierarchy.pack'}">
+  <ltng:require 
+  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs)}"
+  afterScriptsLoaded="{!c.afterScriptsLoaded}"
+  />
+</aura:if>
+
+<aura:if isTrue="{!v.componentType == 'hierarchy.treemapzoom'}">
+  <ltng:require 
+  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs)}"
+  afterScriptsLoaded="{!c.afterScriptsLoaded}"
+  />
+</aura:if>
+
+<aura:if isTrue="{!v.componentType == 'hierarchy.treemap'}">
+  <ltng:require 
+  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs)}"
+  afterScriptsLoaded="{!c.afterScriptsLoaded}"
+  />
+</aura:if>
+
+<aura:if isTrue="{!v.componentType == 'network.connections'}">
+  <ltng:require 
+  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs)}"
+  afterScriptsLoaded="{!c.afterScriptsLoaded}"
+  />
+</aura:if>
+
+<aura:if isTrue="{!v.componentType == 'network.timeline'}">
+  <ltng:require 
+  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs)}"
+  afterScriptsLoaded="{!c.afterScriptsLoaded}"
+  />
+</aura:if>
+
 <!-- if ever need to add a second script then use join syntax
   scripts="{!join(',',$Resource.jq331,$Resource.d3minjs)}"
 

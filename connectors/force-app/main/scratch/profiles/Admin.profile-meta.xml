@@ -152,7 +152,7 @@
         <tab>D3_TreeMap_Zoom_P</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
-    <tabVisibilities>
+    <tabVisibilities> 
         <tab>D3_UAO</tab>
         <visibility>DefaultOn</visibility>
     </tabVisibilities>

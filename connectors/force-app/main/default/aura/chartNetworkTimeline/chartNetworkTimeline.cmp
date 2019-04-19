@@ -1,37 +1,3 @@
 <aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extends="c:chartNetwork"  access="global" >
 
-    <aura:method name="initializeVisuals" /> 
-
-    <aura:method name="dataPreprocess"> 
-        <aura:attribute name="datajson" type="Object"/>    
-        <aura:attribute name="datajsonRefresh" type="Object"/>    
-    </aura:method>
-
-    <aura:method name="refreshDataController"> 
-        <aura:attribute name="parameters" type="Object"/> 
-    </aura:method>
-
-    <aura:method name="getDefaultSize"> 
-    </aura:method>
-  
-    <aura:method name="getDefaultColor"> 
-    </aura:method>
-  
-    <aura:method name="searchChart"> 
-        <aura:attribute name="searchTermId" type="String"/> 
-        <aura:attribute name="searchAction" type="String"/> 
-        <aura:attribute name="showLevels" type="Integer"/> 
-    </aura:method>              
-
-    <aura:method name="reScale"> 
-        <aura:attribute name="ChartScaleFactor" type="Decimal"/> 
-    </aura:method>
-
-    <aura:method name="refreshVisibility"> 
-    </aura:method>
-
-    <aura:method name="styleNodes"> 
-    </aura:method>
-
-
 </aura:component>	

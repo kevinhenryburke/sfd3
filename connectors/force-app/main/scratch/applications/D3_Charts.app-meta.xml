@@ -10,7 +10,7 @@
     <label>D3 Charts</label>
     <navType>Standard</navType>
     <tabs>D3_HalfWidth_Chart</tabs>
-    <tabs>D3_UAO</tabs>
+    <tabs>D3_UAO</tabs> 
     <tabs>D3_Hierarchy_Picklist</tabs>
     <tabs>D3_Network</tabs>
     <tabs>D3_Pack</tabs>

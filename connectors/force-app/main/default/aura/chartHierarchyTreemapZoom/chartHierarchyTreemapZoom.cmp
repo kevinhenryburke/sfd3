@@ -1,14 +1,3 @@
 <aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extends="c:chartHierarchy"  access="global">
 
-    <aura:method name="initializeVisuals"/> 
-
-    <aura:method name="styleNodes"> 
-    </aura:method>
-
-    <aura:method name="getDefaultSize"> 
-    </aura:method>
-  
-    <aura:method name="getDefaultColor"> 
-    </aura:method>
-
 </aura:component>	
