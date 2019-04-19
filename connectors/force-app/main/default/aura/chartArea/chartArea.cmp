@@ -9,42 +9,42 @@
 -->
 <aura:if isTrue="{!v.componentType == 'hierarchy.ctree'}">
   <ltng:require 
-  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs)}"
+  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs,$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/hierarchyCtree.js')}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
   />
 </aura:if>
 
 <aura:if isTrue="{!v.componentType == 'hierarchy.pack'}">
   <ltng:require 
-  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs)}"
+  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs,$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/hierarchyPack.js')}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
   />
 </aura:if>
 
 <aura:if isTrue="{!v.componentType == 'hierarchy.treemapzoom'}">
   <ltng:require 
-  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs)}"
+  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs,$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js')}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
   />
 </aura:if>
 
 <aura:if isTrue="{!v.componentType == 'hierarchy.treemap'}">
   <ltng:require 
-  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs)}"
+  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs,$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js')}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
   />
 </aura:if>
 
 <aura:if isTrue="{!v.componentType == 'network.connections'}">
   <ltng:require 
-  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs)}"
+  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs,$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js')}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
   />
 </aura:if>
 
 <aura:if isTrue="{!v.componentType == 'network.timeline'}">
   <ltng:require 
-  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs)}"
+  scripts="{!join(',',$Resource.d3js413,$Resource.Berliozjs,$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js')}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
   />
 </aura:if>
