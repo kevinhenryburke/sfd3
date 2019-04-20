@@ -587,11 +587,6 @@ console.log("xxxxx 1: " );
         }
     },
 
-
-    clearHighlightPaths : function () {
-        //TODO - IMPLEMENT
-    },
-
     merge : function(component, updatejson) {
         var componentReference = component.get("v.componentReference");
         var _this = this;

@@ -5,6 +5,9 @@ public inherited sharing class ScratchDataSetup {
 If setting up a scratch org then in Execute Anonymous run, sequentially
 
 ScratchDataSetup aaa = new ScratchDataSetup();
+aaa.createUsersLevel1();
+
+ScratchDataSetup aaa = new ScratchDataSetup();
 aaa.insertData(1);
 
 ScratchDataSetup aaa = new ScratchDataSetup();
@@ -24,6 +27,58 @@ ScratchDataSetup.updateGrade();
 
 
 */
+
+    public static void updateUserUserManager () {
+        User securityUser = [select id from User where Name='Security User' ];
+        User userUser = [select id from User where Name='User User' ];
+
+        securityUser.firstName = 'Janet';
+        securityUser.lastName = 'Baker';
+        userUser.firstName = 'Kevin';
+        userUser.lastName = 'Burke';
+        userUser.ManagerId = securityUser.id;
+
+        update securityUser;
+        update userUser;
+    }
+
+// user - first layer is late 20th/21st centure composers, second layer is singers, third is instrumentalists
+
+    public void createUsersLevel1 () {
+        User securityUser = [select id from User where Name='Janet Baker' ];
+        String profileId = [select Id from Profile WHERE Name = 'Standard User' LIMIT 1].id;
+
+        List<User> newUsers = new List<User>();
+        newUsers.add(ScratchDataSetup.createUser('James', 'MacMillan', securityUser.id, profileId));
+        newUsers.add(ScratchDataSetup.createUser('Arvo', 'Part', securityUser.id, profileId));
+        newUsers.add(ScratchDataSetup.createUser('Philip', 'Glass', securityUser.id, profileId));
+        newUsers.add(ScratchDataSetup.createUser('Olivier', 'Messaien', securityUser.id, profileId));
+        newUsers.add(ScratchDataSetup.createUser('Judith', 'Weir', securityUser.id, profileId));
+        newUsers.add(ScratchDataSetup.createUser('Dobrinka', 'Tabakova', securityUser.id, profileId));
+        newUsers.add(ScratchDataSetup.createUser('Meredith', 'Monk', securityUser.id, profileId));
+        insert newUsers;
+    }
+
+    private static User createUser (String firstName, String lastName, String managerId, String profileId) {
+        Double randomness = math.random() * 10000;
+        Integer randomInteger = randomness.intValue();
+
+        User usr = new User(LastName = lastName,
+            FirstName = firstName,
+            Alias = 'a' + randomInteger,
+            Email = 'kevin.burke@salesforce.com',
+            Username = firstName + lastName + randomInteger + '@bzno.org',
+            ProfileId = profileId,
+            TimeZoneSidKey = 'GMT',
+            LanguageLocaleKey = 'en_US',
+            EmailEncodingKey = 'UTF-8',
+            LocaleSidKey = 'en_US',
+            ManagerId = managerId,
+            isActive = false
+            );
+        return usr;
+    }
+
 
     Integer plevel = -1; // Parent Level
     Integer pindex = 0; // Parent Index
@@ -473,20 +528,6 @@ ScratchDataSetup.updateGrade();
             }
             update lau;
         }
-    }
-
-    public static void updateUserUserManager () {
-        User securityUser = [select id from User where Name='Security User' ];
-        User userUser = [select id from User where Name='User User' ];
-
-        securityUser.firstName = 'Janet';
-        securityUser.lastName = 'Baker';
-        userUser.firstName = 'Kevin';
-        userUser.lastName = 'Burke';
-        userUser.ManagerId = securityUser.id;
-
-        update securityUser;
-        update userUser;
     }
 
 
