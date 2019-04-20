@@ -3,8 +3,8 @@
 		console.log("chartHierarchyPackHelper: enter initializeVisuals proper structure");
 		let _this = this;
 
-        let datajson = _this.getCache (component, "datajson") ;  
-		let nodeGroup = _this.getCache (component, "nodeGroup") ;  
+        let datajson = _this.getStore (component, "datajson") ;  
+		let nodeGroup = _this.getStore (component, "nodeGroup") ;  
 
         /* Pack specification */
 
@@ -21,7 +21,7 @@
             .attr("id", d => d.id)
             .attr("recordid", d => d.recordid)
             .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-                _this.setCache (component, "mouseoverRecordId", d.id ) ;
+                _this.setStore (component, "mouseoverRecordId", d.id ) ;
                 var preppedEvent = _this.nodeMouseover(component, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
             }))
@@ -73,7 +73,7 @@
             .sum((d) => d.size)
             .sort((a, b) => b.value - a.value);
 
-            var diameter = Math.min(_this.getCache (component, "width"),_this.getCache (component, "height") ) ;  
+            var diameter = Math.min(_this.getStore (component, "width"),_this.getStore (component, "height") ) ;  
             console.log("getRootStructurePack diameter: " + diameter);
             
             var pack = d3.pack()

@@ -16,7 +16,7 @@
 
         if (groupingFields.length > 0) {
             datajson = helper.picklistNest(component, datajson);
-            helper.setCache (component, "datajson", datajson ) ;    
+            helper.setStore (component, "datajson", datajson ) ;    
         }
     },
 
@@ -28,9 +28,9 @@
         var updatejson = parameters.datajson;
 
         var componentReference = component.get("v.componentReference");
-        var nodeGroup = helper.getCache (component, "nodeGroup") ;  
-        var pathGroup = helper.getCache (component, "pathGroup") ;  
-        var root = helper.getCache (component, "root") ;
+        var nodeGroup = helper.getStore (component, "nodeGroup") ;  
+        var pathGroup = helper.getStore (component, "pathGroup") ;  
+        var root = helper.getStore (component, "root") ;
 
         helper.merge(component, updatejson);
         helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
@@ -44,9 +44,9 @@
         component.set("v.ChartScaleFactor", args.ChartScaleFactor);
 
         var componentReference = component.get("v.componentReference");
-        var nodeGroup = helper.getCache (component, "nodeGroup") ;  
-        var pathGroup = helper.getCache (component, "pathGroup") ;  
-        var root = helper.getCache (component, "root") ;
+        var nodeGroup = helper.getStore (component, "nodeGroup") ;  
+        var pathGroup = helper.getStore (component, "pathGroup") ;  
+        var root = helper.getStore (component, "root") ;
 
         helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
 
@@ -64,9 +64,9 @@
         var clearHighlightedPaths = helper.getMasterParam(component,"panels","ChartPanel","Hierarchy","clearHighlightedPaths");         
 
         var componentReference = component.get("v.componentReference");
-        var nodeGroup = helper.getCache (component, "nodeGroup") ;  
-        var pathGroup = helper.getCache (component, "pathGroup") ;  
-        var root = helper.getCache (component, "root") ;
+        var nodeGroup = helper.getStore (component, "nodeGroup") ;  
+        var pathGroup = helper.getStore (component, "pathGroup") ;  
+        var root = helper.getStore (component, "root") ;
 
         if (searchAction == "HighlightOpenPath" || searchAction == "OpenPath" ) {
                 helper.openPathsBy(component, searchTermId, "Id");
@@ -74,7 +74,7 @@
         }
 
         if (searchAction == "HighlightOpenPath" || searchAction == "HighlightPath" ) {
-            var highlightedPaths = helper.getCache (component, "highlightedPaths") ;
+            var highlightedPaths = helper.getStore (component, "highlightedPaths") ;
             if (highlightedPaths != null && clearHighlightedPaths == true) {
                 helper.stylePathsStroke(highlightedPaths, false);
             }
@@ -98,9 +98,9 @@
         var args = event.getParam("arguments");
 
         var componentReference = component.get("v.componentReference");
-        var nodeGroup = helper.getCache (component, "nodeGroup") ;  
-        var pathGroup = helper.getCache (component, "pathGroup") ;  
-        var root = helper.getCache (component, "root") ;
+        var nodeGroup = helper.getStore (component, "nodeGroup") ;  
+        var pathGroup = helper.getStore (component, "pathGroup") ;  
+        var root = helper.getStore (component, "root") ;
 
         helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
         console.log("aura:method styleNodes in chartHierarchy exit");

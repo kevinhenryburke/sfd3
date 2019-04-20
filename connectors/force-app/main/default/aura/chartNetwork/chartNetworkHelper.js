@@ -4,12 +4,12 @@
         console.log("subhelper: enter initializeVisuals proper!");
         var _this = this;
 
-		var datajson = _this.getCache (component, "datajson") ;  
-		var nodeGroup = _this.getCache (component, "nodeGroup") ;  
-		var pathGroup = _this.getCache (component, "pathGroup") ;  
-		var textGroup = _this.getCache (component, "textGroup") ;  
-		var pathToolTipDiv = _this.getCache (component, "pathToolTipDiv") ;  
-		var pathGroupId = _this.getCache (component, "pathGroupId") ;  
+		var datajson = _this.getStore (component, "datajson") ;  
+		var nodeGroup = _this.getStore (component, "nodeGroup") ;  
+		var pathGroup = _this.getStore (component, "pathGroup") ;  
+		var textGroup = _this.getStore (component, "textGroup") ;  
+		var pathToolTipDiv = _this.getStore (component, "pathToolTipDiv") ;  
+		var pathGroupId = _this.getStore (component, "pathGroupId") ;  
 
         var componentType = component.get("v.componentType");
         
@@ -37,7 +37,7 @@
             })
             // symbols...           .attr("d", d3.symbol().type( function(d) { return d3.symbols[4];}))
             .on('mouseout', function(d) { // hide the div
-                var retainNodeDetailsMouseOut = _this.getCache (component, "retainNodeDetailsMouseOut" ) ;
+                var retainNodeDetailsMouseOut = _this.getStore (component, "retainNodeDetailsMouseOut" ) ;
                 if (!retainNodeDetailsMouseOut)
                 {
                     var preppedEvent = _this.nodeMouseout(component, d); 
@@ -45,7 +45,7 @@
                 }
             })
             .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-                _this.setCache (component, "mouseoverRecordId", d.id ) ;
+                _this.setStore (component, "mouseoverRecordId", d.id ) ;
                 var preppedEvent = _this.nodeMouseover(component, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
             }))
@@ -54,20 +54,20 @@
                 var isiOS = bzchart.isiOS;
                 if (isiOS) {
                     var now = new Date().getTime();
-                    var lastTouch = _this.getCache (component, "lastTouch");
+                    var lastTouch = _this.getStore (component, "lastTouch");
                     var delta = now - lastTouch;
                     if (delta < 350 && delta > 0) {
                         // the second touchend event happened within half a second. Here is where we invoke the double tap code
                         //TODO implement - e.g. var win = window.open("http://news.bbc.co.uk"); win.focus();
                     }
-                    _this.setCache (component, "lastTouch", lastTouch) ;
+                    _this.setStore (component, "lastTouch", lastTouch) ;
                 } else {
                     console.log("not iOS");
                 }
                 // reset the clicked node to be the primary
                 // TODO This will need to be passed in the refreshVisibility call.
                 var primaryNodeId = d.id;
-                _this.setCache (component, "primaryNodeId", primaryNodeId ) ;
+                _this.setStore (component, "primaryNodeId", primaryNodeId ) ;
 
                 var cc = component.getConcreteComponent();
                 cc.refreshVisibility();                 
@@ -78,7 +78,7 @@
                 // Two options - complete refresh OR keep and get data from this point?
                 // send a message identifying the node in question
                 var primaryNodeId = d.id;
-                _this.setCache (component, "primaryNodeId", primaryNodeId ) ;
+                _this.setStore (component, "primaryNodeId", primaryNodeId ) ;
 
                 var preppedEvent = _this.nodeDoubleClick(component,primaryNodeId);
 
@@ -248,7 +248,7 @@
             }
             if (preppedEvent.eventType == "Cache"){
                 console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
-                var appEvents = _this.getCache (component, "appEvents") ;
+                var appEvents = _this.getStore (component, "appEvents") ;
                 event = appEvents.pop();
             }    
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
@@ -265,7 +265,7 @@
         _this.clearChart(componentReference);
         
         // retrieve the existing underlying data
-        var datajson = _this.getCache (component, "datajson") ;
+        var datajson = _this.getStore (component, "datajson") ;
 
         // initialize the new raw data, setting component references
         _this.initializeAddComponentRef(componentReference, datajsonRefresh);
@@ -300,7 +300,7 @@
 
         cc.dataPreprocess(datajson, datajsonRefresh);
 
-        datajson = _this.getCache (component, "datajson") ;
+        datajson = _this.getStore (component, "datajson") ;
         
         // re-initialize the chart
         var isInit = false;
@@ -331,11 +331,11 @@
         console.log("chartNetworkHelper.runSimulationConnections enter");
         var _this = this;
 
-        var datajson = _this.getCache (component, "datajson") ;
+        var datajson = _this.getStore (component, "datajson") ;
 
         var simulation = _this.initializeSimulationConnections(component, datajson.nodes);            
 
-        _this.setCache (component, "simulation", simulation ) ;
+        _this.setStore (component, "simulation", simulation ) ;
     
         var forceLinks = _this.buildForceLinks(path);
         var link_force =  d3.forceLink(forceLinks.links)
@@ -355,8 +355,8 @@
     initializeSimulationConnections : function (component, nodes) {
         var _this = this;
         console.log("chartNetworkHelper.initializeSimulationConnections enter");
-        var width = _this.getCache (component, "width") ;  
-        var height = _this.getCache (component, "height") ; 
+        var width = _this.getStore (component, "width") ;  
+        var height = _this.getStore (component, "height") ; 
     
         // force example - https://bl.ocks.org/rsk2327/23622500eb512b5de90f6a916c836a40
         var attractForce = d3.forceManyBody().strength(5).distanceMax(400).distanceMin(60);
@@ -415,8 +415,8 @@
     onTick : function  (component, path, node, text) {
         var _this = this;
 
-        var width = _this.getCache (component, "width") ;  
-        var height = _this.getCache (component, "height") ; 
+        var width = _this.getStore (component, "width") ;  
+        var height = _this.getStore (component, "height") ; 
     //    if (bzutils.getCache (component, "hasPaths") == true) {
             path.attr("d", function(d) {
                 var sx = _this.limitborderx(d.source.x, width);
@@ -471,11 +471,11 @@
         console.log("chartNetworkHelper.runSimulationInfluence enter");
         var _this = this;
 
-        var datajson = _this.getCache (component, "datajson") ;
+        var datajson = _this.getStore (component, "datajson") ;
 
         var simulation = _this.initializeSimulationInfluence(component, datajson.nodes);            
 
-        _this.setCache (component, "simulation", simulation ) ;
+        _this.setStore (component, "simulation", simulation ) ;
     
         var forceLinks = _this.buildForceLinks(path);
         var link_force =  d3.forceLink(forceLinks.links)
@@ -497,8 +497,8 @@
         console.log("chartNetworkHelper.initializeSimulationInfluence enter");
 
         var _this = this;
-        var width = _this.getCache (component, "width") ;  
-        var height = _this.getCache (component, "height") ; 
+        var width = _this.getStore (component, "width") ;  
+        var height = _this.getStore (component, "height") ; 
         var sizeDivisor = 100;
         var nodePadding = 2.5;
         var currentColorLabel = _this.getStore (component, "currentColorLabel") ; 

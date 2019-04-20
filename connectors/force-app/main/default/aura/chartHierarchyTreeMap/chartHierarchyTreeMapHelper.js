@@ -3,14 +3,14 @@
 		console.log("chartHierarchyTreeMapHelper.initializeVisuals enter");
 		let _this = this;
 
-        let datajson = _this.getCache (component, "datajson") ;  
-		let nodeGroup = _this.getCache (component, "nodeGroup") ;  
+        let datajson = _this.getStore (component, "datajson") ;  
+		let nodeGroup = _this.getStore (component, "nodeGroup") ;  
 
         let nodeDataSetFunction = _this.getRootStructureTreeMap (component); 
 
         nodeDataSetFunction(datajson);
 
-        let root = _this.getCache (component, "root") ;  
+        let root = _this.getStore (component, "root") ;  
 
         let cells = nodeGroup
             .selectAll("g")
@@ -31,7 +31,7 @@
             console.log("chartHierarchyTreeMapHelper computing callback " + componentReference);
 
             var treemap = d3.treemap()
-                .size([_this.getCache (component, "width") - 20, _this.getCache (component, "height") - 4])
+                .size([_this.getStore (component, "width") - 20, _this.getStore (component, "height") - 4])
                 .round(true)
                 .padding(1);
 
@@ -39,7 +39,7 @@
                 .sum(_this.valueAccessor(component))
                 .sort((a, b) => b.value - a.value);
 
-            _this.setCache (component, "root", root) ;  
+            _this.setStore (component, "root", root) ;  
 
             console.log("chartHierarchyTreeMapHelper callback returning" , root);
 
@@ -66,7 +66,7 @@
             .attr("id", d => d.id)
             .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
                 console.log("chartHierarchyTreeMapHelper.mouseover enter");
-                _this.setCache (component, "mouseoverRecordId", d.id ) ;
+                _this.setStore (component, "mouseoverRecordId", d.id ) ;
                 var preppedEvent = _this.nodeMouseover(component, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
             }))

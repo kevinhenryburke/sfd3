@@ -35,7 +35,7 @@ In the zoom controller implement the following method dataPreprocess (started)
             .key(function(d) { return d.subregion; }) // original ....
             .entries(datajson);
         component.set("v.datajson", datajson);
-        helper.setCache (component, "datajson", datajson ) ;
+        helper.setStore (component, "datajson", datajson ) ;
     }
 
 
@@ -63,13 +63,13 @@ In the zoom controller implement the following method dataPreprocess (started)
                 + ' Column: ' + column + ' StackTrace: ' + errorObj);
         }
 
-        var datajson = _this.getCache(component, "datajson");
+        var datajson = _this.getStore(component, "datajson");
 
         var cc = component.getConcreteComponent();
         // dataPreprocess will set datajson in cache
         cc.dataPreprocess(datajson);
 
-        let rootAfter = d3.hierarchy(_this.getCache (component, "datajson"))
+        let rootAfter = d3.hierarchy(_this.getStore (component, "datajson"))
             .eachBefore(function (d) {
                 d.id = d.data.id;
             })
@@ -78,15 +78,15 @@ In the zoom controller implement the following method dataPreprocess (started)
                 return b.value - a.value;
             });
 
-        _this.setCache (component, "d3root", rootAfter ) ;    
+        _this.setStore (component, "d3root", rootAfter ) ;    
 
         var margin = { top: 20, right: 0, bottom: 0, left: 0 };
         var formatNumber = d3.format(",d");
         var grandparentDepthInData = 0;
 
-        let nodeGroup = _this.getCache(component, "nodeGroup");
-        var width = _this.getCache(component, "width") - margin.left - margin.right - 50; // TODO not great  
-        var height = _this.getCache(component, "height") - margin.top - margin.bottom - 650;
+        let nodeGroup = _this.getStore(component, "nodeGroup");
+        var width = _this.getStore(component, "width") - margin.left - margin.right - 50; // TODO not great  
+        var height = _this.getStore(component, "height") - margin.top - margin.bottom - 650;
 
         var x = d3.scaleLinear()
             .domain([0, width])
@@ -135,7 +135,7 @@ In the zoom controller implement the following method dataPreprocess (started)
                 .round(false)
                 .paddingInner(0); // padding options explained at https://d3indepth.com/layouts/
 
-            var root = _this.getCache (component, "d3root" );    
+            var root = _this.getStore (component, "d3root" );    
 
             initialize(root);
             accumulate(root);
@@ -283,7 +283,7 @@ When you click to drill down the same structure is recreated started at the next
                     console.log("chartHierarchyTreemapZoomHelper.mouseover enter", d);
                     console.log("chartHierarchyTreemapZoomHelper.mouseover enter id ", d.id);
                     console.log("chartHierarchyTreemapZoomHelper.mouseover enter component ", component);
-                    _this.setCache(component, "mouseoverRecordId", d.id);
+                    _this.setStore(component, "mouseoverRecordId", d.id);
                     var preppedEvent = _this.nodeMouseover(component, d);
                     _this.publishPreppedEvent(component, preppedEvent);
                 }))

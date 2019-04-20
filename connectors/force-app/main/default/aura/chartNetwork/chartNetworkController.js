@@ -4,11 +4,11 @@
         console.log("calling the aura:method initializeVisuals in subcomponent");
         helper.areaInit(component);
 
-        helper.setCache (component, "primaryNodeHighlightingOn", component.get("v.primaryNodeHighlightingOn") ) ;
-        helper.setCache (component, "primaryNodeHighlightingColour", component.get("v.primaryNodeHighlightingColour") ) ;
-        helper.setCache (component, "primaryNodeHighlightingRadius", component.get("v.primaryNodeHighlightingRadius") ) ;
-        helper.setCache (component, "retainNodeDetailsMouseOut", component.get("v.retainNodeDetailsMouseOut") ) ;
-        helper.setCache (component, "nodestrokewidth", component.get("v.nodestrokewidth") ) ;
+        helper.setStore (component, "primaryNodeHighlightingOn", component.get("v.primaryNodeHighlightingOn") ) ;
+        helper.setStore (component, "primaryNodeHighlightingColour", component.get("v.primaryNodeHighlightingColour") ) ;
+        helper.setStore (component, "primaryNodeHighlightingRadius", component.get("v.primaryNodeHighlightingRadius") ) ;
+        helper.setStore (component, "retainNodeDetailsMouseOut", component.get("v.retainNodeDetailsMouseOut") ) ;
+        helper.setStore (component, "nodestrokewidth", component.get("v.nodestrokewidth") ) ;
 
         helper.initializeVisuals(component);                         
     },
@@ -40,8 +40,8 @@
 
         var componentReference = component.get("v.componentReference");        
         var primaryNodeId = helper.addComponentRef(componentReference, searchTermId);
-        helper.setCache (component, "primaryNodeId", primaryNodeId ) ;
-        helper.setCache (component, "showLevels", showLevels) ;
+        helper.setStore (component, "primaryNodeId", primaryNodeId ) ;
+        helper.setStore (component, "showLevels", showLevels) ;
 
         var cc = component.getConcreteComponent();
         cc.refreshVisibility();                 
@@ -64,10 +64,10 @@
             var componentReference = component.get("v.componentReference");        
             console.log("refreshVisibility enter "); 
         
-            var levels = helper.getCache(component, "showLevels") ;
+            var levels = helper.getStore(component, "showLevels") ;
 
-            var filterValues = helper.getCache (component, "filterValues") ;
-            var primaryNodeId = helper.getCache (component, "primaryNodeId") ;        
+            var filterValues = helper.getStore (component, "filterValues") ;
+            var primaryNodeId = helper.getStore (component, "primaryNodeId") ;        
             // not needed until reinstate measure level visibility
         
             var relatedNodes = helper.getRelatedNodes(primaryNodeId, componentReference, levels);
@@ -141,7 +141,7 @@
 
             var componentReference = component.get("v.componentReference");        
 
-            var primaryid = helper.getCache (component, "primaryNodeId") ;
+            var primaryid = helper.getStore (component, "primaryNodeId") ;
 
             var node = d3.select(helper.getDivId("nodeGroup", componentReference, true))
                 .selectAll("circle")  ;
@@ -162,19 +162,19 @@
                 var stroke = o.stroke;
                 var oid = o.id;
                 if (oid == primaryid) {
-                    var primaryNodeHighlightingOn = helper.getCache (component, "primaryNodeHighlightingOn") ;
+                    var primaryNodeHighlightingOn = helper.getStore (component, "primaryNodeHighlightingOn") ;
                     if (primaryNodeHighlightingOn == true) {
-                        stroke = helper.getCache (component, "primaryNodeHighlightingColour") ;
+                        stroke = helper.getStore (component, "primaryNodeHighlightingColour") ;
                     }                
                 }
                 return stroke;
             });
         
             node.style("stroke-width", function(o, i) {
-                var nodestrokewidth = helper.getCache (component, "nodestrokewidth") ;
+                var nodestrokewidth = helper.getStore (component, "nodestrokewidth") ;
                 var oid = o.id;
                 if (oid == primaryid) {
-                    nodestrokewidth = helper.getCache (component, "primaryNodeHighlightingRadius") ;
+                    nodestrokewidth = helper.getStore (component, "primaryNodeHighlightingRadius") ;
                 }
                 return nodestrokewidth;
             });

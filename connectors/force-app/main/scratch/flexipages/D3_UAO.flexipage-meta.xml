@@ -7,7 +7,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
-                <value>TreeMapZoomController</value>
+                <value>UAOController</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>masterConfig</name>
@@ -18,7 +18,7 @@
         <componentInstances>
             <componentInstanceProperties>
                 <name>Controller</name>
-                <value>TreeMapZoomController</value>
+                <value>UAOController</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>masterConfig</name>
@@ -33,11 +33,11 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
-                <value>HierarchyTreeMapZoom</value>
+                <value>UAOChart</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserControllerComponentId</name>
-                <value>TreeMapZoomController</value>
+                <value>UAOController</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>componentType</name>

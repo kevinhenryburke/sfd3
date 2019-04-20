@@ -11,25 +11,25 @@
 
         _this.initializeCache (component) ;
 
-        _this.setCache (component, "componentReference", component.get("v.componentReference") ) ;
-        _this.setCache (component, "componentType", component.get("v.componentType") ) ;
-        _this.setCache (component, "componentCategory", component.get("v.componentCategory") ) ;
-        _this.setCache (component, "componentEvent", component.getEvent("evt_bzc")) ;        
-        _this.setCache (component, "defaultEventType", component.getEvent("defaultEventType")) ;        
-        _this.setCache (component, "appEvents",  []) ;
+        _this.setStore (component, "componentReference", component.get("v.componentReference") ) ;
+        _this.setStore (component, "componentType", component.get("v.componentType") ) ;
+        _this.setStore (component, "componentCategory", component.get("v.componentCategory") ) ;
+        _this.setStore (component, "componentEvent", component.getEvent("evt_bzc")) ;        
+        _this.setStore (component, "defaultEventType", component.getEvent("defaultEventType")) ;        
+        _this.setStore (component, "appEvents",  []) ;
 
-        _this.setCache (component, "UserComponentId", component.get("v.UserComponentId") ) ;
-        _this.setCache (component, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
-        _this.setCache (component, "hasPrimaryNode", component.get("v.hasPrimaryNode") ) ;
+        _this.setStore (component, "UserComponentId", component.get("v.UserComponentId") ) ;
+        _this.setStore (component, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
+        _this.setStore (component, "hasPrimaryNode", component.get("v.hasPrimaryNode") ) ;
 
-        _this.setCache (component, "lastTouch", new Date().getTime()) ;
-        _this.setCache (component, "width", Math.min(screen.width, screen.height)) ; // review this
-        _this.setCache (component, "height", Math.min(screen.width, screen.height)) ; // review this
+        _this.setStore (component, "lastTouch", new Date().getTime()) ;
+        _this.setStore (component, "width", Math.min(screen.width, screen.height)) ; // review this
+        _this.setStore (component, "height", Math.min(screen.width, screen.height)) ; // review this
 
-        _this.setCache(component, "filtersConfigured", false);
+        _this.setStore(component, "filtersConfigured", false);
 
 		var margin = {top: 20, right: 90, bottom: 30, left: 50}; // this should probably be flexi-ed too
-        _this.setCache (component, "margin", margin) ;  
+        _this.setStore (component, "margin", margin) ;  
         
         // Differing strategies for computing Width and Height
         // Width depends on width of the container
@@ -37,7 +37,7 @@
         var divComponent = component.find("container1"); // this should be ok as it's an internal search, need to prefix with a unique id is required outside of lightning context
         var divElement = divComponent.getElement();
         var clientWidth = divElement.clientWidth;        
-        _this.setCache (component, "width", clientWidth) ; 
+        _this.setStore (component, "width", clientWidth) ; 
 
         // Height we hard code depending on the flexible page width 
         var flexiWidth = component.get("v.flexiWidth");
@@ -49,24 +49,24 @@
 
         if (flexiWidth == "SMALL")
         {
-            _this.setCache (component, "height", 800) ;                 
+            _this.setStore (component, "height", 800) ;                 
         }
 
         if (flexiWidth == "MEDIUM")
         {
-            _this.setCache (component, "height", 800) ;                 
+            _this.setStore (component, "height", 800) ;                 
         }
 
         if (flexiWidth == "LARGE")
         {
-            _this.setCache (component, "height", 1000) ;                 
+            _this.setStore (component, "height", 1000) ;                 
         }
         
         d3.select(_this.getDivId("chartArea", componentReference, true))
             .append("svg")
             .attr("id", _this.getDivId("svg", componentReference, false)) // If putting more than one chart on a page we need to provide unique ids for the svg elements   
-            .attr("width", _this.getCache (component, "width") )
-            .attr("height", _this.getCache (component, "height") );
+            .attr("width", _this.getStore (component, "width") )
+            .attr("height", _this.getStore (component, "height") );
 
         console.log("chartArea: svg attached ");
 
@@ -88,14 +88,14 @@
         console.log("chartArea: ChartRendered event published ");
  
         // build up a cache for mouseover events - may be a better way to do this!
-        _this.setCache (component, "appEvents",  []) ;
+        _this.setStore (component, "appEvents",  []) ;
         _this.restockCache(component);
 
         var panelDisplayEmbedded = component.find("panelDisplayEmbedded"); // this should be ok as it's an internal search, need to prefix with a unique id is required outside of lightning context
-        _this.setCache (component, "panelDisplayEmbedded", panelDisplayEmbedded) ; 
+        _this.setStore (component, "panelDisplayEmbedded", panelDisplayEmbedded) ; 
 
         var panelDisplayEmbeddedOuter = component.find("panelDisplayEmbeddedOuter"); // this should be ok as it's an internal search, need to prefix with a unique id is required outside of lightning context
-        _this.setCache (component, "panelDisplayEmbeddedOuter", panelDisplayEmbeddedOuter) ; 
+        _this.setStore (component, "panelDisplayEmbeddedOuter", panelDisplayEmbeddedOuter) ; 
 
     },
 
@@ -110,24 +110,24 @@
             _this.initializeAddComponentRef(componentReference, datajson);
         }
 
-        _this.setCache (component, "datajson", datajson ) ;
+        _this.setStore (component, "datajson", datajson ) ;
 
-        var hasPrimaryNode = _this.getCache (component, "hasPrimaryNode") ;
+        var hasPrimaryNode = _this.getStore (component, "hasPrimaryNode") ;
         // var hasPrimaryNode = component.get("v.hasPrimaryNode") ;
         if (hasPrimaryNode == true) {
             primaryNodeId = _this.addComponentRef(componentReference, primaryNodeId);
-            _this.setCache (component, "primaryNodeId", primaryNodeId ) ;
+            _this.setStore (component, "primaryNodeId", primaryNodeId ) ;
         }
         else {
             console.log("hasPrimaryNode false");
         }
 
         if (showFilters != null) {
-            _this.setCache (component, "filterValues", showFilters.filterValues ) ;
-            _this.setCache (component, "filterAPIField", showFilters.filterAPIField ) ;
+            _this.setStore (component, "filterValues", showFilters.filterValues ) ;
+            _this.setStore (component, "filterAPIField", showFilters.filterAPIField ) ;
         }
         else {
-            _this.setCache (component, "filterValues", [] ) ;
+            _this.setStore (component, "filterValues", [] ) ;
         }
 
 		var svg = d3.select(_this.getDivId("svg", componentReference, true));
@@ -135,18 +135,18 @@
         // Styling of tooltips - see GitHub prior to Feb 24, 2018
         var pathToolTipDivId = _this.addComponentRef(componentReference, "pathToolTip");
         var pathToolTipDiv = d3.select("#" + pathToolTipDivId);
-        _this.setCache (component, "pathToolTipDiv", pathToolTipDiv ) ;
+        _this.setStore (component, "pathToolTipDiv", pathToolTipDiv ) ;
 
         // create some groups inside the svg element to store the raw data
 
         var pathGroupId = _this.getDivId("pathGroup", componentReference, false);
-        _this.setCache (component, "pathGroupId", pathGroupId ) ;
+        _this.setStore (component, "pathGroupId", pathGroupId ) ;
         var pathGroup = d3.select("#" + pathGroupId);
         if (pathGroup.empty()) {
             console.log("create pathGroup");
             pathGroup = svg.append("g").attr("id",pathGroupId);
         }
-        _this.setCache (component, "pathGroup", pathGroup ) ;
+        _this.setStore (component, "pathGroup", pathGroup ) ;
 
         var nodeGroupId = _this.getDivId("nodeGroup", componentReference, false);
         var nodeGroup = d3.select("#" + nodeGroupId);
@@ -154,7 +154,7 @@
             console.log("create nodeGroup");
             nodeGroup = svg.append("g").attr("id",nodeGroupId);
         }
-        _this.setCache (component, "nodeGroup", nodeGroup ) ;
+        _this.setStore (component, "nodeGroup", nodeGroup ) ;
 
         var textGroupId = _this.getDivId("textGroup", componentReference, false);        
         var textGroup = d3.select("#" + textGroupId);
@@ -162,7 +162,7 @@
             console.log("create textGroup");
             textGroup = svg.append("svg:g").attr("id",textGroupId);
         }
-        _this.setCache (component, "textGroup", textGroup ) ;
+        _this.setStore (component, "textGroup", textGroup ) ;
 
         var legendSymbolGroupId = _this.getDivId("legendSymbolGroup", componentReference, false);
         var legendSymbolGroup = d3.select("#" + legendSymbolGroupId);
@@ -170,7 +170,7 @@
             console.log("create legendSymbolGroup");
             legendSymbolGroup = svg.append("g").attr("id",legendSymbolGroupId);
         }
-        _this.setCache (component, "legendSymbolGroup", legendSymbolGroup ) ;
+        _this.setStore (component, "legendSymbolGroup", legendSymbolGroup ) ;
 
         var allowPopover = _this.getMasterParam(component,"panels","InfoPanel","allowPopover");         
         if (allowPopover == null) {allowPopover = false;}
@@ -194,7 +194,7 @@
 
         var mdata = [0]; // random data value, not used
 
-        var width = _this.getCache (component, "width");
+        var width = _this.getStore (component, "width");
         // var popx = width - 10;
         // var popy = 200;
         var popx = width - 260;
@@ -214,8 +214,8 @@
 
         var referenceSelector = ".infolocation" + componentReference;
 
-        _this.setCache (component, "referenceSelector", referenceSelector ) ;
-        _this.setCache (component, "infosvg", infosvg ) ;
+        _this.setStore (component, "referenceSelector", referenceSelector ) ;
+        _this.setStore (component, "infosvg", infosvg ) ;
     },
 
 
@@ -252,7 +252,7 @@
 
                         component.set("v.popoverPanel", newComponent);
                         
-                        var referenceSelector = _this.getCache (component, "referenceSelector");
+                        var referenceSelector = _this.getStore (component, "referenceSelector");
                         console.log("createPopOverComponent: createComponent callback: " + referenceSelector);
                         if (status === "SUCCESS") {
                             console.log("xxxxx: createPopOverComponent: createComponent callback: SUCCESS: " );
@@ -266,7 +266,7 @@
                             component.set("v.modalPromise", modalPromise);  
                             modalPromise.then(function (overlay) {
                                 overlay.show();  
-                                _this.setCache (component, "overlay", overlay) ; 
+                                _this.setStore (component, "overlay", overlay) ; 
                             });             
                         }
                         else {
@@ -310,7 +310,7 @@
                 event = $A.get("e.c:evt_sfd3");
             }
             if (preppedEvent.eventType == "Cache"){
-                var appEvents = _this.getCache (component, "appEvents") ;
+                var appEvents = _this.getStore (component, "appEvents") ;
                 event = appEvents.pop();
             } 
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
@@ -324,7 +324,7 @@
     restockCache : function(component) {
         var _this = this;
 
-        var appEvents = _this.getCache (component, "appEvents") ;
+        var appEvents = _this.getStore (component, "appEvents") ;
 
         var defaultEventType = component.get("v.defaultEventType");
         console.log("chartArea: restockCache: push new cache events: " + appEvents.length + " of event type: " + defaultEventType);
@@ -343,7 +343,7 @@
             
                 appEvents.push(appEvent);
             }
-            _this.setCache (component, "appEvents",  appEvents) ;
+            _this.setStore (component, "appEvents",  appEvents) ;
         }
     }, 
 
@@ -401,6 +401,25 @@
         }
         return hash;
     },  
+
+    initializeCache : function (component) {
+        component.set("v.cacheObject", {});        
+    },    
+
+    // setCache : function (component, key, value) {
+    //     var store = component.get("v.storeObject");
+    //     store[key] = value;
+    // },
+    
+    // getCache : function (component, key) {
+    //     var store = component.get("v.storeObject");
+    //     return store[key];
+    // },
+    
+    // hasCache : function (component, key) {
+    //     var allkeys = component.get("v.storeObject");
+    //     return Object.keys(allkeys).includes(key);
+    // },
     
     setStore : function (component, key, value) {
         var store = component.get("v.storeObject");
@@ -412,6 +431,11 @@
         return store[key];
     },
 
+    hasStore : function (component, key) {
+        var allkeys = component.get("v.storeObject");
+        return Object.keys(allkeys).includes(key);
+    },
+    
     getMasterParam : function (component /*, args */) {
         var args = Array.prototype.slice.call(arguments, 1);
         var retValue = null;
@@ -446,7 +470,7 @@
 
     prepareEvent : function (component, topic, parameters) {
         var _this = this;
-        var controllerId = _this.getCache (component, "UserControllerComponentId") ;
+        var controllerId = _this.getStore (component, "UserControllerComponentId") ;
         var eventType = bzutils.getEventTypeByTopic(topic);
         return {
             "eventType" : eventType ,
@@ -458,7 +482,7 @@
 
     setFilterVisibility : function (component, filterType, filterState) {
         var _this = this;
-        var filterValues = _this.getCache (component, "filterValues") ;
+        var filterValues = _this.getStore (component, "filterValues") ;
         if (filterState == "Show") {
             filterValues.push(filterType);
         } else {
@@ -467,7 +491,7 @@
                 filterValues.splice(index, 1);
             }
         }
-        _this.setCache (component, "filterValues", filterValues ) ;
+        _this.setStore (component, "filterValues", filterValues ) ;
     },
 
     /* clearElements removes all paths, nodes, rects, text from the chart */
@@ -490,19 +514,6 @@
     initializeCache : function (component) {
         component.set("v.cacheObject", {});        
     },    
-
-    setCache : function (component, key, value) {
-        component.get("v.cacheObject")[key] = value;        
-    },
-    
-    getCache : function (component, key) {
-        return component.get("v.cacheObject")[key];        
-    },
-    
-    hasCache : function (component, key) {
-        var allkeys = component.get("v.cacheObject");
-        return Object.keys(allkeys).includes(key);
-    },
 
     // replace ids with component specific versions - this will allow multiple charts on a page without conflict
     initializeAddComponentRef : function (componentReference, datajson) {
@@ -634,7 +645,7 @@
         // remove existing legend symbols
         d3.select(_this.getDivId("legendSymbolGroup", componentReference, true)).selectAll("*").remove();
 
-        var legendSymbolGroup = _this.getCache (component, "legendSymbolGroup" ) ;
+        var legendSymbolGroup = _this.getStore (component, "legendSymbolGroup" ) ;
         
         var ms = firstMeasureScheme.measureScheme;
         var mst = firstMeasureScheme["measureSchemeType"];
@@ -895,12 +906,12 @@
 
         // if there are no filters configured then we're good to go.
 
-        var filtersConfigured = _this.getCache(component, "filtersConfigured");
+        var filtersConfigured = _this.getStore(component, "filtersConfigured");
         if (filtersConfigured == false) {
             return false;
         } 
 
-        var filterAPIField = _this.getCache (component, "filterAPIField");     
+        var filterAPIField = _this.getStore (component, "filterAPIField");     
         var recordValue;
 
         for (var i = 0; i < d.fields.length; i++) {
@@ -910,7 +921,7 @@
             }
         }
 
-        var filterValues = _this.getCache (component, "filterValues");    
+        var filterValues = _this.getStore (component, "filterValues");    
         
         if (!filterValues.includes(recordValue)) {
             return true;

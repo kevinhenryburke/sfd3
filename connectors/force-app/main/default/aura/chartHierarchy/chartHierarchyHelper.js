@@ -7,25 +7,25 @@
         var componentReference = component.get("v.componentReference");
         var masterConfigObject = component.get("v.masterConfigObject");
 
-        var datajson = _this.getCache (component, "datajson") ;  
-		var nodeGroup = _this.getCache (component, "nodeGroup") ;  
-		var pathGroup = _this.getCache (component, "pathGroup") ;  
-		// var textGroup = _this.getCache (component, "textGroup") ;  
-		// var pathToolTipDiv = _this.getCache (component, "pathToolTipDiv") ;  
-		// var pathGroupId = _this.getCache (component, "pathGroupId") ;  
+        var datajson = _this.getStore (component, "datajson") ;  
+		var nodeGroup = _this.getStore (component, "nodeGroup") ;  
+		var pathGroup = _this.getStore (component, "pathGroup") ;  
+		// var textGroup = _this.getStore (component, "textGroup") ;  
+		// var pathToolTipDiv = _this.getStore (component, "pathToolTipDiv") ;  
+		// var pathGroupId = _this.getStore (component, "pathGroupId") ;  
 		
-		var width = _this.getCache (component, "width") ;  
-        var height = _this.getCache (component, "height") ; 
+		var width = _this.getStore (component, "width") ;  
+        var height = _this.getStore (component, "height") ; 
 
         var cc = component.getConcreteComponent();
         // dataPreprocess will set datajson in cache
         cc.dataPreprocess(datajson);
-        datajson = _this.getCache (component, "datajson") ;  
+        datajson = _this.getStore (component, "datajson") ;  
 
         /* tree specification */
         
         var tree = d3.tree().size([height, width]);
-        _this.setCache (component, "tree", tree ) ;
+        _this.setStore (component, "tree", tree ) ;
         
         // Assigns parent, children, height, depth
         var root = d3.hierarchy(datajson, function(d) { return d.children; });
@@ -37,7 +37,7 @@
             root.children.forEach(_this.collapse);
         }
 
-        _this.setCache (component, "root", root ) ;
+        _this.setStore (component, "root", root ) ;
 
         _this.update(component, nodeGroup, pathGroup, componentReference, root, false);
 
@@ -46,7 +46,7 @@
         // TODO can move this to a generic location?
 
         var highlightId = datajson["initialHighlightId"];
-        _this.setCache (component, "mouseoverRecordId", highlightId ) ;
+        _this.setStore (component, "mouseoverRecordId", highlightId ) ;
         _this.restockCache(component);
 
         var nodeToPublish = root;
@@ -81,11 +81,11 @@
 
         var showMeasureValues = _this.getStore(component, "showMeasureValues");
 
-        var margin = _this.getCache (component, "margin") ;  
+        var margin = _this.getStore (component, "margin") ;  
         
         // Assigns the x and y position for the nodes
 
-        var tree = _this.getCache (component, "tree" ) ;
+        var tree = _this.getStore (component, "tree" ) ;
 
         var treeData;
         if (makeSourceRoot === true) {
@@ -96,7 +96,7 @@
 
         }
         else {
-            var root = _this.getCache (component, "root" ) ;
+            var root = _this.getStore (component, "root" ) ;
             treeData = tree(root);
         }        
       
@@ -127,13 +127,13 @@
             d.y = margin.left + (d.depth * fixedDepth);
 
             // workout the maximum depth in the chart so we can perform any necessary resizing
-            if (!_this.hasCache (component, "maxDepth")) {
-                _this.setCache (component, "maxDepth", 0) ;
+            if (!_this.hasStore (component, "maxDepth")) {
+                _this.setStore (component, "maxDepth", 0) ;
             }
-            var maxDepth = _this.getCache (component, "maxDepth") ;
+            var maxDepth = _this.getStore (component, "maxDepth") ;
             if (d.depth > maxDepth) {
-                _this.setCache (component, "maxDepth", d.depth) ;
-                console.log("maxDepth: " + _this.getCache (component, "maxDepth") );
+                _this.setStore (component, "maxDepth", d.depth) ;
+                console.log("maxDepth: " + _this.getStore (component, "maxDepth") );
             }
         });
 
@@ -181,7 +181,7 @@ console.log("xxxxx 1: " );
             // .filter(function(d, i) {if (d.data.name.length < 5) { return false; } return true;})            
             .on('click', click)
 			.on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-				_this.setCache (component, "mouseoverRecordId", d.id ) ;
+				_this.setStore (component, "mouseoverRecordId", d.id ) ;
                 var preppedEvent = _this.nodeMouseover(component, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
                 if (d.depth <= 1) { // root or first level
@@ -201,7 +201,7 @@ console.log("xxxxx 1: " );
 
             }))
 			.on('mouseout', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-				_this.setCache (component, "mouseoutRecordId", d.id ) ;
+				_this.setStore (component, "mouseoutRecordId", d.id ) ;
                 var preppedEvent = _this.nodeMouseout(component, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
             }))
@@ -436,7 +436,7 @@ console.log("xxxxx 1: " );
 
         // KB: added to ensure highlighted nodes remain highlighted after collapse and expand
         // takes the cached paths and highlights them.
-        var highlightedPaths = _this.getCache (component, "highlightedPaths") ;
+        var highlightedPaths = _this.getStore (component, "highlightedPaths") ;
         if (highlightedPaths != null) {
             _this.stylePathsStroke(highlightedPaths, true);
         }
@@ -472,9 +472,9 @@ console.log("xxxxx 1: " );
         
 
         // finally auto-resize the chart if the bottom nodes are encroaching on the end
-        var maxDepth = _this.getCache (component, "maxDepth") ;
+        var maxDepth = _this.getStore (component, "maxDepth") ;
         var maxHorizontal = margin.left + (maxDepth * fixedDepth);
-		var width = _this.getCache (component, "width") ;  
+		var width = _this.getStore (component, "width") ;  
 
         if (width - maxHorizontal < 100) {
             var csf = component.get("v.ChartScaleFactor");
@@ -545,7 +545,7 @@ console.log("xxxxx 1: " );
     // open the input paths in the graph, note that need to call update afterwards
     openPathsBy : function (component, searchTerm, searchBy){
         var _this = this;
-        var ultimateRoot = _this.getCache (component, "root");
+        var ultimateRoot = _this.getStore (component, "root");
 
         // try to find target node down from the root node
         var paths = _this.searchTree(ultimateRoot,searchTerm,[],searchBy);
@@ -567,13 +567,13 @@ console.log("xxxxx 1: " );
 
     highlightPathsBy : function (component, searchTerm, searchBy, highlightOn){
         var _this = this;
-        var ultimateRoot = _this.getCache (component, "root");
+        var ultimateRoot = _this.getStore (component, "root");
 
         // try to find target node down from the root node
         var paths = _this.searchTree(ultimateRoot,searchTerm,[],searchBy);
         _this.stylePathsStroke(paths, highlightOn);
 
-        _this.setCache (component, "highlightedPaths", paths ) ;
+        _this.setStore (component, "highlightedPaths", paths ) ;
     },
 
     stylePathsStroke : function(paths, highlightOn) {
@@ -613,7 +613,7 @@ console.log("xxxxx 1: " );
             var parentNode = _this.getNodeFromId(parentNodeId);
 
             if (parentNode == null) {
-                var ultimateRoot = _this.getCache (component, "root");
+                var ultimateRoot = _this.getStore (component, "root");
 
                 // try to find target node down from the root node
                 var paths = _this.searchTree(ultimateRoot,parentRecordId,[],"Id");
@@ -692,7 +692,7 @@ console.log("xxxxx 1: " );
                 event = $A.get("e.c:evt_sfd3");
             }
             if (preppedEvent.eventType == "Cache"){
-                var appEvents = _this.getCache (component, "appEvents") ;
+                var appEvents = _this.getStore (component, "appEvents") ;
                 event = appEvents.pop();
             }    
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
@@ -709,7 +709,7 @@ console.log("xxxxx 1: " );
         preppedEvent.eventType = "Cache";
 
         // attempt to get the lighting info panel to follow the highlight.        
-        // var infosvg = _this.getCache (component, "infosvg") ;
+        // var infosvg = _this.getStore (component, "infosvg") ;
         // var dx = d.x;
         // var dy = d.y;
         // console.log("popover:" + dy + " / " + dx);

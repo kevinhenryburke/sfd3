@@ -2,15 +2,15 @@
     styleNodes: function(component,event,helper){
         console.log("aura:method styleNodes in chartHierarchyTreeMap enter");
 
-        let nodeGroup = helper.getCache (component, "nodeGroup") ;  
+        let nodeGroup = helper.getStore (component, "nodeGroup") ;  
 
-        let datajson = helper.getCache (component, "datajson") ;  
+        let datajson = helper.getStore (component, "datajson") ;  
 
         let nodeDataSetFunction = helper.getRootStructureTreeMap (component); 
 
         nodeDataSetFunction(datajson);
 
-        let root = helper.getCache (component, "root") ;  
+        let root = helper.getStore (component, "root") ;  
 
         let cells = nodeGroup
             .selectAll("g")

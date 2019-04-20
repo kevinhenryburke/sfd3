@@ -9,8 +9,8 @@
         var componentReference = component.get("v.componentReference");
         helper.clearElements(componentReference);
 
-        let datajson = helper.getCache (component, "datajson") ;  
-        let datajsonRefresh = helper.getCache (component, "datajson") ;  
+        let datajson = helper.getStore (component, "datajson") ;  
+        let datajsonRefresh = helper.getStore (component, "datajson") ;  
 
         if (latestSizeOrColor == "size") {
             var cc = component.getConcreteComponent();

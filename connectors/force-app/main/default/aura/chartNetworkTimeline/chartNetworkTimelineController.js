@@ -39,7 +39,7 @@
                 }
             }
         }    
-        helper.setCache (component, "datajson", datajsonBefore ) ;
+        helper.setStore (component, "datajson", datajsonBefore ) ;
 
     },
 

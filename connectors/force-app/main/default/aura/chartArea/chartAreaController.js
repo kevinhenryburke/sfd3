@@ -129,13 +129,13 @@
         if (topic == "ShowLevelsMore")
         {
             // get the new number of levels and refresh
-            helper.setCache (component, "showLevels", parameters["levels"] ) ;
+            helper.setStore (component, "showLevels", parameters["levels"] ) ;
             cc.refreshVisibility();                     
         }
         if (topic == "ShowLevelsFewer")
         {
             // get the new number of levels and refresh
-            helper.setCache (component, "showLevels", parameters["levels"] ) ;
+            helper.setStore (component, "showLevels", parameters["levels"] ) ;
             cc.refreshVisibility();                 
         }
         if (topic == "SetColor")
@@ -188,7 +188,7 @@
         if (topic == "SetFilter")
         {
 
-            helper.setCache(component, "filtersConfigured", true);
+            helper.setStore(component, "filtersConfigured", true);
 
             // get the type of filter (essentially which field (group)) and whether we are no Show or Hide
             // filter and set visibility of nodes
@@ -222,17 +222,17 @@
                 
                 var showEmbeddedPanel = helper.getMasterParam(component,"panels","InfoPanel","showEmbeddedPanel");         
                 if (showEmbeddedPanel == null) {showEmbeddedPanel = false;}
-                helper.setCache (component, "showEmbeddedPanel", showEmbeddedPanel ) ;
+                helper.setStore (component, "showEmbeddedPanel", showEmbeddedPanel ) ;
                 component.set("v.showEmbeddedPanel", showEmbeddedPanel);
 
                 var showLevelsInitial = helper.getMasterParam(component,"panels","ChartPanel","showLevelsInitial");         
                 if (showLevelsInitial != null) {
                     component.set("v.showLevelsInitial" , showLevelsInitial);
-                    helper.setCache (component, "showLevels", showLevelsInitial) ;
+                    helper.setStore (component, "showLevels", showLevelsInitial) ;
                 }
                 else {
                     component.set("v.showLevelsInitial" , 1);
-                    helper.setCache (component, "showLevels", 1) ;
+                    helper.setStore (component, "showLevels", 1) ;
                 }
 
                 // set latest values for color and size
@@ -313,20 +313,20 @@
             }
 
             // if we have destroyed the component then we need to make the panel area transparent
-            var panelDisplayEmbeddedOuter = helper.getCache (component, "panelDisplayEmbeddedOuter") ; 
+            var panelDisplayEmbeddedOuter = helper.getStore (component, "panelDisplayEmbeddedOuter") ; 
             var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
             panelDisplayEmbeddedOuterElement.style.opacity = "0";
         } 
         if (topic == "FadeDisplayPanel")
         {      
             // we toggle the opacity of the display panel
-            var panelDisplayEmbedded = helper.getCache (component, "panelDisplayEmbedded") ; 
-            var showEmbeddedPanel = helper.getCache (component, "showEmbeddedPanel" ) ;
+            var panelDisplayEmbedded = helper.getStore (component, "panelDisplayEmbedded") ; 
+            var showEmbeddedPanel = helper.getStore (component, "showEmbeddedPanel" ) ;
             console.log('chartArea: FadeDisplayPanel: ', showEmbeddedPanel);
 
             if (showEmbeddedPanel) {
 
-                var panelDisplayEmbeddedOuter = helper.getCache (component, "panelDisplayEmbeddedOuter") ; 
+                var panelDisplayEmbeddedOuter = helper.getStore (component, "panelDisplayEmbeddedOuter") ; 
 
                 var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
                 var opacity = panelDisplayEmbeddedOuterElement.style["opacity"];        
@@ -346,11 +346,11 @@
             
             bzutils.log("chartArea: ChartMouseOver received by Chart: " + componentReference + "/" + parameters["componentReference"]);
 
-            var panelDisplayEmbedded = helper.getCache (component, "panelDisplayEmbedded") ; 
-            var showEmbeddedPanel = helper.getCache (component, "showEmbeddedPanel" ) ;
+            var panelDisplayEmbedded = helper.getStore (component, "panelDisplayEmbedded") ; 
+            var showEmbeddedPanel = helper.getStore (component, "showEmbeddedPanel" ) ;
             console.log('chartArea: panelDisplayEmbedded, showEmbeddedPanel: ', showEmbeddedPanel);
 
-            var panelDisplayEmbeddedOuter = helper.getCache (component, "panelDisplayEmbeddedOuter") ; 
+            var panelDisplayEmbeddedOuter = helper.getStore (component, "panelDisplayEmbeddedOuter") ; 
 
             var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
             var opacity = panelDisplayEmbeddedOuterElement.style["opacity"];        
@@ -385,7 +385,7 @@
     navigateToRecord : function(component){
         var evtNav = $A.get("e.force:navigateToSObject");
         evtNav.setParams({
-        "recordId": helper.getCache (component, "mouseoverRecordId"),
+        "recordId": helper.getStore (component, "mouseoverRecordId"),
         "slideDevName": "detail"
         });
         sObectEvent.fire(); 
