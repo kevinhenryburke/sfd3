@@ -184,19 +184,6 @@
         }
 
         console.log("aura:method styleNodes in chartNetwork exit");
-    },
-
-    getDefaultSize: function(component,event,helper){
-        // console.log("aura:method getDefaultSize in chartNetwork enter");
-        // console.log("aura:method getDefaultSize in chartNetwork exit");
-        return 20;
-    },
-
-    getDefaultColor: function(component,event,helper){
-        // console.log("aura:method getDefaultColor in chartNetwork enter");
-        // console.log("aura:method getDefaultColor in chartNetwork exit");
-        return "lightsteelblue";
     }
-
 
 })

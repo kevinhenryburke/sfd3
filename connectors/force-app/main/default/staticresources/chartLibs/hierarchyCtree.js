@@ -6,6 +6,9 @@
 
     console.log("loading: bzctree IIFE");
 
+
+
+	Object.defineProperty(exports, '__esModule', { value: true });
     console.log("loaded: bzctree  IIFE");
 
 })));

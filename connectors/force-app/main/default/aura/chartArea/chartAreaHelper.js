@@ -5,11 +5,14 @@
 
     // first method called after all resources are ready
     doneRenderLoad: function (component) {
-        var _this = this;
-        var componentReference = component.get("v.componentReference");
+        let _this = this;
+        let componentReference = component.get("v.componentReference");
         console.log("chartArea: doneRenderLoad: componentReference:" + componentReference);
 
-        _this.initializeCache (component) ;
+
+        
+
+
 
         _this.setStore (component, "componentReference", component.get("v.componentReference") ) ;
         _this.setStore (component, "componentType", component.get("v.componentType") ) ;
@@ -401,25 +404,6 @@
         }
         return hash;
     },  
-
-    initializeCache : function (component) {
-        component.set("v.cacheObject", {});        
-    },    
-
-    // setCache : function (component, key, value) {
-    //     var store = component.get("v.storeObject");
-    //     store[key] = value;
-    // },
-    
-    // getCache : function (component, key) {
-    //     var store = component.get("v.storeObject");
-    //     return store[key];
-    // },
-    
-    // hasCache : function (component, key) {
-    //     var allkeys = component.get("v.storeObject");
-    //     return Object.keys(allkeys).includes(key);
-    // },
     
     setStore : function (component, key, value) {
         var store = component.get("v.storeObject");
@@ -510,10 +494,6 @@
         d3.select(_this.getDivId("textGroup", componentReference, true)).remove();
         d3.select(_this.getDivId("legendSymbolGroup", componentReference, true)).remove();
     },
-
-    initializeCache : function (component) {
-        component.set("v.cacheObject", {});        
-    },    
 
     // replace ids with component specific versions - this will allow multiple charts on a page without conflict
     initializeAddComponentRef : function (componentReference, datajson) {

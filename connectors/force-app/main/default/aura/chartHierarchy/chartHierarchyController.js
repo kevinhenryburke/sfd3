@@ -15,7 +15,8 @@
         let groupingFields = helper.getStore(component, "groupingFields");
 
         if (groupingFields.length > 0) {
-            datajson = helper.picklistNest(component, datajson);
+            let groupingFields = helper.getStore(component, "groupingFields");
+            datajson = bzhierarchy.picklistNest(groupingFields, datajson);
             helper.setStore (component, "datajson", datajson ) ;    
         }
     },
@@ -104,18 +105,6 @@
 
         helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
         console.log("aura:method styleNodes in chartHierarchy exit");
-    },
-
-    getDefaultSize: function(component,event,helper){
-        // console.log("aura:method getDefaultSize in chartHierarchy enter");
-        // console.log("aura:method getDefaultSize in chartHierarchy exit");
-        return 10;
-    },
-
-    getDefaultColor: function(component,event,helper){
-        // console.log("aura:method getDefaultColor in chartHierarchy enter");
-        // console.log("aura:method getDefaultColor in chartHierarchy exit");
-        return "lightsteelblue";
     }
 
 })

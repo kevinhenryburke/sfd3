@@ -65,9 +65,6 @@
         _this.publishPreppedEvent(component,preppedEvent);
         _this.updatePopoverDirectly(component, preppedEvent);
 
-
-
-
         console.log("initialize root path");
     },
 
@@ -136,10 +133,6 @@
                 console.log("maxDepth: " + _this.getStore (component, "maxDepth") );
             }
         });
-
-
-console.log("xxxxx 1: " );
-    
 
         // ****************** Nodes section ***************************
       
@@ -488,17 +481,6 @@ console.log("xxxxx 1: " );
             preppedEvent.eventType = "Cache";
             _this.publishPreppedEvent (component,preppedEvent);    
         }
-
-    },
-
-    setDepth : function (baseNode, baseNodeDepth) {
-        var _this = this;
-        if(baseNode.children) {
-            baseNode.children.forEach(function(d) {
-                d.depth = baseNodeDepth + 1;
-                _this.setDepth(d,baseNodeDepth +1);            
-            });
-        }        
     },
 
     // A way to get the path to an object - this is independent of the search box
@@ -593,6 +575,17 @@ console.log("xxxxx 1: " );
 
         var newjsonarray;
 
+        function setDepthFromBase (baseNode, baseNodeDepth) {
+            console.log("setDepthFromBase");
+            if(baseNode.children) {
+                baseNode.children.forEach(function(d) {
+                    d.depth = baseNodeDepth + 1;
+                    setDepthFromBase(d,baseNodeDepth +1);            
+                });
+            }        
+        }
+    
+
         if (Array.isArray(updatejson)) {
             newjsonarray = updatejson;
         }
@@ -627,7 +620,7 @@ console.log("xxxxx 1: " );
                 newchild.parent = parentNode;
                 newchild.depth = parentNode.depth + 1; 
                 newchild.height = parentNode.height - 1;
-                _this.setDepth(newchild, newchild.depth);
+                setDepthFromBase(newchild, newchild.depth);
                 if (parentNode.children) {
                     parentNode.children.push(newchild);
                 }
@@ -817,57 +810,7 @@ console.log("xxxxx 1: " );
 
 
         console.log("aura:method refreshVisibility in subcomponent exit");
-    },
-
-    nestChildren: function (jsonStructure, nestData, levelsFromBottom) {
-        var _this = this;
-
-        for (var i = 0; i < nestData.length; i++) {
-            let innerArrayLength = nestData[i]["values"].length;
-            let newJsonSegment = {"name" : nestData[i].key};
-            newJsonSegment["children"] = [];
-
-            if (levelsFromBottom > 1) {
-                let nextLevelDown = levelsFromBottom - 1;
-                let childStructureToAdd = _this.nestChildren(newJsonSegment, nestData[i]["values"], nextLevelDown);
-                jsonStructure["children"].push(childStructureToAdd) ;
-            }
-
-            // we have leaf nodes to add
-            if (levelsFromBottom == 1) {
-                for (var j = 0; j < nestData[i]["values"].length; j++) {
-                    newJsonSegment["children"].push(nestData[i]["values"][j]);
-                }
-                jsonStructure["children"].push(newJsonSegment) ;
-            }
-        }           
-        return jsonStructure; 
-    },
-
-    picklistNest : function (component, datajson) {
-        var _this = this;
-
-        let groupingFields = _this.getStore(component, "groupingFields");
-        let numberOfGroupings = groupingFields.length; 
-
-        // we use d3.nest to produce the levels and utilize to create a new version of datajson
-        let nestData = d3.nest()
-            .key(function(d){  
-                return d.fields[groupingFields[0].fieldIndex].retrievedValue;
-            }) 
-            if (numberOfGroupings >= 2) {
-                nestData = nestData.key(d => d.fields[groupingFields[1].fieldIndex].retrievedValue);
-            }
-            if (numberOfGroupings >= 3) {
-                nestData = nestData.key(d => d.fields[groupingFields[2].fieldIndex].retrievedValue);
-            }
-
-        nestData = nestData.entries(datajson.children);
-
-        // Top (Total) level
-        let djSetup = {"name" : "Total", "children" : []};
-
-        return _this.nestChildren(djSetup, nestData, numberOfGroupings);
     }
+
 
 })

@@ -17,17 +17,5 @@
             .data(root.leaves()) // <-D
 
         helper.renderCells(component, cells);
-    },
-
-    getDefaultSize: function(component,event,helper){
-        // console.log("aura:method getDefaultSize in chartHierarchyTreeMap enter");
-        // console.log("aura:method getDefaultSize in chartHierarchyTreeMap exit");
-        return 10;
-    },
-
-    getDefaultColor: function(component,event,helper){
-        // console.log("aura:method getDefaultColor in chartHierarchyTreeMap enter");
-        // console.log("aura:method getDefaultColor in chartHierarchyTreeMap exit");
-        return "lightsteelblue";
     }
 })

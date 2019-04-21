@@ -77,11 +77,6 @@
         helper.publishPreppedEvent(component,preppedEvent);
     },
 
-    searchChart: function(component,event,helper){
-        // bzutils.log("calling the aura:method searchChart in base");        
-    },
-
-
     handleCustomEvent  : function(component, event, helper) {
         var topic, parameters, controller;
         var cc = component.getConcreteComponent();
@@ -204,10 +199,40 @@
 
             if (componentReference == parameters["componentReference"]) {
                 bzutils.log("InitializeData with reference: " + componentReference);
-                var isInit = true;
+                let isInit = true;
 
-                var masterConfigObject = parameters["masterConfigObject"];
+
+                /* Set Mixins for bespoke functionality per component type */
+                let masterConfigObject = parameters["masterConfigObject"];
                 component.set("v.masterConfigObject", masterConfigObject);
+
+                let componentType = component.get("v.componentType");        
+
+                if (componentType == 'hierarchy.ctree') {
+                    const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartHierarchyMixin.OverrideMixin);
+                    bzchart.setStore (masterConfigObject, "chartMixin", chartMixin) ;                    
+                }
+                if (componentType == 'hierarchy.pack') {
+                    const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin);        
+                    bzchart.setStore (masterConfigObject, "chartMixin", chartMixin) ;                  
+                }
+                if (componentType == 'hierarchy.treemapzoom') {
+                    const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin);        
+                    bzchart.setStore (masterConfigObject, "chartMixin", chartMixin) ;                                    
+                }
+                if (componentType == 'hierarchy.treemap') {
+                    const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin);        
+                    bzchart.setStore (masterConfigObject, "chartMixin", chartMixin) ;                                    
+                }
+                if (componentType == 'network.connections') {
+                    const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartNetworkMixin.OverrideMixin);        
+                    bzchart.setStore (masterConfigObject, "chartMixin", chartMixin) ;                                    
+                }
+                if (componentType == 'network.timeline') {
+                    const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartNetworkMixin.OverrideMixin);        
+                    bzchart.setStore (masterConfigObject, "chartMixin", chartMixin) ;                                    
+                }
+        
 
                 helper.buildMeasureSchemeMap(component);
 
@@ -253,8 +278,11 @@
                     helper.setStore(component, "relevantMeasure", "bzDefault");
                 }
 
-                helper.setStore(component, "defaultColor", cc.getDefaultColor());
-                helper.setStore(component, "defaultSize", cc.getDefaultSize());
+                let variantsMixin = bzchart.getStore (masterConfigObject, "chartMixin") ;
+                console.log("chartMixin: getting default size: " + variantsMixin.getDefaultSize());
+                console.log("chartMixin: getting default color: " + variantsMixin.getDefaultColor());
+                helper.setStore(component, "defaultColor", variantsMixin.getDefaultColor());
+                helper.setStore(component, "defaultSize", variantsMixin.getDefaultSize());
                 helper.setStore(component, "updateColor", true);
                 helper.setStore(component, "updateSize", true);
                 helper.setStore(component, "latestSizeOrColor",  "none");
@@ -400,17 +428,5 @@
         // console.log("aura:method styleNodes in chartArea enter");
         // console.log("aura:method styleNodes in chartArea exit");
     },
-
-    getDefaultSize: function(component,event,helper){
-        // console.log("aura:method getDefaultSize in chartArea enter");
-        // console.log("aura:method getDefaultSize in chartArea exit");
-        return "lightsteelblue";
-    },
-
-    getDefaultColor: function(component,event,helper){
-        // console.log("aura:method getDefaultColor in chartArea enter");
-        // console.log("aura:method getDefaultColor in chartArea exit");
-        return 10;
-    }
 
 })

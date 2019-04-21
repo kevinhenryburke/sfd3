@@ -31,18 +31,5 @@
 
 
 
-    },
-
-
-    getDefaultSize: function(component,event,helper){
-        // console.log("aura:method getDefaultSize in chartHierarchyPack enter");
-        // console.log("aura:method getDefaultSize in chartHierarchyPack exit");
-        return 10;
-    },
-
-    getDefaultColor: function(component,event,helper){
-        // console.log("aura:method getDefaultColor in chartHierarchyPack enter");
-        // console.log("aura:method getDefaultColor in chartHierarchyPack exit");
-        return "lightsteelblue";
     }
 })
