@@ -104,6 +104,9 @@ public inherited sharing class HierarchyConfiguration  {
             objectType = fc.parentObjectType;
         }
 
+        System.debug('xxx: objectType: ' + objectType);
+        System.debug('xxx: fieldName: ' + fieldName);
+
         Schema.SObjectType t = Schema.getGlobalDescribe().get(objectType);    
         Schema.DescribeSObjectResult r = t.getDescribe();
         Schema.DescribeFieldResult f = r.fields.getMap().get(fieldName).getDescribe();

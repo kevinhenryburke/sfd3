@@ -483,54 +483,13 @@
         }
     },
 
-    // A way to get the path to an object - this is independent of the search box
-    // we can search by name or id (searchBy = "Name" or "Id")
-    searchTree : function(obj,search,path, searchBy){
-        var _this = this;
-        var objFieldValue = (searchBy == "Name" ? obj.data.name : obj.data.id );
-        
-        if(objFieldValue === search){ //if search is found return, add the object to the path and return it
-            path.push(obj);
-            return path;
-        }
-        else if(obj.children || obj._children){ //if children are collapsed d3 object will have them instantiated as _children
-            var children = (obj.children) ? obj.children : obj._children;
-            for(var i=0;i<children.length;i++){
-                path.push(obj);// we assume this path is the right one
-                var found = _this.searchTree(children[i],search,path, searchBy);
-                if(found){// we were right, this should return the bubbled-up path from the first if statement
-                    return found;
-                }
-                else{//we were wrong, remove this parent from the path and continue iterating
-                    path.pop();
-                }
-            }
-        }
-        else{//not the right object, return false so it will continue to iterate in the loop
-            return false;
-        }
-    },
-
-    // open the input paths in the graph, note that need to call update afterwards
-    openPaths : function (paths){
-        for(var i =0;i<paths.length;i++){
-            if(paths[i].id !== "1"){//i.e. not root
-                paths[i].class = 'found';
-                if(paths[i]._children){ //if children are hidden: open them, otherwise: don't do anything
-                    paths[i].children = paths[i]._children;
-                    paths[i]._children = null;
-                }
-            }
-        }
-    },
-
     // open the input paths in the graph, note that need to call update afterwards
     openPathsBy : function (component, searchTerm, searchBy){
         var _this = this;
         var ultimateRoot = _this.getStore (component, "root");
 
         // try to find target node down from the root node
-        var paths = _this.searchTree(ultimateRoot,searchTerm,[],searchBy);
+        var paths = bzhierarchy.searchTree(ultimateRoot,searchTerm,[],searchBy);
         for(var i =0;i<paths.length;i++){
             if(paths[i].id !== "1"){//i.e. not root
                 paths[i].class = 'found';
@@ -552,7 +511,7 @@
         var ultimateRoot = _this.getStore (component, "root");
 
         // try to find target node down from the root node
-        var paths = _this.searchTree(ultimateRoot,searchTerm,[],searchBy);
+        var paths = bzhierarchy.searchTree(ultimateRoot,searchTerm,[],searchBy);
         _this.stylePathsStroke(paths, highlightOn);
 
         _this.setStore (component, "highlightedPaths", paths ) ;
@@ -609,7 +568,7 @@
                 var ultimateRoot = _this.getStore (component, "root");
 
                 // try to find target node down from the root node
-                var paths = _this.searchTree(ultimateRoot,parentRecordId,[],"Id");
+                var paths = bzhierarchy.searchTree(ultimateRoot,parentRecordId,[],"Id");
                 parentNode = paths.slice(-1).pop(); // this gets the last element of the path array which is the parent node.
             }
 

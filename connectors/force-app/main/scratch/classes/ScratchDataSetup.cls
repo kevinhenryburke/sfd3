@@ -4,8 +4,13 @@ public inherited sharing class ScratchDataSetup {
 /* 
 If setting up a scratch org then in Execute Anonymous run, sequentially
 
+ScratchDataSetup.updateUserUserManager();
 ScratchDataSetup aaa = new ScratchDataSetup();
 aaa.createUsersLevel1();
+ScratchDataSetup aaa = new ScratchDataSetup();
+aaa.createUsersLevel2();
+
+ScratchDataSetup.updateChatterPhotos();
 
 ScratchDataSetup aaa = new ScratchDataSetup();
 aaa.insertData(1);
@@ -16,7 +21,6 @@ aaa.insertOpportunities();
 ScratchDataSetup aaa = new ScratchDataSetup();
 aaa.runScripts(9);
 
-ScratchDataSetup.updateUserUserManager();
  
 
 If setting up an SDO then instead run
@@ -34,8 +38,14 @@ ScratchDataSetup.updateGrade();
 
         securityUser.firstName = 'Janet';
         securityUser.lastName = 'Baker';
+        securityUser.grade__c = 10;
+        securityUser.tenure__c = 3;
+        securityUser.title = 'CEO';
         userUser.firstName = 'Kevin';
         userUser.lastName = 'Burke';
+        userUser.grade__c = 9;
+        userUser.tenure__c = 8;
+        userUser.title = 'CIO';
         userUser.ManagerId = securityUser.id;
 
         update securityUser;
@@ -49,17 +59,104 @@ ScratchDataSetup.updateGrade();
         String profileId = [select Id from Profile WHERE Name = 'Standard User' LIMIT 1].id;
 
         List<User> newUsers = new List<User>();
-        newUsers.add(ScratchDataSetup.createUser('James', 'MacMillan', securityUser.id, profileId));
-        newUsers.add(ScratchDataSetup.createUser('Arvo', 'Part', securityUser.id, profileId));
-        newUsers.add(ScratchDataSetup.createUser('Philip', 'Glass', securityUser.id, profileId));
-        newUsers.add(ScratchDataSetup.createUser('Olivier', 'Messaien', securityUser.id, profileId));
-        newUsers.add(ScratchDataSetup.createUser('Judith', 'Weir', securityUser.id, profileId));
-        newUsers.add(ScratchDataSetup.createUser('Dobrinka', 'Tabakova', securityUser.id, profileId));
-        newUsers.add(ScratchDataSetup.createUser('Meredith', 'Monk', securityUser.id, profileId));
+        newUsers.add(ScratchDataSetup.createUser('James', 'MacMillan', securityUser.id, profileId, 9, 5, 'EVP'));
+        newUsers.add(ScratchDataSetup.createUser('Arvo', 'Part', securityUser.id, profileId, 9, 5,'EVP'));
+        newUsers.add(ScratchDataSetup.createUser('Philip', 'Glass', securityUser.id, profileId, 9, 4,'SVP'));
+        newUsers.add(ScratchDataSetup.createUser('Olivier', 'Messaien', securityUser.id, profileId, 9, 11,'SVP'));
+        newUsers.add(ScratchDataSetup.createUser('Judith', 'Weir', securityUser.id, profileId, 9, 1,'SVP'));
+        newUsers.add(ScratchDataSetup.createUser('Dobrinka', 'Tabakova', securityUser.id, profileId, 8, 2,'VP'));
+        newUsers.add(ScratchDataSetup.createUser('Meredith', 'Monk', securityUser.id, profileId, 9, 6,'VP'));
         insert newUsers;
     }
 
-    private static User createUser (String firstName, String lastName, String managerId, String profileId) {
+    public void createUsersLevel2 () {
+        User securityUser = [select id from User where Name='Janet Baker' ];
+        String profileId = [select Id from Profile WHERE Name = 'Standard User' LIMIT 1].id;
+        List<User> parentUsers = [select id from User where managerid = :securityUser.id ];
+        System.debug(parentUsers);
+
+        List<User> newUsers = new List<User>();
+        newUsers.add(ScratchDataSetup.createUser('Noemi','Adams',parentUsers[0].id,profileid, 7, 1,'Sales Executive'));
+        newUsers.add(ScratchDataSetup.createUser('Waldo','Alexander',parentUsers[0].id,profileid, 6, 1,'Sales Executive'));
+        newUsers.add(ScratchDataSetup.createUser('Elissa','Allen',parentUsers[0].id,profileid, 7, 1,'Sales Executive'));
+        newUsers.add(ScratchDataSetup.createUser('Francina','Anderson',parentUsers[0].id,profileid, 7, 4,'Director'));
+        newUsers.add(ScratchDataSetup.createUser('Sophie','Bailey',parentUsers[0].id,profileid, 6, 6,'Team Lead'));
+        newUsers.add(ScratchDataSetup.createUser('Jackie','Baker',parentUsers[0].id,profileid, 7, 2,'Director'));
+        newUsers.add(ScratchDataSetup.createUser('Cedric','Barnes',parentUsers[1].id,profileid, 7, 6,'Sales Executive'));
+        newUsers.add(ScratchDataSetup.createUser('Sergio','Bell',parentUsers[1].id,profileid, 6, 8,'Specialist'));
+        newUsers.add(ScratchDataSetup.createUser('Sau','Bennett',parentUsers[1].id,profileid, 6, 11,'Specialist'));
+        newUsers.add(ScratchDataSetup.createUser('Le','Brooks',parentUsers[1].id,profileid, 7, 1,'Director'));
+        newUsers.add(ScratchDataSetup.createUser('Queenie','Bryant',parentUsers[1].id,profileid, 6, 2,'Director'));
+        newUsers.add(ScratchDataSetup.createUser('Sheree','Butler',parentUsers[1].id,profileid, 7, 4,'Team Lead'));
+        newUsers.add(ScratchDataSetup.createUser('Louise','Campbell',parentUsers[2].id,profileid, 5, 5,'Sales Executive'));
+        newUsers.add(ScratchDataSetup.createUser('Tawny','Carter',parentUsers[2].id,profileid, 6, 8,'Sales Executive'));
+        newUsers.add(ScratchDataSetup.createUser('Merle','Clark',parentUsers[2].id,profileid, 7, 4,'Director'));
+        newUsers.add(ScratchDataSetup.createUser('Elisabeth','Coleman',parentUsers[2].id,profileid, 6, 10,'Director'));
+        newUsers.add(ScratchDataSetup.createUser('Lona','Collins',parentUsers[2].id,profileid, 6, 1,'Specialist'));
+        newUsers.add(ScratchDataSetup.createUser('Suzanne','Cook',parentUsers[2].id,profileid, 7, 3,'Sales Executive'));
+        newUsers.add(ScratchDataSetup.createUser('Jadwiga','Cooper',parentUsers[2].id,profileid, 7, 3,'Sales Executive'));
+        newUsers.add(ScratchDataSetup.createUser('Edris','Cox',parentUsers[3].id,profileid, 7, 2,'Director'));
+        newUsers.add(ScratchDataSetup.createUser('Shauna','Diaz',parentUsers[3].id,profileid, 6, 7,'Director'));
+        newUsers.add(ScratchDataSetup.createUser('Ronni','Edwards',parentUsers[3].id,profileid, 7, 7,'Team Lead'));
+        newUsers.add(ScratchDataSetup.createUser('Kindra','Evans',parentUsers[4].id,profileid, 6, 1,'Director'));
+        newUsers.add(ScratchDataSetup.createUser('Chuck','Flores',parentUsers[4].id,profileid, 6, 5,'Director'));
+        newUsers.add(ScratchDataSetup.createUser('Tianna','Foster',parentUsers[4].id,profileid, 7, 4,'Specialist'));
+        newUsers.add(ScratchDataSetup.createUser('Dania','Garcia',parentUsers[5].id,profileid, 7, 8,'Specialist'));
+        newUsers.add(ScratchDataSetup.createUser('Ervin','Gonzales',parentUsers[5].id,profileid, 6, 3,'Director'));
+        newUsers.add(ScratchDataSetup.createUser('Florance','Gonzalez',parentUsers[5].id,profileid, 5, 2,'Director'));
+        newUsers.add(ScratchDataSetup.createUser('Lacie','Gray',parentUsers[5].id,profileid, 5, 2,'Director'));
+        newUsers.add(ScratchDataSetup.createUser('Caryn','Green',parentUsers[6].id,profileid, 7, 2,'Director'));
+        newUsers.add(ScratchDataSetup.createUser('Jenine','Griffin',parentUsers[6].id,profileid, 7, 7,'Team Lead'));
+        newUsers.add(ScratchDataSetup.createUser('Fredrick','Hall',parentUsers[6].id,profileid, 6, 9,'Team Lead'));
+        newUsers.add(ScratchDataSetup.createUser('Bennett','Harris',parentUsers[6].id,profileid, 7, 8,'Director'));
+        newUsers.add(ScratchDataSetup.createUser('Karmen','Henderson',parentUsers[6].id,profileid, 6, 6,'Director'));
+        newUsers.add(ScratchDataSetup.createUser('Graig','Hernandez',parentUsers[6].id,profileid, 7, 4,'Director'));
+        insert newUsers;
+    }
+
+    public static void updateChatterPhotos () {
+        StaticResource static_resource = [SELECT Id, Name, SystemModStamp
+            FROM StaticResource 
+            WHERE Name = 'chatterPhotos'
+            LIMIT 1];
+
+        String myUrl = '/resource/'
+                    + String.valueOf(((DateTime)static_resource.get('SystemModStamp')).getTime())
+                    + '/' 
+                    + static_resource.get('Name');
+
+        List<String> JPGs = new List<String>{
+            '/amy_taylor.jpg',
+            '/anup_gupta.jpg',
+            '/caroline_kingsley.jpg',
+            '/jennifer_wu.jpg',
+            '/jonathan_bradley.jpg',
+            '/michael_jones.jpg'
+        };
+
+        Integer NumberJPGs = JPGs.size();
+
+        List<Blob> BLOBs = new List<Blob>();
+
+        for (String jpg : JPGs) {
+            PageReference file_ref = new PageReference(myUrl + jpg);
+            Blob res_json_body = file_ref.getContent();
+            BLOBs.add(res_json_body);
+        }
+
+        Integer counter = 0;
+        List<User> users = [select id from User where grade__c != null];
+        for (User user : users) {
+            System.debug(counter + '/' + NumberJPGs);
+            Integer indexer = Math.mod(counter, NumberJPGs);
+            Blob res_json_body = BLOBs[indexer];
+            ConnectApi.Photo photo = 
+                ConnectApi.UserProfiles.setPhoto(null, user.id, new ConnectApi.BinaryInput(res_json_body, 'image/jpg', 'userImage.jpg'));
+            counter++;    
+        }
+    }
+
+    private static User createUser (String firstName, String lastName, String managerId, String profileId, Integer grade, Integer tenure, String title) {
         Double randomness = math.random() * 10000;
         Integer randomInteger = randomness.intValue();
 
@@ -74,6 +171,8 @@ ScratchDataSetup.updateGrade();
             EmailEncodingKey = 'UTF-8',
             LocaleSidKey = 'en_US',
             ManagerId = managerId,
+            Grade__c = grade,
+            Tenure__c = tenure,
             isActive = false
             );
         return usr;
@@ -681,7 +780,7 @@ ScratchDataSetup.updateGrade();
 
     public static void updateGrade () {
         List<User> listMan =
-            [select id from User where usertype = 'Standard' and name = 'Elliot Executive' LIMIT 1];
+            [select id from User where usertype = 'Standard' and name = 'Janet Baker' LIMIT 1];
 
         System.debug('exec list: ' + listMan);
 
