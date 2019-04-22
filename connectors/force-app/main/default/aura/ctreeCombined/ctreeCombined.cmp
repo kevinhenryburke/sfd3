@@ -1,9 +1,5 @@
 <aura:component implements="force:hasRecordId,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" access="global">
 
-  <ltng:require 
-    scripts="/resource/Berliozjs"
-  />
- 
   <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
   
   <!-- Events and Handlers -->  

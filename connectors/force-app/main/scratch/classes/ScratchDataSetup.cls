@@ -21,6 +21,10 @@ aaa.insertOpportunities();
 ScratchDataSetup aaa = new ScratchDataSetup();
 aaa.runScripts(9);
 
+
+// NOTE #Manual Setup needed - you need to Go to Setup > Customize > User Interface > check "Update records with inactive owners"
+ScratchDataSetup.spreadAccountOwnership();
+
  
 
 If setting up an SDO then instead run
@@ -113,6 +117,27 @@ ScratchDataSetup.updateGrade();
         newUsers.add(ScratchDataSetup.createUser('Graig','Hernandez',parentUsers[6].id,profileid, 7, 4,'Director'));
         insert newUsers;
     }
+
+    public static void spreadAccountOwnership () {
+        User securityUser = [select id from User where Name='Janet Baker' ];
+        String profileId = [select Id from Profile WHERE Name = 'Standard User' LIMIT 1].id;
+        List<User> parentUsers = [select id from User where managerid = :securityUser.id ];
+        System.debug(parentUsers);
+        Integer NumberUsers = parentUsers.size();
+
+        Integer counter = 0;
+        List<Account> accounts = [select id, ownerid from Account];
+
+        for (Account account : accounts) {
+            System.debug(counter + '/' + NumberUsers);
+            Integer indexer = Math.mod(counter, NumberUsers);
+            account.ownerid = parentUsers[indexer].id; 
+            counter++;   
+        }
+        update accounts;
+
+    }
+
 
     public static void updateChatterProfile () {
         StaticResource static_resource = [SELECT Id, Name, SystemModStamp
@@ -641,21 +666,21 @@ ScratchDataSetup.updateGrade();
         Opportunity o;
 
         p=[select id from Account where Name='3G Capital' ];
-        o=new Opportunity(Name='2018 Q3 Renewal', StageName='Closed Won', Amount=35827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,6,30);insert o;
+        o=new Opportunity(Name='2018 Q3 Renewal', StageName='Closed Won', Amount=235827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,6,30);insert o;
         o=new Opportunity(Name='2018 Q4 Renewal', StageName='Closed Won', Amount=25827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,9,30);insert o;
         o=new Opportunity(Name='2019 Q1 Renewal', StageName='Closed Won', Amount=15827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,12,30);insert o;
         o=new Opportunity(Name='2019 Q2 Renewal', StageName='Qualification', Amount=32827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,3,30);insert o;
         o=new Opportunity(Name='2019 Q3 Renewal', StageName='Needs Analysis', Amount=39827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,6,30);insert o;
         o=new Opportunity(Name='2019 Q4 Renewal', StageName='Closed Lost', Amount=5827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,9,30);insert o;
         p=[select id from Account where Name='3i' ];a=new Account(Name='Affinity Equity Partners', AnnualRevenue=38243010);
-        o=new Opportunity(Name='2018 Q3 Renewal', StageName='Closed Won', Amount=35827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,6,30);insert o;
+        o=new Opportunity(Name='2018 Q3 Renewal', StageName='Closed Won', Amount=135827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,6,30);insert o;
         o=new Opportunity(Name='2018 Q4 Renewal', StageName='Closed Won', Amount=25827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,9,30);insert o;
         o=new Opportunity(Name='2019 Q1 Renewal', StageName='Closed Won', Amount=15827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,12,30);insert o;
         o=new Opportunity(Name='2019 Q2 Renewal', StageName='Qualification', Amount=32827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,3,30);insert o;
         o=new Opportunity(Name='2019 Q3 Renewal', StageName='Needs Analysis', Amount=39827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,6,30);insert o;
         o=new Opportunity(Name='2019 Q4 Renewal', StageName='Closed Lost', Amount=5827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,9,30);insert o;
         p=[select id from Account where Name='ABRY Partners' ];a=new Account(Name='American Securities', AnnualRevenue=37931373);
-        o=new Opportunity(Name='2018 Q3 Renewal', StageName='Closed Won', Amount=35827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,6,30);insert o;
+        o=new Opportunity(Name='2018 Q3 Renewal', StageName='Closed Won', Amount=105827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,6,30);insert o;
         o=new Opportunity(Name='2018 Q4 Renewal', StageName='Closed Won', Amount=25827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,9,30);insert o;
         o=new Opportunity(Name='2019 Q1 Renewal', StageName='Closed Won', Amount=15827);o.accountid=p.id;o.CloseDate = Date.newInstance(2018,12,30);insert o;
         o=new Opportunity(Name='2019 Q2 Renewal', StageName='Qualification', Amount=32827);o.accountid=p.id;o.CloseDate = Date.newInstance(2019,3,30);insert o;

@@ -29,7 +29,7 @@
         <componentInstances>
             <componentInstanceProperties>
                 <name>Title</name>
-                <value>1</value>
+                <value>Summing Opportunities by Team Member and Accounts they own</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
