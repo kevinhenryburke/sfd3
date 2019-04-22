@@ -70,11 +70,15 @@
 
     update : function(component, nodeGroup, pathGroup, componentReference, source, makeSourceRoot) {
 		var _this = this;
+
+        let masterConfigObject = component.get("v.masterConfigObject");
+        console.log("xxxxx masterConfigObject", masterConfigObject);
+
         var nodes;
         var links;
         var duration = 250;
         var shortDuration = 250;
-        var fixedDepth = _this.getFixedDepth(component); // this may need to be a function of chart area depth?
+        var fixedDepth = bzctree.getFixedDepth(masterConfigObject); // this may need to be a function of chart area depth?
 
         var showMeasureValues = _this.getStore(component, "showMeasureValues");
 
@@ -243,7 +247,7 @@
             })
             .attr("x", function(d) {
                 if (d.depth > 0) {
-                    return childLess(d) ? _this.getTextOffset(component) : - _this.getTextOffset(component);
+                    return childLess(d) ? bzctree.getTextOffset(masterConfigObject) : - bzctree.getTextOffset(masterConfigObject);
                 }
                 return -1;
             })
@@ -256,7 +260,7 @@
             })
             .attr("id", d => "t" + d.id)            
             .style("font", function(d) {
-                return _this.getFontSizePX(component) + "px sans-serif";
+                return bzctree.getFontSizePX(masterConfigObject) + "px sans-serif";
             })
             .style("opacity", function(d) {
                 return _this.getFilterOpacity(component, d.data);
@@ -269,7 +273,7 @@
             .attr("id", d => "tspan2" + d.id)          
             .attr("x", function(d) {
                 if (d.depth > 0) {
-                    return childLess(d) ? _this.getTextOffset(component) : - _this.getTextOffset(component);
+                    return childLess(d) ? bzctree.getTextOffset(masterConfigObject) : - bzctree.getTextOffset(masterConfigObject);
                 }
                 return -1;
             })
@@ -294,7 +298,7 @@
       
         // Update the node attributes and style
         var nuc = nodeUpdate.select('circle.treenode')
-            .attr('r', _this.getRadius(component))
+            .attr('r', bzctree.getRadius(masterConfigObject))
             .style("stroke", function(d) {
                 if(childLess(d)) {
                     return "black";
@@ -335,7 +339,7 @@
             })
             .attr("x", function(d) {
                 if (d.depth > 0) {
-                    return childLess(d) ? _this.getTextOffset(component) : - _this.getTextOffset(component);
+                    return childLess(d) ? bzctree.getTextOffset(masterConfigObject) : - bzctree.getTextOffset(masterConfigObject);
                 }
                 return -1;
             })
@@ -347,7 +351,7 @@
                 return textAnchor;
             })
             .style("font", function(d) {
-                return _this.getFontSizePX(component) + "px sans-serif";
+                return bzctree.getFontSizePX(masterConfigObject) + "px sans-serif";
             })
             .style("opacity", function(d) {
                 return _this.getFilterOpacity(component, d.data);
@@ -470,7 +474,9 @@
 		var width = _this.getStore (component, "width") ;  
 
         if (width - maxHorizontal < 100) {
-            var csf = component.get("v.ChartScaleFactor");
+            let csf = bzchart.getStore (masterConfigObject, "ChartScaleFactor") ;
+            if (csf == null) { csf = 1;}
+
             var newcsf = csf - 0.1;
             var eventParameters = { 
                 "componentReference" : componentReference,
@@ -601,25 +607,6 @@
 
             });        
         }
-    },    
-
-
-    /* Configuration number functions */
-
-    getFixedDepth : function(component) {
-        return Math.ceil(180 * component.get("v.ChartScaleFactor"));
-    },
-
-    getTextOffset : function(component) {
-        return Math.ceil(13 * component.get("v.ChartScaleFactor"));
-    },
-
-    getFontSizePX : function(component) {
-        return Math.ceil(12 * component.get("v.ChartScaleFactor"));
-    },    
-
-    getRadius : function(component) {
-        return Math.ceil(10 * component.get("v.ChartScaleFactor"));
     },    
 
     // TODO function appears in many places, try to consolidate

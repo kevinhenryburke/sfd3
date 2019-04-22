@@ -9,11 +9,6 @@
         let componentReference = component.get("v.componentReference");
         console.log("chartArea: doneRenderLoad: componentReference:" + componentReference);
 
-
-        
-
-
-
         _this.setStore (component, "componentReference", component.get("v.componentReference") ) ;
         _this.setStore (component, "componentType", component.get("v.componentType") ) ;
         _this.setStore (component, "componentCategory", component.get("v.componentCategory") ) ;
@@ -288,7 +283,9 @@
 
 
     handleScaleChange: function(component,csf){
-        component.set("v.ChartScaleFactor", csf);
+        let masterConfigObject = component.get("v.masterConfigObject");
+        bzchart.setStore (masterConfigObject, "ChartScaleFactor", csf) ;
+
         var cc = component.getConcreteComponent();
         cc.reScale(csf);                 
     },

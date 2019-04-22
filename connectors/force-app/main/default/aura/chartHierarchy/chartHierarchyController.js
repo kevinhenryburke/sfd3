@@ -40,9 +40,9 @@
 
     reScale: function(component,event,helper){
         console.log("reScale: enter");
+        let masterConfigObject = component.get("v.masterConfigObject");
         var args = event.getParam("arguments");
-        console.log("reScale: ChartScaleFactor: " + args.ChartScaleFactor);
-        component.set("v.ChartScaleFactor", args.ChartScaleFactor);
+        bzchart.setStore (masterConfigObject, "ChartScaleFactor", args.ChartScaleFactor) ;
 
         var componentReference = component.get("v.componentReference");
         var nodeGroup = helper.getStore (component, "nodeGroup") ;  

@@ -65,7 +65,7 @@
     handleScaleChange: function(component,event,helper){
         var componentReference = component.get("v.componentReference");
 
-        var csfp = component.get("v.ChartScaleFactorPercentage");
+        var csfp = component.get("v.ChartScalePercentage");
         var csf = parseFloat(csfp / 100); // ensure js knows it's a decimal
 
         var eventParameters = { 
@@ -80,6 +80,7 @@
     handleCustomEvent  : function(component, event, helper) {
         var topic, parameters, controller;
         var cc = component.getConcreteComponent();
+        let masterConfigObject = cc.get("v.masterConfigObject");
 
         // if there is an arguments parameter this has been triggered by a method call
         // in which case we need to source our information from a level down in the event
@@ -397,13 +398,14 @@
         {
             bzutils.log("chartArea: ReScale received by Chart: " + componentReference + "/" + parameters["componentReference"]);
 
-            var csfStored = component.get("v.ChartScaleFactor");
-
+            let csfStored = bzchart.getStore (masterConfigObject, "ChartScaleFactor") ;
+            if (csfStored == null) { csfStored = 1;}
+    
             if (csf != csfStored) {
                 var csf = parameters["ChartScaleFactor"];
                 // make sure the percentage parameter is in sync - required by slider to be an integer
                 var csfp = csf * 100;
-                component.set("v.ChartScaleFactorPercentage", csfp);
+                component.set("v.ChartScalePercentage", csfp);
 
                 helper.handleScaleChange(component,csf);
             }

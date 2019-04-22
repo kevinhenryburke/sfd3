@@ -1,5 +1,5 @@
 <aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extends="c:chartArea" extensible="true"  access="global">
         
-    <aura:attribute name="ChartScaleFactor" type="Decimal" default="1" description="Scale Factor for chart display. Defaults to 1"/>    
+    <!-- No markup -->
 
 </aura:component>
