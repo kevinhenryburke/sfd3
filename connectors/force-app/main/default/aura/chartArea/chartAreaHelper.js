@@ -106,6 +106,7 @@
 
         var _this = this;
         var componentReference = component.get("v.componentReference");
+        let masterConfigObject = component.get("v.masterConfigObject");
 
         console.log("init:initializing initializeGroups with primaryNodeId: " + primaryNodeId);
         
@@ -175,7 +176,7 @@
         }
         _this.setStore (component, "legendSymbolGroup", legendSymbolGroup ) ;
 
-        var allowPopover = _this.getMasterParam(component,"panels","InfoPanel","allowPopover");         
+        var allowPopover = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","allowPopover");         
         if (allowPopover == null) {allowPopover = false;}
 
         if (allowPopover == true) {
@@ -358,8 +359,9 @@
     updatePopoverDirectly : function(component, preppedEvent) {
         var _this = this;
         console.log("chartArea: updatePopoverDirectly enter");
+        let masterConfigObject = component.get("v.masterConfigObject");
 
-        var allowPopover = _this.getMasterParam(component,"panels","InfoPanel","allowPopover");         
+        var allowPopover = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","allowPopover");         
         if (allowPopover == null) {allowPopover = false;}
 
         if (allowPopover == true) {
@@ -420,38 +422,6 @@
         return Object.keys(allkeys).includes(key);
     },
     
-    getMasterParam : function (component /*, args */) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        var retValue = null;
-        var loopJson = component.get("v.masterConfigObject");
-        for (var i=0; i<args.length;i++) {
-            if (loopJson.hasOwnProperty([args[i]])) {
-                retValue = loopJson[args[i]];
-                loopJson = loopJson[args[i]];
-            }
-            else {
-                return;
-            }    
-        }
-        return retValue;
-    },
-    
-    hasMasterParam : function (component /*, args */) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        var loopJson = component.get("v.masterConfigObject");
-        var lastQueriedItem = "";
-        for (var i=0; i<args.length;i++) {
-            if (loopJson.hasOwnProperty([args[i]])) {
-                loopJson = loopJson[args[i]];
-                lastQueriedItem = args[i];
-            }
-            else {
-                return false;
-            }    
-        }
-        return true;
-    },
-
     prepareEvent : function (component, topic, parameters) {
         var _this = this;
         var controllerId = _this.getStore (component, "UserControllerComponentId") ;
@@ -542,7 +512,9 @@
     // during initialization, build a map so we can quickly associate the correct API field to a measure
     buildMeasureSchemeMap : function (component) {
         var _this = this;
-        var objectLevels = _this.getMasterParam(component,"data","queryJSON","objectLevels");
+        let masterConfigObject = component.get("v.masterConfigObject");
+
+        var objectLevels = bzutils.getMasterParam(masterConfigObject,"data","queryJSON","objectLevels");
 
         // storage optimized for node colors: object / measureName / measureSchema
         var measureObjectFieldMap = {};

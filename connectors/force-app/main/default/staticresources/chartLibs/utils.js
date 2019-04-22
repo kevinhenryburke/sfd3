@@ -177,39 +177,33 @@ If componentType is needed then supply it twice in the calling parameters
 //     return true;
 // }
 
-// function getMasterParam(config /*, args */) {
-//     console.log("getMasterParam enter");
-//     var args = Array.prototype.slice.call(arguments, 1);
-//     var retValue = null;
-//     var loopJson = config;
-//     for (var i=0; i<args.length;i++) {
-//         if (loopJson.hasOwnProperty([args[i]])) {
-//             console.log("loopJson: " + args[i]);
-//             retValue = loopJson[args[i]];
-//             loopJson = loopJson[args[i]];
-//         }
-//         else {
-//             return;
-//         }    
-//     }
-//     console.log("getMasterParam exit: " + retValue);
-//     return retValue;
-// }
+function getMasterParam(config, ...args) {
+    var retValue = null;
+    var loopJson = config;
+    for (var i=0; i<args.length;i++) {
+        if (loopJson.hasOwnProperty([args[i]])) {
+            retValue = loopJson[args[i]];
+            loopJson = loopJson[args[i]];
+        }
+        else {
+            return;
+        }    
+    }
+    return retValue;
+}
 
-// function hasMasterParam(config /*, args */) {
-//     var args = Array.prototype.slice.call(arguments, 1);
-//     var loopJson = config;
-//     for (var i=0; i<args.length;i++) {
-//         if (loopJson.hasOwnProperty([args[i]])) {
-//             console.log("loopJson: " + args[i]);
-//             loopJson = loopJson[args[i]];
-//         }
-//         else {
-//             return false;
-//         }    
-//     }
-//     return true;
-// }
+function hasMasterParam(config, ...args) { // Not currently used
+    var loopJson = config;
+    for (var i=0; i<args.length;i++) {
+        if (loopJson.hasOwnProperty([args[i]])) {
+            loopJson = loopJson[args[i]];
+        }
+        else {
+            return false;
+        }    
+    }
+    return true;
+}
 
 
 // new signatures .... 
@@ -258,8 +252,8 @@ exports.log = log;
 // exports.xfct = xfct;
 // exports.getParam2 = getParam2;
 // exports.hasParam2 = hasParam2;
-// exports.getMasterParam = getMasterParam;
-// exports.hasMasterParam = hasMasterParam;
+exports.getMasterParam = getMasterParam;
+exports.hasMasterParam = hasMasterParam;
 // exports.initializeAddComponentRef = initializeAddComponentRef;
 // exports.addComponentRef = addComponentRef;
 // exports.removeComponentRef = removeComponentRef;

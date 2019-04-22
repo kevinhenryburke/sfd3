@@ -58,11 +58,12 @@
     searchChart: function(component,event,helper){
         console.log("calling the aura:method searchChart in subcomponent");
         var args = event.getParam("arguments");
+        let masterConfigObject = component.get("v.masterConfigObject");
 
         var searchTermId = args.searchTermId;
         var searchAction = args.searchAction;
 
-        var clearHighlightedPaths = helper.getMasterParam(component,"panels","ChartPanel","Hierarchy","clearHighlightedPaths");         
+        var clearHighlightedPaths = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","Hierarchy","clearHighlightedPaths");         
 
         var componentReference = component.get("v.componentReference");
         var nodeGroup = helper.getStore (component, "nodeGroup") ;  

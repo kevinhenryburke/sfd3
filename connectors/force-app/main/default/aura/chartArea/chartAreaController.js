@@ -237,7 +237,7 @@
                 helper.buildMeasureSchemeMap(component);
 
 
-                var showZoomSlider = helper.getMasterParam(component,"panels","ChartPanel","Hierarchy","showZoomSlider");         
+                var showZoomSlider = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","Hierarchy","showZoomSlider");         
                 if (showZoomSlider != null) {
                     component.set("v.showZoomSlider" , showZoomSlider);
                 }
@@ -245,12 +245,12 @@
                     component.set("v.showZoomSlider" , false);
                 }      
                 
-                var showEmbeddedPanel = helper.getMasterParam(component,"panels","InfoPanel","showEmbeddedPanel");         
+                var showEmbeddedPanel = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","showEmbeddedPanel");         
                 if (showEmbeddedPanel == null) {showEmbeddedPanel = false;}
                 helper.setStore (component, "showEmbeddedPanel", showEmbeddedPanel ) ;
                 component.set("v.showEmbeddedPanel", showEmbeddedPanel);
 
-                var showLevelsInitial = helper.getMasterParam(component,"panels","ChartPanel","showLevelsInitial");         
+                var showLevelsInitial = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","showLevelsInitial");         
                 if (showLevelsInitial != null) {
                     component.set("v.showLevelsInitial" , showLevelsInitial);
                     helper.setStore (component, "showLevels", showLevelsInitial) ;
@@ -326,7 +326,8 @@
         }
         if (topic == "CloseDisplayPanel")
         {      
-            var allowPopover = helper.getMasterParam(component,"panels","InfoPanel","allowPopover");         
+            let masterConfigObject = component.get("v.masterConfigObject");
+            var allowPopover = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","allowPopover");         
             if (allowPopover == null) {allowPopover = false;}
 
             if (allowPopover == true) {

@@ -10,7 +10,7 @@ aaa.createUsersLevel1();
 ScratchDataSetup aaa = new ScratchDataSetup();
 aaa.createUsersLevel2();
 
-ScratchDataSetup.updateChatterPhotos();
+ScratchDataSetup.updateChatterProfile();
 
 ScratchDataSetup aaa = new ScratchDataSetup();
 aaa.insertData(1);
@@ -114,7 +114,7 @@ ScratchDataSetup.updateGrade();
         insert newUsers;
     }
 
-    public static void updateChatterPhotos () {
+    public static void updateChatterProfile () {
         StaticResource static_resource = [SELECT Id, Name, SystemModStamp
             FROM StaticResource 
             WHERE Name = 'chatterPhotos'
@@ -145,15 +145,19 @@ ScratchDataSetup.updateGrade();
         }
 
         Integer counter = 0;
-        List<User> users = [select id from User where grade__c != null];
+        List<User> users = [select id, AboutMe from User where grade__c != null];
         for (User user : users) {
             System.debug(counter + '/' + NumberJPGs);
             Integer indexer = Math.mod(counter, NumberJPGs);
             Blob res_json_body = BLOBs[indexer];
             ConnectApi.Photo photo = 
                 ConnectApi.UserProfiles.setPhoto(null, user.id, new ConnectApi.BinaryInput(res_json_body, 'image/jpg', 'userImage.jpg'));
-            counter++;    
+            counter++;   
+
+            user.AboutMe = 'I have been software professional for over 20 years, mostly as a developer but more recently I have taken up the challenge of managing a team. I previously worked at Burke Enterprises but could not say no to the chance of working here. Outside work I enjoy origami, parkour and heavy metal'; 
         }
+        update users;
+
     }
 
     private static User createUser (String firstName, String lastName, String managerId, String profileId, Integer grade, Integer tenure, String title) {
