@@ -474,8 +474,7 @@
 		var width = _this.getStore (component, "width") ;  
 
         if (width - maxHorizontal < 100) {
-            let csf = bzchart.getStore (masterConfigObject, "ChartScaleFactor") ;
-            if (csf == null) { csf = 1;}
+            let csf = bzchart.getStoreWithDefault (masterConfigObject, "ChartScaleFactor", 1) ;
 
             var newcsf = csf - 0.1;
             var eventParameters = { 

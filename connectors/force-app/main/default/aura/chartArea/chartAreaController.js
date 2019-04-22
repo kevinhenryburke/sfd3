@@ -398,8 +398,7 @@
         {
             bzutils.log("chartArea: ReScale received by Chart: " + componentReference + "/" + parameters["componentReference"]);
 
-            let csfStored = bzchart.getStore (masterConfigObject, "ChartScaleFactor") ;
-            if (csfStored == null) { csfStored = 1;}
+            let csfStored = bzchart.getStoreWithDefault (masterConfigObject, "ChartScaleFactor", 1) ;
     
             if (csf != csfStored) {
                 var csf = parameters["ChartScaleFactor"];

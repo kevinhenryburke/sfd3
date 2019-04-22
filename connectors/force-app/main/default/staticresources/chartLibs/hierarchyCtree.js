@@ -9,26 +9,22 @@
     /* Configuration number functions */
 
     function getFixedDepth (masterConfigObject) {
-        let csfStored = bzchart.getStore (masterConfigObject, "ChartScaleFactor") ;
-        if (csfStored == null) { csfStored = 1;}
+        let csfStored = bzchart.getStoreWithDefault (masterConfigObject, "ChartScaleFactor", 1) ;
         return Math.ceil(180 * csfStored);
     }
 
     function getTextOffset (masterConfigObject) {
-        let csfStored = bzchart.getStore (masterConfigObject, "ChartScaleFactor") ;
-        if (csfStored == null) { csfStored = 1;}
+        let csfStored = bzchart.getStoreWithDefault (masterConfigObject, "ChartScaleFactor", 1) ;
         return Math.ceil(13 * csfStored);
     }
 
     function getFontSizePX (masterConfigObject) {
-        let csfStored = bzchart.getStore (masterConfigObject, "ChartScaleFactor") ;
-        if (csfStored == null) { csfStored = 1;}
+        let csfStored = bzchart.getStoreWithDefault (masterConfigObject, "ChartScaleFactor", 1) ;
         return Math.ceil(12 * csfStored);
     }     
 
     function getRadius (masterConfigObject) {
-        let csfStored = bzchart.getStore (masterConfigObject, "ChartScaleFactor") ;
-        if (csfStored == null) { csfStored = 1;}
+        let csfStored = bzchart.getStoreWithDefault (masterConfigObject, "ChartScaleFactor", 1) ;
         return Math.ceil(10 * csfStored);
     }   
 

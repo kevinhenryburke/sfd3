@@ -15,11 +15,20 @@ function getStore (store, key) {
     return store[key];
 }
 
+function getStoreWithDefault (store, key, defaultValue) {
+  let returnValue = store[key];
+  if (returnValue == null) {
+    return defaultValue;
+  }
+  return returnValue;
+}
+
 var isiOS = false;
 
 exports.isiOS = isiOS;
 exports.setStore = setStore;
 exports.getStore = getStore;
+exports.getStoreWithDefault = getStoreWithDefault;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
