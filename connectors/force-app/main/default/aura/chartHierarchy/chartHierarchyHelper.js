@@ -34,7 +34,7 @@
 
         // Collapse after the second level (provided root has children)
         if (root.children != null) {
-            root.children.forEach(_this.collapse);
+            root.children.forEach(bzctree.collapse);
         }
 
         _this.setStore (component, "root", root ) ;
@@ -72,6 +72,7 @@
 		var _this = this;
 
         let masterConfigObject = component.get("v.masterConfigObject");
+        let storeObject = component.get("v.storeObject");
         console.log("xxxxx masterConfigObject", masterConfigObject);
 
         var nodes;
@@ -474,7 +475,7 @@
 		var width = _this.getStore (component, "width") ;  
 
         if (width - maxHorizontal < 100) {
-            let csf = bzchart.getStoreWithDefault (masterConfigObject, "ChartScaleFactor", 1) ;
+            let csf = bzchart.getStoreWithDefault (storeObject, "ChartScaleFactor", 1) ;
 
             var newcsf = csf - 0.1;
             var eventParameters = { 
@@ -602,7 +603,7 @@
                 }
         
                 parentNode.data.children.push(newchild.data);
-                _this.collapse(newchild);
+                bzctree.collapse(newchild);
 
             });        
         }
@@ -693,23 +694,6 @@
             preppedEvent.eventType = "Cache";
         } 
         return preppedEvent;
-    },
-
-    // Collapse the node and all its children
-    collapse : function (d) {
-        var recursor = function (e) {
-            if(e.children) {
-                e._children = e.children
-                e._children.forEach(recursor)
-                e.children = null
-            }
-        };
-
-        if(d.children) {
-            d._children = d.children
-            d._children.forEach(recursor)
-            d.children = null
-        }
     },
 
     getFilterOpacityPath : function (component, d) {

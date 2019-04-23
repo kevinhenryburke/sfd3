@@ -7,27 +7,27 @@
     doneRenderLoad: function (component) {
         let _this = this;
         let componentReference = component.get("v.componentReference");
-        console.log("chartArea: doneRenderLoad: componentReference:" + componentReference);
+        let storeObject = component.get("v.storeObject");
 
-        _this.setStore (component, "componentReference", component.get("v.componentReference") ) ;
-        _this.setStore (component, "componentType", component.get("v.componentType") ) ;
-        _this.setStore (component, "componentCategory", component.get("v.componentCategory") ) ;
-        _this.setStore (component, "componentEvent", component.getEvent("evt_bzc")) ;        
-        _this.setStore (component, "defaultEventType", component.getEvent("defaultEventType")) ;        
-        _this.setStore (component, "appEvents",  []) ;
+        bzchart.setStore (storeObject, "componentReference", component.get("v.componentReference") ) ;
+        bzchart.setStore (storeObject, "componentType", component.get("v.componentType") ) ;
+        bzchart.setStore (storeObject, "componentCategory", component.get("v.componentCategory") ) ;
+        bzchart.setStore (storeObject, "componentEvent", component.getEvent("evt_bzc")) ;        
+        bzchart.setStore (storeObject, "defaultEventType", component.getEvent("defaultEventType")) ;        
+        bzchart.setStore (storeObject, "appEvents",  []) ;
 
-        _this.setStore (component, "UserComponentId", component.get("v.UserComponentId") ) ;
-        _this.setStore (component, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
-        _this.setStore (component, "hasPrimaryNode", component.get("v.hasPrimaryNode") ) ;
+        bzchart.setStore (storeObject, "UserComponentId", component.get("v.UserComponentId") ) ;
+        bzchart.setStore (storeObject, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
+        bzchart.setStore (storeObject, "hasPrimaryNode", component.get("v.hasPrimaryNode") ) ;
 
-        _this.setStore (component, "lastTouch", new Date().getTime()) ;
-        _this.setStore (component, "width", Math.min(screen.width, screen.height)) ; // review this
-        _this.setStore (component, "height", Math.min(screen.width, screen.height)) ; // review this
+        bzchart.setStore (storeObject, "lastTouch", new Date().getTime()) ;
+        bzchart.setStore (storeObject, "width", Math.min(screen.width, screen.height)) ; // review this
+        bzchart.setStore (storeObject, "height", Math.min(screen.width, screen.height)) ; // review this
 
-        _this.setStore(component, "filtersConfigured", false);
+        bzchart.setStore (storeObject, "filtersConfigured", false);
 
 		var margin = {top: 20, right: 90, bottom: 30, left: 50}; // this should probably be flexi-ed too
-        _this.setStore (component, "margin", margin) ;  
+        bzchart.setStore (storeObject, "margin", margin) ;  
         
         // Differing strategies for computing Width and Height
         // Width depends on width of the container
@@ -35,7 +35,7 @@
         var divComponent = component.find("container1"); // this should be ok as it's an internal search, need to prefix with a unique id is required outside of lightning context
         var divElement = divComponent.getElement();
         var clientWidth = divElement.clientWidth;        
-        _this.setStore (component, "width", clientWidth) ; 
+        bzchart.setStore (storeObject, "width", clientWidth) ; 
 
         // Height we hard code depending on the flexible page width 
         var flexiWidth = component.get("v.flexiWidth");
@@ -47,24 +47,24 @@
 
         if (flexiWidth == "SMALL")
         {
-            _this.setStore (component, "height", 800) ;                 
+            bzchart.setStore (storeObject, "height", 800) ;                 
         }
 
         if (flexiWidth == "MEDIUM")
         {
-            _this.setStore (component, "height", 800) ;                 
+            bzchart.setStore (storeObject, "height", 800) ;                 
         }
 
         if (flexiWidth == "LARGE")
         {
-            _this.setStore (component, "height", 1000) ;                 
+            bzchart.setStore (storeObject, "height", 1000) ;                 
         }
         
         d3.select(_this.getDivId("chartArea", componentReference, true))
             .append("svg")
             .attr("id", _this.getDivId("svg", componentReference, false)) // If putting more than one chart on a page we need to provide unique ids for the svg elements   
-            .attr("width", _this.getStore (component, "width") )
-            .attr("height", _this.getStore (component, "height") );
+            .attr("width", bzchart.getStore (storeObject, "width") )
+            .attr("height", bzchart.getStore (storeObject, "height") );
 
         console.log("chartArea: svg attached ");
 
@@ -86,14 +86,14 @@
         console.log("chartArea: ChartRendered event published ");
  
         // build up a cache for mouseover events - may be a better way to do this!
-        _this.setStore (component, "appEvents",  []) ;
+        bzchart.setStore (storeObject, "appEvents",  []) ;
         _this.restockCache(component);
 
         var panelDisplayEmbedded = component.find("panelDisplayEmbedded"); // this should be ok as it's an internal search, need to prefix with a unique id is required outside of lightning context
-        _this.setStore (component, "panelDisplayEmbedded", panelDisplayEmbedded) ; 
+        bzchart.setStore (storeObject, "panelDisplayEmbedded", panelDisplayEmbedded) ; 
 
         var panelDisplayEmbeddedOuter = component.find("panelDisplayEmbeddedOuter"); // this should be ok as it's an internal search, need to prefix with a unique id is required outside of lightning context
-        _this.setStore (component, "panelDisplayEmbeddedOuter", panelDisplayEmbeddedOuter) ; 
+        bzchart.setStore (storeObject, "panelDisplayEmbeddedOuter", panelDisplayEmbeddedOuter) ; 
 
     },
 
@@ -102,6 +102,11 @@
         var _this = this;
         var componentReference = component.get("v.componentReference");
         let masterConfigObject = component.get("v.masterConfigObject");
+        let storeObject = component.get("v.storeObject");
+
+//        let tempo = bzchart.getStore (masterConfigObject, "componentReference" ) ;
+        console.log("initializeGroups: tempo: componentReference:" + componentReference, masterConfigObject);
+
 
         console.log("init:initializing initializeGroups with primaryNodeId: " + primaryNodeId);
         
@@ -109,24 +114,24 @@
             _this.initializeAddComponentRef(componentReference, datajson);
         }
 
-        _this.setStore (component, "datajson", datajson ) ;
+        bzchart.setStore (storeObject, "datajson", datajson ) ;
 
-        var hasPrimaryNode = _this.getStore (component, "hasPrimaryNode") ;
+        var hasPrimaryNode = bzchart.getStore (storeObject, "hasPrimaryNode") ;
         // var hasPrimaryNode = component.get("v.hasPrimaryNode") ;
         if (hasPrimaryNode == true) {
             primaryNodeId = _this.addComponentRef(componentReference, primaryNodeId);
-            _this.setStore (component, "primaryNodeId", primaryNodeId ) ;
+            bzchart.setStore (storeObject, "primaryNodeId", primaryNodeId ) ;
         }
         else {
             console.log("hasPrimaryNode false");
         }
 
         if (showFilters != null) {
-            _this.setStore (component, "filterValues", showFilters.filterValues ) ;
-            _this.setStore (component, "filterAPIField", showFilters.filterAPIField ) ;
+            bzchart.setStore (storeObject, "filterValues", showFilters.filterValues ) ;
+            bzchart.setStore (storeObject, "filterAPIField", showFilters.filterAPIField ) ;
         }
         else {
-            _this.setStore (component, "filterValues", [] ) ;
+            bzchart.setStore (storeObject, "filterValues", [] ) ;
         }
 
 		var svg = d3.select(_this.getDivId("svg", componentReference, true));
@@ -134,18 +139,18 @@
         // Styling of tooltips - see GitHub prior to Feb 24, 2018
         var pathToolTipDivId = _this.addComponentRef(componentReference, "pathToolTip");
         var pathToolTipDiv = d3.select("#" + pathToolTipDivId);
-        _this.setStore (component, "pathToolTipDiv", pathToolTipDiv ) ;
+        bzchart.setStore (storeObject, "pathToolTipDiv", pathToolTipDiv ) ;
 
         // create some groups inside the svg element to store the raw data
 
         var pathGroupId = _this.getDivId("pathGroup", componentReference, false);
-        _this.setStore (component, "pathGroupId", pathGroupId ) ;
+        bzchart.setStore (storeObject, "pathGroupId", pathGroupId ) ;
         var pathGroup = d3.select("#" + pathGroupId);
         if (pathGroup.empty()) {
             console.log("create pathGroup");
             pathGroup = svg.append("g").attr("id",pathGroupId);
         }
-        _this.setStore (component, "pathGroup", pathGroup ) ;
+        bzchart.setStore (storeObject, "pathGroup", pathGroup ) ;
 
         var nodeGroupId = _this.getDivId("nodeGroup", componentReference, false);
         var nodeGroup = d3.select("#" + nodeGroupId);
@@ -153,7 +158,7 @@
             console.log("create nodeGroup");
             nodeGroup = svg.append("g").attr("id",nodeGroupId);
         }
-        _this.setStore (component, "nodeGroup", nodeGroup ) ;
+        bzchart.setStore (storeObject, "nodeGroup", nodeGroup ) ;
 
         var textGroupId = _this.getDivId("textGroup", componentReference, false);        
         var textGroup = d3.select("#" + textGroupId);
@@ -161,7 +166,7 @@
             console.log("create textGroup");
             textGroup = svg.append("svg:g").attr("id",textGroupId);
         }
-        _this.setStore (component, "textGroup", textGroup ) ;
+        bzchart.setStore (storeObject, "textGroup", textGroup ) ;
 
         var legendSymbolGroupId = _this.getDivId("legendSymbolGroup", componentReference, false);
         var legendSymbolGroup = d3.select("#" + legendSymbolGroupId);
@@ -169,7 +174,7 @@
             console.log("create legendSymbolGroup");
             legendSymbolGroup = svg.append("g").attr("id",legendSymbolGroupId);
         }
-        _this.setStore (component, "legendSymbolGroup", legendSymbolGroup ) ;
+        bzchart.setStore (storeObject, "legendSymbolGroup", legendSymbolGroup ) ;
 
         var allowPopover = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","allowPopover");         
         if (allowPopover == null) {allowPopover = false;}
@@ -189,11 +194,12 @@
     // create an invisible svg symbol to attach a popover to
     createInfoLocation : function (component) {
         var _this = this;
+        let storeObject = component.get("v.storeObject");
         var componentReference = component.get("v.componentReference");
 
         var mdata = [0]; // random data value, not used
 
-        var width = _this.getStore (component, "width");
+        var width = bzchart.getStore (storeObject, "width");
         // var popx = width - 10;
         // var popy = 200;
         var popx = width - 260;
@@ -213,8 +219,8 @@
 
         var referenceSelector = ".infolocation" + componentReference;
 
-        _this.setStore (component, "referenceSelector", referenceSelector ) ;
-        _this.setStore (component, "infosvg", infosvg ) ;
+        bzchart.setStore (storeObject, "referenceSelector", referenceSelector ) ;
+        bzchart.setStore (storeObject, "infosvg", infosvg ) ;
     },
 
 
@@ -222,6 +228,7 @@
     // creates an informational popover
     createPopOverComponent : function (component) {
         var _this = this;
+        let storeObject = component.get("v.storeObject");
 
         // create an overlayLibrary that we can attach the popover to
         $A.createComponent(
@@ -251,7 +258,7 @@
 
                         component.set("v.popoverPanel", newComponent);
                         
-                        var referenceSelector = _this.getStore (component, "referenceSelector");
+                        var referenceSelector = bzchart.getStore (storeObject, "referenceSelector");
                         console.log("createPopOverComponent: createComponent callback: " + referenceSelector);
                         if (status === "SUCCESS") {
                             console.log("xxxxx: createPopOverComponent: createComponent callback: SUCCESS: " );
@@ -265,7 +272,7 @@
                             component.set("v.modalPromise", modalPromise);  
                             modalPromise.then(function (overlay) {
                                 overlay.show();  
-                                _this.setStore (component, "overlay", overlay) ; 
+                                bzchart.setStore (storeObject, "overlay", overlay) ; 
                             });             
                         }
                         else {
@@ -284,7 +291,8 @@
 
     handleScaleChange: function(component,csf){
         let masterConfigObject = component.get("v.masterConfigObject");
-        bzchart.setStore (masterConfigObject, "ChartScaleFactor", csf) ;
+        let storeObject = component.get("v.storeObject");
+        bzchart.setStore (storeObject, "ChartScaleFactor", csf) ;
 
         var cc = component.getConcreteComponent();
         cc.reScale(csf);                 
@@ -293,6 +301,7 @@
     // TODO function appears in many places, try to consolidate
     publishPreppedEvent : function(component,preppedEvent){
         var _this = this;
+        let storeObject = component.get("v.storeObject");
         if (preppedEvent != null) {
             var event;
 
@@ -311,7 +320,7 @@
                 event = $A.get("e.c:evt_sfd3");
             }
             if (preppedEvent.eventType == "Cache"){
-                var appEvents = _this.getStore (component, "appEvents") ;
+                var appEvents = bzchart.getStore (storeObject, "appEvents") ;
                 event = appEvents.pop();
             } 
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
@@ -324,8 +333,9 @@
 
     restockCache : function(component) {
         var _this = this;
+        let storeObject = component.get("v.storeObject");
 
-        var appEvents = _this.getStore (component, "appEvents") ;
+        var appEvents = bzchart.getStore (storeObject, "appEvents") ;
 
         var defaultEventType = component.get("v.defaultEventType");
         console.log("chartArea: restockCache: push new cache events: " + appEvents.length + " of event type: " + defaultEventType);
@@ -344,7 +354,7 @@
             
                 appEvents.push(appEvent);
             }
-            _this.setStore (component, "appEvents",  appEvents) ;
+            bzchart.setStore (storeObject, "appEvents",  appEvents) ;
         }
     }, 
 
@@ -421,7 +431,8 @@
     
     prepareEvent : function (component, topic, parameters) {
         var _this = this;
-        var controllerId = _this.getStore (component, "UserControllerComponentId") ;
+        let storeObject = component.get("v.storeObject");
+        var controllerId = bzchart.getStore (storeObject, "UserControllerComponentId") ;
         var eventType = bzutils.getEventTypeByTopic(topic);
         return {
             "eventType" : eventType ,
@@ -433,7 +444,8 @@
 
     setFilterVisibility : function (component, filterType, filterState) {
         var _this = this;
-        var filterValues = _this.getStore (component, "filterValues") ;
+        let storeObject = component.get("v.storeObject");
+        var filterValues = bzchart.getStore (storeObject, "filterValues") ;
         if (filterState == "Show") {
             filterValues.push(filterType);
         } else {
@@ -442,7 +454,7 @@
                 filterValues.splice(index, 1);
             }
         }
-        _this.setStore (component, "filterValues", filterValues ) ;
+        bzchart.setStore (storeObject, "filterValues", filterValues ) ;
     },
 
     /* clearElements removes all paths, nodes, rects, text from the chart */
@@ -510,6 +522,7 @@
     buildMeasureSchemeMap : function (component) {
         var _this = this;
         let masterConfigObject = component.get("v.masterConfigObject");
+        let storeObject = component.get("v.storeObject");
 
         var objectLevels = bzutils.getMasterParam(masterConfigObject,"data","queryJSON","objectLevels");
 
@@ -577,24 +590,25 @@
                 }
             }
         }
-        _this.setStore(component, "measureObjectFieldMap", measureObjectFieldMap);
-        _this.setStore(component, "measureArrayObjectFieldMap", measureArrayObjectFieldMap);
-        _this.setStore(component, "measureObjectScaleMap", measureObjectScaleMap);
-        _this.setStore(component, "groupingFields", groupingFields);
+        bzchart.setStore (storeObject, "measureObjectFieldMap", measureObjectFieldMap);
+        bzchart.setStore (storeObject, "measureArrayObjectFieldMap", measureArrayObjectFieldMap);
+        bzchart.setStore (storeObject, "measureObjectScaleMap", measureObjectScaleMap);
+        bzchart.setStore (storeObject, "groupingFields", groupingFields);
     },
 
     showColorSchemeLegend : function (component) {
         var _this = this;
+        let storeObject = component.get("v.storeObject");
         var componentReference = component.get("v.componentReference");
-        var currentColorLabel = _this.getStore(component, "currentColorLabel");
-        var currentSizeLabel = _this.getStore(component, "currentSizeLabel");
+        var currentColorLabel = bzchart.getStore (storeObject, "currentColorLabel");
+        var currentSizeLabel = bzchart.getStore (storeObject, "currentSizeLabel");
 
         var firstMeasureScheme = _this.getFirstColorSchemeLegend(component, currentColorLabel);
 
         // remove existing legend symbols
         d3.select(_this.getDivId("legendSymbolGroup", componentReference, true)).selectAll("*").remove();
 
-        var legendSymbolGroup = _this.getStore (component, "legendSymbolGroup" ) ;
+        var legendSymbolGroup = bzchart.getStore (storeObject, "legendSymbolGroup" ) ;
         
         var ms = firstMeasureScheme.measureScheme;
         var mst = firstMeasureScheme["measureSchemeType"];
@@ -696,8 +710,9 @@
 
     getFirstColorSchemeLegend : function (component, currentColorLabel) {
         var _this = this;
+        let storeObject = component.get("v.storeObject");
 
-        var measureArrayObjectFieldMap = _this.getStore(component, "measureArrayObjectFieldMap");
+        var measureArrayObjectFieldMap = bzchart.getStore (storeObject, "measureArrayObjectFieldMap");
         if (measureArrayObjectFieldMap[currentColorLabel] != null) {
             return measureArrayObjectFieldMap[currentColorLabel][0];
         }
@@ -710,11 +725,12 @@
 
     getDefaultValueForReturnType : function (component, returnType) {
         var _this = this;
+        let storeObject = component.get("v.storeObject");
         let retValDefault; 
         switch (returnType) {
-            case "Color" : retValDefault = _this.getStore(component, "defaultColor") ; break;
+            case "Color" : retValDefault = bzchart.getStore (storeObject, "defaultColor") ; break;
             case "Value" : retValDefault = ""; break;
-            case "Size" : retValDefault = _this.getStore(component, "defaultSize"); break;
+            case "Size" : retValDefault = bzchart.getStore (storeObject, "defaultSize"); break;
         }
         return retValDefault;
     },
@@ -741,9 +757,10 @@
 
     getFromMeasureScheme : function (component, ddata, returnType) {
         var _this = this;
+        let storeObject = component.get("v.storeObject");
 
         // relevantMeasure is set on initialization of data in component and changed on color or size events.
-        let relevantMeasure = _this.getStore(component, "relevantMeasure"); 
+        let relevantMeasure = bzchart.getStore (storeObject, "relevantMeasure"); 
         // deal with the case when there are no colors or sizes configured
         if (relevantMeasure == null || relevantMeasure == "bzDefault") { 
             return _this.getDefaultValueForReturnType (component, returnType);    
@@ -752,7 +769,7 @@
         let objectType = ddata["objectType"];
 
         // deal with the case when there are no colors or sizes configured for the current object
-        var measureObjectFieldMap = _this.getStore(component, "measureObjectFieldMap");
+        var measureObjectFieldMap = bzchart.getStore (storeObject, "measureObjectFieldMap");
         var currentMeasureObjectConfig = measureObjectFieldMap[relevantMeasure][objectType];
 
         if (currentMeasureObjectConfig == null) {
@@ -762,10 +779,10 @@
         // from here on we can assume that there is some object configuration for this measure
 
         let sizeChangesColor =  currentMeasureObjectConfig["sizeChangesColor"];
-        let latestSizeOrColor = _this.getStore(component, "latestSizeOrColor"); 
+        let latestSizeOrColor = bzchart.getStore (storeObject, "latestSizeOrColor"); 
 
         if (returnType == "Color" && !sizeChangesColor && latestSizeOrColor == "size") {
-            relevantMeasure = _this.getStore(component, "currentColorLabel"); 
+            relevantMeasure = bzchart.getStore (storeObject, "currentColorLabel"); 
             currentMeasureObjectConfig = measureObjectFieldMap[relevantMeasure][objectType];
 
             if (currentMeasureObjectConfig == null) {
@@ -833,7 +850,7 @@
             }
 
             if (currentMeasureSchemeType == "Scale") {
-                var measureObjectScaleMap = _this.getStore(component, "measureObjectScaleMap");  
+                var measureObjectScaleMap = bzchart.getStore (storeObject, "measureObjectScaleMap");  
                 var currentMeasureObjectConfig = measureObjectScaleMap[relevantMeasure][objectType];
                 return currentMeasureObjectConfig(numericValue) ;     
             }
@@ -852,15 +869,16 @@
 
     isFilteredOut : function (component, d) {
         var _this = this;
+        let storeObject = component.get("v.storeObject");
 
         // if there are no filters configured then we're good to go.
 
-        var filtersConfigured = _this.getStore(component, "filtersConfigured");
+        var filtersConfigured = bzchart.getStore (storeObject, "filtersConfigured");
         if (filtersConfigured == false) {
             return false;
         } 
 
-        var filterAPIField = _this.getStore (component, "filterAPIField");     
+        var filterAPIField = bzchart.getStore (storeObject, "filterAPIField");     
         var recordValue;
 
         for (var i = 0; i < d.fields.length; i++) {
@@ -870,7 +888,7 @@
             }
         }
 
-        var filterValues = _this.getStore (component, "filterValues");    
+        var filterValues = bzchart.getStore (storeObject, "filterValues");    
         
         if (!filterValues.includes(recordValue)) {
             return true;

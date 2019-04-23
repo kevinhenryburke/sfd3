@@ -81,6 +81,7 @@
         var topic, parameters, controller;
         var cc = component.getConcreteComponent();
         let masterConfigObject = cc.get("v.masterConfigObject");
+        let storeObject = cc.get("v.storeObject");
 
         // if there is an arguments parameter this has been triggered by a method call
         // in which case we need to source our information from a level down in the event
@@ -207,31 +208,33 @@
                 let masterConfigObject = parameters["masterConfigObject"];
                 component.set("v.masterConfigObject", masterConfigObject);
 
+                bzchart.setStore (storeObject, "componentReference", componentReference ) ;
+
                 let componentType = component.get("v.componentType");        
 
                 if (componentType == 'hierarchy.ctree') {
                     const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartHierarchyMixin.OverrideMixin);
-                    bzchart.setStore (masterConfigObject, "chartMixin", chartMixin) ;                    
+                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                    
                 }
                 if (componentType == 'hierarchy.pack') {
                     const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin);        
-                    bzchart.setStore (masterConfigObject, "chartMixin", chartMixin) ;                  
+                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                  
                 }
                 if (componentType == 'hierarchy.treemapzoom') {
                     const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin);        
-                    bzchart.setStore (masterConfigObject, "chartMixin", chartMixin) ;                                    
+                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
                 }
                 if (componentType == 'hierarchy.treemap') {
                     const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin);        
-                    bzchart.setStore (masterConfigObject, "chartMixin", chartMixin) ;                                    
+                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
                 }
                 if (componentType == 'network.connections') {
                     const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartNetworkMixin.OverrideMixin);        
-                    bzchart.setStore (masterConfigObject, "chartMixin", chartMixin) ;                                    
+                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
                 }
                 if (componentType == 'network.timeline') {
                     const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartNetworkMixin.OverrideMixin);        
-                    bzchart.setStore (masterConfigObject, "chartMixin", chartMixin) ;                                    
+                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
                 }
         
 
@@ -279,7 +282,7 @@
                     helper.setStore(component, "relevantMeasure", "bzDefault");
                 }
 
-                let variantsMixin = bzchart.getStore (masterConfigObject, "chartMixin") ;
+                let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
                 console.log("chartMixin: getting default size: " + variantsMixin.getDefaultSize());
                 console.log("chartMixin: getting default color: " + variantsMixin.getDefaultColor());
                 helper.setStore(component, "defaultColor", variantsMixin.getDefaultColor());
@@ -398,7 +401,7 @@
         {
             bzutils.log("chartArea: ReScale received by Chart: " + componentReference + "/" + parameters["componentReference"]);
 
-            let csfStored = bzchart.getStoreWithDefault (masterConfigObject, "ChartScaleFactor", 1) ;
+            let csfStored = bzchart.getStoreWithDefault (storeObject, "ChartScaleFactor", 1) ;
     
             if (csf != csfStored) {
                 var csf = parameters["ChartScaleFactor"];

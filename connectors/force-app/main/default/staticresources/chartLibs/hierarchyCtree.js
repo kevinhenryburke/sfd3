@@ -28,10 +28,29 @@
         return Math.ceil(10 * csfStored);
     }   
 
+    // Collapse the node and all its children
+    function collapse (d) {
+        console.log("bzctree.collapse");
+        var recursor = function (e) {
+            if(e.children) {
+                e._children = e.children
+                e._children.forEach(recursor)
+                e.children = null
+            }
+        };
+
+        if(d.children) {
+            d._children = d.children
+            d._children.forEach(recursor)
+            d.children = null
+        }
+    }
+
     exports.getFixedDepth = getFixedDepth;
     exports.getTextOffset = getTextOffset;
     exports.getFontSizePX = getFontSizePX;
     exports.getRadius = getRadius;
+    exports.collapse = collapse;
 
 
 	Object.defineProperty(exports, '__esModule', { value: true });
