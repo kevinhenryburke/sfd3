@@ -23,12 +23,48 @@ function getStoreWithDefault (store, key, defaultValue) {
   return returnValue;
 }
 
+function isFilteredOut (storeObject, d) {
+  console.log("xxxxx: isFilteredOut");
+  // if there are no filters configured then we're good to go.
+
+  var filtersConfigured = bzchart.getStore (storeObject, "filtersConfigured");
+  if (filtersConfigured == false) {
+      return false;
+  } 
+
+  var filterAPIField = bzchart.getStore (storeObject, "filterAPIField");     
+  var recordValue;
+
+  for (var i = 0; i < d.fields.length; i++) {
+      if (d.fields[i].api == filterAPIField) {
+          recordValue = d.fields[i].retrievedValue;
+          break;
+      }
+  }
+
+  var filterValues = bzchart.getStore (storeObject, "filterValues");    
+  
+  if (!filterValues.includes(recordValue)) {
+      return true;
+  }
+  return false;
+}
+
+function getFilterOpacity (storeObject, d) {
+  if (bzchart.isFilteredOut(storeObject,d)) {
+      return 0.1;
+  }
+  return 1;
+}
+
 var isiOS = false;
 
 exports.isiOS = isiOS;
 exports.setStore = setStore;
 exports.getStore = getStore;
 exports.getStoreWithDefault = getStoreWithDefault;
+exports.isFilteredOut = isFilteredOut;
+exports.getFilterOpacity = getFilterOpacity;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

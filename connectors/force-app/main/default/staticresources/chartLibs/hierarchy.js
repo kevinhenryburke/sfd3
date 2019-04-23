@@ -83,9 +83,24 @@
 
     }
 
+    function getFilterOpacityPath (storeObject, d) {
+        console.log("xxxxx: getFilterOpacityPath");
+        var filteredParent = bzchart.isFilteredOut(storeObject, d.parent.data);
+        var filteredNode = bzchart.isFilteredOut(storeObject, d.data);
+
+        if (filteredParent && filteredNode) {
+            return 0.1;
+        }
+        if (filteredParent || filteredNode) {
+            return 0.3;
+        }
+        return 1;
+    }
+
     exports.nestChildren = nestChildren;
     exports.picklistNest = picklistNest;
     exports.searchTree = searchTree;
+    exports.getFilterOpacityPath = getFilterOpacityPath;
     
     Object.defineProperty(exports, '__esModule', { value: true });
 

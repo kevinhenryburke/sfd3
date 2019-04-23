@@ -32,6 +32,7 @@
     stylePack : function (component, node) {
         // Not sure this is called
         var _this = this;
+        let storeObject = component.get("v.storeObject");
         console.log("stylePack enter");    
 
         node.attr("transform", "translate(2,2)") // new
@@ -44,7 +45,7 @@
         var noc = node.append("circle")
             .attr("r", function(d) { return d.r; })
             .style("fill-opacity", function(d, i) {
-                return _this.getFilterOpacity(component, d.data);
+                return bzchart.getFilterOpacity (storeObject, d.data);
             });
 
         let latestSizeOrColor = _this.getStore(component, "latestSizeOrColor");

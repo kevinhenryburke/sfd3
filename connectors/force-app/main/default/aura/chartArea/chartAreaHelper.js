@@ -855,53 +855,7 @@
                 return currentMeasureObjectConfig(numericValue) ;     
             }
         }
-
-
-    },
-
-    getFilterOpacity : function (component, d) {
-        var _this = this;
-        if (_this.isFilteredOut(component,d)) {
-            return 0.1;
-        }
-        return 1;
-    },
-
-    isFilteredOut : function (component, d) {
-        var _this = this;
-        let storeObject = component.get("v.storeObject");
-
-        // if there are no filters configured then we're good to go.
-
-        var filtersConfigured = bzchart.getStore (storeObject, "filtersConfigured");
-        if (filtersConfigured == false) {
-            return false;
-        } 
-
-        var filterAPIField = bzchart.getStore (storeObject, "filterAPIField");     
-        var recordValue;
-
-        for (var i = 0; i < d.fields.length; i++) {
-            if (d.fields[i].api == filterAPIField) {
-                recordValue = d.fields[i].retrievedValue;
-                break;
-            }
-        }
-
-        var filterValues = bzchart.getStore (storeObject, "filterValues");    
-        
-        if (!filterValues.includes(recordValue)) {
-            return true;
-        }
-        return false;
-
     }
-
-
-
-
-        
-
 })
 
 

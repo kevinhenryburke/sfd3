@@ -399,6 +399,7 @@ When you click to drill down the same structure is recreated started at the next
 
     refreshVisibilityHelper: function (component) {
         var _this = this;
+        let storeObject = component.get("v.storeObject");
         console.log("refreshVisibilityHelper enter");
         var componentReference = component.get("v.componentReference");
 
@@ -408,14 +409,14 @@ When you click to drill down the same structure is recreated started at the next
                 return _this.getFilterOpacity(component, d.data);
             })
             .style("stroke-opacity", function (d, i) {
-                return _this.getFilterOpacity(component, d.data);
+                return bzchart.getFilterOpacity (storeObject, d.data);
             })
             ;
 
         var text = d3.select(_this.getDivId("nodeGroup", componentReference, true))
             .selectAll("text")
             .style("opacity", function (d, i) {
-                return _this.getFilterOpacity(component, d.data);
+                return bzchart.getFilterOpacity (storeObject, d.data);
             });
 
 

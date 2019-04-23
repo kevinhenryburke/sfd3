@@ -229,10 +229,10 @@
                 return "4px";
             })
             .style("fill-opacity", function(d, i) {
-                return _this.getFilterOpacity(component, d.data);
+                return bzchart.getFilterOpacity (storeObject, d.data);
             })
             .style("stroke-opacity", function(d, i) {
-                return _this.getFilterOpacity(component, d.data);
+                return bzchart.getFilterOpacity (storeObject, d.data);
             })
             ;
 
@@ -264,7 +264,7 @@
                 return bzctree.getFontSizePX(masterConfigObject) + "px sans-serif";
             })
             .style("opacity", function(d) {
-                return _this.getFilterOpacity(component, d.data);
+                return bzchart.getFilterOpacity (storeObject, d.data);
             })    
             .text(function(d) { 
                 var textDisplay = d.data.name;
@@ -313,10 +313,10 @@
                 return "4px";
             })
             .style("fill-opacity", function(d, i) {
-                return _this.getFilterOpacity(component, d.data);
+                return bzchart.getFilterOpacity (storeObject, d.data);
             })
             .style("stroke-opacity", function(d, i) {
-                return _this.getFilterOpacity(component, d.data);
+                return bzchart.getFilterOpacity (storeObject, d.data);
             })
             .attr('cursor', 'pointer');      
 
@@ -355,7 +355,7 @@
                 return bzctree.getFontSizePX(masterConfigObject) + "px sans-serif";
             })
             .style("opacity", function(d) {
-                return _this.getFilterOpacity(component, d.data);
+                return bzchart.getFilterOpacity (storeObject, d.data);
             })    
             .select('tspan') // update the measures
             .text(function(d) { 
@@ -402,7 +402,7 @@
                 return diagonal(o, o)
             })
             .attr("stroke-opacity", function(d) {
-                return _this.getFilterOpacityPath(component,d);
+                return bzhierarchy.getFilterOpacityPath(storeObject,d);
             })            
             ;
       
@@ -696,45 +696,32 @@
         return preppedEvent;
     },
 
-    getFilterOpacityPath : function (component, d) {
-        var _this = this;
-        var filteredParent = _this.isFilteredOut(component, d.parent.data);
-        var filteredNode = _this.isFilteredOut(component, d.data);
-
-        if (filteredParent && filteredNode) {
-            return 0.1;
-        }
-        if (filteredParent || filteredNode) {
-            return 0.3;
-        }
-        return 1;
-    },
-
     refreshVisibilityHelper: function(component){
         var _this = this;
+        let storeObject = component.get("v.storeObject");
         console.log("refreshVisibilityHelper enter");
         var componentReference = component.get("v.componentReference");       
         
         var node = d3.select(_this.getDivId("nodeGroup", componentReference, true))
             .selectAll("circle,rect") // comma separated searches for both
             .style("fill-opacity", function(d, i) {
-                return _this.getFilterOpacity(component, d.data);
+                return bzchart.getFilterOpacity (storeObject, d.data);
             })
             .style("stroke-opacity", function(d, i) {
-                return _this.getFilterOpacity(component, d.data);
+                return bzchart.getFilterOpacity (storeObject, d.data);
             })            
         ;
 
         var text = d3.select(_this.getDivId("nodeGroup", componentReference, true))
             .selectAll("text")
             .style("opacity", function(d, i) {
-                return _this.getFilterOpacity(component, d.data);
+                return bzchart.getFilterOpacity (storeObject, d.data);
             });
 
         var path = d3.select(_this.getDivId("pathGroup", componentReference, true))
             .selectAll("path")
             .style("stroke-opacity", function(d, i) {
-                return _this.getFilterOpacityPath(component,d);
+                return bzhierarchy.getFilterOpacityPath(storeObject,d);
             });
 
 
