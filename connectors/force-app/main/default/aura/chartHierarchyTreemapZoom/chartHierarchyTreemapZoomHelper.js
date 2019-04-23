@@ -52,6 +52,7 @@ In the zoom controller implement the following method dataPreprocess (started)
     initializeVisuals: function (component) {
         console.log("chartHierarchyTreemapZoomHelper.initializeVisuals enter");
         var _this = this;
+        let storeObject = component.get("v.storeObject");
         var componentReference = component.get("v.componentReference");
 
         var treemap;
@@ -78,7 +79,7 @@ In the zoom controller implement the following method dataPreprocess (started)
                 return b.value - a.value;
             });
 
-        _this.setStore (component, "d3root", rootAfter ) ;    
+        bzchart.setStore (storeObject, "d3root", rootAfter ) ;    
 
         var margin = { top: 20, right: 0, bottom: 0, left: 0 };
         var formatNumber = d3.format(",d");
@@ -283,7 +284,7 @@ When you click to drill down the same structure is recreated started at the next
                     console.log("chartHierarchyTreemapZoomHelper.mouseover enter", d);
                     console.log("chartHierarchyTreemapZoomHelper.mouseover enter id ", d.id);
                     console.log("chartHierarchyTreemapZoomHelper.mouseover enter component ", component);
-                    _this.setStore(component, "mouseoverRecordId", d.id);
+                    bzchart.setStore (storeObject, "mouseoverRecordId", d.id);
                     var preppedEvent = _this.nodeMouseover(component, d);
                     _this.publishPreppedEvent(component, preppedEvent);
                 }))

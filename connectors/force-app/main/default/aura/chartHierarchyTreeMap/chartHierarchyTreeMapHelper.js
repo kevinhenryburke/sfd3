@@ -24,6 +24,7 @@
         console.log("chartHierarchyTreeMapHelper.getRootStructureTreeMap");
         
         var _this = this;
+        let storeObject = component.get("v.storeObject");
         var componentReference = component.get("v.componentReference");  
         var currentSizeLabel = _this.getStore(component, "currentSizeLabel");
 
@@ -39,7 +40,7 @@
                 .sum(_this.valueAccessor(component))
                 .sort((a, b) => b.value - a.value);
 
-            _this.setStore (component, "root", root) ;  
+            bzchart.setStore (storeObject, "root", root) ;  
 
             console.log("chartHierarchyTreeMapHelper callback returning" , root);
 
@@ -54,6 +55,7 @@
 
     renderCells : function (component, cells) {
         var _this = this;
+        let storeObject = component.get("v.storeObject");
 
 		console.log("chartHierarchyTreeMapHelper.renderCells enter");
 
@@ -66,7 +68,7 @@
             .attr("id", d => d.id)
             .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
                 console.log("chartHierarchyTreeMapHelper.mouseover enter");
-                _this.setStore (component, "mouseoverRecordId", d.id ) ;
+                bzchart.setStore (storeObject, "mouseoverRecordId", d.id ) ;
                 var preppedEvent = _this.nodeMouseover(component, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
             }))

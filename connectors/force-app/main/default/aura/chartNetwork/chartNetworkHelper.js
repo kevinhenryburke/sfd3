@@ -3,6 +3,7 @@
     initializeVisuals: function (component) {
         console.log("subhelper: enter initializeVisuals proper!");
         var _this = this;
+        let storeObject = component.get("v.storeObject");
 
 		var datajson = _this.getStore (component, "datajson") ;  
 		var nodeGroup = _this.getStore (component, "nodeGroup") ;  
@@ -45,7 +46,7 @@
                 }
             })
             .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-                _this.setStore (component, "mouseoverRecordId", d.id ) ;
+                bzchart.setStore (storeObject, "mouseoverRecordId", d.id ) ;
                 var preppedEvent = _this.nodeMouseover(component, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
             }))
@@ -60,14 +61,14 @@
                         // the second touchend event happened within half a second. Here is where we invoke the double tap code
                         //TODO implement - e.g. var win = window.open("http://news.bbc.co.uk"); win.focus();
                     }
-                    _this.setStore (component, "lastTouch", lastTouch) ;
+                    bzchart.setStore (storeObject, "lastTouch", lastTouch) ;
                 } else {
                     console.log("not iOS");
                 }
                 // reset the clicked node to be the primary
                 // TODO This will need to be passed in the refreshVisibility call.
                 var primaryNodeId = d.id;
-                _this.setStore (component, "primaryNodeId", primaryNodeId ) ;
+                bzchart.setStore (storeObject, "primaryNodeId", primaryNodeId ) ;
 
                 var cc = component.getConcreteComponent();
                 cc.refreshVisibility();                 
@@ -78,7 +79,7 @@
                 // Two options - complete refresh OR keep and get data from this point?
                 // send a message identifying the node in question
                 var primaryNodeId = d.id;
-                _this.setStore (component, "primaryNodeId", primaryNodeId ) ;
+                bzchart.setStore (storeObject, "primaryNodeId", primaryNodeId ) ;
 
                 var preppedEvent = _this.nodeDoubleClick(component,primaryNodeId);
 
@@ -330,12 +331,13 @@
     runSimulationConnections : function (component, path, node, text) {
         console.log("chartNetworkHelper.runSimulationConnections enter");
         var _this = this;
+        let storeObject = component.get("v.storeObject");
 
         var datajson = _this.getStore (component, "datajson") ;
 
         var simulation = _this.initializeSimulationConnections(component, datajson.nodes);            
 
-        _this.setStore (component, "simulation", simulation ) ;
+        bzchart.setStore (storeObject, "simulation", simulation ) ;
     
         var forceLinks = _this.buildForceLinks(path);
         var link_force =  d3.forceLink(forceLinks.links)
@@ -470,12 +472,13 @@
     runSimulationInfluence : function (component, path, node, text) {
         console.log("chartNetworkHelper.runSimulationInfluence enter");
         var _this = this;
+        let storeObject = component.get("v.storeObject");
 
         var datajson = _this.getStore (component, "datajson") ;
 
         var simulation = _this.initializeSimulationInfluence(component, datajson.nodes);            
 
-        _this.setStore (component, "simulation", simulation ) ;
+        bzchart.setStore (storeObject, "simulation", simulation ) ;
     
         var forceLinks = _this.buildForceLinks(path);
         var link_force =  d3.forceLink(forceLinks.links)

@@ -3,29 +3,30 @@
     initializeVisuals: function (component) {
 		console.log("subhelper: enter initializeVisuals proper structure");
 		var _this = this;
+        let storeObject = component.get("v.storeObject");
 
         var componentReference = component.get("v.componentReference");
         var masterConfigObject = component.get("v.masterConfigObject");
 
-        var datajson = _this.getStore (component, "datajson") ;  
-		var nodeGroup = _this.getStore (component, "nodeGroup") ;  
-		var pathGroup = _this.getStore (component, "pathGroup") ;  
-		// var textGroup = _this.getStore (component, "textGroup") ;  
-		// var pathToolTipDiv = _this.getStore (component, "pathToolTipDiv") ;  
-		// var pathGroupId = _this.getStore (component, "pathGroupId") ;  
+        var datajson = bzchart.getStore (storeObject, "datajson") ;  
+		var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
+		var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
+		// var textGroup = bzchart.getStore (storeObject, "textGroup") ;  
+		// var pathToolTipDiv = bzchart.getStore (storeObject, "pathToolTipDiv") ;  
+		// var pathGroupId = bzchart.getStore (storeObject, "pathGroupId") ;  
 		
-		var width = _this.getStore (component, "width") ;  
-        var height = _this.getStore (component, "height") ; 
+		var width = bzchart.getStore (storeObject, "width") ;  
+        var height = bzchart.getStore (storeObject, "height") ; 
 
         var cc = component.getConcreteComponent();
         // dataPreprocess will set datajson in cache
         cc.dataPreprocess(datajson);
-        datajson = _this.getStore (component, "datajson") ;  
+        datajson = bzchart.getStore (storeObject, "datajson") ;  
 
         /* tree specification */
         
         var tree = d3.tree().size([height, width]);
-        _this.setStore (component, "tree", tree ) ;
+        bzchart.setStore (storeObject, "tree", tree ) ;
         
         // Assigns parent, children, height, depth
         var root = d3.hierarchy(datajson, function(d) { return d.children; });
@@ -37,7 +38,7 @@
             root.children.forEach(bzctree.collapse);
         }
 
-        _this.setStore (component, "root", root ) ;
+        bzchart.setStore (storeObject, "root", root ) ;
 
         _this.update(component, nodeGroup, pathGroup, componentReference, root, false);
 
@@ -46,7 +47,7 @@
         // TODO can move this to a generic location?
 
         var highlightId = datajson["initialHighlightId"];
-        _this.setStore (component, "mouseoverRecordId", highlightId ) ;
+        bzchart.setStore (storeObject, "mouseoverRecordId", highlightId ) ;
         _this.restockCache(component);
 
         var nodeToPublish = root;
@@ -70,7 +71,6 @@
 
     update : function(component, nodeGroup, pathGroup, componentReference, source, makeSourceRoot) {
 		var _this = this;
-
         let masterConfigObject = component.get("v.masterConfigObject");
         let storeObject = component.get("v.storeObject");
         console.log("xxxxx masterConfigObject", masterConfigObject);
@@ -81,13 +81,13 @@
         var shortDuration = 250;
         var fixedDepth = bzctree.getFixedDepth(masterConfigObject); // this may need to be a function of chart area depth?
 
-        var showMeasureValues = _this.getStore(component, "showMeasureValues");
+        var showMeasureValues = bzchart.getStore (storeObject, "showMeasureValues");
 
-        var margin = _this.getStore (component, "margin") ;  
+        var margin = bzchart.getStore (storeObject, "margin") ;  
         
         // Assigns the x and y position for the nodes
 
-        var tree = _this.getStore (component, "tree" ) ;
+        var tree = bzchart.getStore (storeObject, "tree" ) ;
 
         var treeData;
         if (makeSourceRoot === true) {
@@ -98,7 +98,7 @@
 
         }
         else {
-            var root = _this.getStore (component, "root" ) ;
+            var root = bzchart.getStore (storeObject, "root" ) ;
             treeData = tree(root);
         }        
       
@@ -130,12 +130,12 @@
 
             // workout the maximum depth in the chart so we can perform any necessary resizing
             if (!_this.hasStore (component, "maxDepth")) {
-                _this.setStore (component, "maxDepth", 0) ;
+                bzchart.setStore (storeObject, "maxDepth", 0) ;
             }
-            var maxDepth = _this.getStore (component, "maxDepth") ;
+            var maxDepth = bzchart.getStore (storeObject, "maxDepth") ;
             if (d.depth > maxDepth) {
-                _this.setStore (component, "maxDepth", d.depth) ;
-                console.log("maxDepth: " + _this.getStore (component, "maxDepth") );
+                bzchart.setStore (storeObject, "maxDepth", d.depth) ;
+                console.log("maxDepth: " + bzchart.getStore (storeObject, "maxDepth") );
             }
         });
 
@@ -179,7 +179,7 @@
             // .filter(function(d, i) {if (d.data.name.length < 5) { return false; } return true;})            
             .on('click', click)
 			.on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-				_this.setStore (component, "mouseoverRecordId", d.id ) ;
+				bzchart.setStore (storeObject, "mouseoverRecordId", d.id ) ;
                 var preppedEvent = _this.nodeMouseover(component, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
                 if (d.depth <= 1) { // root or first level
@@ -199,7 +199,7 @@
 
             }))
 			.on('mouseout', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-				_this.setStore (component, "mouseoutRecordId", d.id ) ;
+				bzchart.setStore (storeObject, "mouseoutRecordId", d.id ) ;
                 var preppedEvent = _this.nodeMouseout(component, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
             }))
@@ -322,7 +322,7 @@
 
         /* TODO - wrap this is a check as to whether to change */   
         
-        if (_this.getStore(component, "updateColor")) {
+        if (bzchart.getStore (storeObject, "updateColor")) {
             nuc.style("fill", function(d) {
                 // collapsed children are stored as d._children / expanded as d.children
                 // at present color is treated the same for parents and children
@@ -361,7 +361,7 @@
             .text(function(d) { 
                 if (showMeasureValues == true) {
                     // we don't have updates on size for tree hierarchies
-                    if (_this.getStore(component, "updateColor")) {
+                    if (bzchart.getStore (storeObject, "updateColor")) {
                         var nodeValue = _this.getFromMeasureScheme(component, d.data, "Value");
                         return "(" + nodeValue.toLocaleString()  + ")" ;
                     }
@@ -434,7 +434,7 @@
 
         // KB: added to ensure highlighted nodes remain highlighted after collapse and expand
         // takes the cached paths and highlights them.
-        var highlightedPaths = _this.getStore (component, "highlightedPaths") ;
+        var highlightedPaths = bzchart.getStore (storeObject, "highlightedPaths") ;
         if (highlightedPaths != null) {
             _this.stylePathsStroke(highlightedPaths, true);
         }
@@ -470,9 +470,9 @@
         
 
         // finally auto-resize the chart if the bottom nodes are encroaching on the end
-        var maxDepth = _this.getStore (component, "maxDepth") ;
+        var maxDepth = bzchart.getStore (storeObject, "maxDepth") ;
         var maxHorizontal = margin.left + (maxDepth * fixedDepth);
-		var width = _this.getStore (component, "width") ;  
+		var width = bzchart.getStore (storeObject, "width") ;  
 
         if (width - maxHorizontal < 100) {
             let csf = bzchart.getStoreWithDefault (storeObject, "ChartScaleFactor", 1) ;
@@ -492,7 +492,8 @@
     // open the input paths in the graph, note that need to call update afterwards
     openPathsBy : function (component, searchTerm, searchBy){
         var _this = this;
-        var ultimateRoot = _this.getStore (component, "root");
+        let storeObject = component.get("v.storeObject");
+        var ultimateRoot = bzchart.getStore (storeObject, "root");
 
         // try to find target node down from the root node
         var paths = bzhierarchy.searchTree(ultimateRoot,searchTerm,[],searchBy);
@@ -514,13 +515,15 @@
 
     highlightPathsBy : function (component, searchTerm, searchBy, highlightOn){
         var _this = this;
-        var ultimateRoot = _this.getStore (component, "root");
+        let storeObject = component.get("v.storeObject");
+
+        var ultimateRoot = bzchart.getStore (storeObject, "root");
 
         // try to find target node down from the root node
         var paths = bzhierarchy.searchTree(ultimateRoot,searchTerm,[],searchBy);
         _this.stylePathsStroke(paths, highlightOn);
 
-        _this.setStore (component, "highlightedPaths", paths ) ;
+        bzchart.setStore (storeObject, "highlightedPaths", paths ) ;
     },
 
     stylePathsStroke : function(paths, highlightOn) {
@@ -535,6 +538,7 @@
     },
 
     merge : function(component, updatejson) {
+        let storeObject = component.get("v.storeObject");
         var componentReference = component.get("v.componentReference");
         var _this = this;
 
@@ -571,7 +575,7 @@
             var parentNode = _this.getNodeFromId(parentNodeId);
 
             if (parentNode == null) {
-                var ultimateRoot = _this.getStore (component, "root");
+                var ultimateRoot = bzchart.getStore (storeObject, "root");
 
                 // try to find target node down from the root node
                 var paths = bzhierarchy.searchTree(ultimateRoot,parentRecordId,[],"Id");
@@ -612,6 +616,7 @@
     // TODO function appears in many places, try to consolidate
     publishPreppedEvent : function(component,preppedEvent){
         var _this = this;
+        let storeObject = component.get("v.storeObject");
         if (preppedEvent != null) {
             var event;
             console.log("publishPreppedEvent: enter "+ preppedEvent.topic + " and " + preppedEvent.eventType);
@@ -631,7 +636,7 @@
                 event = $A.get("e.c:evt_sfd3");
             }
             if (preppedEvent.eventType == "Cache"){
-                var appEvents = _this.getStore (component, "appEvents") ;
+                var appEvents = bzchart.getStore (storeObject, "appEvents") ;
                 event = appEvents.pop();
             }    
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
@@ -648,7 +653,7 @@
         preppedEvent.eventType = "Cache";
 
         // attempt to get the lighting info panel to follow the highlight.        
-        // var infosvg = _this.getStore (component, "infosvg") ;
+        // var infosvg = bzchart.getStore (storeObject, "infosvg") ;
         // var dx = d.x;
         // var dy = d.y;
         // console.log("popover:" + dy + " / " + dx);

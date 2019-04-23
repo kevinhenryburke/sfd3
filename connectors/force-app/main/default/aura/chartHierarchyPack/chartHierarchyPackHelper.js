@@ -2,6 +2,7 @@
     initializeVisuals: function (component) {
 		console.log("chartHierarchyPackHelper: enter initializeVisuals proper structure");
 		let _this = this;
+        let storeObject = component.get("v.storeObject");
 
         let datajson = _this.getStore (component, "datajson") ;  
 		let nodeGroup = _this.getStore (component, "nodeGroup") ;  
@@ -21,7 +22,7 @@
             .attr("id", d => d.id)
             .attr("recordid", d => d.recordid)
             .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-                _this.setStore (component, "mouseoverRecordId", d.id ) ;
+                bzchart.setStore (storeObject, "mouseoverRecordId", d.id ) ;
                 var preppedEvent = _this.nodeMouseover(component, d); 
                 _this.publishPreppedEvent(component,preppedEvent);
             }))
