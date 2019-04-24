@@ -46,12 +46,55 @@
         }
     }
 
+
+    // highlight the input paths in the graph, note that need to call update afterwards
+    // searchBy is "name" or "id" depending on what searchTerm we are using
+    // highlightOn is boolean - if true we switch highlighting on, otherwise we switch it off
+
+    function highlightPathsBy (storeObject, searchTerm, searchBy, highlightOn){
+        var ultimateRoot = bzchart.getStore (storeObject, "root");
+
+        // try to find target node down from the root node
+        var paths = bzhierarchy.searchTree(ultimateRoot,searchTerm,[],searchBy);
+        bzctree.stylePathsStroke(paths, highlightOn);
+        bzchart.setStore (storeObject, "highlightedPaths", paths ) ;
+    }
+
+    // open the input paths in the graph, note that need to call update afterwards
+    function openPathsBy (storeObject, searchTerm, searchBy){
+        let ultimateRoot = bzchart.getStore (storeObject, "root");
+
+        // try to find target node down from the root node
+        let paths = bzhierarchy.searchTree(ultimateRoot,searchTerm,[],searchBy);
+        for(let i =0;i<paths.length;i++){
+            if(paths[i].id !== "1"){//i.e. not root
+                paths[i].class = 'found';
+                if(paths[i]._children){ //if children are hidden: open them, otherwise: don't do anything
+                    paths[i].children = paths[i]._children;
+                    paths[i]._children = null;
+                }
+            }
+        }
+    }
+
+    function stylePathsStroke (paths, highlightOn) {
+        let stroke = (highlightOn == true ? "#f00" : "#ccc");
+        for(let i =0;i<paths.length;i++){
+            if(paths[i].id !== "1"){//i.e. not root - TODO check value not equal to root
+                let relatedPathId = "path" + paths[i]["id"];
+                d3.select("#" + relatedPathId).style("stroke", stroke); 
+            }
+        }
+    }
+
     exports.getFixedDepth = getFixedDepth;
     exports.getTextOffset = getTextOffset;
     exports.getFontSizePX = getFontSizePX;
     exports.getRadius = getRadius;
+    exports.highlightPathsBy = highlightPathsBy;
+    exports.openPathsBy = openPathsBy;
     exports.collapse = collapse;
-
+    exports.stylePathsStroke = stylePathsStroke;
 
 	Object.defineProperty(exports, '__esModule', { value: true });
     console.log("loaded: bzctree  IIFE");

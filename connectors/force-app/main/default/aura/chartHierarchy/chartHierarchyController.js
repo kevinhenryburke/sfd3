@@ -30,13 +30,12 @@
 
         var updatejson = parameters.datajson;
 
-        var componentReference = component.get("v.componentReference");
         var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
         var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
         var root = bzchart.getStore (storeObject, "root") ;
 
         helper.merge(component, updatejson);
-        helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
+        helper.update(component, nodeGroup, pathGroup, root, false);
 
     },
 
@@ -46,12 +45,11 @@
         var args = event.getParam("arguments");
         bzchart.setStore (storeObject, "ChartScaleFactor", args.ChartScaleFactor) ;
 
-        var componentReference = component.get("v.componentReference");
         var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
         var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
         var root = bzchart.getStore (storeObject, "root") ;
 
-        helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
+        helper.update(component, nodeGroup, pathGroup, root, false);
 
         console.log("reScale: exit");
     },
@@ -74,18 +72,18 @@
         var root = bzchart.getStore (storeObject, "root") ;
 
         if (searchAction == "HighlightOpenPath" || searchAction == "OpenPath" ) {
-                helper.openPathsBy(component, searchTermId, "Id");
-                helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
+            bzctree.openPathsBy(storeObject, searchTermId, "Id");
+            helper.update(component, nodeGroup, pathGroup, root, false);
         }
 
         if (searchAction == "HighlightOpenPath" || searchAction == "HighlightPath" ) {
             var highlightedPaths = bzchart.getStore (storeObject, "highlightedPaths") ;
             if (highlightedPaths != null && clearHighlightedPaths == true) {
-                helper.stylePathsStroke(highlightedPaths, false);
+                bzctree.stylePathsStroke(highlightedPaths, false);
             }
             
-            helper.highlightPathsBy(component, searchTermId, "Id", true);
-            helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
+            bzctree.highlightPathsBy(storeObject, searchTermId, "Id", true);
+            helper.update(component, nodeGroup, pathGroup, root, false);
         }
     },
 
@@ -104,7 +102,7 @@
         var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
         var root = bzchart.getStore (storeObject, "root") ;
 
-        helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
+        helper.update(component, nodeGroup, pathGroup, root, false);
         console.log("aura:method styleNodes in chartHierarchy exit");
     }
 

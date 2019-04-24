@@ -40,7 +40,7 @@
 
         bzchart.setStore (storeObject, "root", root ) ;
 
-        _this.update(component, nodeGroup, pathGroup, componentReference, root, false);
+        _this.update(component, nodeGroup, pathGroup, root, false);
 
         // Push out an initial message to highlight the root node to display panels
         // Effecitvely can do this via a mouseover event on root.
@@ -58,8 +58,9 @@
 
             nodeToPublish = d3.select("#" + componentReference + highlightId).datum();
             // in this case we will always highlight the path to the key node and open up that node
-            _this.highlightPathsBy(component, highlightId, "Id", true);
-            _this.openPathsBy(component, highlightId, "Id");
+            bzctree.highlightPathsBy(storeObject, highlightId, "Id", true);
+
+            bzctree.openPathsBy(storeObject, highlightId, "Id");
         }
 
         var preppedEvent = _this.nodeMouseover(component, nodeToPublish); 
@@ -69,11 +70,13 @@
         console.log("initialize root path");
     },
 
-    update : function(component, nodeGroup, pathGroup, componentReference, source, makeSourceRoot) {
+    update : function(component, nodeGroup, pathGroup, source, makeSourceRoot) {
 		var _this = this;
         let masterConfigObject = component.get("v.masterConfigObject");
         let storeObject = component.get("v.storeObject");
-        console.log("xxxxx masterConfigObject", masterConfigObject);
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;
+
+        console.log("xxxxx update", componentReference);
 
         var nodes;
         var links;
@@ -436,7 +439,7 @@
         // takes the cached paths and highlights them.
         var highlightedPaths = bzchart.getStore (storeObject, "highlightedPaths") ;
         if (highlightedPaths != null) {
-            _this.stylePathsStroke(highlightedPaths, true);
+            bzctree.stylePathsStroke(highlightedPaths, true);
         }
     
 
@@ -460,7 +463,7 @@
                 d.children = d._children;
                 d._children = null;
             }
-            _this.update(component, nodeGroup, pathGroup, componentReference, d, false);
+            _this.update(component, nodeGroup, pathGroup, d, false);
 		}
   
         function childLess(d) {
@@ -486,54 +489,6 @@
             var preppedEvent = _this.prepareEvent(component, "ReScale", eventParameters);
             preppedEvent.eventType = "Cache";
             _this.publishPreppedEvent (component,preppedEvent);    
-        }
-    },
-
-    // open the input paths in the graph, note that need to call update afterwards
-    openPathsBy : function (component, searchTerm, searchBy){
-        var _this = this;
-        let storeObject = component.get("v.storeObject");
-        var ultimateRoot = bzchart.getStore (storeObject, "root");
-
-        // try to find target node down from the root node
-        var paths = bzhierarchy.searchTree(ultimateRoot,searchTerm,[],searchBy);
-        for(var i =0;i<paths.length;i++){
-            if(paths[i].id !== "1"){//i.e. not root
-                paths[i].class = 'found';
-                if(paths[i]._children){ //if children are hidden: open them, otherwise: don't do anything
-                    paths[i].children = paths[i]._children;
-                    paths[i]._children = null;
-                }
-            }
-        }
-    },
-
-    
-    // highlight the input paths in the graph, note that need to call update afterwards
-    // searchBy is "name" or "id" depending on what searchTerm we are using
-    // highlightOn is boolean - if true we switch highlighting on, otherwise we switch it off
-
-    highlightPathsBy : function (component, searchTerm, searchBy, highlightOn){
-        var _this = this;
-        let storeObject = component.get("v.storeObject");
-
-        var ultimateRoot = bzchart.getStore (storeObject, "root");
-
-        // try to find target node down from the root node
-        var paths = bzhierarchy.searchTree(ultimateRoot,searchTerm,[],searchBy);
-        _this.stylePathsStroke(paths, highlightOn);
-
-        bzchart.setStore (storeObject, "highlightedPaths", paths ) ;
-    },
-
-    stylePathsStroke : function(paths, highlightOn) {
-        var stroke = (highlightOn == true ? "#f00" : "#ccc");
-        for(var i =0;i<paths.length;i++){
-            if(paths[i].id !== "1"){//i.e. not root - TODO check value not equal to root
-                var thispath = paths[i];
-                var relatedPathId = "path" + paths[i]["id"];
-                var g1 = d3.select("#" + relatedPathId).style("stroke", stroke); 
-            }
         }
     },
 
