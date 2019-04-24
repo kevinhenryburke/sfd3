@@ -10,6 +10,7 @@
     // dataPreprocess works by resetting datajson value in Cache
     dataPreprocess: function(component,event,helper){
         console.log("calling the aura:method dataPreprocess in chartHierarchyController");
+        let storeObject = component.get("v.storeObject");
         let args = event.getParam("arguments");
         let datajson = args.datajson; 
         let groupingFields = helper.getStore(component, "groupingFields");
@@ -17,7 +18,7 @@
         if (groupingFields.length > 0) {
             let groupingFields = helper.getStore(component, "groupingFields");
             datajson = bzhierarchy.picklistNest(groupingFields, datajson);
-            helper.setStore (component, "datajson", datajson ) ;    
+            bzchart.setStore (storeObject, "datajson", datajson ) ;    
         }
     },
 

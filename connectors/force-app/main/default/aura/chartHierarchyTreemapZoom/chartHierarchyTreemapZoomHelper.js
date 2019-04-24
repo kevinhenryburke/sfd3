@@ -35,7 +35,7 @@ In the zoom controller implement the following method dataPreprocess (started)
             .key(function(d) { return d.subregion; }) // original ....
             .entries(datajson);
         component.set("v.datajson", datajson);
-        helper.setStore (component, "datajson", datajson ) ;
+        bzchart.setStore (storeObject, "datajson", datajson ) ;
     }
 
 

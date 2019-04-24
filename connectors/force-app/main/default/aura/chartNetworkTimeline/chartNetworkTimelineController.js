@@ -20,6 +20,7 @@
 
     dataPreprocess: function(component,event,helper){
         console.log("calling the aura:method dataPreprocess in chartNetworkTimeline");
+        let storeObject = component.get("v.storeObject");
 
         var args = event.getParam("arguments");
         var datajsonBefore = args.datajson;
@@ -39,7 +40,7 @@
                 }
             }
         }    
-        helper.setStore (component, "datajson", datajsonBefore ) ;
+        bzchart.setStore (storeObject, "datajson", datajsonBefore ) ;
     }
 
 })

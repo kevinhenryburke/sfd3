@@ -3,11 +3,10 @@
     // bear in mind that doInit can't reference anything in an external library as it may lose a race condition.
     doInit: function(component, event, helper) {
         console.log('chartArea: doInit enter');   
-
-        let storeObject = {"rendered": false};
+        let storeObject = {"rendered": false, "showMeasureValues": false};
         component.set("v.storeObject", storeObject);
 
-        helper.setStore(component, "showMeasureValues", false);
+//        bzchart.setStore (storeObject, "showMeasureValues", false);
 
         var recordId = component.get("v.recordId");
         if (recordId == null) {
@@ -25,7 +24,8 @@
 
     // we need to avoid race condition between chart rendering and scripts loading, hence the checks in this method
     doneRendering: function(component, event, helper) {
-        var rendered = helper.getStore(component, "rendered");
+        let storeObject = component.get("v.storeObject");
+        let rendered = storeObject["rendered"];
         if (rendered == false) {
             console.log('chartArea: doneRendering enter for first time');   
             var scriptsLoaded = component.get("v.scriptsLoaded");
@@ -36,16 +36,17 @@
             else {
                 console.log('chartArea: doneRendering: scripts not loaded so publish RefreshEvent from afterScriptsLoaded');   
             }
-            helper.setStore(component, "rendered", true);
+            storeObject["rendered"] = true;
         }
     },
 
     // we need to avoid race condition between chart rendering and scripts loading, hence the checks in this method
     afterScriptsLoaded: function(component, event, helper) {
         bzutils.log('chartArea: afterScriptsLoaded enter');
+        let storeObject = component.get("v.storeObject");
         component.set("v.scriptsLoaded", true);
 
-        var rendered = helper.getStore(component, "rendered");
+        var rendered = bzchart.getStore (storeObject, "rendered");
         if (rendered == true) {
             bzutils.log('chartArea: signalling ready from afterScriptsLoaded');   
             helper.doneRenderLoad(component);
@@ -126,13 +127,13 @@
         if (topic == "ShowLevelsMore")
         {
             // get the new number of levels and refresh
-            helper.setStore (component, "showLevels", parameters["levels"] ) ;
+            bzchart.setStore (storeObject, "showLevels", parameters["levels"] ) ;
             cc.refreshVisibility();                     
         }
         if (topic == "ShowLevelsFewer")
         {
             // get the new number of levels and refresh
-            helper.setStore (component, "showLevels", parameters["levels"] ) ;
+            bzchart.setStore (storeObject, "showLevels", parameters["levels"] ) ;
             cc.refreshVisibility();                 
         }
         if (topic == "SetColor")
@@ -142,19 +143,19 @@
             //TODO - should I just set the measure scheme here, once, in one place???
             // could improve performance a lot?            
 
-            helper.setStore(component, "currentColorLabel",  parameters["measure"]);
-            helper.setStore(component, "relevantMeasure",  parameters["measure"]);
-            helper.setStore(component, "latestSizeOrColor",  "color");
-            helper.setStore(component, "updateColor", true);
-            helper.setStore(component, "updateSize", false);
+            bzchart.setStore (storeObject, "currentColorLabel",  parameters["measure"]);
+            bzchart.setStore (storeObject, "relevantMeasure",  parameters["measure"]);
+            bzchart.setStore (storeObject, "latestSizeOrColor",  "color");
+            bzchart.setStore (storeObject, "updateColor", true);
+            bzchart.setStore (storeObject, "updateSize", false);
 
             var componentType = component.get("v.componentType");
             if (componentType != "hierarchy.treemap" && componentType != "hierarchy.treemapzoom") {
                 helper.showColorSchemeLegend(component);            
-                helper.setStore(component, "showMeasureValues", true);
+                bzchart.setStore (storeObject, "showMeasureValues", true);
             }
             else {
-                helper.setStore(component, "showMeasureValues", false);
+                bzchart.setStore (storeObject, "showMeasureValues", false);
             }
 
             // refresh node styles
@@ -163,20 +164,20 @@
         if (topic == "SetSize")
         {
             // get the measure
-            helper.setStore(component, "currentSizeLabel",  parameters["size"]);
-            helper.setStore(component, "relevantMeasure",  parameters["size"]);
-            helper.setStore(component, "latestSizeOrColor",  "size");
+            bzchart.setStore (storeObject, "currentSizeLabel",  parameters["size"]);
+            bzchart.setStore (storeObject, "relevantMeasure",  parameters["size"]);
+            bzchart.setStore (storeObject, "latestSizeOrColor",  "size");
 
-            helper.setStore(component, "updateColor", false);
-            helper.setStore(component, "updateSize", true);
+            bzchart.setStore (storeObject, "updateColor", false);
+            bzchart.setStore (storeObject, "updateSize", true);
 
             var componentType = component.get("v.componentType");
             if (componentType != "hierarchy.treemap" && componentType != "hierarchy.treemapzoom") {
                 helper.showColorSchemeLegend(component);            
-                helper.setStore(component, "showMeasureValues", true);
+                bzchart.setStore (storeObject, "showMeasureValues", true);
             }
             else {
-                helper.setStore(component, "showMeasureValues", false);
+                bzchart.setStore (storeObject, "showMeasureValues", false);
             }
             
             // refresh node styles
@@ -185,7 +186,7 @@
         if (topic == "SetFilter")
         {
 
-            helper.setStore(component, "filtersConfigured", true);
+            bzchart.setStore (storeObject, "filtersConfigured", true);
 
             // get the type of filter (essentially which field (group)) and whether we are no Show or Hide
             // filter and set visibility of nodes
@@ -251,45 +252,45 @@
                 
                 var showEmbeddedPanel = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","showEmbeddedPanel");         
                 if (showEmbeddedPanel == null) {showEmbeddedPanel = false;}
-                helper.setStore (component, "showEmbeddedPanel", showEmbeddedPanel ) ;
+                bzchart.setStore (storeObject, "showEmbeddedPanel", showEmbeddedPanel ) ;
                 component.set("v.showEmbeddedPanel", showEmbeddedPanel);
 
                 var showLevelsInitial = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","showLevelsInitial");         
                 if (showLevelsInitial != null) {
                     component.set("v.showLevelsInitial" , showLevelsInitial);
-                    helper.setStore (component, "showLevels", showLevelsInitial) ;
+                    bzchart.setStore (storeObject, "showLevels", showLevelsInitial) ;
                 }
                 else {
                     component.set("v.showLevelsInitial" , 1);
-                    helper.setStore (component, "showLevels", 1) ;
+                    bzchart.setStore (storeObject, "showLevels", 1) ;
                 }
 
                 // set latest values for color and size
 
-                helper.setStore(component, "currentColorLabel", 
+                bzchart.setStore (storeObject, "currentColorLabel", 
                     parameters["currentColorLabel"] != null ? parameters["currentColorLabel"] : "bzDefault");
-                helper.setStore(component, "currentSizeLabel", 
+                bzchart.setStore (storeObject, "currentSizeLabel", 
                     parameters["currentSizeLabel"] != null ? parameters["currentSizeLabel"] : "bzDefault");
                 
                 // set relevantMeasure
                 if (parameters["currentColorLabel"] != null) {
-                    helper.setStore(component, "relevantMeasure", parameters["currentColorLabel"]);
+                    bzchart.setStore (storeObject, "relevantMeasure", parameters["currentColorLabel"]);
                 }                
                 else if (parameters["currentSizeLabel"] != null) {
-                    helper.setStore(component, "relevantMeasure", parameters["currentSizeLabel"]);
+                    bzchart.setStore (storeObject, "relevantMeasure", parameters["currentSizeLabel"]);
                 }                
                 else { // if there are no colors or sizes then mark this as bzDefault
-                    helper.setStore(component, "relevantMeasure", "bzDefault");
+                    bzchart.setStore (storeObject, "relevantMeasure", "bzDefault");
                 }
 
                 let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
                 console.log("chartMixin: getting default size: " + variantsMixin.getDefaultSize());
                 console.log("chartMixin: getting default color: " + variantsMixin.getDefaultColor());
-                helper.setStore(component, "defaultColor", variantsMixin.getDefaultColor());
-                helper.setStore(component, "defaultSize", variantsMixin.getDefaultSize());
-                helper.setStore(component, "updateColor", true);
-                helper.setStore(component, "updateSize", true);
-                helper.setStore(component, "latestSizeOrColor",  "none");
+                bzchart.setStore (storeObject, "defaultColor", variantsMixin.getDefaultColor());
+                bzchart.setStore (storeObject, "defaultSize", variantsMixin.getDefaultSize());
+                bzchart.setStore (storeObject, "updateColor", true);
+                bzchart.setStore (storeObject, "updateSize", true);
+                bzchart.setStore (storeObject, "latestSizeOrColor",  "none");
 
 
                 helper.initializeGroups(component, parameters["datajson"], parameters["primaryId"], parameters["showFilters"], isInit);                 
@@ -346,20 +347,20 @@
             }
 
             // if we have destroyed the component then we need to make the panel area transparent
-            var panelDisplayEmbeddedOuter = helper.getStore (component, "panelDisplayEmbeddedOuter") ; 
+            var panelDisplayEmbeddedOuter = bzchart.getStore (storeObject, "panelDisplayEmbeddedOuter") ; 
             var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
             panelDisplayEmbeddedOuterElement.style.opacity = "0";
         } 
         if (topic == "FadeDisplayPanel")
         {      
             // we toggle the opacity of the display panel
-            var panelDisplayEmbedded = helper.getStore (component, "panelDisplayEmbedded") ; 
-            var showEmbeddedPanel = helper.getStore (component, "showEmbeddedPanel" ) ;
+            var panelDisplayEmbedded = bzchart.getStore (storeObject, "panelDisplayEmbedded") ; 
+            var showEmbeddedPanel = bzchart.getStore (storeObject, "showEmbeddedPanel" ) ;
             console.log('chartArea: FadeDisplayPanel: ', showEmbeddedPanel);
 
             if (showEmbeddedPanel) {
 
-                var panelDisplayEmbeddedOuter = helper.getStore (component, "panelDisplayEmbeddedOuter") ; 
+                var panelDisplayEmbeddedOuter = bzchart.getStore (storeObject, "panelDisplayEmbeddedOuter") ; 
 
                 var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
                 var opacity = panelDisplayEmbeddedOuterElement.style["opacity"];        
@@ -379,11 +380,11 @@
             
             bzutils.log("chartArea: ChartMouseOver received by Chart: " + componentReference + "/" + parameters["componentReference"]);
 
-            var panelDisplayEmbedded = helper.getStore (component, "panelDisplayEmbedded") ; 
-            var showEmbeddedPanel = helper.getStore (component, "showEmbeddedPanel" ) ;
+            var panelDisplayEmbedded = bzchart.getStore (storeObject, "panelDisplayEmbedded") ; 
+            var showEmbeddedPanel = bzchart.getStore (storeObject, "showEmbeddedPanel" ) ;
             console.log('chartArea: panelDisplayEmbedded, showEmbeddedPanel: ', showEmbeddedPanel);
 
-            var panelDisplayEmbeddedOuter = helper.getStore (component, "panelDisplayEmbeddedOuter") ; 
+            var panelDisplayEmbeddedOuter = bzchart.getStore (storeObject, "panelDisplayEmbeddedOuter") ; 
 
             var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
             var opacity = panelDisplayEmbeddedOuterElement.style["opacity"];        
@@ -414,11 +415,11 @@
         }
     },
 
-
     navigateToRecord : function(component){
+        let storeObject = component.get("v.storeObject");
         var evtNav = $A.get("e.force:navigateToSObject");
         evtNav.setParams({
-        "recordId": helper.getStore (component, "mouseoverRecordId"),
+        "recordId": bzchart.getStore (storeObject, "mouseoverRecordId"),
         "slideDevName": "detail"
         });
         sObectEvent.fire(); 

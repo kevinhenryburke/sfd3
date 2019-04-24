@@ -2,13 +2,14 @@
 
     initializeVisuals: function(component,event,helper){
         console.log("calling the aura:method initializeVisuals in subcomponent");
+        let storeObject = component.get("v.storeObject");
         helper.areaInit(component);
 
-        helper.setStore (component, "primaryNodeHighlightingOn", component.get("v.primaryNodeHighlightingOn") ) ;
-        helper.setStore (component, "primaryNodeHighlightingColour", component.get("v.primaryNodeHighlightingColour") ) ;
-        helper.setStore (component, "primaryNodeHighlightingRadius", component.get("v.primaryNodeHighlightingRadius") ) ;
-        helper.setStore (component, "retainNodeDetailsMouseOut", component.get("v.retainNodeDetailsMouseOut") ) ;
-        helper.setStore (component, "nodestrokewidth", component.get("v.nodestrokewidth") ) ;
+        bzchart.setStore (storeObject, "primaryNodeHighlightingOn", component.get("v.primaryNodeHighlightingOn") ) ;
+        bzchart.setStore (storeObject, "primaryNodeHighlightingColour", component.get("v.primaryNodeHighlightingColour") ) ;
+        bzchart.setStore (storeObject, "primaryNodeHighlightingRadius", component.get("v.primaryNodeHighlightingRadius") ) ;
+        bzchart.setStore (storeObject, "retainNodeDetailsMouseOut", component.get("v.retainNodeDetailsMouseOut") ) ;
+        bzchart.setStore (storeObject, "nodestrokewidth", component.get("v.nodestrokewidth") ) ;
 
         helper.initializeVisuals(component);                         
     },
@@ -32,6 +33,7 @@
 
     searchChart: function(component,event,helper){
         console.log("aura:method searchChart in subcomponent enter");
+        let storeObject = component.get("v.storeObject");
         var args = event.getParam("arguments");
 
         var searchTermId = args.searchTermId;
@@ -40,8 +42,8 @@
 
         var componentReference = component.get("v.componentReference");        
         var primaryNodeId = helper.addComponentRef(componentReference, searchTermId);
-        helper.setStore (component, "primaryNodeId", primaryNodeId ) ;
-        helper.setStore (component, "showLevels", showLevels) ;
+        bzchart.setStore (storeObject, "primaryNodeId", primaryNodeId ) ;
+        bzchart.setStore (storeObject, "showLevels", showLevels) ;
 
         var cc = component.getConcreteComponent();
         cc.refreshVisibility();                 
