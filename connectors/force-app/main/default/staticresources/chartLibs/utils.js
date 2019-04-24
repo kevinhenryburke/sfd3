@@ -65,13 +65,13 @@ function log (logItem) {
 //     })};
 // }    
 
-// function addComponentRef(componentReference, recordid) {
-//     if (recordid.indexOf("compref") > -1) { // don't double index  
-//         console.log("avoiding a double compref for recordid " + recordid);
-//         return recordid;
-//     }
-//     return componentReference + recordid;
-// }
+function addComponentRef(componentReference, recordid) {
+    if (recordid.indexOf("compref") > -1) { // don't double index  
+        console.log("avoiding a double compref for recordid " + recordid);
+        return recordid;
+    }
+    return componentReference + recordid;
+}
 
 // // remove component specific prefix from id - this will allow original references to be retrieved
 // function removeComponentRef(componentReference, recordidEnriched) {
@@ -255,7 +255,7 @@ exports.log = log;
 exports.getMasterParam = getMasterParam;
 exports.hasMasterParam = hasMasterParam;
 // exports.initializeAddComponentRef = initializeAddComponentRef;
-// exports.addComponentRef = addComponentRef;
+exports.addComponentRef = addComponentRef;
 // exports.removeComponentRef = removeComponentRef;
 // exports.prepareEvent = prepareEvent;
 exports.publishEventHelper = publishEventHelper;

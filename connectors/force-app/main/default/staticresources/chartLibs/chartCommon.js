@@ -15,6 +15,10 @@ function getStore (store, key) {
     return store[key];
 }
 
+function hasStore (store, key) {
+  return Object.keys(store).includes(key);
+}
+
 function getStoreWithDefault (store, key, defaultValue) {
   let returnValue = store[key];
   if (returnValue == null) {
@@ -62,6 +66,7 @@ var isiOS = false;
 exports.isiOS = isiOS;
 exports.setStore = setStore;
 exports.getStore = getStore;
+exports.hasStore = hasStore;
 exports.getStoreWithDefault = getStoreWithDefault;
 exports.isFilteredOut = isFilteredOut;
 exports.getFilterOpacity = getFilterOpacity;

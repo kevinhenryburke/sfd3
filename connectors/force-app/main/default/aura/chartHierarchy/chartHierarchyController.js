@@ -3,7 +3,6 @@
     initializeVisuals: function(component,event,helper){
         console.log("calling the aura:method initializeVisuals in subcomponent");
         helper.areaInit(component);
-
         helper.initializeVisuals(component);                         
     },
 
@@ -66,7 +65,6 @@
 
         var clearHighlightedPaths = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","Hierarchy","clearHighlightedPaths");         
 
-        var componentReference = component.get("v.componentReference");
         var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
         var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
         var root = bzchart.getStore (storeObject, "root") ;
@@ -97,7 +95,6 @@
         console.log("aura:method styleNodes in chartHierarchy enter");
         let storeObject = component.get("v.storeObject");
 
-        var componentReference = component.get("v.componentReference");
         var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
         var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
         var root = bzchart.getStore (storeObject, "root") ;

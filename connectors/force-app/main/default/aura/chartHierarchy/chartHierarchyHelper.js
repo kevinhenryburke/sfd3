@@ -76,8 +76,6 @@
         let storeObject = component.get("v.storeObject");
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;
 
-        console.log("xxxxx update", componentReference);
-
         var nodes;
         var links;
         var duration = 250;
@@ -132,7 +130,7 @@
             d.y = margin.left + (d.depth * fixedDepth);
 
             // workout the maximum depth in the chart so we can perform any necessary resizing
-            if (!_this.hasStore (component, "maxDepth")) {
+            if (!bzchart.hasStore (storeObject, "maxDepth")) {
                 bzchart.setStore (storeObject, "maxDepth", 0) ;
             }
             var maxDepth = bzchart.getStore (storeObject, "maxDepth") ;
@@ -494,7 +492,7 @@
 
     merge : function(component, updatejson) {
         let storeObject = component.get("v.storeObject");
-        var componentReference = component.get("v.componentReference");
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;
         var _this = this;
 
         var newjsonarray;
