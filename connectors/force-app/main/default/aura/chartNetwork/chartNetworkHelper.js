@@ -271,7 +271,7 @@
         var datajson = bzchart.getStore (storeObject, "datajson") ;
 
         // initialize the new raw data, setting component references
-        _this.initializeAddComponentRef(componentReference, datajsonRefresh);
+        bzutils.initializeAddComponentRef(componentReference, datajsonRefresh);
 
         var nodeIds = [];
         datajson.nodes.forEach(function(node) {

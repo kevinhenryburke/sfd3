@@ -50,20 +50,20 @@ function log (logItem) {
 
 
 // replace ids with component specific versions - this will allow multiple charts on a page without conflict
-// function initializeAddComponentRef(componentReference, datajson) {
-//     if (datajson.nodes != null) {
-//     datajson.nodes.forEach(function(node) {
-//         node["id"] = bzutils.addComponentRef(componentReference, node["id"]);
-//         node["recordid"] = bzutils.removeComponentRef(componentReference, node["id"]);
-//     })};
+function initializeAddComponentRef(componentReference, datajson) {
+    if (datajson.nodes != null) {
+    datajson.nodes.forEach(function(node) {
+        node["id"] = bzutils.addComponentRef(componentReference, node["id"]);
+        node["recordid"] = bzutils.removeComponentRef(componentReference, node["id"]);
+    })};
         
-//     if (datajson.links != null) {
-//     datajson.links.forEach(function(link) {
-//         link["id"] = bzutils.addComponentRef(componentReference, link["id"]);
-//         link["sourceid"] = bzutils.addComponentRef(componentReference, link["sourceid"]);
-//         link["targetid"] = bzutils.addComponentRef(componentReference, link["targetid"]);
-//     })};
-// }    
+    if (datajson.links != null) {
+    datajson.links.forEach(function(link) {
+        link["id"] = bzutils.addComponentRef(componentReference, link["id"]);
+        link["sourceid"] = bzutils.addComponentRef(componentReference, link["sourceid"]);
+        link["targetid"] = bzutils.addComponentRef(componentReference, link["targetid"]);
+    })};
+}    
 
 function addComponentRef(componentReference, recordid) {
     if (recordid.indexOf("compref") > -1) { // don't double index  
@@ -73,14 +73,14 @@ function addComponentRef(componentReference, recordid) {
     return componentReference + recordid;
 }
 
-// // remove component specific prefix from id - this will allow original references to be retrieved
-// function removeComponentRef(componentReference, recordidEnriched) {
-//     if (recordidEnriched.indexOf("compref") > -1) { // compref present
-//         var indexer = componentReference.length;
-//         return recordidEnriched.substring(indexer);
-//     }
-//     return recordidEnriched;
-// }    
+// remove component specific prefix from id - this will allow original references to be retrieved
+function removeComponentRef(componentReference, recordidEnriched) {
+    if (recordidEnriched.indexOf("compref") > -1) { // compref present
+        var indexer = componentReference.length;
+        return recordidEnriched.substring(indexer);
+    }
+    return recordidEnriched;
+}    
 
 // function getDivId (idType, componentReference, forSelect) {
 //     return (forSelect ? "#" : "") + componentReference + idType;
@@ -254,9 +254,9 @@ exports.log = log;
 // exports.hasParam2 = hasParam2;
 exports.getMasterParam = getMasterParam;
 exports.hasMasterParam = hasMasterParam;
-// exports.initializeAddComponentRef = initializeAddComponentRef;
+exports.initializeAddComponentRef = initializeAddComponentRef;
 exports.addComponentRef = addComponentRef;
-// exports.removeComponentRef = removeComponentRef;
+exports.removeComponentRef = removeComponentRef;
 // exports.prepareEvent = prepareEvent;
 exports.publishEventHelper = publishEventHelper;
 exports.getEventTypeByTopic = getEventTypeByTopic;

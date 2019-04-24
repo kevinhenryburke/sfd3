@@ -111,7 +111,7 @@
         console.log("init:initializing initializeGroups with primaryNodeId: " + primaryNodeId);
         
         if (isInit) {
-            _this.initializeAddComponentRef(componentReference, datajson);
+            bzutils.initializeAddComponentRef(componentReference, datajson);
         }
 
         bzchart.setStore (storeObject, "datajson", datajson ) ;
@@ -464,23 +464,6 @@
         d3.select(_this.getDivId("legendSymbolGroup", componentReference, true)).remove();
     },
 
-    // replace ids with component specific versions - this will allow multiple charts on a page without conflict
-    initializeAddComponentRef : function (componentReference, datajson) {
-        var _this = this;
-        if (datajson.nodes != null) {
-        datajson.nodes.forEach(function(node) {
-            node["id"] = _this.addComponentRef(componentReference, node["id"]);
-            node["recordid"] = _this.removeComponentRef(componentReference, node["id"]);
-        })};
-            
-        if (datajson.links != null) {
-        datajson.links.forEach(function(link) {
-            link["id"] = _this.addComponentRef(componentReference, link["id"]);
-            link["sourceid"] = _this.addComponentRef(componentReference, link["sourceid"]);
-            link["targetid"] = _this.addComponentRef(componentReference, link["targetid"]);
-        })};
-    },    
-    
     addComponentRef : function(componentReference, recordid) {
         if (recordid.indexOf("compref") > -1) { // don't double index  
             console.log("avoiding a double compref for recordid " + recordid);
