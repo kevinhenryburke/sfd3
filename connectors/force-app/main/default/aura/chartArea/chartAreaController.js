@@ -239,7 +239,7 @@
                 }
         
 
-                helper.buildMeasureSchemeMap(component);
+                helper.buildMeasureSchemeMap(masterConfigObject, storeObject);
 
 
                 var showZoomSlider = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","Hierarchy","showZoomSlider");         

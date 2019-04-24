@@ -8,46 +8,11 @@ console.log("loading: bzutils IIFE");
 
 var debugMode = true;
 
-// Data Cache
-// It it handy to have some data stored outside lightning as lightning loses context.
-// These are Data Caches and can exist in both general and context specific forms. They can hold data derived from configuration, from data or data supporting processing.
-// Each store is indexed by a component reference, hence the name componentCache.
-
-// Data Store to hold data derived from configuration
-// var componentCache = {};
-
-// function initializeCache (componentReference) {
-//     componentCache[componentReference] = {};
-// }
-
-// function setCache (componentReference, key, value) {
-//     componentCache[componentReference][key] = value;
-// }
-
-// function getCache (componentReference, key) {
-//     var referenceParameters = componentCache[componentReference];
-//     return referenceParameters[key];
-// }
-
-// function hasCache (componentReference, key) {
-//     var referenceParameters = componentCache[componentReference];
-//     return Object.keys(referenceParameters).includes(key);
-// }
-
-// function showCache (componentReference) {
-//     bzutils.log(componentCache[componentReference]);
-// }
-
-// function showCacheAll () {
-//     bzutils.log(componentCache);
-// }
-
 function log (logItem) {
     if (debugMode == true) {
         console.log(logItem);
     } 
 }
-
 
 // replace ids with component specific versions - this will allow multiple charts on a page without conflict
 function initializeAddComponentRef(componentReference, datajson) {
@@ -82,14 +47,14 @@ function removeComponentRef(componentReference, recordidEnriched) {
     return recordidEnriched;
 }    
 
-// function getDivId (idType, componentReference, forSelect) {
-//     return (forSelect ? "#" : "") + componentReference + idType;
-// }
+function getDivId (idType, componentReference, forSelect) {
+    return (forSelect ? "#" : "") + componentReference + idType;
+}
 
-// // handy function to retrieve a D3 Node from a DOM id
-// function getNodeFromId (id) {
-//     return d3.select("#" + id).data()[0];
-// }
+// handy function to retrieve a D3 Node from a DOM id
+function getNodeFromId (id) {
+    return d3.select("#" + id).data()[0];
+}
 
 
 /* This is how to list all the properties and all functions in a module
@@ -246,7 +211,6 @@ function getEventTypeByTopic(topic) {
     return null;
 }
 
-// exports.componentCache = componentCache;
 exports.log = log;
 // exports.xfcr = xfcr;
 // exports.xfct = xfct;
@@ -260,14 +224,8 @@ exports.removeComponentRef = removeComponentRef;
 // exports.prepareEvent = prepareEvent;
 exports.publishEventHelper = publishEventHelper;
 exports.getEventTypeByTopic = getEventTypeByTopic;
-// exports.initializeCache = initializeCache;
-// exports.setCache = setCache;
-// exports.getCache = getCache;
-// exports.hasCache = hasCache;
-// exports.showCache = showCache;
-// exports.showCacheAll = showCacheAll;
-// exports.getDivId = getDivId;
-// exports.getNodeFromId = getNodeFromId;
+exports.getDivId = getDivId;
+exports.getNodeFromId = getNodeFromId;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

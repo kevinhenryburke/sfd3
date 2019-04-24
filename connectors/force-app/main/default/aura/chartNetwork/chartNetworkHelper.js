@@ -544,7 +544,7 @@
             var componentReference = component.get("v.componentReference");        
 
             // TODO this will need substantial enriching - e.g. pass current measure and whether to add nodes or to refresh etc.
-            var cleanId = _this.removeComponentRef(componentReference, primaryNodeId);
+            var cleanId = bzutils.removeComponentRef(componentReference, primaryNodeId);
             var eventParameters = {"primaryNodeId" : cleanId, "componentReference" : componentReference};
             console.log("nodeDoubleClick exit.");
         
@@ -700,7 +700,7 @@
             var newnodes = [];
             looplevel++;
     
-            var path = d3.select(_this.getDivId("pathGroup", componentReference, true))
+            var path = d3.select(bzutils.getDivId("pathGroup", componentReference, true))
                 .selectAll("path")
                 .each(function(p) {
                     var sourceindex = linkednodes.indexOf(p.sourceid);

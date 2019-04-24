@@ -60,9 +60,9 @@
             bzchart.setStore (storeObject, "height", 1000) ;                 
         }
         
-        d3.select(_this.getDivId("chartArea", componentReference, true))
+        d3.select(bzutils.getDivId("chartArea", componentReference, true))
             .append("svg")
-            .attr("id", _this.getDivId("svg", componentReference, false)) // If putting more than one chart on a page we need to provide unique ids for the svg elements   
+            .attr("id", bzutils.getDivId("svg", componentReference, false)) // If putting more than one chart on a page we need to provide unique ids for the svg elements   
             .attr("width", bzchart.getStore (storeObject, "width") )
             .attr("height", bzchart.getStore (storeObject, "height") );
 
@@ -119,7 +119,7 @@
         var hasPrimaryNode = bzchart.getStore (storeObject, "hasPrimaryNode") ;
         // var hasPrimaryNode = component.get("v.hasPrimaryNode") ;
         if (hasPrimaryNode == true) {
-            primaryNodeId = _this.addComponentRef(componentReference, primaryNodeId);
+            primaryNodeId = bzutils.addComponentRef(componentReference, primaryNodeId);
             bzchart.setStore (storeObject, "primaryNodeId", primaryNodeId ) ;
         }
         else {
@@ -134,16 +134,16 @@
             bzchart.setStore (storeObject, "filterValues", [] ) ;
         }
 
-		var svg = d3.select(_this.getDivId("svg", componentReference, true));
+		var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
 		        
         // Styling of tooltips - see GitHub prior to Feb 24, 2018
-        var pathToolTipDivId = _this.addComponentRef(componentReference, "pathToolTip");
+        var pathToolTipDivId = bzutils.addComponentRef(componentReference, "pathToolTip");
         var pathToolTipDiv = d3.select("#" + pathToolTipDivId);
         bzchart.setStore (storeObject, "pathToolTipDiv", pathToolTipDiv ) ;
 
         // create some groups inside the svg element to store the raw data
 
-        var pathGroupId = _this.getDivId("pathGroup", componentReference, false);
+        var pathGroupId = bzutils.getDivId("pathGroup", componentReference, false);
         bzchart.setStore (storeObject, "pathGroupId", pathGroupId ) ;
         var pathGroup = d3.select("#" + pathGroupId);
         if (pathGroup.empty()) {
@@ -152,7 +152,7 @@
         }
         bzchart.setStore (storeObject, "pathGroup", pathGroup ) ;
 
-        var nodeGroupId = _this.getDivId("nodeGroup", componentReference, false);
+        var nodeGroupId = bzutils.getDivId("nodeGroup", componentReference, false);
         var nodeGroup = d3.select("#" + nodeGroupId);
         if (nodeGroup.empty()) {
             console.log("create nodeGroup");
@@ -160,7 +160,7 @@
         }
         bzchart.setStore (storeObject, "nodeGroup", nodeGroup ) ;
 
-        var textGroupId = _this.getDivId("textGroup", componentReference, false);        
+        var textGroupId = bzutils.getDivId("textGroup", componentReference, false);        
         var textGroup = d3.select("#" + textGroupId);
         if (textGroup.empty()) {
             console.log("create textGroup");
@@ -168,7 +168,7 @@
         }
         bzchart.setStore (storeObject, "textGroup", textGroup ) ;
 
-        var legendSymbolGroupId = _this.getDivId("legendSymbolGroup", componentReference, false);
+        var legendSymbolGroupId = bzutils.getDivId("legendSymbolGroup", componentReference, false);
         var legendSymbolGroup = d3.select("#" + legendSymbolGroupId);
         if (legendSymbolGroup.empty()) {
             console.log("create legendSymbolGroup");
@@ -205,7 +205,7 @@
         var popx = width - 260;
         var popy = 110;
 
-        var svg = d3.select(_this.getDivId("svg", componentReference, true));
+        var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
         var infosvg = 
         svg.selectAll('.symbol')
             .data(mdata)
@@ -450,7 +450,7 @@
     /* clearElements removes all paths, nodes, rects, text from the chart */
     clearElements : function (componentReference) {
         var _this = this;
-        var svg = d3.select(_this.getDivId("svg", componentReference, true));
+        var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
         svg.selectAll("path,circle,rect,text").remove(); // comma separated acts as union
     },
             
@@ -458,45 +458,14 @@
     clearChart : function (componentReference) {
         var _this = this;
         _this.clearElements(componentReference);
-        d3.select(_this.getDivId("pathGroup", componentReference, true)).remove();
-        d3.select(_this.getDivId("nodeGroup", componentReference, true)).remove();
-        d3.select(_this.getDivId("textGroup", componentReference, true)).remove();
-        d3.select(_this.getDivId("legendSymbolGroup", componentReference, true)).remove();
-    },
-
-    addComponentRef : function(componentReference, recordid) {
-        if (recordid.indexOf("compref") > -1) { // don't double index  
-            console.log("avoiding a double compref for recordid " + recordid);
-            return recordid;
-        }
-        return componentReference + recordid;
+        d3.select(bzutils.getDivId("pathGroup", componentReference, true)).remove();
+        d3.select(bzutils.getDivId("nodeGroup", componentReference, true)).remove();
+        d3.select(bzutils.getDivId("textGroup", componentReference, true)).remove();
+        d3.select(bzutils.getDivId("legendSymbolGroup", componentReference, true)).remove();
     },
     
-    // remove component specific prefix from id - this will allow original references to be retrieved
-    removeComponentRef : function(componentReference, recordidEnriched) {
-        if (recordidEnriched.indexOf("compref") > -1) { // compref present
-            var indexer = componentReference.length;
-            return recordidEnriched.substring(indexer);
-        }
-        return recordidEnriched;
-    },   
-    
-    // handy function to retrieve a D3 Node from a DOM id
-    getNodeFromId : function (id) {
-        return d3.select("#" + id).data()[0];
-    },
-
-    getDivId : function (idType, componentReference, forSelect) {
-        return (forSelect ? "#" : "") + componentReference + idType;
-    },
-    
-
     // during initialization, build a map so we can quickly associate the correct API field to a measure
-    buildMeasureSchemeMap : function (component) {
-        var _this = this;
-        let masterConfigObject = component.get("v.masterConfigObject");
-        let storeObject = component.get("v.storeObject");
-
+    buildMeasureSchemeMap : function (masterConfigObject, storeObject) {
         var objectLevels = bzutils.getMasterParam(masterConfigObject,"data","queryJSON","objectLevels");
 
         // storage optimized for node colors: object / measureName / measureSchema
@@ -579,7 +548,7 @@
         var firstMeasureScheme = _this.getFirstColorSchemeLegend(component, currentColorLabel);
 
         // remove existing legend symbols
-        d3.select(_this.getDivId("legendSymbolGroup", componentReference, true)).selectAll("*").remove();
+        d3.select(bzutils.getDivId("legendSymbolGroup", componentReference, true)).selectAll("*").remove();
 
         var legendSymbolGroup = bzchart.getStore (storeObject, "legendSymbolGroup" ) ;
         

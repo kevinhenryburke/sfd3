@@ -151,10 +151,10 @@
                     return retVal;
                 }
                 if (retVal == null && d.data.id != null) {
-                    d.id = _this.addComponentRef(componentReference, d.data.id);
+                    d.id = bzutils.addComponentRef(componentReference, d.data.id);
                     return d.id;
                 }
-                d.id = _this.addComponentRef(componentReference, "000000000000000000");
+                d.id = bzutils.addComponentRef(componentReference, "000000000000000000");
                 return d.id;
             });  
 
@@ -521,11 +521,11 @@
 
             // the first node id of the newjson is assumed to be a pre-existing node and should not result in a new node.
             var parentRecordId = newjson["id"]; 
-            var addToNodeId = _this.addComponentRef(componentReference, parentRecordId);
+            var addToNodeId = bzutils.addComponentRef(componentReference, parentRecordId);
             var parentNodeId = "circle" + addToNodeId;
 
             // see if this is searchable as a node
-            var parentNode = _this.getNodeFromId(parentNodeId);
+            var parentNode = bzutils.getNodeFromId(parentNodeId);
 
             if (parentNode == null) {
                 var ultimateRoot = bzchart.getStore (storeObject, "root");
@@ -660,7 +660,7 @@
         console.log("refreshVisibilityHelper enter");
         var componentReference = component.get("v.componentReference");       
         
-        var node = d3.select(_this.getDivId("nodeGroup", componentReference, true))
+        var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
             .selectAll("circle,rect") // comma separated searches for both
             .style("fill-opacity", function(d, i) {
                 return bzchart.getFilterOpacity (storeObject, d.data);
@@ -670,13 +670,13 @@
             })            
         ;
 
-        var text = d3.select(_this.getDivId("nodeGroup", componentReference, true))
+        var text = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
             .selectAll("text")
             .style("opacity", function(d, i) {
                 return bzchart.getFilterOpacity (storeObject, d.data);
             });
 
-        var path = d3.select(_this.getDivId("pathGroup", componentReference, true))
+        var path = d3.select(bzutils.getDivId("pathGroup", componentReference, true))
             .selectAll("path")
             .style("stroke-opacity", function(d, i) {
                 return bzhierarchy.getFilterOpacityPath(storeObject,d);

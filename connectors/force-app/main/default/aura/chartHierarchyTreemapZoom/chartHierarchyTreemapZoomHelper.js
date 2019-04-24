@@ -103,7 +103,7 @@ In the zoom controller implement the following method dataPreprocess (started)
 
         function updateDrillDown() {
 
-            var svg = d3.select(_this.getDivId("svg", componentReference, true))
+            var svg = d3.select(bzutils.getDivId("svg", componentReference, true))
                 .attr("width", width - margin.left - margin.right)
                 .attr("height", height)
                 .style("margin-left", -margin.left + "px")
@@ -404,7 +404,7 @@ When you click to drill down the same structure is recreated started at the next
         console.log("refreshVisibilityHelper enter");
         var componentReference = component.get("v.componentReference");
 
-        var node = d3.select(_this.getDivId("nodeGroup", componentReference, true))
+        var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
             .selectAll("circle,rect") // comma separated searches for both
             .style("fill-opacity", function (d, i) {
                 return _this.getFilterOpacity(component, d.data);
@@ -414,7 +414,7 @@ When you click to drill down the same structure is recreated started at the next
             })
             ;
 
-        var text = d3.select(_this.getDivId("nodeGroup", componentReference, true))
+        var text = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
             .selectAll("text")
             .style("opacity", function (d, i) {
                 return bzchart.getFilterOpacity (storeObject, d.data);
