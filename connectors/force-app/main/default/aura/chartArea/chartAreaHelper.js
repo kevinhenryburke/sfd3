@@ -6,10 +6,9 @@
     // first method called after all resources are ready
     doneRenderLoad: function (component) {
         let _this = this;
-        let componentReference = component.get("v.componentReference");
         let storeObject = component.get("v.storeObject");
-
-        bzchart.setStore (storeObject, "componentReference", component.get("v.componentReference") ) ;
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
+        
         bzchart.setStore (storeObject, "componentType", component.get("v.componentType") ) ;
         bzchart.setStore (storeObject, "componentCategory", component.get("v.componentCategory") ) ;
         bzchart.setStore (storeObject, "componentEvent", component.getEvent("evt_bzc")) ;        
@@ -100,9 +99,9 @@
 	initializeGroups: function (component, datajson, primaryNodeId, showFilters, isInit) {
 
         var _this = this;
-        var componentReference = component.get("v.componentReference");
         let masterConfigObject = component.get("v.masterConfigObject");
         let storeObject = component.get("v.storeObject");
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
 //        let tempo = bzchart.getStore (masterConfigObject, "componentReference" ) ;
         console.log("initializeGroups: tempo: componentReference:" + componentReference, masterConfigObject);
@@ -195,7 +194,7 @@
     createInfoLocation : function (component) {
         var _this = this;
         let storeObject = component.get("v.storeObject");
-        var componentReference = component.get("v.componentReference");
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
         var mdata = [0]; // random data value, not used
 
@@ -241,8 +240,8 @@
             if (overlayStatus == "SUCCESS") {
                 console.log("createPopOverComponent: overlayLib found");
 
-                var componentReference = component.get("v.componentReference");
-                var masterConfig = component.get("v.masterConfig");
+                let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
+                let masterConfig = component.get("v.masterConfig");
 
                 $A.createComponent(
                     "c:panelDisplay",
@@ -541,7 +540,7 @@
     showColorSchemeLegend : function (component) {
         var _this = this;
         let storeObject = component.get("v.storeObject");
-        var componentReference = component.get("v.componentReference");
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
         var currentColorLabel = bzchart.getStore (storeObject, "currentColorLabel");
         var currentSizeLabel = bzchart.getStore (storeObject, "currentSizeLabel");
 

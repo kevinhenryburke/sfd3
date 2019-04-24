@@ -3,21 +3,26 @@
     // bear in mind that doInit can't reference anything in an external library as it may lose a race condition.
     doInit: function(component, event, helper) {
         console.log('chartArea: doInit enter');   
-        let storeObject = {"rendered": false, "showMeasureValues": false};
-        component.set("v.storeObject", storeObject);
 
-//        bzchart.setStore (storeObject, "showMeasureValues", false);
-
-        var recordId = component.get("v.recordId");
+        let recordId = component.get("v.recordId");
         if (recordId == null) {
             recordId = "";
         }
 
         // calculate compref from random generator   
-        var comprefNumber = Math.floor((Math.random() * 10000000000) + 1); 
-        var componentReference = "compref" + comprefNumber + recordId;
-        component.set("v.componentReference", componentReference);
-        component.set("v.chartAreaDivId", componentReference + 'chartArea');
+        let comprefNumber = Math.floor((Math.random() * 10000000000) + 1); 
+        let componentReference = "compref" + comprefNumber + recordId;
+        let chartAreaDivId = componentReference + 'chartArea';
+
+//        component.set("v.componentReference", componentReference);
+
+        let storeObject = {
+            "rendered": false, 
+            "showMeasureValues": false,
+            "componentReference": componentReference,
+            "chartAreaDivId": chartAreaDivId
+        };
+        component.set("v.storeObject", storeObject);
 
         console.log('chartArea: doInit exit for componentReference: ' + componentReference);   
     },
@@ -64,7 +69,8 @@
     },
 
     handleScaleChange: function(component,event,helper){
-        var componentReference = component.get("v.componentReference");
+        let storeObject = component.get("v.storeObject");
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
         var csfp = component.get("v.ChartScalePercentage");
         var csf = parseFloat(csfp / 100); // ensure js knows it's a decimal
@@ -83,6 +89,7 @@
         var cc = component.getConcreteComponent();
         let masterConfigObject = cc.get("v.masterConfigObject");
         let storeObject = cc.get("v.storeObject");
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
         // if there is an arguments parameter this has been triggered by a method call
         // in which case we need to source our information from a level down in the event
@@ -100,7 +107,6 @@
             controller = event.getParam("controller");    
         }
 
-        var componentReference = component.get("v.componentReference");        
         // console.log('chartArea: topic:' + topic + " controller " + controller + " componentReference " + componentReference);
 
         var UserControllerComponentId = component.get("v.UserControllerComponentId");

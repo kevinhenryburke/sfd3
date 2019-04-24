@@ -34,13 +34,13 @@
     searchChart: function(component,event,helper){
         console.log("aura:method searchChart in subcomponent enter");
         let storeObject = component.get("v.storeObject");
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
         var args = event.getParam("arguments");
 
         var searchTermId = args.searchTermId;
         var searchAction = args.searchAction;
         var showLevels = args.showLevels;
 
-        var componentReference = component.get("v.componentReference");        
         var primaryNodeId = bzutils.addComponentRef(componentReference, searchTermId);
         bzchart.setStore (storeObject, "primaryNodeId", primaryNodeId ) ;
         bzchart.setStore (storeObject, "showLevels", showLevels) ;
@@ -59,12 +59,12 @@
     refreshVisibility: function(component,event,helper){
         console.log("aura:method refreshVisibility in subcomponent enter - implementation");
         let storeObject = component.get("v.storeObject");
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
         var componentType = component.get("v.componentType");
 
         if (componentType ==  "network.connections") {
 
-            var componentReference = component.get("v.componentReference");        
             console.log("refreshVisibility enter "); 
         
             var levels = bzchart.getStore (storeObject, "showLevels") ;
@@ -138,12 +138,12 @@
     styleNodes: function(component,event,helper){
         console.log("aura:method styleNodes in chartNetwork enter");
         let storeObject = component.get("v.storeObject");
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
         var componentType = component.get("v.componentType");
 
         if ((componentType ==  "network.connections") || (componentType ==  "network.timeline")) {
 
-            var componentReference = component.get("v.componentReference");        
 
             var primaryid = bzchart.getStore (storeObject, "primaryNodeId") ;
 

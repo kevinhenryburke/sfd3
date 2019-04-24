@@ -26,7 +26,7 @@
         
         var _this = this;
         let storeObject = component.get("v.storeObject");
-        var componentReference = component.get("v.componentReference");  
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
         return function(datajson) { 
             console.log("chartHierarchyTreeMapHelper computing callback " + componentReference);

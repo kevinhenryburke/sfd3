@@ -5,8 +5,7 @@
 		var _this = this;
         let storeObject = component.get("v.storeObject");
 
-        var componentReference = component.get("v.componentReference");
-        var masterConfigObject = component.get("v.masterConfigObject");
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
         var datajson = bzchart.getStore (storeObject, "datajson") ;  
 		var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
@@ -658,7 +657,7 @@
         var _this = this;
         let storeObject = component.get("v.storeObject");
         console.log("refreshVisibilityHelper enter");
-        var componentReference = component.get("v.componentReference");       
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
         
         var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
             .selectAll("circle,rect") // comma separated searches for both

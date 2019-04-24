@@ -53,7 +53,7 @@ In the zoom controller implement the following method dataPreprocess (started)
         console.log("chartHierarchyTreemapZoomHelper.initializeVisuals enter");
         var _this = this;
         let storeObject = component.get("v.storeObject");
-        var componentReference = component.get("v.componentReference");
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
         var treemap;
         var transitioning;
@@ -402,7 +402,7 @@ When you click to drill down the same structure is recreated started at the next
         var _this = this;
         let storeObject = component.get("v.storeObject");
         console.log("refreshVisibilityHelper enter");
-        var componentReference = component.get("v.componentReference");
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
         var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
             .selectAll("circle,rect") // comma separated searches for both

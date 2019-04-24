@@ -261,7 +261,7 @@
     refreshDataHelper: function (component, datajsonRefresh, primaryNodeId, showFilters) {
         var _this = this;
         let storeObject = component.get("v.storeObject");
-        var componentReference = component.get("v.componentReference");
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
         // delete the paths and the groups
         // this is not the preferred option - would have preferred to use d3 joins.
@@ -536,12 +536,13 @@
         var _this = this;
         console.log("nodeDoubleClick enter");
 
+        let storeObject = component.get("v.storeObject");
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
         var componentType = component.get("v.componentType");
         console.log("nodeDoubleClick componentType = " + componentType);
 
         if ((componentType ==  "network.timeline") || (componentType ==  "network.connections")) {
 
-            var componentReference = component.get("v.componentReference");        
 
             // TODO this will need substantial enriching - e.g. pass current measure and whether to add nodes or to refresh etc.
             var cleanId = bzutils.removeComponentRef(componentReference, primaryNodeId);

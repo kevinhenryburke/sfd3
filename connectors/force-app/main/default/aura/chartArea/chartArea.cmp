@@ -123,8 +123,7 @@
   <!-- Technical - Chart -->
   <!-- need to accessed or set before all libraries may be available -->
   <aura:attribute name="componentCategory" type="String" default="Display"/>    
-  <aura:attribute name="componentReference" type="String"/> 
-  <aura:attribute name="chartAreaDivId" type="String" default="" description="If putting more than one chart on a page need to provide unique ids for the chart components"/>    
+  <!-- <aura:attribute name="componentReference" type="String"/>  -->
 	<aura:attribute name="scriptsLoaded" type="Boolean" default="false"/>    
   <aura:attribute name="defaultEventType" type="String" default="Application"/>    
 
@@ -142,7 +141,6 @@
 
 
   <body class="bodycontainer" style="background-color: white;">
-<!-- 8792 {!v.flexiWidth} {!v.chartAreaDivId} {!v.componentReference} {!v.UserComponentId} -->
 
 <!-- to pass in stuff from a sub component use {!v.body}  see https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/oo_cmp_attributes.htm   -->
     <aura:if isTrue="{!v.showEmbeddedPanel == true}">
@@ -155,7 +153,7 @@
               Controller = "{!v.UserControllerComponentId}"
               masterConfig = "{!v.masterConfig}" 
               isHosted = "true"
-              hostComponentReference = "{!v.componentReference}"
+              hostComponentReference = "{!v.storeObject.componentReference}"
               hostUserControllerComponentId = "{!v.UserControllerComponentId}"
             />
           </div> 
@@ -180,10 +178,10 @@
                 Note that we need to use the Lightning method of defining absolute position or the box can appear relative to the page itself
  -->                
                 <div class="slds-is-absolute">
-                  <div id="{!v.componentReference + 'pathToolTip'}" class="pathToolTip"></div>
+                  <div id="{!v.storeObject.componentReference + 'pathToolTip'}" class="pathToolTip"></div>
                 </div>
         
-              <div id="{!v.chartAreaDivId}" aura:id="{!v.chartAreaDivId}" class="chartarea"></div>
+              <div id="{!v.storeObject.chartAreaDivId}" aura:id="{!v.storeObject.chartAreaDivId}" class="chartarea"></div>
                   <!-- <div id="nodeToolTip" class="nodeToolTip"></div> -->
               </lightning:layoutItem>
             </lightning:layout>

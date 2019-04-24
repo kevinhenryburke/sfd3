@@ -67,8 +67,8 @@
 
     getRootStructurePack : function (component) {
         var _this = this;
-        var componentReference = component.get("v.componentReference");  
         let storeObject = component.get("v.storeObject");
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
         return function(datajson) { 
             console.log("getRootStructurePack computing callback " + componentReference);
