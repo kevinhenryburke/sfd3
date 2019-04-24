@@ -13,10 +13,10 @@
         let storeObject = component.get("v.storeObject");
         let args = event.getParam("arguments");
         let datajson = args.datajson; 
-        let groupingFields = helper.getStore(component, "groupingFields");
+        let groupingFields = bzchart.getStore (storeObject, "groupingFields");
 
         if (groupingFields.length > 0) {
-            let groupingFields = helper.getStore(component, "groupingFields");
+            let groupingFields = bzchart.getStore (storeObject, "groupingFields");
             datajson = bzhierarchy.picklistNest(groupingFields, datajson);
             bzchart.setStore (storeObject, "datajson", datajson ) ;    
         }
@@ -24,15 +24,16 @@
 
     refreshDataController: function(component,event,helper){
         console.log("calling the aura:method refreshDataController in subcomponent");
+        let storeObject = component.get("v.storeObject");
         var args = event.getParam("arguments");
         var parameters = args.parameters;
 
         var updatejson = parameters.datajson;
 
         var componentReference = component.get("v.componentReference");
-        var nodeGroup = helper.getStore (component, "nodeGroup") ;  
-        var pathGroup = helper.getStore (component, "pathGroup") ;  
-        var root = helper.getStore (component, "root") ;
+        var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
+        var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
+        var root = bzchart.getStore (storeObject, "root") ;
 
         helper.merge(component, updatejson);
         helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
@@ -41,15 +42,14 @@
 
     reScale: function(component,event,helper){
         console.log("reScale: enter");
-        let masterConfigObject = component.get("v.masterConfigObject");
         let storeObject = component.get("v.storeObject");
         var args = event.getParam("arguments");
         bzchart.setStore (storeObject, "ChartScaleFactor", args.ChartScaleFactor) ;
 
         var componentReference = component.get("v.componentReference");
-        var nodeGroup = helper.getStore (component, "nodeGroup") ;  
-        var pathGroup = helper.getStore (component, "pathGroup") ;  
-        var root = helper.getStore (component, "root") ;
+        var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
+        var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
+        var root = bzchart.getStore (storeObject, "root") ;
 
         helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
 
@@ -61,6 +61,7 @@
         console.log("calling the aura:method searchChart in subcomponent");
         var args = event.getParam("arguments");
         let masterConfigObject = component.get("v.masterConfigObject");
+        let storeObject = component.get("v.storeObject");
 
         var searchTermId = args.searchTermId;
         var searchAction = args.searchAction;
@@ -68,9 +69,9 @@
         var clearHighlightedPaths = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","Hierarchy","clearHighlightedPaths");         
 
         var componentReference = component.get("v.componentReference");
-        var nodeGroup = helper.getStore (component, "nodeGroup") ;  
-        var pathGroup = helper.getStore (component, "pathGroup") ;  
-        var root = helper.getStore (component, "root") ;
+        var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
+        var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
+        var root = bzchart.getStore (storeObject, "root") ;
 
         if (searchAction == "HighlightOpenPath" || searchAction == "OpenPath" ) {
                 helper.openPathsBy(component, searchTermId, "Id");
@@ -78,7 +79,7 @@
         }
 
         if (searchAction == "HighlightOpenPath" || searchAction == "HighlightPath" ) {
-            var highlightedPaths = helper.getStore (component, "highlightedPaths") ;
+            var highlightedPaths = bzchart.getStore (storeObject, "highlightedPaths") ;
             if (highlightedPaths != null && clearHighlightedPaths == true) {
                 helper.stylePathsStroke(highlightedPaths, false);
             }
@@ -96,15 +97,12 @@
 
     styleNodes: function(component,event,helper){
         console.log("aura:method styleNodes in chartHierarchy enter");
-
-        let componentType = component.get("v.componentType");
-
-        var args = event.getParam("arguments");
+        let storeObject = component.get("v.storeObject");
 
         var componentReference = component.get("v.componentReference");
-        var nodeGroup = helper.getStore (component, "nodeGroup") ;  
-        var pathGroup = helper.getStore (component, "pathGroup") ;  
-        var root = helper.getStore (component, "root") ;
+        var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
+        var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
+        var root = bzchart.getStore (storeObject, "root") ;
 
         helper.update(component, nodeGroup, pathGroup, componentReference, root, false);
         console.log("aura:method styleNodes in chartHierarchy exit");

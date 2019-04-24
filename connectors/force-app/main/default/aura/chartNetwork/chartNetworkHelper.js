@@ -5,12 +5,12 @@
         var _this = this;
         let storeObject = component.get("v.storeObject");
 
-		var datajson = _this.getStore (component, "datajson") ;  
-		var nodeGroup = _this.getStore (component, "nodeGroup") ;  
-		var pathGroup = _this.getStore (component, "pathGroup") ;  
-		var textGroup = _this.getStore (component, "textGroup") ;  
-		var pathToolTipDiv = _this.getStore (component, "pathToolTipDiv") ;  
-		var pathGroupId = _this.getStore (component, "pathGroupId") ;  
+		var datajson = bzchart.getStore (storeObject, "datajson") ;  
+		var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
+		var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
+		var textGroup = bzchart.getStore (storeObject, "textGroup") ;  
+		var pathToolTipDiv = bzchart.getStore (storeObject, "pathToolTipDiv") ;  
+		var pathGroupId = bzchart.getStore (storeObject, "pathGroupId") ;  
 
         var componentType = component.get("v.componentType");
         
@@ -38,7 +38,7 @@
             })
             // symbols...           .attr("d", d3.symbol().type( function(d) { return d3.symbols[4];}))
             .on('mouseout', function(d) { // hide the div
-                var retainNodeDetailsMouseOut = _this.getStore (component, "retainNodeDetailsMouseOut" ) ;
+                var retainNodeDetailsMouseOut = bzchart.getStore (storeObject, "retainNodeDetailsMouseOut" ) ;
                 if (!retainNodeDetailsMouseOut)
                 {
                     var preppedEvent = _this.nodeMouseout(component, d); 
@@ -55,7 +55,7 @@
                 var isiOS = bzchart.isiOS;
                 if (isiOS) {
                     var now = new Date().getTime();
-                    var lastTouch = _this.getStore (component, "lastTouch");
+                    var lastTouch = bzchart.getStore (storeObject, "lastTouch");
                     var delta = now - lastTouch;
                     if (delta < 350 && delta > 0) {
                         // the second touchend event happened within half a second. Here is where we invoke the double tap code
@@ -226,6 +226,7 @@
     // TODO function appears in many places, try to consolidate
     publishPreppedEvent : function(component,preppedEvent){
         var _this = this;
+        let storeObject = component.get("v.storeObject");
         if (preppedEvent != null) {
             var event;
             console.log("publishPreppedEvent: enter "+ preppedEvent.topic + " and " + preppedEvent.eventType);
@@ -249,7 +250,7 @@
             }
             if (preppedEvent.eventType == "Cache"){
                 console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
-                var appEvents = _this.getStore (component, "appEvents") ;
+                var appEvents = bzchart.getStore (storeObject, "appEvents") ;
                 event = appEvents.pop();
             }    
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
@@ -259,6 +260,7 @@
     // unsophisticated version is to remove everything and re-initialize
     refreshDataHelper: function (component, datajsonRefresh, primaryNodeId, showFilters) {
         var _this = this;
+        let storeObject = component.get("v.storeObject");
         var componentReference = component.get("v.componentReference");
 
         // delete the paths and the groups
@@ -266,7 +268,7 @@
         _this.clearChart(componentReference);
         
         // retrieve the existing underlying data
-        var datajson = _this.getStore (component, "datajson") ;
+        var datajson = bzchart.getStore (storeObject, "datajson") ;
 
         // initialize the new raw data, setting component references
         _this.initializeAddComponentRef(componentReference, datajsonRefresh);
@@ -301,7 +303,7 @@
 
         cc.dataPreprocess(datajson, datajsonRefresh);
 
-        datajson = _this.getStore (component, "datajson") ;
+        datajson = bzchart.getStore (storeObject, "datajson") ;
         
         // re-initialize the chart
         var isInit = false;
@@ -333,7 +335,7 @@
         var _this = this;
         let storeObject = component.get("v.storeObject");
 
-        var datajson = _this.getStore (component, "datajson") ;
+        var datajson = bzchart.getStore (storeObject, "datajson") ;
 
         var simulation = _this.initializeSimulationConnections(component, datajson.nodes);            
 
@@ -356,9 +358,10 @@
 
     initializeSimulationConnections : function (component, nodes) {
         var _this = this;
+        let storeObject = component.get("v.storeObject");
         console.log("chartNetworkHelper.initializeSimulationConnections enter");
-        var width = _this.getStore (component, "width") ;  
-        var height = _this.getStore (component, "height") ; 
+        var width = bzchart.getStore (storeObject, "width") ;  
+        var height = bzchart.getStore (storeObject, "height") ; 
     
         // force example - https://bl.ocks.org/rsk2327/23622500eb512b5de90f6a916c836a40
         var attractForce = d3.forceManyBody().strength(5).distanceMax(400).distanceMin(60);
@@ -416,9 +419,10 @@
     
     onTick : function  (component, path, node, text) {
         var _this = this;
+        let storeObject = component.get("v.storeObject");
 
-        var width = _this.getStore (component, "width") ;  
-        var height = _this.getStore (component, "height") ; 
+        var width = bzchart.getStore (storeObject, "width") ;  
+        var height = bzchart.getStore (storeObject, "height") ; 
     //    if (bzutils.getCache (component, "hasPaths") == true) {
             path.attr("d", function(d) {
                 var sx = _this.limitborderx(d.source.x, width);
@@ -474,7 +478,7 @@
         var _this = this;
         let storeObject = component.get("v.storeObject");
 
-        var datajson = _this.getStore (component, "datajson") ;
+        var datajson = bzchart.getStore (storeObject, "datajson") ;
 
         var simulation = _this.initializeSimulationInfluence(component, datajson.nodes);            
 
@@ -500,11 +504,12 @@
         console.log("chartNetworkHelper.initializeSimulationInfluence enter");
 
         var _this = this;
-        var width = _this.getStore (component, "width") ;  
-        var height = _this.getStore (component, "height") ; 
+        let storeObject = component.get("v.storeObject");
+        var width = bzchart.getStore (storeObject, "width") ;  
+        var height = bzchart.getStore (storeObject, "height") ; 
         var sizeDivisor = 100;
         var nodePadding = 2.5;
-        var currentColorLabel = _this.getStore (component, "currentColorLabel") ; 
+        var currentColorLabel = bzchart.getStore (storeObject, "currentColorLabel") ; 
     
         var simulation = d3.forceSimulation()
             .force("forceX", d3.forceX().strength(.1).x(width * .5))

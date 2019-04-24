@@ -64,13 +64,13 @@ In the zoom controller implement the following method dataPreprocess (started)
                 + ' Column: ' + column + ' StackTrace: ' + errorObj);
         }
 
-        var datajson = _this.getStore(component, "datajson");
+        var datajson = bzchart.getStore (storeObject, "datajson");
 
         var cc = component.getConcreteComponent();
         // dataPreprocess will set datajson in cache
         cc.dataPreprocess(datajson);
 
-        let rootAfter = d3.hierarchy(_this.getStore (component, "datajson"))
+        let rootAfter = d3.hierarchy(bzchart.getStore (storeObject, "datajson"))
             .eachBefore(function (d) {
                 d.id = d.data.id;
             })
@@ -85,9 +85,9 @@ In the zoom controller implement the following method dataPreprocess (started)
         var formatNumber = d3.format(",d");
         var grandparentDepthInData = 0;
 
-        let nodeGroup = _this.getStore(component, "nodeGroup");
-        var width = _this.getStore(component, "width") - margin.left - margin.right - 50; // TODO not great  
-        var height = _this.getStore(component, "height") - margin.top - margin.bottom - 650;
+        let nodeGroup = bzchart.getStore (storeObject, "nodeGroup");
+        var width = bzchart.getStore (storeObject, "width") - margin.left - margin.right - 50; // TODO not great  
+        var height = bzchart.getStore (storeObject, "height") - margin.top - margin.bottom - 650;
 
         var x = d3.scaleLinear()
             .domain([0, width])
@@ -136,7 +136,7 @@ In the zoom controller implement the following method dataPreprocess (started)
                 .round(false)
                 .paddingInner(0); // padding options explained at https://d3indepth.com/layouts/
 
-            var root = _this.getStore (component, "d3root" );    
+            var root = bzchart.getStore (storeObject, "d3root" );    
 
             initialize(root);
             accumulate(root);

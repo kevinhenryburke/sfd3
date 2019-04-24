@@ -2,15 +2,16 @@
     initializeVisuals: function (component) {
 		console.log("chartHierarchyTreeMapHelper.initializeVisuals enter");
 		let _this = this;
+        let storeObject = component.get("v.storeObject");
 
-        let datajson = _this.getStore (component, "datajson") ;  
-		let nodeGroup = _this.getStore (component, "nodeGroup") ;  
+        let datajson = bzchart.getStore (storeObject, "datajson") ;  
+		let nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
 
         let nodeDataSetFunction = _this.getRootStructureTreeMap (component); 
 
         nodeDataSetFunction(datajson);
 
-        let root = _this.getStore (component, "root") ;  
+        let root = bzchart.getStore (storeObject, "root") ;  
 
         let cells = nodeGroup
             .selectAll("g")
@@ -26,13 +27,12 @@
         var _this = this;
         let storeObject = component.get("v.storeObject");
         var componentReference = component.get("v.componentReference");  
-        var currentSizeLabel = _this.getStore(component, "currentSizeLabel");
 
         return function(datajson) { 
             console.log("chartHierarchyTreeMapHelper computing callback " + componentReference);
 
             var treemap = d3.treemap()
-                .size([_this.getStore (component, "width") - 20, _this.getStore (component, "height") - 4])
+                .size([bzchart.getStore (storeObject, "width") - 20, bzchart.getStore (storeObject, "height") - 4])
                 .round(true)
                 .padding(1);
 

@@ -58,6 +58,7 @@
 
     refreshVisibility: function(component,event,helper){
         console.log("aura:method refreshVisibility in subcomponent enter - implementation");
+        let storeObject = component.get("v.storeObject");
 
         var componentType = component.get("v.componentType");
 
@@ -66,10 +67,10 @@
             var componentReference = component.get("v.componentReference");        
             console.log("refreshVisibility enter "); 
         
-            var levels = helper.getStore(component, "showLevels") ;
+            var levels = bzchart.getStore (storeObject, "showLevels") ;
 
-            var filterValues = helper.getStore (component, "filterValues") ;
-            var primaryNodeId = helper.getStore (component, "primaryNodeId") ;        
+            var filterValues = bzchart.getStore (storeObject, "filterValues") ;
+            var primaryNodeId = bzchart.getStore (storeObject, "primaryNodeId") ;        
             // not needed until reinstate measure level visibility
         
             var relatedNodes = helper.getRelatedNodes(primaryNodeId, componentReference, levels);
@@ -136,6 +137,7 @@
 
     styleNodes: function(component,event,helper){
         console.log("aura:method styleNodes in chartNetwork enter");
+        let storeObject = component.get("v.storeObject");
 
         var componentType = component.get("v.componentType");
 
@@ -143,18 +145,18 @@
 
             var componentReference = component.get("v.componentReference");        
 
-            var primaryid = helper.getStore (component, "primaryNodeId") ;
+            var primaryid = bzchart.getStore (storeObject, "primaryNodeId") ;
 
             var node = d3.select(helper.getDivId("nodeGroup", componentReference, true))
                 .selectAll("circle")  ;
 
-            if (helper.getStore(component, "updateSize")) {            
+            if (bzchart.getStore (storeObject, "updateSize")) {            
                 node.attr("r", function(o, i) {
                     return helper.getFromMeasureScheme(component, o, "Size");
                 });
             }
 
-            if (helper.getStore(component, "updateColor")) {            
+            if (bzchart.getStore (storeObject, "updateColor")) {            
                 node.style("fill", function(o, i) {
                     return helper.getFromMeasureScheme(component, o, "Color");
                 });
@@ -164,19 +166,19 @@
                 var stroke = o.stroke;
                 var oid = o.id;
                 if (oid == primaryid) {
-                    var primaryNodeHighlightingOn = helper.getStore (component, "primaryNodeHighlightingOn") ;
+                    var primaryNodeHighlightingOn = bzchart.getStore (storeObject, "primaryNodeHighlightingOn") ;
                     if (primaryNodeHighlightingOn == true) {
-                        stroke = helper.getStore (component, "primaryNodeHighlightingColour") ;
+                        stroke = bzchart.getStore (storeObject, "primaryNodeHighlightingColour") ;
                     }                
                 }
                 return stroke;
             });
         
             node.style("stroke-width", function(o, i) {
-                var nodestrokewidth = helper.getStore (component, "nodestrokewidth") ;
+                var nodestrokewidth = bzchart.getStore (storeObject, "nodestrokewidth") ;
                 var oid = o.id;
                 if (oid == primaryid) {
-                    nodestrokewidth = helper.getStore (component, "primaryNodeHighlightingRadius") ;
+                    nodestrokewidth = bzchart.getStore (storeObject, "primaryNodeHighlightingRadius") ;
                 }
                 return nodestrokewidth;
             });

@@ -4,8 +4,8 @@
 		let _this = this;
         let storeObject = component.get("v.storeObject");
 
-        let datajson = _this.getStore (component, "datajson") ;  
-		let nodeGroup = _this.getStore (component, "nodeGroup") ;  
+        let datajson = bzchart.getStore (storeObject, "datajson") ;  
+		let nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
 
         /* Pack specification */
 
@@ -49,7 +49,7 @@
                 return bzchart.getFilterOpacity (storeObject, d.data);
             });
 
-        let latestSizeOrColor = _this.getStore(component, "latestSizeOrColor");
+        let latestSizeOrColor = bzchart.getStore (storeObject, "latestSizeOrColor");
 
         // if (latestSizeOrColor == "color" || latestSizeOrColor == "none") {
             noc.style("fill", function(d) { 
@@ -68,6 +68,7 @@
     getRootStructurePack : function (component) {
         var _this = this;
         var componentReference = component.get("v.componentReference");  
+        let storeObject = component.get("v.storeObject");
 
         return function(datajson) { 
             console.log("getRootStructurePack computing callback " + componentReference);
@@ -75,7 +76,7 @@
             .sum((d) => d.size)
             .sort((a, b) => b.value - a.value);
 
-            var diameter = Math.min(_this.getStore (component, "width"),_this.getStore (component, "height") ) ;  
+            var diameter = Math.min(bzchart.getStore (storeObject, "width"),bzchart.getStore (storeObject, "height") ) ;  
             console.log("getRootStructurePack diameter: " + diameter);
             
             var pack = d3.pack()

@@ -1,16 +1,16 @@
 ({
     styleNodes: function(component,event,helper){
-        let _this = this;
+        let storeObject = component.get("v.storeObject");
 
         console.log("aura:method styleNodes in chartHierarchyPack enter");
 
-        let latestSizeOrColor = helper.getStore(component, "latestSizeOrColor");
+        let latestSizeOrColor = bzchart.getStore (storeObject, "latestSizeOrColor");
 
         var componentReference = component.get("v.componentReference");
         helper.clearElements(componentReference);
 
-        let datajson = helper.getStore (component, "datajson") ;  
-        let datajsonRefresh = helper.getStore (component, "datajson") ;  
+        let datajson = bzchart.getStore (storeObject, "datajson") ;  
+        let datajsonRefresh = bzchart.getStore (storeObject, "datajson") ;  
 
         if (latestSizeOrColor == "size") {
             var cc = component.getConcreteComponent();

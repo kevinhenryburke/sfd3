@@ -414,16 +414,6 @@
         return hash;
     },  
     
-    setStore : function (component, key, value) {
-        var store = component.get("v.storeObject");
-        store[key] = value;
-    },
-    
-    getStore : function (component, key) {
-        var store = component.get("v.storeObject");
-        return store[key];
-    },
-
     hasStore : function (component, key) {
         var allkeys = component.get("v.storeObject");
         return Object.keys(allkeys).includes(key);
