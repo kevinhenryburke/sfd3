@@ -79,7 +79,7 @@
         var links;
         var duration = 250;
         var shortDuration = 250;
-        var fixedDepth = bzctree.getFixedDepth(masterConfigObject); // this may need to be a function of chart area depth?
+        var fixedDepth = bzctree.getFixedDepth(storeObject); // this may need to be a function of chart area depth?
 
         var showMeasureValues = bzchart.getStore (storeObject, "showMeasureValues");
 
@@ -248,7 +248,7 @@
             })
             .attr("x", function(d) {
                 if (d.depth > 0) {
-                    return childLess(d) ? bzctree.getTextOffset(masterConfigObject) : - bzctree.getTextOffset(masterConfigObject);
+                    return childLess(d) ? bzctree.getTextOffset(storeObject) : - bzctree.getTextOffset(storeObject);
                 }
                 return -1;
             })
@@ -261,7 +261,7 @@
             })
             .attr("id", d => "t" + d.id)            
             .style("font", function(d) {
-                return bzctree.getFontSizePX(masterConfigObject) + "px sans-serif";
+                return bzctree.getFontSizePX(storeObject) + "px sans-serif";
             })
             .style("opacity", function(d) {
                 return bzchart.getFilterOpacity (storeObject, d.data);
@@ -274,7 +274,7 @@
             .attr("id", d => "tspan2" + d.id)          
             .attr("x", function(d) {
                 if (d.depth > 0) {
-                    return childLess(d) ? bzctree.getTextOffset(masterConfigObject) : - bzctree.getTextOffset(masterConfigObject);
+                    return childLess(d) ? bzctree.getTextOffset(storeObject) : - bzctree.getTextOffset(storeObject);
                 }
                 return -1;
             })
@@ -299,7 +299,7 @@
       
         // Update the node attributes and style
         var nuc = nodeUpdate.select('circle.treenode')
-            .attr('r', bzctree.getRadius(masterConfigObject))
+            .attr('r', bzctree.getRadius(storeObject))
             .style("stroke", function(d) {
                 if(childLess(d)) {
                     return "black";
@@ -340,7 +340,7 @@
             })
             .attr("x", function(d) {
                 if (d.depth > 0) {
-                    return childLess(d) ? bzctree.getTextOffset(masterConfigObject) : - bzctree.getTextOffset(masterConfigObject);
+                    return childLess(d) ? bzctree.getTextOffset(storeObject) : - bzctree.getTextOffset(storeObject);
                 }
                 return -1;
             })

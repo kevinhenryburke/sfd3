@@ -14,13 +14,14 @@
         let componentReference = "compref" + comprefNumber + recordId;
         let chartAreaDivId = componentReference + 'chartArea';
 
-//        component.set("v.componentReference", componentReference);
-
+        /* Constants and Defaults */
         let storeObject = {
             "rendered": false, 
             "showMeasureValues": false,
             "componentReference": componentReference,
-            "chartAreaDivId": chartAreaDivId
+            "chartAreaDivId": chartAreaDivId,
+            "ChartScaleFactor": 1,
+            "ChartScalePercentage": 100
         };
         component.set("v.storeObject", storeObject);
 
@@ -72,8 +73,9 @@
         let storeObject = component.get("v.storeObject");
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
-        var csfp = component.get("v.ChartScalePercentage");
-        var csf = parseFloat(csfp / 100); // ensure js knows it's a decimal
+        let csfp = bzchart.getStore (storeObject, "ChartScalePercentage") ;  
+
+        let csf = parseFloat(csfp / 100); // ensure js knows it's a decimal
 
         var eventParameters = { 
             "componentReference" : componentReference,
@@ -414,7 +416,7 @@
                 var csf = parameters["ChartScaleFactor"];
                 // make sure the percentage parameter is in sync - required by slider to be an integer
                 var csfp = csf * 100;
-                component.set("v.ChartScalePercentage", csfp);
+                bzchart.setStore (storeObject, "ChartScalePercentage", csfp) ; 
 
                 helper.handleScaleChange(component,csf);
             }

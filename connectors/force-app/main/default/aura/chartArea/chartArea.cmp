@@ -136,9 +136,6 @@
   <!-- Popover configuration -->
 	<aura:attribute name="showEmbeddedPanel" type="Boolean" default="true"/>    
 
-  <!-- Slider configuration -->
-  <aura:attribute name="ChartScalePercentage" type="Integer" default="100"/> 
-
 
   <body class="bodycontainer" style="background-color: white;">
 
@@ -166,7 +163,7 @@
     <aura:if isTrue="{!v.showZoomSlider == true}">
       <div class="slds-m-left_large">
           <!-- hide label via variant="label-hidden" -->
-          <lightning:slider size="small" label="Zoom" variant="label-hidden" step="10" min="50" max="120" value="{!v.ChartScalePercentage}" onchange="{! c.handleScaleChange }"/>
+          <lightning:slider size="small" label="Zoom" variant="label-hidden" step="10" min="50" max="120" value="{!v.storeObject.ChartScalePercentage}" onchange="{! c.handleScaleChange }"/>
       </div>
     </aura:if>
       

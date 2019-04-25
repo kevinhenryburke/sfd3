@@ -8,23 +8,23 @@
 
     /* Configuration number functions */
 
-    function getFixedDepth (masterConfigObject) {
-        let csfStored = bzchart.getStoreWithDefault (masterConfigObject, "ChartScaleFactor", 1) ;
+    function getFixedDepth (storeObject) {
+        let csfStored = bzchart.getStoreWithDefault (storeObject, "ChartScaleFactor", 1) ;
         return Math.ceil(180 * csfStored);
     }
 
-    function getTextOffset (masterConfigObject) {
-        let csfStored = bzchart.getStoreWithDefault (masterConfigObject, "ChartScaleFactor", 1) ;
+    function getTextOffset (storeObject) {
+        let csfStored = bzchart.getStoreWithDefault (storeObject, "ChartScaleFactor", 1) ;
         return Math.ceil(13 * csfStored);
     }
 
-    function getFontSizePX (masterConfigObject) {
-        let csfStored = bzchart.getStoreWithDefault (masterConfigObject, "ChartScaleFactor", 1) ;
+    function getFontSizePX (storeObject) {
+        let csfStored = bzchart.getStoreWithDefault (storeObject, "ChartScaleFactor", 1) ;
         return Math.ceil(12 * csfStored);
     }     
 
-    function getRadius (masterConfigObject) {
-        let csfStored = bzchart.getStoreWithDefault (masterConfigObject, "ChartScaleFactor", 1) ;
+    function getRadius (storeObject) {
+        let csfStored = bzchart.getStoreWithDefault (storeObject, "ChartScaleFactor", 1) ;
         return Math.ceil(10 * csfStored);
     }   
 
