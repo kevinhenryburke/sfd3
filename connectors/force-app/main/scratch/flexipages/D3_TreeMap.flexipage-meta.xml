@@ -42,10 +42,6 @@
                 <name>componentType</name>
                 <value>hierarchy.treemap</value>
             </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>hasPrimaryNode</name>
-                <value>false</value>
-            </componentInstanceProperties>
             <componentName>chartHierarchyTreeMap</componentName>
         </componentInstances>
         <name>main</name>

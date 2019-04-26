@@ -43,10 +43,6 @@
                 <name>componentType</name>
                 <value>hierarchy.treemapzoom</value>
             </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>hasPrimaryNode</name>
-                <value>false</value>
-            </componentInstanceProperties>
             <componentName>chartHierarchyTreemapZoom</componentName>
         </componentInstances>
         <name>main</name>

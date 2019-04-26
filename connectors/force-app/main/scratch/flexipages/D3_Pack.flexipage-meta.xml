@@ -44,10 +44,6 @@
                 <name>componentType</name>
                 <value>hierarchy.pack</value>
             </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>hasPrimaryNode</name>
-                <value>false</value>
-            </componentInstanceProperties>
             <componentName>chartHierarchyPack</componentName>
         </componentInstances>
         <name>main</name>

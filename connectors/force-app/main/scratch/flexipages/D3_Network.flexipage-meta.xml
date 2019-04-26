@@ -43,10 +43,6 @@
                 <value>network.connections</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
-                <name>hasPrimaryNode</name>
-                <value>true</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
                 <name>nodestrokewidth</name>
                 <value>0.5px</value>
             </componentInstanceProperties>
