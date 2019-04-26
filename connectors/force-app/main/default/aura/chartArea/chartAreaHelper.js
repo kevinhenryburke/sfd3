@@ -10,7 +10,6 @@
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
         
         bzchart.setStore (storeObject, "componentType", component.get("v.componentType") ) ;
-        bzchart.setStore (storeObject, "componentCategory", component.get("v.componentCategory") ) ;
         bzchart.setStore (storeObject, "componentEvent", component.getEvent("evt_bzc")) ;        
         bzchart.setStore (storeObject, "defaultEventType", component.getEvent("defaultEventType")) ;        
         bzchart.setStore (storeObject, "appEvents",  []) ;

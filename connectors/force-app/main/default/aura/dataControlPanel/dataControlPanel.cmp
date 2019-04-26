@@ -50,7 +50,6 @@
 
   <!-- Technical - Chart -->
 
-  <aura:attribute name="componentCategory" access="global" type="String" default="Controller"/>    
 	<aura:attribute name="componentType" access="global" type="String" default="Controller"/>   <!-- this may move to Design Parameters when we get different types --> 
 	<aura:attribute name="initialized" access="global" type="Boolean" default="false"/>    
   <aura:attribute name="datajson" access="global" type="Object" />

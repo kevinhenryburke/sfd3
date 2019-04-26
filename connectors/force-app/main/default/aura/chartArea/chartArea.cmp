@@ -116,14 +116,10 @@
   <aura:attribute name="UserControllerComponentId" access="global" type="String" default="" description="If we want to restrict to a particular controller on the page then put the name here that you used as the Component Id of the Controller. Otherwise all controllers will act on this chart"/>    
   <aura:attribute name="hasPrimaryNode" access="global" type="Boolean" default="false" description="Determines if the chart has a primary node"/>    
   <aura:attribute name="showLevelsInitial" type="Integer" default="1"/>   
-  <aura:attribute name="Title" access="global" type="String" default=""/>       
   <aura:attribute name="componentType" access="global" type="String" default="Chart"/>    
-  <aura:attribute name="showZoomSlider" type="Boolean" default="false"/>    
   
   <!-- Technical - Chart -->
   <!-- need to accessed or set before all libraries may be available -->
-  <aura:attribute name="componentCategory" type="String" default="Display"/>    
-  <!-- <aura:attribute name="componentReference" type="String"/>  -->
 	<aura:attribute name="scriptsLoaded" type="Boolean" default="false"/>    
   <aura:attribute name="defaultEventType" type="String" default="Application"/>    
 
@@ -133,8 +129,10 @@
   <aura:attribute name="flexiWidth" type="String"/>
   <lightning:flexipageRegionInfo width="{!v.flexiWidth}"/>
 
-  <!-- Popover configuration -->
+  <!-- Visibility controlling attributes, can stay prior to LWC migration -->
 	<aura:attribute name="showEmbeddedPanel" type="Boolean" default="true"/>    
+  <aura:attribute name="showZoomSlider" type="Boolean" default="false"/>    
+  <aura:attribute name="Title" access="global" type="String" default=""/>       
 
 
   <body class="bodycontainer" style="background-color: white;">
