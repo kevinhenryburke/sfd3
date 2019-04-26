@@ -68,11 +68,10 @@
 
         var agent = navigator.userAgent.toLowerCase();
         if(agent.indexOf('iphone') >= 0 || agent.indexOf('ipad') >= 0){
-            bzchart.isiOS = true;
-            component.set("v.isiOS", true);
+            bzchart.setStore (storeObject, "isiOS", true) ;                 
         }
         else {
-            bzchart.isiOS = false;
+            bzchart.setStore (storeObject, "isiOS", false) ;                 
         }
         
         var eventParameters = { 

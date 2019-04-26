@@ -123,8 +123,6 @@
 	<aura:attribute name="scriptsLoaded" type="Boolean" default="false"/>    
   <aura:attribute name="defaultEventType" type="String" default="Application"/>    
 
-	<aura:attribute name="isiOS" type="Boolean" default="false"/>    
-  
   <!-- Required for flexible layouts -->
   <aura:attribute name="flexiWidth" type="String"/>
   <lightning:flexipageRegionInfo width="{!v.flexiWidth}"/>

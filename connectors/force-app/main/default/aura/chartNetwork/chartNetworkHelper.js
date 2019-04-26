@@ -52,8 +52,7 @@
             }))
             .on('click', function(d) {
                 console.log("retrieve info on whether isiOS");
-                var isiOS = bzchart.isiOS;
-                if (isiOS) {
+                if (bzchart.getStore (storeObject, "isiOS")) {
                     var now = new Date().getTime();
                     var lastTouch = bzchart.getStore (storeObject, "lastTouch");
                     var delta = now - lastTouch;

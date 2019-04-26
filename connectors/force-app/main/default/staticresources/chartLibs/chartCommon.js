@@ -61,9 +61,6 @@ function getFilterOpacity (storeObject, d) {
   return 1;
 }
 
-var isiOS = false;
-
-exports.isiOS = isiOS;
 exports.setStore = setStore;
 exports.getStore = getStore;
 exports.hasStore = hasStore;

@@ -21,7 +21,8 @@
             "componentReference": componentReference,
             "chartAreaDivId": chartAreaDivId,
             "ChartScaleFactor": 1,
-            "ChartScalePercentage": 100
+            "ChartScalePercentage": 100,
+            "showZoomSlider": false
         };
         component.set("v.storeObject", storeObject);
 
@@ -252,10 +253,12 @@
 
                 var showZoomSlider = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","Hierarchy","showZoomSlider");         
                 if (showZoomSlider != null) {
-                    component.set("v.showZoomSlider" , showZoomSlider);
+                    component.set("v.showZoomSlider" , showZoomSlider); // required for now but not in LWC
+                    bzchart.setStore (storeObject, "showZoomSlider", showZoomSlider) ;                                    
                 }
                 else {
-                    component.set("v.showZoomSlider" , false);
+                    component.set("v.showZoomSlider" , false); // required for now but not in LWC
+                    bzchart.setStore (storeObject, "showZoomSlider", false) ;                                    
                 }      
                 
                 var showEmbeddedPanel = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","showEmbeddedPanel");         
