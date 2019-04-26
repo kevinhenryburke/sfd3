@@ -91,6 +91,9 @@ const DefaultMixin = {
   getDefaultColor() {
     return "lightsteelblue";
   },
+  hasPrimaryNode() {
+    return false;
+  }
 }
 
 exports.DefaultMixin = DefaultMixin;

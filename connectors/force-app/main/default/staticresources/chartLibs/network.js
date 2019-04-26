@@ -26,6 +26,9 @@ console.log("loading: chartNetworkMixin IIFE");
 const OverrideMixin = {
   getDefaultSize() {
     return 20;
+  },
+  hasPrimaryNode() {
+    return true;
   }
 }
 

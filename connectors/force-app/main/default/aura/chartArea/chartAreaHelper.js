@@ -16,7 +16,6 @@
 
         bzchart.setStore (storeObject, "UserComponentId", component.get("v.UserComponentId") ) ;
         bzchart.setStore (storeObject, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
-        bzchart.setStore (storeObject, "hasPrimaryNode", component.get("v.hasPrimaryNode") ) ;
 
         bzchart.setStore (storeObject, "lastTouch", new Date().getTime()) ;
         bzchart.setStore (storeObject, "width", Math.min(screen.width, screen.height)) ; // review this
@@ -101,7 +100,6 @@
         let storeObject = component.get("v.storeObject");
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
-//        let tempo = bzchart.getStore (masterConfigObject, "componentReference" ) ;
         console.log("initializeGroups: tempo: componentReference:" + componentReference, masterConfigObject);
 
 
@@ -113,9 +111,11 @@
 
         bzchart.setStore (storeObject, "datajson", datajson ) ;
 
-        var hasPrimaryNode = bzchart.getStore (storeObject, "hasPrimaryNode") ;
-        // var hasPrimaryNode = component.get("v.hasPrimaryNode") ;
+        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+        let hasPrimaryNode = variantsMixin.hasPrimaryNode();
+
         if (hasPrimaryNode == true) {
+            console.log("hasPrimaryNode true");
             primaryNodeId = bzutils.addComponentRef(componentReference, primaryNodeId);
             bzchart.setStore (storeObject, "primaryNodeId", primaryNodeId ) ;
         }

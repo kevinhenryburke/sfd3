@@ -291,14 +291,11 @@
                 }
 
                 let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
-                console.log("chartMixin: getting default size: " + variantsMixin.getDefaultSize());
-                console.log("chartMixin: getting default color: " + variantsMixin.getDefaultColor());
                 bzchart.setStore (storeObject, "defaultColor", variantsMixin.getDefaultColor());
                 bzchart.setStore (storeObject, "defaultSize", variantsMixin.getDefaultSize());
                 bzchart.setStore (storeObject, "updateColor", true);
                 bzchart.setStore (storeObject, "updateSize", true);
                 bzchart.setStore (storeObject, "latestSizeOrColor",  "none");
-
 
                 helper.initializeGroups(component, parameters["datajson"], parameters["primaryId"], parameters["showFilters"], isInit);                 
 
