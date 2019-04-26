@@ -22,7 +22,8 @@
             "chartAreaDivId": chartAreaDivId,
             "ChartScaleFactor": 1,
             "ChartScalePercentage": 100,
-            "showZoomSlider": false
+            "showZoomSlider": false,
+            "showLevelsInitial": 1
         };
         component.set("v.storeObject", storeObject);
 
@@ -268,12 +269,7 @@
 
                 var showLevelsInitial = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","showLevelsInitial");         
                 if (showLevelsInitial != null) {
-                    component.set("v.showLevelsInitial" , showLevelsInitial);
                     bzchart.setStore (storeObject, "showLevels", showLevelsInitial) ;
-                }
-                else {
-                    component.set("v.showLevelsInitial" , 1);
-                    bzchart.setStore (storeObject, "showLevels", 1) ;
                 }
 
                 // set latest values for color and size
