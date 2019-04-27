@@ -197,8 +197,6 @@
         console.log("aura:method refreshVisibility in subcomponent exit");
     }
 
-
-
     exports.nestChildren = nestChildren;
     exports.picklistNest = picklistNest;
     exports.searchTree = searchTree;

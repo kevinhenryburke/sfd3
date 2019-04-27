@@ -59,78 +59,7 @@
     refreshVisibility: function(component,event,helper){
         console.log("aura:method refreshVisibility in subcomponent enter - implementation");
         let storeObject = component.get("v.storeObject");
-        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
-        let componentType = bzchart.getStore (storeObject, "componentType") ;
-
-        if (componentType ==  "network.connections") {
-
-            console.log("refreshVisibility enter "); 
-        
-            var levels = bzchart.getStore (storeObject, "showLevels") ;
-
-            var filterValues = bzchart.getStore (storeObject, "filterValues") ;
-            var primaryNodeId = bzchart.getStore (storeObject, "primaryNodeId") ;        
-            // not needed until reinstate measure level visibility
-        
-            var relatedNodes = helper.getRelatedNodes(primaryNodeId, componentReference, levels);
-        
-            var path = d3.select(bzutils.getDivId("pathGroup", componentReference, true))
-                .selectAll("path")  ;
-        
-            var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
-                .selectAll("circle")  
-            
-            var shownodeids = [];
-        
-            path.style("visibility", function(p) {
-        
-                var retval = "hidden";
-        
-                var sourcevis = 1;
-                var targetvis = 1;
-        
-                var sourceindex = relatedNodes.indexOf(p.sourceid);
-                var targetindex = relatedNodes.indexOf(p.targetid);
-        
-                var primaryrelated = (sourceindex > -1 && targetindex > -1);
-        
-                if ((sourcevis === 1) && (targetvis === 1) && primaryrelated) {
-        
-                    var index = filterValues.indexOf(p.type);
-        
-                    if (index > -1) {
-                        var indexsource = shownodeids.indexOf(p.sourceid);
-                        if (indexsource == -1) {
-                            shownodeids.push(p.sourceid);
-                        }
-        
-                        var indextarget = shownodeids.indexOf(p.targetid);
-                        if (indextarget == -1) {
-                            shownodeids.push(p.targetid);
-                        }
-                    }
-                }
-        
-                return (index > -1) ? "visible" : "hidden";
-            });
-        
-            // change the visibility of the node
-            // if all the links with that node are invisibile, the node should also be invisible
-            // otherwise if any link related to that node is visibile, the node should be visible
-            node.style("visibility", function(o, i) {
-                var oid = o.id;
-                var index = shownodeids.indexOf(oid);
-                if (index > -1) {
-                    d3.select("#t" + oid).style("visibility", "visible");
-                    d3.select("#s" + oid).style("visibility", "visible");
-                    return "visible";
-                } else {
-                    d3.select("#t" + oid).style("visibility", "hidden");
-                    d3.select("#s" + oid).style("visibility", "hidden");
-                    return "hidden";
-                }
-            });
-        }
+        bznetwork.refreshVisibilityHelper(storeObject);
         console.log("aura:method refreshVisibility in subcomponent exit");
     },
 
