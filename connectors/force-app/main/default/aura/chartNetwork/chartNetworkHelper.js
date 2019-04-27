@@ -12,8 +12,6 @@
 		var pathToolTipDiv = bzchart.getStore (storeObject, "pathToolTipDiv") ;  
 		var pathGroupId = bzchart.getStore (storeObject, "pathGroupId") ;  
 
-        var componentType = component.get("v.componentType");
-        
         var node = {};     
         var text = {};     
         var path = {};     
@@ -317,7 +315,8 @@
         console.log("chartNetworkHelper.runSimulation enter");
         var _this = this;
 
-        var componentType = component.get("v.componentType");
+        let storeObject = component.get("v.storeObject");
+        let componentType = bzchart.getStore (storeObject, "componentType") ;
 
         if (componentType ==  "network.connections") {
             _this.runSimulationConnections(component, path, node, text);
@@ -537,7 +536,7 @@
 
         let storeObject = component.get("v.storeObject");
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
-        var componentType = component.get("v.componentType");
+        let componentType = bzchart.getStore (storeObject, "componentType") ;
         console.log("nodeDoubleClick componentType = " + componentType);
 
         if ((componentType ==  "network.timeline") || (componentType ==  "network.connections")) {
@@ -559,8 +558,8 @@
     textAdditionalAttribute : function (component, text) {
         // Not sure this is called
         console.log("chartNetworkHelper.textAdditionalAttribute enter");    
-
-        var componentType = component.get("v.componentType");
+        let storeObject = component.get("v.storeObject");
+        let componentType = bzchart.getStore (storeObject, "componentType") ;
         console.log("textAdditionalAttribute componentType = " + componentType);
 
         if ((componentType == "network.connections") || (componentType == "network.timeline")) {
@@ -630,7 +629,8 @@
         var _this = this;
         console.log("chartNetworkHelper.nodeMouseover enter");
 
-        var componentType = component.get("v.componentType");
+        let storeObject = component.get("v.storeObject");
+        let componentType = bzchart.getStore (storeObject, "componentType") ;
         console.log("nodeMouseover componentType = " + componentType);
 
         if ((componentType == "network.connections") || (componentType == "network.timeline")) {
@@ -670,7 +670,8 @@
     nodeMouseout : function (component, d) {
         console.log("chartNetworkHelper.nodeMouseout enter.");
 
-        var componentType = component.get("v.componentType");
+        let storeObject = component.get("v.storeObject");
+        let componentType = bzchart.getStore (storeObject, "componentType") ;
         console.log("nodeMouseover componentType = " + componentType);
 
         if ((componentType == "network.connections") || (componentType == "network.timeline")) {

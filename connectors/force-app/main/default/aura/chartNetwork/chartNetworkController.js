@@ -60,8 +60,7 @@
         console.log("aura:method refreshVisibility in subcomponent enter - implementation");
         let storeObject = component.get("v.storeObject");
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
-
-        var componentType = component.get("v.componentType");
+        let componentType = bzchart.getStore (storeObject, "componentType") ;
 
         if (componentType ==  "network.connections") {
 
@@ -139,8 +138,7 @@
         console.log("aura:method styleNodes in chartNetwork enter");
         let storeObject = component.get("v.storeObject");
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
-
-        var componentType = component.get("v.componentType");
+        let componentType = bzchart.getStore (storeObject, "componentType") ;
 
         if ((componentType ==  "network.connections") || (componentType ==  "network.timeline")) {
 

@@ -94,6 +94,7 @@
         let masterConfigObject = cc.get("v.masterConfigObject");
         let storeObject = cc.get("v.storeObject");
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
+        let componentType = bzchart.getStore (storeObject, "componentType") ;
 
         // if there is an arguments parameter this has been triggered by a method call
         // in which case we need to source our information from a level down in the event
@@ -133,6 +134,122 @@
         3. call any refresh methods
         */
 
+       if (topic == "InitializeData")
+       {
+           bzutils.log("InitializeData received by Chart: " + componentReference + "/" + parameters["componentReference"]);
+
+           if (componentReference == parameters["componentReference"]) {
+               bzutils.log("InitializeData with reference: " + componentReference);
+               let isInit = true;
+
+
+               /* Set Mixins for bespoke functionality per component type */
+               let masterConfigObject = parameters["masterConfigObject"];
+               component.set("v.masterConfigObject", masterConfigObject);
+
+               bzchart.setStore (storeObject, "componentReference", componentReference ) ;
+
+// ON BIG REFACTOR - for InitializeData this should be read from  masterConfigObject object not attribute. Can't do this in aura with dynamic rendering              
+                let componentType = bzchart.getStore (storeObject, "componentType") ;
+
+               if (componentType == 'hierarchy.ctree') {
+                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartHierarchyMixin.OverrideMixin);
+                   bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                    
+               }
+               if (componentType == 'hierarchy.pack') {
+                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin);        
+                   bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                  
+               }
+               if (componentType == 'hierarchy.treemapzoom') {
+                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin);        
+                   bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
+               }
+               if (componentType == 'hierarchy.treemap') {
+                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin);        
+                   bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
+               }
+               if (componentType == 'network.connections') {
+                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartNetworkMixin.OverrideMixin);        
+                   bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
+               }
+               if (componentType == 'network.timeline') {
+                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartNetworkMixin.OverrideMixin);        
+                   bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
+               }
+       
+
+               helper.buildMeasureSchemeMap(masterConfigObject, storeObject);
+
+
+               var showZoomSlider = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","Hierarchy","showZoomSlider");         
+               if (showZoomSlider != null) {
+                   component.set("v.showZoomSlider" , showZoomSlider); // required for now but not in LWC
+                   bzchart.setStore (storeObject, "showZoomSlider", showZoomSlider) ;                                    
+               }
+               else {
+                   component.set("v.showZoomSlider" , false); // required for now but not in LWC
+                   bzchart.setStore (storeObject, "showZoomSlider", false) ;                                    
+               }      
+               
+               var showEmbeddedPanel = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","showEmbeddedPanel");         
+               if (showEmbeddedPanel == null) {showEmbeddedPanel = false;}
+               bzchart.setStore (storeObject, "showEmbeddedPanel", showEmbeddedPanel ) ;
+               component.set("v.showEmbeddedPanel", showEmbeddedPanel);
+
+               var showLevelsInitial = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","showLevelsInitial");         
+               if (showLevelsInitial != null) {
+                   bzchart.setStore (storeObject, "showLevels", showLevelsInitial) ;
+               }
+
+               // set latest values for color and size
+
+               bzchart.setStore (storeObject, "currentColorLabel", 
+                   parameters["currentColorLabel"] != null ? parameters["currentColorLabel"] : "bzDefault");
+               bzchart.setStore (storeObject, "currentSizeLabel", 
+                   parameters["currentSizeLabel"] != null ? parameters["currentSizeLabel"] : "bzDefault");
+               
+               // set relevantMeasure
+               if (parameters["currentColorLabel"] != null) {
+                   bzchart.setStore (storeObject, "relevantMeasure", parameters["currentColorLabel"]);
+               }                
+               else if (parameters["currentSizeLabel"] != null) {
+                   bzchart.setStore (storeObject, "relevantMeasure", parameters["currentSizeLabel"]);
+               }                
+               else { // if there are no colors or sizes then mark this as bzDefault
+                   bzchart.setStore (storeObject, "relevantMeasure", "bzDefault");
+               }
+
+               let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+               bzchart.setStore (storeObject, "defaultColor", variantsMixin.getDefaultColor());
+               bzchart.setStore (storeObject, "defaultSize", variantsMixin.getDefaultSize());
+               bzchart.setStore (storeObject, "updateColor", true);
+               bzchart.setStore (storeObject, "updateSize", true);
+               bzchart.setStore (storeObject, "latestSizeOrColor",  "none");
+
+               helper.initializeGroups(component, parameters["datajson"], parameters["primaryId"], parameters["showFilters"], isInit);                 
+
+               var cc = component.getConcreteComponent();
+               cc.initializeVisuals();
+               cc.refreshVisibility();                 
+           }
+           else {
+               bzutils.log("Chart with reference: " + componentReference + " ignores this event with chart reference: " + parameters["componentReference"]);
+           }
+       }
+       if (topic == "RefreshData")
+       {
+           bzutils.log("RefreshData topic received by Chart: " + componentReference + "/" + parameters["componentReference"]);
+           // we process if the event is from it's controller and either specifies this component or does not specify any
+           if (componentReference == parameters["componentReference"] || ! ("componentReference" in parameters)) {
+               bzutils.log("RefreshData: Refresh Chart with reference: " + componentReference);
+               var cc = component.getConcreteComponent();
+               cc.refreshDataController(parameters);                 
+               cc.refreshVisibility();                 
+           }
+           else {
+               bzutils.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
+           }
+       }
 
         if (topic == "ShowLevelsMore")
         {
@@ -159,7 +276,8 @@
             bzchart.setStore (storeObject, "updateColor", true);
             bzchart.setStore (storeObject, "updateSize", false);
 
-            var componentType = component.get("v.componentType");
+            // Repetition of code 20 lines down, needs to refactored into mixin when got rid of "component" from code
+
             if (componentType != "hierarchy.treemap" && componentType != "hierarchy.treemapzoom") {
                 helper.showColorSchemeLegend(component);            
                 bzchart.setStore (storeObject, "showMeasureValues", true);
@@ -181,7 +299,6 @@
             bzchart.setStore (storeObject, "updateColor", false);
             bzchart.setStore (storeObject, "updateSize", true);
 
-            var componentType = component.get("v.componentType");
             if (componentType != "hierarchy.treemap" && componentType != "hierarchy.treemapzoom") {
                 helper.showColorSchemeLegend(component);            
                 bzchart.setStore (storeObject, "showMeasureValues", true);
@@ -205,122 +322,6 @@
             helper.setFilterVisibility(component, filterType, filterState);
 
             cc.refreshVisibility();                 
-        }
-        if (topic == "InitializeData")
-        {
-            bzutils.log("InitializeData received by Chart: " + componentReference + "/" + parameters["componentReference"]);
-
-            if (componentReference == parameters["componentReference"]) {
-                bzutils.log("InitializeData with reference: " + componentReference);
-                let isInit = true;
-
-
-                /* Set Mixins for bespoke functionality per component type */
-                let masterConfigObject = parameters["masterConfigObject"];
-                component.set("v.masterConfigObject", masterConfigObject);
-
-                bzchart.setStore (storeObject, "componentReference", componentReference ) ;
-
-                let componentType = component.get("v.componentType");        
-
-                if (componentType == 'hierarchy.ctree') {
-                    const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartHierarchyMixin.OverrideMixin);
-                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                    
-                }
-                if (componentType == 'hierarchy.pack') {
-                    const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin);        
-                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                  
-                }
-                if (componentType == 'hierarchy.treemapzoom') {
-                    const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin);        
-                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
-                }
-                if (componentType == 'hierarchy.treemap') {
-                    const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin);        
-                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
-                }
-                if (componentType == 'network.connections') {
-                    const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartNetworkMixin.OverrideMixin);        
-                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
-                }
-                if (componentType == 'network.timeline') {
-                    const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartNetworkMixin.OverrideMixin);        
-                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
-                }
-        
-
-                helper.buildMeasureSchemeMap(masterConfigObject, storeObject);
-
-
-                var showZoomSlider = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","Hierarchy","showZoomSlider");         
-                if (showZoomSlider != null) {
-                    component.set("v.showZoomSlider" , showZoomSlider); // required for now but not in LWC
-                    bzchart.setStore (storeObject, "showZoomSlider", showZoomSlider) ;                                    
-                }
-                else {
-                    component.set("v.showZoomSlider" , false); // required for now but not in LWC
-                    bzchart.setStore (storeObject, "showZoomSlider", false) ;                                    
-                }      
-                
-                var showEmbeddedPanel = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","showEmbeddedPanel");         
-                if (showEmbeddedPanel == null) {showEmbeddedPanel = false;}
-                bzchart.setStore (storeObject, "showEmbeddedPanel", showEmbeddedPanel ) ;
-                component.set("v.showEmbeddedPanel", showEmbeddedPanel);
-
-                var showLevelsInitial = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","showLevelsInitial");         
-                if (showLevelsInitial != null) {
-                    bzchart.setStore (storeObject, "showLevels", showLevelsInitial) ;
-                }
-
-                // set latest values for color and size
-
-                bzchart.setStore (storeObject, "currentColorLabel", 
-                    parameters["currentColorLabel"] != null ? parameters["currentColorLabel"] : "bzDefault");
-                bzchart.setStore (storeObject, "currentSizeLabel", 
-                    parameters["currentSizeLabel"] != null ? parameters["currentSizeLabel"] : "bzDefault");
-                
-                // set relevantMeasure
-                if (parameters["currentColorLabel"] != null) {
-                    bzchart.setStore (storeObject, "relevantMeasure", parameters["currentColorLabel"]);
-                }                
-                else if (parameters["currentSizeLabel"] != null) {
-                    bzchart.setStore (storeObject, "relevantMeasure", parameters["currentSizeLabel"]);
-                }                
-                else { // if there are no colors or sizes then mark this as bzDefault
-                    bzchart.setStore (storeObject, "relevantMeasure", "bzDefault");
-                }
-
-                let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
-                bzchart.setStore (storeObject, "defaultColor", variantsMixin.getDefaultColor());
-                bzchart.setStore (storeObject, "defaultSize", variantsMixin.getDefaultSize());
-                bzchart.setStore (storeObject, "updateColor", true);
-                bzchart.setStore (storeObject, "updateSize", true);
-                bzchart.setStore (storeObject, "latestSizeOrColor",  "none");
-
-                helper.initializeGroups(component, parameters["datajson"], parameters["primaryId"], parameters["showFilters"], isInit);                 
-
-                var cc = component.getConcreteComponent();
-                cc.initializeVisuals();
-                cc.refreshVisibility();                 
-            }
-            else {
-                bzutils.log("Chart with reference: " + componentReference + " ignores this event with chart reference: " + parameters["componentReference"]);
-            }
-        }
-
-        if (topic == "RefreshData")
-        {
-            bzutils.log("RefreshData topic received by Chart: " + componentReference + "/" + parameters["componentReference"]);
-            // we process if the event is from it's controller and either specifies this component or does not specify any
-            if (componentReference == parameters["componentReference"] || ! ("componentReference" in parameters)) {
-                bzutils.log("RefreshData: Refresh Chart with reference: " + componentReference);
-                var cc = component.getConcreteComponent();
-                cc.refreshDataController(parameters);                 
-                cc.refreshVisibility();                 
-            }
-            else {
-                bzutils.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
-            }
         }
         if (topic == "SearchChart")
         {
