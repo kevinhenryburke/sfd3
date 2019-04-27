@@ -662,9 +662,7 @@
 
     // returnType is either "Value" or "Color" or "Size"
 
-    getDefaultValueForReturnType : function (component, returnType) {
-        var _this = this;
-        let storeObject = component.get("v.storeObject");
+    getDefaultValueForReturnType : function (storeObject, returnType) {
         let retValDefault; 
         switch (returnType) {
             case "Color" : retValDefault = bzchart.getStore (storeObject, "defaultColor") ; break;
@@ -674,7 +672,7 @@
         return retValDefault;
     },
 
-    getStringValue : function (currentMeasureScheme, retrievedField, returnType) {
+    getStringValue : function (storeObject, currentMeasureScheme, retrievedField, returnType) {
         var _this = this;
         var retrievedValue = retrievedField.retrievedValue;
         if (returnType == "Value") { // for Value just return the String Value in the relevant field
@@ -690,7 +688,7 @@
             if (valueColorDefault != null) {
                 return valueColorDefault;
             }
-            return _this.getDefaultValueForReturnType (component, "Color");    
+            return _this.getDefaultValueForReturnType (storeObject, "Color");    
         }
     },
 
@@ -702,7 +700,7 @@
         let relevantMeasure = bzchart.getStore (storeObject, "relevantMeasure"); 
         // deal with the case when there are no colors or sizes configured
         if (relevantMeasure == null || relevantMeasure == "bzDefault") { 
-            return _this.getDefaultValueForReturnType (component, returnType);    
+            return _this.getDefaultValueForReturnType (storeObject, returnType);    
         }
 
         let objectType = ddata["objectType"];
@@ -712,7 +710,7 @@
         var currentMeasureObjectConfig = measureObjectFieldMap[relevantMeasure][objectType];
 
         if (currentMeasureObjectConfig == null) {
-            return _this.getDefaultValueForReturnType (component, returnType);    
+            return _this.getDefaultValueForReturnType (storeObject, returnType);    
         }
 
         // from here on we can assume that there is some object configuration for this measure
@@ -725,7 +723,7 @@
             currentMeasureObjectConfig = measureObjectFieldMap[relevantMeasure][objectType];
 
             if (currentMeasureObjectConfig == null) {
-                return _this.getDefaultValueForReturnType (component, returnType);    
+                return _this.getDefaultValueForReturnType (storeObject, returnType);    
             }
         }
 
@@ -738,7 +736,7 @@
             // bring the Decimal and Integer options into a single variable
 
             if (currentMeasureSchemeType == "StringValue") {
-                return _this.getStringValue (currentMeasureScheme, retrievedField,  "Value");
+                return _this.getStringValue (storeObject, currentMeasureScheme, retrievedField,  "Value");
             }
 
             if ((retrievedField.fieldType == "CURRENCY" || retrievedField.fieldType == "DECIMAL" || retrievedField.fieldType == "DOUBLE") && retrievedField.retrievedValue != null) {
@@ -753,7 +751,7 @@
         if (returnType == "Color" ) {
             // case when baseing colors and values on picklists (not currently relevant for sizes)
             if (currentMeasureSchemeType == "StringValue") {
-                return _this.getStringValue (currentMeasureScheme, retrievedField, returnType);
+                return _this.getStringValue (storeObject, currentMeasureScheme, retrievedField, returnType);
             }
 
             // case when baseing colors and values on numerics

@@ -97,10 +97,114 @@
         return 1;
     }
 
+    function merge (storeObject, updatejson) {
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;
+        let newjsonarray;
+
+        function setDepthFromBase (baseNode, baseNodeDepth) {
+            console.log("setDepthFromBase");
+            if(baseNode.children) {
+                baseNode.children.forEach(function(d) {
+                    d.depth = baseNodeDepth + 1;
+                    setDepthFromBase(d,baseNodeDepth +1);            
+                });
+            }        
+        }    
+
+        if (Array.isArray(updatejson)) {
+            newjsonarray = updatejson;
+        }
+        else {
+            // if input is not an array then make it one to ease processing
+            newjsonarray = [ updatejson ];
+        }
+
+        for(var i =0;i<newjsonarray.length;i++){
+            var newjson = newjsonarray[i];
+
+            // the first node id of the newjson is assumed to be a pre-existing node and should not result in a new node.
+            var parentRecordId = newjson["id"]; 
+            var addToNodeId = bzutils.addComponentRef(componentReference, parentRecordId);
+            var parentNodeId = "circle" + addToNodeId;
+
+            // see if this is searchable as a node
+            var parentNode = bzutils.getNodeFromId(parentNodeId);
+
+            if (parentNode == null) {
+                var ultimateRoot = bzchart.getStore (storeObject, "root");
+
+                // try to find target node down from the root node
+                var paths = bzhierarchy.searchTree(ultimateRoot,parentRecordId,[],"Id");
+                parentNode = paths.slice(-1).pop(); // this gets the last element of the path array which is the parent node.
+            }
+
+            // parentNode should now be defined
+            var fragmentRoot = d3.hierarchy(newjson, function(d) { return d.children; });
+
+            fragmentRoot.children.forEach(function(newchild) {
+                newchild.parent = parentNode;
+                newchild.depth = parentNode.depth + 1; 
+                newchild.height = parentNode.height - 1;
+                setDepthFromBase(newchild, newchild.depth);
+                if (parentNode.children) {
+                    parentNode.children.push(newchild);
+                }
+                else {
+                    if (parentNode._children) {
+                        parentNode._children.push(newchild);
+                    }
+                    else {
+                        // falls through to this case if a node has no children defined but we now want to push children to it
+                        parentNode._children = [];
+                        parentNode.data.children = [];
+                        parentNode._children.push(newchild);
+                        parentNode.data.children.push(newchild);
+                    }
+                }
+        
+                parentNode.data.children.push(newchild.data);
+                bzctree.collapse(newchild);
+
+            });        
+        }
+    }  
+
+    function refreshVisibilityHelper(storeObject){
+        console.log("refreshVisibilityHelper enter with storeObject");
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
+        
+        let node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
+            .selectAll("circle,rect") // comma separated searches for both
+            .style("fill-opacity", function(d, i) {
+                return bzchart.getFilterOpacity (storeObject, d.data);
+            })
+            .style("stroke-opacity", function(d, i) {
+                return bzchart.getFilterOpacity (storeObject, d.data);
+            });
+
+        let text = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
+            .selectAll("text")
+            .style("opacity", function(d, i) {
+                return bzchart.getFilterOpacity (storeObject, d.data);
+            });
+
+        let path = d3.select(bzutils.getDivId("pathGroup", componentReference, true))
+            .selectAll("path")
+            .style("stroke-opacity", function(d, i) {
+                return bzhierarchy.getFilterOpacityPath(storeObject,d);
+            });
+
+        console.log("aura:method refreshVisibility in subcomponent exit");
+    }
+
+
+
     exports.nestChildren = nestChildren;
     exports.picklistNest = picklistNest;
     exports.searchTree = searchTree;
     exports.getFilterOpacityPath = getFilterOpacityPath;
+    exports.merge = merge;
+    exports.refreshVisibilityHelper = refreshVisibilityHelper;
     
     Object.defineProperty(exports, '__esModule', { value: true });
 

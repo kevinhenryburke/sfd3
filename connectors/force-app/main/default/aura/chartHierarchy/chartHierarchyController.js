@@ -33,7 +33,7 @@
         var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
         var root = bzchart.getStore (storeObject, "root") ;
 
-        helper.merge(component, updatejson);
+        bzhierarchy.merge(storeObject, updatejson);
         helper.update(component, nodeGroup, pathGroup, root, false);
 
     },
@@ -87,7 +87,8 @@
 
     refreshVisibility: function(component,event,helper){
         console.log("aura:method refreshVisibility in subcomponent enter");
-        helper.refreshVisibilityHelper(component);
+        let storeObject = component.get("v.storeObject");
+        bzhierarchy.refreshVisibilityHelper(storeObject);
         console.log("aura:method refreshVisibility in subcomponent exit");
     },
 

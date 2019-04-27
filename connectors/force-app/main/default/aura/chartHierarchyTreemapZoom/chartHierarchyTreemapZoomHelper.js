@@ -394,36 +394,6 @@ When you click to drill down the same structure is recreated started at the next
                 ? displayNameValue(d.parent) + " / " + d.data.name + " (" + formatNumber(d.value) + ")"
                 : d.data.name + " (" + formatNumber(d.value) + ")";
         }
-
-    },
-
-
-    refreshVisibilityHelper: function (component) {
-        var _this = this;
-        let storeObject = component.get("v.storeObject");
-        console.log("refreshVisibilityHelper enter");
-        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
-
-        var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
-            .selectAll("circle,rect") // comma separated searches for both
-            .style("fill-opacity", function (d, i) {
-                return _this.getFilterOpacity(component, d.data);
-            })
-            .style("stroke-opacity", function (d, i) {
-                return bzchart.getFilterOpacity (storeObject, d.data);
-            })
-            ;
-
-        var text = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
-            .selectAll("text")
-            .style("opacity", function (d, i) {
-                return bzchart.getFilterOpacity (storeObject, d.data);
-            });
-
-
-        console.log("aura:method refreshVisibility in subcomponent exit");
-    },
-
-
-
+    }
+    
 })
