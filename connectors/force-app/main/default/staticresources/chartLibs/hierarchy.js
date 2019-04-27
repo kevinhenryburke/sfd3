@@ -170,7 +170,6 @@
     }  
 
     function refreshVisibilityHelper(storeObject){
-        console.log("refreshVisibilityHelper enter with storeObject");
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
         
         let node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
@@ -193,8 +192,6 @@
             .style("stroke-opacity", function(d, i) {
                 return bzhierarchy.getFilterOpacityPath(storeObject,d);
             });
-
-        console.log("aura:method refreshVisibility in subcomponent exit");
     }
 
     exports.nestChildren = nestChildren;
@@ -221,9 +218,9 @@
 console.log("loading: chartHierarchyMixin IIFE");
 
 const OverrideMixin = {
-  getDefaultSize() {
-    return 500;
-  }
+    refreshVisibility(storeObject){
+        bzhierarchy.refreshVisibilityHelper(storeObject);
+    }
 }
 
 exports.OverrideMixin = OverrideMixin;

@@ -92,9 +92,6 @@
     <aura:attribute name="ChartScaleFactor" type="Decimal"/> 
   </aura:method>
 
-  <aura:method name="refreshVisibility"> 
-  </aura:method>
-
   <aura:method name="styleNodes"> 
   </aura:method>
 

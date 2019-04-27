@@ -110,3 +110,26 @@ function update() {
 
 
 })));
+
+
+/* OVERRIDE MIXINS */
+
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.chartHierarchyPackMixin = global.chartHierarchyPackMixin || {})));
+}(this, (function (exports) { 'use strict';
+
+console.log("loading: chartHierarchyPackMixin IIFE");
+
+const OverrideMixin = {
+}
+
+exports.OverrideMixin = OverrideMixin;
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+console.log("loaded: chartHierarchyPackMixin IIFE");
+
+
+})));

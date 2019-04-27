@@ -157,7 +157,7 @@
                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                    
                }
                if (componentType == 'hierarchy.pack') {
-                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin);        
+                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartHierarchyMixin.OverrideMixin, chartHierarchyPackMixin.OverrideMixin);        
                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                  
                }
                if (componentType == 'hierarchy.treemapzoom') {
@@ -228,9 +228,9 @@
 
                helper.initializeGroups(component, parameters["datajson"], parameters["primaryId"], parameters["showFilters"], isInit);                 
 
-               var cc = component.getConcreteComponent();
-               cc.initializeVisuals();
-               cc.refreshVisibility();                 
+                var cc = component.getConcreteComponent();
+                cc.initializeVisuals();
+                variantsMixin.refreshVisibility(storeObject);                
            }
            else {
                bzutils.log("Chart with reference: " + componentReference + " ignores this event with chart reference: " + parameters["componentReference"]);
@@ -244,8 +244,9 @@
                bzutils.log("RefreshData: Refresh Chart with reference: " + componentReference);
                var cc = component.getConcreteComponent();
                cc.refreshDataController(parameters);                 
-               cc.refreshVisibility();                 
-           }
+               let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+               variantsMixin.refreshVisibility(storeObject);
+            }
            else {
                bzutils.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
            }
@@ -255,14 +256,16 @@
         {
             // get the new number of levels and refresh
             bzchart.setStore (storeObject, "showLevels", parameters["levels"] ) ;
-            cc.refreshVisibility();                     
-        }
+            let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+            variantsMixin.refreshVisibility(storeObject);
+      }
         if (topic == "ShowLevelsFewer")
         {
             // get the new number of levels and refresh
             bzchart.setStore (storeObject, "showLevels", parameters["levels"] ) ;
-            cc.refreshVisibility();                 
-        }
+            let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+            variantsMixin.refreshVisibility(storeObject);
+    }
         if (topic == "SetColor")
         {
             // get the measure
@@ -319,9 +322,10 @@
             // filter and set visibility of nodes
             var filterState = parameters["filterState"];
             var filterType = parameters["filterType"];
-            helper.setFilterVisibility(component, filterType, filterState);
+            helper.setFilterVisibility(storeObject, filterType, filterState);
 
-            cc.refreshVisibility();                 
+            let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+            variantsMixin.refreshVisibility(storeObject);
         }
         if (topic == "SearchChart")
         {
@@ -429,11 +433,6 @@
         });
         sObectEvent.fire(); 
      },
-
-     refreshVisibility: function(component,event,helper){
-        // console.log("aura:method refreshVisibility in chartArea enter");
-        // console.log("aura:method refreshVisibility in chartArea exit");
-    },
 
     styleNodes: function(component,event,helper){
         // console.log("aura:method styleNodes in chartArea enter");

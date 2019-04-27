@@ -429,9 +429,7 @@
         }
     },
 
-    setFilterVisibility : function (component, filterType, filterState) {
-        var _this = this;
-        let storeObject = component.get("v.storeObject");
+    setFilterVisibility : function (storeObject, filterType, filterState) {
         var filterValues = bzchart.getStore (storeObject, "filterValues") ;
         if (filterState == "Show") {
             filterValues.push(filterType);

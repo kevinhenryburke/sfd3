@@ -141,7 +141,10 @@ const OverrideMixin = {
   },
   hasPrimaryNode() {
     return true;
-  }
+  },
+  refreshVisibility(storeObject){
+    bznetwork.refreshVisibilityHelper(storeObject);
+  },
 }
 
 exports.OverrideMixin = OverrideMixin;

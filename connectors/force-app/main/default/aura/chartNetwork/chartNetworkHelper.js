@@ -67,8 +67,9 @@
                 var primaryNodeId = d.id;
                 bzchart.setStore (storeObject, "primaryNodeId", primaryNodeId ) ;
 
+                let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+                variantsMixin.refreshVisibility(storeObject);
                 var cc = component.getConcreteComponent();
-                cc.refreshVisibility();                 
                 cc.styleNodes();                 
             })
             .on('dblclick', $A.getCallback(function(d) {
@@ -180,7 +181,8 @@
         cc.styleNodes();                 
 
         console.log("apply node visibility");
-        cc.refreshVisibility();                 
+        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+        variantsMixin.refreshVisibility(storeObject);
 
         /* Above should be common to some degree - Below is forceSimulation specific */
 

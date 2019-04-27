@@ -93,7 +93,10 @@ const DefaultMixin = {
   },
   hasPrimaryNode() {
     return false;
-  }
+  },
+  refreshVisibility(storeObject){
+  },
+
 }
 
 exports.DefaultMixin = DefaultMixin;

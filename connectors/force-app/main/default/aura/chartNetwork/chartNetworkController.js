@@ -45,8 +45,10 @@
         bzchart.setStore (storeObject, "primaryNodeId", primaryNodeId ) ;
         bzchart.setStore (storeObject, "showLevels", showLevels) ;
 
+        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+        variantsMixin.refreshVisibility(storeObject);
+
         var cc = component.getConcreteComponent();
-        cc.refreshVisibility();                 
         cc.styleNodes();                 
         console.log("aura:method searchChart in subcomponent exit");
     },
@@ -54,13 +56,6 @@
     reScale: function(component,event,helper){
         console.log("aura:method reScale in subcomponent enter");
         console.log("aura:method reScale in subcomponent exit");
-    },
-
-    refreshVisibility: function(component,event,helper){
-        console.log("aura:method refreshVisibility in subcomponent enter - implementation");
-        let storeObject = component.get("v.storeObject");
-        bznetwork.refreshVisibilityHelper(storeObject);
-        console.log("aura:method refreshVisibility in subcomponent exit");
     },
 
     styleNodes: function(component,event,helper){
