@@ -91,6 +91,34 @@ function createInfoLocation (storeObject) {
   bzchart.setStore (storeObject, "infosvg", infosvg ) ;
 }
 
+function getDefaultValueForReturnType(storeObject, returnType) {
+  let retValDefault; 
+  switch (returnType) {
+      case "Color" : retValDefault = bzchart.getStore (storeObject, "defaultColor") ; break;
+      case "Value" : retValDefault = ""; break;
+      case "Size" : retValDefault = bzchart.getStore (storeObject, "defaultSize"); break;
+  }
+  return retValDefault;
+}
+
+function getStringValue (storeObject, currentMeasureScheme, retrievedField, returnType) {
+  var retrievedValue = retrievedField.retrievedValue;
+  if (returnType == "Value") { // for Value just return the String Value in the relevant field
+      return retrievedValue;
+  }
+  if (returnType == "Color") { // try to match with the value with the configured list, if not found return the default color
+      var valueColor = currentMeasureScheme[retrievedValue];
+      if (valueColor != null) {
+          return valueColor;
+      }
+
+      var valueColorDefault = currentMeasureScheme["default"];
+      if (valueColorDefault != null) {
+          return valueColorDefault;
+      }
+      return bzchart.getDefaultValueForReturnType (storeObject, "Color");    
+  }
+}
 
 exports.setStore = setStore;
 exports.getStore = getStore;
@@ -99,6 +127,8 @@ exports.getStoreWithDefault = getStoreWithDefault;
 exports.isFilteredOut = isFilteredOut;
 exports.getFilterOpacity = getFilterOpacity;
 exports.createInfoLocation = createInfoLocation;
+exports.getDefaultValueForReturnType = getDefaultValueForReturnType;
+exports.getStringValue = getStringValue;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

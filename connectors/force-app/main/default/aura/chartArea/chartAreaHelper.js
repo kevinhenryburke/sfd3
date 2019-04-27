@@ -603,7 +603,6 @@
     },
 
     getFirstColorSchemeLegend : function (component, currentColorLabel) {
-        var _this = this;
         let storeObject = component.get("v.storeObject");
 
         var measureArrayObjectFieldMap = bzchart.getStore (storeObject, "measureArrayObjectFieldMap");
@@ -615,47 +614,15 @@
         }
     },
 
-    // returnType is either "Value" or "Color" or "Size"
-
-    getDefaultValueForReturnType : function (storeObject, returnType) {
-        let retValDefault; 
-        switch (returnType) {
-            case "Color" : retValDefault = bzchart.getStore (storeObject, "defaultColor") ; break;
-            case "Value" : retValDefault = ""; break;
-            case "Size" : retValDefault = bzchart.getStore (storeObject, "defaultSize"); break;
-        }
-        return retValDefault;
-    },
-
-    getStringValue : function (storeObject, currentMeasureScheme, retrievedField, returnType) {
-        var _this = this;
-        var retrievedValue = retrievedField.retrievedValue;
-        if (returnType == "Value") { // for Value just return the String Value in the relevant field
-            return retrievedValue;
-        }
-        if (returnType == "Color") { // try to match with the value with the configured list, if not found return the default color
-            var valueColor = currentMeasureScheme[retrievedValue];
-            if (valueColor != null) {
-                return valueColor;
-            }
-
-            var valueColorDefault = currentMeasureScheme["default"];
-            if (valueColorDefault != null) {
-                return valueColorDefault;
-            }
-            return _this.getDefaultValueForReturnType (storeObject, "Color");    
-        }
-    },
 
     getFromMeasureScheme : function (component, ddata, returnType) {
-        var _this = this;
         let storeObject = component.get("v.storeObject");
 
         // relevantMeasure is set on initialization of data in component and changed on color or size events.
         let relevantMeasure = bzchart.getStore (storeObject, "relevantMeasure"); 
         // deal with the case when there are no colors or sizes configured
         if (relevantMeasure == null || relevantMeasure == "bzDefault") { 
-            return _this.getDefaultValueForReturnType (storeObject, returnType);    
+            return bzchart.getDefaultValueForReturnType (storeObject, returnType);    
         }
 
         let objectType = ddata["objectType"];
@@ -665,7 +632,7 @@
         var currentMeasureObjectConfig = measureObjectFieldMap[relevantMeasure][objectType];
 
         if (currentMeasureObjectConfig == null) {
-            return _this.getDefaultValueForReturnType (storeObject, returnType);    
+            return bzchart.getDefaultValueForReturnType (storeObject, returnType);    
         }
 
         // from here on we can assume that there is some object configuration for this measure
@@ -678,7 +645,7 @@
             currentMeasureObjectConfig = measureObjectFieldMap[relevantMeasure][objectType];
 
             if (currentMeasureObjectConfig == null) {
-                return _this.getDefaultValueForReturnType (storeObject, returnType);    
+                return bzchart.getDefaultValueForReturnType (storeObject, returnType);    
             }
         }
 
@@ -691,7 +658,7 @@
             // bring the Decimal and Integer options into a single variable
 
             if (currentMeasureSchemeType == "StringValue") {
-                return _this.getStringValue (storeObject, currentMeasureScheme, retrievedField,  "Value");
+                return bzchart.getStringValue (storeObject, currentMeasureScheme, retrievedField,  "Value");
             }
 
             if ((retrievedField.fieldType == "CURRENCY" || retrievedField.fieldType == "DECIMAL" || retrievedField.fieldType == "DOUBLE") && retrievedField.retrievedValue != null) {
@@ -706,7 +673,7 @@
         if (returnType == "Color" ) {
             // case when baseing colors and values on picklists (not currently relevant for sizes)
             if (currentMeasureSchemeType == "StringValue") {
-                return _this.getStringValue (storeObject, currentMeasureScheme, retrievedField, returnType);
+                return bzchart.getStringValue (storeObject, currentMeasureScheme, retrievedField, returnType);
             }
 
             // case when baseing colors and values on numerics
