@@ -494,15 +494,15 @@
         var _this = this;
         let storeObject = component.get("v.storeObject");
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
-        var currentColorLabel = bzchart.getStore (storeObject, "currentColorLabel");
-        var currentSizeLabel = bzchart.getStore (storeObject, "currentSizeLabel");
+        let currentColorLabel = bzchart.getStore (storeObject, "currentColorLabel");
+        let currentSizeLabel = bzchart.getStore (storeObject, "currentSizeLabel");
 
-        var firstMeasureScheme = _this.getFirstColorSchemeLegend(component, currentColorLabel);
+        let firstMeasureScheme = bzchart.getFirstColorSchemeLegend(storeObject, currentColorLabel);
 
         // remove existing legend symbols
         d3.select(bzutils.getDivId("legendSymbolGroup", componentReference, true)).selectAll("*").remove();
 
-        var legendSymbolGroup = bzchart.getStore (storeObject, "legendSymbolGroup" ) ;
+        let legendSymbolGroup = bzchart.getStore (storeObject, "legendSymbolGroup" ) ;
         
         var ms = firstMeasureScheme.measureScheme;
         var mst = firstMeasureScheme["measureSchemeType"];
@@ -598,22 +598,9 @@
             if (mst == "StringValue") {
                 return d;
             }
-        }
-            
-    },
-
-    getFirstColorSchemeLegend : function (component, currentColorLabel) {
-        let storeObject = component.get("v.storeObject");
-
-        var measureArrayObjectFieldMap = bzchart.getStore (storeObject, "measureArrayObjectFieldMap");
-        if (measureArrayObjectFieldMap[currentColorLabel] != null) {
-            return measureArrayObjectFieldMap[currentColorLabel][0];
-        }
-        else {
-            return null;
-        }
+        }            
     }
-    
+
 })
 
 

@@ -219,6 +219,16 @@ function getFromMeasureScheme  (storeObject, ddata, returnType) {
   }
 }
 
+function getFirstColorSchemeLegend (storeObject, currentColorLabel) {
+  var measureArrayObjectFieldMap = bzchart.getStore (storeObject, "measureArrayObjectFieldMap");
+  if (measureArrayObjectFieldMap[currentColorLabel] != null) {
+      return measureArrayObjectFieldMap[currentColorLabel][0];
+  }
+  else {
+      return null;
+  }
+}
+
 
 exports.setStore = setStore;
 exports.getStore = getStore;
@@ -230,6 +240,7 @@ exports.createInfoLocation = createInfoLocation;
 exports.getDefaultValueForReturnType = getDefaultValueForReturnType;
 exports.getStringValue = getStringValue;
 exports.getFromMeasureScheme = getFromMeasureScheme;
+exports.getFirstColorSchemeLegend = getFirstColorSchemeLegend;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
