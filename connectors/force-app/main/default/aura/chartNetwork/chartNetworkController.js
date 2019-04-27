@@ -65,8 +65,6 @@
         let componentType = bzchart.getStore (storeObject, "componentType") ;
 
         if ((componentType ==  "network.connections") || (componentType ==  "network.timeline")) {
-
-
             var primaryid = bzchart.getStore (storeObject, "primaryNodeId") ;
 
             var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
@@ -74,13 +72,13 @@
 
             if (bzchart.getStore (storeObject, "updateSize")) {            
                 node.attr("r", function(o, i) {
-                    return helper.getFromMeasureScheme(component, o, "Size");
+                    return bzchart.getFromMeasureScheme(storeObject, o, "Size");
                 });
             }
 
             if (bzchart.getStore (storeObject, "updateColor")) {            
                 node.style("fill", function(o, i) {
-                    return helper.getFromMeasureScheme(component, o, "Color");
+                    return bzchart.getFromMeasureScheme(storeObject, o, "Color");
                 });
             }
         

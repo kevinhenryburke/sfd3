@@ -32,7 +32,6 @@
 
     stylePack : function (component, node) {
         // Not sure this is called
-        var _this = this;
         let storeObject = component.get("v.storeObject");
         console.log("stylePack enter");    
 
@@ -54,7 +53,7 @@
         // if (latestSizeOrColor == "color" || latestSizeOrColor == "none") {
             noc.style("fill", function(d) { 
                 // we add new circles only to new nodes - the nodes are forgotten if collapsed
-                return _this.getFromMeasureScheme(component, d.data, "Color");
+                return bzchart.getFromMeasureScheme(storeObject, d.data, "Color");
             })
         // }
 
@@ -88,8 +87,9 @@
     recursiveMap: function(component,datajsonBefore, topCall){
         // console.log("chartNetworkTimeline.recursiveMap enter");
         var _this = this;
+        let storeObject = component.get("v.storeObject");
 
-        datajsonBefore["size"] =  _this.getFromMeasureScheme(component, datajsonBefore, "Size");
+        datajsonBefore["size"] =  bzchart.getFromMeasureScheme(storeObject, datajsonBefore, "Size");
 
         if (datajsonBefore.children != null && datajsonBefore.children.length > 0) {
             for (var i = 0; i < datajsonBefore.children.length; i++){

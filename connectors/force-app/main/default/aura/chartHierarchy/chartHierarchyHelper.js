@@ -327,9 +327,9 @@
                 // collapsed children are stored as d._children / expanded as d.children
                 // at present color is treated the same for parents and children
                 if(childLess(d)) {
-                    return _this.getFromMeasureScheme(component, d.data, "Color");                
+                    return bzchart.getFromMeasureScheme(storeObject, d.data, "Color");                
                 }
-                return _this.getFromMeasureScheme(component, d.data, "Color");                
+                return bzchart.getFromMeasureScheme(storeObject, d.data, "Color");                
             })
         }
           
@@ -362,7 +362,7 @@
                 if (showMeasureValues == true) {
                     // we don't have updates on size for tree hierarchies
                     if (bzchart.getStore (storeObject, "updateColor")) {
-                        var nodeValue = _this.getFromMeasureScheme(component, d.data, "Value");
+                        var nodeValue = bzchart.getFromMeasureScheme(storeObject, d.data, "Value");
                         return "(" + nodeValue.toLocaleString()  + ")" ;
                     }
                 }

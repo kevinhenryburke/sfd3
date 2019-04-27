@@ -50,7 +50,8 @@
 
     valueAccessor : function (component) {
         var _this = this;        
-        return (d) =>  _this.getFromMeasureScheme(component, d, "Value");
+        let storeObject = component.get("v.storeObject");
+        return (d) =>  bzchart.getFromMeasureScheme(storeObject, d, "Value");
     },
 
     renderCells : function (component, cells) {

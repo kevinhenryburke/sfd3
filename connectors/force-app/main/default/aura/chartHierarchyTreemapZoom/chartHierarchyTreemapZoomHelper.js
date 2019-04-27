@@ -74,7 +74,7 @@ In the zoom controller implement the following method dataPreprocess (started)
             .eachBefore(function (d) {
                 d.id = d.data.id;
             })
-            .sum((d) =>  _this.getFromMeasureScheme(component, d, "Value"))
+            .sum((d) =>  bzchart.getFromMeasureScheme(storeObject, d, "Value"))
             .sort(function (a, b) {
                 return b.value - a.value;
             });
