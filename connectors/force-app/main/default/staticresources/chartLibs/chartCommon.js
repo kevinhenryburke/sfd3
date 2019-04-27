@@ -61,12 +61,44 @@ function getFilterOpacity (storeObject, d) {
   return 1;
 }
 
+// create an invisible svg symbol to attach a popover to
+function createInfoLocation (storeObject) {
+  let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
+
+  var mdata = [0]; // random data value, not used
+
+  var width = bzchart.getStore (storeObject, "width");
+  // var popx = width - 10;
+  // var popy = 200;
+  var popx = width - 260;
+  var popy = 110;
+
+  var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
+  var infosvg = 
+  svg.selectAll('.symbol')
+      .data(mdata)
+      .enter()
+      .append('path')
+      .attr('transform',function(d,i) { return 'translate(' + popx + ',' + popy + ')';})
+      .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[i];}) )
+      .attr('id', function(d,i) { return "infolocation" + componentReference;})
+      .attr('visibility', "hidden") // white background to hide
+      .attr('class', function(d,i) { return "infolocation" + componentReference;});
+
+  var referenceSelector = ".infolocation" + componentReference;
+
+  bzchart.setStore (storeObject, "referenceSelector", referenceSelector ) ;
+  bzchart.setStore (storeObject, "infosvg", infosvg ) ;
+}
+
+
 exports.setStore = setStore;
 exports.getStore = getStore;
 exports.hasStore = hasStore;
 exports.getStoreWithDefault = getStoreWithDefault;
 exports.isFilteredOut = isFilteredOut;
 exports.getFilterOpacity = getFilterOpacity;
+exports.createInfoLocation = createInfoLocation;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

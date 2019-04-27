@@ -90,11 +90,9 @@
 
         var panelDisplayEmbeddedOuter = component.find("panelDisplayEmbeddedOuter"); // this should be ok as it's an internal search, need to prefix with a unique id is required outside of lightning context
         bzchart.setStore (storeObject, "panelDisplayEmbeddedOuter", panelDisplayEmbeddedOuter) ; 
-
     },
 
 	initializeGroups: function (component, datajson, primaryNodeId, showFilters, isInit) {
-
         var _this = this;
         let masterConfigObject = component.get("v.masterConfigObject");
         let storeObject = component.get("v.storeObject");
@@ -178,53 +176,16 @@
 
         if (allowPopover == true) {
             console.log("allowPopover set so create embedded component ... "); 
-            _this.createInfoLocation(component);
+            bzchart.createInfoLocation(storeObject);
             _this.createPopOverComponent(component);
         }
         else {
             console.log("allowPopover not set "); 
         }
-
-
     },
-
-    // create an invisible svg symbol to attach a popover to
-    createInfoLocation : function (component) {
-        var _this = this;
-        let storeObject = component.get("v.storeObject");
-        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
-
-        var mdata = [0]; // random data value, not used
-
-        var width = bzchart.getStore (storeObject, "width");
-        // var popx = width - 10;
-        // var popy = 200;
-        var popx = width - 260;
-        var popy = 110;
-
-        var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
-        var infosvg = 
-        svg.selectAll('.symbol')
-            .data(mdata)
-            .enter()
-            .append('path')
-            .attr('transform',function(d,i) { return 'translate(' + popx + ',' + popy + ')';})
-            .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[i];}) )
-            .attr('id', function(d,i) { return "infolocation" + componentReference;})
-            .attr('visibility', "hidden") // white background to hide
-            .attr('class', function(d,i) { return "infolocation" + componentReference;});
-
-        var referenceSelector = ".infolocation" + componentReference;
-
-        bzchart.setStore (storeObject, "referenceSelector", referenceSelector ) ;
-        bzchart.setStore (storeObject, "infosvg", infosvg ) ;
-    },
-
-
 
     // creates an informational popover
     createPopOverComponent : function (component) {
-        var _this = this;
         let storeObject = component.get("v.storeObject");
 
         // create an overlayLibrary that we can attach the popover to
@@ -287,7 +248,6 @@
 
 
     handleScaleChange: function(component,csf){
-        let masterConfigObject = component.get("v.masterConfigObject");
         let storeObject = component.get("v.storeObject");
         bzchart.setStore (storeObject, "ChartScaleFactor", csf) ;
 
@@ -297,7 +257,6 @@
 
     // TODO function appears in many places, try to consolidate
     publishPreppedEvent : function(component,preppedEvent){
-        var _this = this;
         let storeObject = component.get("v.storeObject");
         if (preppedEvent != null) {
             var event;
@@ -329,7 +288,6 @@
     // alternative would be to pass in a parameter for these nodes and push events only when the attribute is set
 
     restockCache : function(component) {
-        var _this = this;
         let storeObject = component.get("v.storeObject");
 
         var appEvents = bzchart.getStore (storeObject, "appEvents") ;
@@ -417,7 +375,6 @@
     },
     
     prepareEvent : function (component, topic, parameters) {
-        var _this = this;
         let storeObject = component.get("v.storeObject");
         var controllerId = bzchart.getStore (storeObject, "UserControllerComponentId") ;
         var eventType = bzutils.getEventTypeByTopic(topic);
