@@ -22,14 +22,12 @@
 
     dataPreprocess: function(component,event,helper){
         console.log("calling the aura:method chartHierarchyPack in chart");
+        let storeObject = component.get("v.storeObject");
 
         var args = event.getParam("arguments");
         var datajsonBefore = args.datajson;
 
-        helper.recursiveMap(component,datajsonBefore, true);
-
-
-
+        bzpack.recursiveMap(storeObject,datajsonBefore, true);
 
     }
 })

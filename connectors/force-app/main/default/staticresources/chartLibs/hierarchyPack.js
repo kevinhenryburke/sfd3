@@ -99,15 +99,70 @@ function update() {
     return nodes;
   }
 
-  console.log("loaded: bzpack  IIFE");
-  
+
+  function recursiveMap (storeObject,datajsonBefore, topCall){
+    datajsonBefore["size"] =  bzchart.getFromMeasureScheme(storeObject, datajsonBefore, "Size");
+
+    if (datajsonBefore.children != null && datajsonBefore.children.length > 0) {
+        for (var i = 0; i < datajsonBefore.children.length; i++){
+          bzpack.recursiveMap(storeObject, datajsonBefore.children[i], false);
+        } 
+    }
+    else {
+        return;
+    }
+  }
+
+  function getRootStructurePack (storeObject) {
+    return function(datajson) { 
+        var root = d3.hierarchy(datajson)
+        .sum((d) => d.size)
+        .sort((a, b) => b.value - a.value);
+
+        var diameter = Math.min(bzchart.getStore (storeObject, "width"),bzchart.getStore (storeObject, "height") ) ;  
+        var pack = d3.pack()
+        .size([diameter - 4, diameter - 4]);
+        return pack(root).descendants();
+    };
+}    
+
+function stylePack (storeObject, node) {
+  node.attr("transform", "translate(2,2)") // new
+      .attr("class", function(d) { return d.children ? "packbranch node" : "packleaf node"; })
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+
+  node.append("title")
+      .text(function(d) { return d.data.name + "\n" + d3.format(",d")(d.value); }); // this is the d3 value accessor which handles sum in hierarchy layout 
+
+  var noc = node.append("circle")
+      .attr("r", function(d) { return d.r; })
+      .style("fill-opacity", function(d, i) {
+          return bzchart.getFilterOpacity (storeObject, d.data);
+      });
+
+    noc.style("fill", function(d) { 
+        return bzchart.getFromMeasureScheme(storeObject, d.data, "Color");
+    })
+
+  node.filter(function(d) { return !d.children; }).append("text")
+      .attr("dy", "0.3em")
+      .text(function(d) { return d.data.name.substring(0, d.r / 3); });
+
+  console.log("stylePack exit");
+}
+
   // zoomable
   exports.update = update;
   exports.tick = tick;
   exports.color = color;
   exports.click = click;
   exports.flatten = flatten;
+  exports.recursiveMap = recursiveMap;
+  exports.getRootStructurePack = getRootStructurePack;
+  exports.stylePack = stylePack;
 
+  console.log("loaded: bzpack  IIFE");
+  
 
 })));
 
