@@ -57,6 +57,7 @@
     renderCells : function (component, cells) {
         var _this = this;
         let storeObject = component.get("v.storeObject");
+        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
 
 		console.log("chartHierarchyTreeMapHelper.renderCells enter");
 
@@ -70,7 +71,7 @@
             .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
                 console.log("chartHierarchyTreeMapHelper.mouseover enter");
                 bzchart.setStore (storeObject, "mouseoverRecordId", d.id ) ;
-                var preppedEvent = _this.nodeMouseover(component, d); 
+                let preppedEvent = variantsMixin.nodeMouseover(storeObject, d);
                 _this.publishPreppedEvent(component,preppedEvent);
             }))
         ;

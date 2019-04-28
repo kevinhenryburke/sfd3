@@ -4,6 +4,7 @@
         console.log("subhelper: enter initializeVisuals proper!");
         var _this = this;
         let storeObject = component.get("v.storeObject");
+        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
 
 		var datajson = bzchart.getStore (storeObject, "datajson") ;  
 		var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
@@ -45,7 +46,7 @@
             })
             .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
                 bzchart.setStore (storeObject, "mouseoverRecordId", d.id ) ;
-                var preppedEvent = _this.nodeMouseover(component, d); 
+                let preppedEvent = variantsMixin.nodeMouseover(storeObject, d);
                 _this.publishPreppedEvent(component,preppedEvent);
             }))
             .on('click', function(d) {
@@ -67,7 +68,6 @@
                 var primaryNodeId = d.id;
                 bzchart.setStore (storeObject, "primaryNodeId", primaryNodeId ) ;
 
-                let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
                 variantsMixin.refreshVisibility(storeObject);
                 var cc = component.getConcreteComponent();
                 cc.styleNodes();                 
@@ -181,7 +181,6 @@
         cc.styleNodes();                 
 
         console.log("apply node visibility");
-        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
         variantsMixin.refreshVisibility(storeObject);
 
         /* Above should be common to some degree - Below is forceSimulation specific */
@@ -618,56 +617,13 @@
     
         console.log("chartNetworkHelper.pathMouseout exit");
     },
-
-    
-    nodeMouseover : function (component, d) {
-        var _this = this;
-        console.log("chartNetworkHelper.nodeMouseover enter");
-
-        let storeObject = component.get("v.storeObject");
-        let componentType = bzchart.getStore (storeObject, "componentType") ;
-        console.log("nodeMouseover componentType = " + componentType);
-
-        if ((componentType == "network.connections") || (componentType == "network.timeline")) {
-            // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
-            var fields = d.fields;
-            var fieldsLength = fields.length;
-
-            var displayArray = [d.name];
-            for (var i=0; i<fieldsLength;i++) {
-                if (fields[i].fieldType == "STRING" && fields[i].role != "name") {
-                    displayArray.push(fields[i].retrievedValue);
-                }
-            }
-
-            var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + displayArray[0] ;
-            textcontent += '</tspan>'; 
-            textcontent += '<tspan x="10" dy="15">' + displayArray[1];
-            if (displayArray.length > 2) {
-                textcontent += ' (' + displayArray[2] + ')';
-            }
-            textcontent += '</tspan>';
-
-            var tselect =  "t" + d.id;
-            var t = d3.select("#" + tselect);
-            t.html(textcontent);
-
-            var sselect =  "s" + d.id;
-            var s = d3.select("#" + sselect);
-            s.html(textcontent);
-
-            var publishParameters = {"data" : d, "parent" : null};
-            var preppedEvent = bzchart.prepareEvent(storeObject, "ChartMouseOver", publishParameters);
-            return preppedEvent;
-        }
-    },
     
     nodeMouseout : function (component, d) {
         console.log("chartNetworkHelper.nodeMouseout enter.");
 
         let storeObject = component.get("v.storeObject");
         let componentType = bzchart.getStore (storeObject, "componentType") ;
-        console.log("nodeMouseover componentType = " + componentType);
+        console.log("nodeMouseout componentType = " + componentType);
 
         if ((componentType == "network.connections") || (componentType == "network.timeline")) {
             // revert back to just the name

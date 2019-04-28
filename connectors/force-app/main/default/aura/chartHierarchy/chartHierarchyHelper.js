@@ -4,6 +4,7 @@
 		console.log("subhelper: enter initializeVisuals proper structure");
 		var _this = this;
         let storeObject = component.get("v.storeObject");
+        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
 
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
@@ -62,7 +63,7 @@
             bzctree.openPathsBy(storeObject, highlightId, "Id");
         }
 
-        var preppedEvent = _this.nodeMouseover(component, nodeToPublish); 
+        let preppedEvent = variantsMixin.nodeMouseover(storeObject, nodeToPublish);
         _this.publishPreppedEvent(component,preppedEvent);
         _this.updatePopoverDirectly(component, preppedEvent);
 
@@ -72,6 +73,7 @@
     update : function(component, nodeGroup, pathGroup, source, makeSourceRoot) {
 		var _this = this;
         let storeObject = component.get("v.storeObject");
+        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;
 
         var nodes;
@@ -179,7 +181,7 @@
             .on('click', click)
 			.on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
 				bzchart.setStore (storeObject, "mouseoverRecordId", d.id ) ;
-                var preppedEvent = _this.nodeMouseover(component, d); 
+                let preppedEvent = variantsMixin.nodeMouseover(storeObject, d);
                 _this.publishPreppedEvent(component,preppedEvent);
                 if (d.depth <= 1) { // root or first level
                     _this.restockCache(component);
@@ -517,19 +519,6 @@
         }
     },
 
-    nodeMouseover : function (component, d) {
-        let storeObject = component.get("v.storeObject");
-        console.log("chartHierarchyHelper.nodeMouseover enter");
-        var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
-        console.log(publishParameters);
-        
-        var preppedEvent = bzchart.prepareEvent(storeObject, "ChartMouseOver", publishParameters);
-        preppedEvent.eventType = "Cache";
-    
-        return preppedEvent;
-        
-    },
-    
     nodeMouseout : function (component, d) {
         let storeObject = component.get("v.storeObject");
 

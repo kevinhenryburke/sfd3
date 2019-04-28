@@ -53,6 +53,7 @@ In the zoom controller implement the following method dataPreprocess (started)
         console.log("chartHierarchyTreemapZoomHelper.initializeVisuals enter");
         var _this = this;
         let storeObject = component.get("v.storeObject");
+        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
         var treemap;
@@ -281,16 +282,11 @@ When you click to drill down the same structure is recreated started at the next
 
             g.selectAll("rect") // KB this is selecting all rects, can use rect.parent to select all the parents
                 .on('mouseover', $A.getCallback(function (d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
-                    console.log("chartHierarchyTreemapZoomHelper.mouseover enter", d);
-                    console.log("chartHierarchyTreemapZoomHelper.mouseover enter id ", d.id);
-                    console.log("chartHierarchyTreemapZoomHelper.mouseover enter component ", component);
                     bzchart.setStore (storeObject, "mouseoverRecordId", d.id);
-                    var preppedEvent = _this.nodeMouseover(component, d);
+                    let preppedEvent = variantsMixin.nodeMouseover(storeObject, d);
                     _this.publishPreppedEvent(component, preppedEvent);
                 }))
             ;
-
-
 
             function transitionHigher(d) {
                 console.log("xxxxx: transitionHigher before: " + grandparentDepthInData);

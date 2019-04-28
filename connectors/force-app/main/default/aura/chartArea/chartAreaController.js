@@ -161,11 +161,11 @@
                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                  
                }
                if (componentType == 'hierarchy.treemapzoom') {
-                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin);        
+                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartHierarchyMixin.OverrideMixin);        
                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
                }
                if (componentType == 'hierarchy.treemap') {
-                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin);        
+                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartHierarchyMixin.OverrideMixin);        
                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
                }
                if (componentType == 'network.connections') {

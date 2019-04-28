@@ -194,6 +194,7 @@
             });
     }
 
+
     exports.nestChildren = nestChildren;
     exports.picklistNest = picklistNest;
     exports.searchTree = searchTree;
@@ -220,7 +221,24 @@ console.log("loading: chartHierarchyMixin IIFE");
 const OverrideMixin = {
     refreshVisibility(storeObject){
         bzhierarchy.refreshVisibilityHelper(storeObject);
+    },
+
+    nodeMouseover (storeObject, d) {
+        var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
+        var preppedEvent = bzchart.prepareEvent(storeObject, "ChartMouseOver", publishParameters);
+        preppedEvent.eventType = "Cache";    
+        return preppedEvent;        
+    },
+
+    nodeMouseout (storeObject, d) {
+        var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
+        var preppedEvent = bzchart.prepareEvent(storeObject, "ChartMouseOut", publishParameters);
+        if (d.depth > 1) {
+            preppedEvent.eventType = "Cache";
+        } 
+        return preppedEvent;
     }
+
 }
 
 exports.OverrideMixin = OverrideMixin;

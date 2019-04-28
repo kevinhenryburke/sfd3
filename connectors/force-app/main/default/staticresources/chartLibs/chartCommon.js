@@ -282,7 +282,10 @@ const DefaultMixin = {
   },
   refreshVisibility(storeObject){
   },
-
+  nodeMouseover(storeObject, d) {
+  },
+  nodeMouseout(storeObject, d) {
+  }
 }
 
 exports.DefaultMixin = DefaultMixin;

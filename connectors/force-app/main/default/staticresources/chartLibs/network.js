@@ -145,6 +145,68 @@ const OverrideMixin = {
   refreshVisibility(storeObject){
     bznetwork.refreshVisibilityHelper(storeObject);
   },
+
+  nodeMouseover (storeObject, d) {
+    let componentType = bzchart.getStore (storeObject, "componentType") ;
+
+    if ((componentType == "network.connections") || (componentType == "network.timeline")) {
+        // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
+        var fields = d.fields;
+        var fieldsLength = fields.length;
+
+        var displayArray = [d.name];
+        for (var i=0; i<fieldsLength;i++) {
+            if (fields[i].fieldType == "STRING" && fields[i].role != "name") {
+                displayArray.push(fields[i].retrievedValue);
+            }
+        }
+
+        var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + displayArray[0] ;
+        textcontent += '</tspan>'; 
+        textcontent += '<tspan x="10" dy="15">' + displayArray[1];
+        if (displayArray.length > 2) {
+            textcontent += ' (' + displayArray[2] + ')';
+        }
+        textcontent += '</tspan>';
+
+        var tselect =  "t" + d.id;
+        var t = d3.select("#" + tselect);
+        t.html(textcontent);
+
+        var sselect =  "s" + d.id;
+        var s = d3.select("#" + sselect);
+        s.html(textcontent);
+
+        var publishParameters = {"data" : d, "parent" : null};
+        var preppedEvent = bzchart.prepareEvent(storeObject, "ChartMouseOver", publishParameters);
+        return preppedEvent;
+    }
+  },
+
+  nodeMouseout : function (storeObject, d) {
+    console.log("nodeMouseout network mixin enter");
+
+    let componentType = bzchart.getStore (storeObject, "componentType") ;
+    console.log("nodeMouseout componentType = " + componentType);
+
+    if ((componentType == "network.connections") || (componentType == "network.timeline")) {
+        // revert back to just the name
+        // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
+        var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
+        textcontent += '</tspan>'; 
+
+        var tselect =  "t" + d.id;
+        var sselect =  "s" + d.id;
+            
+        var t = d3.select("#" + tselect);                    
+        t.html(textcontent);
+
+        var s = d3.select("#" + sselect);
+        s.html(textcontent);
+    }
+  }
+
+
 }
 
 exports.OverrideMixin = OverrideMixin;
