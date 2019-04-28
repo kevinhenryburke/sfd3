@@ -531,7 +531,6 @@
     },
     
     nodeMouseout : function (component, d) {
-        var _this = this;
         let storeObject = component.get("v.storeObject");
 
         console.log("chartHierarchyHelper.nodeMouseout enter.");
