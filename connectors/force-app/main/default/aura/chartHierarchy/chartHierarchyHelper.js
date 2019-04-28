@@ -482,7 +482,7 @@
                 "ChartScaleFactor" : newcsf
             }    
 
-            var preppedEvent = _this.prepareEvent(component, "ReScale", eventParameters);
+            var preppedEvent = bzchart.prepareEvent(storeObject, "ReScale", eventParameters);
             preppedEvent.eventType = "Cache";
             _this.publishPreppedEvent (component,preppedEvent);    
         }
@@ -518,46 +518,13 @@
     },
 
     nodeMouseover : function (component, d) {
-        var _this = this;
+        let storeObject = component.get("v.storeObject");
         console.log("chartHierarchyHelper.nodeMouseover enter");
         var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
         console.log(publishParameters);
         
-        var preppedEvent = _this.prepareEvent(component, "ChartMouseOver", publishParameters);
+        var preppedEvent = bzchart.prepareEvent(storeObject, "ChartMouseOver", publishParameters);
         preppedEvent.eventType = "Cache";
-
-        // attempt to get the lighting info panel to follow the highlight.        
-        // var infosvg = bzchart.getStore (storeObject, "infosvg") ;
-        // var dx = d.x;
-        // var dy = d.y;
-        // console.log("popover:" + dy + " / " + dx);
-        // infosvg.attr('transform',function(d,i) { return 'translate(' + dy + ',' + dx + ')';})
-
-        // transitions fine but the lightning component only moves on scroll???
-        // infosvg.transition()
-        // .duration(1000)
-        // .attr("transform", function(d) { 
-        // var t = "translate(" + dy  + "," + dx + ")";
-        //     return t;
-        // });
-
-        // if (dy > 500) {
-        // infosvg.transition()
-        // .duration(100)
-        // .attr("transform", function(d) { 
-        // var t = "translate(" + 50  + "," + dx + ")";
-        //     return t;
-        // });    
-        // }
-
-        // if (dy < 500) {
-        // infosvg.transition()
-        // .duration(100)
-        // .attr("transform", function(d) { 
-        // var t = "translate(" + 600  + "," + dx + ")";
-        //     return t;
-        // });    
-        // }
     
         return preppedEvent;
         
@@ -565,10 +532,12 @@
     
     nodeMouseout : function (component, d) {
         var _this = this;
+        let storeObject = component.get("v.storeObject");
+
         console.log("chartHierarchyHelper.nodeMouseout enter.");
         var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
         
-        var preppedEvent = _this.prepareEvent(component, "ChartMouseOut", publishParameters);
+        var preppedEvent = bzchart.prepareEvent(storeObject, "ChartMouseOut", publishParameters);
         if (d.depth > 1) {
             preppedEvent.eventType = "Cache";
         } 

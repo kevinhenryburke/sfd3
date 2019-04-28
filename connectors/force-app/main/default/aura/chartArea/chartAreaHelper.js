@@ -76,7 +76,7 @@
         var eventParameters = { 
             "componentReference" : componentReference
         }    
-        var preppedEvent = _this.prepareEvent(component, "ChartRendered", eventParameters);
+        var preppedEvent = bzchart.prepareEvent(storeObject, "ChartRendered", eventParameters);
         _this.publishPreppedEvent(component,preppedEvent);
 
         console.log("chartArea: ChartRendered event published ");
@@ -368,11 +368,6 @@
         }
         return hash;
     },  
-    
-    hasStore : function (component, key) {
-        var allkeys = component.get("v.storeObject");
-        return Object.keys(allkeys).includes(key);
-    },
     
     prepareEvent : function (component, topic, parameters) {
         let storeObject = component.get("v.storeObject");

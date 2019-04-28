@@ -229,6 +229,16 @@ function getFirstColorSchemeLegend (storeObject, currentColorLabel) {
   }
 }
 
+function prepareEvent (storeObject, topic, parameters) {
+  var controllerId = bzchart.getStore (storeObject, "UserControllerComponentId") ;
+  var eventType = bzutils.getEventTypeByTopic(topic);
+  return {
+      "eventType" : eventType ,
+      "topic" : topic,
+      "parameters" : parameters,
+      "controllerId" : controllerId
+  }
+}
 
 exports.setStore = setStore;
 exports.getStore = getStore;
@@ -241,6 +251,8 @@ exports.getDefaultValueForReturnType = getDefaultValueForReturnType;
 exports.getStringValue = getStringValue;
 exports.getFromMeasureScheme = getFromMeasureScheme;
 exports.getFirstColorSchemeLegend = getFirstColorSchemeLegend;
+exports.prepareEvent = prepareEvent;
+
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

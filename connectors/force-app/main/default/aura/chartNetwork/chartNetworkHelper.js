@@ -542,14 +542,12 @@
         console.log("nodeDoubleClick componentType = " + componentType);
 
         if ((componentType ==  "network.timeline") || (componentType ==  "network.connections")) {
-
-
             // TODO this will need substantial enriching - e.g. pass current measure and whether to add nodes or to refresh etc.
             var cleanId = bzutils.removeComponentRef(componentReference, primaryNodeId);
             var eventParameters = {"primaryNodeId" : cleanId, "componentReference" : componentReference};
             console.log("nodeDoubleClick exit.");
         
-            var preppedEvent = _this.prepareEvent(component, "InitiateRefreshChart", eventParameters);
+            var preppedEvent = bzchart.prepareEvent(storeObject, "InitiateRefreshChart", eventParameters);
             return preppedEvent;        
 
         }
@@ -659,7 +657,7 @@
             s.html(textcontent);
 
             var publishParameters = {"data" : d, "parent" : null};
-            var preppedEvent = _this.prepareEvent(component, "ChartMouseOver", publishParameters);
+            var preppedEvent = bzchart.prepareEvent(storeObject, "ChartMouseOver", publishParameters);
             return preppedEvent;
         }
     },

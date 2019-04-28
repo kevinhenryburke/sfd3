@@ -84,7 +84,7 @@
             "ChartScaleFactor" : csf
         }    
 
-        var preppedEvent = helper.prepareEvent(component, "ReScale", eventParameters);
+        var preppedEvent = bzchart.prepareEvent(storeObject, "ReScale", eventParameters);
         helper.publishPreppedEvent(component,preppedEvent);
     },
 
