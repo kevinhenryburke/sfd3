@@ -7,7 +7,7 @@
         let datajson = bzchart.getStore (storeObject, "datajson") ;  
 		let nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
 
-        let nodeDataSetFunction = _this.getRootStructureTreeMap (component); 
+        let nodeDataSetFunction = _this.getRootStructureTreeMap (storeObject); 
 
         nodeDataSetFunction(datajson);
 
@@ -21,11 +21,8 @@
         _this.renderCells(component, cells);
     },
 
-    getRootStructureTreeMap : function (component) {
-        console.log("chartHierarchyTreeMapHelper.getRootStructureTreeMap");
-        
-        var _this = this;
-        let storeObject = component.get("v.storeObject");
+    // REFACTOR - create treemapzoom chartLib and move to there.
+    getRootStructureTreeMap : function (storeObject) {
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
         return function(datajson) { 
@@ -37,7 +34,7 @@
                 .padding(1);
 
             var root = d3.hierarchy(datajson) // <-B
-                .sum(_this.valueAccessor(component))
+                .sum((d) =>  bzchart.getFromMeasureScheme(storeObject, d, "Value"))
                 .sort((a, b) => b.value - a.value);
 
             bzchart.setStore (storeObject, "root", root) ;  
@@ -47,12 +44,6 @@
             return treemap(root);
         };
     },        
-
-    valueAccessor : function (component) {
-        var _this = this;        
-        let storeObject = component.get("v.storeObject");
-        return (d) =>  bzchart.getFromMeasureScheme(storeObject, d, "Value");
-    },
 
     renderCells : function (component, cells) {
         var _this = this;
