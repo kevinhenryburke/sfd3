@@ -71,7 +71,6 @@
 
     update : function(component, nodeGroup, pathGroup, source, makeSourceRoot) {
 		var _this = this;
-        let masterConfigObject = component.get("v.masterConfigObject");
         let storeObject = component.get("v.storeObject");
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;
 
@@ -352,7 +351,7 @@
                 return textAnchor;
             })
             .style("font", function(d) {
-                return bzctree.getFontSizePX(masterConfigObject) + "px sans-serif";
+                return bzctree.getFontSizePX(storeObject) + "px sans-serif";
             })
             .style("opacity", function(d) {
                 return bzchart.getFilterOpacity (storeObject, d.data);
