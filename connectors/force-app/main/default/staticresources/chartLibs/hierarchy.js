@@ -231,7 +231,6 @@ const OverrideMixin = {
     },
 
     nodeMouseout (storeObject, d) {
-        console.log("nodeMouseout hierarchy mixin enter");
         var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
         var preppedEvent = bzchart.prepareEvent(storeObject, "ChartMouseOut", publishParameters);
         if (d.depth > 1) {
