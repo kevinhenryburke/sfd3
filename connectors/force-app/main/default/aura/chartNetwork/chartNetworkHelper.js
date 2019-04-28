@@ -40,7 +40,7 @@
                 var retainNodeDetailsMouseOut = bzchart.getStore (storeObject, "retainNodeDetailsMouseOut" ) ;
                 if (!retainNodeDetailsMouseOut)
                 {
-                    var preppedEvent = _this.nodeMouseout(component, d); 
+                    let preppedEvent = variantsMixin.nodeMouseout(storeObject, d);
                     _this.publishPreppedEvent(component,preppedEvent);
                 }
             })
@@ -617,29 +617,5 @@
     
         console.log("chartNetworkHelper.pathMouseout exit");
     },
-    
-    nodeMouseout : function (component, d) {
-        console.log("chartNetworkHelper.nodeMouseout enter.");
-
-        let storeObject = component.get("v.storeObject");
-        let componentType = bzchart.getStore (storeObject, "componentType") ;
-        console.log("nodeMouseout componentType = " + componentType);
-
-        if ((componentType == "network.connections") || (componentType == "network.timeline")) {
-            // revert back to just the name
-            // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
-            var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
-            textcontent += '</tspan>'; 
-
-            var tselect =  "t" + d.id;
-            var sselect =  "s" + d.id;
-                
-            var t = d3.select("#" + tselect);                    
-            t.html(textcontent);
-
-            var s = d3.select("#" + sselect);
-            s.html(textcontent);
-        }
-    }
-    
+        
 })

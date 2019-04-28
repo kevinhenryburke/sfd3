@@ -147,6 +147,7 @@ const OverrideMixin = {
   },
 
   nodeMouseover (storeObject, d) {
+    console.log("nodeMouseover network mixin enter");
     let componentType = bzchart.getStore (storeObject, "componentType") ;
 
     if ((componentType == "network.connections") || (componentType == "network.timeline")) {
@@ -184,28 +185,20 @@ const OverrideMixin = {
   },
 
   nodeMouseout : function (storeObject, d) {
-    console.log("nodeMouseout network mixin enter");
+      // revert back to just the name
+      // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
+      var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
+      textcontent += '</tspan>'; 
 
-    let componentType = bzchart.getStore (storeObject, "componentType") ;
-    console.log("nodeMouseout componentType = " + componentType);
+      var tselect =  "t" + d.id;
+      var sselect =  "s" + d.id;
+          
+      var t = d3.select("#" + tselect);                    
+      t.html(textcontent);
 
-    if ((componentType == "network.connections") || (componentType == "network.timeline")) {
-        // revert back to just the name
-        // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
-        var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
-        textcontent += '</tspan>'; 
-
-        var tselect =  "t" + d.id;
-        var sselect =  "s" + d.id;
-            
-        var t = d3.select("#" + tselect);                    
-        t.html(textcontent);
-
-        var s = d3.select("#" + sselect);
-        s.html(textcontent);
-    }
+      var s = d3.select("#" + sselect);
+      s.html(textcontent);
   }
-
 
 }
 

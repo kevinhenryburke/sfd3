@@ -196,12 +196,10 @@
                 // var tselect =  "t" + d.id;
                 // var s = d3.select("#" + tselect);
                 // s.html(textcontent);
-
-
             }))
 			.on('mouseout', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
 				bzchart.setStore (storeObject, "mouseoutRecordId", d.id ) ;
-                var preppedEvent = _this.nodeMouseout(component, d); 
+                let preppedEvent = variantsMixin.nodeMouseout(storeObject, d);
                 _this.publishPreppedEvent(component,preppedEvent);
             }))
 			;
@@ -518,19 +516,5 @@
             bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
         }
     },
-
-    nodeMouseout : function (component, d) {
-        let storeObject = component.get("v.storeObject");
-
-        console.log("chartHierarchyHelper.nodeMouseout enter.");
-        var publishParameters = {"data" : d.data, "parent" : d.parent ? d.parent.data : null};
-        
-        var preppedEvent = bzchart.prepareEvent(storeObject, "ChartMouseOut", publishParameters);
-        if (d.depth > 1) {
-            preppedEvent.eventType = "Cache";
-        } 
-        return preppedEvent;
-    },
-
 
 })
