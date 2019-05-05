@@ -48,9 +48,19 @@ function publishPreppedEventBase (pubTypeObject, preppedEvent, auraApplicationEv
     }
 }
 
+function callFromContainerWrap (popoverPanelFirst, preppedEvent){
+    let tpc = {
+        "topic" : preppedEvent.topic,
+        "parameters" : preppedEvent.parameters,
+        "controller" : preppedEvent.controllerId,
+    };
+    popoverPanelFirst.callFromContainer(tpc);    
+}
+
 exports.publishPreppedEvent = publishPreppedEvent;
 exports.createStoreObjectForPublication = createStoreObjectForPublication;
 exports.publishPreppedEventBase = publishPreppedEventBase;
+exports.callFromContainerWrap = callFromContainerWrap;
 
 
 Object.defineProperty(exports, '__esModule', { value: true });

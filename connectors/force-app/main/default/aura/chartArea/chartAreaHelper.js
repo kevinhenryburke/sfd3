@@ -12,8 +12,6 @@
         bzchart.setStore (storeObject, "componentType", component.get("v.componentType") ) ;
         bzchart.setStore (storeObject, "componentEvent", component.getEvent("evt_bzc")) ;        
         bzchart.setStore (storeObject, "defaultEventType", component.get("v.defaultEventType")) ;        
-
-        console.log("xxxxx: defaultEventType: ", bzchart.getStore (storeObject, "defaultEventType"));
         bzchart.setStore (storeObject, "appEvents",  []) ;
 
         bzchart.setStore (storeObject, "UserComponentId", component.get("v.UserComponentId") ) ;
@@ -100,10 +98,6 @@
         let storeObject = component.get("v.storeObject");
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
-        console.log("initializeGroups: tempo: componentReference:" + componentReference, masterConfigObject);
-
-
-        console.log("init:initializing initializeGroups with primaryNodeId: " + primaryNodeId);
         
         if (isInit) {
             bzutils.initializeAddComponentRef(componentReference, datajson);
@@ -173,16 +167,15 @@
         }
         bzchart.setStore (storeObject, "legendSymbolGroup", legendSymbolGroup ) ;
 
-        var allowPopover = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","allowPopover");         
+        let allowPopover = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","allowPopover");         
+
         if (allowPopover == null) {allowPopover = false;}
+        bzchart.setStore (storeObject, "allowPopover", allowPopover ) ;
 
         if (allowPopover == true) {
             console.log("allowPopover set so create embedded component ... "); 
             bzchart.createInfoLocation(storeObject);
             _this.createPopOverComponent(component);
-        }
-        else {
-            console.log("allowPopover not set "); 
         }
     },
 
@@ -217,6 +210,7 @@
                     function(newComponent, status, errorMessage){
 
                         component.set("v.popoverPanel", newComponent);
+                        bzchart.setStore (storeObject, "popoverPanel", newComponent) ; 
                         
                         var referenceSelector = bzchart.getStore (storeObject, "referenceSelector");
                         console.log("createPopOverComponent: createComponent callback: " + referenceSelector);
@@ -292,26 +286,20 @@
      not via a component event which is till not recognize
     */
 
-    updatePopoverDirectly : function(component, preppedEvent) {
-        var _this = this;
+    updatePopoverDirectly : function(storeObject, preppedEvent) {
         console.log("chartArea: updatePopoverDirectly enter");
-        let masterConfigObject = component.get("v.masterConfigObject");
-
-        var allowPopover = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","allowPopover");         
+        let allowPopover = bzchart.getStore (storeObject, "allowPopover");         
+        console.log("chartArea: updatePopoverDirectly allowPopover", allowPopover);
         if (allowPopover == null) {allowPopover = false;}
 
         if (allowPopover == true) {
-            var defaultEventType = component.get("v.defaultEventType");
+            let defaultEventType = bzchart.getStore (storeObject, "defaultEventType");
 
             if (defaultEventType == "Component") {
                 console.log("popover: invoking by direct method call");
-                var popoverPanel = component.get("v.popoverPanel");
-                var tpc = {
-                    "topic" : preppedEvent.topic,
-                    "parameters" : preppedEvent.parameters,
-                    "controller" : preppedEvent.controllerId,
-                };
-                popoverPanel[0].callFromContainer(tpc);    
+                let popoverPanel = bzchart.getStore (storeObject, "popoverPanel");
+                let popoverPanelFirst = popoverPanel[0];
+                bzaura.callFromContainerWrap (popoverPanelFirst, preppedEvent);
             }
         }
     },
