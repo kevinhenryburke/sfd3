@@ -193,6 +193,8 @@ function hasMasterParam(config, ...args) { // Not currently used
 //     }
 // }
 
+
+// This may need to move to aura specific js file
 function publishEventHelper(event, topic, parameters, controller) {
     console.log("publishEventHelper: controller: " + controller + " topic: " + topic + " getType: " + event.getType(), parameters );
 
