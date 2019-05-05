@@ -9,7 +9,14 @@
         var controller = parentUserComponentId; 
 
         var preppedEvent = helper.prepareEvent(topic, parameters, controller);
-        helper.publishPreppedEvent(component,preppedEvent);
+
+        let pubTypeObject = bzaura.createStoreObjectForPublication(
+            component.get("v.defaultEventType"),
+            component.getEvent("evt_bzc"),
+            null
+        );
+
+        bzaura.publishPreppedEventBase (pubTypeObject, preppedEvent, $A.get("e.c:evt_sfd3"));
 
     },
  })

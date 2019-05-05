@@ -82,7 +82,13 @@
                     console.log("publish InitializeData from OnInit method")
                     
                     var preppedEvent = helper.prepareEvent("InitializeData", configEventParameters, controllerId);
-                    helper.publishPreppedEvent(component,preppedEvent);
+
+                    let pubTypeObject = bzaura.createStoreObjectForPublication(
+                        component.get("v.defaultEventType"),
+                        component.getEvent("evt_bzc"),
+                        null
+                    );            
+                    bzaura.publishPreppedEventBase (pubTypeObject, preppedEvent, $A.get("e.c:evt_sfd3"));
                 }
                 component.set("v.initEventsQueue",[]);
 
@@ -186,8 +192,14 @@
                 console.log("publish InitializeData from ChartRendered Event")
 
                 var preppedEvent = helper.prepareEvent("InitializeData", configEventParameters, controllerId);
-                helper.publishPreppedEvent(component,preppedEvent);
-            
+
+                let pubTypeObject = bzaura.createStoreObjectForPublication(
+                    component.get("v.defaultEventType"),
+                    component.getEvent("evt_bzc"),
+                    null
+                );            
+                bzaura.publishPreppedEventBase (pubTypeObject, preppedEvent, $A.get("e.c:evt_sfd3"));
+
                 // clear the queue
                 component.set("v.initEventsQueue",[]);
 
@@ -347,7 +359,12 @@
 
             if (counter < 6) {
                 var preppedEvent = helper.prepareEvent("RefreshData", configEventParameters, controllerId);
-                helper.publishPreppedEvent(component,preppedEvent);
+                let pubTypeObject = bzaura.createStoreObjectForPublication(
+                    component.get("v.defaultEventType"),
+                    component.getEvent("evt_bzc"),
+                    null
+                );            
+                bzaura.publishPreppedEventBase (pubTypeObject, preppedEvent, $A.get("e.c:evt_sfd3"));
                 d.setMonth(d.getMonth() + 1);    
             }
             else {

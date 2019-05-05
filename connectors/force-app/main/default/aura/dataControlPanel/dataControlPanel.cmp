@@ -1,5 +1,9 @@
 <aura:component implements="force:hasRecordId,forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" controller="DataExtract"  access="global">
 
+  <ltng:require 
+  scripts="{!join(',',$Resource.chartLibs + '/auraSpecific.js',$Resource.chartLibs + '/utils.js')}"
+  />
+
   <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
 
   <!--declare event fires and hendlers-->  

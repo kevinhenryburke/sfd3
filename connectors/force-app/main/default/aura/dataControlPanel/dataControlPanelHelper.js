@@ -230,8 +230,13 @@
                 //publish to this component
                 var controllerId = component.get("v.UserComponentId");
                 var preppedEvent = _this.prepareEvent("RefreshData", configEventParameters, controllerId);
-                _this.publishPreppedEvent(component,preppedEvent);
-            
+                let pubTypeObject = bzaura.createStoreObjectForPublication(
+                    component.get("v.defaultEventType"),
+                    component.getEvent("evt_bzc"),
+                    null
+                );            
+                bzaura.publishPreppedEventBase (pubTypeObject, preppedEvent, $A.get("e.c:evt_sfd3"));
+        
             }
         }))
         $A.enqueueAction(action);        
@@ -263,7 +268,12 @@
         //publish to this component
         var controllerId = component.get("v.UserComponentId");
         var preppedEvent = _this.prepareEvent("SearchChart", configEventParameters, controllerId);
-        _this.publishPreppedEvent(component,preppedEvent);
+        let pubTypeObject = bzaura.createStoreObjectForPublication(
+            component.get("v.defaultEventType"),
+            component.getEvent("evt_bzc"),
+            null
+        );            
+        bzaura.publishPreppedEventBase (pubTypeObject, preppedEvent, $A.get("e.c:evt_sfd3"));
 
     },
 
@@ -287,8 +297,13 @@
             component.set("v.currentLevels", currentLevels);
             var controllerId = component.get("v.UserComponentId");
             var preppedEvent = _this.prepareEvent("ShowLevelsMore", {"levels" : currentLevels}, controllerId);
-            _this.publishPreppedEvent(component,preppedEvent);
-        }
+            let pubTypeObject = bzaura.createStoreObjectForPublication(
+                component.get("v.defaultEventType"),
+                component.getEvent("evt_bzc"),
+                null
+            );            
+            bzaura.publishPreppedEventBase (pubTypeObject, preppedEvent, $A.get("e.c:evt_sfd3"));
+}
     },
     
     decreaseLevels : function(component) {
@@ -301,8 +316,13 @@
             component.set("v.currentLevels", currentLevels);
             var controllerId = component.get("v.UserComponentId");
             var preppedEvent = _this.prepareEvent("ShowLevelsFewer", {"levels" : currentLevels}, controllerId);
-            _this.publishPreppedEvent(component,preppedEvent);
-        }
+            let pubTypeObject = bzaura.createStoreObjectForPublication(
+                component.get("v.defaultEventType"),
+                component.getEvent("evt_bzc"),
+                null
+            );            
+            bzaura.publishPreppedEventBase (pubTypeObject, preppedEvent, $A.get("e.c:evt_sfd3"));
+}
     },
     
     /* BUTTON methods */
@@ -362,16 +382,26 @@
         component.set("v.panelCurrentColor", currentColor);
         var controllerId = component.get("v.UserComponentId");
         var preppedEvent = _this.prepareEvent("SetColor", {"measure" : currentColor }, controllerId);
-        _this.publishPreppedEvent(component,preppedEvent);
-    },
+        let pubTypeObject = bzaura.createStoreObjectForPublication(
+            component.get("v.defaultEventType"),
+            component.getEvent("evt_bzc"),
+            null
+        );            
+        bzaura.publishPreppedEventBase (pubTypeObject, preppedEvent, $A.get("e.c:evt_sfd3"));
+},
 
     setMenuSize : function(component, currentSize) {
         var _this = this;
         component.set("v.panelCurrentSize", currentSize);
         var controllerId = component.get("v.UserComponentId");
         var preppedEvent = _this.prepareEvent("SetSize", {"size" : currentSize }, controllerId);
-        _this.publishPreppedEvent(component,preppedEvent);
-    },
+        let pubTypeObject = bzaura.createStoreObjectForPublication(
+            component.get("v.defaultEventType"),
+            component.getEvent("evt_bzc"),
+            null
+        );            
+        bzaura.publishPreppedEventBase (pubTypeObject, preppedEvent, $A.get("e.c:evt_sfd3"));
+},
 
 
 
@@ -381,8 +411,13 @@
         var filterState = newClickedState ? "Show" : "Hide"; // if before it was show then now it is hide
 
         var preppedEvent = _this.prepareEvent("SetFilter", {"filterState" : filterState, "filterType" : thisType }, controllerId);
-        _this.publishPreppedEvent(component,preppedEvent);
-    },
+        let pubTypeObject = bzaura.createStoreObjectForPublication(
+            component.get("v.defaultEventType"),
+            component.getEvent("evt_bzc"),
+            null
+        );            
+        bzaura.publishPreppedEventBase (pubTypeObject, preppedEvent, $A.get("e.c:evt_sfd3"));
+},
 
     // TODO TODO TODO - come back, not even half finished.
     
@@ -469,34 +504,6 @@
         var queryLevelIds = component.get("v.queryLevelIds");     
         queryLevelIds[levelIndex].push(thisid);
         component.set("v.queryLevelIds", queryLevelIds); 
-    },
-
-    // TODO function appears in many places, try to consolidate
-    publishPreppedEvent : function(component,preppedEvent){
-        var _this = this;
-        if (preppedEvent != null) {
-            var event;
-            console.log("publishPreppedEvent: enter "+ preppedEvent.topic + " and " + preppedEvent.eventType);
-
-            if (preppedEvent.eventType != null) {
-                // go with preset value
-                console.log("publishPreppedEvent: override eventType: " + preppedEvent.eventType);
-            }
-            else {
-                preppedEvent.eventType = component.get("v.defaultEventType");
-                console.log("publishPreppedEvent: use default eventType: " + preppedEvent.eventType);
-            }
-
-            if (preppedEvent.eventType == "Component"){
-                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
-                event = component.getEvent("evt_bzc");
-            }
-            if (preppedEvent.eventType == "Application"){
-                console.log("publishPreppedEvent: eventType used will be: " +  preppedEvent.eventType);
-                event = $A.get("e.c:evt_sfd3");
-            }
-            bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
-        }
     },
 
     prepareEvent : function (topic, parameters, controllerId) {

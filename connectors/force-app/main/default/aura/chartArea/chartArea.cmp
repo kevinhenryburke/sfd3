@@ -2,42 +2,42 @@
 
 <aura:if isTrue="{!v.componentType == 'hierarchy.ctree'}">
   <ltng:require 
-  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.d3js413,$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/hierarchy.js',$Resource.chartLibs + '/hierarchyCtree.js')}"
+  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/hierarchy.js',$Resource.chartLibs + '/hierarchyCtree.js')}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
   />
 </aura:if>
 
 <aura:if isTrue="{!v.componentType == 'hierarchy.pack'}">
   <ltng:require 
-  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.d3js413,$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/hierarchy.js',$Resource.chartLibs + '/hierarchyPack.js')}"
+  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/hierarchy.js',$Resource.chartLibs + '/hierarchyPack.js')}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
   />
 </aura:if>
 
 <aura:if isTrue="{!v.componentType == 'hierarchy.treemapzoom'}">
   <ltng:require 
-  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.d3js413,$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/hierarchy.js')}"
+  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/hierarchy.js')}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
   />
 </aura:if>
 
 <aura:if isTrue="{!v.componentType == 'hierarchy.treemap'}">
   <ltng:require 
-  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.d3js413,$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/hierarchy.js',$Resource.chartLibs + '/hierarchyTreemap.js')}"
+  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/hierarchy.js',$Resource.chartLibs + '/hierarchyTreemap.js')}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
   />
 </aura:if>
 
 <aura:if isTrue="{!v.componentType == 'network.connections'}">
   <ltng:require 
-  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.d3js413,$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/network.js')}"
+  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/network.js')}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
   />
 </aura:if>
 
 <aura:if isTrue="{!v.componentType == 'network.timeline'}">
   <ltng:require 
-  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.d3js413,$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/network.js')}"
+  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/network.js')}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
   />
 </aura:if>

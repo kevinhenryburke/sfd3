@@ -3,7 +3,11 @@
     <aura:attribute name="IconName" type="string"/> 
     <aura:attribute name="parentUserComponentId" type="String"/> 
     <aura:attribute name="defaultEventType" type="String" default="Application"/>    
- 
+
+    <ltng:require 
+    scripts="{!join(',',$Resource.chartLibs + '/auraSpecific.js',$Resource.chartLibs + '/utils.js')}"
+    />
+      
     <aura:registerEvent name="evt_bzc" type="c:evt_bzc"/>
 
     <li role="presentation" class="slds-listbox__item" onclick="{!c.selectRecord}">
