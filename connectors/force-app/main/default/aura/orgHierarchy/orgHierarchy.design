@@ -1,5 +1,0 @@
-<design:component >
-    <design:attribute name="masterConfig" label="Master Config" default="{}" description="Master Configuration for the component" />      
-    <design:attribute name="showTopPanel" label="Show Top Info Panel" default="true" description="Check if you want a display panel at the top of the page"/>           
-    <design:attribute name="Title" default="1" label="Title Text" description=""/>        
-</design:component>
