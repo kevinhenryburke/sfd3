@@ -64,7 +64,7 @@
         }
 
         let preppedEvent = variantsMixin.nodeMouseover(storeObject, nodeToPublish);
-        _this.publishPreppedEvent(component,preppedEvent);
+        bzaura.publishPreppedEvent(storeObject,preppedEvent,$A.get("e.c:evt_sfd3"));
         _this.updatePopoverDirectly(component, preppedEvent);
 
         console.log("initialize root path");
@@ -182,7 +182,7 @@
 			.on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
 				bzchart.setStore (storeObject, "mouseoverRecordId", d.id ) ;
                 let preppedEvent = variantsMixin.nodeMouseover(storeObject, d);
-                _this.publishPreppedEvent(component,preppedEvent);
+                bzaura.publishPreppedEvent(storeObject,preppedEvent,$A.get("e.c:evt_sfd3"));
                 if (d.depth <= 1) { // root or first level
                     _this.restockCache(component);
                 }
@@ -200,7 +200,7 @@
 			.on('mouseout', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
 				bzchart.setStore (storeObject, "mouseoutRecordId", d.id ) ;
                 let preppedEvent = variantsMixin.nodeMouseout(storeObject, d);
-                _this.publishPreppedEvent(component,preppedEvent);
+                bzaura.publishPreppedEvent(storeObject,preppedEvent,$A.get("e.c:evt_sfd3"));
             }))
 			;
 
@@ -484,36 +484,7 @@
 
             var preppedEvent = bzchart.prepareEvent(storeObject, "ReScale", eventParameters);
             preppedEvent.eventType = "Cache";
-            _this.publishPreppedEvent (component,preppedEvent);    
-        }
-    },
-
-    // TODO function appears in many places, try to consolidate
-    publishPreppedEvent : function(component,preppedEvent){
-        let storeObject = component.get("v.storeObject");
-        if (preppedEvent != null) {
-            var event;
-            console.log("publishPreppedEvent: enter "+ preppedEvent.topic + " and " + preppedEvent.eventType);
-
-            if (preppedEvent.eventType != null) {
-                // go with preset value
-                console.log("publishPreppedEvent: override eventType: " + preppedEvent.eventType);
-            }
-            else {
-                preppedEvent.eventType = component.get("v.defaultEventType");
-            }
-
-            if (preppedEvent.eventType == "Component"){
-                event = component.getEvent("evt_bzc");
-            }
-            if (preppedEvent.eventType == "Application"){
-                event = $A.get("e.c:evt_sfd3");
-            }
-            if (preppedEvent.eventType == "Cache"){
-                var appEvents = bzchart.getStore (storeObject, "appEvents") ;
-                event = appEvents.pop();
-            }    
-            bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
+            bzaura.publishPreppedEvent (storeObject,preppedEvent,$A.get("e.c:evt_sfd3"));    
         }
     },
 

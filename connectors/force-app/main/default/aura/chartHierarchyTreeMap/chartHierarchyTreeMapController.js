@@ -15,6 +15,6 @@
             .selectAll("g")
             .data(root.leaves())
 
-        helper.renderCells(component, cells);
+        helper.renderCells(storeObject, cells);
     }
 })

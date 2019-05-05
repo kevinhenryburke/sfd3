@@ -11,7 +11,9 @@
         
         bzchart.setStore (storeObject, "componentType", component.get("v.componentType") ) ;
         bzchart.setStore (storeObject, "componentEvent", component.getEvent("evt_bzc")) ;        
-        bzchart.setStore (storeObject, "defaultEventType", component.getEvent("defaultEventType")) ;        
+        bzchart.setStore (storeObject, "defaultEventType", component.get("v.defaultEventType")) ;        
+
+        console.log("xxxxx: defaultEventType: ", bzchart.getStore (storeObject, "defaultEventType"));
         bzchart.setStore (storeObject, "appEvents",  []) ;
 
         bzchart.setStore (storeObject, "UserComponentId", component.get("v.UserComponentId") ) ;
@@ -77,7 +79,7 @@
             "componentReference" : componentReference
         }    
         var preppedEvent = bzchart.prepareEvent(storeObject, "ChartRendered", eventParameters);
-        _this.publishPreppedEvent(component,preppedEvent);
+        bzaura.publishPreppedEvent(storeObject,preppedEvent,$A.get("e.c:evt_sfd3"));
 
         console.log("chartArea: ChartRendered event published ");
  
@@ -253,34 +255,6 @@
 
         var cc = component.getConcreteComponent();
         cc.reScale(csf);                 
-    },
-
-    // TODO function appears in many places, try to consolidate
-    publishPreppedEvent : function(component,preppedEvent){
-        let storeObject = component.get("v.storeObject");
-        if (preppedEvent != null) {
-            var event;
-
-            if (preppedEvent.eventType != null) {
-                // go with provided eventType
-            }
-            else {
-                // use the default eventType
-                preppedEvent.eventType = component.get("v.defaultEventType");
-            }
-
-            if (preppedEvent.eventType == "Component"){
-                event = component.getEvent("evt_bzc");
-            }
-            if (preppedEvent.eventType == "Application"){
-                event = $A.get("e.c:evt_sfd3");
-            }
-            if (preppedEvent.eventType == "Cache"){
-                var appEvents = bzchart.getStore (storeObject, "appEvents") ;
-                event = appEvents.pop();
-            } 
-            bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
-        }
     },
 
     // reset cache of events for mouseover events to publish - may be a better way to do this!

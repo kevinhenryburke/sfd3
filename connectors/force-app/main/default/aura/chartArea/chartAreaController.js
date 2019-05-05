@@ -85,7 +85,7 @@
         }    
 
         var preppedEvent = bzchart.prepareEvent(storeObject, "ReScale", eventParameters);
-        helper.publishPreppedEvent(component,preppedEvent);
+        bzaura.publishPreppedEvent(storeObject,preppedEvent,$A.get("e.c:evt_sfd3"));
     },
 
     handleCustomEvent  : function(component, event, helper) {

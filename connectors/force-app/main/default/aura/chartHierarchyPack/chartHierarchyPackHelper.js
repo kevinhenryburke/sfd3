@@ -25,7 +25,7 @@
             .on('mouseover', $A.getCallback(function(d) { // need getCallback to retain context - https://salesforce.stackexchange.com/questions/158422/a-get-for-application-event-is-undefined-or-can-only-fire-once
                 bzchart.setStore (storeObject, "mouseoverRecordId", d.id ) ;
                 let preppedEvent = variantsMixin.nodeMouseover(storeObject, d);
-                _this.publishPreppedEvent(component,preppedEvent);
+                bzaura.publishPreppedEvent(storeObject,preppedEvent,$A.get("e.c:evt_sfd3"));
             }))
         ;
         bzpack.stylePack(storeObject, node);

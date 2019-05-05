@@ -23,7 +23,7 @@
 
 <aura:if isTrue="{!v.componentType == 'hierarchy.treemap'}">
   <ltng:require 
-  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.d3js413,$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/hierarchy.js')}"
+  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.d3js413,$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/hierarchy.js',$Resource.chartLibs + '/hierarchyTreemap.js')}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
   />
 </aura:if>
