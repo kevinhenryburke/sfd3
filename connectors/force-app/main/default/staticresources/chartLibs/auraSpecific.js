@@ -8,31 +8,40 @@ console.log("loading: bzaura IIFE");
 
 
 function publishPreppedEvent (storeObject, preppedEvent, auraApplicationEvent){
-    console.log("publishPreppedEvent: enter topic "+ preppedEvent.topic + " and eventType " + preppedEvent.eventType);
+    let pubTypeObject = bzaura.createStoreObjectForPublication(
+        bzchart.getStore (storeObject,"defaultEventType"),
+        bzchart.getStore (storeObject, "componentEvent"),
+        bzchart.getStore (storeObject, "appEvents")
+    );
+    bzaura.publishPreppedEventBase (pubTypeObject, preppedEvent, auraApplicationEvent);
+}
+
+function createStoreObjectForPublication (defaultEventType, componentEvent, appEvents){
+    return {
+        "defaultEventType" : defaultEventType ,
+        "componentEvent" : componentEvent,
+        "appEvents" : appEvents
+    };
+}
+
+function publishPreppedEventBase (pubTypeObject, preppedEvent, auraApplicationEvent){
+    console.log("publishPreppedEventBase: enter topic "+ preppedEvent.topic + " and eventType " + preppedEvent.eventType);
     if (preppedEvent != null) {
         var event;
 
-        if (preppedEvent.eventType != null) {
-            // go with provided eventType
-            console.log("publishPreppedEvent: override wtih eventType: " + preppedEvent.eventType);
-        }
-        else {
-            // use the default eventType
-//                preppedEvent.eventType = component.get("v.defaultEventType");
-            preppedEvent.eventType = bzchart.getStore (storeObject,"defaultEventType");
-            console.log("publishPreppedEvent: use default eventType: " + preppedEvent.eventType);
+        if (preppedEvent.eventType == null) {
+            preppedEvent.eventType = pubTypeObject["defaultEventType"];
+            console.log("publishPreppedEventBase: use default eventType: " + preppedEvent.eventType);
         }
 
         if (preppedEvent.eventType == "Component"){
-//                event = component.getEvent("evt_bzc");
-            event = bzchart.getStore (storeObject, "componentEvent") ;
+            event = pubTypeObject["componentEvent"] ;
         }
         if (preppedEvent.eventType == "Application"){
-//            event = $A.get("e.c:evt_sfd3");
             event = auraApplicationEvent;            
         }
         if (preppedEvent.eventType == "Cache"){
-            var appEvents = bzchart.getStore (storeObject, "appEvents") ;
+            var appEvents = pubTypeObject["appEvents"];
             event = appEvents.pop();
         } 
         bzutils.publishEventHelper(event, preppedEvent.topic, preppedEvent.parameters, preppedEvent.controllerId);     
@@ -40,6 +49,8 @@ function publishPreppedEvent (storeObject, preppedEvent, auraApplicationEvent){
 }
 
 exports.publishPreppedEvent = publishPreppedEvent;
+exports.createStoreObjectForPublication = createStoreObjectForPublication;
+exports.publishPreppedEventBase = publishPreppedEventBase;
 
 
 Object.defineProperty(exports, '__esModule', { value: true });
