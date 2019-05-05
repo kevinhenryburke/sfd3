@@ -260,12 +260,9 @@
 
         var cc = component.getConcreteComponent();
 
-// cOME BACK
         // merge the old and the new data
-        // "PreProcess data - not right yet - need to update this method to return nothing"
-//        bzutils.xfcr("dataPreProcess", componentReference, datajson, datajsonRefresh); // preprocessing of data (if any)
-
-        cc.dataPreprocess(datajson, datajsonRefresh);
+        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+        variantsMixin.dataPreprocess(storeObject, datajson, datajsonRefresh);
 
         datajson = bzchart.getStore (storeObject, "datajson") ;
         

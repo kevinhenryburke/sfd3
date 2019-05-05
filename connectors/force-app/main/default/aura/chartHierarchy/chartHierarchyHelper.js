@@ -18,9 +18,8 @@
 		var width = bzchart.getStore (storeObject, "width") ;  
         var height = bzchart.getStore (storeObject, "height") ; 
 
-        var cc = component.getConcreteComponent();
-        // dataPreprocess will set datajson in cache
-        cc.dataPreprocess(datajson);
+        variantsMixin.dataPreprocess(storeObject, datajson, null);
+
         datajson = bzchart.getStore (storeObject, "datajson") ;  
 
         /* tree specification */

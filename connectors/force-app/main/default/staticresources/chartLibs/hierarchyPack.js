@@ -178,6 +178,11 @@ function stylePack (storeObject, node) {
 console.log("loading: chartHierarchyPackMixin IIFE");
 
 const OverrideMixin = {
+  dataPreprocess(storeObject, datajson, datajsonRefresh) {
+      console.log("xxxxxx: mixin: dataPreprocess");
+      bzpack.recursiveMap(storeObject,datajson, true);
+
+  }
 }
 
 exports.OverrideMixin = OverrideMixin;

@@ -13,21 +13,11 @@
         let datajsonRefresh = bzchart.getStore (storeObject, "datajson") ;  
 
         if (latestSizeOrColor == "size") {
-            var cc = component.getConcreteComponent();
-            cc.dataPreprocess(datajson, datajsonRefresh);    
+            let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+            variantsMixin.dataPreprocess(storeObject, datajson, datajsonRefresh);
         }
 
         helper.initializeVisuals(component);
-    },
-
-    dataPreprocess: function(component,event,helper){
-        console.log("calling the aura:method chartHierarchyPack in chart");
-        let storeObject = component.get("v.storeObject");
-
-        var args = event.getParam("arguments");
-        var datajsonBefore = args.datajson;
-
-        bzpack.recursiveMap(storeObject,datajsonBefore, true);
-
     }
+    
 })

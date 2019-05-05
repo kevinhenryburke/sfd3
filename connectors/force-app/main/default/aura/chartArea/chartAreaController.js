@@ -173,7 +173,7 @@
                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
                }
                if (componentType == 'network.timeline') {
-                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartNetworkMixin.OverrideMixin);        
+                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartNetworkMixin.OverrideMixin, chartNetworkTimelineMixin.OverrideMixin);        
                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
                }
        

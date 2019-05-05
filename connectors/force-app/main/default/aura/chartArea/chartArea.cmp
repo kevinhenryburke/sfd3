@@ -37,7 +37,7 @@
 
 <aura:if isTrue="{!v.componentType == 'network.timeline'}">
   <ltng:require 
-  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/network.js')}"
+  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/network.js',$Resource.chartLibs + '/networkTimeline.js')}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
   />
 </aura:if>
@@ -84,11 +84,6 @@
   </aura:method>
 
   <aura:method name="initializeVisuals"/> 
-
-  <aura:method name="dataPreprocess"> 
-    <aura:attribute name="datajson" type="Object"/>    
-    <aura:attribute name="datajsonRefresh" type="Object"/>    
-  </aura:method>
 
   <aura:method name="callFromContainer" action="{!c.handleCustomEvent}"> 
       <aura:attribute name="tpc" type="Object"/>    

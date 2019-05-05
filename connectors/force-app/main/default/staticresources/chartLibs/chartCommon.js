@@ -284,8 +284,10 @@ const DefaultMixin = {
   },
   nodeMouseover(storeObject, d) {
   },
-  nodeMouseout(storeObject, d) {
+  dataPreprocess(storeObject, datajson, datajsonRefresh) {
+      console.log("xxxxxx: mixin: dataPreprocess");
   }
+
 }
 
 exports.DefaultMixin = DefaultMixin;

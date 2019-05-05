@@ -316,20 +316,6 @@
         }
     },
 
-
-
-
-    // console.log("PreProcess data");
-    // datajson = bzutils.xfcr("dataPreProcess", componentReference, datajson); // preprocessing of data (if any)
-
-    // use the name convention from d3 tutorials (e.g. http://www.puzzlr.org/force-directed-graph-minimal-working-example/)
-    // variables called simulation, node, path
-
-    // Not used but an alternative way to get node / path values
-    // var node = d3.select("#" + nodeGroupId).selectAll("circle")  ;
-    // var path = d3.select("#" + pathGroupId).selectAll("path")  ;
-    
-    // ideally would prefer to put in Berlioz library but externals can't safely be called in doInit
     simpleHash : function(s) {
         var hash = 0;
         if (s.length == 0) {

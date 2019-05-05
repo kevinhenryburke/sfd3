@@ -6,21 +6,6 @@
         helper.initializeVisuals(component);                         
     },
 
-    // dataPreprocess works by resetting datajson value in Cache
-    dataPreprocess: function(component,event,helper){
-        console.log("calling the aura:method dataPreprocess in chartHierarchyController");
-        let storeObject = component.get("v.storeObject");
-        let args = event.getParam("arguments");
-        let datajson = args.datajson; 
-        let groupingFields = bzchart.getStore (storeObject, "groupingFields");
-
-        if (groupingFields.length > 0) {
-            let groupingFields = bzchart.getStore (storeObject, "groupingFields");
-            datajson = bzhierarchy.picklistNest(groupingFields, datajson);
-            bzchart.setStore (storeObject, "datajson", datajson ) ;    
-        }
-    },
-
     refreshDataController: function(component,event,helper){
         console.log("calling the aura:method refreshDataController in subcomponent");
         let storeObject = component.get("v.storeObject");

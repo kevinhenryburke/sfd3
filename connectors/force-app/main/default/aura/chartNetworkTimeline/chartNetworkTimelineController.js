@@ -16,31 +16,6 @@
         }
 
         helper.refreshDataHelper(component, datajson, primaryId, showFilters);                         
-    },
-
-    dataPreprocess: function(component,event,helper){
-        console.log("calling the aura:method dataPreprocess in chartNetworkTimeline");
-        let storeObject = component.get("v.storeObject");
-
-        var args = event.getParam("arguments");
-        var datajsonBefore = args.datajson;
-        var datajsonRefresh = args.datajsonRefresh;
-
-        for (var i = 0; i < datajsonBefore.nodes.length; i++){
-            var djnodeBefore = datajsonBefore.nodes[i];
-            var fieldsBefore = djnodeBefore.fields;
-            var djnodeAfter = datajsonRefresh.nodes[i];
-            var fieldsAfter = djnodeAfter.fields;
-            for (var j = 0; j < fieldsBefore.length; j++) {
-                if ((fieldsBefore[j].fieldType == "CURRENCY" || fieldsBefore[j].fieldType == "DECIMAL" || fieldsBefore[j].fieldType == "DOUBLE") && fieldsBefore[j].retrievedValue != null) {
-                    fieldsBefore[j].retrievedValue = fieldsAfter[j].retrievedValue;
-                }
-                if (fieldsBefore[j].fieldType == "INTEGER" && fieldsBefore[j].retrievedValue != null) {
-                    fieldsBefore[j].retrievedValue = fieldsAfter[j].retrievedValue;
-                }
-            }
-        }    
-        bzchart.setStore (storeObject, "datajson", datajsonBefore ) ;
     }
 
 })

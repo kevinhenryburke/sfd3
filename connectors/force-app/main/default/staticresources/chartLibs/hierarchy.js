@@ -237,8 +237,20 @@ const OverrideMixin = {
             preppedEvent.eventType = "Cache";
         } 
         return preppedEvent;
-    }
+    },
 
+    // dataPreprocess works by resetting datajson value in Cache
+    dataPreprocess(storeObject, datajson, datajsonRefresh) {
+        console.log("xxxxxx: mixin: dataPreprocess");
+        let groupingFields = bzchart.getStore (storeObject, "groupingFields");
+
+        if (groupingFields.length > 0) {
+            let groupingFields = bzchart.getStore (storeObject, "groupingFields");
+            datajson = bzhierarchy.picklistNest(groupingFields, datajson);
+            bzchart.setStore (storeObject, "datajson", datajson ) ;    
+        }  
+    }
+  
 }
 
 exports.OverrideMixin = OverrideMixin;

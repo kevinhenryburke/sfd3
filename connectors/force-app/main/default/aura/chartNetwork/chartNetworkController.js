@@ -26,11 +26,6 @@
         helper.refreshDataHelper(component, datajson, primaryId, showFilters);                         
     },
 
-
-    dataPreprocess: function(component,event,helper){
-        console.log("calling the aura:method dataPreprocess in subcomponent");
-    },
-
     searchChart: function(component,event,helper){
         console.log("aura:method searchChart in subcomponent enter");
         let storeObject = component.get("v.storeObject");

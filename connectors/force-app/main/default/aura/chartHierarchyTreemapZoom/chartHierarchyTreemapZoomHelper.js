@@ -67,9 +67,8 @@ In the zoom controller implement the following method dataPreprocess (started)
 
         var datajson = bzchart.getStore (storeObject, "datajson");
 
-        var cc = component.getConcreteComponent();
         // dataPreprocess will set datajson in cache
-        cc.dataPreprocess(datajson);
+        variantsMixin.dataPreprocess(storeObject, datajson, null);
 
         let rootAfter = d3.hierarchy(bzchart.getStore (storeObject, "datajson"))
             .eachBefore(function (d) {
