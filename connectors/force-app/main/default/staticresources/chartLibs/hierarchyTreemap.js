@@ -102,3 +102,40 @@ console.log("loaded: bzhierarchytreemap  IIFE");
 
 })));
 
+/* OVERRIDE MIXINS */
+
+(function (global, factory) {
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.chartHierarchyTreemapMixin = global.chartHierarchyTreemapMixin || {})));
+}(this, (function (exports) { 'use strict';
+
+console.log("loading: chartHierarchyTreemapMixin IIFE");
+
+const OverrideMixin = {
+
+    initializeVisuals (storeObject) {
+        let datajson = bzchart.getStore (storeObject, "datajson") ;  
+        let nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
+        let nodeDataSetFunction = bzhierarchytreemap.getRootStructureTreeMap (storeObject); 
+
+        nodeDataSetFunction(datajson);
+
+        let root = bzchart.getStore (storeObject, "root") ;  
+        let cells = nodeGroup
+            .selectAll("g")
+            .data(root.leaves()); // <-D
+
+        bzhierarchytreemap.renderCells(storeObject, cells);
+    }
+    
+}
+
+exports.OverrideMixin = OverrideMixin;
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
+console.log("loaded: chartHierarchyTreemapMixin IIFE");
+
+
+})));

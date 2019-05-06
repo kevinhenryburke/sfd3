@@ -2,7 +2,6 @@
 
     initializeVisuals: function(component,event,helper){
         console.log("calling the aura:method initializeVisuals in subcomponent");
-        helper.areaInit(component);
         helper.initializeVisuals(component);                         
     },
 

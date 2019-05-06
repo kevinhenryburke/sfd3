@@ -3,7 +3,6 @@
     initializeVisuals: function(component,event,helper){
         console.log("calling the aura:method initializeVisuals in subcomponent");
         let storeObject = component.get("v.storeObject");
-        helper.areaInit(component);
 
         bzchart.setStore (storeObject, "primaryNodeHighlightingOn", component.get("v.primaryNodeHighlightingOn") ) ;
         bzchart.setStore (storeObject, "primaryNodeHighlightingColour", component.get("v.primaryNodeHighlightingColour") ) ;

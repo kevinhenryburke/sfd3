@@ -162,11 +162,11 @@
                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                  
                }
                if (componentType == 'hierarchy.treemapzoom') {
-                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartHierarchyMixin.OverrideMixin);        
+                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartHierarchyMixin.OverrideMixin, chartHierarchyTreemapzoomMixin.OverrideMixin);        
                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
                }
                if (componentType == 'hierarchy.treemap') {
-                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartHierarchyMixin.OverrideMixin);        
+                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartHierarchyMixin.OverrideMixin, chartHierarchyTreemapMixin.OverrideMixin);        
                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
                }
                if (componentType == 'network.connections') {
@@ -178,9 +178,7 @@
                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                                    
                }
        
-
-               helper.buildMeasureSchemeMap(masterConfigObject, storeObject);
-
+               bzchart.buildMeasureSchemeMap(masterConfigObject, storeObject);
 
                var showZoomSlider = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","Hierarchy","showZoomSlider");         
                if (showZoomSlider != null) {
@@ -283,7 +281,7 @@
             // Repetition of code 20 lines down, needs to refactored into mixin when got rid of "component" from code
 
             if (componentType != "hierarchy.treemap" && componentType != "hierarchy.treemapzoom") {
-                helper.showColorSchemeLegend(component);            
+                bzchart.showColorSchemeLegend(storeObject);            
                 bzchart.setStore (storeObject, "showMeasureValues", true);
             }
             else {
@@ -304,7 +302,7 @@
             bzchart.setStore (storeObject, "updateSize", true);
 
             if (componentType != "hierarchy.treemap" && componentType != "hierarchy.treemapzoom") {
-                helper.showColorSchemeLegend(component);            
+                bzchart.showColorSchemeLegend(storeObject);            
                 bzchart.setStore (storeObject, "showMeasureValues", true);
             }
             else {
@@ -323,7 +321,7 @@
             // filter and set visibility of nodes
             var filterState = parameters["filterState"];
             var filterType = parameters["filterType"];
-            helper.setFilterVisibility(storeObject, filterType, filterState);
+            bzchart.setFilterVisibility(storeObject, filterType, filterState);
 
             let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
             variantsMixin.refreshVisibility(storeObject);
@@ -424,16 +422,6 @@
             }
         }
     },
-
-    navigateToRecord : function(component){
-        let storeObject = component.get("v.storeObject");
-        var evtNav = $A.get("e.force:navigateToSObject");
-        evtNav.setParams({
-        "recordId": bzchart.getStore (storeObject, "mouseoverRecordId"),
-        "slideDevName": "detail"
-        });
-        sObectEvent.fire(); 
-     },
 
     styleNodes: function(component,event,helper){
         // console.log("aura:method styleNodes in chartArea enter");

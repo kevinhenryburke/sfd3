@@ -16,7 +16,7 @@
 
 <aura:if isTrue="{!v.componentType == 'hierarchy.treemapzoom'}">
   <ltng:require 
-  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/hierarchy.js')}"
+  scripts="{!join(',',$Resource.d3js413,$Resource.chartLibs + '/auraSpecific.js',$Resource.chartLibs + '/utils.js',$Resource.chartLibs + '/chartCommon.js',$Resource.chartLibs + '/hierarchy.js',$Resource.chartLibs + '/hierarchyTreemapzoom.js')}"
   afterScriptsLoaded="{!c.afterScriptsLoaded}"
   />
 </aura:if>

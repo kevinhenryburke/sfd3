@@ -256,6 +256,203 @@ function clearChart(componentReference) {
     d3.select(bzutils.getDivId("legendSymbolGroup", componentReference, true)).remove();
 }
 
+// during initialization, build a map so we can quickly associate the correct API field to a measure
+function buildMeasureSchemeMap (masterConfigObject, storeObject) {
+    var objectLevels = bzutils.getMasterParam(masterConfigObject,"data","queryJSON","objectLevels");
+
+    // storage optimized for node colors: object / measureName / measureSchema
+    var measureObjectFieldMap = {};
+    // storage optimized for legend table: measureName / measureSchema (including object type)
+    var measureArrayObjectFieldMap = {};
+    // storage of scale functions: object / measureName / measureSchema
+    var measureObjectScaleMap = {};
+    // storage of grouping fields for hierarchy zoom charts on picklists: 
+    // top level only at this point, grouping is in the order of the fields in config
+    var groupingFields = [];
+
+    for (var objIndex = 0; objIndex < objectLevels.length; objIndex++) {
+        var thisObjectConfig = objectLevels[objIndex];
+        var objectType = thisObjectConfig.objectType;
+
+        var fields = thisObjectConfig.fields;
+        for (var fieldIndex = 0; fieldIndex < fields.length; fieldIndex++) {
+            var fieldConfig = fields[fieldIndex];
+            if (fieldConfig["measureName"] != null) {
+
+                var measureName = fieldConfig["measureName"] ;
+                var currentApiName = fieldConfig["api"]; 
+                var colorScheme = fieldConfig["measureScheme"]; 
+                var measureSchemeType = fieldConfig["measureSchemeType"]; 
+                var sizeSchemeType = fieldConfig["sizeSchemeType"]; 
+                var sizeChangesColor = fieldConfig["sizeChangesColor"]; 
+
+                if (measureObjectFieldMap[measureName] == null) {
+                    var measureLevel = {};
+                    measureLevel[objectType] = {"measureScheme" : colorScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "sizeSchemeType" : sizeSchemeType, "sizeChangesColor" : sizeChangesColor};
+                    measureObjectFieldMap[measureName] = measureLevel;
+
+                    measureArrayObjectFieldMap[measureName] = [{"measureScheme" : colorScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "objectType" : objectType, "sizeSchemeType" : sizeSchemeType, "sizeChangesColor" : sizeChangesColor}];
+
+                }
+                else {
+                    var measureLevel = measureObjectFieldMap[measureName]; 
+                    measureLevel[objectType] = {"measureScheme" : colorScheme, "measureSchemeType" : measureSchemeType, "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "sizeSchemeType" : sizeSchemeType, "sizeChangesColor" : sizeChangesColor };
+
+                    measureArrayObjectFieldMap[measureName].push({"measureScheme" : colorScheme, "measureSchemeType" : measureSchemeType , "fieldAPI" : currentApiName, "fieldIndex" : fieldIndex, "objectType" : objectType, "sizeSchemeType" : sizeSchemeType, "sizeChangesColor" : sizeChangesColor});
+
+                }
+                if (measureSchemeType == "Scale") {
+                    var domain = colorScheme["domain"]; 
+                    var range = colorScheme["range"]; 
+
+                    if (measureObjectScaleMap[measureName] == null) {
+                        var objectLevel = {};
+                        objectLevel[objectType] = 
+                            d3.scaleLinear().domain(domain).range(range);
+                        ;
+                        measureObjectScaleMap[measureName] = objectLevel;    
+                    }
+                    else {
+                        var objectLevel = measureObjectScaleMap[measureName]; 
+                        objectLevel[objectType] = 
+                            d3.scaleLinear().domain(domain).range(range);
+                    }
+                }
+            }
+            if (objIndex == 0 && fieldConfig["role"] == "group") { // top object level only at present
+                groupingFields.push( {"fieldIndex" : fieldIndex , "api" : fieldConfig["api"]});
+            }
+        }
+    }
+    bzchart.setStore (storeObject, "measureObjectFieldMap", measureObjectFieldMap);
+    bzchart.setStore (storeObject, "measureArrayObjectFieldMap", measureArrayObjectFieldMap);
+    bzchart.setStore (storeObject, "measureObjectScaleMap", measureObjectScaleMap);
+    bzchart.setStore (storeObject, "groupingFields", groupingFields);
+}
+
+function showColorSchemeLegend (storeObject) {
+    let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
+    let currentColorLabel = bzchart.getStore (storeObject, "currentColorLabel");
+    let currentSizeLabel = bzchart.getStore (storeObject, "currentSizeLabel");
+
+    let firstMeasureScheme = bzchart.getFirstColorSchemeLegend(storeObject, currentColorLabel);
+
+    // remove existing legend symbols
+    d3.select(bzutils.getDivId("legendSymbolGroup", componentReference, true)).selectAll("*").remove();
+
+    let legendSymbolGroup = bzchart.getStore (storeObject, "legendSymbolGroup" ) ;
+    
+    let ms = firstMeasureScheme.measureScheme;
+    let mst = firstMeasureScheme["measureSchemeType"];
+    let baseDataArray;
+
+    /*  Measure Scheme is an array in complex cases (value ranges) but is an object with name/value in others
+        We need to baseline our nodes on an array, hence the below
+    */
+
+   switch (mst) {
+        case "ValueBand" : baseDataArray = ms; break;
+        case "Scale" : baseDataArray = ms["domain"]; break;
+        case "StringValue" : baseDataArray = Object.keys(ms); break;
+    }
+
+    var currentColorLabelAsArray = [];
+    var schemeTextPrefix = [];
+
+    let xSchemeTextOffset = 20, xSymbolOffset = 30, xSymbolTextOffset = 40;
+    let ySchemeTextOffset = 13, yLineDepth = 20, yFirstSymbolOffset = 30, yFirstSymbolTextOffset = 33;
+
+    if (currentSizeLabel != "bzDefault") {
+        schemeTextPrefix.push("Size Scheme: ");
+        currentColorLabelAsArray.push(currentSizeLabel);
+        yFirstSymbolOffset += 30;
+        yFirstSymbolTextOffset += 30;    
+    }
+
+    if (currentColorLabel != "bzDefault") {
+        schemeTextPrefix.push("Color Scheme: ");
+        currentColorLabelAsArray.push(currentColorLabel);
+    }
+
+    var measureText = legendSymbolGroup.selectAll("textme")
+        .data(currentColorLabelAsArray)
+        .enter()
+        .append("text")
+        .attr('transform',function(d,i) { return 'translate('+xSchemeTextOffset+','+(i*yLineDepth+ySchemeTextOffset)+')';})  
+        .text( function (d, i) {return schemeTextPrefix[i] + d;})
+        .attr("font-size", "8px")
+        .attr("fill", "black");
+
+    if (currentColorLabel != "bzDefault") {
+        var textme = legendSymbolGroup.selectAll("textme")
+            .data(baseDataArray)
+            .enter()
+            .append("text");            
+
+        var textLabels = textme
+            .attr('transform',function(d,i) { return 'translate('+xSymbolTextOffset+','+(i*yLineDepth+yFirstSymbolTextOffset)+')';})
+            .attr("font-family", "sans-serif")
+            .text( function(d,i) {return getLegendItemName (ms, d, i);})
+            .attr("font-size", "8px")
+            .attr("fill", "gray");
+
+        var nodeSymbol = legendSymbolGroup.selectAll('.symbol')
+            .data(baseDataArray);
+
+        nodeSymbol
+            .enter()
+            .append('path')
+            .style("stroke" , "black")
+            .style("fill" , function(d,i) {return getLegendItemColor (ms, d, i);})
+            .attr('transform',function(d,i) { return 'translate('+xSymbolOffset+','+(i*yLineDepth+yFirstSymbolOffset)+')';})
+            .attr('d', d3.symbol().type( function(d,i) { return d3.symbols[0];}) );
+    }
+
+
+    function getLegendItemColor(ms, d, i) {
+        if (mst == "ValueBand") {
+            return ms[i]["color"];
+        }
+        if (mst == "Scale") {
+            return ms["range"][i];
+        }
+        if (mst == "StringValue") {
+            return ms[d];
+        }
+    }
+
+    function getLegendItemName(ms, d, i) {
+        if (mst == "ValueBand") {
+            if (ms[i]["below"] != null) {
+                return "below " + ms[i]["below"].toLocaleString();
+            }
+            if (ms[i]["above"] != null) {
+                return "above " + ms[i]["above"].toLocaleString();
+            }
+        }
+        if (mst == "Scale") {
+            return ms["domain"][i];
+        }
+        if (mst == "StringValue") {
+            return d;
+        }
+    }            
+}
+
+function setFilterVisibility (storeObject, filterType, filterState) {
+    var filterValues = bzchart.getStore (storeObject, "filterValues") ;
+    if (filterState == "Show") {
+        filterValues.push(filterType);
+    } else {
+        var index = filterValues.indexOf(filterType);
+        if (index > -1) {
+            filterValues.splice(index, 1);
+        }
+    }
+    bzchart.setStore (storeObject, "filterValues", filterValues ) ;
+}
+
+
 exports.setStore = setStore;
 exports.getStore = getStore;
 exports.hasStore = hasStore;
@@ -270,6 +467,9 @@ exports.getFirstColorSchemeLegend = getFirstColorSchemeLegend;
 exports.prepareEvent = prepareEvent;
 exports.clearElements = clearElements;
 exports.clearChart = clearChart;
+exports.buildMeasureSchemeMap = buildMeasureSchemeMap;
+exports.showColorSchemeLegend = showColorSchemeLegend;
+exports.setFilterVisibility = setFilterVisibility;
 
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -305,6 +505,8 @@ const DefaultMixin = {
   dataPreprocess(storeObject, datajson, datajsonRefresh) {
   },
   reScale(storeObject, csf) {
+  },
+  initializeVisuals (storeObject) {
   }
 
 }
