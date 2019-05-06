@@ -63,7 +63,7 @@
 
         let preppedEvent = variantsMixin.nodeMouseover(storeObject, nodeToPublish);
         bzaura.publishPreppedEvent(storeObject,preppedEvent,$A.get("e.c:evt_sfd3"));
-        _this.updatePopoverDirectly(storeObject, preppedEvent);
+        bzhierarchy.updatePopoverDirectly(storeObject, preppedEvent);
 
         console.log("initialize root path");
     },
@@ -181,7 +181,7 @@
 				bzchart.setStore (storeObject, "mouseoverRecordId", d.id ) ;
                 let preppedEvent = variantsMixin.nodeMouseover(storeObject, d);
                 bzaura.publishPreppedEvent(storeObject,preppedEvent,$A.get("e.c:evt_sfd3"));
-                _this.updatePopoverDirectly(storeObject, preppedEvent);
+                bzhierarchy.updatePopoverDirectly(storeObject, preppedEvent);
 
                 // var textcontent = '<tspan x="100" y="0" style="font-weight: bold;">' + d.data.name ;
                 // textcontent += '</tspan>'; 

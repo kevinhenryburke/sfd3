@@ -281,29 +281,6 @@
         }
     }, 
 
-    /*
-     Note - popover component is not in the component hierarchy so needs to be invoked directly, 
-     not via a component event which is till not recognize
-    */
-
-    updatePopoverDirectly : function(storeObject, preppedEvent) {
-        console.log("chartArea: updatePopoverDirectly enter");
-        let allowPopover = bzchart.getStore (storeObject, "allowPopover");         
-        console.log("chartArea: updatePopoverDirectly allowPopover", allowPopover);
-        if (allowPopover == null) {allowPopover = false;}
-
-        if (allowPopover == true) {
-            let defaultEventType = bzchart.getStore (storeObject, "defaultEventType");
-
-            if (defaultEventType == "Component") {
-                console.log("popover: invoking by direct method call");
-                let popoverPanel = bzchart.getStore (storeObject, "popoverPanel");
-                let popoverPanelFirst = popoverPanel[0];
-                bzaura.callFromContainerWrap (popoverPanelFirst, preppedEvent);
-            }
-        }
-    },
-
     simpleHash : function(s) {
         var hash = 0;
         if (s.length == 0) {

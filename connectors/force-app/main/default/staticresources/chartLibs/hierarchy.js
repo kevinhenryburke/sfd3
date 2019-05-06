@@ -194,7 +194,27 @@
             });
     }
 
+    /*
+     Note - popover component is not in the component hierarchy so needs to be invoked directly, 
+     not via a component event which is till not recognize
+    */
 
+    function updatePopoverDirectly(storeObject, preppedEvent) {
+        let allowPopover = bzchart.getStore(storeObject, "allowPopover");
+        if (allowPopover == null) { allowPopover = false; }
+
+        if (allowPopover == true) {
+            let defaultEventType = bzchart.getStore(storeObject, "defaultEventType");
+
+            if (defaultEventType == "Component") {
+                let popoverPanel = bzchart.getStore(storeObject, "popoverPanel");
+                let popoverPanelFirst = popoverPanel[0];
+                bzaura.callFromContainerWrap(popoverPanelFirst, preppedEvent);
+            }
+        }
+    }
+
+    exports.updatePopoverDirectly = updatePopoverDirectly;
     exports.nestChildren = nestChildren;
     exports.picklistNest = picklistNest;
     exports.searchTree = searchTree;
