@@ -247,8 +247,8 @@
         let storeObject = component.get("v.storeObject");
         bzchart.setStore (storeObject, "ChartScaleFactor", csf) ;
 
-        var cc = component.getConcreteComponent();
-        cc.reScale(csf);                 
+       let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+       variantsMixin.reScale(storeObject,csf); 
     },
 
     // reset cache of events for mouseover events to publish - may be a better way to do this!

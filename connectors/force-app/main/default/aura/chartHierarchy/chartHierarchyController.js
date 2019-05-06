@@ -20,24 +20,7 @@
 
         bzhierarchy.merge(storeObject, updatejson);
         bzhierarchy.update(storeObject, nodeGroup, pathGroup, root, false);
-
     },
-
-    reScale: function(component,event,helper){
-        console.log("reScale: enter");
-        let storeObject = component.get("v.storeObject");
-        var args = event.getParam("arguments");
-        bzchart.setStore (storeObject, "ChartScaleFactor", args.ChartScaleFactor) ;
-
-        var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
-        var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
-        var root = bzchart.getStore (storeObject, "root") ;
-
-        bzhierarchy.update(storeObject, nodeGroup, pathGroup, root, false);
-
-        console.log("reScale: exit");
-    },
-        
 
     searchChart: function(component,event,helper){
         console.log("calling the aura:method searchChart in subcomponent");

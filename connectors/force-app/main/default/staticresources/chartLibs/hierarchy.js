@@ -681,8 +681,19 @@ const OverrideMixin = {
             datajson = bzhierarchy.picklistNest(groupingFields, datajson);
             bzchart.setStore (storeObject, "datajson", datajson ) ;    
         }  
+    },
+
+    reScale(storeObject, csf) {
+        bzchart.setStore (storeObject, "ChartScaleFactor", csf) ;
+
+        var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
+        var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
+        var root = bzchart.getStore (storeObject, "root") ;
+
+        bzhierarchy.update(storeObject, nodeGroup, pathGroup, root, false);
     }
-  
+
+    
 }
 
 exports.OverrideMixin = OverrideMixin;

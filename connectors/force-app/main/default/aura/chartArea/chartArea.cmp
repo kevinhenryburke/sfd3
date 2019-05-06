@@ -76,10 +76,6 @@
     <aura:attribute name="showLevels" type="Integer"/> 
   </aura:method>
 
-  <aura:method name="reScale"> 
-    <aura:attribute name="ChartScaleFactor" type="Decimal"/> 
-  </aura:method>
-
   <aura:method name="styleNodes"> 
   </aura:method>
 

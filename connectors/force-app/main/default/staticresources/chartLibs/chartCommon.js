@@ -285,7 +285,8 @@ const DefaultMixin = {
   nodeMouseover(storeObject, d) {
   },
   dataPreprocess(storeObject, datajson, datajsonRefresh) {
-      console.log("xxxxxx: mixin: dataPreprocess");
+  },
+  reScale(storeObject, csf) {
   }
 
 }

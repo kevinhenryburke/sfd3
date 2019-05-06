@@ -48,11 +48,6 @@
         console.log("aura:method searchChart in subcomponent exit");
     },
 
-    reScale: function(component,event,helper){
-        console.log("aura:method reScale in subcomponent enter");
-        console.log("aura:method reScale in subcomponent exit");
-    },
-
     styleNodes: function(component,event,helper){
         console.log("aura:method styleNodes in chartNetwork enter");
         let storeObject = component.get("v.storeObject");
