@@ -154,7 +154,7 @@
                 let componentType = bzchart.getStore (storeObject, "componentType") ;
 
                if (componentType == 'hierarchy.ctree') {
-                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartHierarchyMixin.OverrideMixin);
+                   const chartMixin = Object.assign({}, chartDefaultMixin.DefaultMixin, chartHierarchyMixin.OverrideMixin, chartHierarchyCtreeMixin.OverrideMixin);
                    bzchart.setStore (storeObject, "chartMixin", chartMixin) ;                    
                }
                if (componentType == 'hierarchy.pack') {

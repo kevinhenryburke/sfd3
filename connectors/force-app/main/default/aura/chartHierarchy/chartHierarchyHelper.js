@@ -39,7 +39,7 @@
 
         bzchart.setStore (storeObject, "root", root ) ;
 
-        bzhierarchy.update(storeObject, nodeGroup, pathGroup, root, false);
+        bzctree.update(storeObject, nodeGroup, pathGroup, root, false);
 
         // Push out an initial message to highlight the root node to display panels
         // Effecitvely can do this via a mouseover event on root.

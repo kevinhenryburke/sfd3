@@ -9,17 +9,17 @@
     refreshDataController: function(component,event,helper){
         console.log("calling the aura:method refreshDataController in subcomponent");
         let storeObject = component.get("v.storeObject");
-        var args = event.getParam("arguments");
-        var parameters = args.parameters;
+        let args = event.getParam("arguments");
+        let parameters = args.parameters;
 
-        var updatejson = parameters.datajson;
+        let updatejson = parameters.datajson;
 
-        var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
-        var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
-        var root = bzchart.getStore (storeObject, "root") ;
+        let nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
+        let pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
+        let root = bzchart.getStore (storeObject, "root") ;
 
-        bzhierarchy.merge(storeObject, updatejson);
-        bzhierarchy.update(storeObject, nodeGroup, pathGroup, root, false);
+        bzctree.merge(storeObject, updatejson);
+        bzctree.update(storeObject, nodeGroup, pathGroup, root, false);
     },
 
     searchChart: function(component,event,helper){
@@ -39,7 +39,7 @@
 
         if (searchAction == "HighlightOpenPath" || searchAction == "OpenPath" ) {
             bzctree.openPathsBy(storeObject, searchTermId, "Id");
-            bzhierarchy.update(storeObject, nodeGroup, pathGroup, root, false);
+            bzctree.update(storeObject, nodeGroup, pathGroup, root, false);
         }
 
         if (searchAction == "HighlightOpenPath" || searchAction == "HighlightPath" ) {
@@ -49,7 +49,7 @@
             }
             
             bzctree.highlightPathsBy(storeObject, searchTermId, "Id", true);
-            bzhierarchy.update(storeObject, nodeGroup, pathGroup, root, false);
+            bzctree.update(storeObject, nodeGroup, pathGroup, root, false);
         }
     },
 
@@ -61,7 +61,7 @@
         var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
         var root = bzchart.getStore (storeObject, "root") ;
 
-        bzhierarchy.update(storeObject, nodeGroup, pathGroup, root, false);
+        bzctree.update(storeObject, nodeGroup, pathGroup, root, false);
         console.log("aura:method styleNodes in chartHierarchy exit");
     }
 
