@@ -229,7 +229,7 @@
 
         // delete the paths and the groups
         // this is not the preferred option - would have preferred to use d3 joins.
-        _this.clearChart(componentReference);
+        bzchart.clearChart(componentReference);
         
         // retrieve the existing underlying data
         var datajson = bzchart.getStore (storeObject, "datajson") ;

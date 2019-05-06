@@ -240,6 +240,22 @@ function prepareEvent (storeObject, topic, parameters) {
   }
 }
 
+/* clearElements removes all paths, nodes, rects, text from the chart */
+function clearElements (componentReference) {
+    var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
+    svg.selectAll("path,circle,rect,text").remove(); // comma separated acts as union
+}
+            
+/* clearChart removes all elements and groups from the chart */
+function clearChart(componentReference) {
+    console.log("xxxxx: clearChart 3");
+    bzchart.clearElements(componentReference);
+    d3.select(bzutils.getDivId("pathGroup", componentReference, true)).remove();
+    d3.select(bzutils.getDivId("nodeGroup", componentReference, true)).remove();
+    d3.select(bzutils.getDivId("textGroup", componentReference, true)).remove();
+    d3.select(bzutils.getDivId("legendSymbolGroup", componentReference, true)).remove();
+}
+
 exports.setStore = setStore;
 exports.getStore = getStore;
 exports.hasStore = hasStore;
@@ -252,6 +268,8 @@ exports.getStringValue = getStringValue;
 exports.getFromMeasureScheme = getFromMeasureScheme;
 exports.getFirstColorSchemeLegend = getFirstColorSchemeLegend;
 exports.prepareEvent = prepareEvent;
+exports.clearElements = clearElements;
+exports.clearChart = clearChart;
 
 
 Object.defineProperty(exports, '__esModule', { value: true });

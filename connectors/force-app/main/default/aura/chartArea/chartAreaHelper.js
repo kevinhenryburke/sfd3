@@ -319,17 +319,10 @@
         bzchart.setStore (storeObject, "filterValues", filterValues ) ;
     },
 
-    /* clearElements removes all paths, nodes, rects, text from the chart */
-    clearElements : function (componentReference) {
-        var _this = this;
-        var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
-        svg.selectAll("path,circle,rect,text").remove(); // comma separated acts as union
-    },
-            
     /* clearChart removes all elements and groups from the chart */
     clearChart : function (componentReference) {
-        var _this = this;
-        _this.clearElements(componentReference);
+        console.log("xxxxx: clearChart 2");
+        bzchart.clearElements(componentReference);
         d3.select(bzutils.getDivId("pathGroup", componentReference, true)).remove();
         d3.select(bzutils.getDivId("nodeGroup", componentReference, true)).remove();
         d3.select(bzutils.getDivId("textGroup", componentReference, true)).remove();

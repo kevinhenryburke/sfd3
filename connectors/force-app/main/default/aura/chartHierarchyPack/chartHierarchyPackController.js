@@ -7,7 +7,7 @@
         let latestSizeOrColor = bzchart.getStore (storeObject, "latestSizeOrColor");
 
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
-        helper.clearElements(componentReference);
+        bzchart.clearElements(componentReference);
 
         let datajson = bzchart.getStore (storeObject, "datajson") ;  
         let datajsonRefresh = bzchart.getStore (storeObject, "datajson") ;  
