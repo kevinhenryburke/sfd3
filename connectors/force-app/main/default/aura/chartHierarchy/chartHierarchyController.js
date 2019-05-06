@@ -19,7 +19,7 @@
         var root = bzchart.getStore (storeObject, "root") ;
 
         bzhierarchy.merge(storeObject, updatejson);
-        helper.update(component, nodeGroup, pathGroup, root, false);
+        bzhierarchy.update(storeObject, nodeGroup, pathGroup, root, false);
 
     },
 
@@ -33,7 +33,7 @@
         var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
         var root = bzchart.getStore (storeObject, "root") ;
 
-        helper.update(component, nodeGroup, pathGroup, root, false);
+        bzhierarchy.update(storeObject, nodeGroup, pathGroup, root, false);
 
         console.log("reScale: exit");
     },
@@ -56,7 +56,7 @@
 
         if (searchAction == "HighlightOpenPath" || searchAction == "OpenPath" ) {
             bzctree.openPathsBy(storeObject, searchTermId, "Id");
-            helper.update(component, nodeGroup, pathGroup, root, false);
+            bzhierarchy.update(storeObject, nodeGroup, pathGroup, root, false);
         }
 
         if (searchAction == "HighlightOpenPath" || searchAction == "HighlightPath" ) {
@@ -66,7 +66,7 @@
             }
             
             bzctree.highlightPathsBy(storeObject, searchTermId, "Id", true);
-            helper.update(component, nodeGroup, pathGroup, root, false);
+            bzhierarchy.update(storeObject, nodeGroup, pathGroup, root, false);
         }
     },
 
@@ -78,7 +78,7 @@
         var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
         var root = bzchart.getStore (storeObject, "root") ;
 
-        helper.update(component, nodeGroup, pathGroup, root, false);
+        bzhierarchy.update(storeObject, nodeGroup, pathGroup, root, false);
         console.log("aura:method styleNodes in chartHierarchy exit");
     }
 
