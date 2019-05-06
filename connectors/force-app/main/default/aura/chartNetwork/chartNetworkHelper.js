@@ -258,8 +258,6 @@
             datajson["links"].push(link);
         });
 
-        var cc = component.getConcreteComponent();
-
         // merge the old and the new data
         let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
         variantsMixin.dataPreprocess(storeObject, datajson, datajsonRefresh);
@@ -269,6 +267,8 @@
         // re-initialize the chart
         var isInit = false;
         _this.initializeGroups(component, datajson, primaryNodeId, showFilters, isInit);                 
+
+        var cc = component.getConcreteComponent();
         cc.initializeVisuals();
 
     },    

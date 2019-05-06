@@ -318,16 +318,6 @@
         }
         bzchart.setStore (storeObject, "filterValues", filterValues ) ;
     },
-
-    /* clearChart removes all elements and groups from the chart */
-    clearChart : function (componentReference) {
-        console.log("xxxxx: clearChart 2");
-        bzchart.clearElements(componentReference);
-        d3.select(bzutils.getDivId("pathGroup", componentReference, true)).remove();
-        d3.select(bzutils.getDivId("nodeGroup", componentReference, true)).remove();
-        d3.select(bzutils.getDivId("textGroup", componentReference, true)).remove();
-        d3.select(bzutils.getDivId("legendSymbolGroup", componentReference, true)).remove();
-    },
     
     // during initialization, build a map so we can quickly associate the correct API field to a measure
     buildMeasureSchemeMap : function (masterConfigObject, storeObject) {
