@@ -1,6 +1,7 @@
 ({
     styleNodes: function(component,event,helper){
         let storeObject = component.get("v.storeObject");
+        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
 
         console.log("aura:method styleNodes in chartHierarchyPack enter");
 
@@ -13,11 +14,10 @@
         let datajsonRefresh = bzchart.getStore (storeObject, "datajson") ;  
 
         if (latestSizeOrColor == "size") {
-            let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
             variantsMixin.dataPreprocess(storeObject, datajson, datajsonRefresh);
         }
 
-        helper.initializeVisuals(component);
+        variantsMixin.initializeVisuals(storeObject);
     }
     
 })

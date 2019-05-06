@@ -5,7 +5,8 @@
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
         bzchart.clearElements(componentReference);
 
-        helper.initializeVisuals(component);
+        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+        variantsMixin.initializeVisuals(storeObject);
     }    
 
 })

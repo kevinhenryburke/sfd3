@@ -2,7 +2,9 @@
 
     initializeVisuals: function(component,event,helper){
         console.log("calling the aura:method initializeVisuals in subcomponent");
-        helper.initializeVisuals(component);                         
+        let storeObject = component.get("v.storeObject");
+        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+        variantsMixin.initializeVisuals(storeObject);
     },
 
     refreshDataController: function(component,event,helper){
