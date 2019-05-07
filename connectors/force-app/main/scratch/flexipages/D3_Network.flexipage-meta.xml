@@ -62,10 +62,6 @@
                 <name>retainNodeDetailsMouseOut</name>
                 <value>true</value>
             </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>showPathToolTip</name>
-                <value>true</value>
-            </componentInstanceProperties>
             <componentName>chartNetwork</componentName>
         </componentInstances>
         <name>main</name>

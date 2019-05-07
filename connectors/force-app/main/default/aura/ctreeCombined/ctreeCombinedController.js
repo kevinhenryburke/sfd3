@@ -19,7 +19,6 @@
 
         // <!-- DISPLAY FEATURES - NETWORK -->
         
-        component.set("v.showPathToolTip" , masterConfigObject["panels"]["ChartPanel"]["Network"]["showPathToolTip"]);
         component.set("v.nodestrokewidth" , masterConfigObject["panels"]["ChartPanel"]["Network"]["nodestrokewidth"]);
       
     },
