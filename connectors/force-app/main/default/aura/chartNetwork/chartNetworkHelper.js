@@ -2,7 +2,6 @@
 
     initializeVisuals: function (component) {
         console.log("subhelper: enter initializeVisuals proper!");
-        var _this = this;
         let storeObject = component.get("v.storeObject");
         let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
 
@@ -186,39 +185,8 @@
         /* Above should be common to some degree - Below is forceSimulation specific */
 
         console.log("calling layout / simulation");
-
-        // var forceNodes = {"nodes": [] };
-        // var nodey4 = d3.select("#" + nodeGroupId).selectAll("circle")  
-        // .each(function(d) {
-        // // your update code here as it was in your example
-        //     var d3this = d3.select(this) // Transform to d3 Object - THIS COULD BE MY ANSWER TO EVERYTHING
-        //     forceNodes["nodes"].push(d3this);
-        // });
-
         bznetwork.runSimulation(storeObject, path, node, text);                 
         
-// GARBAGE AFTER HERE - experiments
-
-/*
-        //var nodeGroupId = chartSVGId + "nodeGroup";
-        var nodey4 = d3.select("#" + nodeGroupId).selectAll("circle")  
-        .each(function(d) {
-        // your update code here as it was in your example
-            var d3this = d3.select(this) // Transform to d3 Object - THIS COULD BE MY ANSWER TO EVERYTHING
-            console.log("ThisNode");
-            console.log(d);
-            d3this.attr("testAttribute" , "yay");
-        });
-
-        var pathy4 = d3.select("#" + pathGroupId).selectAll("path")  
-        .each(function(d) {
-        // your update code here as it was in your example
-            var d3this = d3.select(this) // Transform to d3 Object - THIS COULD BE MY ANSWER TO EVERYTHING
-            console.log("ThisPath");
-            console.log(d);
-            d3this.attr("testAttribute" , "yay");
-        });
-*/        
     },
 
     // unsophisticated version is to remove everything and re-initialize
