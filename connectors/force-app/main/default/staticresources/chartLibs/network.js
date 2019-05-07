@@ -114,11 +114,299 @@
     }
 }
 
+function runSimulation  (storeObject, path, node, text) {
+    console.log("bznetwork.runSimulation enter");
+    let componentType = bzchart.getStore (storeObject, "componentType") ;
+
+    if (componentType ==  "network.connections") {
+        bznetwork.runSimulationConnections(storeObject, path, node, text);
+    }
+    if (componentType ==  "network.timeline") {
+        bznetwork.runSimulationInfluence(storeObject, path, node, text);
+    }
+}                 
+
+/* Connections Methods */
+
+function runSimulationConnections  (storeObject, path, node, text) {
+    console.log("bznetwork.runSimulationConnections enter");
+    var datajson = bzchart.getStore (storeObject, "datajson") ;
+
+    var simulation = bznetwork.initializeSimulationConnections(storeObject, datajson.nodes);            
+
+    bzchart.setStore (storeObject, "simulation", simulation ) ;
+
+    var forceLinks = bznetwork.buildForceLinks(path);
+    var link_force =  d3.forceLink(forceLinks.links)
+        .id(function(d) { return d.id; });
+
+    simulation.force("links",link_force);
+
+    bznetwork.dragHandler(node, simulation);
+
+    simulation.on("tick", function() {
+        bznetwork.onTick (storeObject, path, node, text);
+    });             
+
+    console.log("bznetwork.runSimulationConnections exit");
+}                 
+
+function initializeSimulationConnections  (storeObject, nodes) {
+    var width = bzchart.getStore (storeObject, "width") ;  
+    var height = bzchart.getStore (storeObject, "height") ; 
+
+    // force example - https://bl.ocks.org/rsk2327/23622500eb512b5de90f6a916c836a40
+    var attractForce = d3.forceManyBody().strength(5).distanceMax(400).distanceMin(60);
+    var repelForce = d3.forceManyBody().strength(-800).distanceMax(200).distanceMin(30);
+
+    var simulation = d3.forceSimulation()
+        //add nodes
+        .nodes(nodes) 
+        .force("center_force", d3.forceCenter(width / 2, height / 2))
+        .alphaDecay(0.03).force("attractForce",attractForce).force("repelForce",repelForce);
+    
+    console.log("bznetwork.initializeSimulationConnections exit");
+    return simulation;
+}
+
+function dragHandler  (node, simulation) {
+    console.log("dragHandler enter");
+    var drag_handler = d3.drag()
+    .on("start", function (d) {
+        simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+        })
+    .on("drag", function (d) {
+        d.fx = d3.event.x;
+        d.fy = d3.event.y;
+        })
+    .on("end", function (d) {
+        simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+        });
+
+    drag_handler(node);
+    console.log("dragHandler exit");
+}
+    
+function transform  (d, width, height) {
+    var dx = bznetwork.limitborderx(d.x, width);
+    var dy = bznetwork.limitbordery(d.y, height);
+    return "translate(" + dx + "," + dy + ")";
+}
+
+function limitborderx  (x, width) {
+    return Math.max(Math.min(x, width) -30, 20);
+}
+
+function limitbordery  (y, height) {
+    return Math.max(Math.min(y, height - 50), 20 );
+}   
+
+function onTick   (storeObject, path, node, text) {
+    var width = bzchart.getStore (storeObject, "width") ;  
+    var height = bzchart.getStore (storeObject, "height") ; 
+//    if (bzutils.getCache (component, "hasPaths") == true) {
+        path.attr("d", function(d) {
+            var sx = bznetwork.limitborderx(d.source.x, width);
+            var sy = bznetwork.limitbordery(d.source.y, height);
+            var tx = bznetwork.limitborderx(d.target.x, width);
+            var ty = bznetwork.limitbordery(d.target.y, height);
+            var dx = tx - sx;
+            var dy = ty - sy;
+            var dr = Math.sqrt(dx * dx + dy * dy);
+            return "M" + sx + "," + sy + "A" + dr + "," + dr + " 0 0,1 " + tx + "," + ty;
+        });
+//    }
+    node.attr("transform", function(d) {
+        return bznetwork.transform (d, width, height);
+    });
+//        if (bzutils.getCache (component, "hasText") == true) {
+        text.attr("transform", function(d) {
+            return bznetwork.transform (d, width, height);
+        });
+//        }
+}
+
+function buildForceLinks  (path) {
+    var forceLinks = {"links": [] };
+
+    path.data().forEach(function(p) {
+        var sourceDatum = d3.select("#" + p.sourceid).datum();
+        var targetDatum = d3.select("#" + p.targetid).datum();
+        forceLinks["links"].push(
+            {
+                "id" : p.id,
+                "sourceid" : p.sourceid, 
+                "targetid" : p.targetid,
+                "type": p.type,
+                "createdby": p.createdby,
+                "notes": p.notes,
+                "stroke": p.stroke,
+                "source" : sourceDatum,
+                "target" : targetDatum
+            }
+        );
+    });
+    console.log("buildForceLinks exit"); 
+    return forceLinks;
+}
+
+/* Influence Methods */
+
+function runSimulationInfluence  (storeObject, path, node, text) {
+    console.log("bznetwork.runSimulationInfluence enter");
+    var datajson = bzchart.getStore (storeObject, "datajson") ;
+
+    var simulation = bznetwork.initializeSimulationInfluence(storeObject, datajson.nodes);            
+
+    bzchart.setStore (storeObject, "simulation", simulation ) ;
+
+    var forceLinks = bznetwork.buildForceLinks(path);
+    var link_force =  d3.forceLink(forceLinks.links)
+        .id(function(d) { return d.id; });
+
+    simulation.force("links",link_force);
+
+    bznetwork.dragHandler(node, simulation);
+
+    simulation.on("tick", function() {
+        bznetwork.onTick (storeObject, path, node, text);
+    });             
+
+
+    console.log("bznetwork.runSimulationInfluence exit");
+} 
+
+function initializeSimulationInfluence  (storeObject, nodes) {
+    console.log("bznetwork.initializeSimulationInfluence enter");
+    var width = bzchart.getStore (storeObject, "width") ;  
+    var height = bzchart.getStore (storeObject, "height") ; 
+    var sizeDivisor = 100;
+    var nodePadding = 2.5;
+    var currentColorLabel = bzchart.getStore (storeObject, "currentColorLabel") ; 
+
+    var simulation = d3.forceSimulation()
+        .force("forceX", d3.forceX().strength(.1).x(width * .5))
+        .force("forceY", d3.forceY().strength(.1).y(height * .5))
+        .force("center", d3.forceCenter().x(width * .5).y(height * .5))
+        .force("charge", d3.forceManyBody().strength(-150));
+
+    simulation  
+        .nodes(nodes)
+        .force("collide", d3.forceCollide().strength(.5).radius(function(d){
+            return d.measures[currentColorLabel].radius + nodePadding; }).iterations(1))
+//        .force("collide", d3.forceCollide().strength(.5).radius(function(d){ return d.radius + nodePadding; }).iterations(1))
+        .on("tick", function(d){
+          node
+              .attr("cx", function(d){ return d.x; })
+              .attr("cy", function(d){ return d.y; })
+        });        
+    
+    console.log("bznetwork.initializeSimulationInfluence exit");
+    return simulation;
+}
+    
+function nodeDoubleClick(storeObject,primaryNodeId){
+    let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
+    let componentType = bzchart.getStore (storeObject, "componentType") ;
+    console.log("nodeDoubleClick componentType = " + componentType);
+
+    if ((componentType ==  "network.timeline") || (componentType ==  "network.connections")) {
+        // TODO this will need substantial enriching - e.g. pass current measure and whether to add nodes or to refresh etc.
+        var cleanId = bzutils.removeComponentRef(componentReference, primaryNodeId);
+        var eventParameters = {"primaryNodeId" : cleanId, "componentReference" : componentReference};
+        console.log("nodeDoubleClick exit.");
+    
+        var preppedEvent = bzchart.prepareEvent(storeObject, "InitiateRefreshChart", eventParameters);
+        return preppedEvent;        
+    }
+}
+
+
+function textAdditionalAttribute  (storeObject, text) {
+    // Not sure this is called
+    console.log("bznetwork.textAdditionalAttribute enter");    
+    let componentType = bzchart.getStore (storeObject, "componentType") ;
+
+    if ((componentType == "network.connections") || (componentType == "network.timeline")) {
+        text
+        .attr("x", 8)
+        .attr("y", ".31em")            
+    }
+
+    console.log("bznetwork.textAdditionalAttribute exit");
+}
+
+function pathMouseover  (d,path,pathToolTipDiv) {
+    console.log("bznetwork.pathMouseover enter");
+
+    var mouseoverpathid = d.id;
+
+    path.style("stroke", function(o, i) {
+        var oid =o.id;
+
+        if (oid === mouseoverpathid) {
+            return "red";
+        }
+        else
+        {
+            return "gray";
+        }
+    });
+
+    var midx = (d.source.x + d.target.x) / 2
+    var midy = (d.source.y + d.target.y) / 2
+
+    var content = '<div style="text-align:center;font-size:"6px";>';
+    content += '<p>Type: ' + d.type + '</p>';
+    content += '<p>Linked By ' + d.createdby + '</p>';
+    content += '<p>Notes: ' + d.notes + '</p>';
+    content += '</div>';
+
+    pathToolTipDiv.transition()
+        .duration(100)
+        .style("opacity", .9);
+    pathToolTipDiv.html(content)
+        .style("left", midx + "px")
+        .style("top", midy + "px");
+
+    console.log("bznetwork.pathMouseover exit");
+    
+}
+
+function pathMouseout  (pathToolTipDiv) {
+    console.log("bznetwork.pathMouseout enter");
+
+    pathToolTipDiv.transition()
+        .delay(1000)
+        .duration(2000)
+        .style("opacity", 0);
+
+    console.log("bznetwork.pathMouseout exit");
+}
 
   exports.getRelatedNodes = getRelatedNodes;
   exports.nodeDataSetFunctionNodes = nodeDataSetFunctionNodes;
   exports.refreshVisibilityHelper = refreshVisibilityHelper;
-
+  exports.runSimulation = runSimulation;
+  exports.runSimulationConnections = runSimulationConnections;
+  exports.initializeSimulationConnections = initializeSimulationConnections;
+  exports.dragHandler = dragHandler;
+  exports.transform = transform;
+  exports.limitborderx = limitborderx;
+  exports.limitbordery = limitbordery;
+  exports.onTick = onTick;
+  exports.buildForceLinks = buildForceLinks;
+  exports.runSimulationInfluence = runSimulationInfluence;
+  exports.initializeSimulationInfluence = initializeSimulationInfluence;
+  exports.nodeDoubleClick = nodeDoubleClick;
+  exports.textAdditionalAttribute = textAdditionalAttribute;
+  exports.pathMouseover = pathMouseover;
+  exports.pathMouseout = pathMouseout;
+  
   Object.defineProperty(exports, '__esModule', { value: true });
 
   console.log("loaded: bznetwork  IIFE");
@@ -184,7 +472,7 @@ const OverrideMixin = {
     }
   },
 
-  nodeMouseout : function (storeObject, d) {
+  nodeMouseout  (storeObject, d) {
       // revert back to just the name
       // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
       var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + d.name ;
