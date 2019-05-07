@@ -158,13 +158,13 @@
                     return "url(#" + d.type + ")";
                 })
                 .on('mouseout', function(d) { // hide the div
-                    var showPathToolTip = component.get("v.showPathToolTip"); 
+                    var showPathToolTip = bzchart.getStore (storeObject, "showPathToolTip") ;                                    
                     if (showPathToolTip) {
                         bznetwork.pathMouseout(pathToolTipDiv);
                     }
                 })
                 .on('mouseover', $A.getCallback(function(d) { 
-                    var showPathToolTip = component.get("v.showPathToolTip"); 
+                    var showPathToolTip = bzchart.getStore (storeObject, "showPathToolTip") ;                                    
                     console.log("showPathToolTip: " + showPathToolTip);
                     if (showPathToolTip) {
                         bznetwork.pathMouseover(d, path, pathToolTipDiv);

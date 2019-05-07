@@ -180,7 +180,15 @@
        
                bzchart.buildMeasureSchemeMap(masterConfigObject, storeObject);
 
-               var showZoomSlider = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","Hierarchy","showZoomSlider");         
+               let showPathToolTip = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","Network","showPathToolTip");         
+               if (showPathToolTip != null) {
+                   bzchart.setStore (storeObject, "showPathToolTip", showPathToolTip) ;                                    
+               }
+               else {
+                   bzchart.setStore (storeObject, "showPathToolTip", false) ;                                    
+               }                     
+               
+               let showZoomSlider = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","Hierarchy","showZoomSlider");         
                if (showZoomSlider != null) {
                    component.set("v.showZoomSlider" , showZoomSlider); // required for now but not in LWC
                    bzchart.setStore (storeObject, "showZoomSlider", showZoomSlider) ;                                    

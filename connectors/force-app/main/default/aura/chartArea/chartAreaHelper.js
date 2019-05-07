@@ -257,7 +257,11 @@
         var appEvents = bzchart.getStore (storeObject, "appEvents") ;
 
         var defaultEventType = component.get("v.defaultEventType");
-        console.log("chartArea: restockCache: push new cache events: " + appEvents.length + " of event type: " + defaultEventType);
+        console.log("chartArea: restockCache: push new cache events of event type: " + defaultEventType);
+
+        if (appEvents == null) {
+            appEvents = [];
+        }
 
         if (appEvents.length < 200) { // keep a cap on number of cached events
             for (var i = 0; i < 100; i++) {
