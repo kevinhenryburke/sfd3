@@ -79,7 +79,7 @@
                 var primaryNodeId = d.id;
                 bzchart.setStore (storeObject, "primaryNodeId", primaryNodeId ) ;
 
-                var preppedEvent = bznetwork.nodeDoubleClick(component,primaryNodeId);
+                var preppedEvent = bznetwork.nodeDoubleClick(storeObject,primaryNodeId);
 
                 bzaura.publishPreppedEvent(storeObject,preppedEvent,$A.get("e.c:evt_sfd3"));
             }))
@@ -108,7 +108,7 @@
             // .attr("x", 8)
             // .attr("y", ".31em");
 
-        bznetwork.textAdditionalAttribute (component, svgText);
+        bznetwork.textAdditionalAttribute (storeObject, svgText);
 
 
         var svgText = text.append("svg:text");
@@ -121,7 +121,7 @@
             // .attr("x", 8)
             // .attr("y", ".31em");
 
-        bznetwork.textAdditionalAttribute (component, svgText);
+        bznetwork.textAdditionalAttribute (storeObject, svgText);
     
        // calling paths
 
