@@ -50,53 +50,7 @@
     styleNodes: function(component,event,helper){
         console.log("aura:method styleNodes in chartNetwork enter");
         let storeObject = component.get("v.storeObject");
-        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
-        let componentType = bzchart.getStore (storeObject, "componentType") ;
-
-        if ((componentType ==  "network.connections") || (componentType ==  "network.timeline")) {
-            var primaryid = bzchart.getStore (storeObject, "primaryNodeId") ;
-
-            var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
-                .selectAll("circle")  ;
-
-            if (bzchart.getStore (storeObject, "updateSize")) {            
-                node.attr("r", function(o, i) {
-                    return bzchart.getFromMeasureScheme(storeObject, o, "Size");
-                });
-            }
-
-            if (bzchart.getStore (storeObject, "updateColor")) {            
-                node.style("fill", function(o, i) {
-                    return bzchart.getFromMeasureScheme(storeObject, o, "Color");
-                });
-            }
-        
-            node.style("stroke", function(o, i) {
-                var stroke = o.stroke;
-                var oid = o.id;
-                if (oid == primaryid) {
-                    var primaryNodeHighlightingOn = bzchart.getStore (storeObject, "primaryNodeHighlightingOn") ;
-                    if (primaryNodeHighlightingOn == true) {
-                        stroke = bzchart.getStore (storeObject, "primaryNodeHighlightingColour") ;
-                    }                
-                }
-                return stroke;
-            });
-        
-            node.style("stroke-width", function(o, i) {
-                var nodestrokewidth = bzchart.getStore (storeObject, "nodestrokewidth") ;
-                var oid = o.id;
-                if (oid == primaryid) {
-                    nodestrokewidth = bzchart.getStore (storeObject, "primaryNodeHighlightingRadius") ;
-                }
-                return nodestrokewidth;
-            });
-        
-            console.log("styleNodes exit");
-        
-        }
-
-        console.log("aura:method styleNodes in chartNetwork exit");
+        bznetwork.styleNodes(storeObject);
     }
 
 })

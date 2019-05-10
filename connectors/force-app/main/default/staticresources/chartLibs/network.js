@@ -388,6 +388,54 @@ function pathMouseout  (pathToolTipDiv) {
     console.log("bznetwork.pathMouseout exit");
 }
 
+function styleNodes (storeObject) {
+    console.log("network.styleNodes enter");
+    let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
+    let componentType = bzchart.getStore (storeObject, "componentType") ;
+
+    if ((componentType ==  "network.connections") || (componentType ==  "network.timeline")) {
+        var primaryid = bzchart.getStore (storeObject, "primaryNodeId") ;
+
+        var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
+            .selectAll("circle")  ;
+
+        if (bzchart.getStore (storeObject, "updateSize")) {            
+            node.attr("r", function(o, i) {
+                return bzchart.getFromMeasureScheme(storeObject, o, "Size");
+            });
+        }
+
+        if (bzchart.getStore (storeObject, "updateColor")) {            
+            node.style("fill", function(o, i) {
+                return bzchart.getFromMeasureScheme(storeObject, o, "Color");
+            });
+        }
+    
+        node.style("stroke", function(o, i) {
+            var stroke = o.stroke;
+            var oid = o.id;
+            if (oid == primaryid) {
+                var primaryNodeHighlightingOn = bzchart.getStore (storeObject, "primaryNodeHighlightingOn") ;
+                if (primaryNodeHighlightingOn == true) {
+                    stroke = bzchart.getStore (storeObject, "primaryNodeHighlightingColour") ;
+                }                
+            }
+            return stroke;
+        });
+    
+        node.style("stroke-width", function(o, i) {
+            var nodestrokewidth = bzchart.getStore (storeObject, "nodestrokewidth") ;
+            var oid = o.id;
+            if (oid == primaryid) {
+                nodestrokewidth = bzchart.getStore (storeObject, "primaryNodeHighlightingRadius") ;
+            }
+            return nodestrokewidth;
+        });
+    }
+    console.log("network.styleNodes exit");
+}
+
+
   exports.getRelatedNodes = getRelatedNodes;
   exports.nodeDataSetFunctionNodes = nodeDataSetFunctionNodes;
   exports.refreshVisibilityHelper = refreshVisibilityHelper;
@@ -406,6 +454,7 @@ function pathMouseout  (pathToolTipDiv) {
   exports.textAdditionalAttribute = textAdditionalAttribute;
   exports.pathMouseover = pathMouseover;
   exports.pathMouseout = pathMouseout;
+  exports.styleNodes = styleNodes;
   
   Object.defineProperty(exports, '__esModule', { value: true });
 
