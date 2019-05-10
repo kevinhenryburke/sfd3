@@ -2,6 +2,5 @@
     <design:attribute name="componentType" label="Component Type" default="hierarchy.treemap" description="See documentation for a list of these values. For example network.connections, network.timeline" />
     <design:attribute name="UserComponentId" label="Component Id" default="Hierarchy" description="Id for this component" />
     <design:attribute name="UserControllerComponentId" label="Controller Component Id" default="Controller" description="If we want to restrict to a particular controller on the page then put the name here that you used as the Component Id of the Controller. Otherwise all controllers will act on this chart"/>    
-	<design:attribute name="hasPrimaryNode" default="false" label="Chart has Primary Node" description="Determines if the chart has a primary node"/>    
     <design:attribute name="Title" default="1" label="Title Text" description=""/>            
 </design:component>

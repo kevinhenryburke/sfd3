@@ -22,7 +22,7 @@ ScratchDataSetup aaa = new ScratchDataSetup();
 aaa.runScripts(9);
 
 
-// NOTE #Manual Setup needed - you need to Go to Setup > Customize > User Interface > check "Update records with inactive owners"
+// NOTE #Manual Setup needed - you need to Go to Setup > Customize > User Interface > check "Enable "Set Audit Fields upon Record Creation" and "Update Records with Inactive Owners" User Permissions"
 ScratchDataSetup.spreadAccountOwnership();
 
  

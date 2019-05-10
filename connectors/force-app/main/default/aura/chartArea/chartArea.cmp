@@ -90,7 +90,6 @@
   <!-- Design Paramters -->  
   <aura:attribute name="UserComponentId" access="global" type="String" default="" description="If putting more than one chart on a page then this provides users with a mechanism to set their own for mapping purposes"/>    
   <aura:attribute name="UserControllerComponentId" access="global" type="String" default="" description="If we want to restrict to a particular controller on the page then put the name here that you used as the Component Id of the Controller. Otherwise all controllers will act on this chart"/>    
-  <aura:attribute name="hasPrimaryNode" access="global" type="Boolean" default="false" description="Determines if the chart has a primary node"/>    
   <aura:attribute name="componentType" access="global" type="String" default="Chart"/>    
   
   <!-- Technical - Chart -->
