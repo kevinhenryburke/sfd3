@@ -10,7 +10,7 @@
         bzchart.setStore (storeObject, "retainNodeDetailsMouseOut", component.get("v.retainNodeDetailsMouseOut") ) ;
         bzchart.setStore (storeObject, "nodestrokewidth", component.get("v.nodestrokewidth") ) ;
 
-        helper.initializeVisuals(component);                         
+        bznetwork.initializeVisualsHelper (storeObject);
     },
 
     refreshDataController: function(component,event,helper){
@@ -26,25 +26,15 @@
     },
 
     searchChart: function(component,event,helper){
-        console.log("aura:method searchChart in subcomponent enter");
         let storeObject = component.get("v.storeObject");
-        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
-        var args = event.getParam("arguments");
+        let args = event.getParam("arguments");
 
-        var searchTermId = args.searchTermId;
-        var searchAction = args.searchAction;
-        var showLevels = args.showLevels;
-
-        var primaryNodeId = bzutils.addComponentRef(componentReference, searchTermId);
-        bzchart.setStore (storeObject, "primaryNodeId", primaryNodeId ) ;
-        bzchart.setStore (storeObject, "showLevels", showLevels) ;
+        let searchTermId = args.searchTermId;
+        let searchAction = args.searchAction;
+        let showLevels = args.showLevels;
 
         let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
-        variantsMixin.refreshVisibility(storeObject);
-
-        var cc = component.getConcreteComponent();
-        cc.styleNodes();                 
-        console.log("aura:method searchChart in subcomponent exit");
+        variantsMixin.searchChart(storeObject,searchTermId,searchAction,showLevels);    
     },
 
     styleNodes: function(component,event,helper){

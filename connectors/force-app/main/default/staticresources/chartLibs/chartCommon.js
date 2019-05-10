@@ -507,8 +507,11 @@ const DefaultMixin = {
   reScale(storeObject, csf) {
   },
   initializeVisuals (storeObject) {
+  },
+  styleNodes (storeObject) {
+  },
+  searchChart: function(storeObject,searchTermId,searchAction,showLevels){
   }
-
 }
 
 exports.DefaultMixin = DefaultMixin;
