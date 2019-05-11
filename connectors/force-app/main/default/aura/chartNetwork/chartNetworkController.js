@@ -23,7 +23,7 @@
         var primaryId = parameters.primaryId;
         var showFilters = parameters.showFilters;
 
-        helper.refreshDataHelper(storeObject, datajson, primaryId, showFilters);                         
+        bznetwork.refreshDataHelper(storeObject, datajson, primaryId, showFilters);                         
     },
 
     searchChart: function(component,event,helper){

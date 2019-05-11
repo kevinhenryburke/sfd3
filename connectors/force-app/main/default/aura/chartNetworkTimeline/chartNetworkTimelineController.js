@@ -17,7 +17,7 @@
             component.set("v.Title", parameters["valueDate"] );
         }
 
-        helper.refreshDataHelper(storeObject, datajson, primaryId, showFilters);                         
+        bznetwork.refreshDataHelper(storeObject, datajson, primaryId, showFilters);                         
     }
 
 })

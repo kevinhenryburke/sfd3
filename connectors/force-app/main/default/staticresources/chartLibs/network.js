@@ -622,6 +622,55 @@ function initializeVisualsHelper (storeObject) {
 }
 
 
+// unsophisticated version is to remove everything and re-initialize
+function refreshDataHelper (storeObject, datajsonRefresh, primaryNodeId, showFilters) {
+    console.log("refreshDataHelper enter");
+    let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
+
+    // delete the paths and the groups
+    // this is not the preferred option - would have preferred to use d3 joins.
+    bzchart.clearChart(componentReference);
+    
+    // retrieve the existing underlying data
+    var datajson = bzchart.getStore (storeObject, "datajson") ;
+
+    // initialize the new raw data, setting component references
+    bzutils.initializeAddComponentRef(componentReference, datajsonRefresh);
+
+    var nodeIds = [];
+    datajson.nodes.forEach(function(node) {
+        nodeIds.push(node["id"]);
+    });        
+
+    datajsonRefresh.nodes.forEach(function(node) {
+        var indexer = nodeIds.indexOf(node["id"]);       
+        if (indexer == -1) {     
+            datajson["nodes"].push(node); // this adds new nodes into datajson
+        }
+    });
+
+    var linkIds = [];
+    datajson.links.forEach(function(link) {
+        linkIds.push(link["id"]);
+    });        
+    
+    datajsonRefresh.links.forEach(function(link) {
+        datajson["links"].push(link);
+    });
+
+    // merge the old and the new data
+    let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+    variantsMixin.dataPreprocess(storeObject, datajson, datajsonRefresh);
+
+    datajson = bzchart.getStore (storeObject, "datajson") ;
+    
+    // re-initialize the chart
+    var isInit = false;
+    bzchart.initializeGroups(storeObject, datajson, primaryNodeId, showFilters, isInit);                 
+
+    bznetwork.initializeVisualsHelper (storeObject);
+}
+
 
   exports.getRelatedNodes = getRelatedNodes;
   exports.nodeDataSetFunctionNodes = nodeDataSetFunctionNodes;
@@ -643,6 +692,7 @@ function initializeVisualsHelper (storeObject) {
   exports.pathMouseout = pathMouseout;
   exports.styleNodes = styleNodes;
   exports.initializeVisualsHelper = initializeVisualsHelper;
+  exports.refreshDataHelper = refreshDataHelper;
   
   Object.defineProperty(exports, '__esModule', { value: true });
 
@@ -672,41 +722,41 @@ const OverrideMixin = {
   },
 
   nodeMouseover (storeObject, d) {
-    console.log("nodeMouseover network mixin enter");
     let componentType = bzchart.getStore (storeObject, "componentType") ;
+    console.log("nodeMouseover network mixin enter", componentType);
 
-    if ((componentType == "network.connections") || (componentType == "network.timeline")) {
-        // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
-        var fields = d.fields;
-        var fieldsLength = fields.length;
+    // styling svg text content: http://tutorials.jenkov.com/svg/tspan-element.html
+    var fields = d.fields;
+    var fieldsLength = fields.length;
 
-        var displayArray = [d.name];
-        for (var i=0; i<fieldsLength;i++) {
-            if (fields[i].fieldType == "STRING" && fields[i].role != "name") {
-                displayArray.push(fields[i].retrievedValue);
-            }
+    var displayArray = [d.name];
+    for (var i=0; i<fieldsLength;i++) {
+        if (fields[i].fieldType == "STRING" && fields[i].role != "name") {
+            displayArray.push(fields[i].retrievedValue);
         }
-
-        var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + displayArray[0] ;
-        textcontent += '</tspan>'; 
-        textcontent += '<tspan x="10" dy="15">' + displayArray[1];
-        if (displayArray.length > 2) {
-            textcontent += ' (' + displayArray[2] + ')';
-        }
-        textcontent += '</tspan>';
-
-        var tselect =  "t" + d.id;
-        var t = d3.select("#" + tselect);
-        t.html(textcontent);
-
-        var sselect =  "s" + d.id;
-        var s = d3.select("#" + sselect);
-        s.html(textcontent);
-
-        var publishParameters = {"data" : d, "parent" : null};
-        var preppedEvent = bzchart.prepareEvent(storeObject, "ChartMouseOver", publishParameters);
-        return preppedEvent;
     }
+
+    var textcontent = '<tspan x="10" y="0" style="font-weight: bold;">' + displayArray[0] ;
+    textcontent += '</tspan>'; 
+    textcontent += '<tspan x="10" dy="15">' + displayArray[1];
+    if (displayArray.length > 2) {
+        textcontent += ' (' + displayArray[2] + ')';
+    }
+    textcontent += '</tspan>';
+
+    var tselect =  "t" + d.id;
+    var t = d3.select("#" + tselect);
+    t.html(textcontent);
+
+    var sselect =  "s" + d.id;
+    var s = d3.select("#" + sselect);
+    s.html(textcontent);
+
+    var publishParameters = {"data" : d, "parent" : null};
+    console.log("nodeMouseover network mixin publishParameters", publishParameters);
+    var preppedEvent = bzchart.prepareEvent(storeObject, "ChartMouseOver", publishParameters);
+    preppedEvent.eventType = "Cache";    
+    return preppedEvent;
   },
 
   nodeMouseout  (storeObject, d) {
