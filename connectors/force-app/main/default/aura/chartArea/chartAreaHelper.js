@@ -205,7 +205,6 @@
                     },
                     function(newComponent, status, errorMessage){
 
-                        component.set("v.popoverPanel", newComponent);
                         bzchart.setStore (storeObject, "popoverPanel", newComponent) ; 
                         
                         var referenceSelector = bzchart.getStore (storeObject, "referenceSelector");
