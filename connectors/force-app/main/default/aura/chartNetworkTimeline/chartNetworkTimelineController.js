@@ -1,6 +1,8 @@
 ({
     refreshDataController: function(component,event,helper){
         bzutils.log("calling the aura:method refreshDataController in chartNetworkTimeline");
+        let storeObject = component.get("v.storeObject");
+
         var args = event.getParam("arguments");
         var parameters = args.parameters;
 
@@ -15,7 +17,7 @@
             component.set("v.Title", parameters["valueDate"] );
         }
 
-        helper.refreshDataHelper(component, datajson, primaryId, showFilters);                         
+        helper.refreshDataHelper(storeObject, datajson, primaryId, showFilters);                         
     }
 
 })

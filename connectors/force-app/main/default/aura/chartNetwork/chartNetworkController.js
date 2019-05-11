@@ -15,6 +15,7 @@
 
     refreshDataController: function(component,event,helper){
         bzutils.log("calling the aura:method refreshDataController in chartNetwork");
+        let storeObject = component.get("v.storeObject");
         var args = event.getParam("arguments");
         var parameters = args.parameters;
 
@@ -22,7 +23,7 @@
         var primaryId = parameters.primaryId;
         var showFilters = parameters.showFilters;
 
-        helper.refreshDataHelper(component, datajson, primaryId, showFilters);                         
+        helper.refreshDataHelper(storeObject, datajson, primaryId, showFilters);                         
     },
 
     searchChart: function(component,event,helper){

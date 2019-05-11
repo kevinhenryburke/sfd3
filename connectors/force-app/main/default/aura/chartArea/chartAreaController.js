@@ -206,7 +206,7 @@
                    bzchart.setStore (storeObject, "showLevels", showLevelsInitial) ;
                }
 
-               var allowPopover = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","allowPopover");         
+               let allowPopover = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","allowPopover");         
                if (allowPopover != null) {
                     bzchart.setStore (storeObject, "allowPopover", allowPopover) ;
                 }
@@ -239,7 +239,21 @@
                bzchart.setStore (storeObject, "updateSize", true);
                bzchart.setStore (storeObject, "latestSizeOrColor",  "none");
 
-               helper.initializeGroups(storeObject, parameters["datajson"], parameters["primaryId"], parameters["showFilters"], isInit);                 
+               bzchart.initializeGroups(storeObject, parameters["datajson"], parameters["primaryId"], parameters["showFilters"], isInit);                 
+
+                // what remains is the publication of the popover event - TODO
+                if (allowPopover == true) {
+                    console.log("allowPopover set so create embedded component ... "); 
+                    bzchart.createInfoLocation(storeObject);
+
+                    // send an event to create a popover
+                    var eventParameters = { 
+                        "componentReference" : componentReference
+                    }        
+                    var preppedEvent = bzchart.prepareEvent(storeObject, "CreatePopOver", eventParameters);
+                    bzaura.publishPreppedEvent(storeObject,preppedEvent,$A.get("e.c:evt_sfd3"));
+            
+                }
 
                 var cc = component.getConcreteComponent();
                 cc.initializeVisuals();

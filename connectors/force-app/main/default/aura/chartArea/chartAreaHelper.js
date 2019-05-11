@@ -89,27 +89,6 @@
         bzchart.setStore (storeObject, "panelDisplayEmbeddedOuter", panelDisplayEmbeddedOuter) ; 
     },
 
-	initializeGroups: function (storeObject, datajson, primaryNodeId, showFilters, isInit) {
-        bzchart.initializeGroups(storeObject, datajson, primaryNodeId, showFilters, isInit); 
-
-        // what remains is the publication of the popover event - TODO
-        let allowPopover = bzchart.getStore (storeObject, "allowPopover") ; 
-
-        if (allowPopover == true) {
-            console.log("allowPopover set so create embedded component ... "); 
-            bzchart.createInfoLocation(storeObject);
-
-            // send an event to create a popover
-            var eventParameters = { 
-                "componentReference" : componentReference
-            }        
-            var preppedEvent = bzchart.prepareEvent(storeObject, "CreatePopOver", eventParameters);
-            bzaura.publishPreppedEvent(storeObject,preppedEvent,$A.get("e.c:evt_sfd3"));
-    
-        }
-    },
-
-
     handleScaleChange: function(component,csf){
         let storeObject = component.get("v.storeObject");
         bzchart.setStore (storeObject, "ChartScaleFactor", csf) ;

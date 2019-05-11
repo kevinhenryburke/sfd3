@@ -1,9 +1,7 @@
 ({
 
     // unsophisticated version is to remove everything and re-initialize
-    refreshDataHelper: function (component, datajsonRefresh, primaryNodeId, showFilters) {
-        var _this = this;
-        let storeObject = component.get("v.storeObject");
+    refreshDataHelper: function (storeObject, datajsonRefresh, primaryNodeId, showFilters) {
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
         // delete the paths and the groups
@@ -45,7 +43,7 @@
         
         // re-initialize the chart
         var isInit = false;
-        _this.initializeGroups(storeObject, datajson, primaryNodeId, showFilters, isInit);                 
+        bzchart.initializeGroups(storeObject, datajson, primaryNodeId, showFilters, isInit);                 
 
         bznetwork.initializeVisualsHelper (storeObject);
     }
