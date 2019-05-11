@@ -23,37 +23,6 @@
         bzctree.update(storeObject, nodeGroup, pathGroup, root, false);
     },
 
-    searchChart: function(component,event,helper){
-        console.log("calling the aura:method searchChart in subcomponent");
-        var args = event.getParam("arguments");
-        let masterConfigObject = component.get("v.masterConfigObject");
-        let storeObject = component.get("v.storeObject");
-
-        var searchTermId = args.searchTermId;
-        var searchAction = args.searchAction;
-
-        var clearHighlightedPaths = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","Hierarchy","clearHighlightedPaths");         
-
-        var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
-        var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
-        var root = bzchart.getStore (storeObject, "root") ;
-
-        if (searchAction == "HighlightOpenPath" || searchAction == "OpenPath" ) {
-            bzctree.openPathsBy(storeObject, searchTermId, "Id");
-            bzctree.update(storeObject, nodeGroup, pathGroup, root, false);
-        }
-
-        if (searchAction == "HighlightOpenPath" || searchAction == "HighlightPath" ) {
-            var highlightedPaths = bzchart.getStore (storeObject, "highlightedPaths") ;
-            if (highlightedPaths != null && clearHighlightedPaths == true) {
-                bzctree.stylePathsStroke(highlightedPaths, false);
-            }
-            
-            bzctree.highlightPathsBy(storeObject, searchTermId, "Id", true);
-            bzctree.update(storeObject, nodeGroup, pathGroup, root, false);
-        }
-    },
-
     styleNodes: function(component,event,helper){
         console.log("aura:method styleNodes in chartHierarchy enter");
         let storeObject = component.get("v.storeObject");

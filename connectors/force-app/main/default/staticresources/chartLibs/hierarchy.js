@@ -197,7 +197,29 @@ const OverrideMixin = {
             datajson = bzhierarchy.picklistNest(groupingFields, datajson);
             bzchart.setStore (storeObject, "datajson", datajson ) ;    
         }  
-    }
+    },
+
+    searchChart (storeObject,searchTermId,searchAction,showLevels){
+        let clearHighlightedPaths = bzchart.getStore (storeObject, "clearHighlightedPaths") ;
+        let nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
+        let pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
+        let root = bzchart.getStore (storeObject, "root") ;
+
+        if (searchAction == "HighlightOpenPath" || searchAction == "OpenPath" ) {
+            bzctree.openPathsBy(storeObject, searchTermId, "Id");
+            bzctree.update(storeObject, nodeGroup, pathGroup, root, false);
+        }
+
+        if (searchAction == "HighlightOpenPath" || searchAction == "HighlightPath" ) {
+            var highlightedPaths = bzchart.getStore (storeObject, "highlightedPaths") ;
+            if (highlightedPaths != null && clearHighlightedPaths == true) {
+                bzctree.stylePathsStroke(highlightedPaths, false);
+            }
+            
+            bzctree.highlightPathsBy(storeObject, searchTermId, "Id", true);
+            bzctree.update(storeObject, nodeGroup, pathGroup, root, false);
+        }
+    }    
 }
 
 exports.OverrideMixin = OverrideMixin;

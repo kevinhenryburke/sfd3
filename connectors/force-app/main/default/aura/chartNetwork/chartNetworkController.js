@@ -26,18 +26,6 @@
         bznetwork.refreshDataHelper(storeObject, datajson, primaryId, showFilters);                         
     },
 
-    searchChart: function(component,event,helper){
-        let storeObject = component.get("v.storeObject");
-        let args = event.getParam("arguments");
-
-        let searchTermId = args.searchTermId;
-        let searchAction = args.searchAction;
-        let showLevels = args.showLevels;
-
-        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
-        variantsMixin.searchChart(storeObject,searchTermId,searchAction,showLevels);    
-    },
-
     styleNodes: function(component,event,helper){
         console.log("aura:method styleNodes in chartNetwork enter");
         let storeObject = component.get("v.storeObject");

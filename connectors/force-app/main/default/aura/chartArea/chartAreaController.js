@@ -67,10 +67,6 @@
         bzutils.log("calling the aura:method refreshDataController in base");
     },
 
-    searchChart: function(component,event,helper){
-        bzutils.log("calling the aura:method searchChart in base");        
-    },
-
     handleScaleChange: function(component,event,helper){
         let storeObject = component.get("v.storeObject");
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
@@ -212,6 +208,14 @@
                 }
                 else {
                     bzchart.setStore (storeObject, "allowPopover", false) ;
+                }
+
+                var clearHighlightedPaths = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","Hierarchy","clearHighlightedPaths");         
+                if (clearHighlightedPaths != null) {
+                    bzchart.setStore (storeObject, "clearHighlightedPaths", clearHighlightedPaths) ;
+                }
+                else {
+                    bzchart.setStore (storeObject, "clearHighlightedPaths", false) ;
                 }
 
                // set latest values for color and size
@@ -359,9 +363,15 @@
         }
         if (topic == "SearchChart")
         {
-            bzutils.log("SearchChart received by Chart: " + componentReference + "/" + parameters["componentReference"]);
-            var cc = component.getConcreteComponent();
-            cc.searchChart(parameters["searchTermId"], parameters["searchAction"], parameters["showLevels"]);                 
+            bzutils.log("SearchChart received for mixin by Chart: " + componentReference + "/" + parameters["componentReference"]);
+
+            let searchTermId = parameters["searchTermId"];
+            let searchAction = parameters["searchAction"];
+            let showLevels = parameters["showLevels"];
+    
+            let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+            variantsMixin.searchChart(storeObject,searchTermId,searchAction,showLevels);    
+    
 
         }
         if (topic == "ChartMouseOut")
