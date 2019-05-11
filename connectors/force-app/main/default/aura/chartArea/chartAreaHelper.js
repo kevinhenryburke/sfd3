@@ -201,7 +201,7 @@
                         "layoutStyle" : "cardTile",
                         "isHosted" : true,
                         "hostComponentReference" : componentReference,
-                        "hostUserControllerComponentId" : component.get("v.UserControllerComponentId")
+                        "hostUserControllerComponentId" : bzchart.getStore (storeObject, "UserControllerComponentId")
                     },
                     function(newComponent, status, errorMessage){
 
