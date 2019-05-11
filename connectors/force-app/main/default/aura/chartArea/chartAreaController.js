@@ -115,13 +115,13 @@
 
         // console.log('chartArea: topic:' + topic + " controller " + controller + " componentReference " + componentReference);
 
-        var UserControllerComponentId = component.get("v.UserControllerComponentId");
+        let UserControllerComponentId = bzchart.getStore (storeObject, "UserControllerComponentId") ;
         
         // if the component is configured to be controlled by a specified controller then exit if it's a different one.
         if (UserControllerComponentId != null && UserControllerComponentId != "") {
             // note - component will subscribe to its own events
             if (UserControllerComponentId != controller) { 
-                var UserComponentId = component.get("v.UserComponentId");
+                let UserComponentId = bzchart.getStore (storeObject, "UserComponentId") ;
                 bzutils.log("ignoring message from " + controller + " in component " + UserComponentId);
                 return;
             }
