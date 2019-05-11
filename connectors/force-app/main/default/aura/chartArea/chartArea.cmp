@@ -55,9 +55,6 @@
 
   <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
   <aura:handler event="aura:doneRendering" action="{!c.doneRendering}"/>
-
-  <aura:attribute name="modalPromise" access="global" type="Aura.Action"/>
-  <aura:attribute name="modalShown" access="global" type="Boolean" default="false"/>    
   
   <aura:attribute name="masterConfig" access="global" type="String" default="{}"/>      
   <aura:attribute name="masterConfigObject" access="global" type="Object"/>      

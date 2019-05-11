@@ -143,8 +143,6 @@
                bzutils.log("InitializeData with reference: " + componentReference);
                let isInit = true;
 
-
-               /* Set Mixins for bespoke functionality per component type */
                let masterConfigObject = parameters["masterConfigObject"];
                component.set("v.masterConfigObject", masterConfigObject);
 
@@ -259,20 +257,23 @@
            }
        }
 
-        if (topic == "ShowLevelsMore")
-        {
+       if (topic == "CreatePopOver") {
+           console.log("xxxxx: received CreatePopOver ");
+           helper.createPopOverComponent(storeObject);
+        }
+
+        if (topic == "ShowLevelsMore") {
             // get the new number of levels and refresh
-            bzchart.setStore (storeObject, "showLevels", parameters["levels"] ) ;
-            let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+            bzchart.setStore(storeObject, "showLevels", parameters["levels"]);
+            let variantsMixin = bzchart.getStore(storeObject, "chartMixin");
             variantsMixin.refreshVisibility(storeObject);
-      }
-        if (topic == "ShowLevelsFewer")
-        {
+        }
+        if (topic == "ShowLevelsFewer") {
             // get the new number of levels and refresh
-            bzchart.setStore (storeObject, "showLevels", parameters["levels"] ) ;
-            let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+            bzchart.setStore(storeObject, "showLevels", parameters["levels"]);
+            let variantsMixin = bzchart.getStore(storeObject, "chartMixin");
             variantsMixin.refreshVisibility(storeObject);
-    }
+        }
         if (topic == "SetColor")
         {
             // get the measure
@@ -352,7 +353,7 @@
             if (allowPopover == null) {allowPopover = false;}
 
             if (allowPopover == true) {
-                var modalPromise = component.get("v.modalPromise");
+                let modalPromise = bzchart.getStore (storeObject, "modalPromise") ; 
 
                 if (modalPromise != null ) {
                     modalPromise.then(function (overlay) {

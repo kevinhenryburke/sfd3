@@ -9,6 +9,7 @@
         bzchart.setStore (storeObject, "componentEvent", component.getEvent("evt_bzc")) ;        
         bzchart.setStore (storeObject, "defaultEventType", component.get("v.defaultEventType")) ;        
         bzchart.setStore (storeObject, "appEvents",  []) ;
+        bzchart.setStore (storeObject, "masterConfig", component.get("v.masterConfig") ) ;
 
         bzchart.setStore (storeObject, "UserComponentId", component.get("v.UserComponentId") ) ;
         bzchart.setStore (storeObject, "UserControllerComponentId", component.get("v.UserControllerComponentId") ) ;
@@ -89,7 +90,6 @@
     },
 
 	initializeGroups: function (component, datajson, primaryNodeId, showFilters, isInit) {
-        var _this = this;
         let masterConfigObject = component.get("v.masterConfigObject");
         let storeObject = component.get("v.storeObject");
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
@@ -171,70 +171,15 @@
         if (allowPopover == true) {
             console.log("allowPopover set so create embedded component ... "); 
             bzchart.createInfoLocation(storeObject);
-            _this.createPopOverComponent(component);
+
+            // send an event to create a popover
+            var eventParameters = { 
+                "componentReference" : componentReference
+            }        
+            var preppedEvent = bzchart.prepareEvent(storeObject, "CreatePopOver", eventParameters);
+            bzaura.publishPreppedEvent(storeObject,preppedEvent,$A.get("e.c:evt_sfd3"));
+    
         }
-    },
-
-    // creates an informational popover
-    createPopOverComponent : function (component) {
-        let storeObject = component.get("v.storeObject");
-
-        // create an overlayLibrary that we can attach the popover to
-        $A.createComponent(
-        "lightning:overlayLibrary",
-        {
-        },
-        function(overlayLibElement, overlayStatus, overlayErrorMessage){
-
-            console.log("createPopOverComponent: overlayLibrary creation status: " + overlayStatus );
-            if (overlayStatus == "SUCCESS") {
-                console.log("createPopOverComponent: overlayLib found");
-
-                let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
-                let masterConfig = component.get("v.masterConfig");
-
-                $A.createComponent(
-                    "c:panelDisplay",
-                    {
-                        "Controller" : "Top", // TODO is this really ok to hardcode? Should it be same as hosting component's controller?
-                        "masterConfig" : masterConfig,
-                        "layoutStyle" : "cardTile",
-                        "isHosted" : true,
-                        "hostComponentReference" : componentReference,
-                        "hostUserControllerComponentId" : bzchart.getStore (storeObject, "UserControllerComponentId")
-                    },
-                    function(newComponent, status, errorMessage){
-
-                        bzchart.setStore (storeObject, "popoverPanel", newComponent) ; 
-                        
-                        var referenceSelector = bzchart.getStore (storeObject, "referenceSelector");
-                        console.log("createPopOverComponent: createComponent callback: " + referenceSelector);
-                        if (status === "SUCCESS") {
-                            console.log("xxxxx: createPopOverComponent: createComponent callback: SUCCESS: " );
-
-                            var modalPromise = overlayLibElement.showCustomPopover({
-                                body: newComponent,
-                                referenceSelector: referenceSelector,
-                                // cssClass: "slds-hide,popoverclass,slds-popover,slds-popover_panel,slds-nubbin_left,no-pointer,cPopoverTest"
-                                cssClass: "popoverclass,slds-popover,slds-popover_panel,no-pointer,slds-popover__body_small,slds-popover_small,slds-popover__body_small,cChartArea"
-                            });
-                            component.set("v.modalPromise", modalPromise);  
-                            modalPromise.then(function (overlay) {
-                                overlay.show();  
-                                bzchart.setStore (storeObject, "overlay", overlay) ; 
-                            });             
-                        }
-                        else {
-                            console.log("createPopOverComponent: create panelDisplay callback: Error: " + errorMessage);
-                        }
-                    }
-                );
-            }
-            else {
-                console.log("createPopOverComponent: Error: overlayLib not created: " + overlayErrorMessage);
-            }
-        });
-
     },
 
 
@@ -291,8 +236,72 @@
             hash = hash & hash; // Convert to 32bit integer
         }
         return hash;
+    },
+
+    /* AURA SPECIFIC */
+
+    // creates an informational popover
+    createPopOverComponent : function (storeObject) {
+        let masterConfig = bzchart.getStore (storeObject, "masterConfig") ;  
+
+        // create an overlayLibrary that we can attach the popover to
+        $A.createComponent(
+        "lightning:overlayLibrary",
+        {
+        },
+        function(overlayLibElement, overlayStatus, overlayErrorMessage){
+
+            console.log("createPopOverComponent callback: overlayLibrary creation status: " + overlayStatus );
+            if (overlayStatus == "SUCCESS") {
+                console.log("createPopOverComponent: overlayLib found");
+
+                let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
+
+                $A.createComponent(
+                    "c:panelDisplay",
+                    {
+                        "Controller" : "Top", // TODO is this really ok to hardcode? Should it be same as hosting component's controller?
+                        "masterConfig" : masterConfig,
+                        "layoutStyle" : "cardTile",
+                        "isHosted" : true,
+                        "hostComponentReference" : componentReference,
+                        "hostUserControllerComponentId" : bzchart.getStore (storeObject, "UserControllerComponentId")
+                    },
+                    function(newComponent, status, errorMessage){
+
+                        bzchart.setStore (storeObject, "popoverPanel", newComponent) ; 
+                        
+                        let referenceSelector = bzchart.getStore (storeObject, "referenceSelector");
+                        console.log("createPopOverComponent: createComponent callback: " + referenceSelector);
+                        if (status === "SUCCESS") {
+                            console.log("xxxxx: createPopOverComponent: createComponent callback: SUCCESS: " );
+
+                            let modalPromise = overlayLibElement.showCustomPopover({
+                                body: newComponent,
+                                referenceSelector: referenceSelector,
+                                // cssClass: "slds-hide,popoverclass,slds-popover,slds-popover_panel,slds-nubbin_left,no-pointer,cPopoverTest"
+                                cssClass: "popoverclass,slds-popover,slds-popover_panel,no-pointer,slds-popover__body_small,slds-popover_small,slds-popover__body_small,cChartArea"
+                            });
+                            bzchart.setStore (storeObject, "modalPromise", modalPromise) ; 
+                            modalPromise.then(function (overlay) {
+                                overlay.show();  
+                                bzchart.setStore (storeObject, "overlay", overlay) ; 
+                            });             
+                        }
+                        else {
+                            console.log("createPopOverComponent: create panelDisplay callback: Error: " + errorMessage);
+                        }
+                    }
+                );
+            }
+            else {
+                console.log("createPopOverComponent: Error: overlayLib not created: " + overlayErrorMessage);
+            }
+        });
     }
+
     
+
 })
 
 
