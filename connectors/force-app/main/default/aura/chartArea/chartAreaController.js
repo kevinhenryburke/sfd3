@@ -206,6 +206,14 @@
                    bzchart.setStore (storeObject, "showLevels", showLevelsInitial) ;
                }
 
+               var allowPopover = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","allowPopover");         
+               if (allowPopover != null) {
+                    bzchart.setStore (storeObject, "allowPopover", allowPopover) ;
+                }
+                else {
+                    bzchart.setStore (storeObject, "allowPopover", false) ;
+                }
+
                // set latest values for color and size
 
                bzchart.setStore (storeObject, "currentColorLabel", 
@@ -231,7 +239,7 @@
                bzchart.setStore (storeObject, "updateSize", true);
                bzchart.setStore (storeObject, "latestSizeOrColor",  "none");
 
-               helper.initializeGroups(component, parameters["datajson"], parameters["primaryId"], parameters["showFilters"], isInit);                 
+               helper.initializeGroups(storeObject, parameters["datajson"], parameters["primaryId"], parameters["showFilters"], isInit);                 
 
                 var cc = component.getConcreteComponent();
                 cc.initializeVisuals();
@@ -348,9 +356,7 @@
         }
         if (topic == "CloseDisplayPanel")
         {      
-            let masterConfigObject = component.get("v.masterConfigObject");
-            var allowPopover = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","allowPopover");         
-            if (allowPopover == null) {allowPopover = false;}
+            let allowPopover = bzchart.getStore (storeObject, "allowPopover") ; 
 
             if (allowPopover == true) {
                 let modalPromise = bzchart.getStore (storeObject, "modalPromise") ; 

@@ -452,6 +452,80 @@ function setFilterVisibility (storeObject, filterType, filterState) {
     bzchart.setStore (storeObject, "filterValues", filterValues ) ;
 }
 
+function initializeGroups (storeObject, datajson, primaryNodeId, showFilters, isInit) {
+    let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
+    
+    if (isInit) {
+        bzutils.initializeAddComponentRef(componentReference, datajson);
+    }
+
+    bzchart.setStore (storeObject, "datajson", datajson ) ;
+
+    let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+    let hasPrimaryNode = variantsMixin.hasPrimaryNode();
+
+    if (hasPrimaryNode == true) {
+        console.log("hasPrimaryNode true");
+        primaryNodeId = bzutils.addComponentRef(componentReference, primaryNodeId);
+        bzchart.setStore (storeObject, "primaryNodeId", primaryNodeId ) ;
+    }
+    else {
+        console.log("hasPrimaryNode false");
+    }
+
+    if (showFilters != null) {
+        bzchart.setStore (storeObject, "filterValues", showFilters.filterValues ) ;
+        bzchart.setStore (storeObject, "filterAPIField", showFilters.filterAPIField ) ;
+    }
+    else {
+        bzchart.setStore (storeObject, "filterValues", [] ) ;
+    }
+
+    var svg = d3.select(bzutils.getDivId("svg", componentReference, true));
+            
+    // Styling of tooltips - see GitHub prior to Feb 24, 2018
+    var pathToolTipDivId = bzutils.addComponentRef(componentReference, "pathToolTip");
+    var pathToolTipDiv = d3.select("#" + pathToolTipDivId);
+    bzchart.setStore (storeObject, "pathToolTipDiv", pathToolTipDiv ) ;
+
+    // create some groups inside the svg element to store the raw data
+
+    var pathGroupId = bzutils.getDivId("pathGroup", componentReference, false);
+    bzchart.setStore (storeObject, "pathGroupId", pathGroupId ) ;
+    var pathGroup = d3.select("#" + pathGroupId);
+    if (pathGroup.empty()) {
+        console.log("create pathGroup");
+        pathGroup = svg.append("g").attr("id",pathGroupId);
+    }
+    bzchart.setStore (storeObject, "pathGroup", pathGroup ) ;
+
+    var nodeGroupId = bzutils.getDivId("nodeGroup", componentReference, false);
+    var nodeGroup = d3.select("#" + nodeGroupId);
+    if (nodeGroup.empty()) {
+        console.log("create nodeGroup");
+        nodeGroup = svg.append("g").attr("id",nodeGroupId);
+    }
+    bzchart.setStore (storeObject, "nodeGroup", nodeGroup ) ;
+
+    var textGroupId = bzutils.getDivId("textGroup", componentReference, false);        
+    var textGroup = d3.select("#" + textGroupId);
+    if (textGroup.empty()) {
+        console.log("create textGroup");
+        textGroup = svg.append("svg:g").attr("id",textGroupId);
+    }
+    bzchart.setStore (storeObject, "textGroup", textGroup ) ;
+
+    var legendSymbolGroupId = bzutils.getDivId("legendSymbolGroup", componentReference, false);
+    var legendSymbolGroup = d3.select("#" + legendSymbolGroupId);
+    if (legendSymbolGroup.empty()) {
+        console.log("create legendSymbolGroup");
+        legendSymbolGroup = svg.append("g").attr("id",legendSymbolGroupId);
+    }
+    bzchart.setStore (storeObject, "legendSymbolGroup", legendSymbolGroup ) ;
+
+}
+
+
 
 exports.setStore = setStore;
 exports.getStore = getStore;
@@ -470,7 +544,7 @@ exports.clearChart = clearChart;
 exports.buildMeasureSchemeMap = buildMeasureSchemeMap;
 exports.showColorSchemeLegend = showColorSchemeLegend;
 exports.setFilterVisibility = setFilterVisibility;
-
+exports.initializeGroups = initializeGroups;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 

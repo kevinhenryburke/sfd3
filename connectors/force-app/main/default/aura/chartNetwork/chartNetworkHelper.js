@@ -45,7 +45,7 @@
         
         // re-initialize the chart
         var isInit = false;
-        _this.initializeGroups(component, datajson, primaryNodeId, showFilters, isInit);                 
+        _this.initializeGroups(storeObject, datajson, primaryNodeId, showFilters, isInit);                 
 
         bznetwork.initializeVisualsHelper (storeObject);
     }
