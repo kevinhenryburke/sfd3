@@ -196,6 +196,20 @@
                 let clearHighlightedPaths = bzutils.getMasterParamWithDefault(masterConfigObject,false,"panels","ChartPanel","Hierarchy","clearHighlightedPaths");         
                 bzchart.setStore (storeObject, "clearHighlightedPaths", clearHighlightedPaths) ;
 
+                // Following are Network specific at present
+
+                bzchart.setStore (storeObject, "primaryNodeHighlightingOn", 
+                    bzutils.getMasterParamWithDefault(masterConfigObject, true, "panels","ChartPanel","Network","primaryNodeHighlightingOn"));         
+                bzchart.setStore (storeObject, "primaryNodeHighlightingColour", 
+                    bzutils.getMasterParamWithDefault(masterConfigObject, "gold", "panels","ChartPanel","Network","primaryNodeHighlightingColour"));         
+                bzchart.setStore (storeObject, "primaryNodeHighlightingRadius", 
+                    bzutils.getMasterParamWithDefault(masterConfigObject, "10px", "panels","ChartPanel","Network","primaryNodeHighlightingRadius"));         
+                bzchart.setStore (storeObject, "retainNodeDetailsMouseOut", 
+                    bzutils.getMasterParamWithDefault(masterConfigObject, true, "panels","ChartPanel","Network","retainNodeDetailsMouseOut"));         
+                bzchart.setStore (storeObject, "nodestrokewidth", 
+                    bzutils.getMasterParamWithDefault(masterConfigObject, "5px", "panels","ChartPanel","Network","nodestrokewidth"));         
+
+
                // set latest values for color and size
 
                bzchart.setStore (storeObject, "currentColorLabel", 
