@@ -127,7 +127,14 @@ const OverrideMixin = {
             .data(root.leaves()); // <-D
 
         bzhierarchytreemap.renderCells(storeObject, cells);
+    },
+    
+    styleNodes (storeObject){
+        console.log("styleNodes in hierarchyTreemap.js enter");
+        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+        variantsMixin.initializeVisuals(storeObject);
     }
+  
     
 }
 

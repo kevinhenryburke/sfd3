@@ -127,7 +127,12 @@
 
         var forceLinks = bznetwork.buildForceLinks(path);
         var link_force = d3.forceLink(forceLinks.links)
-            .id(function (d) { return d.id; });
+            .id(function (d) { return d.id; })
+            .distance(function(d) {
+                console.log("my d:",d);
+                return d.distance;
+            })
+            ;
 
         simulation.force("links", link_force);
 
@@ -233,6 +238,7 @@
                     "type": p.type,
                     "createdby": p.createdby,
                     "notes": p.notes,
+                    "distance": p.distance,
                     "stroke": p.stroke,
                     "source": sourceDatum,
                     "target": targetDatum

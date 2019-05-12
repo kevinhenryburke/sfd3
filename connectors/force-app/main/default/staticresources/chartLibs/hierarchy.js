@@ -219,7 +219,16 @@ const OverrideMixin = {
             bzctree.highlightPathsBy(storeObject, searchTermId, "Id", true);
             bzctree.update(storeObject, nodeGroup, pathGroup, root, false);
         }
-    }    
+    },
+    
+    styleNodes (storeObject){
+        console.log("styleNodes in hierarchy.js enter");
+        var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
+        var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
+        var root = bzchart.getStore (storeObject, "root") ;
+        bzctree.update(storeObject, nodeGroup, pathGroup, root, false);
+    }
+    
 }
 
 exports.OverrideMixin = OverrideMixin;

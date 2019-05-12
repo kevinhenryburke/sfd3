@@ -350,6 +350,15 @@ When you click to drill down the same structure is recreated started at the next
                 : d.data.name + " (" + formatNumber(d.value) + ")";
         }
 
+    },
+    
+    styleNodes (storeObject){
+        console.log("styleNodes in hierarchyTreemapzoom.js enter");
+        let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
+        bzchart.clearElements(componentReference);
+
+        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+        variantsMixin.initializeVisuals(storeObject);
     }
     
 }

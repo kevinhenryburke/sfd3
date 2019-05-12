@@ -26,13 +26,8 @@
     styleNodes: function(component,event,helper){
         console.log("aura:method styleNodes in chartHierarchy enter");
         let storeObject = component.get("v.storeObject");
-
-        var nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
-        var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
-        var root = bzchart.getStore (storeObject, "root") ;
-
-        bzctree.update(storeObject, nodeGroup, pathGroup, root, false);
-        console.log("aura:method styleNodes in chartHierarchy exit");
+        let variantsMixin = bzchart.getStore(storeObject, "chartMixin");
+        variantsMixin.styleNodes(storeObject);
     }
 
 })
