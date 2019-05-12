@@ -175,41 +175,10 @@
                bzchart.buildMeasureSchemeMap(masterConfigObject, storeObject);
 
                // flash some master parameters into store variable to hide complexity of config structure from build
-
-                let showPathToolTip = bzutils.getMasterParamWithDefault(masterConfigObject, false, "panels","ChartPanel","Network","showPathToolTip");         
-                bzchart.setStore (storeObject, "showPathToolTip", showPathToolTip) ;                                    
-               
-               let showZoomSlider = bzutils.getMasterParamWithDefault(masterConfigObject,false,"panels","ChartPanel","Hierarchy","showZoomSlider");         
-               component.set("v.showZoomSlider" , showZoomSlider); // required for now but not in LWC
-               bzchart.setStore (storeObject, "showZoomSlider", showZoomSlider) ;                                    
-           
-               var showEmbeddedPanel = bzutils.getMasterParamWithDefault(masterConfigObject,null,"panels","InfoPanel","showEmbeddedPanel");         
-               bzchart.setStore (storeObject, "showEmbeddedPanel", showEmbeddedPanel ) ;
-               component.set("v.showEmbeddedPanel", showEmbeddedPanel);
-
-               var showLevelsInitial = bzutils.getMasterParamWithDefault(masterConfigObject,1,"panels","ChartPanel","showLevelsInitial");         
-                bzchart.setStore (storeObject, "showLevels", showLevelsInitial) ;
-
-               let allowPopover = bzutils.getMasterParamWithDefault(masterConfigObject,false,"panels","InfoPanel","allowPopover");         
-                bzchart.setStore (storeObject, "allowPopover", allowPopover) ;
-
-                let clearHighlightedPaths = bzutils.getMasterParamWithDefault(masterConfigObject,false,"panels","ChartPanel","Hierarchy","clearHighlightedPaths");         
-                bzchart.setStore (storeObject, "clearHighlightedPaths", clearHighlightedPaths) ;
-
-                // Following are Network specific at present
-
-                bzchart.setStore (storeObject, "primaryNodeHighlightingOn", 
-                    bzutils.getMasterParamWithDefault(masterConfigObject, true, "panels","ChartPanel","Network","primaryNodeHighlightingOn"));         
-                bzchart.setStore (storeObject, "primaryNodeHighlightingColour", 
-                    bzutils.getMasterParamWithDefault(masterConfigObject, "gold", "panels","ChartPanel","Network","primaryNodeHighlightingColour"));         
-                bzchart.setStore (storeObject, "primaryNodeHighlightingRadius", 
-                    bzutils.getMasterParamWithDefault(masterConfigObject, "10px", "panels","ChartPanel","Network","primaryNodeHighlightingRadius"));         
-                bzchart.setStore (storeObject, "retainNodeDetailsMouseOut", 
-                    bzutils.getMasterParamWithDefault(masterConfigObject, true, "panels","ChartPanel","Network","retainNodeDetailsMouseOut"));         
-                bzchart.setStore (storeObject, "nodestrokewidth", 
-                    bzutils.getMasterParamWithDefault(masterConfigObject, "5px", "panels","ChartPanel","Network","nodestrokewidth"));         
-
-
+               bzchart.mapMasterConfigToStore(masterConfigObject, storeObject);
+               component.set("v.showEmbeddedPanel", bzchart.getStore(storeObject, "showEmbeddedPanel"));
+               component.set("v.showZoomSlider", bzchart.getStore(storeObject, "showZoomSlider")); // required for now but not in LWC
+                          
                // set latest values for color and size
 
                bzchart.setStore (storeObject, "currentColorLabel", 
@@ -238,6 +207,7 @@
                bzchart.initializeGroups(storeObject, parameters["datajson"], parameters["primaryId"], parameters["showFilters"], isInit);                 
 
                 // what remains is the publication of the popover event - TODO
+                let allowPopover = bzchart.getStore(storeObject, "allowPopover");
                 if (allowPopover == true) {
                     console.log("allowPopover set so create embedded component ... "); 
                     bzchart.createInfoLocation(storeObject);

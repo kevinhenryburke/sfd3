@@ -257,6 +257,42 @@ function clearChart(componentReference) {
 }
 
 // during initialization, build a map so we can quickly associate the correct API field to a measure
+function mapMasterConfigToStore(masterConfigObject, storeObject) {
+
+    let showPathToolTip = bzutils.getMasterParamWithDefault(masterConfigObject, false, "panels", "ChartPanel", "Network", "showPathToolTip");
+    bzchart.setStore(storeObject, "showPathToolTip", showPathToolTip);
+
+    let showZoomSlider = bzutils.getMasterParamWithDefault(masterConfigObject, false, "panels", "ChartPanel", "Hierarchy", "showZoomSlider");
+    bzchart.setStore(storeObject, "showZoomSlider", showZoomSlider);
+
+    var showEmbeddedPanel = bzutils.getMasterParamWithDefault(masterConfigObject, null, "panels", "InfoPanel", "showEmbeddedPanel");
+    bzchart.setStore(storeObject, "showEmbeddedPanel", showEmbeddedPanel);
+
+    var showLevelsInitial = bzutils.getMasterParamWithDefault(masterConfigObject, 1, "panels", "ChartPanel", "showLevelsInitial");
+    bzchart.setStore(storeObject, "showLevels", showLevelsInitial);
+
+    let allowPopover = bzutils.getMasterParamWithDefault(masterConfigObject, false, "panels", "InfoPanel", "allowPopover");
+    bzchart.setStore(storeObject, "allowPopover", allowPopover);
+
+    let clearHighlightedPaths = bzutils.getMasterParamWithDefault(masterConfigObject, false, "panels", "ChartPanel", "Hierarchy", "clearHighlightedPaths");
+    bzchart.setStore(storeObject, "clearHighlightedPaths", clearHighlightedPaths);
+
+    // Following are Network specific at present
+
+    bzchart.setStore(storeObject, "primaryNodeHighlightingOn",
+        bzutils.getMasterParamWithDefault(masterConfigObject, true, "panels", "ChartPanel", "Network", "primaryNodeHighlightingOn"));
+    bzchart.setStore(storeObject, "primaryNodeHighlightingColour",
+        bzutils.getMasterParamWithDefault(masterConfigObject, "gold", "panels", "ChartPanel", "Network", "primaryNodeHighlightingColour"));
+    bzchart.setStore(storeObject, "primaryNodeHighlightingRadius",
+        bzutils.getMasterParamWithDefault(masterConfigObject, "10px", "panels", "ChartPanel", "Network", "primaryNodeHighlightingRadius"));
+    bzchart.setStore(storeObject, "retainNodeDetailsMouseOut",
+        bzutils.getMasterParamWithDefault(masterConfigObject, true, "panels", "ChartPanel", "Network", "retainNodeDetailsMouseOut"));
+    bzchart.setStore(storeObject, "nodestrokewidth",
+        bzutils.getMasterParamWithDefault(masterConfigObject, "5px", "panels", "ChartPanel", "Network", "nodestrokewidth"));
+
+}
+
+// during initialization, build a map so we can quickly associate the correct API field to a measure
 function buildMeasureSchemeMap (masterConfigObject, storeObject) {
     var objectLevels = bzutils.getMasterParamWithDefault(masterConfigObject,1,"data","queryJSON","objectLevels");
 
@@ -541,6 +577,7 @@ exports.getFirstColorSchemeLegend = getFirstColorSchemeLegend;
 exports.prepareEvent = prepareEvent;
 exports.clearElements = clearElements;
 exports.clearChart = clearChart;
+exports.mapMasterConfigToStore = mapMasterConfigToStore;
 exports.buildMeasureSchemeMap = buildMeasureSchemeMap;
 exports.showColorSchemeLegend = showColorSchemeLegend;
 exports.setFilterVisibility = setFilterVisibility;
