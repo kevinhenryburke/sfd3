@@ -302,7 +302,9 @@
             }
 
             // refresh node styles
-            cc.styleNodes();                 
+            let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+            variantsMixin.styleNodes(storeObject);
+    
         }
         if (topic == "SetSize")
         {
@@ -323,7 +325,8 @@
             }
             
             // refresh node styles
-            cc.styleNodes();                 
+            let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+            variantsMixin.styleNodes(storeObject);
         }
         if (topic == "SetFilter")
         {
@@ -438,11 +441,6 @@
                 helper.handleScaleChange(component,csf);
             }
         }
-    },
-
-    styleNodes: function(component,event,helper){
-        // console.log("aura:method styleNodes in chartArea enter");
-        // console.log("aura:method styleNodes in chartArea exit");
-    },
+    }
 
 })

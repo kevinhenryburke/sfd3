@@ -21,13 +21,6 @@
 
         bzctree.merge(storeObject, updatejson);
         bzctree.update(storeObject, nodeGroup, pathGroup, root, false);
-    },
-
-    styleNodes: function(component,event,helper){
-        console.log("aura:method styleNodes in chartHierarchy enter");
-        let storeObject = component.get("v.storeObject");
-        let variantsMixin = bzchart.getStore(storeObject, "chartMixin");
-        variantsMixin.styleNodes(storeObject);
     }
 
 })
