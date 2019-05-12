@@ -6,6 +6,58 @@
 
   console.log("loading: bznetworktimeline IIFE");
 
+/* Influence Methods */
+
+function runSimulation  (storeObject, path, node, text) {
+    var datajson = bzchart.getStore (storeObject, "datajson") ;
+
+    var simulation = bznetworktimeline.initializeSimulationInfluence(storeObject, datajson.nodes);            
+
+    bzchart.setStore (storeObject, "simulation", simulation ) ;
+
+    var forceLinks = bznetwork.buildForceLinks(path);
+    var link_force =  d3.forceLink(forceLinks.links)
+        .id(function(d) { return d.id; });
+
+    simulation.force("links",link_force);
+
+    bznetwork.dragHandler(node, simulation);
+
+    simulation.on("tick", function() {
+        bznetwork.onTick (storeObject, path, node, text);
+    });             
+} 
+
+function initializeSimulationInfluence  (storeObject, nodes) {
+    console.log("bznetwork.initializeSimulationInfluence enter");
+    var width = bzchart.getStore (storeObject, "width") ;  
+    var height = bzchart.getStore (storeObject, "height") ; 
+    var nodePadding = 2.5;
+    var currentColorLabel = bzchart.getStore (storeObject, "currentColorLabel") ; 
+
+    var simulation = d3.forceSimulation()
+        .force("forceX", d3.forceX().strength(.1).x(width * .5))
+        .force("forceY", d3.forceY().strength(.1).y(height * .5))
+        .force("center", d3.forceCenter().x(width * .5).y(height * .5))
+        .force("charge", d3.forceManyBody().strength(-150));
+
+    simulation  
+        .nodes(nodes)
+        .force("collide", d3.forceCollide().strength(.5).radius(function(d){
+            return d.measures[currentColorLabel].radius + nodePadding; }).iterations(1))
+//        .force("collide", d3.forceCollide().strength(.5).radius(function(d){ return d.radius + nodePadding; }).iterations(1))
+        .on("tick", function(d){
+          node
+              .attr("cx", function(d){ return d.x; })
+              .attr("cy", function(d){ return d.y; })
+        });        
+    
+    console.log("bznetwork.initializeSimulationInfluence exit");
+    return simulation;
+}
+
+exports.runSimulation = runSimulation;
+exports.initializeSimulationInfluence = initializeSimulationInfluence;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
@@ -41,7 +93,12 @@ const OverrideMixin = {
             }
         }    
         bzchart.setStore (storeObject, "datajson", datajsonBefore ) ;
-    }
+    },
+
+    runSimulation  (storeObject, path, node, text) {
+        console.log("in timeline mixin");
+        bznetworktimeline.runSimulation(storeObject, path, node, text);
+    }     
   
 }
 

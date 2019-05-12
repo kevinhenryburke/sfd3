@@ -114,22 +114,10 @@
     }
 }
 
-function runSimulation  (storeObject, path, node, text) {
-    console.log("bznetwork.runSimulation enter");
-    let componentType = bzchart.getStore (storeObject, "componentType") ;
-
-    if (componentType ==  "network.connections") {
-        bznetwork.runSimulationConnections(storeObject, path, node, text);
-    }
-    if (componentType ==  "network.timeline") {
-        bznetwork.runSimulationInfluence(storeObject, path, node, text);
-    }
-}                 
-
 /* Connections Methods */
 
-function runSimulationConnections  (storeObject, path, node, text) {
-    console.log("bznetwork.runSimulationConnections enter");
+function runSimulation  (storeObject, path, node, text) {
+    console.log("bznetwork.runSimulation enter");
     var datajson = bzchart.getStore (storeObject, "datajson") ;
 
     var simulation = bznetwork.initializeSimulationConnections(storeObject, datajson.nodes);            
@@ -148,7 +136,7 @@ function runSimulationConnections  (storeObject, path, node, text) {
         bznetwork.onTick (storeObject, path, node, text);
     });             
 
-    console.log("bznetwork.runSimulationConnections exit");
+    console.log("bznetwork.runSimulation exit");
 }                 
 
 function initializeSimulationConnections  (storeObject, nodes) {
@@ -254,90 +242,28 @@ function buildForceLinks  (path) {
     return forceLinks;
 }
 
-/* Influence Methods */
-
-function runSimulationInfluence  (storeObject, path, node, text) {
-    console.log("bznetwork.runSimulationInfluence enter");
-    var datajson = bzchart.getStore (storeObject, "datajson") ;
-
-    var simulation = bznetwork.initializeSimulationInfluence(storeObject, datajson.nodes);            
-
-    bzchart.setStore (storeObject, "simulation", simulation ) ;
-
-    var forceLinks = bznetwork.buildForceLinks(path);
-    var link_force =  d3.forceLink(forceLinks.links)
-        .id(function(d) { return d.id; });
-
-    simulation.force("links",link_force);
-
-    bznetwork.dragHandler(node, simulation);
-
-    simulation.on("tick", function() {
-        bznetwork.onTick (storeObject, path, node, text);
-    });             
-
-
-    console.log("bznetwork.runSimulationInfluence exit");
-} 
-
-function initializeSimulationInfluence  (storeObject, nodes) {
-    console.log("bznetwork.initializeSimulationInfluence enter");
-    var width = bzchart.getStore (storeObject, "width") ;  
-    var height = bzchart.getStore (storeObject, "height") ; 
-    var sizeDivisor = 100;
-    var nodePadding = 2.5;
-    var currentColorLabel = bzchart.getStore (storeObject, "currentColorLabel") ; 
-
-    var simulation = d3.forceSimulation()
-        .force("forceX", d3.forceX().strength(.1).x(width * .5))
-        .force("forceY", d3.forceY().strength(.1).y(height * .5))
-        .force("center", d3.forceCenter().x(width * .5).y(height * .5))
-        .force("charge", d3.forceManyBody().strength(-150));
-
-    simulation  
-        .nodes(nodes)
-        .force("collide", d3.forceCollide().strength(.5).radius(function(d){
-            return d.measures[currentColorLabel].radius + nodePadding; }).iterations(1))
-//        .force("collide", d3.forceCollide().strength(.5).radius(function(d){ return d.radius + nodePadding; }).iterations(1))
-        .on("tick", function(d){
-          node
-              .attr("cx", function(d){ return d.x; })
-              .attr("cy", function(d){ return d.y; })
-        });        
-    
-    console.log("bznetwork.initializeSimulationInfluence exit");
-    return simulation;
-}
     
 function nodeDoubleClick(storeObject,primaryNodeId){
     let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
     let componentType = bzchart.getStore (storeObject, "componentType") ;
     console.log("nodeDoubleClick componentType = " + componentType);
 
-    if ((componentType ==  "network.timeline") || (componentType ==  "network.connections")) {
         // TODO this will need substantial enriching - e.g. pass current measure and whether to add nodes or to refresh etc.
         var cleanId = bzutils.removeComponentRef(componentReference, primaryNodeId);
         var eventParameters = {"primaryNodeId" : cleanId, "componentReference" : componentReference};
         console.log("nodeDoubleClick exit.");
-    
+
         var preppedEvent = bzchart.prepareEvent(storeObject, "InitiateRefreshChart", eventParameters);
         return preppedEvent;        
-    }
 }
 
 
 function textAdditionalAttribute  (storeObject, text) {
     // Not sure this is called
-    console.log("bznetwork.textAdditionalAttribute enter");    
-    let componentType = bzchart.getStore (storeObject, "componentType") ;
 
-    if ((componentType == "network.connections") || (componentType == "network.timeline")) {
-        text
-        .attr("x", 8)
+    text .attr("x", 8)
         .attr("y", ".31em")            
-    }
 
-    console.log("bznetwork.textAdditionalAttribute exit");
 }
 
 function pathMouseover  (d,path,pathToolTipDiv) {
@@ -391,9 +317,7 @@ function pathMouseout  (pathToolTipDiv) {
 function styleNodes (storeObject) {
     console.log("network.styleNodes enter");
     let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
-    let componentType = bzchart.getStore (storeObject, "componentType") ;
 
-    if ((componentType ==  "network.connections") || (componentType ==  "network.timeline")) {
         var primaryid = bzchart.getStore (storeObject, "primaryNodeId") ;
 
         var node = d3.select(bzutils.getDivId("nodeGroup", componentReference, true))
@@ -431,7 +355,6 @@ function styleNodes (storeObject) {
             }
             return nodestrokewidth;
         });
-    }
     console.log("network.styleNodes exit");
 }
 
@@ -614,10 +537,8 @@ function initializeVisualsHelper (storeObject) {
     console.log("apply node visibility");
     variantsMixin.refreshVisibility(storeObject);
 
-    /* Above should be common to some degree - Below is forceSimulation specific */
-
-    console.log("calling layout / simulation");
-    bznetwork.runSimulation(storeObject, path, node, text);                 
+    console.log("calling simulation from mixin");
+    variantsMixin.runSimulation(storeObject, path, node, text);                 
     
 }
 
@@ -676,7 +597,6 @@ function refreshDataHelper (storeObject, datajsonRefresh, primaryNodeId, showFil
   exports.nodeDataSetFunctionNodes = nodeDataSetFunctionNodes;
   exports.refreshVisibilityHelper = refreshVisibilityHelper;
   exports.runSimulation = runSimulation;
-  exports.runSimulationConnections = runSimulationConnections;
   exports.initializeSimulationConnections = initializeSimulationConnections;
   exports.dragHandler = dragHandler;
   exports.transform = transform;
@@ -684,8 +604,6 @@ function refreshDataHelper (storeObject, datajsonRefresh, primaryNodeId, showFil
   exports.limitbordery = limitbordery;
   exports.onTick = onTick;
   exports.buildForceLinks = buildForceLinks;
-  exports.runSimulationInfluence = runSimulationInfluence;
-  exports.initializeSimulationInfluence = initializeSimulationInfluence;
   exports.nodeDoubleClick = nodeDoubleClick;
   exports.textAdditionalAttribute = textAdditionalAttribute;
   exports.pathMouseover = pathMouseover;
@@ -779,7 +697,7 @@ const OverrideMixin = {
     bznetwork.styleNodes(storeObject);
   },
 
-  searchChart: function(storeObject,searchTermId,searchAction,showLevels){
+  searchChart (storeObject,searchTermId,searchAction,showLevels){
     let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
     let primaryNodeId = bzutils.addComponentRef(componentReference, searchTermId);
     bzchart.setStore (storeObject, "primaryNodeId", primaryNodeId ) ;
@@ -788,7 +706,11 @@ const OverrideMixin = {
     let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
     variantsMixin.refreshVisibility(storeObject);
     variantsMixin.styleNodes(storeObject);
-  }
+  },
+
+  runSimulation  (storeObject, path, node, text) {
+        bznetwork.runSimulation(storeObject, path, node, text);
+}                 
 
 }
 

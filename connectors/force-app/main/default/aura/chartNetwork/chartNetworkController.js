@@ -27,9 +27,10 @@
     },
 
     styleNodes: function(component,event,helper){
-        console.log("aura:method styleNodes in chartNetwork enter");
+        console.log("aura:method styleNodes in chartNetwork mixin enter");
         let storeObject = component.get("v.storeObject");
-        bznetwork.styleNodes(storeObject);
+        let variantsMixin = bzchart.getStore(storeObject, "chartMixin");
+        variantsMixin.styleNodes(storeObject);
     }
 
 })
