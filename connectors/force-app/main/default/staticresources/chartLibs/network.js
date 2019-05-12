@@ -681,7 +681,13 @@
 
         runSimulation(storeObject, path, node, text) {
             bznetwork.runSimulation(storeObject, path, node, text);
-        }
+        },
+
+        initializeVisuals (storeObject){
+            console.log("calling the initializeVisuals from mixin");
+            bznetwork.initializeVisualsHelper (storeObject);
+        },
+    
 
     }
 

@@ -247,12 +247,9 @@
                         "componentReference" : componentReference
                     }        
                     var preppedEvent = bzchart.prepareEvent(storeObject, "CreatePopOver", eventParameters);
-                    bzaura.publishPreppedEvent(storeObject,preppedEvent,$A.get("e.c:evt_sfd3"));
-            
+                    bzaura.publishPreppedEvent(storeObject,preppedEvent,$A.get("e.c:evt_sfd3"));            
                 }
-
-                var cc = component.getConcreteComponent();
-                cc.initializeVisuals();
+                variantsMixin.initializeVisuals(storeObject);
                 variantsMixin.refreshVisibility(storeObject);                
            }
            else {
