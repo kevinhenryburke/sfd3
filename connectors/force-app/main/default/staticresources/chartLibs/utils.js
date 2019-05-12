@@ -170,6 +170,21 @@ function hasMasterParam(config, ...args) { // Not currently used
     return true;
 }
 
+function getMasterParamWithDefault(config, defaultValue,  ...args) {
+    var retValue = null;
+    var loopJson = config;
+    for (var i=0; i<args.length;i++) {
+        if (loopJson.hasOwnProperty([args[i]])) {
+            retValue = loopJson[args[i]];
+            loopJson = loopJson[args[i]];
+        }
+        else {
+            return defaultValue;
+        }    
+    }
+    return retValue;
+}
+
 
 // new signatures .... 
 // (topic, publisher, publisherCategory, publisherType, parameters, controller)
@@ -220,6 +235,7 @@ exports.log = log;
 // exports.hasParam2 = hasParam2;
 exports.getMasterParam = getMasterParam;
 exports.hasMasterParam = hasMasterParam;
+exports.getMasterParamWithDefault = getMasterParamWithDefault;
 exports.initializeAddComponentRef = initializeAddComponentRef;
 exports.addComponentRef = addComponentRef;
 exports.removeComponentRef = removeComponentRef;

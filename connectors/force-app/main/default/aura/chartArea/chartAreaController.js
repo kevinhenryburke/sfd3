@@ -174,49 +174,27 @@
        
                bzchart.buildMeasureSchemeMap(masterConfigObject, storeObject);
 
-               let showPathToolTip = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","Network","showPathToolTip");         
-               if (showPathToolTip != null) {
-                   bzchart.setStore (storeObject, "showPathToolTip", showPathToolTip) ;                                    
-               }
-               else {
-                   bzchart.setStore (storeObject, "showPathToolTip", false) ;                                    
-               }                     
+               // flash some master parameters into store variable to hide complexity of config structure from build
+
+                let showPathToolTip = bzutils.getMasterParamWithDefault(masterConfigObject, false, "panels","ChartPanel","Network","showPathToolTip");         
+                bzchart.setStore (storeObject, "showPathToolTip", showPathToolTip) ;                                    
                
-               let showZoomSlider = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","Hierarchy","showZoomSlider");         
-               if (showZoomSlider != null) {
-                   component.set("v.showZoomSlider" , showZoomSlider); // required for now but not in LWC
-                   bzchart.setStore (storeObject, "showZoomSlider", showZoomSlider) ;                                    
-               }
-               else {
-                   component.set("v.showZoomSlider" , false); // required for now but not in LWC
-                   bzchart.setStore (storeObject, "showZoomSlider", false) ;                                    
-               }      
-               
-               var showEmbeddedPanel = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","showEmbeddedPanel");         
-               if (showEmbeddedPanel == null) {showEmbeddedPanel = false;}
+               let showZoomSlider = bzutils.getMasterParamWithDefault(masterConfigObject,false,"panels","ChartPanel","Hierarchy","showZoomSlider");         
+               component.set("v.showZoomSlider" , showZoomSlider); // required for now but not in LWC
+               bzchart.setStore (storeObject, "showZoomSlider", showZoomSlider) ;                                    
+           
+               var showEmbeddedPanel = bzutils.getMasterParamWithDefault(masterConfigObject,null,"panels","InfoPanel","showEmbeddedPanel");         
                bzchart.setStore (storeObject, "showEmbeddedPanel", showEmbeddedPanel ) ;
                component.set("v.showEmbeddedPanel", showEmbeddedPanel);
 
-               var showLevelsInitial = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","showLevelsInitial");         
-               if (showLevelsInitial != null) {
-                   bzchart.setStore (storeObject, "showLevels", showLevelsInitial) ;
-               }
+               var showLevelsInitial = bzutils.getMasterParamWithDefault(masterConfigObject,1,"panels","ChartPanel","showLevelsInitial");         
+                bzchart.setStore (storeObject, "showLevels", showLevelsInitial) ;
 
-               let allowPopover = bzutils.getMasterParam(masterConfigObject,"panels","InfoPanel","allowPopover");         
-               if (allowPopover != null) {
-                    bzchart.setStore (storeObject, "allowPopover", allowPopover) ;
-                }
-                else {
-                    bzchart.setStore (storeObject, "allowPopover", false) ;
-                }
+               let allowPopover = bzutils.getMasterParamWithDefault(masterConfigObject,false,"panels","InfoPanel","allowPopover");         
+                bzchart.setStore (storeObject, "allowPopover", allowPopover) ;
 
-                var clearHighlightedPaths = bzutils.getMasterParam(masterConfigObject,"panels","ChartPanel","Hierarchy","clearHighlightedPaths");         
-                if (clearHighlightedPaths != null) {
-                    bzchart.setStore (storeObject, "clearHighlightedPaths", clearHighlightedPaths) ;
-                }
-                else {
-                    bzchart.setStore (storeObject, "clearHighlightedPaths", false) ;
-                }
+                let clearHighlightedPaths = bzutils.getMasterParamWithDefault(masterConfigObject,false,"panels","ChartPanel","Hierarchy","clearHighlightedPaths");         
+                bzchart.setStore (storeObject, "clearHighlightedPaths", clearHighlightedPaths) ;
 
                // set latest values for color and size
 

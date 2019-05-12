@@ -258,7 +258,7 @@ function clearChart(componentReference) {
 
 // during initialization, build a map so we can quickly associate the correct API field to a measure
 function buildMeasureSchemeMap (masterConfigObject, storeObject) {
-    var objectLevels = bzutils.getMasterParam(masterConfigObject,"data","queryJSON","objectLevels");
+    var objectLevels = bzutils.getMasterParamWithDefault(masterConfigObject,1,"data","queryJSON","objectLevels");
 
     // storage optimized for node colors: object / measureName / measureSchema
     var measureObjectFieldMap = {};
