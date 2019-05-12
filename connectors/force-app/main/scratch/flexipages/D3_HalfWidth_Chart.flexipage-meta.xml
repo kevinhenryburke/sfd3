@@ -42,26 +42,6 @@
                 <name>componentType</name>
                 <value>network.connections</value>
             </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>nodestrokewidth</name>
-                <value>0.5px</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>primaryNodeHighlightingColour</name>
-                <value>gold</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>primaryNodeHighlightingOn</name>
-                <value>true</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>primaryNodeHighlightingRadius</name>
-                <value>10px</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>retainNodeDetailsMouseOut</name>
-                <value>true</value>
-            </componentInstanceProperties>
             <componentName>chartNetwork</componentName>
         </componentInstances>
         <name>column1</name>
@@ -109,26 +89,6 @@
             <componentInstanceProperties>
                 <name>componentType</name>
                 <value>network.timeline</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>nodestrokewidth</name>
-                <value>0.5px</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>primaryNodeHighlightingColour</name>
-                <value>silver</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>primaryNodeHighlightingOn</name>
-                <value>true</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>primaryNodeHighlightingRadius</name>
-                <value>10px</value>
-            </componentInstanceProperties>
-            <componentInstanceProperties>
-                <name>retainNodeDetailsMouseOut</name>
-                <value>true</value>
             </componentInstanceProperties>
             <componentName>chartNetworkTimeline</componentName>
         </componentInstances>
