@@ -63,10 +63,6 @@
 
     /* handlers */
 
-    refreshDataController: function(component,event,helper){
-        bzutils.log("calling the aura:method refreshDataController in base");
-    },
-
     handleScaleChange: function(component,event,helper){
         let storeObject = component.get("v.storeObject");
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  

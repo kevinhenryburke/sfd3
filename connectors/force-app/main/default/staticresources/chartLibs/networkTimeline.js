@@ -96,11 +96,9 @@ const OverrideMixin = {
     },
 
     refreshDataController  (storeObject, parameters) {
-        console.log("refreshDataController in mixin");
-        var datajson = parameters.datajson;
-        var primaryId = parameters.primaryId;
-        var showFilters = parameters.showFilters;
-
+        let datajson = parameters.datajson;
+        let primaryId = parameters.primaryId;
+        let showFilters = parameters.showFilters;
         bznetwork.refreshDataHelper(storeObject, datajson, primaryId, showFilters);                         
     },
   
