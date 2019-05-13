@@ -6,18 +6,9 @@
         var args = event.getParam("arguments");
         var parameters = args.parameters;
 
-        var datajson = parameters.datajson;
-        var primaryId = parameters.primaryId;
-        var showFilters = parameters.showFilters;
+        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+        variantsMixin.refreshDataController(storeObject,parameters);
 
-        // THIS ALL TEMPORARY FOR TIME-BASED CHARTS
-
-        var valueDate = parameters["valueDate"];
-        if (valueDate != null) {
-            component.set("v.Title", parameters["valueDate"] );
-        }
-
-        bznetwork.refreshDataHelper(storeObject, datajson, primaryId, showFilters);                         
     }
 
 })

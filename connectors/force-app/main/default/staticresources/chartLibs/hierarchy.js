@@ -227,7 +227,17 @@ const OverrideMixin = {
         var pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
         var root = bzchart.getStore (storeObject, "root") ;
         bzctree.update(storeObject, nodeGroup, pathGroup, root, false);
+    },
+
+    refreshDataController  (storeObject, parameters) {
+        let updatejson = parameters.datajson;
+        let nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
+        let pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
+        let root = bzchart.getStore (storeObject, "root") ;
+        bzctree.merge(storeObject, updatejson);
+        bzctree.update(storeObject, nodeGroup, pathGroup, root, false);
     }
+  
     
 }
 

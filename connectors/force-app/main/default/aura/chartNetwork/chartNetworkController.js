@@ -6,11 +6,8 @@
         var args = event.getParam("arguments");
         var parameters = args.parameters;
 
-        var datajson = parameters.datajson;
-        var primaryId = parameters.primaryId;
-        var showFilters = parameters.showFilters;
-
-        bznetwork.refreshDataHelper(storeObject, datajson, primaryId, showFilters);                         
+        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+        variantsMixin.refreshDataController(storeObject,parameters);
     }
 
 })

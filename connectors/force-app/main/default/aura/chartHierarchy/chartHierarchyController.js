@@ -6,14 +6,8 @@
         let args = event.getParam("arguments");
         let parameters = args.parameters;
 
-        let updatejson = parameters.datajson;
-
-        let nodeGroup = bzchart.getStore (storeObject, "nodeGroup") ;  
-        let pathGroup = bzchart.getStore (storeObject, "pathGroup") ;  
-        let root = bzchart.getStore (storeObject, "root") ;
-
-        bzctree.merge(storeObject, updatejson);
-        bzctree.update(storeObject, nodeGroup, pathGroup, root, false);
+        let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+        variantsMixin.refreshDataController(storeObject,parameters);
     }
 
 })

@@ -679,6 +679,14 @@
             variantsMixin.styleNodes(storeObject);
         },
 
+        refreshDataController  (storeObject, parameters) {
+            let datajson = parameters.datajson;
+            let primaryId = parameters.primaryId;
+            let showFilters = parameters.showFilters;
+    
+            bznetwork.refreshDataHelper(storeObject, datajson, primaryId, showFilters);                         
+        },
+    
         runSimulation(storeObject, path, node, text) {
             bznetwork.runSimulation(storeObject, path, node, text);
         },

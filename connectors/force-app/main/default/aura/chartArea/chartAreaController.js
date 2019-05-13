@@ -231,10 +231,12 @@
            bzutils.log("RefreshData topic received by Chart: " + componentReference + "/" + parameters["componentReference"]);
            // we process if the event is from it's controller and either specifies this component or does not specify any
            if (componentReference == parameters["componentReference"] || ! ("componentReference" in parameters)) {
-               bzutils.log("RefreshData: Refresh Chart with reference: " + componentReference);
-               var cc = component.getConcreteComponent();
-               cc.refreshDataController(parameters);                 
                let variantsMixin = bzchart.getStore (storeObject, "chartMixin") ;
+               let newTitle = variantsMixin.updateTitle(parameters);
+               if (newTitle != null) {
+                component.set("v.Title", newTitle );
+               }
+               variantsMixin.refreshDataController(storeObject,parameters);
                variantsMixin.refreshVisibility(storeObject);
             }
            else {
@@ -243,7 +245,6 @@
        }
 
        if (topic == "CreatePopOver") {
-           console.log("xxxxx: received CreatePopOver ");
            helper.createPopOverComponent(storeObject);
         }
 

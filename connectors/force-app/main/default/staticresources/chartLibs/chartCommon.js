@@ -622,7 +622,13 @@ const DefaultMixin = {
   styleNodes (storeObject) {
   },
   searchChart: function(storeObject,searchTermId,searchAction,showLevels){
+  },
+  updateTitle : function (parameters) {
+      return null;
+  },
+  refreshDataController  (storeObject, parameters) {
   }
+
 }
 
 exports.DefaultMixin = DefaultMixin;

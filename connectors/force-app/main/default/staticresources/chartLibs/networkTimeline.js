@@ -95,6 +95,18 @@ const OverrideMixin = {
         bzchart.setStore (storeObject, "datajson", datajsonBefore ) ;
     },
 
+    refreshDataController  (storeObject, parameters) {
+        console.log("refreshDataController in mixin");
+        var datajson = parameters.datajson;
+        var primaryId = parameters.primaryId;
+        var showFilters = parameters.showFilters;
+
+        bznetwork.refreshDataHelper(storeObject, datajson, primaryId, showFilters);                         
+    },
+  
+    updateTitle : function (parameters) {
+        return parameters["valueDate"].toLocaleDateString();
+    },
     runSimulation  (storeObject, path, node, text) {
         console.log("in timeline mixin");
         bznetworktimeline.runSimulation(storeObject, path, node, text);
