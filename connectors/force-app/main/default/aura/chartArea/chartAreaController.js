@@ -36,7 +36,8 @@
         let rendered = storeObject["rendered"];
         if (rendered == false) {
             console.log('chartArea: doneRendering enter for first time');   
-            var scriptsLoaded = component.get("v.scriptsLoaded");
+            var scriptsLoaded = storeObject["scriptsLoaded"];        
+
             if (scriptsLoaded == true) {
                 console.log('chartArea: signalling ready from doneRendering');   
                 helper.doneRenderLoad(component);
@@ -52,7 +53,7 @@
     afterScriptsLoaded: function(component, event, helper) {
         bzutils.log('chartArea: afterScriptsLoaded enter');
         let storeObject = component.get("v.storeObject");
-        component.set("v.scriptsLoaded", true);
+        storeObject["scriptsLoaded"] = true;        
 
         var rendered = bzchart.getStore (storeObject, "rendered");
         if (rendered == true) {

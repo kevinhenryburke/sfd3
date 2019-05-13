@@ -78,7 +78,6 @@
   
   <!-- Technical - Chart -->
   <!-- need to accessed or set before all libraries may be available -->
-	<aura:attribute name="scriptsLoaded" type="Boolean" default="false"/>    
   <aura:attribute name="defaultEventType" type="String" default="Application"/>    
 
   <!-- Required for flexible layouts -->
