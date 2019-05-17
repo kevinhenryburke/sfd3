@@ -39,7 +39,7 @@
     />
   </aura:if>
 
-  <c:chartHierarchy aura:id="chartHierarchy"
+  <c:chartBase aura:id="chartHierarchy"
     defaultEventType = "Component"
     componentType = "hierarchy.ctree"
     UserComponentId = "Hierarchy"

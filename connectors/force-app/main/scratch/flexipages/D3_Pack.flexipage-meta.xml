@@ -34,7 +34,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
-                <value>HierarchyPack</value>
+                <value>Base</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserControllerComponentId</name>
@@ -44,7 +44,7 @@
                 <name>componentType</name>
                 <value>hierarchy.pack</value>
             </componentInstanceProperties>
-            <componentName>chartHierarchyPack</componentName>
+            <componentName>chartBase</componentName>
         </componentInstances>
         <name>main</name>
         <type>Region</type>
