@@ -1,4 +1,0 @@
-<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extends="c:chartHierarchy"  access="global">
-
-
-</aura:component>	
