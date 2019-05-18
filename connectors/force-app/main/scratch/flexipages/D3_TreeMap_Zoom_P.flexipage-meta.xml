@@ -32,7 +32,7 @@
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
-                <value>HierarchyTreeMapZoom</value>
+                <value>TreeMapZoomPBase</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserControllerComponentId</name>
@@ -42,7 +42,7 @@
                 <name>componentType</name>
                 <value>hierarchy.treemapzoom</value>
             </componentInstanceProperties>
-            <componentName>chartHierarchyTreemapZoom</componentName>
+            <componentName>chartBase</componentName>
         </componentInstances>
         <name>main</name>
         <type>Region</type>
