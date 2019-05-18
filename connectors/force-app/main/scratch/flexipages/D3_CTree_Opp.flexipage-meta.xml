@@ -30,11 +30,10 @@
         <componentInstances>
             <componentInstanceProperties>
                 <name>Title</name>
-                <value>1</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
-                <value>BottomOpp</value>
+                <value>BaseOpp</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserControllerComponentId</name>
@@ -44,7 +43,7 @@
                 <name>componentType</name>
                 <value>hierarchy.ctree</value>
             </componentInstanceProperties>
-            <componentName>chartHierarchy</componentName>
+            <componentName>chartBase</componentName>
         </componentInstances>
         <name>main</name>
         <type>Region</type>

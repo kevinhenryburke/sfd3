@@ -51,5 +51,5 @@
     <template>
         <name>flexipage:defaultAppHomeTemplate</name>
     </template>
-    <type>AppPage</type>
+    <type>AppPage</type> 
 </FlexiPage>
