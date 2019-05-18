@@ -29,10 +29,11 @@
         <componentInstances>
             <componentInstanceProperties>
                 <name>Title</name>
+                <value>Connections</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
-                <value>Chart Left</value>
+                <value>Controller Base Left</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserControllerComponentId</name>
@@ -42,7 +43,7 @@
                 <name>componentType</name>
                 <value>network.connections</value>
             </componentInstanceProperties>
-            <componentName>chartNetwork</componentName>
+            <componentName>chartBase</componentName>
         </componentInstances>
         <name>column1</name>
         <type>Region</type>
@@ -76,11 +77,11 @@
         <componentInstances>
             <componentInstanceProperties>
                 <name>Title</name>
-                <value>Silver Influence</value>
+                <value>Starting State</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserComponentId</name>
-                <value>Chart Right</value>
+                <value>Controller Base Right</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>UserControllerComponentId</name>
@@ -90,7 +91,7 @@
                 <name>componentType</name>
                 <value>network.timeline</value>
             </componentInstanceProperties>
-            <componentName>chartNetworkTimeline</componentName>
+            <componentName>chartBase</componentName>
         </componentInstances>
         <name>column2</name>
         <type>Region</type>
