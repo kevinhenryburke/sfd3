@@ -130,6 +130,9 @@ stroke-width: 1.5px;
   stroke-opacity: .8;
 }
 
+
+
+
 /* FROM TREE HIERARCHY COMPONENT */
 
 .THIS .treenode circle {
@@ -162,3 +165,68 @@ stroke-width: 1.5px;
 .THIS.no-pointer .pointer{
     visibility: hidden;
 }
+
+
+
+
+/* FROM THE TREEMAPZOOM COMPONENT */
+
+.THIS rect {
+  fill: none;
+  stroke: #fff;
+}
+
+.THIS text {
+  pointer-events: none;
+}
+    
+.THIS   .grandparent text {
+  font-weight: bold;
+}
+
+.THIS   .ptext text {
+  font-weight: bold;
+}
+
+.THIS   .grandparent rect {
+  stroke-width: 2px;
+}
+  
+.THIS  .grandparent rect {
+  fill: orange;
+  cursor: pointer;
+}
+
+.THIS  .grandparent:hover rect {
+  fill: #ee9700;
+}
+
+.THIS  rect.parent {
+/*  stroke: #50377e; */
+  stroke: #3952a1; 
+  stroke-width: 2px;
+  fill-opacity: 0.9;
+  pointer-events: none;  
+}
+
+.THIS  rect.child {
+  stroke: #FFFFFF;
+  stroke-width: 2px;
+}
+
+.THIS  .children rect.parent {
+  fill: #bbb;
+  fill-opacity: .5;
+}
+
+  
+.THIS .children:hover rect.parent {
+    fill: #bbb;
+    fill-opacity: 0.2;
+  }
+  
+.THIS  .children:hover rect.child {
+    fill: #bbb;
+    fill-opacity: 1;
+  }
+
