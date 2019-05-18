@@ -1,5 +1,0 @@
-<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extends="c:chartArea" extensible="true"  access="global">
-        
-    <!-- No markup -->
-
-</aura:component>

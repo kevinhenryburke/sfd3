@@ -1,3 +1,0 @@
-<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extends="c:chartNetwork"  access="global" >
-
-</aura:component>	

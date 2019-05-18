@@ -1,9 +1,0 @@
-<aura:component implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes" extends="c:chartArea" extensible="true"  access="global">
-          
-    <aura:attribute name="primaryNodeHighlightingOn" access="global" type="Boolean" default="true" description="Determines if selected node should be highlighted"/>    
-    <aura:attribute name="primaryNodeHighlightingColour" access="global" type="String" default="gold" description="Name of the colour of highlighed node"/>    
-    <aura:attribute name="primaryNodeHighlightingRadius" access="global" type="String" default="10px" description="Determines width of highlighting on a selected node"/>      
-    <aura:attribute name="retainNodeDetailsMouseOut" access="global" type="Boolean" default="true"  description="Set to true if we wish extended details following a node mouseover to be retain after mouseout"/>    
-	<aura:attribute name="nodestrokewidth" access="global" type="String" default="0.5px"/>    
-    
-</aura:component>
