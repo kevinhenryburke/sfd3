@@ -27,6 +27,32 @@ function getStoreWithDefault (store, key, defaultValue) {
   return returnValue;
 }
 
+function initializeStore (recordId) {
+
+    if (recordId == null) {
+        recordId = "";
+    }
+
+    // calculate compref from random generator   
+    let comprefNumber = Math.floor((Math.random() * 10000000000) + 1); 
+    let componentReference = "compref" + comprefNumber + recordId;
+    let chartAreaDivId = componentReference + 'chartArea';
+
+    let storeObject = {
+        "recordId": recordId,
+        "rendered": false, 
+        "showMeasureValues": false,
+        "componentReference": componentReference,
+        "chartAreaDivId": chartAreaDivId,
+        "ChartScaleFactor": 1,
+        "ChartScalePercentage": 100,
+        "showZoomSlider": false,
+        "showLevelsInitial": 1
+    }
+    return storeObject;
+};
+
+
 function isFilteredOut (storeObject, d) {
   console.log("xxxxx: isFilteredOut");
   // if there are no filters configured then we're good to go.
@@ -567,6 +593,7 @@ exports.setStore = setStore;
 exports.getStore = getStore;
 exports.hasStore = hasStore;
 exports.getStoreWithDefault = getStoreWithDefault;
+exports.initializeStore = initializeStore;
 exports.isFilteredOut = isFilteredOut;
 exports.getFilterOpacity = getFilterOpacity;
 exports.createInfoLocation = createInfoLocation;

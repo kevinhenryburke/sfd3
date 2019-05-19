@@ -2,11 +2,40 @@
     <lightning-card title="LWC Chart" icon-name="custom:custom14">
         <div class="slds-card__body slds-card__body_inner">
             <p>{defaultEventType}</p>
-            <p>{componentType}</p>
+            <p>{recordId}</p>
             <p>{UserComponentId}</p>
             <p>{UserControllerComponentId}</p>
             <p>{Title}</p>
             <p>{masterConfig}</p>          
         </div>
     </lightning-card>
+
+    <lightning-card title="LWC Chart" icon-name="custom:custom14">
+        <div class="slds-card__body slds-card__body_inner">
+            <p>{chartAreaDivId}</p>
+        </div>
+    </lightning-card>
+
+    <div class="c-container" id="container1">
+        <lightning-layout horizontal-align="space" vertical-align="end">
+            <lightning-layout-item flexibility="grow" padding="around-small" size="12">
+<!--                 Mechanism for tooltips is based on https://bl.ocks.org/d3noob/257c360b3650b9f0a52dd8257d7a2d73
+              The tooltip exists as a position : absolute div that is moved around when a path is moused over
+              Note that we need to use the Lightning method of defining absolute position or the box can appear relative to the page itself
+-->                
+              <div class="slds-is-absolute">
+                <div id={pathToolTipDivId} class="pathToolTip"></div>
+              </div>
+      
+            <div id={chartAreaDivId} class="chartarea"></div>
+                <!-- <div id="nodeToolTip" class="nodeToolTip"></div> -->
+                HELLO
+            </lightning-layout-item>
+          </lightning-layout>
+    </div>
+
+    <!-- <div id={chartAreaDivId} class="chartarea">
+        HELLO
+    </div> -->
+
 </template>

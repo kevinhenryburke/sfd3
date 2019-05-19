@@ -1,4 +1,4 @@
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { loadScript, loadStyle } from 'lightning/platformResourceLoader';
 import CHARTLIBS from '@salesforce/resourceUrl/chartLibs';
@@ -8,47 +8,75 @@ import D3 from '@salesforce/resourceUrl/d3js413';
 
 export default class LwcChart extends LightningElement {
     @api defaultEventType;
-    @api componentType;
     @api UserComponentId;
     @api UserControllerComponentId;
     @api Title;
     @api masterConfig;  
 
-    d3Initialized = false;
+    @api recordId;    
+    
+    storeObject;    
+    componentReference;  
+    @api pathToolTipDivId;  
+    @api chartAreaDivId;
+
+    renderedCallbackRun = false;
 
     renderedCallback() {
-        if (this.d3Initialized) {
+        if (this.renderedCallbackRun) {
+            console.log("lwcChart: not first renderedCallback");
             return;
         }
-        this.d3Initialized = true;
+        console.log("lwcChart: first renderedCallback");
+
+        this.renderedCallbackRun = true;
 
 
         Promise.all([
             loadScript(this, CHARTLIBS + '/utils.js'),
+            loadScript(this, CHARTLIBS + '/lwcSpecific.js'),
             loadScript(this, CHARTLIBS + '/chartCommon.js'),
-            loadScript(this, CHARTLIBS + '/hierarchy.js'),
-            loadScript(this, CHARTLIBS + '/hierarchyCtree.js'),
             loadScript(this, D3),
 //            ,
 //            loadStyle(this, D3 + '/style.css'),
         ])
             .then(() => {
-//                this.initializeD3();
-                bzutils.log("LOGGING FROM CHART LIBS - YAAAY");
+
+                bzutils.log("lwcChart: loaded common libs");
 
                 let masterConfigObject = JSON.parse(this.masterConfig);
-
-
                 let componentType = bzutils.getMasterParamWithDefault(masterConfigObject,1,"data","componentType");
-                console.log("LOGGING FROM CHART LIBS - componentType" , componentType);
-                
-        // will need toparse out component type and then choose what to load
 
+                Promise.all([
+                    loadScript(this, CHARTLIBS + '/hierarchy.js'),
+                    loadScript(this, CHARTLIBS + '/hierarchyCtree.js'),
+                ])
+                    .then(() => {
+                        bzutils.log("lwcChart: loaded specific libs");
+                        bzutils.log("lwcChart: recordId: " , this.recordId);
+                        this.storeObject = bzlwc.startInitialize(this.recordId);
+
+                        this.chartAreaDivId = bzchart.getStore (this.storeObject, "chartAreaDivId");   
+                        this.componentReference = bzchart.getStore (this.storeObject, "componentReference");
+                        this.pathToolTipDivId = this.componentReference + 'pathToolTip';
+                        console.log("lwcChart: testing getStore", this.storeObject, this.chartAreaDivId);
+
+
+                    })
+                    .catch(error => {
+                        this.dispatchEvent(
+                            new ShowToastEvent({
+                                title: 'Error loading specific libs',
+                                message: error.message,
+                                variant: 'error',
+                            }),
+                        );
+                    });
             })
             .catch(error => {
                 this.dispatchEvent(
                     new ShowToastEvent({
-                        title: 'Error loading libs',
+                        title: 'Error loading common libs',
                         message: error.message,
                         variant: 'error',
                     }),

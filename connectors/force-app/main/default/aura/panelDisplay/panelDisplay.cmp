@@ -63,22 +63,9 @@
 
     <aura:if isTrue="{!v.layoutStyle == 'card'}"> 
         <c:lwcPanelCard 
-
             recordName="{!v.recordName}"
             iconName="{!v.iconName}"
             extractedDisplayValues="{!v.extractedDisplayValues}" />
-        
-        <!-- <lightning:card aura:id="detailcard" title="{!v.recordName}" iconName="{!v.iconName}">
-            <div class="c-container">
-                <lightning:layout horizontalAlign="space" verticalAlign="stretch" multipleRows="true">
-                    <aura:iteration items="{!v.extractedDisplayValues}" var="item">
-                        <lightning:layoutItem flexibility="auto" padding="around-small">
-                            <p><c:fieldFormatter item="{!item}"/></p>    
-                        </lightning:layoutItem>
-                    </aura:iteration>
-                </lightning:layout>
-            </div>
-        </lightning:card>   -->
     </aura:if>
 
 
