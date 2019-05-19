@@ -39,6 +39,15 @@
     />
   </aura:if>
 
+  <c:lwcChart     
+    recordId = "{!v.recordId}"
+    defaultEventType = "Component"
+    UserComponentId = "Hierarchy"
+    UserControllerComponentId = "Controller"
+    Title = "{!v.Title}"
+    masterConfig = "{!v.masterConfig}"  
+  />
+
   <c:chartBase aura:id="chartHierarchy"
     defaultEventType = "Component"
     componentType = "hierarchy.ctree"
