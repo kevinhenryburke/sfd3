@@ -62,7 +62,13 @@
 
 
     <aura:if isTrue="{!v.layoutStyle == 'card'}"> 
-        <lightning:card aura:id="detailcard" title="{!v.recordName}" iconName="{!v.iconName}">
+        <c:lwcPanelCard 
+
+            recordName="{!v.recordName}"
+            iconName="{!v.iconName}"
+            extractedDisplayValues="{!v.extractedDisplayValues}" />
+        
+        <!-- <lightning:card aura:id="detailcard" title="{!v.recordName}" iconName="{!v.iconName}">
             <div class="c-container">
                 <lightning:layout horizontalAlign="space" verticalAlign="stretch" multipleRows="true">
                     <aura:iteration items="{!v.extractedDisplayValues}" var="item">
@@ -72,7 +78,7 @@
                     </aura:iteration>
                 </lightning:layout>
             </div>
-        </lightning:card>  
+        </lightning:card>   -->
     </aura:if>
 
 
