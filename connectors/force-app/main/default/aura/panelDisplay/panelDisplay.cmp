@@ -41,14 +41,17 @@
     <aura:attribute name="layoutType" type="String" default="Compact"/>    
     <aura:attribute name="mode" type="String"/>    
 
+
+    <aura:attribute name="displayData" type="Object"/>      
+
+
     <div class="slds">
 
     <!-- <aura:if isTrue="{!v.layoutStyle == 'card'}">  -->
     <aura:if isTrue="{!v.layoutStyle == 'cardTile'}">
         <c:lwcPanelCardTile 
-            recordName="{!v.recordName}"
-            iconName="{!v.iconName}"
-            extractedDisplayValues="{!v.extractedDisplayValues}" 
+            aura:id="lwcPanelCardTile"
+            masterConfig="masterConfig"
             onhandlefade="{! c.handleFade }"
             onhandleclose="{! c.handleClose }"        
         />
@@ -57,15 +60,18 @@
 
     <aura:if isTrue="{!v.layoutStyle == 'card'}"> 
         <c:lwcPanelCard 
+            aura:id="lwcPanelCard"
             recordName="{!v.recordName}"
             iconName="{!v.iconName}"
-            extractedDisplayValues="{!v.extractedDisplayValues}" />
+            extractedDisplayValues="{!v.extractedDisplayValues}" 
+            displayData="{!v.displayData}"            
+        />
     </aura:if>
 
 
 <!-- Temporary concentrate on the simple -->            
 <aura:if isTrue="false">            
-
+<!--
     <aura:if isTrue="{!v.layoutStyle == 'cardTile'}">
             <lightning:card variant="Narrow" aura:id="detailcard" title="{!v.recordName}" iconName="{!v.iconName}" class="slds-truncate slds-text-body_regular">
                 <aura:set attribute="actions">
@@ -129,6 +135,7 @@
                     </div>
                 </lightning:card>
         </aura:if>
+-->
     </aura:if>
     </div>
 

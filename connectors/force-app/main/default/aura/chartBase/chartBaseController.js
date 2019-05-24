@@ -9,6 +9,7 @@
             recordId = "";
         }
 
+
         // calculate compref from random generator   
         let comprefNumber = Math.floor((Math.random() * 10000000000) + 1); 
         let componentReference = "compref" + comprefNumber + recordId;
@@ -88,6 +89,8 @@
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
         let componentType = bzchart.getStore (storeObject, "componentType") ;
 
+
+
         helper.restockCache(cc);
 
         // if there is an arguments parameter this has been triggered by a method call
@@ -105,6 +108,16 @@
             parameters = event.getParam("parameters");
             controller = event.getParam("controller");    
         }
+
+// TEMPORARY -- SENDING OUT AN LWC AURA INTEROP EVENT
+var pubsub = component.find('pubsub');
+console.log("lwcPanelCardTile: firing from pubsub", parameters);
+let eventData = {
+    "topic" : topic,
+    "parameters" : parameters,
+    "controller" : controller,
+};
+pubsub.fireEvent('evt_sfd3', eventData);    
 
         // console.log('chartArea: topic:' + topic + " controller " + controller + " componentReference " + componentReference);
 

@@ -51,6 +51,9 @@
   <aura:registerEvent name="evt_bzc" type="c:evt_bzc"/>
   <aura:registerEvent name="evt_sfd3" type="c:evt_sfd3"/>
 
+  <c:auraPubsub aura:id="pubsub"/>
+
+
   <aura:handler event="c:evt_sfd3" action="{!c.handleCustomEvent}"/>
 
   <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
