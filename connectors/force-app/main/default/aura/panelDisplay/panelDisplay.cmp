@@ -51,7 +51,7 @@
     <aura:if isTrue="{!v.layoutStyle == 'cardTile'}">
         <c:lwcPanelCardTile 
             aura:id="lwcPanelCardTile"
-            masterConfig="masterConfig"
+            masterConfig="{! v.masterConfig}"
             onhandlefade="{! c.handleFade }"
             onhandleclose="{! c.handleClose }"        
         />

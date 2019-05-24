@@ -18,10 +18,13 @@ export default class lwcPanelCardTile extends LightningElement {
     @track extractedDisplayValues;
 
     renderedCallbackRun = false;
+    masterConfigObject;
+    objectIcons;
 
 
     connectedCallback() {
-        console.log("lwcPanelCardTile: connectedCallback enter");
+        this.masterConfigObject = JSON.parse(this.masterConfig);
+        this.objectIcons = this.extractObjectIcons();
         registerListener('evt_sfd3', this.handleCustomEvent, this);
     }
 
@@ -34,12 +37,19 @@ export default class lwcPanelCardTile extends LightningElement {
 
         if (topic == "ChartMouseOver")
         {
-            console.log("lwcPanelCardTile: handleCustomEvent ChartMouseOver");
-            this.recordId = this.extractRecordRoleField(parameters["data"], "id");
-            this.recordName = this.extractRecordRoleField(parameters["data"], "name");
-            this.extractedDisplayValues = this.extractDisplayValuesImpl(parameters["data"]); 
+            let displayData = parameters["data"];
+            this.recordId = this.extractRecordRoleField(displayData, "id");
+            this.recordName = this.extractRecordRoleField(displayData, "name");
+            this.extractedDisplayValues = this.extractDisplayValuesImpl(displayData); 
 
+            let objectType = displayData["objectType"];
 
+            if (objectType != null && this.objectIcons[objectType] != null) {
+                this.iconName = this.objectIcons[objectType];
+            }
+            else {
+                this.iconName = "standard:account";
+            }
         }
     }
 
@@ -181,6 +191,54 @@ export default class lwcPanelCardTile extends LightningElement {
         }
     }
 
-    
+    extractObjectIcons () {
+        // There are currently two formats for mouseover
+        // a SIMPLE style (not currently linked to any real Apex implementation) and a FIELDS style (real implementations and the ultimate long-term format)
+
+        let objectIcons;
+
+        if (this.masterConfigObject["panels"] != null) {
+            objectIcons = this.masterConfigObject["panels"]["InfoPanel"]["objectIcons"];
+        }
+        else {
+            objectIcons = {};  
+        }
+        return objectIcons;
+    }
+
+/*
+
+            var displayData = parameters["data"];
+            component.set("v.displayData", displayData);
+
+            var lwcPanelCardTile = component.find("lwcPanelCardTile");
+
+            var extractedDisplayValues;
+            // TEMPORARY TILL DOING BOTH TILE TYPES
+            if (lwcPanelCardTile != null) {
+                // LWC Method update
+                console.log("panelDisplayController.lwcPanelCardTile",lwcPanelCardTile);
+//                extractedDisplayValues = lwcPanelCardTile.extractDisplayValuesImpl(displayData);    
+            }
+            else {
+                extractedDisplayValues = helper.extractDisplayValues (displayData);
+                component.set("v.extractedDisplayValues", extractedDisplayValues);  
+            }
+
+
+            var objectType = displayData["objectType"];
+            component.set("v.objectType", objectType);
+
+            component.set("v.iconName", "standard:account");
+
+            if (objectType != null && objectIcons[objectType] != null) {
+                component.set("v.iconName", objectIcons[objectType]);
+            }
+            else {
+                component.set("v.iconName", "standard:account");
+            }
+        }
+
+*/    
 
 }
