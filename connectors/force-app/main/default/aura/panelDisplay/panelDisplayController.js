@@ -73,52 +73,52 @@
         if (topic == "ChartMouseOver")
         {
 
-            var lwcPanelCardTile = component.find("lwcPanelCardTile");
+//            var lwcPanelCardTile = component.find("lwcPanelCardTile");
             // TEMPORARY TILL DOING BOTH TILE TYPES
 
-            if (lwcPanelCardTile != null) {
-                // LWC handled already
-                console.log("panelDisplayController.lwcPanelCardTile",lwcPanelCardTile);
-            }
-            else {
-                // There are currently two formats for mouseover
-                // a SIMPLE style (not currently linked to any real Apex implementation) and a FIELDS style (real implementations and the ultimate long-term format)
+            // if (lwcPanelCardTile != null) {
+            //     // LWC handled already
+            //     console.log("panelDisplayController.lwcPanelCardTile",lwcPanelCardTile);
+            // }
+            // else {
+            //     // There are currently two formats for mouseover
+            //     // a SIMPLE style (not currently linked to any real Apex implementation) and a FIELDS style (real implementations and the ultimate long-term format)
 
-                var masterConfigObject = component.get("v.masterConfigObject");
-                var objectIcons;
+            //     var masterConfigObject = component.get("v.masterConfigObject");
+            //     var objectIcons;
 
-                if (masterConfigObject["panels"] != null) {
-                    console.log("panels: configured from master");
-                    objectIcons = masterConfigObject["panels"]["InfoPanel"]["objectIcons"];
-                }
-                else {
-                    objectIcons = {};  
-                }
+            //     if (masterConfigObject["panels"] != null) {
+            //         console.log("panels: configured from master");
+            //         objectIcons = masterConfigObject["panels"]["InfoPanel"]["objectIcons"];
+            //     }
+            //     else {
+            //         objectIcons = {};  
+            //     }
 
-                var displayData = parameters["data"];
-                component.set("v.displayData", displayData);
-
-
-                var extractedDisplayValues = helper.extractDisplayValues (displayData);
-                component.set("v.extractedDisplayValues", extractedDisplayValues);  
+            //     var displayData = parameters["data"];
+            //     component.set("v.displayData", displayData);
 
 
-                var objectType = displayData["objectType"];
-                component.set("v.objectType", objectType);
+            //     var extractedDisplayValues = helper.extractDisplayValues (displayData);
+            //     component.set("v.extractedDisplayValues", extractedDisplayValues);  
 
-                component.set("v.iconName", "standard:account");
 
-                if (objectType != null && objectIcons[objectType] != null) {
-                    component.set("v.iconName", objectIcons[objectType]);
-                }
-                else {
-                    component.set("v.iconName", "standard:account");
-                }
+            //     var objectType = displayData["objectType"];
+            //     component.set("v.objectType", objectType);
 
-                component.set("v.recordId", helper.extractRecordRoleField(displayData, "id"));
-                component.set("v.recordName", helper.extractRecordRoleField(displayData, "name"));
+            //     component.set("v.iconName", "standard:account");
 
-            }
+            //     if (objectType != null && objectIcons[objectType] != null) {
+            //         component.set("v.iconName", objectIcons[objectType]);
+            //     }
+            //     else {
+            //         component.set("v.iconName", "standard:account");
+            //     }
+
+            //     component.set("v.recordId", helper.extractRecordRoleField(displayData, "id"));
+            //     component.set("v.recordName", helper.extractRecordRoleField(displayData, "name"));
+
+            // }
         }
 
         if (topic == "ChartMouseOut")

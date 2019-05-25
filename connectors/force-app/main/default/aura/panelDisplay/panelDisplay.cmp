@@ -47,26 +47,16 @@
 
     <div class="slds">
 
-    <!-- <aura:if isTrue="{!v.layoutStyle == 'card'}">  -->
-    <aura:if isTrue="{!v.layoutStyle == 'cardTile'}">
         <c:lwcPanelCardTile 
             aura:id="lwcPanelCardTile"
+            layoutStyle = "{!v.layoutStyle}" 
             masterConfig="{! v.masterConfig}"
+
+            iconName="{!v.iconName}"
+
             onhandlefade="{! c.handleFade }"
             onhandleclose="{! c.handleClose }"        
         />
-    </aura:if>
-
-
-    <aura:if isTrue="{!v.layoutStyle == 'card'}"> 
-        <c:lwcPanelCard 
-            aura:id="lwcPanelCard"
-            recordName="{!v.recordName}"
-            iconName="{!v.iconName}"
-            extractedDisplayValues="{!v.extractedDisplayValues}" 
-            displayData="{!v.displayData}"            
-        />
-    </aura:if>
 
 
 <!-- Temporary concentrate on the simple -->            

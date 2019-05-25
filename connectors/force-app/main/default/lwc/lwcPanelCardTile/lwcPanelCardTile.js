@@ -9,10 +9,11 @@ export default class lwcPanelCardTile extends LightningElement {
 
     @wire(CurrentPageReference) pageRef;
 
-    @track recordName;
+    @track recordName = "Hover chart for details";
     @api iconName;
     @api displayData;
     @api masterConfig;
+    @api layoutStyle;
     recordId;
 
     @track extractedDisplayValues;
@@ -21,6 +22,13 @@ export default class lwcPanelCardTile extends LightningElement {
     masterConfigObject;
     objectIcons;
 
+    get isCardTile() {
+        return this.layoutStyle === "cardTile";
+    }    
+
+    get isCard() {
+        return this.layoutStyle === "card";
+    }    
 
     connectedCallback() {
         this.masterConfigObject = JSON.parse(this.masterConfig);
@@ -115,7 +123,7 @@ export default class lwcPanelCardTile extends LightningElement {
             let fields = data["fields"];
             let displayValuesArray = [];
         
-            for (var i = 0; i < fields.length; i++) {
+            for (let i = 0; i < fields.length; i++) {
                 let field = fields[i];
                 console.log("lwcPanelCardTile field.api: " + field.api + " " + field.display + " " + field.fieldType + " /field:  " , field);
                 if (field.display == true) {
