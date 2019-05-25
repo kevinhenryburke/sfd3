@@ -84,14 +84,13 @@
 
     handleCustomEvent  : function(component, event, helper) {
         var topic, parameters, controller;
-        var cc = component.getConcreteComponent();
-        let storeObject = cc.get("v.storeObject");
+        let storeObject = component.get("v.storeObject");
         let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
         let componentType = bzchart.getStore (storeObject, "componentType") ;
 
 
 
-        helper.restockCache(cc);
+        helper.restockCache(component);
 
         // if there is an arguments parameter this has been triggered by a method call
         // in which case we need to source our information from a level down in the event
