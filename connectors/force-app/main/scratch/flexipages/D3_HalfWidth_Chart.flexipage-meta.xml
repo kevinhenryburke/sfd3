@@ -18,13 +18,18 @@
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>
-                <name>Controller</name>
+                <name>configController</name>
                 <value>Controller Top Left</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
-                <name>masterConfig</name>
+                <name>layoutStyle</name>
+                <value>card</value>
             </componentInstanceProperties>
-            <componentName>panelDisplay</componentName>
+            <componentInstanceProperties>
+                <name>masterConfig</name>
+                <value>{}</value>
+            </componentInstanceProperties>
+            <componentName>bzPanel</componentName>
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>
@@ -66,13 +71,18 @@
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>
-                <name>Controller</name>
+                <name>configController</name>
                 <value>Controller Top Right</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
-                <name>masterConfig</name>
+                <name>layoutStyle</name>
+                <value>card</value>
             </componentInstanceProperties>
-            <componentName>panelDisplay</componentName>
+            <componentInstanceProperties>
+                <name>masterConfig</name>
+                <value>{}</value>
+            </componentInstanceProperties>
+            <componentName>bzPanel</componentName>
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>
