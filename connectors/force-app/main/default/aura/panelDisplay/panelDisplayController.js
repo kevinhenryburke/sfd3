@@ -24,37 +24,37 @@
     */
 
     handleCustomEvent  : function(component, event, helper) {
-        var topic, parameters, controller;
+        // var topic, parameters, controller;
 
-        // if there is an arguments parameter this has been triggered by a method call
-        // in which case we need to source our information from a level down in the event
-        var argumentsParameter = event.getParam("arguments");
+        // // if there is an arguments parameter this has been triggered by a method call
+        // // in which case we need to source our information from a level down in the event
+        // var argumentsParameter = event.getParam("arguments");
 
-        if (argumentsParameter != null) {
-            bzutils.log('panelDisplay: controller: invoked from method');
-            var tpc = argumentsParameter.tpc;
-            topic = tpc.topic;
-            parameters = tpc.parameters;
-            controller = tpc.controller;
-            // console.log('panelDisplay: handleCustomEvent enter from method, topic: ' + topic);
-        }
-        else {
-            bzutils.log('panelDisplay: invoked from event');
-            topic = event.getParam("topic");
-            parameters = event.getParam("parameters");
-            controller = event.getParam("controller");    
-            // console.log('panelDisplay: handleCustomEvent enter from event, topic: ' + topic);
-        }
+        // if (argumentsParameter != null) {
+        //     bzutils.log('panelDisplay: controller: invoked from method');
+        //     var tpc = argumentsParameter.tpc;
+        //     topic = tpc.topic;
+        //     parameters = tpc.parameters;
+        //     controller = tpc.controller;
+        //     // console.log('panelDisplay: handleCustomEvent enter from method, topic: ' + topic);
+        // }
+        // else {
+        //     bzutils.log('panelDisplay: invoked from event');
+        //     topic = event.getParam("topic");
+        //     parameters = event.getParam("parameters");
+        //     controller = event.getParam("controller");    
+        //     // console.log('panelDisplay: handleCustomEvent enter from event, topic: ' + topic);
+        // }
 
-        var RelatedControllerId = component.get("v.Controller");
+        // var RelatedControllerId = component.get("v.Controller");
 
-        var isHosted = component.get("v.isHosted");
+        // var isHosted = component.get("v.isHosted");
 
-        // if the component is named and the event propagated from a chart controlled by a controller with another name then we ignore it.
-        if (isHosted == false && RelatedControllerId != controller) {
-            bzutils.log("panelDisplay: controller: ignoring message for card related to " + RelatedControllerId + " intended for component " + controller);
-            return;
-        }
+        // // if the component is named and the event propagated from a chart controlled by a controller with another name then we ignore it.
+        // if (isHosted == false && RelatedControllerId != controller) {
+        //     bzutils.log("panelDisplay: controller: ignoring message for card related to " + RelatedControllerId + " intended for component " + controller);
+        //     return;
+        // }
 
         // if the component is hosted then we check that the incoming message was published by the same component that created the component
         // IF we want to reinstigate this functionality we will need to re-introduce a publisher parameters
@@ -70,61 +70,6 @@
         //     }
         // }
 
-        if (topic == "ChartMouseOver")
-        {
-
-//            var lwcPanelCardTile = component.find("lwcPanelCardTile");
-            // TEMPORARY TILL DOING BOTH TILE TYPES
-
-            // if (lwcPanelCardTile != null) {
-            //     // LWC handled already
-            //     console.log("panelDisplayController.lwcPanelCardTile",lwcPanelCardTile);
-            // }
-            // else {
-            //     // There are currently two formats for mouseover
-            //     // a SIMPLE style (not currently linked to any real Apex implementation) and a FIELDS style (real implementations and the ultimate long-term format)
-
-            //     var masterConfigObject = component.get("v.masterConfigObject");
-            //     var objectIcons;
-
-            //     if (masterConfigObject["panels"] != null) {
-            //         console.log("panels: configured from master");
-            //         objectIcons = masterConfigObject["panels"]["InfoPanel"]["objectIcons"];
-            //     }
-            //     else {
-            //         objectIcons = {};  
-            //     }
-
-            //     var displayData = parameters["data"];
-            //     component.set("v.displayData", displayData);
-
-
-            //     var extractedDisplayValues = helper.extractDisplayValues (displayData);
-            //     component.set("v.extractedDisplayValues", extractedDisplayValues);  
-
-
-            //     var objectType = displayData["objectType"];
-            //     component.set("v.objectType", objectType);
-
-            //     component.set("v.iconName", "standard:account");
-
-            //     if (objectType != null && objectIcons[objectType] != null) {
-            //         component.set("v.iconName", objectIcons[objectType]);
-            //     }
-            //     else {
-            //         component.set("v.iconName", "standard:account");
-            //     }
-
-            //     component.set("v.recordId", helper.extractRecordRoleField(displayData, "id"));
-            //     component.set("v.recordName", helper.extractRecordRoleField(displayData, "name"));
-
-            // }
-        }
-
-        if (topic == "ChartMouseOut")
-        {
-
-        }
     },
    
     navigateToRecord : function(component){
