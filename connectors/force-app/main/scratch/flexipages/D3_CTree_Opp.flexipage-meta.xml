@@ -18,14 +18,18 @@
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>
-                <name>Controller</name>
+                <name>configController</name>
                 <value>TopOpp</value>
+            </componentInstanceProperties>
+            <componentInstanceProperties>
+                <name>layoutStyle</name>
+                <value>card</value>
             </componentInstanceProperties>
             <componentInstanceProperties>
                 <name>masterConfig</name>
                 <value>{     &quot;panels&quot;: {         &quot;InfoPanel&quot;: {             &quot;showOnTop&quot;: true,             &quot;allowPopover&quot;:true,&quot;showEmbeddedPanel&quot;:false,             &quot;objectIcons&quot;: {                 &quot;Account&quot;: &quot;standard:account&quot;,                 &quot;Opportunity&quot;: &quot;standard:opportunity&quot;             }         }     } }</value>
             </componentInstanceProperties>
-            <componentName>panelDisplay</componentName>
+            <componentName>bzPanel</componentName>
         </componentInstances>
         <componentInstances>
             <componentInstanceProperties>
