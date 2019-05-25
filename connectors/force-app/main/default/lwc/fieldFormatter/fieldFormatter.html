@@ -21,10 +21,7 @@
         {item.displayPrefix}<lightning-formatted-text value={item.value} linkify></lightning-formatted-text>
     </div>
     <div if:true={isLookup}>
-        {item.displayPrefix}<lightning-formatted-url value={localURL} tooltip="Go to record" label={item.value} target="_blank" ></lightning-formatted-url>
-        <!-- this is the official way to naviage but it does not seem to work -->
-        <!-- https://developer.salesforce.com/docs/component-library/documentation/lwc/lwc.use_navigate-->
-        <!-- <a href="" onclick={navigateToRecordViewPage}>{item.value}</a> -->
+        {item.displayPrefix}<a href={url} onclick={goToRecord}>{item.value}</a>
     </div>
     <div if:true={isTextArea}>
         {item.displayPrefix}<lightning-formatted-rich-text value={item.value} linkify></lightning-formatted-rich-text>

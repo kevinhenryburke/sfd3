@@ -1,8 +1,34 @@
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api, track } from 'lwc';
 import { NavigationMixin } from 'lightning/navigation';
 
 export default class FieldFormatter extends NavigationMixin(LightningElement) {
+    @track url;
     @api item;
+
+    connectedCallback() {
+        // Store the PageReference in a variable to use in handleClick.
+        // This is a plain Javascript object that conforms to the
+        // PageReference type by including "type" and "attributes" properties.
+        // The "state" property is optional.
+        this.recordPageRef = {
+            type: "standard__recordPage",
+            attributes: {
+                recordId: this.item.lookupId,
+                actionName: 'view'
+            }
+        };
+        this[NavigationMixin.GenerateUrl](this.recordPageRef)
+            .then(url => this.url = url);
+    }
+
+    goToRecord(evt) {
+        // Stop the event's default behavior.
+        // Stop the event from bubbling up in the DOM.
+        evt.preventDefault();
+        evt.stopPropagation();
+        // Navigate to the Account Home page.
+        this[NavigationMixin.Navigate](this.recordPageRef);
+    }    
 
     get isPhone() { 
         return (this.item.formatAs === "PHONE") ? true : false;
@@ -49,35 +75,4 @@ export default class FieldFormatter extends NavigationMixin(LightningElement) {
         return "/" + this.item.lookupId;
     }
 
-    // this is the official way to naviage but it does not seem to work
-
-    /*
-    navigateToRecordViewPage() {
-        // // View a custom object record.
-
-        // console.log("xxxxx: nav to " , this.item.lookupId);
-
-        // this[NavigationMixin.Navigate]({
-        //     type: 'standard__recordPage',
-        //     attributes: {
-        //         recordId: this.item.lookupId,
-        //         objectApiName: 'Account',
-        //         actionName: 'view'
-        //     }
-        // });
-
-        // OR 
-
-        // // Generate a URL to a User record page
-        // this[NavigationMixin.GenerateUrl]({
-        //     type: 'standard__recordPage',
-        //     attributes: {
-        //         recordId: this.item.lookupId,
-        //         actionName: 'view',
-        //     },
-        // }).then(url => {
-        //     this.recordPageUrl = url;
-        // });        
-    }    
-    */
 }
