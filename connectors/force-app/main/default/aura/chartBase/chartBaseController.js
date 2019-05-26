@@ -110,7 +110,7 @@
 
 // TEMPORARY -- SENDING OUT AN LWC AURA INTEROP EVENT
 var pubsub = component.find('pubsub');
-console.log("lwcPanelCardTile: firing from pubsub", parameters);
+console.log("bzPanel: firing from pubsub", parameters);
 let eventData = {
     "topic" : topic,
     "parameters" : parameters,

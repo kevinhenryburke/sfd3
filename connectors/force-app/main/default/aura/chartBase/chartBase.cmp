@@ -94,14 +94,11 @@
       <div aura:id = "panelDisplayEmbeddedOuter" class="slds-is-relative" style="right : 0; opacity : 1">
         <div class="slds-is-absolute" style="right : 0;">
           <div style="height: 250px; width: 200px; background: rgb(255, 255, 255);">
-              <c:panelDisplay 
-              aura:id = "panelDisplayEmbedded" 
-              layoutStyle = "cardTile"
-              Controller = "{!v.UserControllerComponentId}"
-              masterConfig = "{!v.masterConfig}" 
-              isHosted = "true"
-              hostComponentReference = "{!v.storeObject.componentReference}"
-              hostUserControllerComponentId = "{!v.UserControllerComponentId}"
+            <c:bzPanel 
+              aura:id="lwcbzPanel"
+              layoutStyle = "cardTile" 
+              masterConfig="{! v.masterConfig}"
+              configController="{!v.UserControllerComponentId}"
             />
           </div> 
         </div>
