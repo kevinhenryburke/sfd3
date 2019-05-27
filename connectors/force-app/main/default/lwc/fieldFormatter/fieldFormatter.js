@@ -26,7 +26,14 @@ export default class FieldFormatter extends NavigationMixin(LightningElement) {
         // Stop the event from bubbling up in the DOM.
         evt.preventDefault();
         evt.stopPropagation();
-        // Navigate to the Account Home page.
+        // Navigate to the record page.
+        this.recordPageRef = {
+            type: "standard__recordPage",
+            attributes: {
+                recordId: this.item.lookupId,
+                actionName: 'view'
+            }
+        };
         this[NavigationMixin.Navigate](this.recordPageRef);
     }    
 

@@ -40,8 +40,6 @@ export default class bzPanel extends LightningElement {
     handleCustomEvent(eventData) {
         console.log("bzPanel: handleCustomEvent enter");
 
-        this.className = "besty";
-
         let topic = eventData.topic;
         let parameters = eventData.parameters;
         let eventController = eventData.controller;        
@@ -56,6 +54,7 @@ export default class bzPanel extends LightningElement {
         if (topic === "ChartMouseOver")
         {
             let displayData = parameters["data"];
+            console.log("bzPanel: handleCustomEvent displayData = ", displayData);
             this.recordId = this.extractRecordRoleField(displayData, "id");
             this.recordName = this.extractRecordRoleField(displayData, "name");
             this.extractedDisplayValues = this.extractDisplayValuesImpl(displayData); 

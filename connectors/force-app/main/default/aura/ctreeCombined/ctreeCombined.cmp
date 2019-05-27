@@ -33,13 +33,18 @@
   <!-- Card Display Parameters-->
 
   <aura:if isTrue="{!v.showTopPanel}">
-    <c:panelDisplay aura:id = "panelDisplay" 
-      Controller = "Controller"
-      masterConfig = "{!v.masterConfig}"  
+    <c:bzPanel 
+        aura:id="lwcbzPanel"
+        layoutStyle = "card" 
+        masterConfig="{! v.masterConfig}"
+        configController="Controller"
     />
   </aura:if>
 
-  <c:lwcChart     
+
+  <!-- TEMPORARY!! -->
+  <c:lwcChart   
+    aura:id="lwcChart"
     recordId = "{!v.recordId}"
     defaultEventType = "Component"
     UserComponentId = "Hierarchy"
@@ -47,6 +52,13 @@
     Title = "{!v.Title}"
     masterConfig = "{!v.masterConfig}"  
   />
+
+  <!-- TEMPORARY!! -->
+  <!-- <h1>TEMPORARY</h1>
+  <c:bzPanel 
+  aura:id="bzPanelTEMPORARY"
+/> -->
+
 
   <c:chartBase aura:id="chartHierarchy"
     defaultEventType = "Component"

@@ -95,10 +95,12 @@
         <div class="slds-is-absolute" style="right : 0;">
           <div style="height: 250px; width: 200px; background: rgb(255, 255, 255);">
             <c:bzPanel 
-              aura:id="lwcbzPanel"
+              aura:id="lwcbzPanelEmbedded"
               layoutStyle = "cardTile" 
               masterConfig="{! v.masterConfig}"
               configController="{!v.UserControllerComponentId}"
+              onhandlefade="{! c.handleFade }"
+              onhandleclose="{! c.handleClose }"            
             />
           </div> 
         </div>

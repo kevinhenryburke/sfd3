@@ -47,15 +47,15 @@
 
     <div class="slds">
 
-        <c:bzPanel 
-            aura:id="lwcbzPanel"
-            layoutStyle = "{!v.layoutStyle}" 
-            masterConfig="{! v.masterConfig}"
-            iconName="{!v.iconName}"
-            configController="{!v.Controller}"
-            onhandlefade="{! c.handleFade }"
-            onhandleclose="{! c.handleClose }"        
-        />
+    <c:bzPanel 
+        aura:id="lwcbzPanel"
+        layoutStyle = "{!v.layoutStyle}" 
+        masterConfig="{! v.masterConfig}"
+        iconName="{!v.iconName}"
+        configController="{!v.Controller}"
+        onhandlefade="{! c.handleFade }"
+        onhandleclose="{! c.handleClose }"        
+    />
 
 
 <!-- Temporary concentrate on the simple -->            

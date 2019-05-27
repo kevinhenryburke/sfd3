@@ -87,7 +87,8 @@ function getFilterOpacity (storeObject, d) {
   return 1;
 }
 
-// create an invisible svg symbol to attach a popover to
+// No longer used but useful example of manipulating location within svg element
+// Have not exported this function
 function createInfoLocation (storeObject) {
   let componentReference = bzchart.getStore (storeObject, "componentReference") ;  
 
@@ -296,9 +297,6 @@ function mapMasterConfigToStore(masterConfigObject, storeObject) {
 
     var showLevelsInitial = bzutils.getMasterParamWithDefault(masterConfigObject, 1, "panels", "ChartPanel", "showLevelsInitial");
     bzchart.setStore(storeObject, "showLevels", showLevelsInitial);
-
-    let allowPopover = bzutils.getMasterParamWithDefault(masterConfigObject, false, "panels", "InfoPanel", "allowPopover");
-    bzchart.setStore(storeObject, "allowPopover", allowPopover);
 
     let clearHighlightedPaths = bzutils.getMasterParamWithDefault(masterConfigObject, false, "panels", "ChartPanel", "Hierarchy", "clearHighlightedPaths");
     bzchart.setStore(storeObject, "clearHighlightedPaths", clearHighlightedPaths);
@@ -596,7 +594,7 @@ exports.getStoreWithDefault = getStoreWithDefault;
 exports.initializeStore = initializeStore;
 exports.isFilteredOut = isFilteredOut;
 exports.getFilterOpacity = getFilterOpacity;
-exports.createInfoLocation = createInfoLocation;
+//exports.createInfoLocation = createInfoLocation;
 exports.getDefaultValueForReturnType = getDefaultValueForReturnType;
 exports.getStringValue = getStringValue;
 exports.getFromMeasureScheme = getFromMeasureScheme;

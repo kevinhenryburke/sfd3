@@ -110,7 +110,7 @@
 
 // TEMPORARY -- SENDING OUT AN LWC AURA INTEROP EVENT
 var pubsub = component.find('pubsub');
-console.log("bzPanel: firing from pubsub", parameters);
+console.log("bzPanel: firing from pubsub", JSON.stringify(parameters));
 let eventData = {
     "topic" : topic,
     "parameters" : parameters,
@@ -215,19 +215,6 @@ pubsub.fireEvent('evt_sfd3', eventData);
 
                bzchart.initializeGroups(storeObject, parameters["datajson"], parameters["primaryId"], parameters["showFilters"], isInit);                 
 
-                // what remains is the publication of the popover event - TODO
-                let allowPopover = bzchart.getStore(storeObject, "allowPopover");
-                if (allowPopover == true) {
-                    console.log("allowPopover set so create embedded component ... "); 
-                    bzchart.createInfoLocation(storeObject);
-
-                    // send an event to create a popover
-                    var eventParameters = { 
-                        "componentReference" : componentReference
-                    }        
-                    var preppedEvent = bzchart.prepareEvent(storeObject, "CreatePopOver", eventParameters);
-                    bzaura.publishPreppedEvent(storeObject,preppedEvent,$A.get("e.c:evt_sfd3"));            
-                }
                 variantsMixin.initializeVisuals(storeObject);
                 variantsMixin.refreshVisibility(storeObject);                
            }
@@ -252,10 +239,6 @@ pubsub.fireEvent('evt_sfd3', eventData);
                bzutils.log("Chart with reference: " + componentReference + " / ignores this event with chart reference: " + parameters["componentReference"]);
            }
        }
-
-       if (topic == "CreatePopOver") {
-           helper.createPopOverComponent(storeObject);
-        }
 
         if (topic == "ShowLevelsMore") {
             // get the new number of levels and refresh
@@ -350,71 +333,24 @@ pubsub.fireEvent('evt_sfd3', eventData);
         {
             bzutils.log("chartArea: ChartMouseOut received by Chart: " + componentReference + "/" + parameters["componentReference"]);
         }
-        if (topic == "CloseDisplayPanel")
-        {      
-            let allowPopover = bzchart.getStore (storeObject, "allowPopover") ; 
-
-            if (allowPopover == true) {
-                let modalPromise = bzchart.getStore (storeObject, "modalPromise") ; 
-
-                if (modalPromise != null ) {
-                    modalPromise.then(function (overlay) {
-                        // overlay.hide();   
-                        overlay.close();   
-                    });
-                }
-            }
-
-            // if we have destroyed the component then we need to make the panel area transparent
-            var panelDisplayEmbeddedOuter = bzchart.getStore (storeObject, "panelDisplayEmbeddedOuter") ; 
-            var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
-            panelDisplayEmbeddedOuterElement.style.opacity = "0";
-        } 
-        if (topic == "FadeDisplayPanel")
-        {      
-            // we toggle the opacity of the display panel
-            var panelDisplayEmbedded = bzchart.getStore (storeObject, "panelDisplayEmbedded") ; 
-            var showEmbeddedPanel = bzchart.getStore (storeObject, "showEmbeddedPanel" ) ;
-            console.log('chartArea: FadeDisplayPanel: ', showEmbeddedPanel);
-
-            if (showEmbeddedPanel) {
-
-                var panelDisplayEmbeddedOuter = bzchart.getStore (storeObject, "panelDisplayEmbeddedOuter") ; 
-
-                var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
-                var opacity = panelDisplayEmbeddedOuterElement.style["opacity"];        
-                opacity = parseFloat(opacity); // as the style element is returned as a string
-
-                if (opacity < 0.5) {
-                    panelDisplayEmbeddedOuterElement.style.opacity = "1";
-                }
-                else {
-                    panelDisplayEmbeddedOuterElement.style.opacity = "0.3";
-                }                
-            }
-
-        } 
         if (topic == "ChartMouseOver")
         {
             
             bzutils.log("chartArea: ChartMouseOver received by Chart: " + componentReference + "/" + parameters["componentReference"]);
-
-            var panelDisplayEmbedded = bzchart.getStore (storeObject, "panelDisplayEmbedded") ; 
-            var showEmbeddedPanel = bzchart.getStore (storeObject, "showEmbeddedPanel" ) ;
+            
+            let showEmbeddedPanel = bzchart.getStore (storeObject, "showEmbeddedPanel" ) ;
             console.log('chartArea: panelDisplayEmbedded, showEmbeddedPanel: ', showEmbeddedPanel);
 
-            var panelDisplayEmbeddedOuter = bzchart.getStore (storeObject, "panelDisplayEmbeddedOuter") ; 
+            if (showEmbeddedPanel) {
+                let panelDisplayEmbedded = bzchart.getStore (storeObject, "panelDisplayEmbedded") ; 
 
-            var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
-            var opacity = panelDisplayEmbeddedOuterElement.style["opacity"];        
-            opacity = parseFloat(opacity);
-                
-            var tpc = {
-                "topic" : topic,
-                "parameters" : parameters,
-                "controller" : controller
-            };
-            panelDisplayEmbedded.callFromContainer(tpc);               
+                let tpc = {
+                    "topic" : topic,
+                    "parameters" : parameters,
+                    "controller" : controller
+                };
+                panelDisplayEmbedded.callFromContainer(tpc);               
+            }
 
         }
         if (topic == "ReScale")
@@ -432,6 +368,29 @@ pubsub.fireEvent('evt_sfd3', eventData);
                 helper.handleScaleChange(component,csf);
             }
         }
-    }
+    },
+
+    handleClose : function(component, event, helper) {
+        let storeObject = component.get("v.storeObject");
+        var panelDisplayEmbeddedOuter = bzchart.getStore (storeObject, "panelDisplayEmbeddedOuter") ; 
+        var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
+        panelDisplayEmbeddedOuterElement.style.opacity = "0";
+    },
+
+    handleFade : function(component, event, helper) {
+        let storeObject = component.get("v.storeObject");
+        var panelDisplayEmbeddedOuter = bzchart.getStore (storeObject, "panelDisplayEmbeddedOuter") ; 
+
+        var panelDisplayEmbeddedOuterElement = panelDisplayEmbeddedOuter.getElement();
+        var opacity = panelDisplayEmbeddedOuterElement.style["opacity"];        
+        opacity = parseFloat(opacity); // as the style element is returned as a string
+        if (opacity < 0.5) {
+            panelDisplayEmbeddedOuterElement.style.opacity = "1";
+        }
+        else {
+            panelDisplayEmbeddedOuterElement.style.opacity = "0.3";
+        }
+    },
+
 
 })
