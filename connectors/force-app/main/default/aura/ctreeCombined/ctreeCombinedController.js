@@ -47,9 +47,9 @@
 
         var showTopPanel = component.get("v.showTopPanel");
 
-        if (showTopPanel == true) {
-            var panelDisplay = component.find("panelDisplay");
-            panelDisplay.callFromContainer(tpc);
-        }
+        // if (showTopPanel == true) {
+        //     var panelDisplay = component.find("panelDisplay");
+        //     panelDisplay.callFromContainer(tpc);
+        // }
     },
 })
