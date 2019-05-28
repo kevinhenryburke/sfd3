@@ -60,7 +60,6 @@
   <aura:handler event="aura:doneRendering" action="{!c.doneRendering}"/>
   
   <aura:attribute name="masterConfig" access="global" type="String" default="{}"/>      
-  <aura:attribute name="masterConfigObject" access="global" type="Object"/>      
 
   <aura:method name="callFromContainer" action="{!c.handleCustomEvent}"> 
       <aura:attribute name="tpc" type="Object"/>    

@@ -149,7 +149,7 @@ pubsub.fireEvent('evt_sfd3', eventData);
                let isInit = true;
 
                let masterConfigObject = parameters["masterConfigObject"];
-               component.set("v.masterConfigObject", masterConfigObject);
+               bzchart.setStore (storeObject, "masterConfigObject", masterConfigObject ) ; // not actually refernced though
 
                bzchart.setStore (storeObject, "componentReference", componentReference ) ;
 

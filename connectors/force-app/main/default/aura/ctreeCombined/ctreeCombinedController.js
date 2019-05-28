@@ -2,25 +2,19 @@
     onInit: function(component, event, helper) {
         console.log('ctreeCombined: onInit: enter');
 
-        var masterConfig = component.get("v.masterConfig");
+        let masterConfig = component.get("v.masterConfig");
+        let masterConfigObject;
         if (typeof masterConfig === 'string' || masterConfig instanceof String) {
             console.log("masterConfig is a string");
-            component.set("v.masterConfigObject", JSON.parse(masterConfig));
+            masterConfigObject = JSON.parse(masterConfig);
         }
         else {
             console.log("masterConfig is an object?");
-            component.set("v.masterConfigObject", masterConfig);
+            masterConfigObject = masterConfig;
         }
-        var masterConfigObject = component.get("v.masterConfigObject");
         
-        component.set("v.masterConfigObject", masterConfigObject);
         component.set("v.showTopPanel" , masterConfigObject["panels"]["InfoPanel"]["showOnTop"]);
         component.set("v.Title" , masterConfigObject["panels"]["ChartPanel"]["Title"]);
-
-        // <!-- DISPLAY FEATURES - NETWORK -->
-        
-        component.set("v.nodestrokewidth" , masterConfigObject["panels"]["ChartPanel"]["Network"]["nodestrokewidth"]);
-      
     },
 
     /* receive a bubbled component event and distribute this to required children */

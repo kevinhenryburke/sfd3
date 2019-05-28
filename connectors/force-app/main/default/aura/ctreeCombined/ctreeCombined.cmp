@@ -6,7 +6,6 @@
   <aura:handler name="evt_bzc" event="c:evt_bzc" action="{!c.handleCustomEvent}"/>   
 
   <aura:attribute name="masterConfig" access="global" type="String" default="{}"/>      
-  <aura:attribute name="masterConfigObject" access="global" type="Object"/>      
 
   <!-- DISPLAY PANELS -->
 
@@ -15,12 +14,6 @@
   <!-- DISPLAY FEATURES - GENERAL -->
 
   <aura:attribute name="Title" access="global" type="String" />      
-
-  <!-- DISPLAY FEATURES - HIERARCHY -->
-
-  <!-- DISPLAY FEATURES - NETWORK -->
-
-  <aura:attribute name="nodestrokewidth" type="String" default="0.5px"/>    
   
   <c:dataControlPanel aura:id = "dataControlPanel"
     defaultEventType = "Component"
